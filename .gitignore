@@ -1,0 +1,9 @@
+# Python specific
+*.py[cgo]
+*.egg-info/
+build/
+Pipfile.lock
+
+# IDEs
+.idea/
+
