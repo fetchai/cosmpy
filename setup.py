@@ -34,7 +34,7 @@ setup(
     install_requires=['ecdsa', 'bech32'],
     extras_require={
         'dev': ['check-manifest'],
-        'test': ['coverage', 'pytest'],
+        'test': ['coverage', 'pytest', 'tox'],
     },
     project_urls={
         'Bug Reports': 'https://github.com/fetchai/pycosm/issues',

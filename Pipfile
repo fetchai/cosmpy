@@ -7,6 +7,3 @@ verify_ssl = true
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
-
-[requires]
-python_version = "3.9"

@@ -4,6 +4,9 @@
 build/
 Pipfile.lock
 
+# Testing
+.tox/
+
 # IDEs
 .idea/
 
