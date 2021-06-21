@@ -7,3 +7,6 @@ verify_ssl = true
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
+
+[pipenv]
+allow_prereleases = true

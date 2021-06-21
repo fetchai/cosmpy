@@ -9,18 +9,19 @@ class PublicKey:
     curve = ecdsa.SECP256k1
     hash_function = hashlib.sha256
 
-    def __init__(self, public_key: Union[bytes, 'PublicKey', ecdsa.VerifyingKey]):
+    def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
         if isinstance(public_key, bytes):
-            self._verifying_key = ecdsa.VerifyingKey.from_string(public_key, curve=self.curve,
-                                                                 hashfunc=self.hash_function)
+            self._verifying_key = ecdsa.VerifyingKey.from_string(
+                public_key, curve=self.curve, hashfunc=self.hash_function
+            )
         elif isinstance(public_key, PublicKey):
             self._verifying_key = public_key._verifying_key
         elif isinstance(public_key, ecdsa.VerifyingKey):
             self._verifying_key = public_key
         else:
-            raise RuntimeError('Invalid public key type') # noqa
+            raise RuntimeError("Invalid public key type")  # noqa
 
-        self._public_key_bytes = self._verifying_key.to_string('compressed')
+        self._public_key_bytes = self._verifying_key.to_string("compressed")
         self._public_key = base64.b64encode(self._public_key_bytes).decode()
 
     @property
@@ -50,12 +51,15 @@ class PublicKey:
 class PrivateKey(PublicKey):
     def __init__(self, private_key: Optional[bytes] = None):
         if private_key is None:
-            self._signing_key = ecdsa.SigningKey.generate(curve=self.curve, hashfunc=self.hash_function)
+            self._signing_key = ecdsa.SigningKey.generate(
+                curve=self.curve, hashfunc=self.hash_function
+            )
         elif isinstance(private_key, bytes):
-            self._signing_key = ecdsa.SigningKey.from_string(private_key, curve=self.curve,
-                                                             hashfunc=self.hash_function)
+            self._signing_key = ecdsa.SigningKey.from_string(
+                private_key, curve=self.curve, hashfunc=self.hash_function
+            )
         else:
-            raise RuntimeError('Unable to load private key from input')
+            raise RuntimeError("Unable to load private key from input")
 
         # cache the binary representations of the private key
         self._private_key_bytes = self._signing_key.to_string()

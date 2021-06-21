@@ -8,9 +8,9 @@ def sha256(contents: bytes) -> bytes:
 
 
 def ripemd160(contents: bytes) -> bytes:
-    if 'ripemd160' not in hashlib.algorithms_available:
-        raise RuntimeError('ripemd160 hash not supported on your platform')
+    if "ripemd160" not in hashlib.algorithms_available:
+        raise RuntimeError("ripemd160 hash not supported on your platform")
 
-    h = hashlib.new('ripemd160')
+    h = hashlib.new("ripemd160")
     h.update(contents)
     return h.digest()
