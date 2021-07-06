@@ -1,12 +1,16 @@
 COSMOS_SDK_DIR := cosmos-sdk-proto-schema
 COSMOS_SDK_VERSION := v0.17.1
-OUTPUT_FOLDER := src/types
+OUTPUT_FOLDER := src/cosm/types
 
 SOURCE := $(shell find $(COSMOS_SDK_DIR) -type f -name *.proto)
 RELATIVE_SOURCE := $(foreach file,$(SOURCE),$(shell echo -n $(file) | sed -E 's|^([^/]+/)*proto/||'))
 RELATIVE_GENERATED := $(patsubst %.proto,$(types_folder)/%.py,$(RELATIVE_SOURCE))
 PROTO_ROOT_DIRS := $(shell find -E $(COSMOS_SDK_DIR) -type d -regex "^([^/]+/)*proto")
-COMMAND := protoc $(patsubst %,--proto_path=%,$(PROTO_ROOT_DIRS)) --python_out=$(OUTPUT_FOLDER) $(RELATIVE_SOURCE)
+
+GENERATED_DIRS := $(shell find -E $(OUTPUT_FOLDER) -type d)
+INIT_PY_FILES_TO_CREATE :=  $(patsubst %,%/__init__.py,$(GENERATED_DIRS))
+
+COMMAND := protoc $(patsubst %,--proto_path=%,$(PROTO_ROOT_DIRS)) --python_out=$(OUTPUT_FOLDER) $(RELATIVE_SOURCE) && touch $(INIT_PY_FILES_TO_CREATE)
 
 
 generate_proto_types: $(SOURCE)
