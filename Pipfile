@@ -7,6 +7,7 @@ verify_ssl = true
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
+protobuf = "3.15.5"
 
 [requires]
 python_version = "3.9"
