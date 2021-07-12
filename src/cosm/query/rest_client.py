@@ -1,4 +1,5 @@
 import requests
+from common import JSONLike
 
 
 class RestClient:
@@ -6,7 +7,7 @@ class RestClient:
         self._session = requests.session()
         self.rest_address = rest_address
 
-    def query(self, request: str):
+    def query(self, request: str) -> JSONLike:
         response = self._session.get(url=self.rest_address + request)
         if response.status_code != 200:
             raise RuntimeError(response)
