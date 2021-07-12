@@ -1,24 +1,33 @@
 import unittest
-import mock
+from unittest.mock import patch
 from cosm.bank.bank import Bank
 
 
 class MockResponse:
-    def __init__(self, json_data, status_code):
-        self.json_data = json_data
+    def __init__(self, status_code, json_output):
         self.status_code = status_code
+        self.json_output = json_output
 
     def json(self):
-        return self.json_data
+        return self.json_output
+
+
+class MockSession:
+    def __init__(self, status_code, json_output):
+        self.status_code = status_code
+        self.json_output = json_output
+        self.last_url = ""
+
+    def get(self, url):
+        self.last_url = url
+        return MockResponse(self.status_code, self.json_output)
 
 
 class BankTests(unittest.TestCase):
-
-    @mock.patch('requests.get', autospec=True)
-    def test_get_balance(self, mock_requests_get):
-        mock_requests_get.return_value = MockResponse("OK", 200)
-
+    def test_get_balance(self):
         bank = Bank("rest_address")
-        assert (bank.get_balance("account", "denom") == "OK")
-        assert (mock_requests_get.call_args.kwargs == {
-            'url': 'rest_address/cosmos/bank/v1beta1/balances/account/denom'})
+
+        session = MockSession(200, "OK")
+        with patch.object(bank.rest_api, '_session', session):
+            assert (bank.get_balance("account", "denom") == "OK")
+            assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/balances/account/denom')
