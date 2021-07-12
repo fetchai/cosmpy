@@ -1,14 +1,21 @@
 COSMOS_SDK_DIR := cosmos-sdk-proto-schema
 COSMOS_SDK_VERSION := v0.17.1
+COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
+SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
 OUTPUT_FOLDER := src
 
-SOURCES_REGEX_TO_EXCLUDE := $(COSMOS_SDK_DIR)/third_party/proto/google/.*
-PATTERNS_TO_EXCLUDE = $(patsubst %,! -regex "%",$(SOURCES_REGEX_TO_EXCLUDE))
-SOURCE := $(shell find -E $(COSMOS_SDK_DIR) -type f -name *.proto $(PATTERNS_TO_EXCLUDE))
-RELATIVE_SOURCE := $(foreach file,$(SOURCE),$(shell echo -n $(file) | sed -E 's|^([^/]+/)*proto/||'))
-#RELATIVE_SOURCE := $(SOURCE)
-RELATIVE_GENERATED := $(patsubst %.proto,$(OUTPUT_FOLDER)/%.py,$(RELATIVE_SOURCE))
-PROTO_ROOT_DIRS := $(shell find -E $(COSMOS_SDK_DIR) -type d -regex "^([^/]+/)*proto" ! -regex "$(RELATIVE_SOURCE_EXCLUDE)(/.*)?")
+
+ifeq ($(OS),Windows_NT)
+	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        FIND_CMD := find $(COSMOS_PROTO_RELATIVE_DIRS) -regextype posix-extended
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        FIND_CMD := find -E $(COSMOS_PROTO_RELATIVE_DIRS)
+    endif
+endif
 
 define unique
   $(eval seen :=)
@@ -17,14 +24,21 @@ define unique
 endef
 unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1)))
 
-#GENERATED_DIRS := $(shell find -E $(OUTPUT_FOLDER) -type d)
-GENERATED_DIRS := $(call unique,$(patsubst %/,$(OUTPUT_FOLDER)/%,$(dir $(RELATIVE_SOURCE))))
-INIT_PY_FILES_TO_CREATE :=  $(patsubst %,%/__init__.py,$(GENERATED_DIRS))
 
-COMPILE_PROTOBUFS_COMMAND := protoc $(patsubst %,--proto_path=%,$(PROTO_ROOT_DIRS)) --python_out=$(OUTPUT_FOLDER) $(RELATIVE_SOURCE)
+FIND_CMD := $(FIND_CMD) -type f -name *.proto $(SOURCES_REGEX_TO_EXCLUDE:%=! -regex "%")
+RELATIVE_SOURCE := $(shell cd $(COSMOS_SDK_DIR) && $(FIND_CMD))
+UNROOTED_SOURCE := $(foreach _,$(COSMOS_PROTO_RELATIVE_DIRS),$(patsubst $(_)/%,%,$(filter $(_)/%,$(RELATIVE_SOURCE))))
+SOURCE := $(RELATIVE_SOURCE:%=$(COSMOS_SDK_DIR)/%)
+GENERATED := $(UNROOTED_SOURCE:%.proto=$(OUTPUT_FOLDER)/%.py)
+PROTO_ROOT_DIRS := $(COSMOS_PROTO_RELATIVE_DIRS:%=$(COSMOS_SDK_DIR)/%)
+
+GENERATED_DIRS := $(call unique,$(patsubst %/,$(OUTPUT_FOLDER)/%,$(UNROOTED_SOURCE)))
+INIT_PY_FILES_TO_CREATE :=  $(GENERATED:%=%/__init__.py)
+
+COMPILE_PROTOBUFS_COMMAND := python -m grpc_tools.protoc $(PROTO_ROOT_DIRS:%=--proto_path=%) --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(UNROOTED_SOURCE)
 
 
-generate_proto_types: $(SOURCE)
+generate_proto_types: $(SOURCE) $(COSMOS_SDK_DIR)
 	$(COMPILE_PROTOBUFS_COMMAND)
 
 fetch_proto_schema_source: $(COSMOS_SDK_DIR)
@@ -33,7 +47,7 @@ generate_init_py_files: $(INIT_PY_FILES_TO_CREATE)
 
 $(SOURCE)&: $(COSMOS_SDK_DIR)
 
-$(RELATIVE_GENERATED)&: $(SOURCE)
+$(GENERATED)&: $(SOURCE)
 	$(COMPILE_PROTOBUFS_COMMAND)
 
 $(INIT_PY_FILES_TO_CREATE)&: $(GENERATED_DIRS)
@@ -41,15 +55,13 @@ $(INIT_PY_FILES_TO_CREATE)&: $(GENERATED_DIRS)
 
 $(GENERATED_DIRS)&: $(COSMOS_SDK_DIR)
 
-$(COSMOS_SDK_DIR): Makefile
+$(COSMOS_SDK_DIR):
 	rm -rf $(COSMOS_SDK_DIR)
 	git clone --branch $(COSMOS_SDK_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none https://github.com/fetchai/cosmos-sdk $(COSMOS_SDK_DIR)
-	cd $(COSMOS_SDK_DIR) && git checkout $(COSMOS_SDK_VERSION) -- proto third_party/proto
+	cd $(COSMOS_SDK_DIR) && git checkout $(COSMOS_SDK_VERSION) -- $(COSMOS_PROTO_RELATIVE_DIRS)
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
-	$(info  )
-	$(info PATTERNS_TO_EXCLUDE: $(PATTERNS_TO_EXCLUDE))
 	$(info  )
 	$(info GENERATED_DIRS: $(GENERATED_DIRS))
 	$(info  )
@@ -59,6 +71,12 @@ debug:
 	$(info  )
 	$(info RELATIVE_SOURCE: $(RELATIVE_SOURCE))
 	$(info  )
-	$(info RELATIVE_GENERATED: $(RELATIVE_GENERATED))
+	$(info GENERATED: $(GENERATED))
+	$(info  )
+	$(info UNROOTED_SOURCE: $(UNROOTED_SOURCE))
 	$(info  )
 	$(info PROTO_ROOT_DIRS: $(PROTO_ROOT_DIRS))
+	$(info  )
+	$(info FIND_CMD: $(FIND_CMD))
+	$(info  )
+	$(info COMPILE_PROTOBUFS_COMMAND: $(COMPILE_PROTOBUFS_COMMAND))
