@@ -40,6 +40,11 @@ class Bank:
                             amount=coin["amount"]))
         return res
 
+    @staticmethod
+    def _convert_to_pagination(json_response: JSONLike) -> PageResponse:
+        return PageResponse(next_key=json_response["next_key"],
+                            total=int(json_response["total"]))
+
     def _query_balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/balances/{request.address}/{request.denom}")
 
@@ -50,12 +55,9 @@ class Bank:
     def _query_all_balances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/balances/{request.address}")
 
-        pagination = PageResponse(next_key=json_response["pagination"]["next_key"],
-                                  total=int(json_response["pagination"]["total"]))
-
         return QueryAllBalancesResponse(
             balances=self._convert_to_list_of_coins(json_response["balances"]),
-            pagination=pagination)
+            pagination=self._convert_to_pagination(json_response["pagination"]))
 
     def _query_total_supply(self) -> QueryTotalSupplyResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/supply")
@@ -71,16 +73,15 @@ class Bank:
     def _query_denoms_metadata(self, request: QueryDenomsMetadataRequest) -> QueryDenomsMetadataResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/denoms_metadata")
 
-        pagination = PageResponse(next_key=json_response["pagination"]["next_key"],
-                                  total=int(json_response["pagination"]["total"]))
-
         metadatas: [Metadata] = []
         for metadata in json_response["metadatas"]:
             metadatas.append(Metadata(metadata))
 
-        return QueryDenomsMetadataResponse(metadatas=metadatas, pagination=pagination)
+        return QueryDenomsMetadataResponse(metadatas=metadatas,
+                                           pagination=self._convert_to_pagination(json_response["pagination"]))
 
-    def _query_denom_metadata(self, request: QueryDenomMetadataRequest) -> QueryDenomMetadataResponse:
-        json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/denoms_metadata/{request.denom}")
 
-        return QueryDenomsMetadataResponse(metadata=Metadata(json_response["metadata"]))
+def _query_denom_metadata(self, request: QueryDenomMetadataRequest) -> QueryDenomMetadataResponse:
+    json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/denoms_metadata/{request.denom}")
+
+    return QueryDenomsMetadataResponse(metadata=Metadata(json_response["metadata"]))

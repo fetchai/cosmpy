@@ -2,6 +2,12 @@ import unittest
 from unittest.mock import patch
 from cosm.bank.bank import Bank
 
+from cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse, \
+    QueryAllBalancesResponse, QueryTotalSupplyResponse, QuerySupplyOfResponse
+
+from cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
+
 
 class MockResponse:
     def __init__(self, status_code: int, json_output: str):
@@ -24,50 +30,72 @@ class MockSession:
 
 
 class BankTests(unittest.TestCase):
-    def test_get_balance(self):
+    def test_query_balance(self):
+        expected_response = QueryBalanceResponse(balance=Coin(denom="stake", amount="1234"))
+        json_output = {"balance":
+            {
+                "denom": "stake",
+                "amount": "1234"
+            }
+        }
+        session = MockSession(200, json_output)
+
         bank = Bank("rest_address")
 
-        session = MockSession(200, "OK")
         with patch.object(bank.rest_api, '_session', session):
-            assert (bank.get_balance("account", "denom") == "OK")
+            assert (bank.query_balance("account", "denom") == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/balances/account/denom')
 
-    def test_get_all_balances(self):
+    def test_query_all_balances(self):
+        expected_response = QueryAllBalancesResponse(balances=[Coin(denom="stake", amount="1234")],
+                                                     pagination=PageResponse(next_key=None, total=0))
+        json_output = {"balances":
+            [{
+                "denom": "stake",
+                "amount": "1234"
+            }],
+            "pagination":
+                {
+                    "next_key": None,
+                    "total": 0
+                }
+        }
+        session = MockSession(200, json_output)
+
         bank = Bank("rest_address")
 
-        session = MockSession(200, "OK")
         with patch.object(bank.rest_api, '_session', session):
-            assert (bank.get_all_balances("account") == "OK")
+            assert (bank.query_all_balances("account") == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/balances/account')
 
-    def test_get_total_supply(self):
+    def test_query_total_supply(self):
+        expected_response = QueryTotalSupplyResponse(supply=[Coin(denom="stake", amount="1234")])
+        json_output = {"supply":
+            [{
+                "denom": "stake",
+                "amount": "1234"
+            }]
+        }
+        session = MockSession(200, json_output)
+
         bank = Bank("rest_address")
 
-        session = MockSession(200, "OK")
         with patch.object(bank.rest_api, '_session', session):
-            assert (bank.get_total_supply() == "OK")
+            assert (bank.query_total_supply() == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/supply')
 
-    def test_get_supply_of(self):
+    def test_query_supply_of(self):
+        expected_response = QuerySupplyOfResponse(amount=Coin(denom="stake", amount="1234"))
+        json_output = {"amount":
+            {
+                "denom": "stake",
+                "amount": "1234"
+            }
+        }
+        session = MockSession(200, json_output)
+
         bank = Bank("rest_address")
 
-        session = MockSession(200, "OK")
         with patch.object(bank.rest_api, '_session', session):
-            assert (bank.get_supply_of("denom") == "OK")
+            assert (bank.query_supply_of("denom") == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/supply/denom')
-
-    def test_get_denoms_metadata(self):
-        bank = Bank("rest_address")
-
-        session = MockSession(200, "OK")
-        with patch.object(bank.rest_api, '_session', session):
-            assert (bank.get_denoms_metadata() == "OK")
-            assert (session.last_url == '/cosmos/bank/v1beta1/denoms_metadata')
-
-    def test_get_denoms_metadata(self):
-        bank = Bank("rest_address")
-
-        session = MockSession(200, "OK")
-        with patch.object(bank.rest_api, '_session', session):
-            assert (bank.get_metadata_of_denom("denom") == "OK")
-            assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/denoms_metadata/denom')
