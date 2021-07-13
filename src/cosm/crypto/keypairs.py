@@ -1,7 +1,6 @@
 import base64
 import hashlib
 from typing import Union, Optional
-
 import ecdsa
 
 
@@ -46,6 +45,17 @@ class PublicKey:
 
         return success
 
+    def verify_digest(self, digest: bytes, signature: bytes):
+        success = False
+
+        try:
+            success = self._verifying_key.verify_digest(signature, digest)
+
+        except ecdsa.keys.BadSignatureError:
+            pass
+
+        return success
+
 
 class PrivateKey(PublicKey):
     def __init__(self, private_key: Optional[bytes] = None):
@@ -76,5 +86,14 @@ class PrivateKey(PublicKey):
     def private_key_bytes(self) -> bytes:
         return self._private_key_bytes
 
-    def sign(self, message: bytes) -> bytes:
-        return self._signing_key.sign(message)
+    def sign(self, message: bytes, deterministic=True) -> bytes:
+        if deterministic:
+            return self._signing_key.sign_deterministic(message)
+        else:
+            return self._signing_key.sign(message)
+
+    def sign_digest(self, digest: bytes, deterministic=True) -> bytes:
+        if deterministic:
+            return self._signing_key.sign_digest_deterministic(digest)
+        else:
+            return self._signing_key.sign_digest(digest)
