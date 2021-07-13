@@ -10,5 +10,5 @@ class RestClient:
     def query(self, request: str) -> JSONLike:
         response = self._session.get(url=self.rest_address + request)
         if response.status_code != 200:
-            raise RuntimeError(response)
+            raise RuntimeError(f"Error when sending a query request.\n Request: {request}\n Response: {response})")
         return response.json()
