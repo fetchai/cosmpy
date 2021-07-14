@@ -20,7 +20,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Install dependencies
-      run: pipenv install --skip-lock
+      run: |
+        pip install pipenv
+        pipenv install --skip-lock
     - name: Check code formatting
       run: |
         cd src/cosm
