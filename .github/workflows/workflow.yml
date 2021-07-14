@@ -25,7 +25,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pipenv
-        pipenv install --skip-lock
+        pipenv install --dev --skip-lock
     - name: Check code formatting
       run: |
         cd src/cosm
