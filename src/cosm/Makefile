@@ -6,3 +6,6 @@ mypy:
 
 black:
 	black .
+
+black-check:
+	black --check .
