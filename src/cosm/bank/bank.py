@@ -8,7 +8,7 @@ class Bank:
     def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
         pass
 
-    def TotalSupply(self) -> QueryTotalSupplyResponse:
+    def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
         pass
 
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:

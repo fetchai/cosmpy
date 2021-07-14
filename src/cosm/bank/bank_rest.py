@@ -17,7 +17,7 @@ class BankRest(Bank):
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/balances/{request.address}")
         return Parse(json_response, QueryAllBalancesResponse())
 
-    def TotalSupply(self) -> QueryTotalSupplyResponse:
+    def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/supply")
         return Parse(json_response, QueryTotalSupplyResponse())
 

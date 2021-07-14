@@ -14,7 +14,7 @@ class BankWrapper:
         return self.bank_api.AllBalances(QueryAllBalancesRequest(address=address))
 
     def query_total_supply(self) -> QueryTotalSupplyResponse:
-        return self.bank_api.TotalSupply()
+        return self.bank_api.TotalSupply(QueryTotalSupplyRequest())
 
     def query_supply_of(self, denom: str) -> QuerySupplyOfResponse:
         return self.bank_api.SupplyOf(QuerySupplyOfRequest(denom=denom))
