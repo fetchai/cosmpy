@@ -1,10 +1,11 @@
 from cosm.query.rest_client import RestClient
+from cosm.bank.bank import Bank
 
 from cosmos.bank.v1beta1.query_pb2 import *
 from google.protobuf.json_format import Parse
 
 
-class BankRest:
+class BankRest(Bank):
     def __init__(self, rest_address: str):
         self.rest_api = RestClient(rest_address)
 

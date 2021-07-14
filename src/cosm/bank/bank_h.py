@@ -1,10 +1,11 @@
-from cosm.bank.bank_rest import BankRest
+from cosm.bank.bank import Bank
 from cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from cosmos.bank.v1beta1.query_pb2 import *
 
-class Bank:
-    def __init__(self, rest_address: str):
-        self.bank_api = BankRest(rest_address)
+
+class BankWrapper:
+    def __init__(self, bank_api: Bank):
+        self.bank_api = bank_api
 
     def query_balance(self, address: str, denom: str) -> QueryBalanceResponse:
         return self.bank_api.Balance(QueryBalanceRequest(address=address, denom=denom))
