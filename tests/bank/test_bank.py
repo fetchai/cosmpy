@@ -8,37 +8,36 @@ from cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse, \
 from cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
 
+import json
+
 
 class MockResponse:
-    def __init__(self, status_code: int, json_output: str):
+    def __init__(self, status_code: int, content: str):
         self.status_code = status_code
-        self.json_output = json_output
-
-    def json(self) -> str:
-        return self.json_output
+        self.content = content
 
 
 class MockSession:
-    def __init__(self, status_code: int, json_output: str):
+    def __init__(self, status_code: int, content: str):
         self.status_code = status_code
-        self.json_output = json_output
+        self.content = content
         self.last_url = ""
 
     def get(self, url: str) -> MockResponse:
         self.last_url = url
-        return MockResponse(self.status_code, self.json_output)
+        return MockResponse(self.status_code, self.content)
 
 
 class BankTests(unittest.TestCase):
     def test_query_balance(self):
         expected_response = QueryBalanceResponse(balance=Coin(denom="stake", amount="1234"))
-        json_output = {"balance":
+        content = {"balance":
             {
                 "denom": "stake",
                 "amount": "1234"
             }
         }
-        session = MockSession(200, json_output)
+        session = MockSession(200, json.dumps(content))
 
         bank = Bank("rest_address")
 
@@ -49,7 +48,7 @@ class BankTests(unittest.TestCase):
     def test_query_all_balances(self):
         expected_response = QueryAllBalancesResponse(balances=[Coin(denom="stake", amount="1234")],
                                                      pagination=PageResponse(next_key=None, total=0))
-        json_output = {"balances":
+        content = {"balances":
             [{
                 "denom": "stake",
                 "amount": "1234"
@@ -60,7 +59,7 @@ class BankTests(unittest.TestCase):
                     "total": 0
                 }
         }
-        session = MockSession(200, json_output)
+        session = MockSession(200, json.dumps(content))
 
         bank = Bank("rest_address")
 
@@ -70,13 +69,13 @@ class BankTests(unittest.TestCase):
 
     def test_query_total_supply(self):
         expected_response = QueryTotalSupplyResponse(supply=[Coin(denom="stake", amount="1234")])
-        json_output = {"supply":
+        content = {"supply":
             [{
                 "denom": "stake",
                 "amount": "1234"
             }]
         }
-        session = MockSession(200, json_output)
+        session = MockSession(200, json.dumps(content))
 
         bank = Bank("rest_address")
 
@@ -86,13 +85,13 @@ class BankTests(unittest.TestCase):
 
     def test_query_supply_of(self):
         expected_response = QuerySupplyOfResponse(amount=Coin(denom="stake", amount="1234"))
-        json_output = {"amount":
+        content = {"amount":
             {
                 "denom": "stake",
                 "amount": "1234"
             }
         }
-        session = MockSession(200, json_output)
+        session = MockSession(200, json.dumps(content))
 
         bank = Bank("rest_address")
 
