@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from cosm.bank.bank import Bank
+from cosm.bank.bank_h import Bank
 
 from cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse, \
     QueryAllBalancesResponse, QueryTotalSupplyResponse, QuerySupplyOfResponse
@@ -41,7 +41,7 @@ class BankTests(unittest.TestCase):
 
         bank = Bank("rest_address")
 
-        with patch.object(bank.rest_api, '_session', session):
+        with patch.object(bank.bank_api.rest_api, '_session', session):
             assert (bank.query_balance("account", "denom") == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/balances/account/denom')
 
@@ -63,7 +63,7 @@ class BankTests(unittest.TestCase):
 
         bank = Bank("rest_address")
 
-        with patch.object(bank.rest_api, '_session', session):
+        with patch.object(bank.bank_api.rest_api, '_session', session):
             assert (bank.query_all_balances("account") == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/balances/account')
 
@@ -79,7 +79,7 @@ class BankTests(unittest.TestCase):
 
         bank = Bank("rest_address")
 
-        with patch.object(bank.rest_api, '_session', session):
+        with patch.object(bank.bank_api.rest_api, '_session', session):
             assert (bank.query_total_supply() == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/supply')
 
@@ -95,6 +95,6 @@ class BankTests(unittest.TestCase):
 
         bank = Bank("rest_address")
 
-        with patch.object(bank.rest_api, '_session', session):
+        with patch.object(bank.bank_api.rest_api, '_session', session):
             assert (bank.query_supply_of("denom") == expected_response)
             assert (session.last_url == 'rest_address/cosmos/bank/v1beta1/supply/denom')
