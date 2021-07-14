@@ -8,9 +8,6 @@ class BankRest:
     def __init__(self, rest_address: str):
         self.rest_api = RestClient(rest_address)
 
-    def query_denom_metadata(self, denom: str) -> QueryDenomMetadataResponse:
-        return self.DenomMetadata(QueryDenomMetadataRequest(denom=denom))
-
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/balances/{request.address}/{request.denom}")
         return Parse(json_response, QueryBalanceResponse())
