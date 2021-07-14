@@ -26,12 +26,12 @@ class BankRest:
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/params")
-        return Parse(json_response, QueryDenomsMetadataResponse())
+        return Parse(json_response, QueryParamsResponse())
 
-    def DenomMetadata(self, request: QueryDenomsMetadataRequest) -> QueryDenomsMetadataResponse:
-        json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/denoms_metadata")
-        return Parse(json_response, QueryDenomsMetadataResponse())
-
-    def DenomsMetadata(self, request: QueryDenomMetadataRequest) -> QueryDenomMetadataResponse:
+    def DenomMetadata(self, request: QueryDenomMetadataRequest) -> QueryDenomMetadataResponse:
         json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/denoms_metadata/{request.denom}")
+        return Parse(json_response, QueryDenomMetadataResponse())
+
+    def DenomsMetadata(self, request: QueryDenomsMetadataRequest) -> QueryDenomsMetadataResponse:
+        json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/denoms_metadata")
         return Parse(json_response, QueryDenomsMetadataResponse())

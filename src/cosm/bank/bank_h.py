@@ -2,7 +2,6 @@ from cosm.bank.bank_rest import BankRest
 from cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from cosmos.bank.v1beta1.query_pb2 import *
 
-
 class Bank:
     def __init__(self, rest_address: str):
         self.bank_api = BankRest(rest_address)
@@ -24,3 +23,6 @@ class Bank:
 
     def query_denoms_metadata(self) -> QueryDenomsMetadataResponse:
         return self.bank_api.DenomsMetadata(QueryDenomsMetadataRequest(pagination=PageRequest()))
+
+    def query_denom_metadata(self, denom: str) -> QueryDenomMetadataResponse:
+        return self.bank_api.DenomMetadata(QueryDenomMetadataRequest(denom=denom))
