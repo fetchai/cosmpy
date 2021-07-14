@@ -1,0 +1,35 @@
+name: PyCosm checks and tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9] # Matching Docker container
+
+    timeout-minutes: 30
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Install dependencies
+      run: pipenv install --skip-lock
+    - name: Check code formatting
+      run: |
+        cd src/cosm
+        make black
+    - name: Code style check
+      run: |
+        cd src/cosm
+        make flake
+    - name: Static type check
+      run: |
+        cd src/cosm
+        make mypy
