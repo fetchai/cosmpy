@@ -1,7 +1,6 @@
 from cosm.query.rest_client import RestClient
 from cosm.staking.staking import Staking
 
-# from cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
