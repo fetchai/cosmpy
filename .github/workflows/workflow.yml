@@ -24,12 +24,12 @@ jobs:
     - name: Check code formatting
       run: |
         cd src/cosm
-        make black
+        pipenv run make black
     - name: Code style check
       run: |
         cd src/cosm
-        make flake
+        pipenv run make flake
     - name: Static type check
       run: |
         cd src/cosm
-        make mypy
+        pipenv run make mypy
