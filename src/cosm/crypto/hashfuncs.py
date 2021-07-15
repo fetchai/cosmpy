@@ -1,5 +1,5 @@
 import hashlib
-from _hashlib import HASH
+from _hashlib import HASH  # type: ignore
 
 
 def sha256(contents: bytes) -> bytes:
