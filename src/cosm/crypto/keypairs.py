@@ -5,7 +5,7 @@ import ecdsa
 
 
 class PublicKey:
-    curve = ecdsa.SECP256k1
+    curve: ecdsa.Curve = ecdsa.SECP256k1
     hash_function: Callable = hashlib.sha256
 
     def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
@@ -20,8 +20,8 @@ class PublicKey:
         else:
             raise RuntimeError("Invalid public key type")  # noqa
 
-        self._public_key_bytes = self._verifying_key.to_string("compressed")
-        self._public_key = base64.b64encode(self._public_key_bytes).decode()
+        self._public_key_bytes: bytes = self._verifying_key.to_string("compressed")
+        self._public_key: str = base64.b64encode(self._public_key_bytes).decode()
 
     @property
     def public_key(self) -> str:
@@ -36,7 +36,7 @@ class PublicKey:
         return self._public_key_bytes
 
     def verify(self, message: bytes, signature: bytes):
-        success = False
+        success: bool = False
 
         try:
             success = self._verifying_key.verify(signature, message)
