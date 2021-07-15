@@ -1,7 +1,7 @@
 from cosm.query.rest_client import RestClient
 from cosm.auth.auth import Auth
 
-from cosmos.auth.v1beta1.query_pb2 import *
+from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest, QueryAccountResponse, QueryParamsRequest, QueryParamsResponse
 from google.protobuf.json_format import Parse
 
 
