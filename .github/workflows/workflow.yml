@@ -38,3 +38,7 @@ jobs:
       run: |
         cd src/cosm
         pipenv run make mypy
+    - name: Unit tests
+      run: |
+        cd src/cosm
+        pipenv run make test

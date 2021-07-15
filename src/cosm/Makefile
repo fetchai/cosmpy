@@ -9,3 +9,6 @@ black:
 
 black-check:
 	black --check .
+
+test:
+	python -m unittest
