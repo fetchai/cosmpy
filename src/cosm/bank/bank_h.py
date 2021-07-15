@@ -1,9 +1,21 @@
 from cosm.bank.bank import Bank
 from cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse, QueryAllBalancesRequest, \
-    QueryAllBalancesResponse, QueryTotalSupplyRequest, QueryTotalSupplyResponse, QuerySupplyOfRequest, \
-    QuerySupplyOfResponse, QueryParamsRequest, QueryParamsResponse, QueryDenomMetadataRequest, \
-    QueryDenomsMetadataResponse, QueryDenomMetadataResponse, QueryDenomsMetadataRequest
+from cosmos.bank.v1beta1.query_pb2 import (
+    QueryBalanceRequest,
+    QueryBalanceResponse,
+    QueryAllBalancesRequest,
+    QueryAllBalancesResponse,
+    QueryTotalSupplyRequest,
+    QueryTotalSupplyResponse,
+    QuerySupplyOfRequest,
+    QuerySupplyOfResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QueryDenomMetadataRequest,
+    QueryDenomsMetadataResponse,
+    QueryDenomMetadataResponse,
+    QueryDenomsMetadataRequest,
+)
 
 
 class BankWrapper:
@@ -26,7 +38,9 @@ class BankWrapper:
         return self.bank_api.Params(QueryParamsRequest())
 
     def query_denoms_metadata(self) -> QueryDenomsMetadataResponse:
-        return self.bank_api.DenomsMetadata(QueryDenomsMetadataRequest(pagination=PageRequest()))
+        return self.bank_api.DenomsMetadata(
+            QueryDenomsMetadataRequest(pagination=PageRequest())
+        )
 
     def query_denom_metadata(self, denom: str) -> QueryDenomMetadataResponse:
         return self.bank_api.DenomMetadata(QueryDenomMetadataRequest(denom=denom))

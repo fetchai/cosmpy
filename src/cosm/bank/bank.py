@@ -1,7 +1,19 @@
-from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse, QueryAllBalancesRequest, \
-    QueryAllBalancesResponse, QueryTotalSupplyRequest, QueryTotalSupplyResponse, QuerySupplyOfRequest, \
-    QuerySupplyOfResponse, QueryParamsRequest, QueryParamsResponse, QueryDenomMetadataRequest, \
-    QueryDenomsMetadataResponse, QueryDenomMetadataResponse, QueryDenomsMetadataRequest
+from cosmos.bank.v1beta1.query_pb2 import (
+    QueryBalanceRequest,
+    QueryBalanceResponse,
+    QueryAllBalancesRequest,
+    QueryAllBalancesResponse,
+    QueryTotalSupplyRequest,
+    QueryTotalSupplyResponse,
+    QuerySupplyOfRequest,
+    QuerySupplyOfResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QueryDenomMetadataRequest,
+    QueryDenomsMetadataResponse,
+    QueryDenomMetadataResponse,
+    QueryDenomsMetadataRequest,
+)
 
 
 class Bank:
@@ -20,8 +32,12 @@ class Bank:
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         pass
 
-    def DenomMetadata(self, request: QueryDenomMetadataRequest) -> QueryDenomMetadataResponse:
+    def DenomMetadata(
+        self, request: QueryDenomMetadataRequest
+    ) -> QueryDenomMetadataResponse:
         pass
 
-    def DenomsMetadata(self, request: QueryDenomsMetadataRequest) -> QueryDenomsMetadataResponse:
+    def DenomsMetadata(
+        self, request: QueryDenomsMetadataRequest
+    ) -> QueryDenomsMetadataResponse:
         pass
