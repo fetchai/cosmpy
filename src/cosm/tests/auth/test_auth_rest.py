@@ -49,5 +49,5 @@ class AuthTests(unittest.TestCase):
         with patch.object(auth.auth_api.rest_api, "_session", session):
             assert auth.query_account("address") == expected_response
             assert (
-                    session.last_url == "rest_address/cosmos/auth/v1beta1/accounts/address"
+                session.last_url == "rest_address/cosmos/auth/v1beta1/accounts/address"
             )
