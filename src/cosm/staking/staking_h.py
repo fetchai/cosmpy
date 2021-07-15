@@ -1,4 +1,3 @@
-from cosm.query.rest_client import RestClient
 from cosm.staking.staking import Staking
 
 from cosmos.staking.v1beta1.query_pb2 import (
@@ -31,7 +30,6 @@ from cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
 )
-from google.protobuf.json_format import Parse
 
 
 class StakingWrapper:
@@ -63,6 +61,16 @@ class StakingWrapper:
         """Query ValidatorUnbondingDelegations."""
         return self.api.ValidatorUnbondingDelegations(
             QueryValidatorUnbondingDelegationsRequest(validator_addr=validator_addr)
+        )
+
+    def query_delegation(
+        self, validator_addr: str, delegator_addr: str
+    ) -> QueryDelegationResponse:
+        """Query UnbondingDelegation."""
+        return self.api.Delegation(
+            QueryDelegationRequest(
+                validator_addr=validator_addr, delegator_addr=delegator_addr
+            )
         )
 
     def query_unbonding_delegation(
