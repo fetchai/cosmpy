@@ -9,9 +9,9 @@ from hashlib import sha256
 
 
 def my_import(name):
-    if name[0] == '/':
+    if name[0] == "/":
         name = name[1:]
-    components = name.split('.')
+    components = name.split(".")
     mod = __import__(components[0])
     for comp in components[1:]:
         mod = getattr(mod, comp)
@@ -41,12 +41,12 @@ class TxSerialisedTestData:
 
 class TxSign(unittest.TestCase):
     tx_test_data = TxSerialisedTestData(
-          private_key=b"0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
-        , tx_body=b"0a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e73"
-        , tx=b"0aac010a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e7312670a500a460a1f2f636f736d6f732e63727970746f2e736563703235366b312e5075624b657912230a2102935ee91bcdd32610db433cceec287e852ba21ad7ff368a0d6174ec59dad71c3f12040a020801180112130a0d0a0575636f736d1204323030301080f1041a4064d060aad828a4a31ef779455a27c30349c602aaca22924cbb6ed982a6c19aa7239da91af10936c3e34304771e31b8abb3588bb7dd7526260c31236cf2a6588a"
-        , sign_doc_bytes=b"0aac010a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e7312670a500a460a1f2f636f736d6f732e63727970746f2e736563703235366b312e5075624b657912230a2102935ee91bcdd32610db433cceec287e852ba21ad7ff368a0d6174ec59dad71c3f12040a020801180112130a0d0a0575636f736d1204323030301080f1041a0774657374696e67"
-        , hash_for_signing=b"c0aeb7763e9a6e0a3371c2f2eb7f1271702f6d58f9af5bb56a5a93a0b2a895f0"
-        )
+        private_key=b"0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae",
+        tx_body=b"0a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e73",
+        tx=b"0aac010a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e7312670a500a460a1f2f636f736d6f732e63727970746f2e736563703235366b312e5075624b657912230a2102935ee91bcdd32610db433cceec287e852ba21ad7ff368a0d6174ec59dad71c3f12040a020801180112130a0d0a0575636f736d1204323030301080f1041a4064d060aad828a4a31ef779455a27c30349c602aaca22924cbb6ed982a6c19aa7239da91af10936c3e34304771e31b8abb3588bb7dd7526260c31236cf2a6588a",
+        sign_doc_bytes=b"0aac010a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e7312670a500a460a1f2f636f736d6f732e63727970746f2e736563703235366b312e5075624b657912230a2102935ee91bcdd32610db433cceec287e852ba21ad7ff368a0d6174ec59dad71c3f12040a020801180112130a0d0a0575636f736d1204323030301080f1041a0774657374696e67",
+        hash_for_signing=b"c0aeb7763e9a6e0a3371c2f2eb7f1271702f6d58f9af5bb56a5a93a0b2a895f0",
+    )
 
     def test_deserialise_message_from_tx_body(self):
         body = TxBody()
@@ -55,9 +55,9 @@ class TxSign(unittest.TestCase):
         print("===> body.memo:", body.memo)
 
         for m in body.messages:
-            #msg = my_import(m.type_url)
-            #m.Unpack(msg)
-            #print("message:", msg)
+            # msg = my_import(m.type_url)
+            # m.Unpack(msg)
+            # print("message:", msg)
             if m.type_url == "/cosmos.bank.v1beta1.MsgSend":
                 msg_send = MsgSend()
                 m.Unpack(msg_send)
@@ -71,14 +71,14 @@ class TxSign(unittest.TestCase):
         print("===> txRaw:", tx)
         print("======> Tx.body: ", tx.body)
         print("======> Tx.auth_info: ", tx.auth_info)
-        for sig  in tx.signatures:
+        for sig in tx.signatures:
             print("signature: ", sig)
-        #Tx.body.messages.Unpack(msg)
-        #print("msg_send: ", msg)
+        # Tx.body.messages.Unpack(msg)
+        # print("msg_send: ", msg)
 
     def test_sign(self):
-        #tx = Tx()
-        #tx.ParseFromString(self.tx_test_data.tx)
+        # tx = Tx()
+        # tx.ParseFromString(self.tx_test_data.tx)
 
         tx = Tx()
         tx.ParseFromString(self.tx_test_data.tx)
@@ -118,14 +118,18 @@ class TxSign(unittest.TestCase):
 
         # Verify signature provided in the **original/reference** transaction
         print("signature: ", tx.signatures[0])
-        assert pubk.verify_digest(digest=self.tx_test_data.hash_for_signing, signature=tx.signatures[0])
+        assert pubk.verify_digest(
+            digest=self.tx_test_data.hash_for_signing, signature=tx.signatures[0]
+        )
 
         # Generating deterministic signature:
         deterministic_signature = pk.sign_digest(hash_for_signing, deterministic=True)
         # Quite *unnecessary* verification of the freshly generated signature:
-        assert pubk.verify_digest(digest=self.tx_test_data.hash_for_signing, signature=deterministic_signature)
+        assert pubk.verify_digest(
+            digest=self.tx_test_data.hash_for_signing, signature=deterministic_signature
+        )
 
         # =======================================
         # !!! NOTE !!!: It looks like cosmos-cli generated non-deterministic signatures, since following assert fails
-        #assert tx.signatures[0] == deterministic_signature
+        # assert tx.signatures[0] == deterministic_signature
         # =======================================
