@@ -7,7 +7,7 @@ class AuthWrapper:
         self.auth_api = auth_api
 
     def query_account(self, address: str) -> QueryAccountResponse:
-        return self.auth_api.Balance(QueryAccountRequest(address=address))
+        return self.auth_api.Account(QueryAccountRequest(address=address))
 
     def query_params(self) -> QueryParamsResponse:
         return self.auth_api.Params(QueryParamsRequest())
