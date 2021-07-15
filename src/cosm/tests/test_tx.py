@@ -1,8 +1,7 @@
 import unittest
 from dataclasses import dataclass
-from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PublicKey, PrivateKey
-from cosmos.tx.v1beta1.tx_pb2 import Tx, TxRaw, TxBody, SignDoc
+from cosmos.tx.v1beta1.tx_pb2 import Tx, TxBody, SignDoc
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from hashlib import sha256
