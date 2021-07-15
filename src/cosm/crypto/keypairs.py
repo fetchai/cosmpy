@@ -1,12 +1,12 @@
 import base64
 import hashlib
-from typing import Union, Optional
+from typing import Union, Optional, Callable
 import ecdsa
 
 
 class PublicKey:
     curve = ecdsa.SECP256k1
-    hash_function = hashlib.sha256
+    hash_function: Callable = hashlib.sha256
 
     def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
         if isinstance(public_key, bytes):
