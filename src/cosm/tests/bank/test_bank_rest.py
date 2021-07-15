@@ -51,7 +51,8 @@ class BankTests(unittest.TestCase):
         with patch.object(bank.bank_api.rest_api, "_session", session):
             assert bank.query_balance("account", "denom") == expected_response
             assert (
-                session.last_url == "rest_address/cosmos/bank/v1beta1/balances/account/denom"
+                session.last_url
+                == "rest_address/cosmos/bank/v1beta1/balances/account/denom"  # noqa W503
             )
 
     def test_query_all_balances(self):
@@ -144,5 +145,6 @@ class BankTests(unittest.TestCase):
         with patch.object(bank.bank_api.rest_api, "_session", session):
             assert bank.query_denom_metadata("denom") == expected_response
             assert (
-                session.last_url == "rest_address/cosmos/bank/v1beta1/denoms_metadata/denom"
+                session.last_url
+                == "rest_address/cosmos/bank/v1beta1/denoms_metadata/denom"  # noqa W503
             )
