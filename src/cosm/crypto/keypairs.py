@@ -2,10 +2,11 @@ import base64
 import hashlib
 from typing import Union, Optional, Callable
 import ecdsa
+from ecdsa.curves import Curve
 
 
 class PublicKey:
-    curve: ecdsa.Curve = ecdsa.SECP256k1
+    curve: Curve = ecdsa.SECP256k1
     hash_function: Callable = hashlib.sha256
 
     def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
