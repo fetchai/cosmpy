@@ -47,7 +47,7 @@ class PublicKey:
         return success
 
     def verify_digest(self, digest: bytes, signature: bytes):
-        success = False
+        success: bool = False
 
         try:
             success = self._verifying_key.verify_digest(signature, digest)
