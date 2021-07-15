@@ -1,5 +1,4 @@
 import requests
-from common import JSONLike
 
 
 class RestClient:
