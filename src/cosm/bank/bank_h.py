@@ -1,6 +1,9 @@
 from cosm.bank.bank import Bank
 from cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from cosmos.bank.v1beta1.query_pb2 import *
+from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse, QueryAllBalancesRequest, \
+    QueryAllBalancesResponse, QueryTotalSupplyRequest, QueryTotalSupplyResponse, QuerySupplyOfRequest, \
+    QuerySupplyOfResponse, QueryParamsRequest, QueryParamsResponse, QueryDenomMetadataRequest, \
+    QueryDenomsMetadataResponse, QueryDenomMetadataResponse, QueryDenomsMetadataRequest
 
 
 class BankWrapper:

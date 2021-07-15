@@ -1,4 +1,7 @@
-from cosmos.bank.v1beta1.query_pb2 import *
+from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse, QueryAllBalancesRequest, \
+    QueryAllBalancesResponse, QueryTotalSupplyRequest, QueryTotalSupplyResponse, QuerySupplyOfRequest, \
+    QuerySupplyOfResponse, QueryParamsRequest, QueryParamsResponse, QueryDenomMetadataRequest, \
+    QueryDenomsMetadataResponse, QueryDenomMetadataResponse, QueryDenomsMetadataRequest
 
 
 class Bank:
