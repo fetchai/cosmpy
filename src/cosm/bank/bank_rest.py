@@ -37,7 +37,7 @@ class BankRest(Bank):
         return Parse(json_response, QueryAllBalancesResponse())
 
     def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
-        json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/supply")
+        json_response = self.rest_api.query("/cosmos/bank/v1beta1/supply")
         return Parse(json_response, QueryTotalSupplyResponse())
 
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
@@ -47,7 +47,7 @@ class BankRest(Bank):
         return Parse(json_response, QuerySupplyOfResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/params")
+        json_response = self.rest_api.query("/cosmos/bank/v1beta1/params")
         return Parse(json_response, QueryParamsResponse())
 
     def DenomMetadata(
@@ -61,5 +61,5 @@ class BankRest(Bank):
     def DenomsMetadata(
         self, request: QueryDenomsMetadataRequest
     ) -> QueryDenomsMetadataResponse:
-        json_response = self.rest_api.query(f"/cosmos/bank/v1beta1/denoms_metadata")
+        json_response = self.rest_api.query("/cosmos/bank/v1beta1/denoms_metadata")
         return Parse(json_response, QueryDenomsMetadataResponse())
