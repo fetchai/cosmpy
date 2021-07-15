@@ -2,6 +2,7 @@ import base64
 import hashlib
 from typing import Union, Optional
 import ecdsa
+from cosm.crypto.interface import Signer
 
 
 class PublicKey:
@@ -57,7 +58,7 @@ class PublicKey:
         return success
 
 
-class PrivateKey(PublicKey):
+class PrivateKey(PublicKey, Signer):
     def __init__(self, private_key: Optional[bytes] = None):
         if private_key is None:
             self._signing_key = ecdsa.SigningKey.generate(curve=self.curve, hashfunc=self.hash_function)
