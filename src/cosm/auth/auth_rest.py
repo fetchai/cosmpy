@@ -1,7 +1,12 @@
 from cosm.query.rest_client import RestClient
 from cosm.auth.auth import Auth
 
-from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest, QueryAccountResponse, QueryParamsRequest, QueryParamsResponse
+from cosmos.auth.v1beta1.query_pb2 import (
+    QueryAccountRequest,
+    QueryAccountResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+)
 from google.protobuf.json_format import Parse
 
 
@@ -10,7 +15,9 @@ class AuthRest(Auth):
         self.rest_api = RestClient(rest_address)
 
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
-        json_response = self.rest_api.query(f"/cosmos/auth/v1beta1/accounts/{request.address}")
+        json_response = self.rest_api.query(
+            f"/cosmos/auth/v1beta1/accounts/{request.address}"
+        )
         return Parse(json_response, QueryAccountResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:

@@ -1,4 +1,9 @@
-from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest, QueryAccountResponse, QueryParamsRequest, QueryParamsResponse
+from cosmos.auth.v1beta1.query_pb2 import (
+    QueryAccountRequest,
+    QueryAccountResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+)
 
 
 class Auth:
