@@ -21,5 +21,5 @@ class AuthRest(Auth):
         return Parse(json_response, QueryAccountResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        json_response = self.rest_api.query(f"/cosmos/auth/v1beta1/params")
+        json_response = self.rest_api.query("/cosmos/auth/v1beta1/params")
         return Parse(json_response, QueryParamsResponse())
