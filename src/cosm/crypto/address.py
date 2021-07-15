@@ -16,9 +16,9 @@ def _to_bech32(prefix: str, data: bytes) -> str:
 
 class Address:
     def __init__(
-            self,
-            value: Union[str, bytes, PublicKey, "Address"],
-            prefix: Optional[str] = None,
+        self,
+        value: Union[str, bytes, PublicKey, "Address"],
+        prefix: Optional[str] = None,
     ):
         if isinstance(value, str):
             _, data_base5 = bech32.bech32_decode(value)
