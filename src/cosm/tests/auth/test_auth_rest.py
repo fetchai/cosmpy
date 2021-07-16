@@ -51,7 +51,7 @@ class AuthTests(unittest.TestCase):
 
         with patch.object(auth.rest_api, "_session", session):
             assert (
-                auth.Account(QueryAccountRequest(account="address"))
+                auth.Account(QueryAccountRequest(address="address"))
                 == expected_response  # noqa W503
             )
             assert (
