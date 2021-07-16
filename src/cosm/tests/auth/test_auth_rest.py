@@ -1,9 +1,13 @@
 import unittest
 from unittest.mock import patch
-from cosm.auth.auth_h import AuthWrapper
 from cosm.auth.auth_rest import AuthRest
 
-from cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse, QueryParamsResponse
+from cosmos.auth.v1beta1.query_pb2 import (
+    QueryAccountResponse,
+    QueryAccountRequest,
+    QueryParamsResponse,
+    QueryParamsRequest,
+)
 from google.protobuf.json_format import ParseDict
 
 import json
@@ -43,10 +47,13 @@ class AuthTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryAccountResponse())
 
         session = MockSession(200, json.dumps(content))
-        auth = AuthWrapper(AuthRest("rest_address"))
+        auth = AuthRest("rest_address")
 
-        with patch.object(auth.auth_api.rest_api, "_session", session):
-            assert auth.query_account("address") == expected_response
+        with patch.object(auth.rest_api, "_session", session):
+            assert (
+                auth.Account(QueryAccountRequest(account="address"))
+                == expected_response  # noqa W503
+            )
             assert (
                 session.last_url == "rest_address/cosmos/auth/v1beta1/accounts/address"
             )
@@ -64,8 +71,8 @@ class AuthTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryParamsResponse())
 
         session = MockSession(200, json.dumps(content))
-        auth = AuthWrapper(AuthRest("rest_address"))
+        auth = AuthRest("rest_address")
 
-        with patch.object(auth.auth_api.rest_api, "_session", session):
-            assert auth.query_params() == expected_response
+        with patch.object(auth.rest_api, "_session", session):
+            assert auth.Params(QueryParamsRequest()) == expected_response
             assert session.last_url == "rest_address/cosmos/auth/v1beta1/params"
