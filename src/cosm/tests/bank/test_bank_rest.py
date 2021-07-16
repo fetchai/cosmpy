@@ -1,15 +1,21 @@
 import unittest
 from unittest.mock import patch
-from cosm.bank.bank_h import BankWrapper
 from cosm.bank.bank_rest import BankRest
 
 from cosmos.bank.v1beta1.query_pb2 import (
+    QueryBalanceRequest,
     QueryBalanceResponse,
+    QueryAllBalancesRequest,
     QueryAllBalancesResponse,
+    QueryTotalSupplyRequest,
     QueryTotalSupplyResponse,
+    QuerySupplyOfRequest,
     QuerySupplyOfResponse,
+    QueryParamsRequest,
     QueryParamsResponse,
+    QueryDenomMetadataRequest,
     QueryDenomMetadataResponse,
+    QueryDenomsMetadataRequest,
     QueryDenomsMetadataResponse,
 )
 
@@ -46,10 +52,13 @@ class BankTests(unittest.TestCase):
         content = {"balance": {"denom": "stake", "amount": "1234"}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankWrapper(BankRest("rest_address"))
+        bank = BankRest("rest_address")
 
-        with patch.object(bank.bank_api.rest_api, "_session", session):
-            assert bank.query_balance("account", "denom") == expected_response
+        with patch.object(bank.rest_api, "_session", session):
+            assert (
+                bank.Balance(QueryBalanceRequest(address="account", denom="denom"))
+                == expected_response  # noqa W503
+            )
             assert (
                 session.last_url
                 == "rest_address/cosmos/bank/v1beta1/balances/account/denom"  # noqa W503
@@ -66,10 +75,13 @@ class BankTests(unittest.TestCase):
         }
         session = MockSession(200, json.dumps(content))
 
-        bank = BankWrapper(BankRest("rest_address"))
+        bank = BankRest("rest_address")
 
-        with patch.object(bank.bank_api.rest_api, "_session", session):
-            assert bank.query_all_balances("account") == expected_response
+        with patch.object(bank.rest_api, "_session", session):
+            assert (
+                bank.AllBalances(QueryAllBalancesRequest(address="account"))
+                == expected_response  # noqa W503
+            )
             assert (
                 session.last_url == "rest_address/cosmos/bank/v1beta1/balances/account"
             )
@@ -81,10 +93,10 @@ class BankTests(unittest.TestCase):
         content = {"supply": [{"denom": "stake", "amount": "1234"}]}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankWrapper(BankRest("rest_address"))
+        bank = BankRest("rest_address")
 
-        with patch.object(bank.bank_api.rest_api, "_session", session):
-            assert bank.query_total_supply() == expected_response
+        with patch.object(bank.rest_api, "_session", session):
+            assert bank.TotalSupply(QueryTotalSupplyRequest()) == expected_response
             assert session.last_url == "rest_address/cosmos/bank/v1beta1/supply"
 
     def test_query_supply_of(self):
@@ -94,10 +106,12 @@ class BankTests(unittest.TestCase):
         content = {"amount": {"denom": "stake", "amount": "1234"}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankWrapper(BankRest("rest_address"))
+        bank = BankRest("rest_address")
 
-        with patch.object(bank.bank_api.rest_api, "_session", session):
-            assert bank.query_supply_of("denom") == expected_response
+        with patch.object(bank.rest_api, "_session", session):
+            assert (
+                bank.SupplyOf(QuerySupplyOfRequest(denom="denom")) == expected_response
+            )
             assert session.last_url == "rest_address/cosmos/bank/v1beta1/supply/denom"
 
     def test_query_params(self):
@@ -107,10 +121,10 @@ class BankTests(unittest.TestCase):
         content = {"params": {"default_send_enabled": True}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankWrapper(BankRest("rest_address"))
+        bank = BankRest("rest_address")
 
-        with patch.object(bank.bank_api.rest_api, "_session", session):
-            assert bank.query_params() == expected_response
+        with patch.object(bank.rest_api, "_session", session):
+            assert bank.Params(QueryParamsRequest()) == expected_response
             assert session.last_url == "rest_address/cosmos/bank/v1beta1/params"
 
     def test_query_denoms_metadata(self):
@@ -120,10 +134,12 @@ class BankTests(unittest.TestCase):
         content = {"metadatas": [], "pagination": {"next_key": None, "total": 0}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankWrapper(BankRest("rest_address"))
+        bank = BankRest("rest_address")
 
-        with patch.object(bank.bank_api.rest_api, "_session", session):
-            assert bank.query_denoms_metadata() == expected_response
+        with patch.object(bank.rest_api, "_session", session):
+            assert (
+                bank.DenomsMetadata(QueryDenomsMetadataRequest()) == expected_response
+            )
             assert (
                 session.last_url == "rest_address/cosmos/bank/v1beta1/denoms_metadata"
             )
@@ -140,10 +156,13 @@ class BankTests(unittest.TestCase):
         }
         session = MockSession(200, json.dumps(content))
 
-        bank = BankWrapper(BankRest("rest_address"))
+        bank = BankRest("rest_address")
 
-        with patch.object(bank.bank_api.rest_api, "_session", session):
-            assert bank.query_denom_metadata("denom") == expected_response
+        with patch.object(bank.rest_api, "_session", session):
+            assert (
+                bank.DenomMetadata(QueryDenomMetadataRequest(denom="denom"))
+                == expected_response  # noqa W503
+            )
             assert (
                 session.last_url
                 == "rest_address/cosmos/bank/v1beta1/denoms_metadata/denom"  # noqa W503
