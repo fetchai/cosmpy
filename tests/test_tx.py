@@ -1,3 +1,5 @@
+import json
+import os
 import unittest
 from dataclasses import dataclass
 from cosm.crypto.address import Address
@@ -12,10 +14,11 @@ from grpc import insecure_channel
 from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxClient
 from cosmos.tx.v1beta1.service_pb2 import BroadcastTxRequest, BroadcastTxResponse, BroadcastMode
 from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
-from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
+from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest, QueryAccountResponse
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.well_known_types import Any as AnyOrig
+from cosm.transaction import sign_transaction
 
 orig_Pack = AnyOrig.Pack
 
@@ -148,6 +151,7 @@ class TxSign(unittest.TestCase):
         #assert tx.signatures[0] == deterministic_signature
         # =======================================
 
+    @unittest.skipIf('FETCHD_GRPC_URL' not in os.environ, "Just for testing with local fetchd node")
     def test_tx_broadcast(self):
         #from_pk = PrivateKey(bytes.fromhex("8bdfbd2eaad5dc4324d19fabed72882709dc080b39e61044d51b91a6e38f6871"))
         from_pk = PrivateKey(bytes.fromhex("cfb265b5d54ace71f6adc93a5072da3b8d6bfa8941904b1f6d4197db0c6f677e"))
@@ -157,7 +161,7 @@ class TxSign(unittest.TestCase):
         to_pb = PrivateKey(bytes.fromhex("bc689e9f5e3f4e74f3686423fb23aaee25eb96e926bb1d33196c0bf5b482d003"))
         to_address = Address(to_pb)
 
-        channel = insecure_channel('localhost:9090')
+        channel = insecure_channel(os.environ['FETCHD_GRPC_URL'])
         tx_client = TxClient(channel)
         auth_query_client = AuthQueryClient(channel)
         account_response = auth_query_client.Account(
@@ -209,25 +213,28 @@ class TxSign(unittest.TestCase):
                 )
             )
 
-        sd = SignDoc()
-        sd.body_bytes = tx_body.SerializeToString()
-        sd.auth_info_bytes = auth_info.SerializeToString()
-        sd.chain_id = "testing"
-        sd.account_number = account.account_number
+        #sd = SignDoc()
+        #sd.body_bytes = tx_body.SerializeToString()
+        #sd.auth_info_bytes = auth_info.SerializeToString()
+        #sd.chain_id = "testing"
+        #sd.account_number = account.account_number
 
-        sd_data = sd.SerializeToString()
-        m = sha256()
-        m.update(sd_data)
-        hash_for_signing = m.digest()
+        #sd_data = sd.SerializeToString()
+        #m = sha256()
+        #m.update(sd_data)
+        #hash_for_signing = m.digest()
 
-        # Generating deterministic signature:
-        deterministic_signature = from_pk.sign_digest(hash_for_signing, deterministic=True)
+        ## Generating deterministic signature:
+        #deterministic_signature = from_pk.sign_digest(hash_for_signing, deterministic=True)
+
+        #tx = Tx(body=tx_body, auth_info=auth_info)
+        #tx.signatures.extend([deterministic_signature])
+
+        #print("new Tx = ", tx)
 
         tx = Tx(body=tx_body, auth_info=auth_info)
-        tx.signatures.extend([deterministic_signature])
 
-        print("new Tx = ", tx)
-
+        sign_transaction(tx, signer=from_pk, chain_id="testing", account_number=account.account_number, deterministic=True)
         tx_data = tx.SerializeToString()
 
         broad_tx_req = BroadcastTxRequest(
@@ -238,16 +245,3 @@ class TxSign(unittest.TestCase):
         broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
 
         print("broad_tx_resp = ", broad_tx_resp)
-
-    def test_x(self):
-        from cosmos.tx.v1beta1.tx_pb2 import Tx
-        from google.protobuf.json_format import MessageToJson, Parse
-        from base64 import b64decode
-        tx_base64 = "CpUBCowBChwvY29zbW9zLmJhbmsudjFiZXRhMS5Nc2dTZW5kEmwKLGZldGNoMW1yZjV5eWpubmxweTBlZ3ZwazJwdmpkazk2NjdqMmd0dThrcGZ5EixmZXRjaDEyOHI4M3V2Y3huczgyNTM1ZDNkYTV3bWZ2aGMyZTVtdXQ5MjJkdxoOCgVzdGFrZRIFMTIzNDUSBG1lbW8SZgpQCkYKHy9jb3Ntb3MuY3J5cHRvLnNlY3AyNTZrMS5QdWJLZXkSIwohApNe6RvN0yYQ20M8zuwofoUrohrX/zaKDWF07Fna1xw/EgQKAggBGAMSEgoMCgVzdGFrZRIDMTAwEIDxBBpAr643svBLGgLRqmFMipglqCnY2hutKKmjoAOFiZn8XeN26qjgFkMyS0wImzNCBF/5FpO/EI33PE03197UiMpklw=="
-        tx_proto = b64decode(tx_base64.encode())
-        tx = Tx()
-        tx.ParseFromString(tx_proto)
-        tx_json = MessageToJson(tx)
-        print("tx_json: ", tx_json)
-        tx_reconst = Parse(tx_json, Tx())
-        assert tx == tx_reconst

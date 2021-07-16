@@ -5,10 +5,13 @@ from cosmos.tx.v1beta1.tx_pb2 import Tx, TxRaw, TxBody, SignDoc, SignerInfo, Aut
 def sign_transaction(
         tx: Tx,
         signer: Signer,
-        chain_id=None,
-        account_number=None,
-        deterministic=None
+        chain_id: str,
+        account_number: int,
+        deterministic: bool = None
         ):
+    if deterministic is None:
+        deterministic = False
+
     sd = SignDoc()
     sd.body_bytes = tx.body.SerializeToString()
     sd.auth_info_bytes = tx.auth_info.SerializeToString()
@@ -18,5 +21,5 @@ def sign_transaction(
     data_for_signing = sd.SerializeToString()
 
     # Generating deterministic signature:
-    deterministic_signature = signer.sign(data_for_signing, deterministic=deterministic)
-    tx.signatures.extend([deterministic_signature])
+    signature = signer.sign(data_for_signing, deterministic=deterministic)
+    tx.signatures.extend([signature])
