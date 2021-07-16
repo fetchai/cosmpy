@@ -3,6 +3,7 @@ import hashlib
 from typing import Union, Optional, Callable
 import ecdsa
 from ecdsa.curves import Curve
+from ecdsa.util import sigencode_string_canonize, sigencode_string
 
 
 class PublicKey:
@@ -91,14 +92,14 @@ class PrivateKey(PublicKey):
     def private_key_bytes(self) -> bytes:
         return self._private_key_bytes
 
-    def sign(self, message: bytes, deterministic=True) -> bytes:
-        if deterministic:
-            return self._signing_key.sign_deterministic(message)
-        else:
-            return self._signing_key.sign(message)
+    def sign(self, message: bytes, deterministic=True, canonicalise: bool = True) -> bytes:
+        sigencode = sigencode_string_canonize if canonicalise else sigencode_string
+        sign_fnc = self._signing_key.sign_deterministic if deterministic else self._signing_key.sign
 
-    def sign_digest(self, digest: bytes, deterministic=True) -> bytes:
-        if deterministic:
-            return self._signing_key.sign_digest_deterministic(digest)
-        else:
-            return self._signing_key.sign_digest(digest)
+        return sign_fnc(message, sigencode=sigencode)
+
+    def sign_digest(self, digest: bytes, deterministic=True, canonicalise: bool = True) -> bytes:
+        sigencode = sigencode_string_canonize if canonicalise else sigencode_string
+        sign_fnc = self._signing_key.sign_digest_deterministic if deterministic else self._signing_key.sign_digest
+
+        return sign_fnc(digest, sigencode=sigencode)
