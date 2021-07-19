@@ -13,7 +13,7 @@ from cosm.auth.interface import Auth
 
 class AuthRestClient(Auth):
     def __init__(self, rest_address: str):
-        self.rest_api = RestClient(rest_address)
+        self.rest_api = QueryRestClient(rest_address)
 
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
         json_response = self.rest_api.query(
