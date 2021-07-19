@@ -1,6 +1,6 @@
 from google.protobuf.json_format import Parse
 
-from cosm.query.base import RestClient
+from cosm.query.rest_client import QueryRestClient
 
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,

@@ -1,5 +1,5 @@
 from google.protobuf.json_format import Parse
-from cosm.query.base import RestClient
+from cosm.query.rest_client import QueryRestClient
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
     QueryBalanceResponse,
@@ -22,7 +22,7 @@ from cosm.bank.interface import Bank
 
 class BankRestClient(Bank):
     def __init__(self, rest_address: str):
-        self.rest_api = RestClient(rest_address)
+        self.rest_api = QueryRestClient(rest_address)
 
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         json_response = self.rest_api.query(
