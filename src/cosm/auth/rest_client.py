@@ -1,20 +1,14 @@
-from abc import ABC
 from google.protobuf.json_format import Parse
+
+from cosm.query.base import RestClient
+
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
-from cosm.query.base import RestClient
-
-
-class Auth(ABC):
-    def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
-        pass
-
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        pass
+from cosm.auth.interface import Auth
 
 
 class AuthRestClient(Auth):

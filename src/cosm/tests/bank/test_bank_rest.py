@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from cosm.bank.base import BankRestClient
+from cosm.bank.rest_client import BankRestClient
 
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,

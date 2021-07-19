@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from cosm.auth.base import AuthRestClient
+from cosm.auth.rest_client import AuthRestClient
 
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountResponse,
