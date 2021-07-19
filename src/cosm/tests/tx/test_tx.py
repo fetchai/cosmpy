@@ -4,6 +4,7 @@ import unittest
 from dataclasses import dataclass
 from cosm.crypto.keypairs import PublicKey, PrivateKey
 from cosm.crypto.address import Address
+from cosm.tx.tx_rest_client import TxRestClient
 from cosmos.tx.v1beta1.tx_pb2 import Tx, TxBody, SignDoc, SignerInfo, AuthInfo, ModeInfo, Fee
 from cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
@@ -18,7 +19,7 @@ from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.well_known_types import Any as AnyOrig
-from cosm.transaction import sign_transaction
+from cosm.tx import sign_transaction
 
 orig_Pack = AnyOrig.Pack
 
@@ -166,7 +167,8 @@ class TxSign(unittest.TestCase):
         to_address = Address(to_pb)
 
         channel = insecure_channel(os.environ['FETCHD_GRPC_URL'])
-        tx_client = TxClient(channel)
+        #tx_client = TxClient(channel)
+        tx_client = TxRestClient("http://localhost:1317")
         auth_query_client = AuthQueryClient(channel)
         account_response = auth_query_client.Account(
             QueryAccountRequest(address=str(from_address)))
@@ -217,30 +219,29 @@ class TxSign(unittest.TestCase):
                 )
             )
 
-        #sd = SignDoc()
-        #sd.body_bytes = tx_body.SerializeToString()
-        #sd.auth_info_bytes = auth_info.SerializeToString()
-        #sd.chain_id = "testing"
-        #sd.account_number = account.account_number
+        sd = SignDoc()
+        sd.body_bytes = tx_body.SerializeToString()
+        sd.auth_info_bytes = auth_info.SerializeToString()
+        sd.chain_id = "testing"
+        sd.account_number = account.account_number
 
-        #sd_data = sd.SerializeToString()
-        #m = sha256()
-        #m.update(sd_data)
-        #hash_for_signing = m.digest()
+        sd_data = sd.SerializeToString()
+        m = sha256()
+        m.update(sd_data)
+        hash_for_signing = m.digest()
 
-        ## Generating deterministic signature:
-        #deterministic_signature = from_pk.sign_digest(hash_for_signing, deterministic=True)
-
-        #tx = Tx(body=tx_body, auth_info=auth_info)
-        #tx.signatures.extend([deterministic_signature])
-
-        #print("new Tx = ", tx)
+        # Generating deterministic signature:
+        deterministic_signature = from_pk.sign_digest(hash_for_signing, deterministic=True)
 
         tx = Tx(body=tx_body, auth_info=auth_info)
+        tx.signatures.extend([deterministic_signature])
 
-        sign_transaction(tx, signer=from_pk, chain_id="testing", account_number=account.account_number, deterministic=True)
+        print("new Tx = ", tx)
+
+        #tx = Tx(body=tx_body, auth_info=auth_info)
+        #sign_transaction(tx, signer=from_pk, chain_id="testing", account_number=account.account_number, deterministic=True)
+
         tx_data = tx.SerializeToString()
-
         broad_tx_req = BroadcastTxRequest(
             tx_bytes=tx_data,
             mode=BroadcastMode.BROADCAST_MODE_SYNC

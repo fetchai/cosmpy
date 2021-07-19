@@ -1,5 +1,5 @@
 from cosm.crypto.interface import Signer
-from cosmos.tx.v1beta1.tx_pb2 import Tx, TxRaw, TxBody, SignDoc, SignerInfo, AuthInfo, ModeInfo, Fee
+from cosmos.tx.v1beta1.tx_pb2 import Tx, SignDoc
 
 
 def sign_transaction(
@@ -21,5 +21,5 @@ def sign_transaction(
     data_for_signing = sd.SerializeToString()
 
     # Generating deterministic signature:
-    signature = signer.sign(data_for_signing, deterministic=deterministic)
+    signature = signer.sign(data_for_signing, deterministic=deterministic, canonicalise=True)
     tx.signatures.extend([signature])
