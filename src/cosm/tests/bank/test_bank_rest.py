@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from cosm.bank.bank_rest import BankRest
+from cosm.bank.base import BankRestClient
 
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
@@ -52,7 +52,7 @@ class BankTests(unittest.TestCase):
         content = {"balance": {"denom": "stake", "amount": "1234"}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankRest("rest_address")
+        bank = BankRestClient("rest_address")
 
         with patch.object(bank.rest_api, "_session", session):
             assert (
@@ -75,7 +75,7 @@ class BankTests(unittest.TestCase):
         }
         session = MockSession(200, json.dumps(content))
 
-        bank = BankRest("rest_address")
+        bank = BankRestClient("rest_address")
 
         with patch.object(bank.rest_api, "_session", session):
             assert (
@@ -93,7 +93,7 @@ class BankTests(unittest.TestCase):
         content = {"supply": [{"denom": "stake", "amount": "1234"}]}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankRest("rest_address")
+        bank = BankRestClient("rest_address")
 
         with patch.object(bank.rest_api, "_session", session):
             assert bank.TotalSupply(QueryTotalSupplyRequest()) == expected_response
@@ -106,7 +106,7 @@ class BankTests(unittest.TestCase):
         content = {"amount": {"denom": "stake", "amount": "1234"}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankRest("rest_address")
+        bank = BankRestClient("rest_address")
 
         with patch.object(bank.rest_api, "_session", session):
             assert (
@@ -121,7 +121,7 @@ class BankTests(unittest.TestCase):
         content = {"params": {"default_send_enabled": True}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankRest("rest_address")
+        bank = BankRestClient("rest_address")
 
         with patch.object(bank.rest_api, "_session", session):
             assert bank.Params(QueryParamsRequest()) == expected_response
@@ -134,7 +134,7 @@ class BankTests(unittest.TestCase):
         content = {"metadatas": [], "pagination": {"next_key": None, "total": 0}}
         session = MockSession(200, json.dumps(content))
 
-        bank = BankRest("rest_address")
+        bank = BankRestClient("rest_address")
 
         with patch.object(bank.rest_api, "_session", session):
             assert (
@@ -156,7 +156,7 @@ class BankTests(unittest.TestCase):
         }
         session = MockSession(200, json.dumps(content))
 
-        bank = BankRest("rest_address")
+        bank = BankRestClient("rest_address")
 
         with patch.object(bank.rest_api, "_session", session):
             assert (

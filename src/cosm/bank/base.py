@@ -1,6 +1,5 @@
-from cosm.query.rest_client import RestClient
-from cosm.bank.bank import Bank
-
+from abc import ABC
+from google.protobuf.json_format import Parse
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
     QueryBalanceResponse,
@@ -17,10 +16,37 @@ from cosmos.bank.v1beta1.query_pb2 import (
     QueryDenomMetadataResponse,
     QueryDenomsMetadataRequest,
 )
-from google.protobuf.json_format import Parse
+from cosm.query.base import RestClient
 
 
-class BankRest(Bank):
+class Bank(ABC):
+    def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
+        pass
+
+    def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
+        pass
+
+    def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
+        pass
+
+    def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
+        pass
+
+    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+        pass
+
+    def DenomMetadata(
+        self, request: QueryDenomMetadataRequest
+    ) -> QueryDenomMetadataResponse:
+        pass
+
+    def DenomsMetadata(
+        self, request: QueryDenomsMetadataRequest
+    ) -> QueryDenomsMetadataResponse:
+        pass
+
+
+class BankRestClient(Bank):
     def __init__(self, rest_address: str):
         self.rest_api = RestClient(rest_address)
 

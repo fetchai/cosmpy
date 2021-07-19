@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from cosm.auth.auth_rest import AuthRest
+from cosm.auth.base import AuthRestClient
 
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountResponse,
@@ -47,7 +47,7 @@ class AuthTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryAccountResponse())
 
         session = MockSession(200, json.dumps(content))
-        auth = AuthRest("rest_address")
+        auth = AuthRestClient("rest_address")
 
         with patch.object(auth.rest_api, "_session", session):
             assert (
@@ -71,7 +71,7 @@ class AuthTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryParamsResponse())
 
         session = MockSession(200, json.dumps(content))
-        auth = AuthRest("rest_address")
+        auth = AuthRestClient("rest_address")
 
         with patch.object(auth.rest_api, "_session", session):
             assert auth.Params(QueryParamsRequest()) == expected_response
