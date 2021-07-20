@@ -14,8 +14,8 @@ from cosm.auth.interface import Auth
 class AuthRestClient(Auth):
     API_URL = "/cosmos/auth/v1beta1"
 
-    def __init__(self, rest_address: str):
-        self._rest_api = QueryRestClient(rest_address)
+    def __init__(self, rest_api: QueryRestClient):
+        self._rest_api = rest_api
 
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
         json_response = self._rest_api.get(

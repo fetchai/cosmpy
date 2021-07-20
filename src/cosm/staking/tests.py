@@ -42,11 +42,10 @@ class StakingRestClientTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up test case."""
-        cls.client = StakingRestClient("rest_address")
         content = {}
 
         mock_client = MockQueryRestClient(json.dumps(content))
-        cls.client.rest_api = mock_client
+        cls.client = StakingRestClient(mock_client)
 
     def test_Validators(self):
         """Test Validators method."""

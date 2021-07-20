@@ -23,8 +23,8 @@ from cosm.bank.interface import Bank
 class BankRestClient(Bank):
     API_URL = "/cosmos/bank/v1beta1"
 
-    def __init__(self, rest_address: str):
-        self._rest_api = QueryRestClient(rest_address)
+    def __init__(self, rest_api: QueryRestClient):
+        self._rest_api = rest_api
 
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         json_response = self._rest_api.get(

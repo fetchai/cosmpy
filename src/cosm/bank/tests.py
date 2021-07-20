@@ -36,7 +36,7 @@ class BankTests(unittest.TestCase):
         content = {"balance": {"denom": "stake", "amount": "1234"}}
         mock_client = MockQueryRestClient(json.dumps(content))
 
-        bank = BankRestClient("rest_address")
+        bank = BankRestClient(mock_client)
 
         with patch.object(bank, "_rest_api", mock_client):
             assert (
@@ -59,7 +59,7 @@ class BankTests(unittest.TestCase):
         }
         mock_client = MockQueryRestClient(json.dumps(content))
 
-        bank = BankRestClient("rest_address")
+        bank = BankRestClient(mock_client)
 
         with patch.object(bank, "_rest_api", mock_client):
             assert (
@@ -75,7 +75,7 @@ class BankTests(unittest.TestCase):
         content = {"supply": [{"denom": "stake", "amount": "1234"}]}
         mock_client = MockQueryRestClient(json.dumps(content))
 
-        bank = BankRestClient("rest_address")
+        bank = BankRestClient(mock_client)
 
         with patch.object(bank, "_rest_api", mock_client):
             assert bank.TotalSupply(QueryTotalSupplyRequest()) == expected_response
@@ -88,7 +88,7 @@ class BankTests(unittest.TestCase):
         content = {"amount": {"denom": "stake", "amount": "1234"}}
         mock_client = MockQueryRestClient(json.dumps(content))
 
-        bank = BankRestClient("rest_address")
+        bank = BankRestClient(mock_client)
 
         with patch.object(bank, "_rest_api", mock_client):
             assert (
@@ -103,7 +103,7 @@ class BankTests(unittest.TestCase):
         content = {"params": {"default_send_enabled": True}}
         mock_client = MockQueryRestClient(json.dumps(content))
 
-        bank = BankRestClient("rest_address")
+        bank = BankRestClient(mock_client)
 
         with patch.object(bank, "_rest_api", mock_client):
             assert bank.Params(QueryParamsRequest()) == expected_response
@@ -116,7 +116,7 @@ class BankTests(unittest.TestCase):
         content = {"metadatas": [], "pagination": {"next_key": None, "total": 0}}
         mock_client = MockQueryRestClient(json.dumps(content))
 
-        bank = BankRestClient("rest_address")
+        bank = BankRestClient(mock_client)
 
         with patch.object(bank, "_rest_api", mock_client):
             assert (
@@ -136,7 +136,7 @@ class BankTests(unittest.TestCase):
         }
         mock_client = MockQueryRestClient(json.dumps(content))
 
-        bank = BankRestClient("rest_address")
+        bank = BankRestClient(mock_client)
 
         with patch.object(bank, "_rest_api", mock_client):
             assert (

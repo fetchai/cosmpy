@@ -31,14 +31,13 @@ class AuthTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryAccountResponse())
 
         mock_client = MockQueryRestClient(json.dumps(content))
-        auth = AuthRestClient("rest_address")
+        auth = AuthRestClient(mock_client)
 
-        with patch.object(auth, "_rest_api", mock_client):
-            assert (
-                auth.Account(QueryAccountRequest(address="address"))
-                == expected_response  # noqa W503
-            )
-            assert mock_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
+        assert (
+            auth.Account(QueryAccountRequest(address="address"))
+            == expected_response  # noqa W503
+        )
+        assert mock_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
 
     def test_query_params(self):
         content = {
@@ -53,8 +52,7 @@ class AuthTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryParamsResponse())
 
         mock_client = MockQueryRestClient(json.dumps(content))
-        auth = AuthRestClient("rest_address")
+        auth = AuthRestClient(mock_client)
 
-        with patch.object(auth, "_rest_api", mock_client):
-            assert auth.Params(QueryParamsRequest()) == expected_response
-            assert mock_client.last_request == "/cosmos/auth/v1beta1/params"
+        assert auth.Params(QueryParamsRequest()) == expected_response
+        assert mock_client.last_request == "/cosmos/auth/v1beta1/params"
