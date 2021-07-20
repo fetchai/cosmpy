@@ -3,10 +3,6 @@ from unittest import TestCase
 import mock
 
 
-class MockRequest:
-    pass
-
-
 class BankTests(TestCase):
     @mock.patch("urllib.request.urlopen", autospec=True)
     def test_get(self, mock_urlopen):
