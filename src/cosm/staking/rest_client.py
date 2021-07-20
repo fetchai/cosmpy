@@ -34,7 +34,7 @@ from cosmos.staking.v1beta1.query_pb2 import (
 from google.protobuf.json_format import Parse
 
 
-class StakingRest(Staking):
+class StakingRestClient(Staking):
     """Staking REST API module."""
 
     API_URL = "/cosmos/staking/v1beta1"

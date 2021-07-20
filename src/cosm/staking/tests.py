@@ -33,16 +33,16 @@ from cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsResponse,
 )
 
-from .staking_rest import StakingRest
+from .rest_client import StakingRestClient
 
 
-class StakingRestTestCase(TestCase):
-    """Test case for StakingRest class."""
+class StakingRestClientTestCase(TestCase):
+    """Test case for StakingRestClient class."""
 
     @classmethod
     def setUpClass(cls):
         """Set up test case."""
-        cls.client = StakingRest("rest_address")
+        cls.client = StakingRestClient("rest_address")
         content = {}
         session = MockSession(200, json.dumps(content))
         cls.client.rest_api._session = session
