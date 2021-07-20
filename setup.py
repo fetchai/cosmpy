@@ -31,9 +31,15 @@ setup(
     package_dir={'': 'src'},
     packages=find_packages(where='src'),
     python_requires='>=3.6, <4',
-    install_requires=['ecdsa', 'bech32', 'requests', 'google-api-python-client'],
+    install_requires=['ecdsa',
+                      'bech32',
+                      'requests',
+                      'google-api-python-client',
+                      'protobuf',
+                      'grpcio',
+                      'grpcio-tools'],
     extras_require={
-        'dev': ['check-manifest'],
+        'dev': ['check-manifest', 'flake8', 'black', 'mypy'],
         'test': ['coverage', 'pytest'],
     },
     project_urls={

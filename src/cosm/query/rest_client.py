@@ -15,11 +15,10 @@ class RestClient:
         return response.content
 
     def post(self, url_path, json_request: dict) -> bytes:
-        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+        headers = {"Content-type": "application/json", "Accept": "application/json"}
         response = self._session.post(
-            url=self.rest_address + url_path,
-            json=json_request,
-            headers=headers)
+            url=self.rest_address + url_path, json=json_request, headers=headers
+        )
 
         if response.status_code != 200:
             raise RuntimeError(
