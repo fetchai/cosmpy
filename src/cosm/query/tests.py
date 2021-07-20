@@ -3,7 +3,7 @@ from unittest import TestCase
 import mock
 
 
-class BankTests(TestCase):
+class QueryTests(TestCase):
     @mock.patch("urllib.request.urlopen", autospec=True)
     def test_get(self, mock_urlopen):
         client = QueryRestClient("address")
