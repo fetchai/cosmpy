@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 from cosm.auth.rest_client import AuthRestClient
 from cosm.tests.helpers import MockQueryRestClient
 
