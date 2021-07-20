@@ -7,11 +7,8 @@ def sign_transaction(
     signer: Signer,
     chain_id: str,
     account_number: int,
-    deterministic: bool = None,
+    deterministic: bool = False,
 ):
-    if deterministic is None:
-        deterministic = False
-
     sd = SignDoc()
     sd.body_bytes = tx.body.SerializeToString()
     sd.auth_info_bytes = tx.auth_info.SerializeToString()

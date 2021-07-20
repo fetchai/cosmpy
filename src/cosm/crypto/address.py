@@ -18,11 +18,8 @@ class Address:
     def __init__(
         self,
         value: Union[str, bytes, PublicKey, "Address"],
-        prefix: Optional[str] = None,
+        prefix: Optional[str] = DEFAULT_PREFIX,
     ):
-        if prefix is None:
-            prefix = DEFAULT_PREFIX
-
         if isinstance(value, str):
             _, data_base5 = bech32.bech32_decode(value)
             if data_base5 is None:
