@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 from cosm.bank.rest_client import BankRestClient
+from cosm.tests.helpers import MockQueryRestClient
 
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
@@ -25,16 +26,6 @@ from cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
 
 import json
-
-
-class MockQueryRestClient:
-    def __init__(self, content: str):
-        self.content = content
-        self.last_request = ""
-
-    def query(self, request: str) -> str:
-        self.last_request = request
-        return self.content
 
 
 class BankTests(unittest.TestCase):

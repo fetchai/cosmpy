@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 from cosm.auth.rest_client import AuthRestClient
+from cosm.tests.helpers import MockQueryRestClient
 
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountResponse,
@@ -11,16 +12,6 @@ from cosmos.auth.v1beta1.query_pb2 import (
 from google.protobuf.json_format import ParseDict
 
 import json
-
-
-class MockQueryRestClient:
-    def __init__(self, content: str):
-        self.content = content
-        self.last_request = ""
-
-    def query(self, request: str) -> str:
-        self.last_request = request
-        return self.content
 
 
 class AuthTests(unittest.TestCase):
