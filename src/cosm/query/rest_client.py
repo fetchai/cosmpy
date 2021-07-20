@@ -1,7 +1,7 @@
 import requests
 
 
-class RestClient:
+class QueryRestClient:
     def __init__(self, rest_address: str):
         self._session = requests.session()
         self.rest_address = rest_address
