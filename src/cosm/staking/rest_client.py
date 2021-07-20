@@ -1,5 +1,5 @@
 from cosm.query.rest_client import RestClient
-from cosm.staking.staking import Staking
+from cosm.staking.interface import Staking
 
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
