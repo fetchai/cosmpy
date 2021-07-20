@@ -1,4 +1,4 @@
-from cosm.query.rest_client import RestClient
+from cosm.query.rest_client import QueryRestClient
 from cosm.staking.interface import Staking
 
 from cosmos.staking.v1beta1.query_pb2 import (
@@ -41,7 +41,7 @@ class StakingRestClient(Staking):
 
     def __init__(self, rest_address: str):
         """Initialize."""
-        self.rest_api = RestClient(rest_address)
+        self.rest_api = QueryRestClient(rest_address)
 
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
         """Validators queries all validators that match the given status."""
