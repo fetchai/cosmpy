@@ -18,11 +18,11 @@ class AuthRestClient(Auth):
         self._rest_api = QueryRestClient(rest_address)
 
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
-        json_response = self._rest_api.query(
+        json_response = self._rest_api.get(
             self.API_URL + f"/accounts/{request.address}"
         )
         return Parse(json_response, QueryAccountResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        json_response = self._rest_api.query(self.API_URL + "/params")
+        json_response = self._rest_api.get(self.API_URL + "/params")
         return Parse(json_response, QueryParamsResponse())

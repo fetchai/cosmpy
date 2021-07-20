@@ -9,7 +9,7 @@ class MockQueryRestClient:
         self.content = content
         self.last_request = ""
 
-    def query(self, request: str) -> str:
+    def get(self, request: str) -> str:
         """Handle GET request."""
         self.last_request = request
         return self.content
