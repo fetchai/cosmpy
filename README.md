@@ -46,7 +46,7 @@ Script will ask for root permissions while setting up node.
 fetchd start
 ```
 
-# Run balance example
+# Run example
 ```
 python src/examples/query_balance_example.py
 ```
