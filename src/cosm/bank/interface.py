@@ -1,3 +1,4 @@
+from abc import ABC
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
     QueryBalanceResponse,
@@ -16,7 +17,7 @@ from cosmos.bank.v1beta1.query_pb2 import (
 )
 
 
-class Bank:
+class Bank(ABC):
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         pass
 
