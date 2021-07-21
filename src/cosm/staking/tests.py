@@ -1,7 +1,7 @@
 import json
 from unittest import TestCase
 
-from cosm.tests.helpers import MockSession
+from cosm.tests.helpers import MockQueryRestClient
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
@@ -42,10 +42,10 @@ class StakingRestClientTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up test case."""
-        cls.client = StakingRestClient("rest_address")
         content = {}
-        session = MockSession(200, json.dumps(content))
-        cls.client.rest_api._session = session
+
+        mock_client = MockQueryRestClient(json.dumps(content))
+        cls.client = StakingRestClient(mock_client)
 
     def test_Validators(self):
         """Test Validators method."""
