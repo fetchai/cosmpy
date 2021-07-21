@@ -1,10 +1,43 @@
+import os
 import unittest
 from dataclasses import dataclass
 from cosm.crypto.keypairs import PublicKey, PrivateKey
-from cosmos.tx.v1beta1.tx_pb2 import Tx, TxBody, SignDoc
+from cosm.crypto.address import Address
+from cosm.query.rest_client import QueryRestClient
+from cosm.tx.rest_client import TxRestClient
+from cosmos.tx.v1beta1.tx_pb2 import (
+    Tx,
+    TxBody,
+    SignDoc,
+    SignerInfo,
+    AuthInfo,
+    ModeInfo,
+    Fee,
+)
+from cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from hashlib import sha256
+from grpc import insecure_channel
+
+# from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+from cosmos.tx.v1beta1.service_pb2 import BroadcastTxRequest, BroadcastMode
+from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
+from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
+from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from google.protobuf.any_pb2 import Any
+from google.protobuf.internal.well_known_types import Any as AnyOrig
+from cosm.tx import sign_transaction
+
+orig_Pack = AnyOrig.Pack
+
+
+def new_Pack(self, msg, type_url_prefix="/", deterministic=None):
+    return orig_Pack(self, msg, type_url_prefix, deterministic)
+
+
+AnyOrig.Pack = new_Pack
 
 
 def my_import(name):
@@ -54,17 +87,12 @@ class TxSign(unittest.TestCase):
         print("===> body.memo:", body.memo)
 
         for m in body.messages:
-            # msg = my_import(m.type_url)
-            # m.Unpack(msg)
-            # print("message:", msg)
-            if m.type_url == "/cosmos.bank.v1beta1.MsgSend":
+            if m.type_url is MsgSend.DESCRIPTOR:
                 msg_send = MsgSend()
                 m.Unpack(msg_send)
                 print("message:", msg_send)
             else:
                 print("message:", m)
-
-    def test_deserialise_tx(self):
         tx = Tx()
         tx.ParseFromString(self.tx_test_data.tx)
         print("===> txRaw:", tx)
@@ -72,13 +100,8 @@ class TxSign(unittest.TestCase):
         print("======> Tx.auth_info: ", tx.auth_info)
         for sig in tx.signatures:
             print("signature: ", sig)
-        # Tx.body.messages.Unpack(msg)
-        # print("msg_send: ", msg)
 
     def test_sign(self):
-        # tx = Tx()
-        # tx.ParseFromString(self.tx_test_data.tx)
-
         tx = Tx()
         tx.ParseFromString(self.tx_test_data.tx)
 
@@ -132,3 +155,92 @@ class TxSign(unittest.TestCase):
         # !!! NOTE !!!: It looks like cosmos-cli generated non-deterministic signatures, since following assert fails
         # assert tx.signatures[0] == deterministic_signature
         # =======================================
+
+    @unittest.skipIf(
+        "FETCHD_GRPC_URL" not in os.environ, "Just for testing with local fetchd node"
+    )
+    def test_tx_broadcast(self):
+        from_pk = PrivateKey(
+            bytes.fromhex(
+                "cfb265b5d54ace71f6adc93a5072da3b8d6bfa8941904b1f6d4197db0c6f677e"
+            )
+        )
+        from_address = Address(from_pk)
+        print("validator = ", from_address)
+
+        to_pb = PrivateKey(
+            bytes.fromhex(
+                "bc689e9f5e3f4e74f3686423fb23aaee25eb96e926bb1d33196c0bf5b482d003"
+            )
+        )
+        to_address = Address(to_pb)
+
+        channel = insecure_channel(os.environ["FETCHD_GRPC_URL"])
+        # NOTE(pb): Commented-out code intentionally left in as example:
+        # tx_client = TxGrpcClient(channel)
+        rest_client = QueryRestClient("http://localhost:1317")
+        tx_client = TxRestClient(rest_client)
+        auth_query_client = AuthQueryClient(channel)
+        account_response = auth_query_client.Account(
+            QueryAccountRequest(address=str(from_address))
+        )
+        account = BaseAccount()
+        if account_response.account.Is(BaseAccount.DESCRIPTOR):
+            account_response.account.Unpack(account)
+        else:
+            raise TypeError("Unexpected account type")
+        print("account = ", account)
+
+        msg_send = MsgSend()
+        msg_send.from_address = str(from_address)
+        msg_send.to_address = str(to_address)
+        amount = Coin()
+        amount.amount = "1"
+        amount.denom = "afet"
+        msg_send.amount.extend([amount])
+
+        tx_body = TxBody()
+        tx_body.memo = "very first tx"
+        # NOTE(pb): Commented-out code intentionally left in as example:
+        # tx_body.timeout_height = 0xffffffffffffffff
+        send_msg_packed = Any()
+        send_msg_packed.Pack(msg_send)  # , type_url_prefix="/")
+        tx_body.messages.extend([send_msg_packed])
+
+        from_pub_key_pb = ProtoPubKey()
+        from_pub_key_pb.key = from_pk.public_key_bytes
+
+        single = ModeInfo.Single()
+        single.mode = SignMode.SIGN_MODE_DIRECT
+        mode_info = ModeInfo(single=single)
+
+        from_pub_key_packed = Any()
+        from_pub_key_packed.Pack(from_pub_key_pb)  # , type_url_prefix="/")
+        signer_info = SignerInfo(
+            public_key=from_pub_key_packed,
+            mode_info=mode_info,
+            sequence=account.sequence,
+        )
+        auth_info = AuthInfo(
+            signer_infos=[signer_info],
+            fee=Fee(amount=[Coin(amount="0", denom="afet")], gas_limit=200000),
+        )
+
+        tx = Tx(body=tx_body, auth_info=auth_info)
+        sign_transaction(
+            tx,
+            signer=from_pk,
+            chain_id="testing",
+            account_number=account.account_number,
+            deterministic=True,
+        )
+        print("new Tx = ", tx)
+
+        tx_data = tx.SerializeToString()
+        broad_tx_req = BroadcastTxRequest(
+            tx_bytes=tx_data, mode=BroadcastMode.BROADCAST_MODE_SYNC
+        )
+
+        broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
+
+        print("broad_tx_resp = ", broad_tx_resp)
