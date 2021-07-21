@@ -1,4 +1,4 @@
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 from cosm.staking.interface import Staking
 
 from cosmos.staking.v1beta1.query_pb2 import (
@@ -39,7 +39,7 @@ class StakingRestClient(Staking):
 
     API_URL = "/cosmos/staking/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient):
+    def __init__(self, rest_api: RestClient):
         """Initialize."""
         self._rest_api = rest_api
 

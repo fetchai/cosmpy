@@ -1,23 +1,33 @@
 import requests
+from urllib.parse import urlencode
+from google.protobuf.descriptor import Descriptor
+from google.protobuf.json_format import MessageToDict
 
 
-class QueryRestClient:
+class RestClient:
     def __init__(self, rest_address: str):
         self._session = requests.session()
         self.rest_address = rest_address
 
-    def get(self, request: str) -> bytes:
-        response = self._session.get(url=self.rest_address + request)
+    def get(self, url_base_path: str, request: Descriptor) -> bytes:
+        json_request = MessageToDict(request)
+        url_encoded_request = urlencode(json_request)
+        response = self._session.get(
+            url=f"{self.rest_address}{url_base_path}&{url_encoded_request}"
+        )
         if response.status_code != 200:
             raise RuntimeError(
                 f"Error when sending a query request.\n Request: {request}\n Response: {response.status_code}, {str(response.content)})"
             )
         return response.content
 
-    def post(self, url_path, json_request: dict) -> bytes:
+    def post(self, url_base_path: str, request: Descriptor) -> bytes:
+        json_request = MessageToDict(request)
         headers = {"Content-type": "application/json", "Accept": "application/json"}
         response = self._session.post(
-            url=self.rest_address + url_path, json=json_request, headers=headers
+            url=f"{self.rest_address}{url_base_path}",
+            json=json_request,
+            headers=headers,
         )
 
         if response.status_code != 200:

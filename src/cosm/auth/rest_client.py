@@ -1,6 +1,6 @@
 from google.protobuf.json_format import Parse
 import cosmos.crypto.secp256k1.keys_pb2  # noqa
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
@@ -14,7 +14,7 @@ from cosm.auth.interface import Auth
 class AuthRestClient(Auth):
     API_URL = "/cosmos/auth/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient):
+    def __init__(self, rest_api: RestClient):
         self._rest_api = rest_api
 
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:

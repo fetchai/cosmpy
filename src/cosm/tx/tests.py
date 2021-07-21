@@ -3,7 +3,7 @@ import unittest
 from dataclasses import dataclass
 from cosm.crypto.keypairs import PublicKey, PrivateKey
 from cosm.crypto.address import Address
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 from cosm.tx.rest_client import TxRestClient
 from cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
@@ -178,7 +178,7 @@ class TxSign(unittest.TestCase):
         channel = insecure_channel(os.environ["FETCHD_GRPC_URL"])
         # NOTE(pb): Commented-out code intentionally left in as example:
         # tx_client = TxGrpcClient(channel)
-        rest_client = QueryRestClient("http://localhost:1317")
+        rest_client = RestClient("http://localhost:1317")
         tx_client = TxRestClient(rest_client)
         auth_query_client = AuthQueryClient(channel)
         account_response = auth_query_client.Account(
