@@ -3,7 +3,8 @@ import unittest
 from dataclasses import dataclass
 from cosm.crypto.keypairs import PublicKey, PrivateKey
 from cosm.crypto.address import Address
-from cosm.tx.tx_rest_client import TxRestClient
+from cosm.query.rest_client import QueryRestClient
+from cosm.tx.rest_client import TxRestClient
 from cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
@@ -20,7 +21,7 @@ from cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from hashlib import sha256
 from grpc import insecure_channel
 
-# from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxClient
+# from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from cosmos.tx.v1beta1.service_pb2 import BroadcastTxRequest, BroadcastMode
 from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
@@ -176,8 +177,9 @@ class TxSign(unittest.TestCase):
 
         channel = insecure_channel(os.environ["FETCHD_GRPC_URL"])
         # NOTE(pb): Commented-out code intentionally left in as example:
-        # tx_client = TxClient(channel)
-        tx_client = TxRestClient("http://localhost:1317")
+        # tx_client = TxGrpcClient(channel)
+        rest_client = QueryRestClient("http://localhost:1317")
+        tx_client = TxRestClient(rest_client)
         auth_query_client = AuthQueryClient(channel)
         account_response = auth_query_client.Account(
             QueryAccountRequest(address=str(from_address))
