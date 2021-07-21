@@ -20,6 +20,9 @@ class Address:
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
     ):
+        if prefix is None:
+            prefix = DEFAULT_PREFIX
+
         if isinstance(value, str):
             _, data_base5 = bech32.bech32_decode(value)
             if data_base5 is None:
@@ -37,15 +40,17 @@ class Address:
                 raise RuntimeError("Incorrect address length")
 
             self._address = value
-            self._display = _to_bech32(prefix or DEFAULT_PREFIX, self._address)
+            self._display = _to_bech32(prefix, self._address)
 
         elif isinstance(value, PublicKey):
             self._address = ripemd160(sha256(value.public_key_bytes))
-            self._display = _to_bech32(prefix or DEFAULT_PREFIX, self._address)
+            self._display = _to_bech32(prefix, self._address)
 
         elif isinstance(value, Address):
             self._address = value._address
             self._display = value._display
+        else:
+            raise TypeError("Unexpected type of `value` parameter")
 
     def __str__(self):
         return self._display

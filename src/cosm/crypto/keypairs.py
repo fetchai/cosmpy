@@ -4,6 +4,7 @@ from typing import Union, Optional, Callable
 import ecdsa
 from ecdsa.curves import Curve
 from ecdsa.util import sigencode_string_canonize, sigencode_string
+from cosm.crypto.interface import Signer
 
 
 class PublicKey:
@@ -60,7 +61,7 @@ class PublicKey:
         return success
 
 
-class PrivateKey(PublicKey):
+class PrivateKey(PublicKey, Signer):
     def __init__(self, private_key: Optional[bytes] = None):
         if private_key is None:
             self._signing_key = ecdsa.SigningKey.generate(

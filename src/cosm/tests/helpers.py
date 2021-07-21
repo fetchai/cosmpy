@@ -13,3 +13,6 @@ class MockQueryRestClient:
         """Handle GET request."""
         self.last_request = request
         return self.content
+
+    def close(self):
+        pass
