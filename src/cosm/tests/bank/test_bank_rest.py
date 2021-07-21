@@ -43,6 +43,9 @@ class MockSession:
         self.last_url = url
         return MockResponse(self.status_code, self.content)
 
+    def close(self):
+        pass
+
 
 class BankTests(unittest.TestCase):
     def test_query_balance(self):

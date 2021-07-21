@@ -27,3 +27,6 @@ class MockSession(Mock):
         """Handle GET request."""
         self.last_url = url
         return MockResponse(self.status_code, self.content)
+
+    def close(self):
+        pass

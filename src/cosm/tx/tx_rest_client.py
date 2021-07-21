@@ -1,4 +1,4 @@
-from cosm.query.rest_client import RestClient
+from cosm.query.rest_client import QueryRestClient as RestClient
 from cosm.tx.interface import RPCInterface
 
 from cosmos.tx.v1beta1.service_pb2 import (

@@ -86,17 +86,12 @@ class TxSign(unittest.TestCase):
         print("===> body.memo:", body.memo)
 
         for m in body.messages:
-            # msg = my_import(m.type_url)
-            # m.Unpack(msg)
-            # print("message:", msg)
-            if m.type_url == "/cosmos.bank.v1beta1.MsgSend":
+            if m.type_url is MsgSend.DESCRIPTOR:
                 msg_send = MsgSend()
                 m.Unpack(msg_send)
                 print("message:", msg_send)
             else:
                 print("message:", m)
-
-    def test_deserialise_tx(self):
         tx = Tx()
         tx.ParseFromString(self.tx_test_data.tx)
         print("===> txRaw:", tx)
@@ -104,8 +99,6 @@ class TxSign(unittest.TestCase):
         print("======> Tx.auth_info: ", tx.auth_info)
         for sig in tx.signatures:
             print("signature: ", sig)
-        # Tx.body.messages.Unpack(msg)
-        # print("msg_send: ", msg)
 
     def test_sign(self):
         tx = Tx()
@@ -166,7 +159,6 @@ class TxSign(unittest.TestCase):
         "FETCHD_GRPC_URL" not in os.environ, "Just for testing with local fetchd node"
     )
     def test_tx_broadcast(self):
-        # from_pk = PrivateKey(bytes.fromhex("8bdfbd2eaad5dc4324d19fabed72882709dc080b39e61044d51b91a6e38f6871"))
         from_pk = PrivateKey(
             bytes.fromhex(
                 "cfb265b5d54ace71f6adc93a5072da3b8d6bfa8941904b1f6d4197db0c6f677e"
@@ -183,6 +175,7 @@ class TxSign(unittest.TestCase):
         to_address = Address(to_pb)
 
         channel = insecure_channel(os.environ["FETCHD_GRPC_URL"])
+        # NOTE(pb): Commented-out code intentionally left in as example:
         # tx_client = TxClient(channel)
         tx_client = TxRestClient("http://localhost:1317")
         auth_query_client = AuthQueryClient(channel)
@@ -206,6 +199,7 @@ class TxSign(unittest.TestCase):
 
         tx_body = TxBody()
         tx_body.memo = "very first tx"
+        # NOTE(pb): Commented-out code intentionally left in as example:
         # tx_body.timeout_height = 0xffffffffffffffff
         send_msg_packed = Any()
         send_msg_packed.Pack(msg_send)  # , type_url_prefix="/")
@@ -220,8 +214,6 @@ class TxSign(unittest.TestCase):
 
         from_pub_key_packed = Any()
         from_pub_key_packed.Pack(from_pub_key_pb)  # , type_url_prefix="/")
-        # signer_info.public_key = from_pub_key_packed
-        # signer_info.mode_info = mode_info
         signer_info = SignerInfo(
             public_key=from_pub_key_packed,
             mode_info=mode_info,
@@ -231,25 +223,6 @@ class TxSign(unittest.TestCase):
             signer_infos=[signer_info],
             fee=Fee(amount=[Coin(amount="0", denom="afet")], gas_limit=200000),
         )
-
-        # sd = SignDoc()
-        # sd.body_bytes = tx_body.SerializeToString()
-        # sd.auth_info_bytes = auth_info.SerializeToString()
-        # sd.chain_id = "testing"
-        # sd.account_number = account.account_number
-
-        # sd_data = sd.SerializeToString()
-        # m = sha256()
-        # m.update(sd_data)
-        # hash_for_signing = m.digest()
-
-        # # Generating deterministic signature:
-        # deterministic_signature = from_pk.sign_digest(
-        #     hash_for_signing, deterministic=True
-        # )
-
-        # tx = Tx(body=tx_body, auth_info=auth_info)
-        # tx.signatures.extend([deterministic_signature])
 
         tx = Tx(body=tx_body, auth_info=auth_info)
         sign_transaction(
