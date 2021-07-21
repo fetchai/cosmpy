@@ -9,7 +9,7 @@ cd .. && rm -rf fetchd
 
 
 # Add symlink of fetchd
-sudo ln -s ~/go/bin/fetchd /usr/bin/fetchd
+sudo ln -s ~/go/bin/fetchd /usr/local/bin/fetchd
 
 # Export PATH
 if [[ "$OSTYPE" == "darwin"* ]]; then
