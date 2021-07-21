@@ -14,15 +14,15 @@ from cosm.auth.interface import Auth
 class AuthRestClient(Auth):
     API_URL = "/cosmos/auth/v1beta1"
 
-    def __init__(self, rest_address: str):
-        self.rest_api = QueryRestClient(rest_address)
+    def __init__(self, rest_api: QueryRestClient):
+        self._rest_api = rest_api
 
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
-        json_response = self.rest_api.query(
+        json_response = self._rest_api.get(
             self.API_URL + f"/accounts/{request.address}"
         )
         return Parse(json_response, QueryAccountResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        json_response = self.rest_api.query(self.API_URL + "/params")
+        json_response = self._rest_api.get(self.API_URL + "/params")
         return Parse(json_response, QueryParamsResponse())

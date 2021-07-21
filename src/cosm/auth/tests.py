@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import patch
 from cosm.auth.rest_client import AuthRestClient
+from cosm.tests.helpers import MockQueryRestClient
 
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountResponse,
@@ -11,23 +11,6 @@ from cosmos.auth.v1beta1.query_pb2 import (
 from google.protobuf.json_format import ParseDict
 
 import json
-
-
-class MockResponse:
-    def __init__(self, status_code: int, content: str):
-        self.status_code = status_code
-        self.content = content
-
-
-class MockSession:
-    def __init__(self, status_code: int, content: str):
-        self.status_code = status_code
-        self.content = content
-        self.last_url = ""
-
-    def get(self, url: str) -> MockResponse:
-        self.last_url = url
-        return MockResponse(self.status_code, self.content)
 
 
 class AuthTests(unittest.TestCase):
@@ -46,17 +29,14 @@ class AuthTests(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryAccountResponse())
 
-        session = MockSession(200, json.dumps(content))
-        auth = AuthRestClient("rest_address")
+        mock_client = MockQueryRestClient(json.dumps(content))
+        auth = AuthRestClient(mock_client)
 
-        with patch.object(auth.rest_api, "_session", session):
-            assert (
-                auth.Account(QueryAccountRequest(address="address"))
-                == expected_response  # noqa W503
-            )
-            assert (
-                session.last_url == "rest_address/cosmos/auth/v1beta1/accounts/address"
-            )
+        assert (
+            auth.Account(QueryAccountRequest(address="address"))
+            == expected_response  # noqa W503
+        )
+        assert mock_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
 
     def test_query_params(self):
         content = {
@@ -70,9 +50,8 @@ class AuthTests(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryParamsResponse())
 
-        session = MockSession(200, json.dumps(content))
-        auth = AuthRestClient("rest_address")
+        mock_client = MockQueryRestClient(json.dumps(content))
+        auth = AuthRestClient(mock_client)
 
-        with patch.object(auth.rest_api, "_session", session):
-            assert auth.Params(QueryParamsRequest()) == expected_response
-            assert session.last_url == "rest_address/cosmos/auth/v1beta1/params"
+        assert auth.Params(QueryParamsRequest()) == expected_response
+        assert mock_client.last_request == "/cosmos/auth/v1beta1/params"
