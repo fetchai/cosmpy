@@ -93,14 +93,26 @@ class PrivateKey(PublicKey, Signer):
     def private_key_bytes(self) -> bytes:
         return self._private_key_bytes
 
-    def sign(self, message: bytes, deterministic=True, canonicalise: bool = True) -> bytes:
+    def sign(
+        self, message: bytes, deterministic=True, canonicalise: bool = True
+    ) -> bytes:
         sigencode = sigencode_string_canonize if canonicalise else sigencode_string
-        sign_fnc = self._signing_key.sign_deterministic if deterministic else self._signing_key.sign
+        sign_fnc = (
+            self._signing_key.sign_deterministic
+            if deterministic
+            else self._signing_key.sign
+        )
 
         return sign_fnc(message, sigencode=sigencode)
 
-    def sign_digest(self, digest: bytes, deterministic=True, canonicalise: bool = True) -> bytes:
+    def sign_digest(
+        self, digest: bytes, deterministic=True, canonicalise: bool = True
+    ) -> bytes:
         sigencode = sigencode_string_canonize if canonicalise else sigencode_string
-        sign_fnc = self._signing_key.sign_digest_deterministic if deterministic else self._signing_key.sign_digest
+        sign_fnc = (
+            self._signing_key.sign_digest_deterministic
+            if deterministic
+            else self._signing_key.sign_digest
+        )
 
         return sign_fnc(digest, sigencode=sigencode)

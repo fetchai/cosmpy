@@ -49,6 +49,8 @@ class Address:
         elif isinstance(value, Address):
             self._address = value._address
             self._display = value._display
+        else:
+            raise TypeError("Unexpected type of `value` parameter")
 
     def __str__(self):
         return self._display
