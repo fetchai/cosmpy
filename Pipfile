@@ -4,15 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-#flake8 = "*"
-#black = "*"
-#mypy = "*"
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
-#protobuf = "3.15.5"
-#grpcio = "1.38.1"
-#grpcio-tools = "1.38.1"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
