@@ -17,7 +17,7 @@ class RestClient:
         )
         if response.status_code != 200:
             raise RuntimeError(
-                f"Error when sending a query request.\n Request: {request}\n Response: {response.status_code}, {str(response.content)})"
+                f"Error when sending a GET request.\n Request: {request}\n Response: {response.status_code}, {str(response.content)})"
             )
         return response.content
 
@@ -32,7 +32,7 @@ class RestClient:
 
         if response.status_code != 200:
             raise RuntimeError(
-                f"Error when sending a query request.\n Request: {json_request}\n Response: {response.status_code}, {str(response.content)})"
+                f"Error when sending a POST request.\n Request: {json_request}\n Response: {response.status_code}, {str(response.content)})"
             )
         return response.content
 
