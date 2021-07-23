@@ -42,7 +42,6 @@ print("bob = ", to_address)
 
 channel = insecure_channel("localhost:9090")
 tx_client = TxGrpcClient(channel)
-
 auth_query_client = AuthQueryClient(channel)
 account_response = auth_query_client.Account(
     QueryAccountRequest(address=str(from_address))
@@ -58,7 +57,7 @@ msg_send = MsgSend()
 msg_send.from_address = str(from_address)
 msg_send.to_address = str(to_address)
 amount = Coin()
-amount.amount = "1234"
+amount.amount = "1"
 amount.denom = "stake"
 msg_send.amount.extend([amount])
 
@@ -107,3 +106,4 @@ broad_tx_req = BroadcastTxRequest(
 broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
 
 print("broad_tx_resp = ", broad_tx_resp)
+
