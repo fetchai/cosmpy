@@ -1,9 +1,12 @@
 COSMOS_SDK_DIR := cosmos-sdk-proto-schema
+WASMD_DIR := wasm-proto-shema
 COSMOS_SDK_VERSION := v0.17.1
+WASMD_VERSION := v0.16.0
 COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
+WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
 OUTPUT_FOLDER := src
-
+PYCOSM_SRC_DIR := src/cosm
 
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
@@ -32,33 +35,57 @@ SOURCE := $(RELATIVE_SOURCE:%=$(COSMOS_SDK_DIR)/%)
 GENERATED := $(UNROOTED_SOURCE:%.proto=$(OUTPUT_FOLDER)/%.py)
 PROTO_ROOT_DIRS := $(COSMOS_PROTO_RELATIVE_DIRS:%=$(COSMOS_SDK_DIR)/%)
 
-GENERATED_DIRS := $(call unique,$(patsubst %/,$(OUTPUT_FOLDER)/%,$(UNROOTED_SOURCE)))
-INIT_PY_FILES_TO_CREATE :=  $(GENERATED:%=%/__init__.py)
+GENERATED_DIRS := $(call unique,$(foreach _,$(UNROOTED_SOURCE),$(dir $(_))))
+INIT_PY_FILES_TO_CREATE :=  $(GENERATED_DIRS:%=$(OUTPUT_FOLDER)/%__init__.py)
 
 COMPILE_PROTOBUFS_COMMAND := python -m grpc_tools.protoc $(PROTO_ROOT_DIRS:%=--proto_path=%) --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(UNROOTED_SOURCE)
 
 
-generate_proto_types: $(SOURCE) $(COSMOS_SDK_DIR)
+generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR)
 	$(COMPILE_PROTOBUFS_COMMAND)
 
-fetch_proto_schema_source: $(COSMOS_SDK_DIR)
+fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR)
 
 generate_init_py_files: $(INIT_PY_FILES_TO_CREATE)
 
-$(SOURCE)&: $(COSMOS_SDK_DIR)
+$(SOURCE): $(COSMOS_SDK_DIR)
 
-$(GENERATED)&: $(SOURCE)
+$(GENERATED): $(SOURCE)
 	$(COMPILE_PROTOBUFS_COMMAND)
 
-$(INIT_PY_FILES_TO_CREATE)&: $(GENERATED_DIRS)
+$(INIT_PY_FILES_TO_CREATE): $(GENERATED_DIRS)
 	touch $(INIT_PY_FILES_TO_CREATE)
 
-$(GENERATED_DIRS)&: $(COSMOS_SDK_DIR)
+$(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR)
 
-$(COSMOS_SDK_DIR):
-	rm -rf $(COSMOS_SDK_DIR)
+$(COSMOS_SDK_DIR): Makefile
+	rm -rfv $(COSMOS_SDK_DIR)
 	git clone --branch $(COSMOS_SDK_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none https://github.com/fetchai/cosmos-sdk $(COSMOS_SDK_DIR)
 	cd $(COSMOS_SDK_DIR) && git checkout $(COSMOS_SDK_VERSION) -- $(COSMOS_PROTO_RELATIVE_DIRS)
+
+$(WASMD_DIR): Makefile
+	rm -rfv $(WASMD_DIR)
+	git clone --branch $(WASMD_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none https://github.com/CosmWasm/wasmd $(WASMD_DIR)
+	cd $(WASMD_DIR) && git checkout $(WASMD_VERSION) -- $(WASMD_PROTO_RELATIVE_DIRS)
+	cp -rpv $(WASMD_PROTO_RELATIVE_DIRS:%=$(WASMD_DIR)/%) $(COSMOS_SDK_DIR)
+
+
+flake:
+	flake8 $(PYCOSM_SRC_DIR)
+
+mypy:
+	mypy $(PYCOSM_SRC_DIR)
+
+black:
+	black $(PYCOSM_SRC_DIR)
+
+black-check:
+	black --check $(PYCOSM_SRC_DIR)
+
+test:
+	python -m unittest discover -s $(PYCOSM_SRC_DIR)
+
+ci: flake mypy black clask-check test
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))

@@ -28,17 +28,13 @@ jobs:
         pipenv install --dev --skip-lock
     - name: Check code formatting
       run: |
-        cd src/cosm
         pipenv run make black-check
     - name: Code style check
       run: |
-        cd src/cosm
         pipenv run make flake
     - name: Static type check
       run: |
-        cd src/cosm
         pipenv run make mypy
     - name: Unit tests
       run: |
-        cd src/cosm
         pipenv run make test
