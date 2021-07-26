@@ -34,11 +34,13 @@ from_pk = PrivateKey(
     )
 )
 
-# Addres of recipient account
+# Address of recipient account
 to_address = "fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw"
 
 # Create send message
-msg = get_packed_send_msg(Address(from_pk), to_address, [Coin(amount="1", denom="stake")])
+msg = get_packed_send_msg(from_address=Address(from_pk),
+                          to_address=to_address,
+                          amount=[Coin(amount="1", denom="stake")])
 
 # Open gRPC channel
 channel = insecure_channel("localhost:9090")
