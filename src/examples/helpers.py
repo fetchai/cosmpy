@@ -20,14 +20,31 @@ from cosmos.base.v1beta1.coin_pb2 import Coin
 
 from google.protobuf.any_pb2 import Any
 import time
+from grpc._channel import Channel
 
 
-def sign_and_broadcast_msg(send_msg_packed: Any, channel, from_pk: PrivateKey, fee=[Coin(amount="0", denom="stake")],
-                           gas_limit=200000, memo="", chain_id="testing"):
+def sign_and_broadcast_msg(send_msg_packed: Any, channel: Channel, from_pk: PrivateKey,
+                           fee: [Coin] = [Coin(amount="0", denom="stake")],
+                           gas_limit: int = 200000, memo: str = "", chain_id: str = "testing"):
+    """
+    Sign and broadcast packed Any message
+    :param send_msg_packed: Message to be broadcast
+    :param channel: gRPC channel
+    :param from_pk: Sender's private key
+    :param fee: Transaction fee
+    :param gas_limit: Gas limit
+    :param memo: Memo
+    :param chain_id: Chain ID
+    :return: Transaction receipt
+    """
+    # Prepare clients
+    auth_query_client = AuthQueryClient(channel)
+    tx_client = TxGrpcClient(channel)
+
     # Get address from private key
     from_address = Address(from_pk)
-    tx_client = TxGrpcClient(channel)
-    auth_query_client = AuthQueryClient(channel)
+
+    # Get account data for signing
     account_response = auth_query_client.Account(
         QueryAccountRequest(address=str(from_address))
     )
@@ -37,21 +54,18 @@ def sign_and_broadcast_msg(send_msg_packed: Any, channel, from_pk: PrivateKey, f
     else:
         raise TypeError("Unexpected account type")
 
-    # NOTE(pb): Commented-out code intentionally left in as example:
-    # tx_body.timeout_height = 0xffffffffffffffff
+    # Prepare Tx body
     tx_body = TxBody()
     tx_body.memo = memo
     tx_body.messages.extend([send_msg_packed])
 
-    from_pub_key_pb = ProtoPubKey()
-    from_pub_key_pb.key = from_pk.public_key_bytes
-
-    single = ModeInfo.Single()
-    single.mode = SignMode.SIGN_MODE_DIRECT
-    mode_info = ModeInfo(single=single)
-
     from_pub_key_packed = Any()
+    from_pub_key_pb = ProtoPubKey(key=from_pk.public_key_bytes)
     from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix="/")
+
+    # Prepare auth info
+    single = ModeInfo.Single(mode=SignMode.SIGN_MODE_DIRECT)
+    mode_info = ModeInfo(single=single)
     signer_info = SignerInfo(
         public_key=from_pub_key_packed,
         mode_info=mode_info,
@@ -62,6 +76,7 @@ def sign_and_broadcast_msg(send_msg_packed: Any, channel, from_pk: PrivateKey, f
         fee=Fee(amount=fee, gas_limit=gas_limit),
     )
 
+    # Prepare and sign transaction
     tx = Tx(body=tx_body, auth_info=auth_info)
     sign_transaction(
         tx,
@@ -71,18 +86,18 @@ def sign_and_broadcast_msg(send_msg_packed: Any, channel, from_pk: PrivateKey, f
         deterministic=True,
     )
 
+    # Broadcast transaction
     tx_data = tx.SerializeToString()
     broad_tx_req = BroadcastTxRequest(
         tx_bytes=tx_data, mode=BroadcastMode.BROADCAST_MODE_SYNC
     )
-
     broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
-    tx_hash = broad_tx_resp.tx_response.txhash
 
     # Wait for transaction to settle
     time.sleep(5)
 
-    tx_request = GetTxRequest(hash=tx_hash)
+    # Get transaction receipt
+    tx_request = GetTxRequest(hash=broad_tx_resp.tx_response.txhash)
     tx_response = tx_client.GetTx(tx_request)
 
     return tx_response

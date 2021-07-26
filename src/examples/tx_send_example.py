@@ -10,6 +10,14 @@ from examples.helpers import sign_and_broadcast_msg
 
 
 def get_packed_send_msg(from_address: Address, to_address: Address, amount: [Coin]):
+    """
+    Generate and pack MsgSend
+
+    :param from_address: Address of sender
+    :param to_address: Address of recipient
+    :param amount: List of Coins to be sent
+    :return: packer Any type message
+    """
     msg_send = MsgSend(from_address=str(from_address),
                        to_address=str(to_address),
                        amount=amount)
