@@ -32,3 +32,39 @@ make generate_proto_types
 > The makefile target id implemented the way, that necessary bits & pieces
 > of Cosmos-SDK repository is downloaded on demand (for python types
 > generation), but they are **NOT** checked-in to this repository
+
+
+# Setup Stargate local-net
+## Setup FetchD
+```
+bash scripts/setup_fetchd.sh
+```
+Script will ask for root permissions while setting up node.
+
+# Start node
+```
+fetchd start
+```
+
+# Run examples
+Commands bellow should be executed from pipenv shell
+```
+pipenv install
+pipenv shell
+```
+
+
+### Query balance example
+```
+python src/examples/query_balance_example.py
+```
+
+### Send funds transaction example
+```
+python src/examples/tx_send_example.py
+```
+
+### Contract deployment and interaction example
+```
+python src/examples/contract_interaction_example.py
+```

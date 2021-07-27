@@ -24,6 +24,7 @@ class QueryRestClient:
             raise RuntimeError(
                 f"Error when sending a query request.\n Request: {json_request}\n Response: {response.status_code}, {str(response.content)})"
             )
+
         return response.content
 
     def __del__(self):
