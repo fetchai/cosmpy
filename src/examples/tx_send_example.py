@@ -1,3 +1,5 @@
+""" Sending and querying funds example """
+
 from cosm.crypto.keypairs import PrivateKey
 from cosm.crypto.address import Address
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
@@ -13,11 +15,11 @@ from google.protobuf.any_pb2 import Any
 from examples.helpers import sign_and_broadcast_msg
 
 
-# Sending and querying funds example
 
 def get_balance(channel: Channel, address: Address, denom: str) -> QueryBalanceResponse:
     """
     Get balance of specific account and denom
+
     :param channel: gRPC channel
     :param address: Address
     :param denom: Denomination

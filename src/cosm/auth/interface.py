@@ -12,6 +12,7 @@ class Auth(ABC):
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
         """
         Queries account data - sequence, account_id, etc.
+
         :param request: QueryAccountRequest that contains account address
 
         :return: QueryAccountResponse
@@ -22,6 +23,7 @@ class Auth(ABC):
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
         Queries all parameters
+
         :param request: QueryParamsRequest
 
         :return: QueryParamsResponse

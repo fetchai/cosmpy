@@ -17,6 +17,7 @@ class AuthRestClient(Auth):
     def __init__(self, rest_api: QueryRestClient):
         """
         Create authentication rest client
+
         :param rest_api: QueryRestClient api
         """
         self._rest_api = rest_api
@@ -24,6 +25,7 @@ class AuthRestClient(Auth):
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
         """
         Queries account data - sequence, account_id, etc.
+
         :param request: QueryAccountRequest that contains account address
 
         :return: QueryAccountResponse
@@ -36,6 +38,7 @@ class AuthRestClient(Auth):
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
         Queries all parameters
+
         :param request: QueryParamsRequest
 
         :return: QueryParamsResponse

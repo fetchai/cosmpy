@@ -1,3 +1,5 @@
+""" Smart contract interaction example """
+
 import gzip
 import json
 from cosm.crypto.keypairs import PrivateKey
@@ -15,12 +17,10 @@ from google.protobuf.any_pb2 import Any
 
 from examples.helpers import sign_and_broadcast_msg
 
-
-# Smart contract interaction example
-
 def get_code_id(response: str) -> int:
     """
     Get code id from store code transaction response
+
     :param response: Response of store code transaction
 
     :return: integer code_id
@@ -33,6 +33,7 @@ def get_code_id(response: str) -> int:
 def get_packed_store_msg(sender_address: Address, contract_filename: Path) -> Any:
     """
     Loads contract bytecode, generate and return packed MsgStoreCode
+
     :param sender_address: Address of transaction sender
     :param contract_filename: Path to smart contract bytecode
 
@@ -66,6 +67,7 @@ def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLik
                         funds: [Coin] = []) -> Any:
     """
     Create and pack MsgInstantiateContract
+
     :param sender_address: Sender's address
     :param code_id: code_id of stored contract bytecode
     :param init_msg: Parameters to be passed to smart contract constructor
@@ -89,6 +91,7 @@ def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLik
 def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSONLike, funds: [Coin] = []) -> Any:
     """
     Create and pack MsgExecuteContract
+
     :param sender_address: Address of sender
     :param contract_address: Address of contract
     :param msg: Paramaters to be passed to smart contract
@@ -110,6 +113,7 @@ def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSO
 def query_contract_state(contract_address: str, msg: JSONLike) -> JSONLike:
     """
     Get state of smart contract
+
     :param contract_address: Contract address
     :param msg: Parameters to be passed to query function inside contract
 

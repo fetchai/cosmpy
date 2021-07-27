@@ -28,6 +28,7 @@ def sign_and_broadcast_msg(send_msg_packed: Any, channel: Channel, from_pk: Priv
                            gas_limit: int = 200000, memo: str = "", chain_id: str = "testing", wait_time: int = 5):
     """
     Sign and broadcast packed Any message
+
     :param send_msg_packed: Message to be broadcast
     :param channel: gRPC channel
     :param from_pk: Sender's private key
