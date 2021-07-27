@@ -46,7 +46,14 @@ Script will ask for root permissions while setting up node.
 fetchd start
 ```
 
-# Run example
+# Run examples
+Commands bellow should be executed from pipenv shell
+```
+pipenv install
+pipenv shell
+```
+
+
 ### Query balance example
 ```
 python src/examples/query_balance_example.py

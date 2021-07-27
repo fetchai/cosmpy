@@ -34,6 +34,7 @@ class BankRestClient(Bank):
         """
         Queries balance of selected denomination from specific account
         :param request: QueryBalanceRequest with address and denomination
+
         :return: QueryBalanceResponse
         """
         json_response = self._rest_api.get(
@@ -45,6 +46,7 @@ class BankRestClient(Bank):
         """
         Queries balance of all denominations from specific account
         :param request: QueryAllBalancesRequest with account address
+
         :return: QueryAllBalancesResponse
         """
         json_response = self._rest_api.get(
@@ -56,6 +58,7 @@ class BankRestClient(Bank):
         """
         Queries total supply of all denominations
         :param request: QueryTotalSupplyRequest
+
         :return: QueryTotalSupplyResponse
         """
         json_response = self._rest_api.get(self.API_URL + "/supply")
@@ -65,6 +68,7 @@ class BankRestClient(Bank):
         """
         Queries total supply of specific denomination
         :param request: QuerySupplyOfRequest with denomination
+
         :return: QuerySupplyOfResponse
         """
         json_response = self._rest_api.get(self.API_URL + f"/supply/{request.denom}")
@@ -74,6 +78,7 @@ class BankRestClient(Bank):
         """
         Queries the parameters of bank module
         :param request: QueryParamsRequest
+
         :return: QueryParamsResponse
         """
         json_response = self._rest_api.get(self.API_URL + "/params")
@@ -85,6 +90,7 @@ class BankRestClient(Bank):
         """
         Queries the client metadata for all registered coin denominations
         :param request: QueryDenomMetadataRequest with denomination
+
         :return: QueryDenomMetadataResponse
         """
         json_response = self._rest_api.get(
@@ -98,6 +104,7 @@ class BankRestClient(Bank):
         """
         Queries the client metadata of a given coin denomination
         :param request: QueryDenomsMetadataRequest
+
         :return: QueryDenomsMetadataResponse
         """
         json_response = self._rest_api.get(self.API_URL + "/denoms_metadata")

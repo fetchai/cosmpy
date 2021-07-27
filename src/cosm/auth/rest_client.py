@@ -25,6 +25,7 @@ class AuthRestClient(Auth):
         """
         Queries account data - sequence, account_id, etc.
         :param request: QueryAccountRequest that contains account address
+
         :return: QueryAccountResponse
         """
         json_response = self._rest_api.get(
@@ -36,6 +37,7 @@ class AuthRestClient(Auth):
         """
         Queries all parameters
         :param request: QueryParamsRequest
+
         :return: QueryParamsResponse
         """
         json_response = self._rest_api.get(self.API_URL + "/params")

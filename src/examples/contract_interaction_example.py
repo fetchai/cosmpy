@@ -16,10 +16,13 @@ from google.protobuf.any_pb2 import Any
 from examples.helpers import sign_and_broadcast_msg
 
 
+# Smart contract interaction example
+
 def get_code_id(response: str) -> int:
     """
     Get code id from store code transaction response
     :param response: Response of store code transaction
+
     :return: integer code_id
     """
     raw_log = json.loads(response.tx_response.raw_log)
@@ -32,6 +35,7 @@ def get_packed_store_msg(sender_address: Address, contract_filename: Path) -> An
     Loads contract bytecode, generate and return packed MsgStoreCode
     :param sender_address: Address of transaction sender
     :param contract_filename: Path to smart contract bytecode
+
     :return: Packed MsgStoreCode
     """
     with open(contract_filename, "rb") as contract_file:
@@ -50,6 +54,7 @@ def get_contract_address(response: str) -> str:
     """
     Get contract address from instantiate msg response
     :param response: Response of MsgInstantiateContract transaction
+
     :return: contract address string
     """
     raw_log = json.loads(response.tx_response.raw_log)
@@ -66,6 +71,7 @@ def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLik
     :param init_msg: Parameters to be passed to smart contract constructor
     :param label: Label
     :param funds: Funds transfered to new contract
+
     :return: Packed MsgInstantiateContract
     """
     msg_send = MsgInstantiateContract(sender=str(sender_address),
@@ -87,6 +93,7 @@ def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSO
     :param contract_address: Address of contract
     :param msg: Paramaters to be passed to smart contract
     :param funds: Funds to be sent to smart contract
+
     :return: Packed MsgExecuteContract
     """
     msg_send = MsgExecuteContract(sender=str(sender_address),
@@ -105,6 +112,7 @@ def query_contract_state(contract_address: str, msg: JSONLike) -> JSONLike:
     Get state of smart contract
     :param contract_address: Contract address
     :param msg: Parameters to be passed to query function inside contract
+
     :return: JSON query response
     """
     request = QuerySmartContractStateRequest(address=contract_address,
@@ -113,16 +121,20 @@ def query_contract_state(contract_address: str, msg: JSONLike) -> JSONLike:
     return json.loads(res.data)
 
 
-"""
-    Smart contract interaction example
-"""
+# ID and amount of tokens to be minted in contract
+TOKEN_ID = "1234"
+AMOUNT = "1"
+
+# Path to smart contract
+CONTRACT_FILENAME = "../../contracts/cw_erc1155.wasm"
 
 # Private key of sender's account
-from_pk = PrivateKey(
+FROM_PK = PrivateKey(
     bytes.fromhex(
         "0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
     )
 )
+FROM_ADDRESS = Address(FROM_PK)
 
 # Open gRPC channel
 channel = insecure_channel("localhost:9090")
@@ -131,55 +143,55 @@ channel = insecure_channel("localhost:9090")
 wasm_query_client = CosmWasmQueryClient(channel)
 
 # Store contract
-store_msg = get_packed_store_msg(sender_address=Address(from_pk),
-                                 contract_filename="../../contracts/cw_erc1155.wasm")
-response = sign_and_broadcast_msg(store_msg, channel, from_pk, gas_limit=2000000)
+store_msg = get_packed_store_msg(sender_address=FROM_ADDRESS,
+                                 contract_filename=CONTRACT_FILENAME)
+response = sign_and_broadcast_msg(store_msg, channel, FROM_PK, gas_limit=2000000)
 code_id = get_code_id(response)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
-init_msg = get_packed_init_msg(sender_address=Address(from_pk), code_id=code_id, init_msg={})
-response = sign_and_broadcast_msg(init_msg, channel, from_pk, gas_limit=2000000)
+init_msg = get_packed_init_msg(sender_address=FROM_ADDRESS, code_id=code_id, init_msg={})
+response = sign_and_broadcast_msg(init_msg, channel, FROM_PK, gas_limit=2000000)
 contract_address = get_contract_address(response)
 print(f"Contract address: {contract_address}")
 
-# Create token with ID 1234
+# Create token with ID TOKEN_ID
 create_single_msg = \
     {
         "create_single":
             {
-                "item_owner": str(Address(from_pk)),
-                "id": "1234",
+                "item_owner": str(FROM_ADDRESS),
+                "id": TOKEN_ID,
                 "path": "some_path",
             }
     }
-exec_msg = get_packed_exec_msg(sender_address=Address(from_pk),
+exec_msg = get_packed_exec_msg(sender_address=FROM_ADDRESS,
                                contract_address=contract_address,
                                msg=create_single_msg)
-response = sign_and_broadcast_msg(exec_msg, channel, from_pk, gas_limit=2000000)
-print("Created token with ID 1234")
+response = sign_and_broadcast_msg(exec_msg, channel, FROM_PK, gas_limit=2000000)
+print(f"Created token with ID {TOKEN_ID}")
 
-# Mint 1 token with ID 1234 and give it to validator
+# Mint 1 token with ID TOKEN_ID and give it to validator
 mint_single_msg = \
     {
         "mint_single":
             {
-                "to_address": str(Address(from_pk)),
-                "id": "1234",
+                "to_address": str(FROM_ADDRESS),
+                "id": TOKEN_ID,
                 "supply": "1",
                 "data": "some_data",
             },
     }
-exec_msg = get_packed_exec_msg(sender_address=Address(from_pk),
+exec_msg = get_packed_exec_msg(sender_address=FROM_ADDRESS,
                                contract_address=contract_address,
                                msg=mint_single_msg)
-response = sign_and_broadcast_msg(exec_msg, channel, from_pk, gas_limit=2000000)
-print("Minted 1 token with ID 1234")
+response = sign_and_broadcast_msg(exec_msg, channel, FROM_PK, gas_limit=2000000)
+print(f"Minted 1 token with ID {TOKEN_ID}")
 
-# Query validator's balance of token 1234
+# Query validator's balance of token TOKEN_ID
 msg = {"balance": {
-    "address": str(Address(from_pk)),
-    "id": "1234",
+    "address": str(FROM_ADDRESS),
+    "id": TOKEN_ID,
 }}
 res = query_contract_state(contract_address=contract_address,
                            msg=msg)

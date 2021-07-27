@@ -35,6 +35,7 @@ def sign_and_broadcast_msg(send_msg_packed: Any, channel: Channel, from_pk: Priv
     :param gas_limit: Gas limit
     :param memo: Memo
     :param chain_id: Chain ID
+
     :return: Transaction receipt
     """
     # Prepare clients

@@ -13,15 +13,17 @@ class Auth(ABC):
         """
         Queries account data - sequence, account_id, etc.
         :param request: QueryAccountRequest that contains account address
+
         :return: QueryAccountResponse
         """
-        ...
+        pass
 
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
         Queries all parameters
         :param request: QueryParamsRequest
+
         :return: QueryParamsResponse
         """
-        ...
+        pass
