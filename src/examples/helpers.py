@@ -25,7 +25,7 @@ from grpc._channel import Channel
 
 def sign_and_broadcast_msg(send_msg_packed: Any, channel: Channel, from_pk: PrivateKey,
                            fee: [Coin] = [Coin(amount="0", denom="stake")],
-                           gas_limit: int = 200000, memo: str = "", chain_id: str = "testing"):
+                           gas_limit: int = 200000, memo: str = "", chain_id: str = "testing", wait_time: int = 5):
     """
     Sign and broadcast packed Any message
     :param send_msg_packed: Message to be broadcast
@@ -93,8 +93,12 @@ def sign_and_broadcast_msg(send_msg_packed: Any, channel: Channel, from_pk: Priv
     )
     broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
 
+    if broad_tx_resp.tx_response.code != 0:
+        raw_log = broad_tx_resp["raw_log"]
+        raise RuntimeError(f"Transaction failed: {raw_log}")
+
     # Wait for transaction to settle
-    time.sleep(5)
+    time.sleep(wait_time)
 
     # Get transaction receipt
     tx_request = GetTxRequest(hash=broad_tx_resp.tx_response.txhash)
