@@ -47,7 +47,17 @@ fetchd start
 ```
 
 # Run example
+### Query balance example
 ```
 python src/examples/query_balance_example.py
 ```
 
+### Send funds transaction example
+```
+python src/examples/tx_send_example.py
+```
+
+### Contract deployment and interaction example
+```
+python src/examples/contract_interaction_example.py
+```

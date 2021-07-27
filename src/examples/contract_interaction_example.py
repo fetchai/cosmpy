@@ -17,19 +17,28 @@ from examples.helpers import sign_and_broadcast_msg
 
 
 def get_code_id(response: str) -> int:
+    """
+    Get code id from store code transaction response
+    :param response: Response of store code transaction
+    :return: integer code_id
+    """
     raw_log = json.loads(response.tx_response.raw_log)
     assert raw_log[0]["events"][0]["attributes"][3]["key"] == "code_id"
     return int(raw_log[0]["events"][0]["attributes"][3]["value"])
 
 
-def get_packed_store_msg(sender_address: Address, contract_filename: Path, source: str = "", builder: str = "") -> Any:
+def get_packed_store_msg(sender_address: Address, contract_filename: Path) -> Any:
+    """
+    Loads contract bytecode, generate and return packed MsgStoreCode
+    :param sender_address: Address of transaction sender
+    :param contract_filename: Path to smart contract bytecode
+    :return: Packed MsgStoreCode
+    """
     with open(contract_filename, "rb") as contract_file:
         wasm_byte_code = gzip.compress(contract_file.read(), 6)
 
     msg_send = MsgStoreCode(sender=str(sender_address),
                             wasm_byte_code=wasm_byte_code,
-                            source=source,
-                            builder=builder
                             )
     send_msg_packed = Any()
     send_msg_packed.Pack(msg_send, type_url_prefix="/")
@@ -38,6 +47,11 @@ def get_packed_store_msg(sender_address: Address, contract_filename: Path, sourc
 
 
 def get_contract_address(response: str) -> str:
+    """
+    Get contract address from instantiate msg response
+    :param response: Response of MsgInstantiateContract transaction
+    :return: contract address string
+    """
     raw_log = json.loads(response.tx_response.raw_log)
     assert raw_log[0]["events"][1]["attributes"][0]["key"] == "contract_address"
     return str(raw_log[0]["events"][1]["attributes"][0]["value"])
@@ -45,6 +59,15 @@ def get_contract_address(response: str) -> str:
 
 def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLike, label="contract",
                         funds: [Coin] = []) -> Any:
+    """
+    Create and pack MsgInstantiateContract
+    :param sender_address: Sender's address
+    :param code_id: code_id of stored contract bytecode
+    :param init_msg: Parameters to be passed to smart contract constructor
+    :param label: Label
+    :param funds: Funds transfered to new contract
+    :return: Packed MsgInstantiateContract
+    """
     msg_send = MsgInstantiateContract(sender=str(sender_address),
                                       code_id=code_id,
                                       init_msg=json.dumps(init_msg).encode("UTF8"),
@@ -58,6 +81,14 @@ def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLik
 
 
 def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSONLike, funds: [Coin] = []) -> Any:
+    """
+    Create and pack MsgExecuteContract
+    :param sender_address: Address of sender
+    :param contract_address: Address of contract
+    :param msg: Paramaters to be passed to smart contract
+    :param funds: Funds to be sent to smart contract
+    :return: Packed MsgExecuteContract
+    """
     msg_send = MsgExecuteContract(sender=str(sender_address),
                                   contract=contract_address,
                                   msg=json.dumps(msg).encode("UTF8"),
@@ -70,6 +101,12 @@ def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSO
 
 
 def query_contract_state(contract_address: str, msg: JSONLike) -> JSONLike:
+    """
+    Get state of smart contract
+    :param contract_address: Contract address
+    :param msg: Parameters to be passed to query function inside contract
+    :return: JSON query response
+    """
     request = QuerySmartContractStateRequest(address=contract_address,
                                              query_data=json.dumps(msg).encode("UTF8"))
     res = wasm_query_client.SmartContractState(request)
