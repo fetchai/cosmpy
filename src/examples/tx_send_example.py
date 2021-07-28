@@ -2,53 +2,12 @@
 
 from cosm.crypto.keypairs import PrivateKey
 from cosm.crypto.address import Address
-from cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmos.base.v1beta1.coin_pb2 import Coin
-from cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankQueryClent
-from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse
 
 from grpc import insecure_channel
-from grpc._channel import Channel
 
-from google.protobuf.any_pb2 import Any
-
-from examples.helpers import sign_and_broadcast_msg
-
-
-
-def get_balance(channel: Channel, address: Address, denom: str) -> QueryBalanceResponse:
-    """
-    Get balance of specific account and denom
-
-    :param channel: gRPC channel
-    :param address: Address
-    :param denom: Denomination
-
-    :return: QueryBalanceResponse
-    """
-    bank_client = BankQueryClent(channel)
-    res = bank_client.Balance(QueryBalanceRequest(address=str(address), denom=denom))
-    return res
-
-
-def get_packed_send_msg(from_address: Address, to_address: Address, amount: [Coin]):
-    """
-    Generate and pack MsgSend
-
-    :param from_address: Address of sender
-    :param to_address: Address of recipient
-    :param amount: List of Coins to be sent
-
-    :return: packer Any type message
-    """
-    msg_send = MsgSend(from_address=str(from_address),
-                       to_address=str(to_address),
-                       amount=amount)
-    send_msg_packed = Any()
-    send_msg_packed.Pack(msg_send, type_url_prefix="/")
-
-    return send_msg_packed
-
+from examples.helpers import sign_and_broadcast_msgs
+from examples.helpers import get_balance, get_packed_send_msg
 
 # Denomination and amouunt of transferred tokens
 DENOM = "stake"
@@ -72,7 +31,7 @@ channel = insecure_channel("localhost:9090")
 print("Before transaction")
 res = get_balance(channel, FROM_ADDRESS, DENOM)
 print(f"Validator has {res.balance.amount} {DENOM}")
-res = get_balance(channel, FROM_ADDRESS, DENOM)
+res = get_balance(channel, TO_ADDRESS, DENOM)
 print(f"Bob has {res.balance.amount} {DENOM}")
 
 # Create send message
@@ -81,7 +40,7 @@ msg = get_packed_send_msg(from_address=FROM_ADDRESS,
                           amount=AMOUNT)
 
 # Send and broadcast message
-sign_and_broadcast_msg(msg, channel, FROM_PK)
+sign_and_broadcast_msgs([msg], channel, [FROM_PK])
 
 # Print balance after transfer
 print("After transaction")
