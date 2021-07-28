@@ -23,7 +23,7 @@ VALIDATOR_PK = PrivateKey(
 )
 VALIDATOR_ADDRESS = Address(VALIDATOR_PK)
 
-# Private key of validator's account
+# Private key of bob's account
 BOB_PK = PrivateKey(
     bytes.fromhex(
         "439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636"
