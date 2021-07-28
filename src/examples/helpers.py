@@ -17,10 +17,47 @@ from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosm.tx import multi_sign_transaction
 from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankQueryClent
+from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse
 
 from google.protobuf.any_pb2 import Any
 import time
 from grpc._channel import Channel
+
+
+def get_balance(channel: Channel, address: Address, denom: str) -> QueryBalanceResponse:
+    """
+    Get balance of specific account and denom
+
+    :param channel: gRPC channel
+    :param address: Address
+    :param denom: Denomination
+
+    :return: QueryBalanceResponse
+    """
+    bank_client = BankQueryClent(channel)
+    res = bank_client.Balance(QueryBalanceRequest(address=str(address), denom=denom))
+    return res
+
+
+def get_packed_send_msg(from_address: Address, to_address: Address, amount: [Coin]):
+    """
+    Generate and pack MsgSend
+
+    :param from_address: Address of sender
+    :param to_address: Address of recipient
+    :param amount: List of Coins to be sent
+
+    :return: packer Any type message
+    """
+    msg_send = MsgSend(from_address=str(from_address),
+                       to_address=str(to_address),
+                       amount=amount)
+    send_msg_packed = Any()
+    send_msg_packed.Pack(msg_send, type_url_prefix="/")
+
+    return send_msg_packed
 
 
 def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 5) -> GetTxResponse:
