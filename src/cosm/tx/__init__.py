@@ -19,6 +19,8 @@ def sign_transaction(
     :param chain_id: Chain ID
     :param account_number: Account Number
     :param deterministic: Deterministic mode flag
+
+    :return: None
     """
     sd = SignDoc()
     sd.body_bytes = tx.body.SerializeToString()
@@ -50,6 +52,8 @@ def multi_sign_transaction(
     :param chain_id: Chain ID
     :param accounts: List of account data
     :param deterministic: Deterministic mode flag
+
+    :return: None
     """
     signatures = []
 
