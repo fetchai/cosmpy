@@ -87,7 +87,7 @@ def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 5) -> GetTxResponse:
     broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
 
     if broad_tx_resp.tx_response.code != 0:
-        raw_log = broad_tx_resp["raw_log"]
+        raw_log = broad_tx_resp.tx_response.raw_log
         raise RuntimeError(f"Transaction failed: {raw_log}")
 
     # Wait for transaction to settle
