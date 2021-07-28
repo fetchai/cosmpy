@@ -11,6 +11,15 @@ def sign_transaction(
     account_number: int,
     deterministic: bool = False,
 ):
+    """
+    Sign transaction
+
+    :param tx: Transaction to be signed
+    :param signer: Signer of transaction
+    :param chain_id: Chain ID
+    :param account_number: Account Number
+    :param deterministic: Deterministic mode flag
+    """
     sd = SignDoc()
     sd.body_bytes = tx.body.SerializeToString()
     sd.auth_info_bytes = tx.auth_info.SerializeToString()
@@ -33,6 +42,15 @@ def multi_sign_transaction(
     accounts: List[BaseAccount],
     deterministic: bool = False,
 ):
+    """
+    Sign transaction
+
+    :param tx: Transaction to be signed
+    :param signers: List of signers
+    :param chain_id: Chain ID
+    :param accounts: List of account data
+    :param deterministic: Deterministic mode flag
+    """
     signatures = []
 
     for i in range(len(signers)):
