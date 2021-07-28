@@ -12,7 +12,7 @@ from grpc._channel import Channel
 
 from google.protobuf.any_pb2 import Any
 
-from examples.helpers import sign_and_broadcast_msg
+from examples.helpers import sign_and_broadcast_msgs
 
 
 
@@ -72,7 +72,7 @@ channel = insecure_channel("localhost:9090")
 print("Before transaction")
 res = get_balance(channel, FROM_ADDRESS, DENOM)
 print(f"Validator has {res.balance.amount} {DENOM}")
-res = get_balance(channel, FROM_ADDRESS, DENOM)
+res = get_balance(channel, TO_ADDRESS, DENOM)
 print(f"Bob has {res.balance.amount} {DENOM}")
 
 # Create send message
@@ -81,7 +81,7 @@ msg = get_packed_send_msg(from_address=FROM_ADDRESS,
                           amount=AMOUNT)
 
 # Send and broadcast message
-sign_and_broadcast_msg(msg, channel, FROM_PK)
+sign_and_broadcast_msgs([msg], channel, [FROM_PK])
 
 # Print balance after transfer
 print("After transaction")

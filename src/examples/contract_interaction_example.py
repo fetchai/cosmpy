@@ -15,7 +15,7 @@ from common import JSONLike
 
 from google.protobuf.any_pb2 import Any
 
-from examples.helpers import sign_and_broadcast_msg
+from examples.helpers import sign_and_broadcast_msgs
 
 def get_code_id(response: str) -> int:
     """
@@ -149,13 +149,13 @@ wasm_query_client = CosmWasmQueryClient(channel)
 # Store contract
 store_msg = get_packed_store_msg(sender_address=FROM_ADDRESS,
                                  contract_filename=CONTRACT_FILENAME)
-response = sign_and_broadcast_msg(store_msg, channel, FROM_PK, gas_limit=2000000)
+response = sign_and_broadcast_msgs([store_msg], channel, FROM_PK, gas_limit=2000000)
 code_id = get_code_id(response)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
 init_msg = get_packed_init_msg(sender_address=FROM_ADDRESS, code_id=code_id, init_msg={})
-response = sign_and_broadcast_msg(init_msg, channel, FROM_PK, gas_limit=2000000)
+response = sign_and_broadcast_msgs([init_msg], channel, [FROM_PK], gas_limit=2000000)
 contract_address = get_contract_address(response)
 print(f"Contract address: {contract_address}")
 
@@ -172,7 +172,7 @@ create_single_msg = \
 exec_msg = get_packed_exec_msg(sender_address=FROM_ADDRESS,
                                contract_address=contract_address,
                                msg=create_single_msg)
-response = sign_and_broadcast_msg(exec_msg, channel, FROM_PK, gas_limit=2000000)
+response = sign_and_broadcast_msgs([exec_msg], channel, [FROM_PK], gas_limit=2000000)
 print(f"Created token with ID {TOKEN_ID}")
 
 # Mint 1 token with ID TOKEN_ID and give it to validator
@@ -189,7 +189,7 @@ mint_single_msg = \
 exec_msg = get_packed_exec_msg(sender_address=FROM_ADDRESS,
                                contract_address=contract_address,
                                msg=mint_single_msg)
-response = sign_and_broadcast_msg(exec_msg, channel, FROM_PK, gas_limit=2000000)
+response = sign_and_broadcast_msgs([exec_msg], channel, [FROM_PK], gas_limit=2000000)
 print(f"Minted 1 token with ID {TOKEN_ID}")
 
 # Query validator's balance of token TOKEN_ID
