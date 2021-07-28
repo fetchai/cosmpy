@@ -65,6 +65,7 @@ def query_account_data(channel: Channel, address: Address) -> BaseAccount:
     # Get account data for signing
     account_response = auth_query_client.Account(
         QueryAccountRequest(address=str(address))
+
     )
     account = BaseAccount()
     if account_response.account.Is(BaseAccount.DESCRIPTOR):
@@ -74,7 +75,7 @@ def query_account_data(channel: Channel, address: Address) -> BaseAccount:
     return account
 
 
-def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount)->SignerInfo:
+def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount) -> SignerInfo:
     """
     Generate signer info
     :param from_pk: Private key of signer
@@ -98,7 +99,8 @@ def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount)->SignerInfo:
 
 def sign_and_broadcast_msgs(packed_msgs: [Any], channel: Channel, signers_keys: [PrivateKey],
                             fee: [Coin] = [Coin(amount="0", denom="stake")],
-                            gas_limit: int = 200000, memo: str = "", chain_id: str = "testing", wait_time: int = 5) -> GetTxResponse:
+                            gas_limit: int = 200000, memo: str = "", chain_id: str = "testing",
+                            wait_time: int = 5) -> GetTxResponse:
     """
     Sign and broadcast one or multiple packed Any messages
 
@@ -120,7 +122,7 @@ def sign_and_broadcast_msgs(packed_msgs: [Any], channel: Channel, signers_keys: 
     for signer_key in signers_keys:
         account = query_account_data(channel, Address(signer_key))
         accounts.append(account)
-        signers_info.append(get_signer_info(signer_key,account))
+        signers_info.append(get_signer_info(signer_key, account))
 
     # Prepare auth info
     auth_info = AuthInfo(
