@@ -53,7 +53,6 @@ pipenv install
 pipenv shell
 ```
 
-
 ### Query balance example
 ```
 python src/examples/query_balance_example.py
@@ -67,4 +66,14 @@ python src/examples/tx_send_example.py
 ### Contract deployment and interaction example
 ```
 python src/examples/contract_interaction_example.py
+```
+
+### Native tokens atomic swap example 
+```
+python src/examples/tx_native_tokens_atomic_swap_example.py
+```
+
+### Atomic swap using ERC1155 contract example
+```
+python src/examples/atomic_swap_contract_example.py
 ```

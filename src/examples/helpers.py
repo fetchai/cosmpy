@@ -36,6 +36,8 @@ from common import JSONLike
 
 from google.protobuf.any_pb2 import Any
 
+from typing import List
+
 
 def get_balance(channel: Channel, address: Address, denom: str) -> QueryBalanceResponse:
     """
@@ -52,7 +54,7 @@ def get_balance(channel: Channel, address: Address, denom: str) -> QueryBalanceR
     return res
 
 
-def get_packed_send_msg(from_address: Address, to_address: Address, amount: [Coin]):
+def get_packed_send_msg(from_address: Address, to_address: Address, amount: List[Coin]):
     """
     Generate and pack MsgSend
 
@@ -144,9 +146,10 @@ def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount) -> SignerInfo:
     )
     return signer_info
 
+
 # CosmWasm helpers
-def sign_and_broadcast_msgs(packed_msgs: [Any], channel: Channel, signers_keys: [PrivateKey],
-                            fee: [Coin] = [Coin(amount="0", denom="stake")],
+def sign_and_broadcast_msgs(packed_msgs: List[Any], channel: Channel, signers_keys: List[PrivateKey],
+                            fee: List[Coin] = [Coin(amount="0", denom="stake")],
                             gas_limit: int = 200000, memo: str = "", chain_id: str = "testing",
                             wait_time: int = 5) -> GetTxResponse:
     """
@@ -165,8 +168,8 @@ def sign_and_broadcast_msgs(packed_msgs: [Any], channel: Channel, signers_keys: 
     """
 
     # Get signers and account info
-    accounts = []
-    signers_info = []
+    accounts: List[BaseAccount] = []
+    signers_info: List[SignerInfo] = []
     for signer_key in signers_keys:
         account = query_account_data(channel, Address(signer_key))
         accounts.append(account)
@@ -194,7 +197,6 @@ def sign_and_broadcast_msgs(packed_msgs: [Any], channel: Channel, signers_keys: 
     )
 
     return broadcast_tx(channel, tx, wait_time)
-
 
 
 def get_code_id(response: str) -> int:
@@ -244,7 +246,7 @@ def get_contract_address(response: str) -> str:
 
 
 def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLike, label="contract",
-                        funds: [Coin] = []) -> Any:
+                        funds: List[Coin] = []) -> Any:
     """
     Create and pack MsgInstantiateContract
 
@@ -268,7 +270,7 @@ def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLik
     return send_msg_packed
 
 
-def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSONLike, funds: [Coin] = []) -> Any:
+def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSONLike, funds: List[Coin] = []) -> Any:
     """
     Create and pack MsgExecuteContract
 
@@ -304,4 +306,3 @@ def query_contract_state(channel: Channel, contract_address: str, msg: JSONLike)
                                              query_data=json.dumps(msg).encode("UTF8"))
     res = wasm_query_client.SmartContractState(request)
     return json.loads(res.data)
-

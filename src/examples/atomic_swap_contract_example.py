@@ -1,4 +1,4 @@
-""" Smart contract interaction example """
+""" Atomic swap using ERC1155 contract and multiple messages per transaction example """
 
 from cosm.crypto.keypairs import PrivateKey
 from cosm.crypto.address import Address
@@ -34,8 +34,6 @@ BOB_ADDRESS = Address(BOB_PK)
 
 # Open gRPC channel
 channel = insecure_channel("localhost:9090")
-
-# Prepare client for querying contract state
 
 # Store contract
 store_msg = get_packed_store_msg(sender_address=VALIDATOR_ADDRESS,
@@ -82,7 +80,7 @@ mint_single_msg = \
             {
                 "to_address": str(VALIDATOR_ADDRESS),
                 "id": TOKEN_ID_1,
-                "supply": "1",
+                "supply": AMOUNT_1,
                 "data": "some_data",
             },
     }
@@ -99,7 +97,7 @@ mint_single_msg = \
             {
                 "to_address": str(BOB_ADDRESS),
                 "id": TOKEN_ID_2,
-                "supply": "1",
+                "supply": AMOUNT_2,
                 "data": "some_data",
             },
     }
@@ -119,7 +117,7 @@ transfer_msg_1 = \
                 "from_address": str(VALIDATOR_ADDRESS),
                 "to_address": str(BOB_ADDRESS),
                 "id": TOKEN_ID_1,
-                "value": "1",
+                "value": AMOUNT_1,
             },
     }
 exec_transfer_msg_1 = get_packed_exec_msg(sender_address=VALIDATOR_ADDRESS,
@@ -135,7 +133,7 @@ transfer_msg_2 = \
                 "from_address": str(BOB_ADDRESS),
                 "to_address": str(VALIDATOR_ADDRESS),
                 "id": TOKEN_ID_2,
-                "value": "1",
+                "value": AMOUNT_2,
             },
     }
 exec_transfer_msg_2 = get_packed_exec_msg(sender_address=BOB_ADDRESS,
@@ -148,26 +146,29 @@ response = sign_and_broadcast_msgs([exec_transfer_msg_1, exec_transfer_msg_2], c
 print(f"Swapped token validator's token {TOKEN_ID_1} with bob's token {TOKEN_ID_2}")
 
 # Query validator's balances of validator an bob in one query call
-msg = {"balance_batch":
-    {"addresses":
-        [
-            {
-                "address": str(VALIDATOR_ADDRESS),
-                "id": TOKEN_ID_2,
-            }
-            ,
-            {
-                "address": str(BOB_ADDRESS),
-                "id": TOKEN_ID_1,
-            }
-        ]
-    }
+msg = {
+    "balance_batch":
+        {
+            "addresses":
+                [
+                    {
+                        "address": str(BOB_ADDRESS),
+                        "id": TOKEN_ID_1,
+                    }
+                    ,
+                    {
+                        "address": str(VALIDATOR_ADDRESS),
+                        "id": TOKEN_ID_2,
+                    }
+                ]
+        }
 }
 res = query_contract_state(channel=channel,
                            contract_address=contract_address,
                            msg=msg)
 
 # Check if swap was successful
-assert res["balances"] == ['1', '1']
+# TOKEN_ID_1 should be now owned by bob and TOKEN_ID_2 by validator
+assert res["balances"] == [AMOUNT_1, AMOUNT_2]
 
 print("All done!")

@@ -1,6 +1,7 @@
 from cosm.crypto.interface import Signer
 from cosmos.tx.v1beta1.tx_pb2 import Tx, SignDoc
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from typing import List
 
 
 def sign_transaction(
@@ -27,9 +28,9 @@ def sign_transaction(
 
 def multi_sign_transaction(
     tx: Tx,
-    signers: [Signer],
+    signers: List[Signer],
     chain_id: str,
-    accounts: [BaseAccount],
+    accounts: List[BaseAccount],
     deterministic: bool = False,
 ):
     signatures = []
