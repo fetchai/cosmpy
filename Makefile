@@ -85,6 +85,25 @@ black-check:
 test:
 	python -m unittest discover -s $(PYCOSM_SRC_DIR)
 
+bandit:
+	bandit -r $(PYCOSM_SRC_DIR)
+
+safety:
+	safety check -i 37524 -i 38038 -i 37776 -i 38039 -i 39621 -i 40291 -i 39706
+
+isort:
+	isort --check $(PYCOSM_SRC_DIR)
+
+darglint:
+	darglint $(PYCOSM_SRC_DIR)
+
+vulture:
+	vulture $(PYCOSM_SRC_DIR)
+
+pylint:
+	pylint $(PYCOSM_SRC_DIR)
+
+
 ci: flake mypy black clask-check test
 
 debug:
