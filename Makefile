@@ -94,9 +94,6 @@ safety:
 isort:
 	isort --check $(PYCOSM_SRC_DIR)
 
-darglint:
-	darglint $(PYCOSM_SRC_DIR)
-
 vulture:
 	vulture $(PYCOSM_SRC_DIR)
 

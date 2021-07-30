@@ -40,8 +40,6 @@ jobs:
       run: pipenv run make safety
     - name: Check imports order with Isort
       run: pipenv run make isort
-    - name: Docstrings check with Darglint
-      run: pipenv run make darglint
     - name: Unused code check with Vulture
       run: pipenv run make vulture
     - name: Code check with PyLint
