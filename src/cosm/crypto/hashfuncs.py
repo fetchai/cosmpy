@@ -1,4 +1,5 @@
 import hashlib
+
 from _hashlib import HASH  # type: ignore
 
 

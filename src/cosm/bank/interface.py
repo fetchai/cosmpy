@@ -1,19 +1,20 @@
 from abc import ABC, abstractmethod
+
 from cosmos.bank.v1beta1.query_pb2 import (
-    QueryBalanceRequest,
-    QueryBalanceResponse,
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
-    QueryTotalSupplyRequest,
-    QueryTotalSupplyResponse,
-    QuerySupplyOfRequest,
-    QuerySupplyOfResponse,
-    QueryParamsRequest,
-    QueryParamsResponse,
+    QueryBalanceRequest,
+    QueryBalanceResponse,
     QueryDenomMetadataRequest,
-    QueryDenomsMetadataResponse,
     QueryDenomMetadataResponse,
     QueryDenomsMetadataRequest,
+    QueryDenomsMetadataResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QuerySupplyOfRequest,
+    QuerySupplyOfResponse,
+    QueryTotalSupplyRequest,
+    QueryTotalSupplyResponse,
 )
 
 

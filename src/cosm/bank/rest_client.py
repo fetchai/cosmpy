@@ -1,23 +1,23 @@
 from google.protobuf.json_format import Parse
-from cosm.query.rest_client import QueryRestClient
-from cosmos.bank.v1beta1.query_pb2 import (
-    QueryBalanceRequest,
-    QueryBalanceResponse,
-    QueryAllBalancesRequest,
-    QueryAllBalancesResponse,
-    QueryTotalSupplyRequest,
-    QueryTotalSupplyResponse,
-    QuerySupplyOfRequest,
-    QuerySupplyOfResponse,
-    QueryParamsRequest,
-    QueryParamsResponse,
-    QueryDenomMetadataRequest,
-    QueryDenomsMetadataResponse,
-    QueryDenomMetadataResponse,
-    QueryDenomsMetadataRequest,
-)
 
 from cosm.bank.interface import Bank
+from cosm.query.rest_client import QueryRestClient
+from cosmos.bank.v1beta1.query_pb2 import (
+    QueryAllBalancesRequest,
+    QueryAllBalancesResponse,
+    QueryBalanceRequest,
+    QueryBalanceResponse,
+    QueryDenomMetadataRequest,
+    QueryDenomMetadataResponse,
+    QueryDenomsMetadataRequest,
+    QueryDenomsMetadataResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QuerySupplyOfRequest,
+    QuerySupplyOfResponse,
+    QueryTotalSupplyRequest,
+    QueryTotalSupplyResponse,
+)
 
 
 class BankRestClient(Bank):

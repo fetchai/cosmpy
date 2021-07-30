@@ -1,9 +1,11 @@
 import base64
 import hashlib
-from typing import Union, Optional, Callable
+from typing import Callable, Optional, Union
+
 import ecdsa
 from ecdsa.curves import Curve
-from ecdsa.util import sigencode_string_canonize, sigencode_string
+from ecdsa.util import sigencode_string, sigencode_string_canonize
+
 from cosm.crypto.interface import Signer
 
 

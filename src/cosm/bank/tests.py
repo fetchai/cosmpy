@@ -1,31 +1,28 @@
+import json
 import unittest
 from unittest.mock import patch
+
 from cosm.bank.rest_client import BankRestClient
 from cosm.tests.helpers import MockQueryRestClient
-
+from cosmos.bank.v1beta1.bank_pb2 import Metadata, Params
 from cosmos.bank.v1beta1.query_pb2 import (
-    QueryBalanceRequest,
-    QueryBalanceResponse,
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
-    QueryTotalSupplyRequest,
-    QueryTotalSupplyResponse,
-    QuerySupplyOfRequest,
-    QuerySupplyOfResponse,
-    QueryParamsRequest,
-    QueryParamsResponse,
+    QueryBalanceRequest,
+    QueryBalanceResponse,
     QueryDenomMetadataRequest,
     QueryDenomMetadataResponse,
     QueryDenomsMetadataRequest,
     QueryDenomsMetadataResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QuerySupplyOfRequest,
+    QuerySupplyOfResponse,
+    QueryTotalSupplyRequest,
+    QueryTotalSupplyResponse,
 )
-
-from cosmos.bank.v1beta1.bank_pb2 import Params, Metadata
-
-from cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
-
-import json
+from cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 class BankTests(unittest.TestCase):

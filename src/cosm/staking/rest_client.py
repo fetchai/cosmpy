@@ -1,6 +1,7 @@
+from google.protobuf.json_format import Parse
+
 from cosm.query.rest_client import QueryRestClient
 from cosm.staking.interface import Staking
-
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
@@ -31,7 +32,6 @@ from cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
 )
-from google.protobuf.json_format import Parse
 
 
 class StakingRestClient(Staking):

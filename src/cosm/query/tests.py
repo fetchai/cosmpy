@@ -1,7 +1,9 @@
-from cosm.query.rest_client import QueryRestClient
 from unittest import TestCase
 from unittest.mock import Mock, patch
-from requests import Session, Response
+
+from requests import Response, Session
+
+from cosm.query.rest_client import QueryRestClient
 
 
 class QueryTests(TestCase):

@@ -1,7 +1,8 @@
-from typing import Union, Optional
+from typing import Optional, Union
 
 import bech32
-from cosm.crypto.hashfuncs import sha256, ripemd160
+
+from cosm.crypto.hashfuncs import ripemd160, sha256
 from cosm.crypto.keypairs import PublicKey
 
 DEFAULT_PREFIX = "fetch"

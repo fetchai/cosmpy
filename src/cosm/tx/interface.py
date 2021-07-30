@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 import cosmos.tx.v1beta1.service_pb2 as svc
 
 
