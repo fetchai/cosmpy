@@ -14,7 +14,7 @@ from cosmos.tx.v1beta1.service_pb2 import BroadcastTxRequest, BroadcastMode, Get
 from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from cosm.tx import multi_sign_transaction
+from cosm.tx import sign_transaction
 from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankQueryClent
@@ -125,15 +125,15 @@ def query_account_data(channel: Channel, address: Address) -> BaseAccount:
     return account
 
 
-def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount) -> SignerInfo:
+def get_signer_info(from_acc: BaseAccount) -> SignerInfo:
     """
     Generate signer info
-    :param from_pk: Private key of signer
     :param from_acc: Account info of signer
     :return: SignerInfo
     """
+
     from_pub_key_packed = Any()
-    from_pub_key_pb = ProtoPubKey(key=from_pk.public_key_bytes)
+    from_pub_key_pb = ProtoPubKey(key=from_acc.pub_key.value[2:35])
     from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix="/")
 
     # Prepare auth info
@@ -145,6 +145,10 @@ def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount) -> SignerInfo:
         sequence=from_acc.sequence,
     )
     return signer_info
+
+
+def generate_tx(packed_msgs: List[Any], accounts: List[BaseAccount]):
+
 
 
 # CosmWasm helpers
@@ -173,7 +177,7 @@ def sign_and_broadcast_msgs(packed_msgs: List[Any], channel: Channel, signers_ke
     for signer_key in signers_keys:
         account = query_account_data(channel, Address(signer_key))
         accounts.append(account)
-        signers_info.append(get_signer_info(signer_key, account))
+        signers_info.append(get_signer_info(account))
 
     # Prepare auth info
     auth_info = AuthInfo(
@@ -188,13 +192,9 @@ def sign_and_broadcast_msgs(packed_msgs: List[Any], channel: Channel, signers_ke
 
     # Prepare and sign transaction
     tx = Tx(body=tx_body, auth_info=auth_info)
-    multi_sign_transaction(
-        tx,
-        signers=signers_keys,
-        chain_id=chain_id,
-        accounts=accounts,
-        deterministic=True,
-    )
+
+    for i in range(len(signers_keys)):
+        sign_transaction(tx, signers_keys[i], chain_id, accounts[i].account_number)
 
     return broadcast_tx(channel, tx, wait_time)
 
