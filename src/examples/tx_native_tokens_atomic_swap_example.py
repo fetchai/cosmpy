@@ -21,7 +21,6 @@ VALIDATOR_PK = PrivateKey(
         "0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
     )
 )
-validator_client = SigningCosmWasmClient(VALIDATOR_PK, ENDPOINT_ADDRESS, CHAIN_ID)
 
 # Private key of bob's account
 BOB_PK = PrivateKey(
@@ -29,6 +28,9 @@ BOB_PK = PrivateKey(
         "439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636"
     )
 )
+
+# Create clients
+validator_client = SigningCosmWasmClient(VALIDATOR_PK, ENDPOINT_ADDRESS, CHAIN_ID)
 bob_client = SigningCosmWasmClient(BOB_PK, ENDPOINT_ADDRESS, CHAIN_ID)
 
 # Print balances before transfer
