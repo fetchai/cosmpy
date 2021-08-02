@@ -1,10 +1,7 @@
 """ Native tokens atomic swap example """
 
 from cosm.crypto.keypairs import PrivateKey
-from cosm.crypto.address import Address
 from cosmos.base.v1beta1.coin_pb2 import Coin
-
-from grpc import insecure_channel
 
 from examples.clients import SigningCosmWasmClient
 
@@ -14,6 +11,7 @@ AMOUNT_1 = [Coin(amount="1", denom=DENOM_1)]
 DENOM_2 = "atestfet"
 AMOUNT_2 = [Coin(amount="1", denom=DENOM_2)]
 
+# Node config
 ENDPOINT_ADDRESS = "localhost:9090"
 CHAIN_ID = "testing"
 
@@ -53,13 +51,15 @@ msg_2 = bob_client.get_packed_send_msg(from_address=bob_client.address,
                                        to_address=validator_client.address,
                                        amount=AMOUNT_2)
 
-# Send and broadcast both messages as part of 1 transaction
+# Generate one transaction containing both messages
 tx = validator_client.generate_tx(packed_msgs=[msg_1, msg_2],
                                   from_addresses=[validator_client.address, bob_client.address])
 
+# Sign transaction by both clients
 validator_client.sign_tx(tx)
 bob_client.sign_tx(tx)
 
+# Broadcast transaction
 validator_client.broadcast_tx(tx)
 
 # Print balances after transfer
