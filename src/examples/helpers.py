@@ -76,10 +76,12 @@ def get_packed_send_msg(from_address: Address, to_address: Address, amount: List
 def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 5) -> GetTxResponse:
     """
     Broadcast transaction and get receipt
+
     :param channel: gRPC channel
     :param tx: Transaction
     :param wait_time: Number of seconds to wait before getting transaction receipt
-    :return:
+
+    :return: GetTxResponse
     """
     tx_client = TxGrpcClient(channel)
     tx_data = tx.SerializeToString()
@@ -105,9 +107,11 @@ def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 5) -> GetTxResponse:
 def query_account_data(channel: Channel, address: Address) -> BaseAccount:
     """
     Query account data for signing
+
     :param channel: gRPC channel
     :param address: Address of account to query data about
-    :return:
+
+    :return: BaseAccount
     """
     # Prepare clients
     auth_query_client = AuthQueryClient(channel)
@@ -128,7 +132,9 @@ def query_account_data(channel: Channel, address: Address) -> BaseAccount:
 def get_signer_info(from_acc: BaseAccount) -> SignerInfo:
     """
     Generate signer info
+
     :param from_acc: Account info of signer
+
     :return: SignerInfo
     """
 
@@ -151,11 +157,13 @@ def generate_tx(packed_msgs: List[Any], accounts: List[BaseAccount],
                 fee: List[Coin] = [Coin(amount="0", denom="stake")], memo: str = "", gas_limit: int = 200000) -> Tx:
     """
     Generate transaction that can be later signed
+
     :param packed_msgs: Messages to be in transaction
     :param accounts: List of account info for each sender
     :param fee: Transaction fee
     :param memo: Memo
     :param gas_limit: Gas limit
+
     :return: Tx
     """
     # Prepare signers info
