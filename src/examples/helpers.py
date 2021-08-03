@@ -279,7 +279,7 @@ def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLik
     :param code_id: code_id of stored contract bytecode
     :param init_msg: Parameters to be passed to smart contract constructor
     :param label: Label
-    :param funds: Funds transfered to new contract
+    :param funds: Funds transferred to new contract
 
     :return: Packed MsgInstantiateContract
     """
