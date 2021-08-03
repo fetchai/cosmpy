@@ -40,7 +40,7 @@ msg = get_packed_send_msg(from_address=FROM_ADDRESS,
                           amount=AMOUNT)
 
 # Send and broadcast message
-sign_and_broadcast_msgs([msg], channel, [FROM_PK])
+sign_and_broadcast_msgs(channel, [msg], [FROM_PK])
 
 # Print balance after transfer
 print("After transaction")
