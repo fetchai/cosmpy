@@ -100,6 +100,15 @@ vulture:
 pylint:
 	pylint $(PYCOSM_SRC_DIR)
 
+check:
+	make black-check && make isort && make flake
+	make bandit
+	make safety
+	make mypy
+	make pylint
+	make vulture
+	make test
+
 
 ci: flake mypy black clask-check test
 
