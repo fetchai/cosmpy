@@ -95,7 +95,7 @@ isort:
 	isort --check $(PYCOSM_SRC_DIR)
 
 vulture:
-	vulture $(PYCOSM_SRC_DIR)
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
 
 pylint:
 	pylint $(PYCOSM_SRC_DIR)
