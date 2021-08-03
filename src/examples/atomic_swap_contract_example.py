@@ -2,7 +2,7 @@
 
 from cosm.crypto.keypairs import PrivateKey
 
-from examples.clients import SigningCosmWasmClient
+from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID_1 = "1234"

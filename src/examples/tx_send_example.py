@@ -3,7 +3,7 @@
 from cosm.crypto.keypairs import PrivateKey
 from cosmos.base.v1beta1.coin_pb2 import Coin
 
-from examples.clients import SigningCosmWasmClient
+from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 
 # Denomination and amount of transferred tokens
 DENOM = "stake"

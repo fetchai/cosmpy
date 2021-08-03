@@ -7,15 +7,8 @@ from typing import List
 from google.protobuf.any_pb2 import Any
 
 from common import JSONLike
-from grpc import insecure_channel
 from cosm.crypto.address import Address
-from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse
-from cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankQueryClent
-from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
-from cosmwasm.wasm.v1beta1.query_pb2_grpc import QueryStub as CosmWasmQueryClient
-from cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
 
 from cosm.crypto.keypairs import PrivateKey
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
@@ -32,67 +25,18 @@ from cosmos.tx.v1beta1.tx_pb2 import (
 )
 from cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
-from cosmos.tx.v1beta1.service_pb2 import BroadcastTxRequest, BroadcastMode, GetTxRequest, GetTxResponse
-from cosmwasm.wasm.v1beta1.tx_pb2 import MsgStoreCode, MsgInstantiateContract, MsgExecuteContract
-
-
-class CosmWasmClient():
-    def __init__(self, endpoint: str):
-        """
-        :param endpoint: address of gRPC endpoint
-        """
-        self.channel = insecure_channel(endpoint)
-
-    def get_balance(self, address: Address, denom: str) -> QueryBalanceResponse:
-        """
-        Get balance of specific account and denom
-
-        :param address: Address
-        :param denom: Denomination
-
-        :return: QueryBalanceResponse
-        """
-        bank_client = BankQueryClent(self.channel)
-        res = bank_client.Balance(QueryBalanceRequest(address=str(address), denom=denom))
-        return res
-
-    def query_account_data(self, address: Address) -> BaseAccount:
-        """
-        Query account data for signing
-
-        :param address: Address of account to query data about
-
-        :return: BaseAccount
-        """
-        # Prepare clients
-        auth_query_client = AuthQueryClient(self.channel)
-
-        # Get account data for signing
-        account_response = auth_query_client.Account(
-            QueryAccountRequest(address=str(address))
-
-        )
-        account = BaseAccount()
-        if account_response.account.Is(BaseAccount.DESCRIPTOR):
-            account_response.account.Unpack(account)
-        else:
-            raise TypeError("Unexpected account type")
-        return account
-
-    def query_contract_state(self, contract_address: str, msg: JSONLike) -> JSONLike:
-        """
-        Get state of smart contract
-
-        :param contract_address: Contract address
-        :param msg: Parameters to be passed to query function inside contract
-
-        :return: JSON query response
-        """
-        wasm_query_client = CosmWasmQueryClient(self.channel)
-        request = QuerySmartContractStateRequest(address=contract_address,
-                                                 query_data=json.dumps(msg).encode("UTF8"))
-        res = wasm_query_client.SmartContractState(request)
-        return json.loads(res.data)
+from cosmos.tx.v1beta1.service_pb2 import (
+    BroadcastTxRequest,
+    BroadcastMode,
+    GetTxRequest,
+    GetTxResponse,
+)
+from cosmwasm.wasm.v1beta1.tx_pb2 import (
+    MsgStoreCode,
+    MsgInstantiateContract,
+    MsgExecuteContract,
+)
+from cosm.clients.cosmwasm_client import CosmWasmClient
 
 
 class SigningCosmWasmClient(CosmWasmClient):
@@ -111,8 +55,14 @@ class SigningCosmWasmClient(CosmWasmClient):
         self.account_number = account.account_number
         self.chain_id = chain_id
 
-    def generate_tx(self, packed_msgs: List[Any], from_addresses: List[Address],
-                    fee: List[Coin] = [Coin(amount="0", denom="stake")], memo: str = "", gas_limit: int = 200000) -> Tx:
+    def generate_tx(
+        self,
+        packed_msgs: List[Any],
+        from_addresses: List[Address],
+        fee: List[Coin] = [Coin(amount="0", denom="stake")],
+        memo: str = "",
+        gas_limit: int = 200000,
+    ) -> Tx:
         """
         Generate transaction that can be later signed
 
@@ -186,7 +136,9 @@ class SigningCosmWasmClient(CosmWasmClient):
         return tx_response
 
     @staticmethod
-    def get_packed_send_msg(from_address: Address, to_address: Address, amount: List[Coin]) -> Any:
+    def get_packed_send_msg(
+        from_address: Address, to_address: Address, amount: List[Coin]
+    ) -> Any:
         """
         Generate and pack MsgSend
 
@@ -196,9 +148,9 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: packer Any type message
         """
-        msg_send = MsgSend(from_address=str(from_address),
-                           to_address=str(to_address),
-                           amount=amount)
+        msg_send = MsgSend(
+            from_address=str(from_address), to_address=str(to_address), amount=amount
+        )
         send_msg_packed = Any()
         send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
@@ -217,17 +169,23 @@ class SigningCosmWasmClient(CosmWasmClient):
         with open(contract_filename, "rb") as contract_file:
             wasm_byte_code = gzip.compress(contract_file.read(), 6)
 
-        msg_send = MsgStoreCode(sender=str(sender_address),
-                                wasm_byte_code=wasm_byte_code,
-                                )
+        msg_send = MsgStoreCode(
+            sender=str(sender_address),
+            wasm_byte_code=wasm_byte_code,
+        )
         send_msg_packed = Any()
         send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
         return send_msg_packed
 
     @staticmethod
-    def get_packed_init_msg(sender_address: Address, code_id: int, init_msg: JSONLike, label="contract",
-                            funds: List[Coin] = []) -> Any:
+    def get_packed_init_msg(
+        sender_address: Address,
+        code_id: int,
+        init_msg: JSONLike,
+        label="contract",
+        funds: List[Coin] = [],
+    ) -> Any:
         """
         Create and pack MsgInstantiateContract
 
@@ -239,20 +197,25 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: Packed MsgInstantiateContract
         """
-        msg_send = MsgInstantiateContract(sender=str(sender_address),
-                                          code_id=code_id,
-                                          init_msg=json.dumps(init_msg).encode("UTF8"),
-                                          label=label,
-                                          funds=funds
-                                          )
+        msg_send = MsgInstantiateContract(
+            sender=str(sender_address),
+            code_id=code_id,
+            init_msg=json.dumps(init_msg).encode("UTF8"),
+            label=label,
+            funds=funds,
+        )
         send_msg_packed = Any()
         send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
         return send_msg_packed
 
     @staticmethod
-    def get_packed_exec_msg(sender_address: Address, contract_address: str, msg: JSONLike,
-                            funds: List[Coin] = []) -> Any:
+    def get_packed_exec_msg(
+        sender_address: Address,
+        contract_address: str,
+        msg: JSONLike,
+        funds: List[Coin] = [],
+    ) -> Any:
         """
         Create and pack MsgExecuteContract
 
@@ -263,11 +226,12 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: Packed MsgExecuteContract
         """
-        msg_send = MsgExecuteContract(sender=str(sender_address),
-                                      contract=contract_address,
-                                      msg=json.dumps(msg).encode("UTF8"),
-                                      funds=funds
-                                      )
+        msg_send = MsgExecuteContract(
+            sender=str(sender_address),
+            contract=contract_address,
+            msg=json.dumps(msg).encode("UTF8"),
+            funds=funds,
+        )
         send_msg_packed = Any()
         send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
@@ -283,9 +247,9 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: GetTxResponse
         """
-        msg = self.get_packed_send_msg(from_address=self.address,
-                                       to_address=to_address,
-                                       amount=amount)
+        msg = self.get_packed_send_msg(
+            from_address=self.address, to_address=to_address, amount=amount
+        )
 
         tx = self.generate_tx([msg], [self.address])
         self.sign_tx(tx)
@@ -300,16 +264,23 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: Code ID
         """
-        msg = self.get_packed_store_msg(sender_address=self.address,
-                                        contract_filename=contract_filename)
+        msg = self.get_packed_store_msg(
+            sender_address=self.address, contract_filename=contract_filename
+        )
 
         tx = self.generate_tx([msg], [self.address], gas_limit=gas_limit)
         self.sign_tx(tx)
         res = self.broadcast_tx(tx)
         return self._get_code_id(res)
 
-    def instantiate(self, code_id: int, init_msg: JSONLike, label="contract",
-                    funds: List[Coin] = [], gas_limit: int = 200000) -> GetTxResponse:
+    def instantiate(
+        self,
+        code_id: int,
+        init_msg: JSONLike,
+        label="contract",
+        funds: List[Coin] = [],
+        gas_limit: int = 200000,
+    ) -> GetTxResponse:
         """
         Instantiate smart contract and return contract address
 
@@ -321,19 +292,26 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: Contract address
         """
-        msg = self.get_packed_init_msg(sender_address=self.address,
-                                       code_id=code_id,
-                                       init_msg=init_msg,
-                                       label=label,
-                                       funds=funds)
+        msg = self.get_packed_init_msg(
+            sender_address=self.address,
+            code_id=code_id,
+            init_msg=init_msg,
+            label=label,
+            funds=funds,
+        )
 
         tx = self.generate_tx([msg], [self.address], gas_limit=gas_limit)
         self.sign_tx(tx)
         res = self.broadcast_tx(tx)
         return self._get_contract_address(res)
 
-    def execute(self, contract_address: str, msg: JSONLike, funds: List[Coin] = [],
-                gas_limit: int = 200000) -> GetTxResponse:
+    def execute(
+        self,
+        contract_address: str,
+        msg: JSONLike,
+        funds: List[Coin] = [],
+        gas_limit: int = 200000,
+    ) -> GetTxResponse:
         """
         Send execute message to interact with smart contract
 
@@ -344,10 +322,12 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: GetTxResponse
         """
-        msg = self.get_packed_exec_msg(sender_address=self.address,
-                                       contract_address=contract_address,
-                                       msg=msg,
-                                       funds=funds)
+        msg = self.get_packed_exec_msg(
+            sender_address=self.address,
+            contract_address=contract_address,
+            msg=msg,
+            funds=funds,
+        )
 
         tx = self.generate_tx([msg], [self.address], gas_limit=gas_limit)
         self.sign_tx(tx)
