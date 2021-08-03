@@ -5,7 +5,7 @@ from cosmos.base.v1beta1.coin_pb2 import Coin
 
 from examples.clients import SigningCosmWasmClient
 
-# Denomination and amouunt of transferred tokens
+# Denomination and amount of transferred tokens
 DENOM_1 = "stake"
 AMOUNT_1 = [Coin(amount="1", denom=DENOM_1)]
 DENOM_2 = "atestfet"

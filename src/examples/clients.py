@@ -195,8 +195,23 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         return tx_response
 
+    def send_tokens(self, to_address: Address, amount: List[Coin]) -> GetTxResponse:
+        """
+        Send native tokens from clients address to to_address
+        :param to_address: Address of recipient
+        :param amount: List of tokens to be transferred
+        :return: GetTxResponse
+        """
+        msg = self.get_packed_send_msg(from_address=self.address,
+                                       to_address=to_address,
+                                       amount=amount)
+
+        tx = self.generate_tx([msg], [self.address])
+        self.sign_tx(tx)
+        return self.broadcast_tx(tx)
+
     @staticmethod
-    def _get_signer_info(self, from_acc: BaseAccount) -> SignerInfo:
+    def _get_signer_info(from_acc: BaseAccount) -> SignerInfo:
         """
         Generate signer info
 
