@@ -359,7 +359,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         return signer_info
 
     @staticmethod
-    def _get_code_id(response: str) -> int:
+    def _get_code_id(response: GetTxResponse) -> int:
         """
         Get code id from store code transaction response
 
@@ -372,7 +372,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         return int(raw_log[0]["events"][0]["attributes"][3]["value"])
 
     @staticmethod
-    def _get_contract_address(response: str) -> str:
+    def _get_contract_address(response: GetTxResponse) -> str:
         """
         Get contract address from instantiate msg response
         :param response: Response of MsgInstantiateContract transaction
