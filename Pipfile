@@ -4,15 +4,15 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-flake8 = "*"
+flake8 = "==3.9.2"
 black = "==21.6b0"
-mypy = "*"
-bandit = "*"
-safety = "*"
-isort = "*"
-darglint = "*"
-vulture = "*"
-pylint = "*"
+mypy = "==0.910"
+bandit = "==1.7.0"
+safety = "==1.10.3"
+isort = "==5.9.3"
+darglint = "==1.8.0"
+vulture = "==2.3"
+pylint = "==2.9.6"
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
