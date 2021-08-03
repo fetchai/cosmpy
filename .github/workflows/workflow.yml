@@ -27,9 +27,10 @@ jobs:
         pip install pipenv
         pipenv install --dev
     - name: Code style check
-      run: pipenv run make black-check && make flake
-    - name: Imports order checks
-      run: make isort
+      run: |
+        pipenv run make black-check
+        pipenv run make isort
+        pipenv run make flake
     - name: Security check
       run: pipenv run make bandit
     - name: Safety check
