@@ -1,3 +1,5 @@
+"""REST Client of the Bank module."""
+
 from google.protobuf.json_format import Parse
 
 from cosm.bank.interface import Bank
@@ -21,6 +23,8 @@ from cosmos.bank.v1beta1.query_pb2 import (
 
 
 class BankRestClient(Bank):
+    """Bank REST Client class."""
+
     API_URL = "/cosmos/bank/v1beta1"
 
     def __init__(self, rest_api: QueryRestClient):

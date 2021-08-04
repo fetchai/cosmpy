@@ -1,3 +1,5 @@
+"""Interface of the Band module."""
+
 from abc import ABC, abstractmethod
 
 from cosmos.bank.v1beta1.query_pb2 import (
@@ -19,6 +21,8 @@ from cosmos.bank.v1beta1.query_pb2 import (
 
 
 class Bank(ABC):
+    """Band abstract class."""
+
     @abstractmethod
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         """

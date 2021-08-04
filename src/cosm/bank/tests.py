@@ -1,3 +1,5 @@
+"""Tests of the Band module."""
+
 import json
 import unittest
 from unittest.mock import patch
@@ -26,7 +28,11 @@ from cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 class BankTests(unittest.TestCase):
-    def test_query_balance(self):
+    """Test case of Band module."""
+
+    @staticmethod
+    def test_query_balance():
+        """Test query balance for the positive result."""
         expected_response = QueryBalanceResponse(
             balance=Coin(denom="stake", amount="1234")
         )
@@ -45,7 +51,9 @@ class BankTests(unittest.TestCase):
                 == "/cosmos/bank/v1beta1/balances/account/denom"  # noqa W503
             )
 
-    def test_query_all_balances(self):
+    @staticmethod
+    def test_query_all_balances():
+        """Test query all balances for the positive result."""
         expected_response = QueryAllBalancesResponse(
             balances=[Coin(denom="stake", amount="1234")],
             pagination=PageResponse(next_key=None, total=0),
@@ -65,7 +73,9 @@ class BankTests(unittest.TestCase):
             )
             assert mock_client.last_request == "/cosmos/bank/v1beta1/balances/account"
 
-    def test_query_total_supply(self):
+    @staticmethod
+    def test_query_total_supply():
+        """Test query total supply for the positive result."""
         expected_response = QueryTotalSupplyResponse(
             supply=[Coin(denom="stake", amount="1234")]
         )
@@ -78,7 +88,9 @@ class BankTests(unittest.TestCase):
             assert bank.TotalSupply(QueryTotalSupplyRequest()) == expected_response
             assert mock_client.last_request == "/cosmos/bank/v1beta1/supply"
 
-    def test_query_supply_of(self):
+    @staticmethod
+    def test_query_supply_of():
+        """Test query supply for the positive result."""
         expected_response = QuerySupplyOfResponse(
             amount=Coin(denom="stake", amount="1234")
         )
@@ -93,7 +105,9 @@ class BankTests(unittest.TestCase):
             )
             assert mock_client.last_request == "/cosmos/bank/v1beta1/supply/denom"
 
-    def test_query_params(self):
+    @staticmethod
+    def test_query_params():
+        """Test query params for the positive result."""
         expected_response = QueryParamsResponse(
             params=Params(default_send_enabled=True)
         )
@@ -106,7 +120,9 @@ class BankTests(unittest.TestCase):
             assert bank.Params(QueryParamsRequest()) == expected_response
             assert mock_client.last_request == "/cosmos/bank/v1beta1/params"
 
-    def test_query_denoms_metadata(self):
+    @staticmethod
+    def test_query_denoms_metadata():
+        """Test query denoms metadata for the positive result."""
         expected_response = QueryDenomsMetadataResponse(
             pagination=PageResponse(next_key=None, total=0)
         )
@@ -121,7 +137,9 @@ class BankTests(unittest.TestCase):
             )
             assert mock_client.last_request == "/cosmos/bank/v1beta1/denoms_metadata"
 
-    def test_query_denom_metadata(self):
+    @staticmethod
+    def test_query_denom_metadata():
+        """Test query denom metadata for the positive result."""
         expected_response = QueryDenomMetadataResponse(metadata=Metadata())
         content = {
             "metadata": {
