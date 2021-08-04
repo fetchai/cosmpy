@@ -55,7 +55,7 @@ msg_2 = get_packed_send_msg(from_address=BOB_ADDRESS,
                             amount=AMOUNT_2)
 
 # Send and broadcast both messages as part of 1 transaction
-sign_and_broadcast_msgs([msg_1, msg_2], channel, [VALIDATOR_PK, BOB_PK])
+sign_and_broadcast_msgs(channel, [msg_1, msg_2], [VALIDATOR_PK, BOB_PK])
 
 # Print balances after transfer
 print("After transaction")

@@ -43,13 +43,13 @@ channel = insecure_channel("localhost:9090")
 # Store contract
 store_msg = get_packed_store_msg(sender_address=VALIDATOR_ADDRESS,
                                  contract_filename=Path(CONTRACT_FILENAME))
-response = sign_and_broadcast_msgs([store_msg], channel, [VALIDATOR_PK], gas_limit=2000000)
+response = sign_and_broadcast_msgs(channel, [store_msg], [VALIDATOR_PK], gas_limit=2000000)
 code_id = get_code_id(response)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
 init_msg = get_packed_init_msg(sender_address=VALIDATOR_ADDRESS, code_id=code_id, init_msg={})
-response = sign_and_broadcast_msgs([init_msg], channel, [VALIDATOR_PK], gas_limit=2000000)
+response = sign_and_broadcast_msgs(channel, [init_msg], [VALIDATOR_PK], gas_limit=2000000)
 contract_address = get_contract_address(response)
 print(f"Contract address: {contract_address}")
 
@@ -75,7 +75,7 @@ create_batch_msg = \
 exec_msg = get_packed_exec_msg(sender_address=VALIDATOR_ADDRESS,
                                contract_address=contract_address,
                                msg=create_batch_msg)
-response = sign_and_broadcast_msgs([exec_msg], channel, [VALIDATOR_PK], gas_limit=2000000)
+response = sign_and_broadcast_msgs(channel, [exec_msg], [VALIDATOR_PK], gas_limit=2000000)
 print(f"Created tokens with ID {TOKEN_ID_1} and {TOKEN_ID_2}")
 
 # Mint 1 token with ID TOKEN_ID_1 and give it to validator
@@ -92,7 +92,7 @@ mint_single_msg = \
 exec_msg = get_packed_exec_msg(sender_address=VALIDATOR_ADDRESS,
                                contract_address=contract_address,
                                msg=mint_single_msg)
-response = sign_and_broadcast_msgs([exec_msg], channel, [VALIDATOR_PK], gas_limit=2000000)
+response = sign_and_broadcast_msgs(channel, [exec_msg], [VALIDATOR_PK], gas_limit=2000000)
 print(f"Minted 1 token with ID {TOKEN_ID_1} to validator.")
 
 # Mint 1 token with ID TOKEN_ID_2 and give it to bob
@@ -109,7 +109,7 @@ mint_single_msg = \
 exec_msg = get_packed_exec_msg(sender_address=VALIDATOR_ADDRESS,
                                contract_address=contract_address,
                                msg=mint_single_msg)
-response = sign_and_broadcast_msgs([exec_msg], channel, [VALIDATOR_PK], gas_limit=2000000)
+response = sign_and_broadcast_msgs(channel, [exec_msg], [VALIDATOR_PK], gas_limit=2000000)
 print(f"Minted 1 token with ID {TOKEN_ID_2} to bob")
 
 # Create atomic swap messages
@@ -146,7 +146,7 @@ exec_transfer_msg_2 = get_packed_exec_msg(sender_address=BOB_ADDRESS,
                                           msg=transfer_msg_2)
 
 # Execute atomic swap by 2 transfer messages in one transaction
-response = sign_and_broadcast_msgs([exec_transfer_msg_1, exec_transfer_msg_2], channel, [VALIDATOR_PK, BOB_PK],
+response = sign_and_broadcast_msgs(channel, [exec_transfer_msg_1, exec_transfer_msg_2], [VALIDATOR_PK, BOB_PK],
                                    gas_limit=2000000)
 print(f"Swapped token validator's token {TOKEN_ID_1} with bob's token {TOKEN_ID_2}")
 

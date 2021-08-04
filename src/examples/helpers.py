@@ -14,7 +14,7 @@ from cosmos.tx.v1beta1.service_pb2 import BroadcastTxRequest, BroadcastMode, Get
 from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from cosm.tx import multi_sign_transaction
+from cosm.tx import sign_transaction
 from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankQueryClent
@@ -76,10 +76,12 @@ def get_packed_send_msg(from_address: Address, to_address: Address, amount: List
 def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 10) -> GetTxResponse:
     """
     Broadcast transaction and get receipt
+
     :param channel: gRPC channel
     :param tx: Transaction
     :param wait_time: Number of seconds to wait before getting transaction receipt
-    :return:
+
+    :return: GetTxResponse
     """
     tx_client = TxGrpcClient(channel)
     tx_data = tx.SerializeToString()
@@ -105,9 +107,11 @@ def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 10) -> GetTxResponse
 def query_account_data(channel: Channel, address: Address) -> BaseAccount:
     """
     Query account data for signing
+
     :param channel: gRPC channel
     :param address: Address of account to query data about
-    :return:
+
+    :return: BaseAccount
     """
     # Prepare clients
     auth_query_client = AuthQueryClient(channel)
@@ -125,15 +129,17 @@ def query_account_data(channel: Channel, address: Address) -> BaseAccount:
     return account
 
 
-def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount) -> SignerInfo:
+def get_signer_info(from_acc: BaseAccount) -> SignerInfo:
     """
     Generate signer info
-    :param from_pk: Private key of signer
+
     :param from_acc: Account info of signer
+
     :return: SignerInfo
     """
+
     from_pub_key_packed = Any()
-    from_pub_key_pb = ProtoPubKey(key=from_pk.public_key_bytes)
+    from_pub_key_pb = ProtoPubKey(key=from_acc.pub_key.value[2:35])
     from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix="/")
 
     # Prepare auth info
@@ -147,16 +153,49 @@ def get_signer_info(from_pk: PrivateKey, from_acc: BaseAccount) -> SignerInfo:
     return signer_info
 
 
-# CosmWasm helpers
-def sign_and_broadcast_msgs(packed_msgs: List[Any], channel: Channel, signers_keys: List[PrivateKey],
+def generate_tx(packed_msgs: List[Any], accounts: List[BaseAccount],
+                fee: List[Coin] = [Coin(amount="0", denom="stake")], memo: str = "", gas_limit: int = 200000) -> Tx:
+    """
+    Generate transaction that can be later signed
+
+    :param packed_msgs: Messages to be in transaction
+    :param accounts: List of account info for each sender
+    :param fee: Transaction fee
+    :param memo: Memo
+    :param gas_limit: Gas limit
+
+    :return: Tx
+    """
+    # Prepare signers info
+    signer_infos: List[SignerInfo] = []
+    for account in accounts:
+        signer_infos.append(get_signer_info(account))
+
+    # Prepare auth info
+    auth_info = AuthInfo(
+        signer_infos=signer_infos,
+        fee=Fee(amount=fee, gas_limit=gas_limit),
+    )
+
+    # Prepare Tx body
+    tx_body = TxBody()
+    tx_body.memo = memo
+    tx_body.messages.extend(packed_msgs)
+
+    # Prepare Tx
+    tx = Tx(body=tx_body, auth_info=auth_info)
+    return tx
+
+
+def sign_and_broadcast_msgs(channel: Channel, packed_msgs: List[Any], signers_keys: List[PrivateKey],
                             fee: List[Coin] = [Coin(amount="0", denom="stake")],
                             gas_limit: int = 200000, memo: str = "", chain_id: str = "testing",
                             wait_time: int = 5) -> GetTxResponse:
     """
     Sign and broadcast one or multiple packed Any messages
 
-    :param packed_msgs: Messages to be broadcast
     :param channel: gRPC channel
+    :param packed_msgs: Messages to be broadcast
     :param signers_keys: Private keys to sign messages
     :param fee: Transaction fee
     :param gas_limit: Gas limit
@@ -167,38 +206,24 @@ def sign_and_broadcast_msgs(packed_msgs: List[Any], channel: Channel, signers_ke
     :return: Transaction receipt
     """
 
-    # Get signers and account info
+    # Get account info for each sender
     accounts: List[BaseAccount] = []
-    signers_info: List[SignerInfo] = []
     for signer_key in signers_keys:
         account = query_account_data(channel, Address(signer_key))
         accounts.append(account)
-        signers_info.append(get_signer_info(signer_key, account))
 
-    # Prepare auth info
-    auth_info = AuthInfo(
-        signer_infos=signers_info,
-        fee=Fee(amount=fee, gas_limit=gas_limit),
-    )
+    # Generate transaction
+    tx = generate_tx(packed_msgs, accounts, fee, memo, gas_limit)
 
-    # Prepare Tx body
-    tx_body = TxBody()
-    tx_body.memo = memo
-    tx_body.messages.extend(packed_msgs)
+    # Sign transaction by each sender
+    for i in range(len(signers_keys)):
+        sign_transaction(tx, signers_keys[i], chain_id, accounts[i].account_number)
 
-    # Prepare and sign transaction
-    tx = Tx(body=tx_body, auth_info=auth_info)
-    multi_sign_transaction(
-        tx,
-        signers=signers_keys,
-        chain_id=chain_id,
-        accounts=accounts,
-        deterministic=True,
-    )
-
+    # Broadcast transaction and return receipt
     return broadcast_tx(channel, tx, wait_time)
 
 
+# CosmWasm helpers
 def get_code_id(response: str) -> int:
     """
     Get code id from store code transaction response
@@ -296,6 +321,7 @@ def query_contract_state(channel: Channel, contract_address: str, msg: JSONLike)
     """
     Get state of smart contract
 
+    :param channel: gRPC channel
     :param contract_address: Contract address
     :param msg: Parameters to be passed to query function inside contract
 
