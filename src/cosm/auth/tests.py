@@ -16,7 +16,11 @@ from cosmos.auth.v1beta1.query_pb2 import (
 
 
 class AuthTests(unittest.TestCase):
-    def test_query_account(self):
+    """Test case for Auth module."""
+
+    @staticmethod
+    def test_query_account():
+        """Test query account for positive result."""
         content = {
             "account": {
                 "@type": "/cosmos.auth.v1beta1.BaseAccount",
@@ -40,7 +44,9 @@ class AuthTests(unittest.TestCase):
         )
         assert mock_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
 
-    def test_query_params(self):
+    @staticmethod
+    def test_query_params():
+        """Test query params for positive result."""
         content = {
             "params": {
                 "max_memo_characters": 256,

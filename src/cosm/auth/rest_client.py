@@ -1,3 +1,5 @@
+"""REST Client of the Auth module."""
+
 from google.protobuf.json_format import Parse
 
 from cosm.auth.interface import Auth
@@ -11,11 +13,13 @@ from cosmos.auth.v1beta1.query_pb2 import (
 
 
 class AuthRestClient(Auth):
+    """Auth REST Client class."""
+
     API_URL = "/cosmos/auth/v1beta1"
 
     def __init__(self, rest_api: QueryRestClient):
         """
-        Create authentication rest client
+        Initialize authentication rest client.
 
         :param rest_api: QueryRestClient api
         """
