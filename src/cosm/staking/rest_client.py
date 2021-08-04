@@ -1,3 +1,5 @@
+"""REST Client of Staking module."""
+
 from google.protobuf.json_format import Parse
 
 from cosm.query.rest_client import QueryRestClient

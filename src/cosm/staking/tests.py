@@ -1,3 +1,5 @@
+"""Tests of Staking module."""
+
 import json
 from unittest import TestCase
 
