@@ -89,7 +89,7 @@ bandit:
 	bandit -r $(PYCOSM_SRC_DIR) --skip B101
 
 safety:
-	safety check -i 37524 -i 38038 -i 37776 -i 38039 -i 39621 -i 40291 -i 39706
+	safety check -i 37524 -i 38038 -i 37776 -i 38039 -i 39621 -i 40291 -i 39706 -i 41002
 
 isort:
 	isort --check $(PYCOSM_SRC_DIR)
