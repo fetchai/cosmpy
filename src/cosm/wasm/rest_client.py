@@ -1,5 +1,3 @@
-from google.protobuf.json_format import Parse  # noqa
-import cosmos.crypto.secp256k1.keys_pb2  # noqa
 from cosm.query.rest_client import QueryRestClient
 
 from cosmwasm.wasm.v1beta1.query_pb2 import (
@@ -24,6 +22,9 @@ from cosm.wasm.interface import Wasm
 
 from google.protobuf.json_format import MessageToDict, Parse
 from urllib.parse import urlencode
+
+import base64
+import json
 
 
 class WasmRestClient(Wasm):
@@ -50,7 +51,7 @@ class WasmRestClient(Wasm):
         json_request = MessageToDict(request)
         json_request.pop("address")
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
+        response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}?{url_encoded_request}",
         )
         return Parse(response, QueryContractInfoResponse())
@@ -68,7 +69,7 @@ class WasmRestClient(Wasm):
         json_request = MessageToDict(request)
         json_request.pop("address")
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
+        response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}/history?{url_encoded_request}",
         )
         return Parse(response, QueryContractHistoryResponse())
@@ -86,7 +87,7 @@ class WasmRestClient(Wasm):
         json_request = MessageToDict(request)
         json_request.pop("code_id")
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
+        response = self._rest_api.get(
             f"{self.API_URL}/code/{request.code_id}/contracts?{url_encoded_request}",
         )
         return Parse(response, QueryContractsByCodeResponse())
@@ -104,7 +105,7 @@ class WasmRestClient(Wasm):
         json_request = MessageToDict(request)
         json_request.pop("address")
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
+        response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}/state?{url_encoded_request}",
         )
         return Parse(response, QueryAllContractStateResponse())
@@ -121,12 +122,16 @@ class WasmRestClient(Wasm):
         """
         json_request = MessageToDict(request)
         json_request.pop("address")
-        json_request.pop("query_data")
+        json_request.pop("queryData")
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
-            f"{self.API_URL}/contract/{request.address}/raw/{request.query_data}?{url_encoded_request}",
+        query_data = base64.b64encode(request.query_data).decode()
+        response = self._rest_api.get(
+            f"{self.API_URL}/contract/{request.address}/raw/{query_data}?{url_encoded_request}",
         )
-        return Parse(response, QueryRawContractStateResponse())
+        dict_response = json.loads(response)
+        data = json.dumps(dict_response["data"]).encode("UTF8")
+
+        return QueryRawContractStateResponse(data=data)
 
     def SmartContractState(
         self, request: QuerySmartContractStateRequest
@@ -140,12 +145,16 @@ class WasmRestClient(Wasm):
         """
         json_request = MessageToDict(request)
         json_request.pop("address")
-        json_request.pop("query_data")
+        json_request.pop("queryData")
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
-            f"{self.API_URL}/contract/{request.address}/smart/{request.query_data}?{url_encoded_request}",
+        query_data = base64.b64encode(request.query_data).decode()
+        response = self._rest_api.get(
+            f"{self.API_URL}/contract/{request.address}/smart/{query_data}?{url_encoded_request}",
         )
-        return Parse(response, QuerySmartContractStateResponse())
+        dict_response = json.loads(response)
+        data = json.dumps(dict_response["data"]).encode("UTF8")
+
+        return QuerySmartContractStateResponse(data=data)
 
     def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
         """
@@ -158,7 +167,7 @@ class WasmRestClient(Wasm):
         json_request = MessageToDict(request)
         json_request.pop("code_id")
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
+        response = self._rest_api.get(
             f"{self.API_URL}/code/{request.code_id}?{url_encoded_request}",
         )
         return Parse(response, QueryCodeResponse())
@@ -173,7 +182,7 @@ class WasmRestClient(Wasm):
         """
         json_request = MessageToDict(request)
         url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
+        response = self._rest_api.get(
             f"{self.API_URL}/code?{url_encoded_request}",
         )
         return Parse(response, QueryCodesResponse())
