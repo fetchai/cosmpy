@@ -23,7 +23,6 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
 from google.protobuf.json_format import ParseDict
 
 import json
-import base64
 
 
 class WasmTests(unittest.TestCase):
@@ -120,4 +119,29 @@ class WasmTests(unittest.TestCase):
         assert (
             mock_client.last_request
             == "/wasm/v1beta1/contract/fetchcontractaddress/state?"
+        )
+
+    def test_query_contract_info(self):
+        content = {
+            "address": "some_address",
+            "contract_info": {
+                "code_id": "2",
+                "creator": "other_address",
+                "admin": "",
+                "label": "contract",
+                "ibc_port_id": "",
+            },
+        }
+
+        expected_response = ParseDict(content, QueryContractInfoResponse())
+
+        mock_client = MockQueryRestClient(json.dumps(content))
+        wasm = WasmRestClient(mock_client)
+
+        assert (
+            wasm.ContractInfo(QueryContractInfoRequest(address="fetchcontractaddress"))
+            == expected_response
+        )
+        assert (
+            mock_client.last_request == "/wasm/v1beta1/contract/fetchcontractaddress?"
         )
