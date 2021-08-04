@@ -68,11 +68,11 @@ class WasmTests(unittest.TestCase):
                     address="fetchcontractaddress", query_data=b"{}"
                 )
             )
-            == expected_response
+            == expected_response  # noqa W503
         )
         assert (
             mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30=?"
+            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30=?"  # noqa W503
         )
 
     def test_query_raw_contract_state(self):
@@ -88,11 +88,11 @@ class WasmTests(unittest.TestCase):
                     address="fetchcontractaddress", query_data=b"{}"
                 )
             )
-            == expected_response
+            == expected_response  # noqa W503
         )
         assert (
             mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/raw/e30=?"
+            == "/wasm/v1beta1/contract/fetchcontractaddress/raw/e30=?"  # noqa W503
         )
 
     def test_query_all_contract_state(self):
@@ -115,11 +115,11 @@ class WasmTests(unittest.TestCase):
             wasm.AllContractState(
                 QueryAllContractStateRequest(address="fetchcontractaddress")
             )
-            == expected_response
+            == expected_response  # noqa W503
         )
         assert (
             mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/state?"
+            == "/wasm/v1beta1/contract/fetchcontractaddress/state?"  # noqa W503
         )
 
     def test_query_contract_info(self):
@@ -141,7 +141,7 @@ class WasmTests(unittest.TestCase):
 
         assert (
             wasm.ContractInfo(QueryContractInfoRequest(address="fetchcontractaddress"))
-            == expected_response
+            == expected_response  # noqa W503
         )
         assert (
             mock_client.last_request == "/wasm/v1beta1/contract/fetchcontractaddress?"
@@ -160,24 +160,7 @@ class WasmTests(unittest.TestCase):
 
         assert (
             wasm.ContractsByCode(QueryContractsByCodeRequest(code_id=1))
-            == expected_response
-        )
-        assert mock_client.last_request == "/wasm/v1beta1/code/1/contracts?"
-
-    def test_query_contract_history(self):
-        content = {
-            "contracts": ["fetch18vd8fpwxzck93qlwghaj6arh4p7c5n890l3amr"],
-            "pagination": {"total": "1"},
-        }
-
-        expected_response = ParseDict(content, QueryContractsByCodeResponse())
-
-        mock_client = MockQueryRestClient(json.dumps(content))
-        wasm = WasmRestClient(mock_client)
-
-        assert (
-            wasm.ContractsByCode(QueryContractsByCodeRequest(code_id=1))
-            == expected_response
+            == expected_response  # noqa W503
         )
         assert mock_client.last_request == "/wasm/v1beta1/code/1/contracts?"
 
@@ -209,9 +192,9 @@ class WasmTests(unittest.TestCase):
             wasm.ContractHistory(
                 QueryContractHistoryRequest(address="fetchcontractaddress")
             )
-            == expected_response
+            == expected_response  # noqa W503
         )
         assert (
             mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/history?"
+            == "/wasm/v1beta1/contract/fetchcontractaddress/history?"  # noqa W503
         )

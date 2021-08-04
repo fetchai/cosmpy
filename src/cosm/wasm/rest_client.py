@@ -20,7 +20,7 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
 )
 from cosm.wasm.interface import Wasm
 
-from google.protobuf.json_format import MessageToDict, Parse
+from google.protobuf.json_format import MessageToDict, Parse, ParseDict
 from urllib.parse import urlencode
 
 import base64
@@ -72,7 +72,15 @@ class WasmRestClient(Wasm):
         response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}/history?{url_encoded_request}",
         )
-        return Parse(response, QueryContractHistoryResponse())
+
+        # JSON in JSON workaround
+        dict_response = json.loads(response)
+        for entry in dict_response["entries"]:
+            entry["msg"] = base64.b64encode(
+                json.dumps(entry["msg"]).encode("UTF8")
+            ).decode()
+
+        return ParseDict(dict_response, QueryContractHistoryResponse())
 
     def ContractsByCode(
         self, request: QueryContractsByCodeRequest
@@ -108,7 +116,6 @@ class WasmRestClient(Wasm):
         response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}/state?{url_encoded_request}",
         )
-
         return Parse(response, QueryAllContractStateResponse())
 
     def RawContractState(
@@ -129,10 +136,14 @@ class WasmRestClient(Wasm):
         response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}/raw/{query_data}?{url_encoded_request}",
         )
-        dict_response = json.loads(response)
-        data = json.dumps(dict_response["data"]).encode("UTF8")
 
-        return QueryRawContractStateResponse(data=data)
+        # JSON in JSON workaround
+        dict_response = json.loads(response)
+        dict_response["data"] = base64.b64encode(
+            json.dumps(dict_response["data"]).encode("UTF8")
+        ).decode()
+
+        return ParseDict(dict_response, QueryRawContractStateResponse())
 
     def SmartContractState(
         self, request: QuerySmartContractStateRequest
@@ -152,10 +163,14 @@ class WasmRestClient(Wasm):
         response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}/smart/{query_data}?{url_encoded_request}",
         )
-        dict_response = json.loads(response)
-        data = json.dumps(dict_response["data"]).encode("UTF8")
 
-        return QuerySmartContractStateResponse(data=data)
+        # JSON in JSON workaround
+        dict_response = json.loads(response)
+        dict_response["data"] = base64.b64encode(
+            json.dumps(dict_response["data"]).encode("UTF8")
+        ).decode()
+
+        return ParseDict(dict_response, QuerySmartContractStateResponse())
 
     def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
         """
@@ -171,6 +186,7 @@ class WasmRestClient(Wasm):
         response = self._rest_api.get(
             f"{self.API_URL}/code/{request.code_id}?{url_encoded_request}",
         )
+
         return Parse(response, QueryCodeResponse())
 
     def Codes(self, request: QueryCodesRequest) -> QueryCodesResponse:
