@@ -13,7 +13,6 @@ isort = "==5.9.3"
 darglint = "==1.8.0"
 vulture = "==2.3"
 pylint = "==2.9.6"
-coverage = "==6.0b1"
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
