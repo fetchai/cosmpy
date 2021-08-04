@@ -4,6 +4,7 @@ from cosm.crypto.keypairs import PrivateKey
 from cosmos.base.v1beta1.coin_pb2 import Coin
 
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from grpc import insecure_channel
 
 # Denomination and amount of transferred tokens
 DENOM_1 = "stake"
@@ -12,7 +13,7 @@ DENOM_2 = "atestfet"
 AMOUNT_2 = [Coin(amount="1", denom=DENOM_2)]
 
 # Node config
-ENDPOINT_ADDRESS = "localhost:9090"
+GRPC_ENDPOINT_ADDRESS = "localhost:9090"
 CHAIN_ID = "testing"
 
 # Private key of validator's account
@@ -30,8 +31,9 @@ BOB_PK = PrivateKey(
 )
 
 # Create clients
-validator_client = SigningCosmWasmClient(VALIDATOR_PK, ENDPOINT_ADDRESS, CHAIN_ID)
-bob_client = SigningCosmWasmClient(BOB_PK, ENDPOINT_ADDRESS, CHAIN_ID)
+channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
+validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+bob_client = SigningCosmWasmClient(BOB_PK, channel, CHAIN_ID)
 
 # Print balances before transfer
 print("Before transaction")

@@ -3,7 +3,7 @@ import json
 import time
 from pathlib import Path
 
-from typing import List
+from typing import List, Union
 from google.protobuf.any_pb2 import Any
 
 from common import JSONLike
@@ -14,7 +14,6 @@ from cosm.crypto.keypairs import PrivateKey
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmos.base.v1beta1.coin_pb2 import Coin
 from cosm.tx import sign_transaction
-from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
@@ -38,15 +37,33 @@ from cosmwasm.wasm.v1beta1.tx_pb2 import (
 )
 from cosm.clients.cosmwasm_client import CosmWasmClient
 
+from grpc._channel import Channel
+from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+
+from cosm.query.rest_client import QueryRestClient
+from cosm.tx.rest_client import TxRestClient
+
 
 class SigningCosmWasmClient(CosmWasmClient):
-    def __init__(self, private_key: PrivateKey, endpoint: str, chain_id: str):
+    def __init__(
+        self,
+        private_key: PrivateKey,
+        channel: Union[Channel, QueryRestClient],
+        chain_id: str,
+    ):
         """
         :param private_key: Private key used for signing
         :param endpoint: address of gRPC endpoint
         :param chain_id: Chain ID
         """
-        super().__init__(endpoint)
+        super().__init__(channel)
+
+        if isinstance(channel, Channel):
+            self.tx_client = TxGrpcClient(channel)
+        elif isinstance(channel, QueryRestClient):
+            self.tx_client = TxRestClient(channel)
+        else:
+            raise RuntimeError(f"Unsupported channel type {type(channel)}")
 
         self.private_key = private_key
 
@@ -115,12 +132,11 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: GetTxResponse
         """
-        tx_client = TxGrpcClient(self.channel)
         tx_data = tx.SerializeToString()
         broad_tx_req = BroadcastTxRequest(
             tx_bytes=tx_data, mode=BroadcastMode.BROADCAST_MODE_SYNC
         )
-        broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
+        broad_tx_resp = self.tx_client.BroadcastTx(broad_tx_req)
 
         if broad_tx_resp.tx_response.code != 0:
             raw_log = broad_tx_resp.tx_response.raw_log
@@ -131,7 +147,7 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         # Get transaction receipt
         tx_request = GetTxRequest(hash=broad_tx_resp.tx_response.txhash)
-        tx_response = tx_client.GetTx(tx_request)
+        tx_response = self.tx_client.GetTx(tx_request)
 
         return tx_response
 

@@ -1,23 +1,41 @@
 import json
 
+from typing import Union
+
 from common import JSONLike
-from grpc import insecure_channel
 from cosm.crypto.address import Address
 from cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse
-from cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankQueryClent
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
-from cosmwasm.wasm.v1beta1.query_pb2_grpc import QueryStub as CosmWasmQueryClient
 from cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
+
+from grpc._channel import Channel
+from cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
+from cosmwasm.wasm.v1beta1.query_pb2_grpc import QueryStub as CosmWasmGrpcClient
+
+from cosm.query.rest_client import QueryRestClient
+from cosm.bank.rest_client import BankRestClient
+from cosm.auth.rest_client import AuthRestClient
+from cosm.wasm.rest_client import WasmRestClient
 
 
 class CosmWasmClient:
-    def __init__(self, endpoint: str):
+    def __init__(self, channel: Union[Channel, QueryRestClient]):
         """
-        :param endpoint: address of gRPC endpoint
+        :param channel: gRPC or REST querying client
         """
-        self.channel = insecure_channel(endpoint)
+
+        if isinstance(channel, Channel):
+            self.bank_client = BankGrpcClient(channel)
+            self.auth_client = AuthGrpcClient(channel)
+            self.wasm_client = CosmWasmGrpcClient(channel)
+        elif isinstance(channel, QueryRestClient):
+            self.bank_client = BankRestClient(channel)
+            self.auth_client = AuthRestClient(channel)
+            self.wasm_client = WasmRestClient(channel)
+        else:
+            raise RuntimeError(f"Unsupported channel type {type(channel)}")
 
     def get_balance(self, address: Address, denom: str) -> QueryBalanceResponse:
         """
@@ -28,8 +46,7 @@ class CosmWasmClient:
 
         :return: QueryBalanceResponse
         """
-        bank_client = BankQueryClent(self.channel)
-        res = bank_client.Balance(
+        res = self.bank_client.Balance(
             QueryBalanceRequest(address=str(address), denom=denom)
         )
         return res
@@ -42,11 +59,8 @@ class CosmWasmClient:
 
         :return: BaseAccount
         """
-        # Prepare clients
-        auth_query_client = AuthQueryClient(self.channel)
-
         # Get account data for signing
-        account_response = auth_query_client.Account(
+        account_response = self.auth_client.Account(
             QueryAccountRequest(address=str(address))
         )
         account = BaseAccount()
@@ -65,9 +79,8 @@ class CosmWasmClient:
 
         :return: JSON query response
         """
-        wasm_query_client = CosmWasmQueryClient(self.channel)
         request = QuerySmartContractStateRequest(
             address=contract_address, query_data=json.dumps(msg).encode("UTF8")
         )
-        res = wasm_query_client.SmartContractState(request)
+        res = self.wasm_client.SmartContractState(request)
         return json.loads(res.data)

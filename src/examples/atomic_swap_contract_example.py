@@ -4,6 +4,8 @@ from cosm.crypto.keypairs import PrivateKey
 
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 
+from grpc import insecure_channel
+
 # ID and amount of tokens to be minted in contract
 TOKEN_ID_1 = "1234"
 AMOUNT_1 = "1"
@@ -14,7 +16,7 @@ AMOUNT_2 = "1"
 CONTRACT_FILENAME = "../../contracts/cw_erc1155.wasm"
 
 # Node config
-ENDPOINT_ADDRESS = "localhost:9090"
+GRPC_ENDPOINT_ADDRESS = "localhost:9090"
 CHAIN_ID = "testing"
 
 # Private key of validator's account
@@ -32,8 +34,9 @@ BOB_PK = PrivateKey(
 )
 
 # Create clients
-validator_client = SigningCosmWasmClient(VALIDATOR_PK, ENDPOINT_ADDRESS, CHAIN_ID)
-bob_client = SigningCosmWasmClient(BOB_PK, ENDPOINT_ADDRESS, CHAIN_ID)
+channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
+validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+bob_client = SigningCosmWasmClient(BOB_PK, channel, CHAIN_ID)
 
 # Store contract
 code_id = validator_client.store_contract(CONTRACT_FILENAME)

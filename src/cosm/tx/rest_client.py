@@ -30,9 +30,10 @@ class TxRestClient(RPCInterface):
     def GetTx(self, request: GetTxRequest) -> GetTxResponse:
         """GetTx fetches a tx by hash."""
         json_request = MessageToDict(request)
+        json_request.pop("hash")
         url_encoded_request = urlencode(json_request)
         response = self.rest_client.get(
-            f"{self.txs_url_path}&{url_encoded_request}",
+            f"{self.txs_url_path}/{request.hash}?{url_encoded_request}",
         )
         return Parse(response, GetTxResponse())
 
