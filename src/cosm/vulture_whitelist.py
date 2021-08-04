@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 _.body_bytes  # unused attribute (./tx/__init__.py:25)
 _.auth_info_bytes  # unused attribute (./tx/__init__.py:26)
 multi_sign_transaction  # unused function (./tx/__init__.py:39)
