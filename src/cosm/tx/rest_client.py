@@ -1,3 +1,6 @@
+import json
+import base64
+
 from cosm.query.rest_client import QueryRestClient as RestClient
 from cosm.tx.interface import RPCInterface
 
@@ -11,7 +14,7 @@ from cosmos.tx.v1beta1.service_pb2 import (
     GetTxsEventRequest,
     GetTxsEventResponse,
 )
-from google.protobuf.json_format import MessageToDict, Parse
+from google.protobuf.json_format import MessageToDict, Parse, ParseDict
 from urllib.parse import urlencode
 
 
@@ -35,7 +38,13 @@ class TxRestClient(RPCInterface):
         response = self.rest_client.get(
             f"{self.txs_url_path}/{request.hash}?{url_encoded_request}",
         )
-        return Parse(response, GetTxResponse())
+
+        # JSON in JSON in case of CosmWasm messages workaround
+        dict_response = json.loads(response)
+        self._fix_messages(dict_response["tx"]["body"]["messages"])
+        self._fix_messages(dict_response["tx_response"]["tx"]["body"]["messages"])
+
+        return ParseDict(dict_response, GetTxResponse())
 
     def BroadcastTx(self, request: BroadcastTxRequest) -> BroadcastTxResponse:
         """BroadcastTx broadcast transaction."""
@@ -49,3 +58,15 @@ class TxRestClient(RPCInterface):
         url_encoded_request = urlencode(json_request)
         response = self.rest_client.get(f"{self.txs_url_path}&{url_encoded_request}")
         return Parse(response, GetTxsEventResponse())
+
+    @staticmethod
+    def _fix_messages(messages):
+        for message in messages:
+            if message["@type"] == "/cosmwasm.wasm.v1beta1.MsgInstantiateContract":
+                message["init_msg"] = base64.b64encode(
+                    json.dumps(message["init_msg"]).encode("UTF8")
+                ).decode()
+            if message["@type"] == "/cosmwasm.wasm.v1beta1.MsgExecuteContract":
+                message["msg"] = base64.b64encode(
+                    json.dumps(message["msg"]).encode("UTF8")
+                ).decode()

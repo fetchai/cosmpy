@@ -4,7 +4,6 @@ from cosm.crypto.keypairs import PrivateKey
 from cosmos.base.v1beta1.coin_pb2 import Coin
 
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from grpc import insecure_channel
 from cosm.query.rest_client import QueryRestClient
 
 # Denomination and amount of transferred tokens
@@ -12,7 +11,6 @@ DENOM = "stake"
 AMOUNT = [Coin(amount="1", denom=DENOM)]
 
 # Node config
-GRPC_ENDPOINT_ADDRESS = "localhost:9090"
 REST_ENDPOINT_ADDRESS = "http://localhost:1317"
 CHAIN_ID = "testing"
 
@@ -23,8 +21,7 @@ FROM_PK = PrivateKey(
     )
 )
 # Create client
-channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
-#channel = QueryRestClient(REST_ENDPOINT_ADDRESS)
+channel = QueryRestClient(REST_ENDPOINT_ADDRESS)
 client = SigningCosmWasmClient(FROM_PK, channel, CHAIN_ID)
 
 # Address of recipient account
