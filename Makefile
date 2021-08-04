@@ -107,7 +107,7 @@ vulture:
 
 .PHONY: pylint
 pylint:
-	pylint --exit-zero $(PYCOSM_SRC_DIR)
+	pylint $(PYCOSM_SRC_DIR)
 
 .PHONY: lint
 lint:
