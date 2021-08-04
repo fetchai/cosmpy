@@ -7,8 +7,10 @@ from cosm.query.rest_client import QueryRestClient
 
 
 class QueryTests(TestCase):
+
+    @staticmethod
     @patch("requests.session", spec=Session)
-    def test_get_pass(self, session_mock):
+    def test_get_pass(session_mock):
         rest_address = "some url"
         client = QueryRestClient(rest_address)
 

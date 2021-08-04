@@ -161,7 +161,8 @@ class TxSign(unittest.TestCase):
     @unittest.skipIf(
         "FETCHD_GRPC_URL" not in os.environ, "Just for testing with local fetchd node"
     )
-    def test_tx_broadcast(self):
+    @staticmethod
+    def test_tx_broadcast():
         from_pk = PrivateKey(
             bytes.fromhex(
                 "cfb265b5d54ace71f6adc93a5072da3b8d6bfa8941904b1f6d4197db0c6f677e"
