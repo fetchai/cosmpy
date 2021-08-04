@@ -59,6 +59,7 @@ def my_import(name):
 @dataclass
 class TxSerialisedTestData:
     """Data class for transactions"""
+
     private_key: str
     tx_body: str
     tx: str
@@ -80,6 +81,7 @@ class TxSerialisedTestData:
 
 class TxSign(unittest.TestCase):
     """Test case of Tx module."""
+
     tx_test_data = TxSerialisedTestData(
         private_key="0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae",
         tx_body="0a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e73",

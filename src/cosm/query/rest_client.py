@@ -11,7 +11,6 @@ class QueryRestClient:
         Create a REST query
 
         :param rest_address: the address the REST client must communicate with
-        :return: None
         """
         self._session = requests.session()
         self.rest_address = rest_address
@@ -21,6 +20,7 @@ class QueryRestClient:
         Send a GET request
 
         :param request: the URL path after the default rest address
+        :raises RuntimeError: if response code is not 200
         :return: response's content
         """
         response = self._session.get(url=self.rest_address + request)
@@ -36,6 +36,8 @@ class QueryRestClient:
 
         :param url_path: the URL path after the default rest address
         :param json_request: the json data
+
+        :raises RuntimeError: if response code is not 200
 
         :return: response's content
         """

@@ -46,7 +46,6 @@ class StakingRestClient(Staking):
         Initialize.
 
         :param rest_api: QueryRestClient api
-        :return: None
         """
         self._rest_api = rest_api
 

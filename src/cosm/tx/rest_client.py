@@ -20,6 +20,7 @@ from cosmos.tx.v1beta1.service_pb2 import (
 
 class TxRestClient(TxInterface):
     """Tx REST client."""
+
     txs_url_path = "/cosmos/tx/v1beta1/txs"
 
     def __init__(self, rest_client: RestClient) -> None:
@@ -27,7 +28,6 @@ class TxRestClient(TxInterface):
         Create a Tx rest client
 
         :param rest_client: QueryRestClient api
-        :return: None
         """
         self.rest_client = rest_client
 

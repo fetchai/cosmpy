@@ -32,7 +32,6 @@ class BankRestClient(Bank):
         Create bank rest client
 
         :param rest_api: QueryRestClient api
-        :return: None
         """
         self._rest_api = rest_api
 
