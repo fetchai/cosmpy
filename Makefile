@@ -111,7 +111,7 @@ pylint:
 
 .PHONY: lint
 lint:
-	make black
+	make black-check
 	make isort
 	make flake
 	make vulture
