@@ -6,10 +6,10 @@ class Signer(ABC):
     def sign(
         self, message: bytes, deterministic=False, canonicalise: bool = True
     ) -> bytes:
-        pass
+        ...
 
     @abstractmethod
     def sign_digest(
         self, digest: bytes, deterministic=False, canonicalise: bool = True
     ) -> bytes:
-        pass
+        ...

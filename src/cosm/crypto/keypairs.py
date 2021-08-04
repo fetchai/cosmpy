@@ -47,7 +47,7 @@ class PublicKey:
             success = self._verifying_key.verify(signature, message)
 
         except ecdsa.keys.BadSignatureError:
-            pass
+            ...
 
         return success
 
@@ -58,7 +58,7 @@ class PublicKey:
             success = self._verifying_key.verify_digest(signature, digest)
 
         except ecdsa.keys.BadSignatureError:
-            pass
+            ...
 
         return success
 

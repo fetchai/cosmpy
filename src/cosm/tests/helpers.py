@@ -15,4 +15,4 @@ class MockQueryRestClient:
         return self.content
 
     def close(self):
-        pass
+        ...

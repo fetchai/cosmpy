@@ -18,7 +18,7 @@ class Auth(ABC):
 
         :return: QueryAccountResponse
         """
-        pass
+        ...
 
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
@@ -29,4 +29,4 @@ class Auth(ABC):
 
         :return: QueryParamsResponse
         """
-        pass
+        ...

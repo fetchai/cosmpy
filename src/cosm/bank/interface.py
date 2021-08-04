@@ -28,7 +28,7 @@ class Bank(ABC):
 
         :return: QueryBalanceResponse
         """
-        pass
+        ...
 
     @abstractmethod
     def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
@@ -39,7 +39,7 @@ class Bank(ABC):
 
         :return: QueryAllBalancesResponse
         """
-        pass
+        ...
 
     @abstractmethod
     def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
@@ -50,7 +50,7 @@ class Bank(ABC):
 
         :return: QueryTotalSupplyResponse
         """
-        pass
+        ...
 
     @abstractmethod
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
@@ -61,7 +61,7 @@ class Bank(ABC):
 
         :return: QuerySupplyOfResponse
         """
-        pass
+        ...
 
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
@@ -72,7 +72,7 @@ class Bank(ABC):
 
         :return: QueryParamsResponse
         """
-        pass
+        ...
 
     @abstractmethod
     def DenomMetadata(
@@ -85,7 +85,7 @@ class Bank(ABC):
 
         :return: QueryDenomMetadataResponse
         """
-        pass
+        ...
 
     @abstractmethod
     def DenomsMetadata(
@@ -98,4 +98,4 @@ class Bank(ABC):
 
         :return: QueryDenomsMetadataResponse
         """
-        pass
+        ...
