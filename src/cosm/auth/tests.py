@@ -1,3 +1,5 @@
+"""Tests of the Auth module."""
+
 import json
 import unittest
 

@@ -1,3 +1,5 @@
+"""Interface of the Auth module."""
+
 from abc import ABC, abstractmethod
 
 from cosmos.auth.v1beta1.query_pb2 import (
@@ -9,6 +11,8 @@ from cosmos.auth.v1beta1.query_pb2 import (
 
 
 class Auth(ABC):
+    """Auth abstract class."""
+
     @abstractmethod
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
         """
