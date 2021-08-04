@@ -1,4 +1,4 @@
-"""REST Client of Staking module."""
+"""Implementation of Staking interface using REST."""
 
 from google.protobuf.json_format import Parse
 
@@ -37,12 +37,17 @@ from cosmos.staking.v1beta1.query_pb2 import (
 
 
 class StakingRestClient(Staking):
-    """Staking REST API module."""
+    """Staking REST client."""
 
     API_URL = "/cosmos/staking/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient):
-        """Initialize."""
+    def __init__(self, rest_api: QueryRestClient) -> None:
+        """
+        Initialize.
+
+        :param rest_api: QueryRestClient api
+        :return: None
+        """
         self._rest_api = rest_api
 
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:

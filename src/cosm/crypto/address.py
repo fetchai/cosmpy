@@ -1,4 +1,4 @@
-"""Adress of a Crypto module."""
+"""Address of the Crypto package."""
 
 from typing import Optional, Union
 

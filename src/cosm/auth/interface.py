@@ -1,4 +1,4 @@
-"""Interface of the Auth module."""
+"""Interface for the Auth functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
 
@@ -22,7 +22,6 @@ class Auth(ABC):
 
         :return: QueryAccountResponse
         """
-        ...
 
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
@@ -33,4 +32,3 @@ class Auth(ABC):
 
         :return: QueryParamsResponse
         """
-        ...

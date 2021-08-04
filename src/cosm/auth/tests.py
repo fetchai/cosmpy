@@ -1,4 +1,4 @@
-"""Tests of the Auth module."""
+"""Tests for REST implementation of Auth."""
 
 import json
 import unittest

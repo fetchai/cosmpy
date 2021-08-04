@@ -1,4 +1,4 @@
-"""Tests of Staking module."""
+"""Tests for REST implementation of Staking."""
 
 import json
 from unittest import TestCase

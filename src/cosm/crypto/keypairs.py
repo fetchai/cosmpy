@@ -1,4 +1,4 @@
-"""Keypairs of Crypto module."""
+"""Crypto KeyPairs (Public Key and Private Key)."""
 
 import base64
 import hashlib

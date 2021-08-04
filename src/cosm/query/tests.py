@@ -1,3 +1,5 @@
+"""Tests for REST Query."""
+
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
@@ -7,8 +9,12 @@ from cosm.query.rest_client import QueryRestClient
 
 
 class QueryTests(TestCase):
+    """Test case of Query module."""
+
+    @staticmethod
     @patch("requests.session", spec=Session)
-    def test_get_pass(self, session_mock):
+    def test_get_pass(session_mock):
+        """Test query GET with positive result."""
         rest_address = "some url"
         client = QueryRestClient(rest_address)
 
@@ -28,6 +34,7 @@ class QueryTests(TestCase):
 
     @patch("requests.session", spec=Session)
     def test_get_error(self, session_mock):
+        """Test query GET with negative result."""
         rest_address = "some url"
         client = QueryRestClient(rest_address)
 

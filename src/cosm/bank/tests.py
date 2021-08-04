@@ -1,4 +1,4 @@
-"""Tests of the Band module."""
+"""Tests for REST implementation of Bank."""
 
 import json
 import unittest
@@ -28,7 +28,7 @@ from cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 class BankTests(unittest.TestCase):
-    """Test case of Band module."""
+    """Test case of Bank module."""
 
     @staticmethod
     def test_query_balance():

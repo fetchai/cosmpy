@@ -1,3 +1,5 @@
+"""Tests for REST implementation of Tx."""
+
 import os
 import unittest
 from dataclasses import dataclass
@@ -36,6 +38,7 @@ orig_Pack = AnyOrig.Pack
 
 
 def new_Pack(self, msg, type_url_prefix="/", deterministic=None):
+    """Prefix / character to type_url."""
     return orig_Pack(self, msg, type_url_prefix, deterministic)
 
 
@@ -43,6 +46,7 @@ AnyOrig.Pack = new_Pack
 
 
 def my_import(name):
+    """returns the name of the last module given a dotted path"""
     if name[0] == "/":
         name = name[1:]
     components = name.split(".")
@@ -54,6 +58,7 @@ def my_import(name):
 
 @dataclass
 class TxSerialisedTestData:
+    """Data class for transactions"""
     private_key: str
     tx_body: str
     tx: str
@@ -74,6 +79,7 @@ class TxSerialisedTestData:
 
 
 class TxSign(unittest.TestCase):
+    """Test case of Tx module."""
     tx_test_data = TxSerialisedTestData(
         private_key="0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae",
         tx_body="0a8a010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e64126a0a2b7761736d316d72663579796a6e6e6c707930656776706b3270766a646b393636376a326774397877737a63122b7761736d313238723833757663786e7338323533356433646135776d667668633265356d756a796a6d786a1a0e0a0575636f736d12053132333435121d486176652066756e207769746820796f7572207374617220636f696e73",
@@ -83,6 +89,7 @@ class TxSign(unittest.TestCase):
     )
 
     def test_deserialise_message_from_tx_body(self):
+        """Test deserialising message from tx body with positive result."""
         body = TxBody()
         body.ParseFromString(self.tx_test_data.tx_body)
         print("===> body:", body)
@@ -104,6 +111,7 @@ class TxSign(unittest.TestCase):
             print("signature: ", sig)
 
     def test_sign(self):
+        """Test various fields of a serialised Tx remain intact when deserialised then serialised again."""
         tx = Tx()
         tx.ParseFromString(self.tx_test_data.tx)
 
@@ -158,10 +166,12 @@ class TxSign(unittest.TestCase):
         # assert tx.signatures[0] == deterministic_signature
         # =======================================
 
+    @staticmethod
     @unittest.skipIf(
         "FETCHD_GRPC_URL" not in os.environ, "Just for testing with local fetchd node"
     )
-    def test_tx_broadcast(self):
+    def test_tx_broadcast():
+        """Test broadcasting tx is correct with positive result."""
         from_pk = PrivateKey(
             bytes.fromhex(
                 "cfb265b5d54ace71f6adc93a5072da3b8d6bfa8941904b1f6d4197db0c6f677e"

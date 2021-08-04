@@ -1,8 +1,8 @@
-"""Hash functions of Crypto module."""
+"""Hash functions of Crypto package."""
 
 import hashlib
 
-from _hashlib import HASH  # type: ignore
+from _hashlib import HASH  # type: ignore  # pylint: disable=no-name-in-module
 
 
 def sha256(contents: bytes) -> bytes:

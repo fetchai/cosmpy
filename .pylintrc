@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=C0103, C0301, R0801
+disable=C0103, C0301, R0801, E1101
 
 [IMPORTS]
 ignored-modules=
