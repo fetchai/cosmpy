@@ -85,7 +85,7 @@ class WasmRestClient(Wasm):
         :return: QueryContractsByCodeResponse
         """
         json_request = MessageToDict(request)
-        json_request.pop("code_id")
+        json_request.pop("codeId")
         url_encoded_request = urlencode(json_request)
         response = self._rest_api.get(
             f"{self.API_URL}/code/{request.code_id}/contracts?{url_encoded_request}",
@@ -108,6 +108,7 @@ class WasmRestClient(Wasm):
         response = self._rest_api.get(
             f"{self.API_URL}/contract/{request.address}/state?{url_encoded_request}",
         )
+
         return Parse(response, QueryAllContractStateResponse())
 
     def RawContractState(
@@ -165,7 +166,7 @@ class WasmRestClient(Wasm):
         :return: QueryCodeResponse
         """
         json_request = MessageToDict(request)
-        json_request.pop("code_id")
+        json_request.pop("codeId")
         url_encoded_request = urlencode(json_request)
         response = self._rest_api.get(
             f"{self.API_URL}/code/{request.code_id}?{url_encoded_request}",
