@@ -54,7 +54,7 @@ def multi_sign_transaction(
     """
     signatures = []
 
-    for i in range(len(signers)):
+    for i, _ in enumerate(signers):
         sd = SignDoc()
         sd.body_bytes = tx.body.SerializeToString()
         sd.auth_info_bytes = tx.auth_info.SerializeToString()

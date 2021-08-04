@@ -1,3 +1,5 @@
+"""Adress of a Crypto module."""
+
 from typing import Optional, Union
 
 import bech32
@@ -16,11 +18,14 @@ def _to_bech32(prefix: str, data: bytes) -> str:
 
 
 class Address:
+    """Address class."""
+
     def __init__(
         self,
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
     ):
+        """Initialize."""
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
