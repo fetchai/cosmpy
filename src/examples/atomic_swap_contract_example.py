@@ -1,5 +1,9 @@
 """ Atomic swap using ERC1155 contract and multiple messages per transaction example """
 
+import inspect
+import os
+from pathlib import Path
+
 from cosm.crypto.keypairs import PrivateKey
 from cosm.crypto.address import Address
 from grpc import insecure_channel
@@ -14,7 +18,8 @@ TOKEN_ID_2 = "1235"
 AMOUNT_2 = "1"
 
 # Path to smart contract
-CONTRACT_FILENAME = "../../contracts/cw_erc1155.wasm"
+CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
+CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "..", "contracts", "cw_erc1155.wasm")
 
 # Private key of validator's account
 VALIDATOR_PK = PrivateKey(
@@ -37,7 +42,7 @@ channel = insecure_channel("localhost:9090")
 
 # Store contract
 store_msg = get_packed_store_msg(sender_address=VALIDATOR_ADDRESS,
-                                 contract_filename=CONTRACT_FILENAME)
+                                 contract_filename=Path(CONTRACT_FILENAME))
 response = sign_and_broadcast_msgs([store_msg], channel, [VALIDATOR_PK], gas_limit=2000000)
 code_id = get_code_id(response)
 print(f"Contract stored, code ID: {code_id}")
@@ -48,7 +53,7 @@ response = sign_and_broadcast_msgs([init_msg], channel, [VALIDATOR_PK], gas_limi
 contract_address = get_contract_address(response)
 print(f"Contract address: {contract_address}")
 
-# Create token 2 tokens in one batch message
+# Create 2 tokens in one batch message
 create_batch_msg = \
     {
         "create_batch":
