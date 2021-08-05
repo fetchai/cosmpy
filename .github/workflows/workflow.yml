@@ -25,16 +25,22 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pipenv
-        pipenv install --dev --skip-lock
-    - name: Check code formatting
-      run: |
-        pipenv run make black-check
+        pipenv install --dev
     - name: Code style check
       run: |
+        pipenv run make black-check
+        pipenv run make isort-check
         pipenv run make flake
+        pipenv run make vulture
+    - name: Security check
+      run: pipenv run make bandit
+    - name: Safety check
+      run: pipenv run make safety
     - name: Static type check
-      run: |
-        pipenv run make mypy
+      run: pipenv run make mypy
+    - name: Pylint check
+      run: pipenv run make pylint
+    - name: Unused code check
+      run: pipenv run make vulture
     - name: Unit tests
-      run: |
-        pipenv run make test
+      run: pipenv run make test

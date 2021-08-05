@@ -1,65 +1,123 @@
+"""Implementation of Bank interface using REST."""
+
 from google.protobuf.json_format import Parse
-from cosm.common.rest_client import RestClient
-from cosmos.bank.v1beta1.query_pb2 import (
-    QueryBalanceRequest,
-    QueryBalanceResponse,
-    QueryAllBalancesRequest,
-    QueryAllBalancesResponse,
-    QueryTotalSupplyRequest,
-    QueryTotalSupplyResponse,
-    QuerySupplyOfRequest,
-    QuerySupplyOfResponse,
-    QueryParamsRequest,
-    QueryParamsResponse,
-    QueryDenomMetadataRequest,
-    QueryDenomsMetadataResponse,
-    QueryDenomMetadataResponse,
-    QueryDenomsMetadataRequest,
-)
 
 from cosm.bank.interface import Bank
+from cosm.common.rest_client import RestClient
+from cosmos.bank.v1beta1.query_pb2 import (
+    QueryAllBalancesRequest,
+    QueryAllBalancesResponse,
+    QueryBalanceRequest,
+    QueryBalanceResponse,
+    QueryDenomMetadataRequest,
+    QueryDenomMetadataResponse,
+    QueryDenomsMetadataRequest,
+    QueryDenomsMetadataResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QuerySupplyOfRequest,
+    QuerySupplyOfResponse,
+    QueryTotalSupplyRequest,
+    QueryTotalSupplyResponse,
+)
 
 
 class BankRestClient(Bank):
+    """Bank REST client."""
+
     API_URL = "/cosmos/bank/v1beta1"
 
     def __init__(self, rest_api: RestClient):
+        """
+        Create bank rest client
+
+        :param rest_api: RestClient api
+        """
         self._rest_api = rest_api
 
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
+        """
+        Queries balance of selected denomination from specific account
+
+        :param request: QueryBalanceRequest with address and denomination
+
+        :return: QueryBalanceResponse
+        """
         json_response = self._rest_api.get(
-            self.API_URL + f"/balances/{request.address}/{request.denom}"
+            self.API_URL + f"/balances/{request.address}/{request.denom}", request
         )
         return Parse(json_response, QueryBalanceResponse())
 
     def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
+        """
+        Queries balance of all denominations from specific account
+
+        :param request: QueryAllBalancesRequest with account address
+
+        :return: QueryAllBalancesResponse
+        """
         json_response = self._rest_api.get(
-            self.API_URL + f"/balances/{request.address}"
+            self.API_URL + f"/balances/{request.address}", request
         )
         return Parse(json_response, QueryAllBalancesResponse())
 
     def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
-        json_response = self._rest_api.get(self.API_URL + "/supply")
+        """
+        Queries total supply of all denominations
+
+        :param request: QueryTotalSupplyRequest
+
+        :return: QueryTotalSupplyResponse
+        """
+        json_response = self._rest_api.get(self.API_URL + "/supply", request)
         return Parse(json_response, QueryTotalSupplyResponse())
 
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
-        json_response = self._rest_api.get(self.API_URL + f"/supply/{request.denom}")
+        """
+        Queries total supply of specific denomination
+
+        :param request: QuerySupplyOfRequest with denomination
+
+        :return: QuerySupplyOfResponse
+        """
+        json_response = self._rest_api.get(self.API_URL + f"/supply/{request.denom}", request)
         return Parse(json_response, QuerySupplyOfResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        json_response = self._rest_api.get(self.API_URL + "/params")
+        """
+        Queries the parameters of bank module
+
+        :param request: QueryParamsRequest
+
+        :return: QueryParamsResponse
+        """
+        json_response = self._rest_api.get(self.API_URL + "/params", request)
         return Parse(json_response, QueryParamsResponse())
 
     def DenomMetadata(
         self, request: QueryDenomMetadataRequest
     ) -> QueryDenomMetadataResponse:
+        """
+        Queries the client metadata for all registered coin denominations
+
+        :param request: QueryDenomMetadataRequest with denomination
+
+        :return: QueryDenomMetadataResponse
+        """
         json_response = self._rest_api.get(
-            self.API_URL + f"/denoms_metadata/{request.denom}"
+            self.API_URL + f"/denoms_metadata/{request.denom}", request
         )
         return Parse(json_response, QueryDenomMetadataResponse())
 
     def DenomsMetadata(
         self, request: QueryDenomsMetadataRequest
     ) -> QueryDenomsMetadataResponse:
-        json_response = self._rest_api.get(self.API_URL + "/denoms_metadata")
+        """
+        Queries the client metadata of a given coin denomination
+
+        :param request: QueryDenomsMetadataRequest
+
+        :return: QueryDenomsMetadataResponse
+        """
+        json_response = self._rest_api.get(self.API_URL + "/denoms_metadata", request)
         return Parse(json_response, QueryDenomsMetadataResponse())

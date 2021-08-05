@@ -1,8 +1,8 @@
 """Helpers methods and classes for testing."""
 
 
-class MockQueryRestClient:
-    """Mock QueryRestClient"""
+class MockRestClient:
+    """Mock RestClient"""
 
     def __init__(self, content: str):
         """Initialize."""
@@ -14,5 +14,7 @@ class MockQueryRestClient:
         self.last_request = request
         return self.content
 
-    def close(self):
-        pass
+    @staticmethod
+    def close():
+        """Mock close method."""
+        ...

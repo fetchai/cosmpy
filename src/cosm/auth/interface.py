@@ -1,4 +1,7 @@
-from abc import ABC
+"""Interface for the Auth functionality of CosmosSDK."""
+
+from abc import ABC, abstractmethod
+
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
@@ -8,8 +11,24 @@ from cosmos.auth.v1beta1.query_pb2 import (
 
 
 class Auth(ABC):
-    def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
-        pass
+    """Auth abstract class."""
 
+    @abstractmethod
+    def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
+        """
+        Queries account data - sequence, account_id, etc.
+
+        :param request: QueryAccountRequest that contains account address
+
+        :return: QueryAccountResponse
+        """
+
+    @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        pass
+        """
+        Queries all parameters
+
+        :param request: QueryParamsRequest
+
+        :return: QueryParamsResponse
+        """
