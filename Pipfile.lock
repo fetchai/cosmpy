@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dbf97003921ef3aa2d17003b8949f7e70aeb6161c234cd6c54e75a07db5fae22"
+            "sha256": "b373deef268e720a834fd73c0da326fe0124c9e964e5e1370aa803bfdb1466d1"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -726,6 +726,15 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
             "version": "==3.9.2"
+        },
+        "flake8-copyright": {
+            "hashes": [
+                "sha256:5c3632dd8c586547b25fff4272282005fdbcba56eeb77b7487564aa636b6e533",
+                "sha256:616a960c9602ad2d0136bf3f12564e253caffe82f151d2982f78a12a42e1faa0",
+                "sha256:dbad92ee5f51398722cd571b6e36cc3651914bf1b286b0e638bba1f4af0b6f5b"
+            ],
+            "index": "pypi",
+            "version": "==0.2.2"
         },
         "gitdb": {
             "hashes": [
