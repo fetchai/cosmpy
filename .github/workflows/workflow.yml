@@ -29,8 +29,9 @@ jobs:
     - name: Code style check
       run: |
         pipenv run make black-check
-        pipenv run make isort
+        pipenv run make isort-check
         pipenv run make flake
+        pipenv run make vulture
     - name: Security check
       run: pipenv run make bandit
     - name: Safety check

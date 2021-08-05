@@ -69,25 +69,29 @@ $(WASMD_DIR): Makefile
 	cd $(WASMD_DIR) && git checkout $(WASMD_VERSION) -- $(WASMD_PROTO_RELATIVE_DIRS)
 	cp -rpv $(WASMD_PROTO_RELATIVE_DIRS:%=$(WASMD_DIR)/%) $(COSMOS_SDK_DIR)
 
+####################
+### Code style
+####################
+
+.PHONY: black-check
+black-check:
+	black --check --verbose $(PYCOSM_SRC_DIR)
+
+.PHONY: isort-check
+isort-check:
+	isort --check-only --verbose $(PYCOSM_SRC_DIR)
+
 .PHONY: flake
 flake:
 	flake8 $(PYCOSM_SRC_DIR)
 
-.PHONY: mypy
-mypy:
-	mypy $(PYCOSM_SRC_DIR)
+.PHONY: vulture
+vulture:
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py --exclude "*_pb2.py"
 
-.PHONY: black
-black:
-	black $(PYCOSM_SRC_DIR)
-
-.PHONY: black-check
-black-check:
-	black --check $(PYCOSM_SRC_DIR)
-
-.PHONY: test
-test:
-	python -m unittest discover -s $(PYCOSM_SRC_DIR)
+####################
+### Security & Safety
+####################
 
 .PHONY: bandit
 bandit:
@@ -97,36 +101,48 @@ bandit:
 safety:
 	safety check -i 41002
 
-.PHONY: isort
-isort:
-	isort --check $(PYCOSM_SRC_DIR)
+####################
+### Linters
+####################
 
-.PHONY: vulture
-vulture:
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
+.PHONY: mypy
+mypy:
+	mypy $(PYCOSM_SRC_DIR)
 
 .PHONY: pylint
 pylint:
 	pylint $(PYCOSM_SRC_DIR)
 
+####################
+### Tests
+####################
+
+.PHONY: test
+test:
+	python -m unittest discover -s $(PYCOSM_SRC_DIR)
+
+####################
+### Combinations
+####################
+
 .PHONY: lint
 lint:
-	make black
-	make isort
-	make flake
-	make vulture
+	black $(PYCOSM_SRC_DIR)
+	isort $(PYCOSM_SRC_DIR)
+	flake8 $(PYCOSM_SRC_DIR)
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py --exclude "*_pb2.py"
 
 .PHONY: check
 check:
-	make lint
+	make black-check
+	make isort-check
+	make flake
+	make vulture
 	make bandit
 	make safety
 	make mypy
 	make pylint
 	make test
-
-
-ci: flake mypy black clask-check test
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
