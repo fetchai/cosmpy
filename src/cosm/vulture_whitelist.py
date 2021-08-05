@@ -16,3 +16,12 @@ TxSign  # unused class (./tx/tests.py:76)
 _.body_bytes  # unused attribute (./tx/tests.py:119)
 _.auth_info_bytes  # unused attribute (./tx/tests.py:120)
 _.mode  # unused attribute (./tx/tests.py:216)
+_.get_balance  # unused method (./clients/cosmwasm_client.py:40)
+_.query_contract_state  # unused method (./clients/cosmwasm_client.py:75)
+SigningCosmWasmClient  # unused class (./clients/signing_cosmwasm_client.py:37)
+_.send_tokens  # unused method (./clients/signing_cosmwasm_client.py:254)
+_.store_contract  # unused method (./clients/signing_cosmwasm_client.py:271)
+_.instantiate  # unused method (./clients/signing_cosmwasm_client.py:291)
+_.execute  # unused method (./clients/signing_cosmwasm_client.py:325)
+
+
