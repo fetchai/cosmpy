@@ -42,5 +42,9 @@ jobs:
       run: pipenv run make pylint
     - name: Unused code check
       run: pipenv run make vulture
+    - name: License check
+      run: pipenv run make liccheck
+    - name: Copyright check
+      run: pipenv run make copyright-check
     - name: Unit tests
       run: pipenv run make test

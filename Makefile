@@ -122,6 +122,19 @@ test:
 	python -m unittest discover -s $(PYCOSM_SRC_DIR)
 
 ####################
+### License and copyright checks
+####################
+
+.PHONY: liccheck
+liccheck:
+	pipenv lock -r > requirements.txt
+	liccheck -s strategy.ini -r requirements.txt -l PARANOID
+
+.PHONY: copyright-check
+copyright-check:
+	python scripts/check_copyright.py
+
+####################
 ### Combinations
 ####################
 
@@ -142,6 +155,8 @@ check:
 	make safety
 	make mypy
 	make pylint
+	make liccheck
+	make copyright-check
 	make test
 
 debug:
