@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Tests for REST implementation of Wasm."""
+
 import base64
 import json
 import unittest
