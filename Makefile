@@ -122,6 +122,15 @@ test:
 	python -m unittest discover -s $(PYCOSM_SRC_DIR)
 
 ####################
+### License and copywrite checks
+####################
+
+.PHONY: liccheck
+liccheck:
+	pipenv lock -r > requirements.txt
+	liccheck -s strategy.ini -r requirements.txt -l PARANOID
+
+####################
 ### Combinations
 ####################
 
