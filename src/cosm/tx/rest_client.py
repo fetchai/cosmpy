@@ -1,24 +1,34 @@
-from cosm.query.rest_client import QueryRestClient as RestClient
-from cosm.tx.interface import RPCInterface
+"""Implementation of Tx interface using REST."""
 
-from cosmos.tx.v1beta1.service_pb2 import (
-    SimulateRequest,
-    SimulateResponse,
-    GetTxRequest,
-    GetTxResponse,
-    BroadcastTxRequest,
-    BroadcastTxResponse,
-    GetTxsEventRequest,
-    GetTxsEventResponse,
-)
-from google.protobuf.json_format import MessageToDict, Parse
 from urllib.parse import urlencode
 
+from google.protobuf.json_format import MessageToDict, Parse
 
-class TxRestClient(RPCInterface):
+from cosm.query.rest_client import QueryRestClient as RestClient
+from cosm.tx.interface import TxInterface
+from cosmos.tx.v1beta1.service_pb2 import (
+    BroadcastTxRequest,
+    BroadcastTxResponse,
+    GetTxRequest,
+    GetTxResponse,
+    GetTxsEventRequest,
+    GetTxsEventResponse,
+    SimulateRequest,
+    SimulateResponse,
+)
+
+
+class TxRestClient(TxInterface):
+    """Tx REST client."""
+
     txs_url_path = "/cosmos/tx/v1beta1/txs"
 
-    def __init__(self, rest_client: RestClient):
+    def __init__(self, rest_client: RestClient) -> None:
+        """
+        Create a Tx rest client
+
+        :param rest_client: QueryRestClient api
+        """
         self.rest_client = rest_client
 
     def Simulate(self, request: SimulateRequest) -> SimulateResponse:

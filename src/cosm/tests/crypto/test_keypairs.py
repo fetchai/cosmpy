@@ -1,10 +1,15 @@
+"""Tests for KeyPair module of the Crypto Package."""
+
 import unittest
 
 from cosm.crypto.keypairs import PrivateKey, PublicKey
 
 
 class KeyPairTests(unittest.TestCase):
+    """Test case of KeyPair module."""
+
     def test_basic_signing(self):
+        """Test basic signing with positive result."""
         pk = PrivateKey()
         msg = b"The name of the wind"
 
@@ -12,6 +17,7 @@ class KeyPairTests(unittest.TestCase):
         self.assertTrue(pk.verify(msg, sig))
 
     def test_restore_private_key(self):
+        """Test restoring private key with positive result."""
         raw_pk = b"\xabneC\xee\xf2.\xe4\xc5}\x9a\xc0\x93\xe1\xc4\xbf\xc8\xc67\x05;\x10\xd1\x14\xacf\xad\xcd>\x90lS"
         pk = PrivateKey(raw_pk)
 
@@ -32,10 +38,12 @@ class KeyPairTests(unittest.TestCase):
         self.assertEqual(pk.private_key_bytes, raw_pk)
 
     def test_invalid_private_key_recovery(self):
+        """Test private key recovery with negative results."""
         with self.assertRaises(RuntimeError):
             PrivateKey("not a private key")
 
     def test_bad_signature(self):
+        """Test versifying private key with a corrupted signature."""
         pk = PrivateKey()
         msg = b"The wise mans fear"
 
@@ -48,12 +56,14 @@ class KeyPairTests(unittest.TestCase):
         self.assertFalse(pk.verify(msg, corrupted_sig))
 
     def test_create_public_key_from_bytes(self):
+        """Test creating public key from bytes with positive result."""
         pk = PublicKey(
             b"\x02W\xbe\xe2\x08\xdc\x80(\xd2\xd0C\xbe\xe0{\x02\x81\xa6\xf9Y\x19\x0e\xd1\x8a*\x99\x84\xd6e\x07\x99\x8d\x96h"
         )
         self.assertEqual(pk.public_key, "Ale+4gjcgCjS0EO+4HsCgab5WRkO0YoqmYTWZQeZjZZo")
 
     def test_create_public_key_from_another(self):
+        """Test creating public key from another public key with positive result."""
         pk1 = PublicKey(
             b"\x02W\xbe\xe2\x08\xdc\x80(\xd2\xd0C\xbe\xe0{\x02\x81\xa6\xf9Y\x19\x0e\xd1\x8a*\x99\x84\xd6e\x07\x99\x8d\x96h"
         )
@@ -61,5 +71,6 @@ class KeyPairTests(unittest.TestCase):
         self.assertEqual(pk1.public_key, pk2.public_key)
 
     def test_invalid_public_key_recovery(self):
+        """Test public key recovery with negative results."""
         with self.assertRaises(RuntimeError):
             PublicKey("certainly not a public key")

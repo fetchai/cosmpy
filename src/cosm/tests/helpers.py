@@ -14,5 +14,7 @@ class MockQueryRestClient:
         self.last_request = request
         return self.content
 
-    def close(self):
-        pass
+    @staticmethod
+    def close():
+        """Mock close method."""
+        ...

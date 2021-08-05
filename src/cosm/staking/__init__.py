@@ -1,1 +1,1 @@
-"""Staking module."""
+"""This package contains the Staking modules."""
