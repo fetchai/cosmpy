@@ -1,14 +1,13 @@
 """Implementation of Tx interface using REST."""
 
-import json
 import base64
+import json
 from typing import List
 from urllib.parse import urlencode
 
 from google.protobuf.json_format import MessageToDict, Parse, ParseDict
 
 from common import JSONLike
-
 from cosm.query.rest_client import QueryRestClient as RestClient
 from cosm.tx.interface import TxInterface
 from cosmos.tx.v1beta1.service_pb2 import (
