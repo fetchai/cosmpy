@@ -73,7 +73,7 @@ def get_packed_send_msg(from_address: Address, to_address: Address, amount: List
     return send_msg_packed
 
 
-def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 5) -> GetTxResponse:
+def broadcast_tx(channel: Channel, tx: Tx, wait_time: int = 10) -> GetTxResponse:
     """
     Broadcast transaction and get receipt
 

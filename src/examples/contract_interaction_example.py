@@ -1,4 +1,7 @@
 """ ERC1155 contract deployment and interaction example """
+import inspect
+import os
+from pathlib import Path
 
 from cosm.crypto.keypairs import PrivateKey
 from cosm.crypto.address import Address
@@ -12,7 +15,8 @@ TOKEN_ID = "1234"
 AMOUNT = "1"
 
 # Path to smart contract
-CONTRACT_FILENAME = "../../contracts/cw_erc1155.wasm"
+CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
+CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "..", "contracts", "cw_erc1155.wasm")
 
 # Private key of sender's account
 VALIDATOR_PK = PrivateKey(
@@ -27,7 +31,7 @@ channel = insecure_channel("localhost:9090")
 
 # Store contract
 store_msg = get_packed_store_msg(sender_address=VALIDATOR_ADDRESS,
-                                 contract_filename=CONTRACT_FILENAME)
+                                 contract_filename=Path(CONTRACT_FILENAME))
 response = sign_and_broadcast_msgs(channel, [store_msg], [VALIDATOR_PK], gas_limit=2000000)
 code_id = get_code_id(response)
 print(f"Contract stored, code ID: {code_id}")
