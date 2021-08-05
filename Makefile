@@ -151,6 +151,7 @@ check:
 	make safety
 	make mypy
 	make pylint
+	make liccheck
 	make test
 
 debug:
