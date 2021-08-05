@@ -44,7 +44,7 @@ jobs:
       run: pipenv run make vulture
     - name: License check
       run: pipenv run make liccheck
-    - name: Copywrite check
+    - name: Copyright check
       run: pipenv run make copywrite-check
     - name: Unit tests
       run: pipenv run make test
