@@ -125,6 +125,8 @@ class SigningCosmWasmClient(CosmWasmClient):
         :param tx: Transaction
         :param wait_time: Number of seconds to wait before getting transaction receipt
 
+        :raises RuntimeError: if broadcasting fails.
+
         :return: GetTxResponse
         """
         tx_data = tx.SerializeToString()
