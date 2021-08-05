@@ -126,7 +126,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         """
         sign_transaction(tx, self.private_key, self.chain_id, self.account_number)
 
-    def broadcast_tx(self, tx: Tx, wait_time: int = 5) -> GetTxResponse:
+    def broadcast_tx(self, tx: Tx, wait_time: int = 10) -> GetTxResponse:
         """
         Broadcast transaction and get receipt
 
@@ -284,7 +284,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         :return: Code ID
         """
         msg = self.get_packed_store_msg(
-            sender_address=self.address, contract_filename=contract_filename
+            sender_address=self.address, contract_filename=Path(contract_filename)
         )
 
         tx = self.generate_tx(

@@ -1,22 +1,25 @@
-from google.protobuf.json_format import Parse
-import cosmos.crypto.secp256k1.keys_pb2  # noqa
-from cosm.query.rest_client import QueryRestClient
+"""Implementation of Auth interface using REST."""
 
+from google.protobuf.json_format import Parse
+
+from cosm.auth.interface import Auth
+from cosm.query.rest_client import QueryRestClient
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
-from cosm.auth.interface import Auth
 
 
 class AuthRestClient(Auth):
+    """Auth REST client."""
+
     API_URL = "/cosmos/auth/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient):
+    def __init__(self, rest_api: QueryRestClient) -> None:
         """
-        Create authentication rest client
+        Initialize authentication rest client.
 
         :param rest_api: QueryRestClient api
         """

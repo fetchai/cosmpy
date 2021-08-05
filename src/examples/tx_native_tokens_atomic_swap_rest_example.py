@@ -1,4 +1,4 @@
-""" Native tokens atomic swap example """
+""" REST example of native tokens atomic swap """
 
 from cosm.crypto.keypairs import PrivateKey
 from cosmos.base.v1beta1.coin_pb2 import Coin

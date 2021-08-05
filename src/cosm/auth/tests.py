@@ -1,20 +1,26 @@
-import unittest
-from cosm.auth.rest_client import AuthRestClient
-from cosm.tests.helpers import MockQueryRestClient
-
-from cosmos.auth.v1beta1.query_pb2 import (
-    QueryAccountResponse,
-    QueryAccountRequest,
-    QueryParamsResponse,
-    QueryParamsRequest,
-)
-from google.protobuf.json_format import ParseDict
+"""Tests for REST implementation of Auth."""
 
 import json
+import unittest
+
+from google.protobuf.json_format import ParseDict
+
+from cosm.auth.rest_client import AuthRestClient
+from cosm.tests.helpers import MockQueryRestClient
+from cosmos.auth.v1beta1.query_pb2 import (
+    QueryAccountRequest,
+    QueryAccountResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+)
 
 
 class AuthTests(unittest.TestCase):
-    def test_query_account(self):
+    """Test case for Auth module."""
+
+    @staticmethod
+    def test_query_account():
+        """Test query account for positive result."""
         content = {
             "account": {
                 "@type": "/cosmos.auth.v1beta1.BaseAccount",
@@ -38,7 +44,9 @@ class AuthTests(unittest.TestCase):
         )
         assert mock_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
 
-    def test_query_params(self):
+    @staticmethod
+    def test_query_params():
+        """Test query params for positive result."""
         content = {
             "params": {
                 "max_memo_characters": 256,

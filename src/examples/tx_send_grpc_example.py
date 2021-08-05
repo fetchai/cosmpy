@@ -1,4 +1,4 @@
-""" Sending and querying funds example """
+""" gRPC example of sending and querying funds """
 
 from cosm.crypto.keypairs import PrivateKey
 from cosmos.base.v1beta1.coin_pb2 import Coin

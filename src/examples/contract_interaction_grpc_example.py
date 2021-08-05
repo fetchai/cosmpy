@@ -1,7 +1,12 @@
-""" ERC1155 contract deployment and interaction example """
+""" gRPC example of ERC1155 contract deployment and interaction """
+
+import inspect
+import os
 
 from cosm.crypto.keypairs import PrivateKey
+
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
+
 from grpc import insecure_channel
 
 
@@ -10,7 +15,8 @@ TOKEN_ID = "1234"
 AMOUNT = "1"
 
 # Path to smart contract
-CONTRACT_FILENAME = "../../contracts/cw_erc1155.wasm"
+CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
+CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "..", "contracts", "cw_erc1155.wasm")
 
 # Node config
 GRPC_ENDPOINT_ADDRESS = "localhost:9090"

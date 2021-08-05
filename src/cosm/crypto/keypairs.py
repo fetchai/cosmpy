@@ -1,17 +1,24 @@
+"""Crypto KeyPairs (Public Key and Private Key)."""
+
 import base64
 import hashlib
-from typing import Union, Optional, Callable
+from typing import Callable, Optional, Union
+
 import ecdsa
 from ecdsa.curves import Curve
-from ecdsa.util import sigencode_string_canonize, sigencode_string
+from ecdsa.util import sigencode_string, sigencode_string_canonize
+
 from cosm.crypto.interface import Signer
 
 
 class PublicKey:
+    """Public key class."""
+
     curve: Curve = ecdsa.SECP256k1
     hash_function: Callable = hashlib.sha256
 
     def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
+        """Initialize."""
         if isinstance(public_key, bytes):
             self._verifying_key = ecdsa.VerifyingKey.from_string(
                 public_key, curve=self.curve, hashfunc=self.hash_function
@@ -28,41 +35,78 @@ class PublicKey:
 
     @property
     def public_key(self) -> str:
+        """
+        Get public key.
+
+        :return: str public key.
+        """
         return self._public_key
 
     @property
     def public_key_hex(self) -> str:
+        """
+        Get public key hex.
+
+        :return: str public key hex.
+        """
         return self.public_key_bytes.hex()
 
     @property
     def public_key_bytes(self) -> bytes:
+        """
+        Get bytes public key.
+
+        :return: bytes public key.
+        """
         return self._public_key_bytes
 
-    def verify(self, message: bytes, signature: bytes):
+    def verify(self, message: bytes, signature: bytes) -> bool:
+        """
+        Verify message and signature.
+
+        :param message: bytes message content.
+        :param signature: bytes signature.
+        :return: bool is message and signature valid.
+        """
         success: bool = False
 
         try:
             success = self._verifying_key.verify(signature, message)
 
         except ecdsa.keys.BadSignatureError:
-            pass
+            ...
 
         return success
 
-    def verify_digest(self, digest: bytes, signature: bytes):
+    def verify_digest(self, digest: bytes, signature: bytes) -> bool:
+        """
+        Verify digest.
+
+        :param digest: bytes digest.
+        :param signature: bytes signature.
+        :return: bool is digest valid.
+        """
         success: bool = False
 
         try:
             success = self._verifying_key.verify_digest(signature, digest)
 
         except ecdsa.keys.BadSignatureError:
-            pass
+            ...
 
         return success
 
 
 class PrivateKey(PublicKey, Signer):
+    """Private key class."""
+
     def __init__(self, private_key: Optional[bytes] = None):
+        """
+        Initialize.
+
+        :param private_key: bytes private key (optional, None by default).
+        :raises RuntimeError: if unable to load private key from input.
+        """
         if private_key is None:
             self._signing_key = ecdsa.SigningKey.generate(
                 curve=self.curve, hashfunc=self.hash_function
@@ -83,19 +127,43 @@ class PrivateKey(PublicKey, Signer):
 
     @property
     def private_key(self) -> str:
+        """
+        Get private key.
+
+        :return: str private key.
+        """
         return self._private_key
 
     @property
     def private_key_hex(self) -> str:
+        """
+        Get private key hex.
+
+        :return: str private key hex.
+        """
         return self.private_key_bytes.hex()
 
     @property
     def private_key_bytes(self) -> bytes:
+        """
+        Get bytes private key.
+
+        :return: bytes private key.
+        """
         return self._private_key_bytes
 
     def sign(
-        self, message: bytes, deterministic=True, canonicalise: bool = True
+        self, message: bytes, deterministic: bool = True, canonicalise: bool = True
     ) -> bytes:
+        """
+        Sign message.
+
+        :param message: bytes message content.
+        :param deterministic: bool is deterministic.
+        :param canonicalise: bool is canonicalise.
+
+        :return: bytes signed message.
+        """
         sigencode = sigencode_string_canonize if canonicalise else sigencode_string
         sign_fnc = (
             self._signing_key.sign_deterministic
@@ -108,6 +176,15 @@ class PrivateKey(PublicKey, Signer):
     def sign_digest(
         self, digest: bytes, deterministic=True, canonicalise: bool = True
     ) -> bytes:
+        """
+        Sign digest.
+
+        :param digest: bytes digest content.
+        :param deterministic: bool is deterministic.
+        :param canonicalise: bool is canonicalise.
+
+        :return: bytes signed digest.
+        """
         sigencode = sigencode_string_canonize if canonicalise else sigencode_string
         sign_fnc = (
             self._signing_key.sign_digest_deterministic

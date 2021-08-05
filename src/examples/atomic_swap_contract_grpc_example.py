@@ -1,4 +1,7 @@
-""" Atomic swap using ERC1155 contract and multiple messages per transaction example """
+""" gRPC example of atomic swap using ERC1155 contract and multiple messages per transaction """
+
+import inspect
+import os
 
 from cosm.crypto.keypairs import PrivateKey
 
@@ -13,7 +16,8 @@ TOKEN_ID_2 = "1235"
 AMOUNT_2 = "1"
 
 # Path to smart contract
-CONTRACT_FILENAME = "../../contracts/cw_erc1155.wasm"
+CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
+CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "..", "contracts", "cw_erc1155.wasm")
 
 # Node config
 GRPC_ENDPOINT_ADDRESS = "localhost:9090"
@@ -46,7 +50,7 @@ print(f"Contract stored, code ID: {code_id}")
 contract_address = validator_client.instantiate(code_id, {})
 print(f"Contract address: {contract_address}")
 
-# Create token 2 tokens in one batch message
+# Create 2 tokens in one batch message
 create_batch_msg = \
     {
         "create_batch":
