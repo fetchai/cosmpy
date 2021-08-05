@@ -50,14 +50,15 @@ msg_1 = validator_client.get_packed_send_msg(from_address=validator_client.addre
                                              to_address=bob_client.address,
                                              amount=AMOUNT_1)
 
-# Transfer AMOUNT_1 from bob to validator
+# Transfer AMOUNT_2 from bob to validator
 msg_2 = bob_client.get_packed_send_msg(from_address=bob_client.address,
                                        to_address=validator_client.address,
                                        amount=AMOUNT_2)
 
 # Generate one transaction containing both messages
 tx = validator_client.generate_tx(packed_msgs=[msg_1, msg_2],
-                                  from_addresses=[validator_client.address, bob_client.address])
+                                  from_addresses=[validator_client.address, bob_client.address],
+                                  pub_keys=[validator_client.public_key_bytes, bob_client.public_key_bytes])
 
 # Sign transaction by both clients
 validator_client.sign_tx(tx)

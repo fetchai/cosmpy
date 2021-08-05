@@ -10,7 +10,7 @@ from common import JSONLike
 from cosm.crypto.address import Address
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 
-from cosm.crypto.keypairs import PrivateKey
+from cosm.crypto.keypairs import PrivateKey, PublicKey
 from cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmos.base.v1beta1.coin_pb2 import Coin
 from cosm.tx import sign_transaction
@@ -68,6 +68,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         self.private_key = private_key
 
         self.address = Address(self.private_key)
+        self.public_key_bytes = private_key.public_key_bytes
         account = self.query_account_data(self.address)
         self.account_number = account.account_number
         self.chain_id = chain_id
@@ -76,6 +77,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         self,
         packed_msgs: List[Any],
         from_addresses: List[Address],
+        pub_keys: List[bytes],
         fee: List[Coin] = [Coin(amount="0", denom="stake")],
         memo: str = "",
         gas_limit: int = 200000,
@@ -85,6 +87,7 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :param packed_msgs: Messages to be in transaction
         :param from_addresses: List of addresses of each sender
+        :param pub_keys: List of public keys
         :param fee: Transaction fee
         :param memo: Memo
         :param gas_limit: Gas limit
@@ -95,10 +98,10 @@ class SigningCosmWasmClient(CosmWasmClient):
         # Get account and signer info for each sender
         accounts: List[BaseAccount] = []
         signer_infos: List[SignerInfo] = []
-        for from_address in from_addresses:
-            account = self.query_account_data(from_address)
+        for i in range(len(from_addresses)):
+            account = self.query_account_data(from_addresses[i])
             accounts.append(account)
-            signer_infos.append(self._get_signer_info(account))
+            signer_infos.append(self._get_signer_info(account, pub_keys[i]))
 
         # Prepare auth info
         auth_info = AuthInfo(
@@ -267,7 +270,7 @@ class SigningCosmWasmClient(CosmWasmClient):
             from_address=self.address, to_address=to_address, amount=amount
         )
 
-        tx = self.generate_tx([msg], [self.address])
+        tx = self.generate_tx([msg], [self.address], [self.public_key_bytes])
         self.sign_tx(tx)
         return self.broadcast_tx(tx)
 
@@ -284,7 +287,9 @@ class SigningCosmWasmClient(CosmWasmClient):
             sender_address=self.address, contract_filename=contract_filename
         )
 
-        tx = self.generate_tx([msg], [self.address], gas_limit=gas_limit)
+        tx = self.generate_tx(
+            [msg], [self.address], [self.public_key_bytes], gas_limit=gas_limit
+        )
         self.sign_tx(tx)
         res = self.broadcast_tx(tx)
         return self._get_code_id(res)
@@ -316,7 +321,9 @@ class SigningCosmWasmClient(CosmWasmClient):
             funds=funds,
         )
 
-        tx = self.generate_tx([msg], [self.address], gas_limit=gas_limit)
+        tx = self.generate_tx(
+            [msg], [self.address], [self.public_key_bytes], gas_limit=gas_limit
+        )
         self.sign_tx(tx)
         res = self.broadcast_tx(tx)
         return self._get_contract_address(res)
@@ -345,13 +352,15 @@ class SigningCosmWasmClient(CosmWasmClient):
             funds=funds,
         )
 
-        tx = self.generate_tx([msg], [self.address], gas_limit=gas_limit)
+        tx = self.generate_tx(
+            [msg], [self.address], [self.public_key_bytes], gas_limit=gas_limit
+        )
         self.sign_tx(tx)
         return self.broadcast_tx(tx)
 
     # Protected attributes
     @staticmethod
-    def _get_signer_info(from_acc: BaseAccount) -> SignerInfo:
+    def _get_signer_info(from_acc: BaseAccount, pub_key: bytes) -> SignerInfo:
         """
         Generate signer info
 
@@ -361,7 +370,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         """
 
         from_pub_key_packed = Any()
-        from_pub_key_pb = ProtoPubKey(key=from_acc.pub_key.value[2:35])
+        from_pub_key_pb = ProtoPubKey(key=pub_key)
         from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix="/")
 
         # Prepare auth info

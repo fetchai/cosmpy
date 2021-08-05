@@ -131,7 +131,8 @@ exec_transfer_msg_2 = validator_client.get_packed_exec_msg(sender_address=bob_cl
 
 # Execute atomic swap by 2 transfer messages in one transaction
 tx = validator_client.generate_tx([exec_transfer_msg_1, exec_transfer_msg_2],
-                                  [validator_client.address, bob_client.address], gas_limit=2000000)
+                                  [validator_client.address, bob_client.address],
+                                  [validator_client.public_key_bytes, bob_client.public_key_bytes], gas_limit=2000000)
 validator_client.sign_tx(tx)
 bob_client.sign_tx(tx)
 response = validator_client.broadcast_tx(tx)
