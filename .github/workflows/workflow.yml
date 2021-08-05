@@ -45,6 +45,6 @@ jobs:
     - name: License check
       run: pipenv run make liccheck
     - name: Copyright check
-      run: pipenv run make copywrite-check
+      run: pipenv run make copyright-check
     - name: Unit tests
       run: pipenv run make test
