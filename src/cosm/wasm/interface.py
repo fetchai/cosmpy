@@ -32,7 +32,6 @@ class Wasm(ABC):
 
         :return: QueryContractInfoResponse
         """
-        pass
 
     @abstractmethod
     def ContractHistory(
@@ -45,7 +44,6 @@ class Wasm(ABC):
 
         :return: QueryContractHistoryResponse
         """
-        pass
 
     @abstractmethod
     def ContractsByCode(
@@ -58,7 +56,6 @@ class Wasm(ABC):
 
         :return: QueryContractsByCodeResponse
         """
-        pass
 
     @abstractmethod
     def AllContractState(
@@ -71,7 +68,6 @@ class Wasm(ABC):
 
         :return: QueryAllContractStateResponse
         """
-        pass
 
     @abstractmethod
     def RawContractState(
@@ -84,7 +80,6 @@ class Wasm(ABC):
 
         :return: QueryRawContractStateResponse
         """
-        pass
 
     @abstractmethod
     def SmartContractState(
@@ -97,7 +92,6 @@ class Wasm(ABC):
 
         :return: QuerySmartContractStateResponse
         """
-        pass
 
     @abstractmethod
     def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
@@ -108,7 +102,6 @@ class Wasm(ABC):
 
         :return: QueryCodeResponse
         """
-        pass
 
     @abstractmethod
     def Codes(self, request: QueryCodesRequest) -> QueryCodesResponse:
@@ -119,4 +112,3 @@ class Wasm(ABC):
 
         :return: QueryCodesResponse
         """
-        pass
