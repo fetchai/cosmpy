@@ -42,5 +42,3 @@ _.send_tokens  # unused method (./clients/signing_cosmwasm_client.py:254)
 _.store_contract  # unused method (./clients/signing_cosmwasm_client.py:271)
 _.instantiate  # unused method (./clients/signing_cosmwasm_client.py:291)
 _.execute  # unused method (./clients/signing_cosmwasm_client.py:325)
-
-
