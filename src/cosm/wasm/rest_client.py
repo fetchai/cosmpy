@@ -4,6 +4,7 @@ from urllib.parse import urlencode
 
 from google.protobuf.json_format import MessageToDict, Parse, ParseDict
 
+from common import JSONLike
 from cosm.query.rest_client import QueryRestClient
 from cosm.wasm.interface import Wasm
 from cosmwasm.wasm.v1beta1.query_pb2 import (
@@ -38,7 +39,7 @@ class WasmRestClient(Wasm):
         self._rest_api = rest_api
 
     def ContractInfo(
-        self, request: QueryContractInfoRequest
+            self, request: QueryContractInfoRequest
     ) -> QueryContractInfoResponse:
         """
         Gets the contract meta data
@@ -56,7 +57,7 @@ class WasmRestClient(Wasm):
         return Parse(response, QueryContractInfoResponse())
 
     def ContractHistory(
-        self, request: QueryContractHistoryRequest
+            self, request: QueryContractHistoryRequest
     ) -> QueryContractHistoryResponse:
         """
         Gets the contract code history
@@ -72,17 +73,10 @@ class WasmRestClient(Wasm):
             f"{self.API_URL}/contract/{request.address}/history?{url_encoded_request}",
         )
 
-        # JSON in JSON workaround
-        dict_response = json.loads(response)
-        for entry in dict_response["entries"]:
-            entry["msg"] = base64.b64encode(
-                json.dumps(entry["msg"]).encode("UTF8")
-            ).decode()
-
-        return ParseDict(dict_response, QueryContractHistoryResponse())
+        return ParseDict(self._fix_history_response(response), QueryContractHistoryResponse())
 
     def ContractsByCode(
-        self, request: QueryContractsByCodeRequest
+            self, request: QueryContractsByCodeRequest
     ) -> QueryContractsByCodeResponse:
         """
         Lists all smart contracts for a code id
@@ -100,7 +94,7 @@ class WasmRestClient(Wasm):
         return Parse(response, QueryContractsByCodeResponse())
 
     def AllContractState(
-        self, request: QueryAllContractStateRequest
+            self, request: QueryAllContractStateRequest
     ) -> QueryAllContractStateResponse:
         """
         Gets all raw store data for a single contract
@@ -118,7 +112,7 @@ class WasmRestClient(Wasm):
         return Parse(response, QueryAllContractStateResponse())
 
     def RawContractState(
-        self, request: QueryRawContractStateRequest
+            self, request: QueryRawContractStateRequest
     ) -> QueryRawContractStateResponse:
         """
         Gets single key from the raw store data of a contract
@@ -145,7 +139,7 @@ class WasmRestClient(Wasm):
         return ParseDict(dict_response, QueryRawContractStateResponse())
 
     def SmartContractState(
-        self, request: QuerySmartContractStateRequest
+            self, request: QuerySmartContractStateRequest
     ) -> QuerySmartContractStateResponse:
         """
         Get smart query result from the contract
@@ -163,13 +157,7 @@ class WasmRestClient(Wasm):
             f"{self.API_URL}/contract/{request.address}/smart/{query_data}?{url_encoded_request}",
         )
 
-        # JSON in JSON workaround
-        dict_response = json.loads(response)
-        dict_response["data"] = base64.b64encode(
-            json.dumps(dict_response["data"]).encode("UTF8")
-        ).decode()
-
-        return ParseDict(dict_response, QuerySmartContractStateResponse())
+        return ParseDict(self._fix_state_response(response), QuerySmartContractStateResponse())
 
     def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
         """
@@ -202,3 +190,34 @@ class WasmRestClient(Wasm):
             f"{self.API_URL}/code?{url_encoded_request}",
         )
         return Parse(response, QueryCodesResponse())
+
+    @staticmethod
+    def _fix_state_response(response: str) -> JSONLike:
+        """
+        Fix raw/smart contract state responses to be parsable to protobuf object
+        - Converts dict to base64 encoded string
+
+        :param response: raw/smart contract state response
+        :return: Fixed response in form of dict
+        """
+        dict_response = json.loads(response)
+        dict_response["data"] = base64.b64encode(
+            json.dumps(dict_response["data"]).encode("UTF8")
+        ).decode()
+        return dict_response
+
+    @staticmethod
+    def _fix_history_response(response: str) -> JSONLike:
+        """
+        Fix contract history responses to be parsable to protobuf object
+        - Converts dict to base64 encoded string
+
+        :param response: raw/smart contract state response
+        :return: Fixed response in form of dict
+        """
+        dict_response = json.loads(response)
+        for entry in dict_response["entries"]:
+            entry["msg"] = base64.b64encode(
+                json.dumps(entry["msg"]).encode("UTF8")
+            ).decode()
+        return dict_response
