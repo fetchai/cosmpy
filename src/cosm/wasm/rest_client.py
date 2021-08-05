@@ -1,8 +1,12 @@
-from cosm.query.rest_client import QueryRestClient
+import base64
+import json
+from urllib.parse import urlencode
 
+from google.protobuf.json_format import MessageToDict, Parse, ParseDict
+
+from cosm.query.rest_client import QueryRestClient
+from cosm.wasm.interface import Wasm
 from cosmwasm.wasm.v1beta1.query_pb2 import (
-    QuerySmartContractStateRequest,
-    QuerySmartContractStateResponse,
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
     QueryCodeRequest,
@@ -17,14 +21,9 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryContractsByCodeResponse,
     QueryRawContractStateRequest,
     QueryRawContractStateResponse,
+    QuerySmartContractStateRequest,
+    QuerySmartContractStateResponse,
 )
-from cosm.wasm.interface import Wasm
-
-from google.protobuf.json_format import MessageToDict, Parse, ParseDict
-from urllib.parse import urlencode
-
-import base64
-import json
 
 
 class WasmRestClient(Wasm):

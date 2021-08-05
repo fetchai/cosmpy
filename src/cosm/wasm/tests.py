@@ -1,11 +1,12 @@
-import unittest
-from cosm.wasm.rest_client import WasmRestClient
-from cosm.tests.helpers import MockQueryRestClient
 import base64
+import json
+import unittest
 
+from google.protobuf.json_format import ParseDict
+
+from cosm.tests.helpers import MockQueryRestClient
+from cosm.wasm.rest_client import WasmRestClient
 from cosmwasm.wasm.v1beta1.query_pb2 import (
-    QuerySmartContractStateRequest,
-    QuerySmartContractStateResponse,
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
     QueryCodeRequest,
@@ -20,10 +21,9 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryContractsByCodeResponse,
     QueryRawContractStateRequest,
     QueryRawContractStateResponse,
+    QuerySmartContractStateRequest,
+    QuerySmartContractStateResponse,
 )
-from google.protobuf.json_format import ParseDict
-
-import json
 
 
 class WasmTests(unittest.TestCase):

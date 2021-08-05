@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
+
 from cosmwasm.wasm.v1beta1.query_pb2 import (
-    QuerySmartContractStateRequest,
-    QuerySmartContractStateResponse,
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
     QueryCodeRequest,
@@ -16,6 +15,8 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryContractsByCodeResponse,
     QueryRawContractStateRequest,
     QueryRawContractStateResponse,
+    QuerySmartContractStateRequest,
+    QuerySmartContractStateResponse,
 )
 
 
