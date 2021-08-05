@@ -47,6 +47,8 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
 
 
 class WasmRestClient(Wasm):
+    """Wasm REST client."""
+
     API_URL = "/wasm/v1beta1"
 
     def __init__(self, rest_api: QueryRestClient):

@@ -46,7 +46,12 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
 
 
 class WasmTests(unittest.TestCase):
-    def test_query_codes(self):
+    """Test case for Wasm module."""
+
+    @staticmethod
+    def test_query_codes():
+        """Test query codes for positive result."""
+
         content = {
             "code_infos": [
                 {"code_id": 3, "creator": "fetchaddress", "data_hash": "hash"},
@@ -61,7 +66,10 @@ class WasmTests(unittest.TestCase):
         assert wasm.Codes(QueryCodesRequest()) == expected_response
         assert mock_client.last_request == "/wasm/v1beta1/code?"
 
-    def test_query_code(self):
+    @staticmethod
+    def test_query_code():
+        """Test query code for positive result."""
+
         content = {
             "code_info": {"code_id": 3, "creator": "fetchaddress", "data_hash": "hash"},
             "data": "bytecode",
@@ -74,7 +82,10 @@ class WasmTests(unittest.TestCase):
         assert wasm.Code(QueryCodeRequest(code_id=1)) == expected_response
         assert mock_client.last_request == "/wasm/v1beta1/code/1?"
 
-    def test_query_smart_contract_state(self):
+    @staticmethod
+    def test_query_smart_contract_state():
+        """Test query smart contract state for positive result."""
+
         raw_content = b'{\n  "data": {"balance":"1"}\n}'
         expected_response = QuerySmartContractStateResponse(data=b'{"balance": "1"}')
 
@@ -94,7 +105,10 @@ class WasmTests(unittest.TestCase):
             == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30=?"  # noqa W503
         )
 
-    def test_query_raw_contract_state(self):
+    @staticmethod
+    def test_query_raw_contract_state():
+        """Test query raw contract state for positive result."""
+
         raw_content = b'{\n  "data": {"balance":"1"}\n}'
         expected_response = QueryRawContractStateResponse(data=b'{"balance": "1"}')
 
@@ -114,7 +128,10 @@ class WasmTests(unittest.TestCase):
             == "/wasm/v1beta1/contract/fetchcontractaddress/raw/e30=?"  # noqa W503
         )
 
-    def test_query_all_contract_state(self):
+    @staticmethod
+    def test_query_all_contract_state():
+        """Test query all contract state for positive result."""
+
         content = {
             "models": [
                 {
@@ -141,7 +158,10 @@ class WasmTests(unittest.TestCase):
             == "/wasm/v1beta1/contract/fetchcontractaddress/state?"  # noqa W503
         )
 
-    def test_query_contract_info(self):
+    @staticmethod
+    def test_query_contract_info():
+        """Test query contract info for positive result."""
+
         content = {
             "address": "some_address",
             "contract_info": {
@@ -166,7 +186,10 @@ class WasmTests(unittest.TestCase):
             mock_client.last_request == "/wasm/v1beta1/contract/fetchcontractaddress?"
         )
 
-    def test_query_contract_by_code(self):
+    @staticmethod
+    def test_query_contract_by_code():
+        """Test query contract by code for positive result."""
+
         content = {
             "contracts": ["fetch18vd8fpwxzck93qlwghaj6arh4p7c5n890l3amr"],
             "pagination": {"total": "1"},
@@ -183,7 +206,10 @@ class WasmTests(unittest.TestCase):
         )
         assert mock_client.last_request == "/wasm/v1beta1/code/1/contracts?"
 
-    def test_query_contract_history(self):
+    @staticmethod
+    def test_query_contract_history():
+        """Test query contract history for positive result."""
+
         msg = {}
         base64_msg = base64.b64encode(json.dumps(msg).encode("UTF8")).decode()
 

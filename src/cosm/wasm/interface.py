@@ -40,6 +40,8 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
 
 
 class Wasm(ABC):
+    """Wasm abstract class."""
+
     @abstractmethod
     def ContractInfo(
         self, request: QueryContractInfoRequest
