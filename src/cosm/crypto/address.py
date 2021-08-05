@@ -1,7 +1,10 @@
-from typing import Union, Optional
+"""Address of the Crypto package."""
+
+from typing import Optional, Union
 
 import bech32
-from cosm.crypto.hashfuncs import sha256, ripemd160
+
+from cosm.crypto.hashfuncs import ripemd160, sha256
 from cosm.crypto.keypairs import PublicKey
 
 DEFAULT_PREFIX = "fetch"
@@ -15,11 +18,14 @@ def _to_bech32(prefix: str, data: bytes) -> str:
 
 
 class Address:
+    """Address class."""
+
     def __init__(
         self,
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
     ):
+        """Initialize."""
         if prefix is None:
             prefix = DEFAULT_PREFIX
 

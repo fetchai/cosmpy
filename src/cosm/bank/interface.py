@@ -1,23 +1,28 @@
+"""Interface for the Bank functionality of CosmosSDK."""
+
 from abc import ABC, abstractmethod
+
 from cosmos.bank.v1beta1.query_pb2 import (
-    QueryBalanceRequest,
-    QueryBalanceResponse,
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
-    QueryTotalSupplyRequest,
-    QueryTotalSupplyResponse,
-    QuerySupplyOfRequest,
-    QuerySupplyOfResponse,
-    QueryParamsRequest,
-    QueryParamsResponse,
+    QueryBalanceRequest,
+    QueryBalanceResponse,
     QueryDenomMetadataRequest,
-    QueryDenomsMetadataResponse,
     QueryDenomMetadataResponse,
     QueryDenomsMetadataRequest,
+    QueryDenomsMetadataResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QuerySupplyOfRequest,
+    QuerySupplyOfResponse,
+    QueryTotalSupplyRequest,
+    QueryTotalSupplyResponse,
 )
 
 
 class Bank(ABC):
+    """Bank abstract class."""
+
     @abstractmethod
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         """
@@ -27,7 +32,6 @@ class Bank(ABC):
 
         :return: QueryBalanceResponse
         """
-        pass
 
     @abstractmethod
     def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
@@ -38,7 +42,6 @@ class Bank(ABC):
 
         :return: QueryAllBalancesResponse
         """
-        pass
 
     @abstractmethod
     def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
@@ -49,7 +52,6 @@ class Bank(ABC):
 
         :return: QueryTotalSupplyResponse
         """
-        pass
 
     @abstractmethod
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
@@ -60,7 +62,6 @@ class Bank(ABC):
 
         :return: QuerySupplyOfResponse
         """
-        pass
 
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
@@ -71,7 +72,6 @@ class Bank(ABC):
 
         :return: QueryParamsResponse
         """
-        pass
 
     @abstractmethod
     def DenomMetadata(
@@ -84,7 +84,6 @@ class Bank(ABC):
 
         :return: QueryDenomMetadataResponse
         """
-        pass
 
     @abstractmethod
     def DenomsMetadata(
@@ -97,4 +96,3 @@ class Bank(ABC):
 
         :return: QueryDenomsMetadataResponse
         """
-        pass
