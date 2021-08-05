@@ -132,13 +132,9 @@ class WasmRestClient(Wasm):
             f"{self.API_URL}/contract/{request.address}/raw/{query_data}?{url_encoded_request}",
         )
 
-        # JSON in JSON workaround
-        dict_response = json.loads(response)
-        dict_response["data"] = base64.b64encode(
-            json.dumps(dict_response["data"]).encode("UTF8")
-        ).decode()
-
-        return ParseDict(dict_response, QueryRawContractStateResponse())
+        return ParseDict(
+            self._fix_state_response(response), QueryRawContractStateResponse()
+        )
 
     def SmartContractState(
         self, request: QuerySmartContractStateRequest
