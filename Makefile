@@ -156,6 +156,7 @@ check:
 	make mypy
 	make pylint
 	make liccheck
+	make copyright-check
 	make test
 
 debug:
