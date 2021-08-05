@@ -122,7 +122,7 @@ test:
 	python -m unittest discover -s $(PYCOSM_SRC_DIR)
 
 ####################
-### License and copywrite checks
+### License check
 ####################
 
 .PHONY: liccheck
