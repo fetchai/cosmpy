@@ -10,7 +10,7 @@ from grpc._channel import Channel
 from common import JSONLike
 from cosm.clients.cosmwasm_client import CosmWasmClient
 from cosm.crypto.address import Address
-from cosm.crypto.keypairs import PrivateKey, PublicKey
+from cosm.crypto.keypairs import PrivateKey
 from cosm.query.rest_client import QueryRestClient
 from cosm.tx import sign_transaction
 from cosm.tx.rest_client import TxRestClient
@@ -43,8 +43,10 @@ class SigningCosmWasmClient(CosmWasmClient):
     ):
         """
         :param private_key: Private key used for signing
-        :param endpoint: address of gRPC endpoint
+        :param channel: REST or gRPC querying client
         :param chain_id: Chain ID
+
+        :raises RuntimeError: if channel is of wrong type.
         """
         super().__init__(channel)
 
@@ -355,6 +357,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         Generate signer info
 
         :param from_acc: Account info of signer
+        :param pub_key: Public key bytes
 
         :return: SignerInfo
         """

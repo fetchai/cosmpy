@@ -22,6 +22,8 @@ class CosmWasmClient:
     def __init__(self, channel: Union[Channel, QueryRestClient]):
         """
         :param channel: gRPC or REST querying client
+
+        :raises RuntimeError: if channel is of wrong type.
         """
 
         if isinstance(channel, Channel):
