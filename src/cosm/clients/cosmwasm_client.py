@@ -57,7 +57,7 @@ class CosmWasmClient:
 
         :param address: Address of account to query data about
 
-        :raises RuntimeError: in case of wrong account type.
+        :raises TypeError: in case of wrong account type.
 
         :return: BaseAccount
         """
