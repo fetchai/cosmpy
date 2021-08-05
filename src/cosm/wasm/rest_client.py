@@ -39,7 +39,7 @@ class WasmRestClient(Wasm):
         self._rest_api = rest_api
 
     def ContractInfo(
-            self, request: QueryContractInfoRequest
+        self, request: QueryContractInfoRequest
     ) -> QueryContractInfoResponse:
         """
         Gets the contract meta data
@@ -57,7 +57,7 @@ class WasmRestClient(Wasm):
         return Parse(response, QueryContractInfoResponse())
 
     def ContractHistory(
-            self, request: QueryContractHistoryRequest
+        self, request: QueryContractHistoryRequest
     ) -> QueryContractHistoryResponse:
         """
         Gets the contract code history
@@ -73,10 +73,12 @@ class WasmRestClient(Wasm):
             f"{self.API_URL}/contract/{request.address}/history?{url_encoded_request}",
         )
 
-        return ParseDict(self._fix_history_response(response), QueryContractHistoryResponse())
+        return ParseDict(
+            self._fix_history_response(response), QueryContractHistoryResponse()
+        )
 
     def ContractsByCode(
-            self, request: QueryContractsByCodeRequest
+        self, request: QueryContractsByCodeRequest
     ) -> QueryContractsByCodeResponse:
         """
         Lists all smart contracts for a code id
@@ -94,7 +96,7 @@ class WasmRestClient(Wasm):
         return Parse(response, QueryContractsByCodeResponse())
 
     def AllContractState(
-            self, request: QueryAllContractStateRequest
+        self, request: QueryAllContractStateRequest
     ) -> QueryAllContractStateResponse:
         """
         Gets all raw store data for a single contract
@@ -112,7 +114,7 @@ class WasmRestClient(Wasm):
         return Parse(response, QueryAllContractStateResponse())
 
     def RawContractState(
-            self, request: QueryRawContractStateRequest
+        self, request: QueryRawContractStateRequest
     ) -> QueryRawContractStateResponse:
         """
         Gets single key from the raw store data of a contract
@@ -139,7 +141,7 @@ class WasmRestClient(Wasm):
         return ParseDict(dict_response, QueryRawContractStateResponse())
 
     def SmartContractState(
-            self, request: QuerySmartContractStateRequest
+        self, request: QuerySmartContractStateRequest
     ) -> QuerySmartContractStateResponse:
         """
         Get smart query result from the contract
@@ -157,7 +159,9 @@ class WasmRestClient(Wasm):
             f"{self.API_URL}/contract/{request.address}/smart/{query_data}?{url_encoded_request}",
         )
 
-        return ParseDict(self._fix_state_response(response), QuerySmartContractStateResponse())
+        return ParseDict(
+            self._fix_state_response(response), QuerySmartContractStateResponse()
+        )
 
     def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
         """
