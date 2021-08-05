@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Interface for the Wasm functionality of CosmosSDK."""
+
 from abc import ABC, abstractmethod
 
 from cosmwasm.wasm.v1beta1.query_pb2 import (

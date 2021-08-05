@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Implementation of Wasm interface using REST."""
+
 import base64
 import json
 from urllib.parse import urlencode
