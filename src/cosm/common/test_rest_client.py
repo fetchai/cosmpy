@@ -31,9 +31,10 @@ from cosm.common.rest_client import RestClient
 class QueryTests(TestCase):
     """Test case of REST client module."""
 
+    @staticmethod
     @patch("requests.session", spec=Session)
     @patch("cosm.common.rest_client.MessageToDict")
-    def test_get_pass(self, messageToDict_mock, session_mock):
+    def test_get_pass(messageToDict_mock, session_mock):
         """Test get method for the positive result."""
 
         rest_address = "some url"
@@ -85,9 +86,10 @@ class QueryTests(TestCase):
         messageToDict_mock.assert_called_once_with(request)
         self.assertTrue("Error when sending a GET request" in str(context.exception))
 
+    @staticmethod
     @patch("requests.session", spec=Session)
     @patch("cosm.common.rest_client.MessageToDict")
-    def test_post_pass(self, messageToDict_mock, session_mock):
+    def test_post_pass(messageToDict_mock, session_mock):
         """Test post method for the positive result."""
 
         rest_address = "some url"
@@ -150,8 +152,9 @@ class QueryTests(TestCase):
         messageToDict_mock.assert_called_once_with(request)
         self.assertTrue("Error when sending a POST request" in str(context.exception))
 
+    @staticmethod
     @patch("requests.session", spec=Session)
-    def test_session_close_on_object_deletion(self, session_mock):
+    def test_session_close_on_object_deletion(session_mock):
         """Test session close for the positive result."""
 
         rest_address = "some url"

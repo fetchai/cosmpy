@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Implementation of REST api client."""
 
 from typing import List, Optional
 from urllib.parse import urlencode

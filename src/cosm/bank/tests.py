@@ -21,7 +21,6 @@
 
 import json
 import unittest
-from unittest.mock import patch
 
 from cosm.bank.rest_client import BankRestClient
 from cosm.tests.helpers import MockRestClient

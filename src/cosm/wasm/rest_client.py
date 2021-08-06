@@ -22,7 +22,7 @@
 import base64
 import json
 
-from google.protobuf.json_format import MessageToDict, Parse, ParseDict
+from google.protobuf.json_format import Parse, ParseDict
 
 from common import JSONLike
 from cosm.common.rest_client import RestClient
