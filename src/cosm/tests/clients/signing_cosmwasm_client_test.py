@@ -27,7 +27,7 @@ from unittest.mock import patch
 
 from google.protobuf.json_format import MessageToDict, ParseDict
 
-from cosm.auth.interface import AuthInterface
+from cosm.auth.interface import Auth
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PrivateKey
@@ -90,7 +90,7 @@ CONTRACT_FILENAME = "dummy_contract.wasm"
 CONTRACT_BYTECODE = "H4sIAG4mDWEA/3N0cnYBAKUgF9sEAAAA"
 
 
-class MockAuth(AuthInterface):
+class MockAuth(Auth):
     """Mock Auth client"""
 
     def __init__(

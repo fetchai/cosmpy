@@ -39,7 +39,7 @@ from cosmos.bank.v1beta1.query_pb2 import (
 )
 
 
-class BankInterface(ABC):
+class Bank(ABC):
     """Bank abstract class."""
 
     @abstractmethod

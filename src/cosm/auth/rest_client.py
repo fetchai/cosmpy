@@ -21,7 +21,7 @@
 
 from google.protobuf.json_format import Parse
 
-from cosm.auth.interface import AuthInterface
+from cosm.auth.interface import Auth
 from cosm.query.rest_client import QueryRestClient
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
@@ -31,7 +31,7 @@ from cosmos.auth.v1beta1.query_pb2 import (
 )
 
 
-class AuthRestClient(AuthInterface):
+class AuthRestClient(Auth):
     """Auth REST client."""
 
     API_URL = "/cosmos/auth/v1beta1"

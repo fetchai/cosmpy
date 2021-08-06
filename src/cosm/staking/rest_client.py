@@ -22,7 +22,7 @@
 from google.protobuf.json_format import Parse
 
 from cosm.query.rest_client import QueryRestClient
-from cosm.staking.interface import StakingInterface
+from cosm.staking.interface import Staking
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
@@ -55,7 +55,7 @@ from cosmos.staking.v1beta1.query_pb2 import (
 )
 
 
-class StakingRestClient(StakingInterface):
+class StakingRestClient(Staking):
     """Staking REST client."""
 
     API_URL = "/cosmos/staking/v1beta1"

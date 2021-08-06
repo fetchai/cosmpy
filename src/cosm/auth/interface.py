@@ -29,7 +29,7 @@ from cosmos.auth.v1beta1.query_pb2 import (
 )
 
 
-class AuthInterface(ABC):
+class Auth(ABC):
     """Auth abstract class."""
 
     @abstractmethod
