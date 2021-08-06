@@ -17,9 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-from typing import Any, Dict, List, Optional, Union
-
 """Common types"""
+
+from typing import Any, Dict, List, Optional, Union
 
 Primitive = Union[str, int, bool, float]
 _JSONDict = Dict[Any, Any]  # temporary placeholder
