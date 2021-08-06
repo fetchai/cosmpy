@@ -63,7 +63,9 @@ class BankRestClient(Bank):
         :return: QueryBalanceResponse
         """
         json_response = self._rest_api.get(
-            self.API_URL + f"/balances/{request.address}/{request.denom}", request
+            self.API_URL + f"/balances/{request.address}/{request.denom}",
+            request,
+            ["address", "denom"],
         )
         return Parse(json_response, QueryBalanceResponse())
 
@@ -76,7 +78,7 @@ class BankRestClient(Bank):
         :return: QueryAllBalancesResponse
         """
         json_response = self._rest_api.get(
-            self.API_URL + f"/balances/{request.address}", request
+            self.API_URL + f"/balances/{request.address}", request, ["address"]
         )
         return Parse(json_response, QueryAllBalancesResponse())
 
@@ -99,7 +101,9 @@ class BankRestClient(Bank):
 
         :return: QuerySupplyOfResponse
         """
-        json_response = self._rest_api.get(self.API_URL + f"/supply/{request.denom}", request)
+        json_response = self._rest_api.get(
+            self.API_URL + f"/supply/{request.denom}", request, ["denom"]
+        )
         return Parse(json_response, QuerySupplyOfResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
@@ -124,7 +128,7 @@ class BankRestClient(Bank):
         :return: QueryDenomMetadataResponse
         """
         json_response = self._rest_api.get(
-            self.API_URL + f"/denoms_metadata/{request.denom}", request
+            self.API_URL + f"/denoms_metadata/{request.denom}", request, ["denom"]
         )
         return Parse(json_response, QueryDenomMetadataResponse())
 

@@ -53,7 +53,7 @@ class AuthRestClient(Auth):
         :return: QueryAccountResponse
         """
         json_response = self._rest_api.get(
-            self.API_URL + f"/accounts/{request.address}"
+            self.API_URL + f"/accounts/{request.address}", request, ["address"]
         )
         return Parse(json_response, QueryAccountResponse())
 
@@ -65,5 +65,5 @@ class AuthRestClient(Auth):
 
         :return: QueryParamsResponse
         """
-        json_response = self._rest_api.get(self.API_URL + "/params")
+        json_response = self._rest_api.get(self.API_URL + "/params", request)
         return Parse(json_response, QueryParamsResponse())

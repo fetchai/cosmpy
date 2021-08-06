@@ -60,15 +60,14 @@ class BankTests(unittest.TestCase):
 
         bank = BankRestClient(mock_client)
 
-        with patch.object(bank, "_rest_api", mock_client):
-            assert (
-                bank.Balance(QueryBalanceRequest(address="account", denom="denom"))
-                == expected_response  # noqa W503
-            )
-            assert (
-                mock_client.last_request
-                == "/cosmos/bank/v1beta1/balances/account/denom"  # noqa W503
-            )
+        assert (
+            bank.Balance(QueryBalanceRequest(address="account", denom="denom"))
+            == expected_response  # noqa W503
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/bank/v1beta1/balances/account/denom"  # noqa W503
+        )
 
     @staticmethod
     def test_query_all_balances():
@@ -85,12 +84,11 @@ class BankTests(unittest.TestCase):
 
         bank = BankRestClient(mock_client)
 
-        with patch.object(bank, "_rest_api", mock_client):
-            assert (
-                bank.AllBalances(QueryAllBalancesRequest(address="account"))
-                == expected_response  # noqa W503
-            )
-            assert mock_client.last_request == "/cosmos/bank/v1beta1/balances/account"
+        assert (
+            bank.AllBalances(QueryAllBalancesRequest(address="account"))
+            == expected_response  # noqa W503
+        )
+        assert mock_client.last_base_url == "/cosmos/bank/v1beta1/balances/account"
 
     @staticmethod
     def test_query_total_supply():
@@ -103,9 +101,8 @@ class BankTests(unittest.TestCase):
 
         bank = BankRestClient(mock_client)
 
-        with patch.object(bank, "_rest_api", mock_client):
-            assert bank.TotalSupply(QueryTotalSupplyRequest()) == expected_response
-            assert mock_client.last_request == "/cosmos/bank/v1beta1/supply"
+        assert bank.TotalSupply(QueryTotalSupplyRequest()) == expected_response
+        assert mock_client.last_base_url == "/cosmos/bank/v1beta1/supply"
 
     @staticmethod
     def test_query_supply_of():
@@ -118,11 +115,8 @@ class BankTests(unittest.TestCase):
 
         bank = BankRestClient(mock_client)
 
-        with patch.object(bank, "_rest_api", mock_client):
-            assert (
-                bank.SupplyOf(QuerySupplyOfRequest(denom="denom")) == expected_response
-            )
-            assert mock_client.last_request == "/cosmos/bank/v1beta1/supply/denom"
+        assert bank.SupplyOf(QuerySupplyOfRequest(denom="denom")) == expected_response
+        assert mock_client.last_base_url == "/cosmos/bank/v1beta1/supply/denom"
 
     @staticmethod
     def test_query_params():
@@ -135,9 +129,8 @@ class BankTests(unittest.TestCase):
 
         bank = BankRestClient(mock_client)
 
-        with patch.object(bank, "_rest_api", mock_client):
-            assert bank.Params(QueryParamsRequest()) == expected_response
-            assert mock_client.last_request == "/cosmos/bank/v1beta1/params"
+        assert bank.Params(QueryParamsRequest()) == expected_response
+        assert mock_client.last_base_url == "/cosmos/bank/v1beta1/params"
 
     @staticmethod
     def test_query_denoms_metadata():
@@ -150,11 +143,8 @@ class BankTests(unittest.TestCase):
 
         bank = BankRestClient(mock_client)
 
-        with patch.object(bank, "_rest_api", mock_client):
-            assert (
-                bank.DenomsMetadata(QueryDenomsMetadataRequest()) == expected_response
-            )
-            assert mock_client.last_request == "/cosmos/bank/v1beta1/denoms_metadata"
+        assert bank.DenomsMetadata(QueryDenomsMetadataRequest()) == expected_response
+        assert mock_client.last_base_url == "/cosmos/bank/v1beta1/denoms_metadata"
 
     @staticmethod
     def test_query_denom_metadata():
@@ -172,12 +162,11 @@ class BankTests(unittest.TestCase):
 
         bank = BankRestClient(mock_client)
 
-        with patch.object(bank, "_rest_api", mock_client):
-            assert (
-                bank.DenomMetadata(QueryDenomMetadataRequest(denom="denom"))
-                == expected_response  # noqa W503
-            )
-            assert (
-                mock_client.last_request
-                == "/cosmos/bank/v1beta1/denoms_metadata/denom"  # noqa W503
-            )
+        assert (
+            bank.DenomMetadata(QueryDenomMetadataRequest(denom="denom"))
+            == expected_response  # noqa W503
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/bank/v1beta1/denoms_metadata/denom"  # noqa W503
+        )

@@ -1,8 +1,10 @@
-from cosm.common.rest_client import RestClient
 from unittest import TestCase
 from unittest.mock import Mock, patch
-from requests import Session, Response
 from urllib.parse import urlencode
+
+from requests import Response, Session
+
+from cosm.common.rest_client import RestClient
 
 
 class QueryTests(TestCase):
@@ -28,7 +30,7 @@ class QueryTests(TestCase):
 
         messageToDict_mock.assert_called_once_with(request)
 
-        expected_url = f"{rest_address}{request_url_path}&{urlencode(request_json)}"
+        expected_url = f"{rest_address}{request_url_path}?{urlencode(request_json)}"
         session_mock.return_value.get.assert_called_once_with(url=expected_url)
 
     @patch("requests.session", spec=Session)

@@ -19,6 +19,10 @@
 
 """Helpers methods and classes for testing."""
 
+from typing import List, Optional
+
+from google.protobuf.descriptor import Descriptor
+
 
 class MockRestClient:
     """Mock RestClient"""
@@ -26,14 +30,18 @@ class MockRestClient:
     def __init__(self, content: str):
         """Initialize."""
         self.content = content
-        self.last_request = ""
+        self.last_base_url = None
+        self.last_request = None
+        self.last_used_params = None
 
-    def get(self, request: str) -> str:
+    def get(
+        self,
+        url_base_path: str,
+        request: Descriptor,
+        used_params: Optional[List[str]] = None,
+    ) -> str:
         """Handle GET request."""
+        self.last_base_url = url_base_path
         self.last_request = request
+        self.last_used_params = used_params
         return self.content
-
-    @staticmethod
-    def close():
-        """Mock close method."""
-        ...

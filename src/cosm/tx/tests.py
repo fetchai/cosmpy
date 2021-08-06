@@ -28,9 +28,9 @@ from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.well_known_types import Any as AnyOrig
 from grpc import insecure_channel
 
+from cosm.common.rest_client import RestClient
 from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PrivateKey, PublicKey
-from cosm.common.rest_client import RestClient
 from cosm.tx import sign_transaction
 from cosm.tx.rest_client import TxRestClient
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount

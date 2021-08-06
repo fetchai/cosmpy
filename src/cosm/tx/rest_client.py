@@ -34,6 +34,7 @@ from cosmos.tx.v1beta1.service_pb2 import (
     SimulateResponse,
 )
 
+
 class TxRestClient(TxInterface):
     """Tx REST client."""
 

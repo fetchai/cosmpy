@@ -61,7 +61,7 @@ class AuthTests(unittest.TestCase):
             auth.Account(QueryAccountRequest(address="address"))
             == expected_response  # noqa W503
         )
-        assert mock_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
+        assert mock_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
 
     @staticmethod
     def test_query_params():
@@ -81,4 +81,4 @@ class AuthTests(unittest.TestCase):
         auth = AuthRestClient(mock_client)
 
         assert auth.Params(QueryParamsRequest()) == expected_response
-        assert mock_client.last_request == "/cosmos/auth/v1beta1/params"
+        assert mock_client.last_base_url == "/cosmos/auth/v1beta1/params"
