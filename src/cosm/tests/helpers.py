@@ -30,9 +30,9 @@ class MockRestClient:
     def __init__(self, content: str):
         """Initialize."""
         self.content = content
-        self.last_base_url = None
-        self.last_request = None
-        self.last_used_params = None
+        self.last_base_url: Optional[str] = None
+        self.last_request: Optional[Descriptor] = None
+        self.last_used_params: Optional[List[str]] = None
 
     def get(
         self,
