@@ -36,11 +36,3 @@ class MockQueryRestClient(QueryRestClient):
         """Handle GET request."""
         self.last_request = request
         return self.content
-
-    @staticmethod
-    def close():
-        """Mock close method."""
-        ...
-
-    def __del__(self):
-        pass
