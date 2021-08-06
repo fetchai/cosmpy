@@ -1,3 +1,24 @@
+# -*- coding: utf-8 -*-
+# ------------------------------------------------------------------------------
+#
+#   Copyright 2018-2021 Fetch.AI Limited
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# ------------------------------------------------------------------------------
+
+"""Tests for REST client."""
+
 from unittest import TestCase
 from unittest.mock import Mock, patch
 from urllib.parse import urlencode
@@ -8,9 +29,13 @@ from cosm.common.rest_client import RestClient
 
 
 class QueryTests(TestCase):
+    """Test case of REST client module."""
+
     @patch("requests.session", spec=Session)
     @patch("cosm.common.rest_client.MessageToDict")
     def test_get_pass(self, messageToDict_mock, session_mock):
+        """Test get method for the positive result."""
+
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -36,6 +61,8 @@ class QueryTests(TestCase):
     @patch("requests.session", spec=Session)
     @patch("cosm.common.rest_client.MessageToDict")
     def test_get_error(self, messageToDict_mock, session_mock):
+        """Test get method for the negative result."""
+
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -61,6 +88,8 @@ class QueryTests(TestCase):
     @patch("requests.session", spec=Session)
     @patch("cosm.common.rest_client.MessageToDict")
     def test_post_pass(self, messageToDict_mock, session_mock):
+        """Test post method for the positive result."""
+
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -96,6 +125,8 @@ class QueryTests(TestCase):
     @patch("requests.session", spec=Session)
     @patch("cosm.common.rest_client.MessageToDict")
     def test_post_error(self, messageToDict_mock, session_mock):
+        """Test post method for the negative result."""
+
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -121,6 +152,8 @@ class QueryTests(TestCase):
 
     @patch("requests.session", spec=Session)
     def test_session_close_on_object_deletion(self, session_mock):
+        """Test session close for the positive result."""
+
         rest_address = "some url"
         client = RestClient(rest_address)
 
