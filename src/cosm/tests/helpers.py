@@ -36,3 +36,8 @@ class MockQueryRestClient(QueryRestClient):
         """Handle GET request."""
         self.last_request = request
         return self.content
+
+    def post(self, url_path, json_request: dict) -> bytes:
+        """Send a POST request"""
+        self.last_request = url_path
+        return self.content
