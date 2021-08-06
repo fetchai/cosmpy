@@ -23,7 +23,7 @@ import gzip
 import json
 import time
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 from google.protobuf.any_pb2 import Any
 from grpc._channel import Channel
@@ -93,7 +93,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         packed_msgs: List[Any],
         from_addresses: List[Address],
         pub_keys: List[bytes],
-        fee: List[Coin] = [Coin(amount="0", denom="stake")],
+        fee: Optional[List[Coin]] = None,
         memo: str = "",
         gas_limit: int = 200000,
     ) -> Tx:
@@ -113,10 +113,10 @@ class SigningCosmWasmClient(CosmWasmClient):
         # Get account and signer info for each sender
         accounts: List[BaseAccount] = []
         signer_infos: List[SignerInfo] = []
-        for i in range(len(from_addresses)):
-            account = self.query_account_data(from_addresses[i])
+        for from_address, pub_key in zip(from_addresses, pub_keys):
+            account = self.query_account_data(from_address)
             accounts.append(account)
-            signer_infos.append(self._get_signer_info(account, pub_keys[i]))
+            signer_infos.append(self._get_signer_info(account, pub_key))
 
         # Prepare auth info
         auth_info = AuthInfo(
@@ -220,7 +220,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         code_id: int,
         init_msg: JSONLike,
         label="contract",
-        funds: List[Coin] = [],
+        funds: Optional[List[Coin]] = None,
     ) -> Any:
         """
         Create and pack MsgInstantiateContract
@@ -250,7 +250,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         sender_address: Address,
         contract_address: str,
         msg: JSONLike,
-        funds: List[Coin] = [],
+        funds: Optional[List[Coin]] = None,
     ) -> Any:
         """
         Create and pack MsgExecuteContract
@@ -316,7 +316,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         code_id: int,
         init_msg: JSONLike,
         label="contract",
-        funds: List[Coin] = [],
+        funds: Optional[List[Coin]] = None,
         gas_limit: int = 200000,
     ) -> GetTxResponse:
         """
@@ -349,7 +349,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         self,
         contract_address: str,
         msg: JSONLike,
-        funds: List[Coin] = [],
+        funds: Optional[List[Coin]] = None,
         gas_limit: int = 200000,
     ) -> GetTxResponse:
         """
