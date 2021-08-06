@@ -32,7 +32,7 @@ from cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
 
 from cosmos.base.v1beta1.coin_pb2 import Coin
 from pathlib import Path
-from common.types import JSONLike
+from cosm.common.types import JSONLike
 
 from google.protobuf.any_pb2 import Any
 
