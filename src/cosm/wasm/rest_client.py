@@ -24,7 +24,7 @@ import json
 
 from google.protobuf.json_format import Parse, ParseDict
 
-from common import JSONLike
+from common.types import JSONLike
 from cosm.common.rest_client import RestClient
 from cosm.wasm.interface import Wasm
 from cosmwasm.wasm.v1beta1.query_pb2 import (
