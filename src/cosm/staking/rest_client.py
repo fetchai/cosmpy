@@ -119,6 +119,7 @@ class StakingRestClient(Staking):
         """UnbondingDelegation queries unbonding info for given validator delegator pair."""
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}/unbonding_delegation",
+            request,
             ["validatorAddr", "delegatorAddr"],
         )
         return Parse(json_response, QueryUnbondingDelegationResponse())
