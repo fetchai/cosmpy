@@ -22,6 +22,8 @@
 import base64
 import json
 import unittest
+from typing import Optional
+from unittest.mock import patch
 
 from google.protobuf.json_format import MessageToDict, ParseDict
 
@@ -37,6 +39,7 @@ from cosmos.auth.v1beta1.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
 )
+from cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
 from cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
@@ -48,30 +51,41 @@ from cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
+from cosmos.tx.v1beta1.tx_pb2 import Tx
 
-CHAIN_ID = "testing"
-
+# Private key
 PRIVATE_KEY = PrivateKey(
     bytes.fromhex("deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef")
 )
+
+# Addresses
 ADDRESS_PK = Address(PRIVATE_KEY)
+ADDRESS_OTHER = "fetchaddressaddressaddressaddressaddressaddr"
+
+# Public keys
 PUBLIC_KEY_PK_BASE64 = base64.b64encode(PRIVATE_KEY.public_key_bytes).decode()
 
-ADDRESS_OTHER = "fetchaddressaddressaddressaddressaddressaddr"
+# Node config
+CHAIN_ID = "testing"
+
+# Auth data
 ACCOUNT_NUMBER = 0
 SEQUENCE = 1
 
+# Tx params
 GAS_LIMIT = 987654321
+LABEL = "label"
 
+# Coins
 DENOM = "stake"
 AMOUNT = "1234"
 COINS = [Coin(amount=AMOUNT, denom=DENOM)]
 
+# CosmWasm
 WASM_MSG = {"key": "value"}
 WASM_MSG_BASE64 = base64.b64encode(json.dumps(WASM_MSG).encode("UTF8")).decode()
 CODE_ID = 42
-ADDRESS_CONTRACT = "fetchcontractcontractcontractcontractcontrac"
-LABEL = "label"
+CONTRACT_ADDRESS = "fetchcontractcontractcontractcontractcontrac"
 CONTRACT_FILENAME = "dummy_contract.wasm"
 CONTRACT_BYTECODE = "H4sIAG4mDWEA/3N0cnYBAKUgF9sEAAAA"
 
@@ -112,8 +126,9 @@ class MockAuth(AuthInterface):
 
 
 class MockTx(TxInterface):
-    def __init__(self):
-        pass
+    def __init__(self, response_code: int):
+        self.response_code = response_code
+        self.last_broadcast_tx_request: Optional[BroadcastTxRequest] = None
 
     def Simulate(self, request: SimulateRequest) -> SimulateResponse:
         """Simulate executing a transaction to estimate gas usage."""
@@ -121,13 +136,28 @@ class MockTx(TxInterface):
 
     def GetTx(self, request: GetTxRequest) -> GetTxResponse:
         """GetTx fetches a tx by hash."""
+        return GetTxResponse()
 
     def BroadcastTx(self, request: BroadcastTxRequest) -> BroadcastTxResponse:
         """BroadcastTx broadcast transaction."""
+        self.last_broadcast_tx_request = request
+        return BroadcastTxResponse(tx_response=TxResponse(code=self.response_code))
 
     def GetTxsEvent(self, request: GetTxsEventRequest) -> GetTxsEventResponse:
         """GetTxsEvent fetches txs by event."""
         raise NotImplementedError("Method not implemented!")
+
+
+def mock_get_code_id(response: GetTxResponse) -> int:
+    """Get code id from store code transaction response"""
+    assert type(response) == GetTxResponse
+    return CODE_ID
+
+
+def mock_get_contract_address(response: GetTxResponse) -> str:
+    """Get code id from store code transaction response"""
+    assert type(response) == GetTxResponse
+    return CONTRACT_ADDRESS
 
 
 class CosmWasmClientTests(unittest.TestCase):
@@ -192,13 +222,13 @@ class CosmWasmClientTests(unittest.TestCase):
         expected_result = {
             "@type": "/cosmwasm.wasm.v1beta1.MsgExecuteContract",
             "sender": str(ADDRESS_PK),
-            "contract": str(ADDRESS_CONTRACT),
+            "contract": str(CONTRACT_ADDRESS),
             "msg": WASM_MSG_BASE64,
             "funds": [{"denom": DENOM, "amount": AMOUNT}],
         }
 
         msg = self.signing_wasm_client.get_packed_exec_msg(
-            ADDRESS_PK, ADDRESS_CONTRACT, WASM_MSG, COINS
+            ADDRESS_PK, CONTRACT_ADDRESS, WASM_MSG, COINS
         )
         assert MessageToDict(msg) == expected_result
 
@@ -313,3 +343,145 @@ class CosmWasmClientTests(unittest.TestCase):
         expected_result["signatures"] = dict_tx["signatures"]
 
         assert dict_tx == expected_result
+
+    def test_broadcast_tx_success(self):
+        """Test broadcast Tx with positive result."""
+        tx = self.signing_wasm_client.generate_tx([], [], [], COINS, LABEL, GAS_LIMIT)
+
+        mock_tx_client = MockTx(response_code=0)
+        self.signing_wasm_client.tx_client = mock_tx_client
+
+        result = self.signing_wasm_client.broadcast_tx(tx, 0)
+        self.assertIsInstance(result, GetTxResponse)
+
+    def test_broadcast_tx_fail(self):
+        """Test broadcast Tx with negative result."""
+        tx = self.signing_wasm_client.generate_tx([], [], [], COINS, LABEL, GAS_LIMIT)
+
+        # Response code different from 0 means Tx error
+        mock_tx_client = MockTx(response_code=1)
+        self.signing_wasm_client.tx_client = mock_tx_client
+
+        # Check if broadcasting fails
+        self.assertRaises(RuntimeError, self.signing_wasm_client.broadcast_tx, tx, 0)
+
+    def test_send_tokens(self):
+        """Test send tokens method with positive result."""
+
+        mock_tx_client = MockTx(response_code=0)
+        self.signing_wasm_client.tx_client = mock_tx_client
+
+        result = self.signing_wasm_client.send_tokens(ADDRESS_OTHER, COINS)
+        self.assertIsInstance(result, GetTxResponse)
+
+        # Reconstruct original Tx from last tx request bytes
+        tx = Tx()
+        tx.ParseFromString(mock_tx_client.last_broadcast_tx_request.tx_bytes)
+
+        assert len(tx.body.messages) == 1
+        assert tx.body.messages[0].type_url == "/cosmos.bank.v1beta1.MsgSend"
+
+    def test_deploy_contract(self):
+        """Test deploy contract method with positive result."""
+
+        mock_tx_client = MockTx(response_code=0)
+        self.signing_wasm_client.tx_client = mock_tx_client
+
+        with patch.object(self.signing_wasm_client, "_get_code_id", mock_get_code_id):
+            result = self.signing_wasm_client.deploy_contract(CONTRACT_FILENAME)
+        assert result == CODE_ID
+
+        # Reconstruct original Tx from last tx request bytes
+        tx = Tx()
+        tx.ParseFromString(mock_tx_client.last_broadcast_tx_request.tx_bytes)
+
+        assert len(tx.body.messages) == 1
+        assert tx.body.messages[0].type_url == "/cosmwasm.wasm.v1beta1.MsgStoreCode"
+
+    def test_init_contract(self):
+        """Test init contract method with positive result."""
+
+        mock_tx_client = MockTx(response_code=0)
+        self.signing_wasm_client.tx_client = mock_tx_client
+
+        with patch.object(
+            self.signing_wasm_client, "_get_contract_address", mock_get_contract_address
+        ):
+            result = self.signing_wasm_client.instantiate_contract(CODE_ID, WASM_MSG)
+        assert result == CONTRACT_ADDRESS
+
+        # Reconstruct original Tx from last tx request bytes
+        tx = Tx()
+        tx.ParseFromString(mock_tx_client.last_broadcast_tx_request.tx_bytes)
+
+        assert len(tx.body.messages) == 1
+        assert (
+            tx.body.messages[0].type_url
+            == "/cosmwasm.wasm.v1beta1.MsgInstantiateContract"
+        )
+
+    def test_execute_contract(self):
+        """Test execute contract method with positive result."""
+
+        mock_tx_client = MockTx(response_code=0)
+        self.signing_wasm_client.tx_client = mock_tx_client
+
+        result = self.signing_wasm_client.execute_contract(CONTRACT_ADDRESS, WASM_MSG)
+        self.assertIsInstance(result, GetTxResponse)
+
+        # Reconstruct original Tx from last tx request bytes
+        tx = Tx()
+        tx.ParseFromString(mock_tx_client.last_broadcast_tx_request.tx_bytes)
+
+        assert len(tx.body.messages) == 1
+        assert (
+            tx.body.messages[0].type_url == "/cosmwasm.wasm.v1beta1.MsgExecuteContract"
+        )
+
+    def test_get_code_id(self):
+        """Test get code id from response with positive result."""
+
+        raw_log_dict = [
+            {
+                "events": [
+                    {
+                        "type": "message",
+                        "attributes": [
+                            {},
+                            {},
+                            {},
+                            {"key": "code_id", "value": str(CODE_ID)},
+                        ],
+                    }
+                ]
+            }
+        ]
+
+        tx_response = GetTxResponse()
+        tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
+
+        result = self.signing_wasm_client._get_code_id(tx_response)
+        assert result == CODE_ID
+
+    def test_get_contract_address(self):
+        """Test get contract address from response with positive result."""
+
+        raw_log_dict = [
+            {
+                "events": [
+                    {},
+                    {
+                        "type": "wasm",
+                        "attributes": [
+                            {"key": "contract_address", "value": CONTRACT_ADDRESS}
+                        ],
+                    },
+                ]
+            }
+        ]
+
+        tx_response = GetTxResponse()
+        tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
+
+        result = self.signing_wasm_client._get_contract_address(tx_response)
+        assert result == CONTRACT_ADDRESS
