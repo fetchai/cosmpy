@@ -27,6 +27,8 @@ class MockQueryRestClient(QueryRestClient):
 
     def __init__(self, content: str):
         """Initialize."""
+        super().__init__("")
+
         self.content = content
         self.last_request = ""
 

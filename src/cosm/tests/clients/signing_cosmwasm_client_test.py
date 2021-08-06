@@ -91,6 +91,8 @@ CONTRACT_BYTECODE = "H4sIAG4mDWEA/3N0cnYBAKUgF9sEAAAA"
 
 
 class MockAuth(AuthInterface):
+    """Mock Auth client"""
+
     def __init__(
         self,
         address: Address,
@@ -98,7 +100,8 @@ class MockAuth(AuthInterface):
         sequence: int,
     ):
         """
-        Mock Auth client
+        Create mock Auth client
+
         :param address: Mock address to be returned in response
         :param account_number: Mock account_number to be returned in response
         :param sequence: Mock sequence to be returned in response
@@ -126,7 +129,14 @@ class MockAuth(AuthInterface):
 
 
 class MockTx(TxInterface):
+    """Mock Tx client"""
+
     def __init__(self, response_code: int):
+        """
+        Create mock Tx client
+
+        :param response_code: Code in GetTxResponse returned on GetTx call
+        """
         self.response_code = response_code
         self.last_broadcast_tx_request: Optional[BroadcastTxRequest] = None
 
@@ -150,13 +160,13 @@ class MockTx(TxInterface):
 
 def mock_get_code_id(response: GetTxResponse) -> int:
     """Get code id from store code transaction response"""
-    assert type(response) == GetTxResponse
+    assert isinstance(response, GetTxResponse)
     return CODE_ID
 
 
 def mock_get_contract_address(response: GetTxResponse) -> str:
     """Get code id from store code transaction response"""
-    assert type(response) == GetTxResponse
+    assert isinstance(response, GetTxResponse)
     return CONTRACT_ADDRESS
 
 
@@ -387,7 +397,7 @@ class CosmWasmClientTests(unittest.TestCase):
         mock_tx_client = MockTx(response_code=0)
         self.signing_wasm_client.tx_client = mock_tx_client
 
-        with patch.object(self.signing_wasm_client, "_get_code_id", mock_get_code_id):
+        with patch.object(self.signing_wasm_client, "get_code_id", mock_get_code_id):
             result = self.signing_wasm_client.deploy_contract(CONTRACT_FILENAME)
         assert result == CODE_ID
 
@@ -405,7 +415,7 @@ class CosmWasmClientTests(unittest.TestCase):
         self.signing_wasm_client.tx_client = mock_tx_client
 
         with patch.object(
-            self.signing_wasm_client, "_get_contract_address", mock_get_contract_address
+            self.signing_wasm_client, "get_contract_address", mock_get_contract_address
         ):
             result = self.signing_wasm_client.instantiate_contract(CODE_ID, WASM_MSG)
         assert result == CONTRACT_ADDRESS
@@ -460,7 +470,7 @@ class CosmWasmClientTests(unittest.TestCase):
         tx_response = GetTxResponse()
         tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
 
-        result = self.signing_wasm_client._get_code_id(tx_response)
+        result = self.signing_wasm_client.get_code_id(tx_response)
         assert result == CODE_ID
 
     def test_get_contract_address(self):
@@ -483,5 +493,5 @@ class CosmWasmClientTests(unittest.TestCase):
         tx_response = GetTxResponse()
         tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
 
-        result = self.signing_wasm_client._get_contract_address(tx_response)
+        result = self.signing_wasm_client.get_contract_address(tx_response)
         assert result == CONTRACT_ADDRESS
