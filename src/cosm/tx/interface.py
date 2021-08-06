@@ -29,7 +29,7 @@ class TxInterface(ABC):
 
     @abstractmethod
     def Simulate(self, request: svc.SimulateRequest) -> svc.SimulateResponse:
-        """Simulate simulates executing a transaction for estimating gas usage."""
+        """Simulate executing a transaction to estimate gas usage."""
 
     @abstractmethod
     def GetTx(self, request: svc.GetTxRequest) -> svc.GetTxResponse:
