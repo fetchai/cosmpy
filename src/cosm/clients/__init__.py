@@ -16,3 +16,5 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""This package contains high level clients modules."""
