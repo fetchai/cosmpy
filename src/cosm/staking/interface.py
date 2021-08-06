@@ -53,7 +53,7 @@ from cosmos.staking.v1beta1.query_pb2 import (
 )
 
 
-class Staking(ABC):
+class StakingInterface(ABC):
     """Staking abstract class."""
 
     @abstractmethod

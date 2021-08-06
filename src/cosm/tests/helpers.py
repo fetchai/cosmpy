@@ -19,8 +19,10 @@
 
 """Helpers methods and classes for testing."""
 
+from cosm.query.rest_client import QueryRestClient
 
-class MockQueryRestClient:
+
+class MockQueryRestClient(QueryRestClient):
     """Mock QueryRestClient"""
 
     def __init__(self, content: str):
@@ -37,3 +39,6 @@ class MockQueryRestClient:
     def close():
         """Mock close method."""
         ...
+
+    def __del__(self):
+        pass

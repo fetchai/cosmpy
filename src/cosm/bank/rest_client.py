@@ -21,7 +21,7 @@
 
 from google.protobuf.json_format import Parse
 
-from cosm.bank.interface import Bank
+from cosm.bank.interface import BankInterface
 from cosm.query.rest_client import QueryRestClient
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
@@ -41,7 +41,7 @@ from cosmos.bank.v1beta1.query_pb2 import (
 )
 
 
-class BankRestClient(Bank):
+class BankRestClient(BankInterface):
     """Bank REST client."""
 
     API_URL = "/cosmos/bank/v1beta1"
