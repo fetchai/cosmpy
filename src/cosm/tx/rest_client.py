@@ -19,14 +19,14 @@
 
 """Implementation of Tx interface using REST."""
 
-from google.protobuf.json_format import Parse, ParseDict
-
-import json
 import base64
-from cosm.common.types import JSONLike
+import json
 from typing import List
 
+from google.protobuf.json_format import Parse, ParseDict
+
 from cosm.common.rest_client import RestClient
+from cosm.common.types import JSONLike
 from cosm.tx.interface import TxInterface
 from cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
@@ -98,7 +98,7 @@ class TxRestClient(TxInterface):
         :param request: GetTxsEventRequest
         :return: GetTxsEventResponse
         """
-        response = self.rest_client.get(f"{self.txs_url_path}",request)
+        response = self.rest_client.get(f"{self.txs_url_path}", request)
         return Parse(response, GetTxsEventResponse())
 
     @staticmethod

@@ -24,11 +24,11 @@ from typing import Union
 
 from grpc._channel import Channel
 
-from cosm.common.types import JSONLike
 from cosm.auth.rest_client import AuthRestClient
 from cosm.bank.rest_client import BankRestClient
-from cosm.crypto.address import Address
 from cosm.common.rest_client import RestClient
+from cosm.common.types import JSONLike
+from cosm.crypto.address import Address
 from cosm.wasm.rest_client import WasmRestClient
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest

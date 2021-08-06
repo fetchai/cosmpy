@@ -35,13 +35,10 @@ TxSign  # unused class (./tx/tests.py:76)
 _.body_bytes  # unused attribute (./tx/tests.py:119)
 _.auth_info_bytes  # unused attribute (./tx/tests.py:120)
 _.mode  # unused attribute (./tx/tests.py:216)
-<<<<<<< HEAD
-
 _.last_request  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:34)
 _.last_used_params  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:35)
 _.last_request  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:45)
 _.last_used_params  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:46)
-=======
 _.get_balance  # unused method (./clients/cosmwasm_client.py:40)
 _.query_contract_state  # unused method (./clients/cosmwasm_client.py:75)
 SigningCosmWasmClient  # unused class (./clients/signing_cosmwasm_client.py:37)
@@ -49,4 +46,3 @@ _.send_tokens  # unused method (./clients/signing_cosmwasm_client.py:254)
 _.deploy_contract  # unused method (./clients/signing_cosmwasm_client.py:271)
 _.instantiate_contract  # unused method (./clients/signing_cosmwasm_client.py:291)
 _.execute_contract  # unused method (./clients/signing_cosmwasm_client.py:325)
->>>>>>> 194d248b9493bd9c2e2cdb720fa3d4e14499a7a8
