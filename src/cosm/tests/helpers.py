@@ -19,20 +19,22 @@
 
 """Helpers methods and classes for testing."""
 
+from typing import Optional
+
 from cosm.query.rest_client import QueryRestClient
 
 
 class MockQueryRestClient(QueryRestClient):
     """Mock QueryRestClient"""
 
-    def __init__(self, content: str):
+    def __init__(self, content: bytes):
         """Initialize."""
         super().__init__("")
 
-        self.content = content
-        self.last_request = ""
+        self.content: bytes = content
+        self.last_request: Optional[str] = None
 
-    def get(self, request: str) -> str:
+    def get(self, request: str) -> bytes:
         """Handle GET request."""
         self.last_request = request
         return self.content
