@@ -56,7 +56,7 @@ class TxRestClient(TxInterface):
 
     def Simulate(self, request: SimulateRequest) -> SimulateResponse:
         """
-        Simulate simulates executing a transaction for estimating gas usage.
+        Simulate executing a transaction to estimate gas usage.
 
         :param request: SimulateRequest
         :return: SimulateResponse

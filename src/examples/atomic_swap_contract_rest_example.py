@@ -43,11 +43,11 @@ validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
 bob_client = SigningCosmWasmClient(BOB_PK, channel, CHAIN_ID)
 
 # Store contract
-code_id = validator_client.store_contract(CONTRACT_FILENAME)
+code_id = validator_client.deploy_contract(CONTRACT_FILENAME)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
-contract_address = validator_client.instantiate(code_id, {})
+contract_address = validator_client.instantiate_contract(code_id, {})
 print(f"Contract address: {contract_address}")
 
 # Create 2 tokens in one batch message
@@ -69,7 +69,7 @@ create_batch_msg = \
                     ]
             }
     }
-response = validator_client.execute(contract_address, create_batch_msg)
+response = validator_client.execute_contract(contract_address, create_batch_msg)
 print(f"Created tokens with ID {TOKEN_ID_1} and {TOKEN_ID_2}")
 
 # Mint 1 token with ID TOKEN_ID_1 and give it to validator
@@ -83,7 +83,7 @@ mint_single_msg = \
                 "data": "some_data",
             },
     }
-response = validator_client.execute(contract_address, mint_single_msg)
+response = validator_client.execute_contract(contract_address, mint_single_msg)
 print(f"Minted 1 token with ID {TOKEN_ID_1} to validator.")
 
 # Mint 1 token with ID TOKEN_ID_2 and give it to bob
@@ -97,7 +97,7 @@ mint_single_msg = \
                 "data": "some_data",
             },
     }
-response = validator_client.execute(contract_address, mint_single_msg)
+response = validator_client.execute_contract(contract_address, mint_single_msg)
 print(f"Minted 1 token with ID {TOKEN_ID_2} to bob")
 
 # Create atomic swap messages

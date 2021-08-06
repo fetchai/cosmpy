@@ -34,11 +34,11 @@ channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
 client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
 
 # Store contract
-code_id = client.store_contract(CONTRACT_FILENAME)
+code_id = client.deploy_contract(CONTRACT_FILENAME)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
-contract_address = client.instantiate(code_id, {})
+contract_address = client.instantiate_contract(code_id, {})
 print(f"Contract address: {contract_address}")
 
 # Create token with ID TOKEN_ID
@@ -51,7 +51,7 @@ create_single_msg = \
                 "path": "some_path",
             }
     }
-response = client.execute(contract_address, create_single_msg)
+response = client.execute_contract(contract_address, create_single_msg)
 print(f"Created token with ID {TOKEN_ID}")
 
 # Mint 1 token with ID TOKEN_ID and give it to validator
@@ -65,7 +65,7 @@ mint_single_msg = \
                 "data": "some_data",
             },
     }
-response = client.execute(contract_address, mint_single_msg)
+response = client.execute_contract(contract_address, mint_single_msg)
 print(f"Minted 1 token with ID {TOKEN_ID}")
 
 # Query validator's balance of token TOKEN_ID

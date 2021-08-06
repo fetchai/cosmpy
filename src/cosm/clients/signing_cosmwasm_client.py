@@ -58,6 +58,9 @@ from cosmwasm.wasm.v1beta1.tx_pb2 import (
 class SigningCosmWasmClient(CosmWasmClient):
     """High level client for REST/gRPC node interaction with ability to sign transactions."""
 
+    DEFAULT_GAS_LIMIT = 200000
+    DEFAULT_DEPLOY_GAS_LIMIT = 2000000
+
     def __init__(
         self,
         private_key: PrivateKey,
@@ -95,7 +98,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         pub_keys: List[bytes],
         fee: Optional[List[Coin]] = None,
         memo: str = "",
-        gas_limit: int = 200000,
+        gas_limit: int = DEFAULT_GAS_LIMIT,
     ) -> Tx:
         """
         Generate transaction that can be later signed
@@ -291,7 +294,9 @@ class SigningCosmWasmClient(CosmWasmClient):
         self.sign_tx(tx)
         return self.broadcast_tx(tx)
 
-    def store_contract(self, contract_filename: Path, gas_limit: int = 2000000) -> int:
+    def deploy_contract(
+        self, contract_filename: Path, gas_limit: int = DEFAULT_DEPLOY_GAS_LIMIT
+    ) -> int:
         """
         Deploy smart contract on chain
 
@@ -311,14 +316,14 @@ class SigningCosmWasmClient(CosmWasmClient):
         res = self.broadcast_tx(tx)
         return self._get_code_id(res)
 
-    def instantiate(
+    def instantiate_contract(
         self,
         code_id: int,
         init_msg: JSONLike,
         label="contract",
         funds: Optional[List[Coin]] = None,
-        gas_limit: int = 200000,
-    ) -> GetTxResponse:
+        gas_limit: int = DEFAULT_GAS_LIMIT,
+    ) -> str:
         """
         Instantiate smart contract and return contract address
 
@@ -345,12 +350,12 @@ class SigningCosmWasmClient(CosmWasmClient):
         res = self.broadcast_tx(tx)
         return self._get_contract_address(res)
 
-    def execute(
+    def execute_contract(
         self,
         contract_address: str,
         msg: JSONLike,
         funds: Optional[List[Coin]] = None,
-        gas_limit: int = 200000,
+        gas_limit: int = DEFAULT_GAS_LIMIT,
     ) -> GetTxResponse:
         """
         Send execute message to interact with smart contract
