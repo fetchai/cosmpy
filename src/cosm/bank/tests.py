@@ -61,11 +61,11 @@ class BankTests(unittest.TestCase):
 
         assert (
             bank.Balance(QueryBalanceRequest(address="account", denom="denom"))
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
             mock_client.last_base_url
-            == "/cosmos/bank/v1beta1/balances/account/denom"  # noqa W503
+            == "/cosmos/bank/v1beta1/balances/account/denom"
         )
 
     @staticmethod
@@ -85,7 +85,7 @@ class BankTests(unittest.TestCase):
 
         assert (
             bank.AllBalances(QueryAllBalancesRequest(address="account"))
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert mock_client.last_base_url == "/cosmos/bank/v1beta1/balances/account"
 
@@ -163,9 +163,9 @@ class BankTests(unittest.TestCase):
 
         assert (
             bank.DenomMetadata(QueryDenomMetadataRequest(denom="denom"))
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
             mock_client.last_base_url
-            == "/cosmos/bank/v1beta1/denoms_metadata/denom"  # noqa W503
+            == "/cosmos/bank/v1beta1/denoms_metadata/denom"
         )

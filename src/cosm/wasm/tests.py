@@ -100,11 +100,11 @@ class WasmTests(unittest.TestCase):
                     address="fetchcontractaddress", query_data=b"{}"
                 )
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
             mock_client.last_base_url
-            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30="  # noqa W503
+            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30="
         )
 
     @staticmethod
@@ -123,11 +123,11 @@ class WasmTests(unittest.TestCase):
                     address="fetchcontractaddress", query_data=b"{}"
                 )
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
             mock_client.last_base_url
-            == "/wasm/v1beta1/contract/fetchcontractaddress/raw/e30="  # noqa W503
+            == "/wasm/v1beta1/contract/fetchcontractaddress/raw/e30="
         )
 
     @staticmethod
@@ -153,11 +153,11 @@ class WasmTests(unittest.TestCase):
             wasm.AllContractState(
                 QueryAllContractStateRequest(address="fetchcontractaddress")
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
             mock_client.last_base_url
-            == "/wasm/v1beta1/contract/fetchcontractaddress/state"  # noqa W503
+            == "/wasm/v1beta1/contract/fetchcontractaddress/state"
         )
 
     @staticmethod
@@ -182,7 +182,7 @@ class WasmTests(unittest.TestCase):
 
         assert (
             wasm.ContractInfo(QueryContractInfoRequest(address="fetchcontractaddress"))
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
             mock_client.last_base_url == "/wasm/v1beta1/contract/fetchcontractaddress"
@@ -204,7 +204,7 @@ class WasmTests(unittest.TestCase):
 
         assert (
             wasm.ContractsByCode(QueryContractsByCodeRequest(code_id=1))
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert mock_client.last_base_url == "/wasm/v1beta1/code/1/contracts"
 
@@ -239,9 +239,9 @@ class WasmTests(unittest.TestCase):
             wasm.ContractHistory(
                 QueryContractHistoryRequest(address="fetchcontractaddress")
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
             mock_client.last_base_url
-            == "/wasm/v1beta1/contract/fetchcontractaddress/history"  # noqa W503
+            == "/wasm/v1beta1/contract/fetchcontractaddress/history"
         )
