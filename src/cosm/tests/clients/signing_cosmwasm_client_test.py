@@ -93,9 +93,9 @@ CONTRACT_BYTECODE = "H4sIAG4mDWEA/3N0cnYBAKUgF9sEAAAA"
 class MockAuth(AuthInterface):
     def __init__(
         self,
-        address: Address = ADDRESS_PK,
-        account_number: str = ACCOUNT_NUMBER,
-        sequence: str = SEQUENCE,
+        address: Address,
+        account_number: int,
+        sequence: int,
     ):
         """
         Mock Auth client
