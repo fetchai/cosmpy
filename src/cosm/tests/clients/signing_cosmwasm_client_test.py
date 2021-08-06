@@ -20,6 +20,7 @@
 """Tests for the CosmWasm client module of the Clients Package."""
 
 import base64
+import gzip
 import json
 import unittest
 from typing import Optional
@@ -87,7 +88,7 @@ WASM_MSG_BASE64 = base64.b64encode(json.dumps(WASM_MSG).encode("UTF8")).decode()
 CODE_ID = 42
 CONTRACT_ADDRESS = "fetchcontractcontractcontractcontractcontrac"
 CONTRACT_FILENAME = "dummy_contract.wasm"
-CONTRACT_BYTECODE = "H4sIAG4mDWEA/3N0cnYBAKUgF9sEAAAA"
+CONTRACT_BYTECODE = b"ABCD"
 
 
 class MockAuth(Auth):
@@ -244,22 +245,17 @@ class CosmWasmClientTests(unittest.TestCase):
 
     def test_get_packed_store_msg(self):
         """Test correct generation of packed store msg."""
-        expected_result = {
-            "@type": "/cosmwasm.wasm.v1beta1.MsgStoreCode",
-            "sender": str(ADDRESS_PK),
-            "wasmByteCode": CONTRACT_BYTECODE,
-        }
-
         msg = self.signing_wasm_client.get_packed_store_msg(
             ADDRESS_PK, CONTRACT_FILENAME
         )
 
         msg_dict = MessageToDict(msg)
-        assert len(msg_dict) == len(expected_result)
-        assert msg_dict["sender"] == expected_result["sender"]
-        assert msg_dict["@type"] == expected_result["@type"]
-        # wasmByteCode is non-deterministic
-        assert len(msg_dict["wasmByteCode"]) > 28
+        assert len(msg_dict) == 3
+        assert msg_dict["@type"] == "/cosmwasm.wasm.v1beta1.MsgStoreCode"
+        assert msg_dict["sender"] == str(ADDRESS_PK)
+        zipped_bytecode: bytes = base64.b64decode(msg_dict["wasmByteCode"])
+        original_bytecode: bytes = gzip.decompress(zipped_bytecode)
+        assert original_bytecode == CONTRACT_BYTECODE
 
     def test_generate_tx(self):
         """Test correct generation of Tx."""
