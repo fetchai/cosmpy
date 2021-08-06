@@ -35,3 +35,8 @@ TxSign  # unused class (./tx/tests.py:76)
 _.body_bytes  # unused attribute (./tx/tests.py:119)
 _.auth_info_bytes  # unused attribute (./tx/tests.py:120)
 _.mode  # unused attribute (./tx/tests.py:216)
+
+_.last_request  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:34)
+_.last_used_params  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:35)
+_.last_request  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:45)
+_.last_used_params  # unused attribute (/home/jiri/fetch/pycosm/src/cosm/tests/helpers.py:46)
