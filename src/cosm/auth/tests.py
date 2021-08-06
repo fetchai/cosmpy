@@ -57,10 +57,7 @@ class AuthTests(unittest.TestCase):
         mock_client = MockRestClient(json.dumps(content))
         auth = AuthRestClient(mock_client)
 
-        assert (
-            auth.Account(QueryAccountRequest(address="address"))
-            == expected_response
-        )
+        assert auth.Account(QueryAccountRequest(address="address")) == expected_response
         assert mock_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
 
     @staticmethod
