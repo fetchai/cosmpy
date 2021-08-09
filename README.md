@@ -53,27 +53,47 @@ pipenv install
 pipenv shell
 ```
 
-### Query balance example
+### Query balance example using REST api
 ```
-python src/examples/query_balance_example.py
+python src/examples/query_balance_rest_example.py
 ```
 
 ### Send funds transaction example
+Using gRPC
 ```
-python src/examples/tx_send_example.py
+python src/examples/tx_send_grpc_example.py
+```
+Using REST api
+```
+python src/examples/tx_send_rest_example.py
 ```
 
 ### Contract deployment and interaction example
+Using gRPC
 ```
-python src/examples/contract_interaction_example.py
+python src/examples/contract_interaction_grpc_example.py
+```
+Using REST api
+```
+python src/examples/contract_interaction_rest_example.py
 ```
 
 ### Native tokens atomic swap example 
+Using gRPC
 ```
-python src/examples/tx_native_tokens_atomic_swap_example.py
+python src/examples/tx_native_tokens_atomic_swap_grpc_example.py
+```
+Using REST api
+```
+python src/examples/tx_native_tokens_atomic_swap_rest_example.py
 ```
 
 ### Atomic swap using ERC1155 contract example
+Using gRPC
 ```
-python src/examples/atomic_swap_contract_example.py
+python src/examples/atomic_swap_contract_grpc_example.py
+```
+Using REST api
+```
+python src/examples/atomic_swap_contract_rest_example.py
 ```

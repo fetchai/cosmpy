@@ -17,29 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Helpers methods and classes for testing."""
-
-from typing import Optional
-
-from cosm.query.rest_client import QueryRestClient
-
-
-class MockQueryRestClient(QueryRestClient):
-    """Mock QueryRestClient"""
-
-    def __init__(self, content: bytes):
-        """Initialize."""
-        super().__init__("")
-
-        self.content: bytes = content
-        self.last_request: Optional[str] = None
-
-    def get(self, request: str) -> bytes:
-        """Handle GET request."""
-        self.last_request = request
-        return self.content
-
-    def post(self, url_path, json_request: dict) -> bytes:
-        """Send a POST request"""
-        self.last_request = url_path
-        return self.content
+"""This package contains tests for high level clients modules."""
