@@ -43,7 +43,7 @@ from cosmos.tx.v1beta1.service_pb2 import (
 class TxRestClient(TxInterface):
     """Tx REST client."""
 
-    txs_url_path = "/cosmos/tx/v1beta1/txs"
+    API_URL = "/cosmos/tx/v1beta1"
 
     def __init__(self, rest_client: RestClient) -> None:
         """
@@ -60,7 +60,9 @@ class TxRestClient(TxInterface):
         :param request: SimulateRequest
         :return: SimulateResponse
         """
-        response = self.rest_client.post("/cosmos/tx/v1beta1/simulate", request)
+        response = self._rest_api.get(
+            f"{self.API_URL}/simulate",
+        )
         return Parse(response, SimulateResponse())
 
     def GetTx(self, request: GetTxRequest) -> GetTxResponse:
@@ -70,9 +72,7 @@ class TxRestClient(TxInterface):
         :param request: GetTxRequest
         :return: GetTxResponse
         """
-        response = self.rest_client.get(
-            f"{self.txs_url_path}/{request.hash}", request, ["hash"]
-        )
+        response = self.rest_client.get(f"{self.API_URL}/txs/{request.hash}")
 
         # JSON in JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
@@ -88,7 +88,7 @@ class TxRestClient(TxInterface):
         :param request: BroadcastTxRequest
         :return: BroadcastTxResponse
         """
-        response = self.rest_client.post(self.txs_url_path, request)
+        response = self.rest_client.post(f"{self.API_URL}/txs", request)
         return Parse(response, BroadcastTxResponse())
 
     def GetTxsEvent(self, request: GetTxsEventRequest) -> GetTxsEventResponse:
@@ -98,7 +98,7 @@ class TxRestClient(TxInterface):
         :param request: GetTxsEventRequest
         :return: GetTxsEventResponse
         """
-        response = self.rest_client.get(f"{self.txs_url_path}", request)
+        response = self.rest_client.get(f"{self.API_URL}/txs", request)
         return Parse(response, GetTxsEventResponse())
 
     @staticmethod

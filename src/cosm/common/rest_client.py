@@ -42,7 +42,7 @@ class RestClient:
     def get(
         self,
         url_base_path: str,
-        request: Descriptor,
+        request: Optional[Descriptor] = None,
         used_params: Optional[List[str]] = None,
     ) -> bytes:
         """
@@ -51,24 +51,12 @@ class RestClient:
         :param url_base_path: URL base path
         :param request: Protobuf coded request
         :param used_params: Parameters to be removed from request after converting it to dict
-        :return:
+        :return: Content of url response
         """
-        json_request = MessageToDict(request)
-
-        # Remove params that are already in url_base_path
-        if used_params is not None:
-            for param in used_params:
-                json_request.pop(param)
-
-        url_encoded_request = urlencode(json_request)
-        response = self._session.get(
-            url=f"{self.rest_address}{url_base_path}?{url_encoded_request}"
-        )
-        if response.status_code != 200:
-            raise RuntimeError(
-                f"Error when sending a GET request.\n Request: {json_request}\n Response: {response.status_code}, {str(response.content)})"
-            )
-        return response.content
+        if request is None:
+            return self._get_without_request(url_base_path)
+        else:
+            return self._get_with_request(url_base_path, request, used_params)
 
     def post(self, url_base_path: str, request: Descriptor) -> bytes:
         """
@@ -79,6 +67,7 @@ class RestClient:
         :return:
         """
         json_request = MessageToDict(request)
+
         headers = {"Content-type": "application/json", "Accept": "application/json"}
         response = self._session.post(
             url=f"{self.rest_address}{url_base_path}",
@@ -94,3 +83,56 @@ class RestClient:
 
     def __del__(self):
         self._session.close()
+
+    def _get_with_request(
+        self,
+        url_base_path: str,
+        request: Optional[Descriptor] = None,
+        used_params: Optional[List[str]] = None,
+    ) -> bytes:
+        """
+        Send a GET request with keywords parameters
+
+        :param url_base_path: URL base path
+        :param request: Protobuf coded request
+        :param used_params: Parameters to be removed from request after converting it to dict
+        :return: Content of url response
+        """
+        json_request = MessageToDict(request)
+
+        # Remove params that are already in url_base_path
+        if used_params is not None:
+            for param in used_params:
+                json_request.pop(param)
+
+        url_encoded_request = urlencode(json_request)
+
+        if len(url_encoded_request) == 0:
+            url = f"{self.rest_address}{url_base_path}"
+        else:
+            url = f"{self.rest_address}{url_base_path}?{url_encoded_request}"
+
+        response = self._session.get(url=url)
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"Error when sending a GET request.\n Request: {json_request}\n Response: {response.status_code}, {str(response.content)})"
+            )
+        return response.content
+
+    def _get_without_request(
+        self,
+        url_base_path: str,
+    ) -> bytes:
+        """
+        Send a GET request without keyword parameters
+
+        :param url_base_path: URL base path
+        :return: Content of url response
+        """
+
+        response = self._session.get(url=f"{self.rest_address}{url_base_path}")
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"Error when sending a GET request.\n Response: {response.status_code}, {str(response.content)})"
+            )
+        return response.content

@@ -41,7 +41,7 @@ class MockRestClient(RestClient):
     def get(
         self,
         url_base_path: str,
-        request: Descriptor,
+        request: Optional[Descriptor] = None,
         used_params: Optional[List[str]] = None,
     ) -> bytes:
         """Handle GET request."""
