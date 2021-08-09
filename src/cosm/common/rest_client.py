@@ -54,10 +54,28 @@ class RestClient:
         :return: Content of url response
         """
         if request is None:
-            result = self._get_without_request(url_base_path)
+            url = f"{self.rest_address}{url_base_path}"
         else:
-            result = self._get_with_request(url_base_path, request, used_params)
-        return result
+            json_request = MessageToDict(request)
+
+            # Remove params that are already in url_base_path
+            if used_params is not None:
+                for param in used_params:
+                    json_request.pop(param)
+
+            url_encoded_request = urlencode(json_request)
+
+            if len(url_encoded_request) == 0:
+                url = f"{self.rest_address}{url_base_path}"
+            else:
+                url = f"{self.rest_address}{url_base_path}?{url_encoded_request}"
+
+        response = self._session.get(url=url)
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"Error when sending a GET request.\n Response: {response.status_code}, {str(response.content)})"
+            )
+        return response.content
 
     def post(self, url_base_path: str, request: Descriptor) -> bytes:
         """
@@ -84,56 +102,3 @@ class RestClient:
 
     def __del__(self):
         self._session.close()
-
-    def _get_with_request(
-        self,
-        url_base_path: str,
-        request: Optional[Descriptor] = None,
-        used_params: Optional[List[str]] = None,
-    ) -> bytes:
-        """
-        Send a GET request with keywords parameters
-
-        :param url_base_path: URL base path
-        :param request: Protobuf coded request
-        :param used_params: Parameters to be removed from request after converting it to dict
-        :return: Content of url response
-        """
-        json_request = MessageToDict(request)
-
-        # Remove params that are already in url_base_path
-        if used_params is not None:
-            for param in used_params:
-                json_request.pop(param)
-
-        url_encoded_request = urlencode(json_request)
-
-        if len(url_encoded_request) == 0:
-            url = f"{self.rest_address}{url_base_path}"
-        else:
-            url = f"{self.rest_address}{url_base_path}?{url_encoded_request}"
-
-        response = self._session.get(url=url)
-        if response.status_code != 200:
-            raise RuntimeError(
-                f"Error when sending a GET request.\n Request: {json_request}\n Response: {response.status_code}, {str(response.content)})"
-            )
-        return response.content
-
-    def _get_without_request(
-        self,
-        url_base_path: str,
-    ) -> bytes:
-        """
-        Send a GET request without keyword parameters
-
-        :param url_base_path: URL base path
-        :return: Content of url response
-        """
-
-        response = self._session.get(url=f"{self.rest_address}{url_base_path}")
-        if response.status_code != 200:
-            raise RuntimeError(
-                f"Error when sending a GET request.\n Response: {response.status_code}, {str(response.content)})"
-            )
-        return response.content
