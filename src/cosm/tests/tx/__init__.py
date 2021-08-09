@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains tests for crypto modules."""
+"""This package contains test for the Tx modules."""
