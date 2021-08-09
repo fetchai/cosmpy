@@ -54,9 +54,10 @@ class RestClient:
         :return: Content of url response
         """
         if request is None:
-            return self._get_without_request(url_base_path)
+            result = self._get_without_request(url_base_path)
         else:
-            return self._get_with_request(url_base_path, request, used_params)
+            result = self._get_with_request(url_base_path, request, used_params)
+        return result
 
     def post(self, url_base_path: str, request: Descriptor) -> bytes:
         """
