@@ -314,7 +314,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         )
         self.sign_tx(tx)
         res = self.broadcast_tx(tx)
-        return self._get_code_id(res)
+        return self.get_code_id(res)
 
     def instantiate_contract(
         self,
@@ -348,7 +348,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         )
         self.sign_tx(tx)
         res = self.broadcast_tx(tx)
-        return self._get_contract_address(res)
+        return self.get_contract_address(res)
 
     def execute_contract(
         self,
@@ -380,7 +380,32 @@ class SigningCosmWasmClient(CosmWasmClient):
         self.sign_tx(tx)
         return self.broadcast_tx(tx)
 
-    # Protected attributes
+    @staticmethod
+    def get_code_id(response: GetTxResponse) -> int:
+        """
+        Get code id from store code transaction response
+
+        :param response: Response of store code transaction
+
+        :return: integer code_id
+        """
+        raw_log = json.loads(response.tx_response.raw_log)
+        assert raw_log[0]["events"][0]["attributes"][3]["key"] == "code_id"
+        return int(raw_log[0]["events"][0]["attributes"][3]["value"])
+
+    @staticmethod
+    def get_contract_address(response: GetTxResponse) -> str:
+        """
+        Get contract address from instantiate msg response
+        :param response: Response of MsgInstantiateContract transaction
+
+        :return: contract address string
+        """
+        raw_log = json.loads(response.tx_response.raw_log)
+        assert raw_log[0]["events"][1]["attributes"][0]["key"] == "contract_address"
+        return str(raw_log[0]["events"][1]["attributes"][0]["value"])
+
+    # Protected methods
     @staticmethod
     def _get_signer_info(from_acc: BaseAccount, pub_key: bytes) -> SignerInfo:
         """
@@ -405,28 +430,3 @@ class SigningCosmWasmClient(CosmWasmClient):
             sequence=from_acc.sequence,
         )
         return signer_info
-
-    @staticmethod
-    def _get_code_id(response: GetTxResponse) -> int:
-        """
-        Get code id from store code transaction response
-
-        :param response: Response of store code transaction
-
-        :return: integer code_id
-        """
-        raw_log = json.loads(response.tx_response.raw_log)
-        assert raw_log[0]["events"][0]["attributes"][3]["key"] == "code_id"
-        return int(raw_log[0]["events"][0]["attributes"][3]["value"])
-
-    @staticmethod
-    def _get_contract_address(response: GetTxResponse) -> str:
-        """
-        Get contract address from instantiate msg response
-        :param response: Response of MsgInstantiateContract transaction
-
-        :return: contract address string
-        """
-        raw_log = json.loads(response.tx_response.raw_log)
-        assert raw_log[0]["events"][1]["attributes"][0]["key"] == "contract_address"
-        return str(raw_log[0]["events"][1]["attributes"][0]["value"])

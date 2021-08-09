@@ -23,25 +23,37 @@ from typing import List, Optional
 
 from google.protobuf.descriptor import Descriptor
 
+from cosm.common.rest_client import RestClient
 
-class MockRestClient:
-    """Mock RestClient"""
 
-    def __init__(self, content: str):
+class MockRestClient(RestClient):
+    """Mock QueryRestClient"""
+
+    def __init__(self, content: bytes):
         """Initialize."""
-        self.content = content
+        self.content: bytes = content
         self.last_base_url: Optional[str] = None
         self.last_request: Optional[Descriptor] = None
         self.last_used_params: Optional[List[str]] = None
+
+        super().__init__("")
 
     def get(
         self,
         url_base_path: str,
         request: Descriptor,
         used_params: Optional[List[str]] = None,
-    ) -> str:
+    ) -> bytes:
         """Handle GET request."""
         self.last_base_url = url_base_path
         self.last_request = request
         self.last_used_params = used_params
+
+        return self.content
+
+    def post(self, url_base_path: str, request: Descriptor) -> bytes:
+        """Send a POST request"""
+        self.last_base_url = url_base_path
+        self.last_request = request
+
         return self.content
