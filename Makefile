@@ -120,7 +120,7 @@ pylint:
 
 .PHONY: test
 test:
-	python -m unittest discover -s $(PYCOSM_TESTS_DIR)
+	python -m unittest discover -s .
 
 ####################
 ### License and copyright checks

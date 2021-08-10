@@ -25,7 +25,7 @@ import unittest
 from google.protobuf.json_format import ParseDict
 
 from cosm.clients.cosmwasm_client import CosmWasmClient
-from cosm.tests.helpers import MockRestClient
+from tests.helpers import MockRestClient
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
 from cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
 from cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateResponse
