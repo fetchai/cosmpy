@@ -19,27 +19,41 @@
 
 """Helpers methods and classes for testing."""
 
-from typing import Optional
+from typing import List, Optional
 
-from cosm.query.rest_client import QueryRestClient
+from google.protobuf.descriptor import Descriptor
+
+from cosm.common.rest_client import RestClient
 
 
-class MockQueryRestClient(QueryRestClient):
+class MockRestClient(RestClient):
     """Mock QueryRestClient"""
 
     def __init__(self, content: bytes):
         """Initialize."""
+        self.content: bytes = content
+        self.last_base_url: Optional[str] = None
+        self.last_request: Optional[Descriptor] = None
+        self.last_used_params: Optional[List[str]] = None
+
         super().__init__("")
 
-        self.content: bytes = content
-        self.last_request: Optional[str] = None
-
-    def get(self, request: str) -> bytes:
+    def get(
+        self,
+        url_base_path: str,
+        request: Optional[Descriptor] = None,
+        used_params: Optional[List[str]] = None,
+    ) -> bytes:
         """Handle GET request."""
+        self.last_base_url = url_base_path
         self.last_request = request
+        self.last_used_params = used_params
+
         return self.content
 
-    def post(self, url_path, json_request: dict) -> bytes:
+    def post(self, url_base_path: str, request: Descriptor) -> bytes:
         """Send a POST request"""
-        self.last_request = url_path
+        self.last_base_url = url_base_path
+        self.last_request = request
+
         return self.content

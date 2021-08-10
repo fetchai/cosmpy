@@ -6,7 +6,7 @@ import os
 from cosm.crypto.keypairs import PrivateKey
 
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 
 
 # ID and amount of tokens to be minted in contract
@@ -29,7 +29,7 @@ VALIDATOR_PK = PrivateKey(
 )
 
 # Create client
-channel = QueryRestClient(REST_ENDPOINT_ADDRESS)
+channel = RestClient(REST_ENDPOINT_ADDRESS)
 client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
 
 # Store contract

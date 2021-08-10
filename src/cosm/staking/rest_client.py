@@ -21,7 +21,7 @@
 
 from google.protobuf.json_format import Parse
 
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 from cosm.staking.interface import Staking
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
@@ -60,23 +60,23 @@ class StakingRestClient(Staking):
 
     API_URL = "/cosmos/staking/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient) -> None:
+    def __init__(self, rest_api: RestClient) -> None:
         """
         Initialize.
 
-        :param rest_api: QueryRestClient api
+        :param rest_api: RestClient api
         """
         self._rest_api = rest_api
 
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
         """Validators queries all validators that match the given status."""
-        json_response = self._rest_api.get(f"{self.API_URL}/validators")
+        json_response = self._rest_api.get(f"{self.API_URL}/validators", request)
         return Parse(json_response, QueryValidatorsResponse())
 
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
         """Validator queries validator info for given validator address."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/validators/{request.validator_addr}"
+            f"{self.API_URL}/validators/{request.validator_addr}",
         )
         return Parse(json_response, QueryValidatorResponse())
 
@@ -85,7 +85,9 @@ class StakingRestClient(Staking):
     ) -> QueryValidatorDelegationsResponse:
         """ValidatorDelegations queries delegate info for given validator."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/validators/{request.validator_addr}/delegations"
+            f"{self.API_URL}/validators/{request.validator_addr}/delegations",
+            request,
+            ["validatorAddr"],
         )
         return Parse(json_response, QueryValidatorDelegationsResponse())
 
@@ -94,14 +96,16 @@ class StakingRestClient(Staking):
     ) -> QueryValidatorUnbondingDelegationsResponse:
         """ValidatorUnbondingDelegations queries unbonding delegations of a validator."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/validators/{request.validator_addr}/unbonding_delegations"
+            f"{self.API_URL}/validators/{request.validator_addr}/unbonding_delegations",
+            request,
+            ["validatorAddr"],
         )
         return Parse(json_response, QueryValidatorUnbondingDelegationsResponse())
 
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
         """Delegation queries delegate info for given validator delegator pair."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}"
+            f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}",
         )
         return Parse(json_response, QueryDelegationResponse())
 
@@ -110,7 +114,7 @@ class StakingRestClient(Staking):
     ) -> QueryUnbondingDelegationResponse:
         """UnbondingDelegation queries unbonding info for given validator delegator pair."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}/unbonding_delegation"
+            f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}/unbonding_delegation",
         )
         return Parse(json_response, QueryUnbondingDelegationResponse())
 
@@ -119,7 +123,9 @@ class StakingRestClient(Staking):
     ) -> QueryDelegatorDelegationsResponse:
         """DelegatorDelegations queries all delegations of a given delegator address."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/delegations/{request.delegator_addr}"
+            f"{self.API_URL}/delegations/{request.delegator_addr}",
+            request,
+            ["delegatorAddr"],
         )
         return Parse(json_response, QueryDelegatorDelegationsResponse())
 
@@ -128,7 +134,9 @@ class StakingRestClient(Staking):
     ) -> QueryDelegatorUnbondingDelegationsResponse:
         """DelegatorUnbondingDelegations queries all unbonding delegations of a given delegator address."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/delegators/{request.delegator_addr}/unbonding_delegations"
+            f"{self.API_URL}/delegators/{request.delegator_addr}/unbonding_delegations",
+            request,
+            ["delegatorAddr"],
         )
         return Parse(json_response, QueryDelegatorUnbondingDelegationsResponse())
 
@@ -137,7 +145,9 @@ class StakingRestClient(Staking):
     ) -> QueryRedelegationsResponse:
         """Redelegations queries redelegations of given address."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/delegators/{request.delegator_addr}/redelegations"
+            f"{self.API_URL}/delegators/{request.delegator_addr}/redelegations",
+            request,
+            ["delegatorAddr"],
         )
         return Parse(json_response, QueryRedelegationsResponse())
 
@@ -146,7 +156,9 @@ class StakingRestClient(Staking):
     ) -> QueryDelegatorValidatorsResponse:
         """DelegatorValidators queries all validators info for given delegator address."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/delegators/{request.delegator_addr}/validators"
+            f"{self.API_URL}/delegators/{request.delegator_addr}/validators",
+            request,
+            ["delegatorAddr"],
         )
         return Parse(json_response, QueryDelegatorValidatorsResponse())
 
@@ -155,7 +167,7 @@ class StakingRestClient(Staking):
     ) -> QueryDelegatorValidatorResponse:
         """DelegatorValidator queries validator info for given delegator validator pair."""
         json_response = self._rest_api.get(
-            f"{self.API_URL}/delegators/{request.delegator_addr}/validators/{request.validator_addr}"
+            f"{self.API_URL}/delegators/{request.delegator_addr}/validators/{request.validator_addr}",
         )
         return Parse(json_response, QueryDelegatorValidatorResponse())
 

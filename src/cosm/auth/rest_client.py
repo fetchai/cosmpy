@@ -22,7 +22,7 @@
 from google.protobuf.json_format import Parse
 
 from cosm.auth.interface import Auth
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
@@ -36,11 +36,11 @@ class AuthRestClient(Auth):
 
     API_URL = "/cosmos/auth/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient) -> None:
+    def __init__(self, rest_api: RestClient):
         """
         Initialize authentication rest client.
 
-        :param rest_api: QueryRestClient api
+        :param rest_api: RestClient api
         """
         self._rest_api = rest_api
 
@@ -52,9 +52,7 @@ class AuthRestClient(Auth):
 
         :return: QueryAccountResponse
         """
-        json_response = self._rest_api.get(
-            self.API_URL + f"/accounts/{request.address}"
-        )
+        json_response = self._rest_api.get(f"{self.API_URL}/accounts/{request.address}")
         return Parse(json_response, QueryAccountResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
@@ -65,5 +63,5 @@ class AuthRestClient(Auth):
 
         :return: QueryParamsResponse
         """
-        json_response = self._rest_api.get(self.API_URL + "/params")
+        json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())

@@ -22,7 +22,8 @@
 import json
 from unittest import TestCase
 
-from cosm.tests.helpers import MockQueryRestClient
+from cosm.staking.rest_client import StakingRestClient
+from cosm.tests.helpers import MockRestClient
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
@@ -54,8 +55,6 @@ from cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsResponse,
 )
 
-from .rest_client import StakingRestClient
-
 
 class StakingRestClientTestCase(TestCase):
     """Test case for StakingRestClient class."""
@@ -65,7 +64,7 @@ class StakingRestClientTestCase(TestCase):
         """Set up test case."""
         content = {}
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         cls.client = StakingRestClient(mock_client)
 
     def test_Validators(self):

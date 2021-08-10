@@ -7,6 +7,7 @@ WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
 OUTPUT_FOLDER := src
 PYCOSM_SRC_DIR := src/cosm
+PYCOSM_TESTS_DIR := src/cosm/tests
 
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
@@ -119,7 +120,7 @@ pylint:
 
 .PHONY: test
 test:
-	python -m unittest discover -s $(PYCOSM_SRC_DIR)
+	python -m unittest discover -s $(PYCOSM_TESTS_DIR)
 
 ####################
 ### License and copyright checks

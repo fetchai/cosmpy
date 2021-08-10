@@ -4,7 +4,7 @@ from cosm.crypto.keypairs import PrivateKey
 from cosmos.base.v1beta1.coin_pb2 import Coin
 
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 
 # Denomination and amount of transferred tokens
 DENOM_1 = "stake"
@@ -31,7 +31,7 @@ BOB_PK = PrivateKey(
 )
 
 # Create clients
-channel = QueryRestClient(REST_ENDPOINT_ADDRESS)
+channel = RestClient(REST_ENDPOINT_ADDRESS)
 validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
 bob_client = SigningCosmWasmClient(BOB_PK, channel, CHAIN_ID)
 

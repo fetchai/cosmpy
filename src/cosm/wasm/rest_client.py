@@ -21,12 +21,11 @@
 
 import base64
 import json
-from urllib.parse import urlencode
 
-from google.protobuf.json_format import MessageToDict, Parse, ParseDict
+from google.protobuf.json_format import Parse, ParseDict
 
-from common import JSONLike
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
+from cosm.common.types import JSONLike
 from cosm.wasm.interface import Wasm
 from cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
@@ -53,11 +52,11 @@ class WasmRestClient(Wasm):
 
     API_URL = "/wasm/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient):
+    def __init__(self, rest_api: RestClient):
         """
         Create CosmWasm rest client
 
-        :param rest_api: QueryRestClient api
+        :param rest_api: RestClient api
         """
         self._rest_api = rest_api
 
@@ -71,11 +70,8 @@ class WasmRestClient(Wasm):
 
         :return: QueryContractInfoResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("address")
-        url_encoded_request = urlencode(json_request)
         response = self._rest_api.get(
-            f"{self.API_URL}/contract/{request.address}?{url_encoded_request}",
+            f"{self.API_URL}/contract/{request.address}", request, ["address"]
         )
         return Parse(response, QueryContractInfoResponse())
 
@@ -89,11 +85,8 @@ class WasmRestClient(Wasm):
 
         :return: QueryContractHistoryResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("address")
-        url_encoded_request = urlencode(json_request)
         response = self._rest_api.get(
-            f"{self.API_URL}/contract/{request.address}/history?{url_encoded_request}",
+            f"{self.API_URL}/contract/{request.address}/history", request, ["address"]
         )
 
         return ParseDict(
@@ -110,11 +103,8 @@ class WasmRestClient(Wasm):
 
         :return: QueryContractsByCodeResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("codeId")
-        url_encoded_request = urlencode(json_request)
         response = self._rest_api.get(
-            f"{self.API_URL}/code/{request.code_id}/contracts?{url_encoded_request}",
+            f"{self.API_URL}/code/{request.code_id}/contracts", request, ["codeId"]
         )
         return Parse(response, QueryContractsByCodeResponse())
 
@@ -128,11 +118,8 @@ class WasmRestClient(Wasm):
 
         :return: QueryAllContractStateResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("address")
-        url_encoded_request = urlencode(json_request)
         response = self._rest_api.get(
-            f"{self.API_URL}/contract/{request.address}/state?{url_encoded_request}",
+            f"{self.API_URL}/contract/{request.address}/state", request, ["address"]
         )
         return Parse(response, QueryAllContractStateResponse())
 
@@ -146,13 +133,13 @@ class WasmRestClient(Wasm):
 
         :return: QueryRawContractStateResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("address")
-        json_request.pop("queryData")
-        url_encoded_request = urlencode(json_request)
+        # Convert request.query_data dict to base64 encoded string
         query_data = base64.b64encode(request.query_data).decode()
+
         response = self._rest_api.get(
-            f"{self.API_URL}/contract/{request.address}/raw/{query_data}?{url_encoded_request}",
+            f"{self.API_URL}/contract/{request.address}/raw/{query_data}",
+            request,
+            ["address", "queryData"],
         )
 
         return ParseDict(
@@ -169,13 +156,11 @@ class WasmRestClient(Wasm):
 
         :return: QuerySmartContractStateResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("address")
-        json_request.pop("queryData")
-        url_encoded_request = urlencode(json_request)
         query_data = base64.b64encode(request.query_data).decode()
         response = self._rest_api.get(
-            f"{self.API_URL}/contract/{request.address}/smart/{query_data}?{url_encoded_request}",
+            f"{self.API_URL}/contract/{request.address}/smart/{query_data}",
+            request,
+            ["address", "queryData"],
         )
 
         return ParseDict(
@@ -190,11 +175,8 @@ class WasmRestClient(Wasm):
 
         :return: QueryCodeResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("codeId")
-        url_encoded_request = urlencode(json_request)
         response = self._rest_api.get(
-            f"{self.API_URL}/code/{request.code_id}?{url_encoded_request}",
+            f"{self.API_URL}/code/{request.code_id}", request, ["codeId"]
         )
 
         return Parse(response, QueryCodeResponse())
@@ -207,11 +189,7 @@ class WasmRestClient(Wasm):
 
         :return: QueryCodesResponse
         """
-        json_request = MessageToDict(request)
-        url_encoded_request = urlencode(json_request)
-        response = self._rest_api.get(
-            f"{self.API_URL}/code?{url_encoded_request}",
-        )
+        response = self._rest_api.get(f"{self.API_URL}/code", request)
         return Parse(response, QueryCodesResponse())
 
     @staticmethod

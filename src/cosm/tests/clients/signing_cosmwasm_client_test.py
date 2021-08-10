@@ -32,7 +32,7 @@ from cosm.auth.interface import Auth
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PrivateKey
-from cosm.tests.helpers import MockQueryRestClient
+from cosm.tests.helpers import MockRestClient
 from cosm.tx.interface import TxInterface
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
@@ -184,7 +184,7 @@ class CosmWasmClientTests(unittest.TestCase):
             mock_auth.Account(QueryAccountRequest(address=str(ADDRESS_PK)))
         )
 
-        mock_rest_client = MockQueryRestClient(json.dumps(content))
+        mock_rest_client = MockRestClient(json.dumps(content))
         cls.signing_wasm_client = SigningCosmWasmClient(
             PRIVATE_KEY, mock_rest_client, CHAIN_ID
         )

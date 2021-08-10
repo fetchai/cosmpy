@@ -22,12 +22,11 @@
 import base64
 import json
 from typing import List
-from urllib.parse import urlencode
 
-from google.protobuf.json_format import MessageToDict, Parse, ParseDict
+from google.protobuf.json_format import Parse, ParseDict
 
-from common import JSONLike
-from cosm.query.rest_client import QueryRestClient as RestClient
+from cosm.common.rest_client import RestClient
+from cosm.common.types import JSONLike
 from cosm.tx.interface import TxInterface
 from cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
@@ -44,13 +43,13 @@ from cosmos.tx.v1beta1.service_pb2 import (
 class TxRestClient(TxInterface):
     """Tx REST client."""
 
-    txs_url_path = "/cosmos/tx/v1beta1/txs"
+    API_URL = "/cosmos/tx/v1beta1"
 
     def __init__(self, rest_client: RestClient) -> None:
         """
         Create a Tx rest client
 
-        :param rest_client: QueryRestClient api
+        :param rest_client: RestClient api
         """
         self.rest_client = rest_client
 
@@ -61,8 +60,9 @@ class TxRestClient(TxInterface):
         :param request: SimulateRequest
         :return: SimulateResponse
         """
-        json_request = MessageToDict(request)
-        response = self.rest_client.post("/cosmos/tx/v1beta1/simulate", json_request)
+        response = self._rest_api.get(
+            f"{self.API_URL}/simulate",
+        )
         return Parse(response, SimulateResponse())
 
     def GetTx(self, request: GetTxRequest) -> GetTxResponse:
@@ -72,12 +72,7 @@ class TxRestClient(TxInterface):
         :param request: GetTxRequest
         :return: GetTxResponse
         """
-        json_request = MessageToDict(request)
-        json_request.pop("hash")
-        url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(
-            f"{self.txs_url_path}/{request.hash}?{url_encoded_request}",
-        )
+        response = self.rest_client.get(f"{self.API_URL}/txs/{request.hash}")
 
         # JSON in JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
@@ -93,8 +88,7 @@ class TxRestClient(TxInterface):
         :param request: BroadcastTxRequest
         :return: BroadcastTxResponse
         """
-        json_request = MessageToDict(request)
-        response = self.rest_client.post(self.txs_url_path, json_request)
+        response = self.rest_client.post(f"{self.API_URL}/txs", request)
         return Parse(response, BroadcastTxResponse())
 
     def GetTxsEvent(self, request: GetTxsEventRequest) -> GetTxsEventResponse:
@@ -104,9 +98,7 @@ class TxRestClient(TxInterface):
         :param request: GetTxsEventRequest
         :return: GetTxsEventResponse
         """
-        json_request = MessageToDict(request)
-        url_encoded_request = urlencode(json_request)
-        response = self.rest_client.get(f"{self.txs_url_path}&{url_encoded_request}")
+        response = self.rest_client.get(f"{self.API_URL}/txs", request)
         return Parse(response, GetTxsEventResponse())
 
     @staticmethod

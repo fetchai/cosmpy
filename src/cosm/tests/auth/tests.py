@@ -25,7 +25,7 @@ import unittest
 from google.protobuf.json_format import ParseDict
 
 from cosm.auth.rest_client import AuthRestClient
-from cosm.tests.helpers import MockQueryRestClient
+from cosm.tests.helpers import MockRestClient
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
@@ -54,14 +54,11 @@ class AuthTests(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryAccountResponse())
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         auth = AuthRestClient(mock_client)
 
-        assert (
-            auth.Account(QueryAccountRequest(address="address"))
-            == expected_response  # noqa W503
-        )
-        assert mock_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
+        assert auth.Account(QueryAccountRequest(address="address")) == expected_response
+        assert mock_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
 
     @staticmethod
     def test_query_params():
@@ -77,8 +74,8 @@ class AuthTests(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryParamsResponse())
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         auth = AuthRestClient(mock_client)
 
         assert auth.Params(QueryParamsRequest()) == expected_response
-        assert mock_client.last_request == "/cosmos/auth/v1beta1/params"
+        assert mock_client.last_base_url == "/cosmos/auth/v1beta1/params"

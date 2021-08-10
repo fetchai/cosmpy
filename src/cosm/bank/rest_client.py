@@ -22,7 +22,7 @@
 from google.protobuf.json_format import Parse
 
 from cosm.bank.interface import Bank
-from cosm.query.rest_client import QueryRestClient
+from cosm.common.rest_client import RestClient
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
@@ -46,11 +46,11 @@ class BankRestClient(Bank):
 
     API_URL = "/cosmos/bank/v1beta1"
 
-    def __init__(self, rest_api: QueryRestClient) -> None:
+    def __init__(self, rest_api: RestClient):
         """
         Create bank rest client
 
-        :param rest_api: QueryRestClient api
+        :param rest_api: RestClient api
         """
         self._rest_api = rest_api
 
@@ -62,10 +62,10 @@ class BankRestClient(Bank):
 
         :return: QueryBalanceResponse
         """
-        json_response = self._rest_api.get(
-            self.API_URL + f"/balances/{request.address}/{request.denom}"
+        response = self._rest_api.get(
+            f"{self.API_URL}/balances/{request.address}/{request.denom}",
         )
-        return Parse(json_response, QueryBalanceResponse())
+        return Parse(response, QueryBalanceResponse())
 
     def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
         """
@@ -75,10 +75,10 @@ class BankRestClient(Bank):
 
         :return: QueryAllBalancesResponse
         """
-        json_response = self._rest_api.get(
-            self.API_URL + f"/balances/{request.address}"
+        response = self._rest_api.get(
+            f"{self.API_URL}/balances/{request.address}", request, ["address"]
         )
-        return Parse(json_response, QueryAllBalancesResponse())
+        return Parse(response, QueryAllBalancesResponse())
 
     def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
         """
@@ -88,8 +88,8 @@ class BankRestClient(Bank):
 
         :return: QueryTotalSupplyResponse
         """
-        json_response = self._rest_api.get(self.API_URL + "/supply")
-        return Parse(json_response, QueryTotalSupplyResponse())
+        response = self._rest_api.get(f"{self.API_URL}/supply")
+        return Parse(response, QueryTotalSupplyResponse())
 
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
         """
@@ -99,8 +99,8 @@ class BankRestClient(Bank):
 
         :return: QuerySupplyOfResponse
         """
-        json_response = self._rest_api.get(self.API_URL + f"/supply/{request.denom}")
-        return Parse(json_response, QuerySupplyOfResponse())
+        response = self._rest_api.get(f"{self.API_URL}/supply/{request.denom}")
+        return Parse(response, QuerySupplyOfResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
@@ -110,8 +110,8 @@ class BankRestClient(Bank):
 
         :return: QueryParamsResponse
         """
-        json_response = self._rest_api.get(self.API_URL + "/params")
-        return Parse(json_response, QueryParamsResponse())
+        response = self._rest_api.get(f"{self.API_URL}/params")
+        return Parse(response, QueryParamsResponse())
 
     def DenomMetadata(
         self, request: QueryDenomMetadataRequest
@@ -123,10 +123,8 @@ class BankRestClient(Bank):
 
         :return: QueryDenomMetadataResponse
         """
-        json_response = self._rest_api.get(
-            self.API_URL + f"/denoms_metadata/{request.denom}"
-        )
-        return Parse(json_response, QueryDenomMetadataResponse())
+        response = self._rest_api.get(f"{self.API_URL}/denoms_metadata/{request.denom}")
+        return Parse(response, QueryDenomMetadataResponse())
 
     def DenomsMetadata(
         self, request: QueryDenomsMetadataRequest
@@ -138,5 +136,5 @@ class BankRestClient(Bank):
 
         :return: QueryDenomsMetadataResponse
         """
-        json_response = self._rest_api.get(self.API_URL + "/denoms_metadata")
-        return Parse(json_response, QueryDenomsMetadataResponse())
+        response = self._rest_api.get(f"{self.API_URL}/denoms_metadata", request)
+        return Parse(response, QueryDenomsMetadataResponse())

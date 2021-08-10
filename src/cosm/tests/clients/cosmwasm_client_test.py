@@ -25,7 +25,7 @@ import unittest
 from google.protobuf.json_format import ParseDict
 
 from cosm.clients.cosmwasm_client import CosmWasmClient
-from cosm.tests.helpers import MockQueryRestClient
+from cosm.tests.helpers import MockRestClient
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
 from cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
 from cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateResponse
@@ -41,13 +41,13 @@ class CosmWasmClientTests(unittest.TestCase):
         content = {"balance": {"denom": "stake", "amount": "1234"}}
         expected_response = ParseDict(content, QueryBalanceResponse())
 
-        mock_rest_client = MockQueryRestClient(json.dumps(content))
+        mock_rest_client = MockRestClient(json.dumps(content))
         wasm_client = CosmWasmClient(mock_rest_client)
         response = wasm_client.get_balance("account", "denom")
 
         assert response == expected_response
         assert (
-            mock_rest_client.last_request
+            mock_rest_client.last_base_url
             == "/cosmos/bank/v1beta1/balances/account/denom"
         )
 
@@ -69,12 +69,12 @@ class CosmWasmClientTests(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryAccountResponse())
 
-        mock_rest_client = MockQueryRestClient(json.dumps(content))
+        mock_rest_client = MockRestClient(json.dumps(content))
         wasm_client = CosmWasmClient(mock_rest_client)
         response = wasm_client.query_account_data("account")
 
         assert response == expected_response
-        assert mock_rest_client.last_request == "/cosmos/auth/v1beta1/accounts/address"
+        assert mock_rest_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
 
     @staticmethod
     def test_query_contract_state():
@@ -83,12 +83,12 @@ class CosmWasmClientTests(unittest.TestCase):
         raw_content = b'{\n  "data": {"balance":"1"}\n}'
         expected_response = QuerySmartContractStateResponse(data=b'{"balance": "1"}')
 
-        mock_rest_client = MockQueryRestClient(raw_content)
+        mock_rest_client = MockRestClient(raw_content)
         wasm_client = CosmWasmClient(mock_rest_client)
         response = wasm_client.query_contract_state("account", "denom")
 
         assert response == expected_response
         assert (
-            mock_rest_client.last_request
+            mock_rest_client.last_base_url
             == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30=?"
         )

@@ -24,11 +24,11 @@ from typing import Union
 
 from grpc._channel import Channel
 
-from common import JSONLike
 from cosm.auth.rest_client import AuthRestClient
 from cosm.bank.rest_client import BankRestClient
+from cosm.common.rest_client import RestClient
+from cosm.common.types import JSONLike
 from cosm.crypto.address import Address
-from cosm.query.rest_client import QueryRestClient
 from cosm.wasm.rest_client import WasmRestClient
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
@@ -42,7 +42,7 @@ from cosmwasm.wasm.v1beta1.query_pb2_grpc import QueryStub as CosmWasmGrpcClient
 class CosmWasmClient:
     """High level client for REST/gRPC node interaction."""
 
-    def __init__(self, channel: Union[Channel, QueryRestClient]):
+    def __init__(self, channel: Union[Channel, RestClient]):
         """
         :param channel: gRPC or REST querying client
 
@@ -53,7 +53,7 @@ class CosmWasmClient:
             self.bank_client = BankGrpcClient(channel)
             self.auth_client = AuthGrpcClient(channel)
             self.wasm_client = CosmWasmGrpcClient(channel)
-        elif isinstance(channel, QueryRestClient):
+        elif isinstance(channel, RestClient):
             self.bank_client = BankRestClient(channel)
             self.auth_client = AuthRestClient(channel)
             self.wasm_client = WasmRestClient(channel)

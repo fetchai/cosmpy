@@ -25,7 +25,7 @@ import unittest
 
 from google.protobuf.json_format import ParseDict
 
-from cosm.tests.helpers import MockQueryRestClient
+from cosm.tests.helpers import MockRestClient
 from cosm.wasm.rest_client import WasmRestClient
 from cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
@@ -62,11 +62,11 @@ class WasmTests(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryCodesResponse())
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         wasm = WasmRestClient(mock_client)
 
         assert wasm.Codes(QueryCodesRequest()) == expected_response
-        assert mock_client.last_request == "/wasm/v1beta1/code?"
+        assert mock_client.last_base_url == "/wasm/v1beta1/code"
 
     @staticmethod
     def test_query_code():
@@ -78,11 +78,11 @@ class WasmTests(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryCodeResponse())
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         wasm = WasmRestClient(mock_client)
 
         assert wasm.Code(QueryCodeRequest(code_id=1)) == expected_response
-        assert mock_client.last_request == "/wasm/v1beta1/code/1?"
+        assert mock_client.last_base_url == "/wasm/v1beta1/code/1"
 
     @staticmethod
     def test_query_smart_contract_state():
@@ -91,7 +91,7 @@ class WasmTests(unittest.TestCase):
         raw_content = b'{\n  "data": {"balance":"1"}\n}'
         expected_response = QuerySmartContractStateResponse(data=b'{"balance": "1"}')
 
-        mock_client = MockQueryRestClient(raw_content)
+        mock_client = MockRestClient(raw_content)
         wasm = WasmRestClient(mock_client)
 
         assert (
@@ -100,11 +100,11 @@ class WasmTests(unittest.TestCase):
                     address="fetchcontractaddress", query_data=b"{}"
                 )
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
-            mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30=?"  # noqa W503
+            mock_client.last_base_url
+            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30="
         )
 
     @staticmethod
@@ -114,7 +114,7 @@ class WasmTests(unittest.TestCase):
         raw_content = b'{\n  "data": {"balance":"1"}\n}'
         expected_response = QueryRawContractStateResponse(data=b'{"balance": "1"}')
 
-        mock_client = MockQueryRestClient(raw_content)
+        mock_client = MockRestClient(raw_content)
         wasm = WasmRestClient(mock_client)
 
         assert (
@@ -123,11 +123,11 @@ class WasmTests(unittest.TestCase):
                     address="fetchcontractaddress", query_data=b"{}"
                 )
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
-            mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/raw/e30=?"  # noqa W503
+            mock_client.last_base_url
+            == "/wasm/v1beta1/contract/fetchcontractaddress/raw/e30="
         )
 
     @staticmethod
@@ -146,18 +146,18 @@ class WasmTests(unittest.TestCase):
 
         expected_response = ParseDict(content, QueryAllContractStateResponse())
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         wasm = WasmRestClient(mock_client)
 
         assert (
             wasm.AllContractState(
                 QueryAllContractStateRequest(address="fetchcontractaddress")
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
-            mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/state?"  # noqa W503
+            mock_client.last_base_url
+            == "/wasm/v1beta1/contract/fetchcontractaddress/state"
         )
 
     @staticmethod
@@ -177,15 +177,15 @@ class WasmTests(unittest.TestCase):
 
         expected_response = ParseDict(content, QueryContractInfoResponse())
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         wasm = WasmRestClient(mock_client)
 
         assert (
             wasm.ContractInfo(QueryContractInfoRequest(address="fetchcontractaddress"))
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
-            mock_client.last_request == "/wasm/v1beta1/contract/fetchcontractaddress?"
+            mock_client.last_base_url == "/wasm/v1beta1/contract/fetchcontractaddress"
         )
 
     @staticmethod
@@ -199,14 +199,14 @@ class WasmTests(unittest.TestCase):
 
         expected_response = ParseDict(content, QueryContractsByCodeResponse())
 
-        mock_client = MockQueryRestClient(json.dumps(content))
+        mock_client = MockRestClient(json.dumps(content))
         wasm = WasmRestClient(mock_client)
 
         assert (
             wasm.ContractsByCode(QueryContractsByCodeRequest(code_id=1))
-            == expected_response  # noqa W503
+            == expected_response
         )
-        assert mock_client.last_request == "/wasm/v1beta1/code/1/contracts?"
+        assert mock_client.last_base_url == "/wasm/v1beta1/code/1/contracts"
 
     @staticmethod
     def test_query_contract_history():
@@ -231,7 +231,7 @@ class WasmTests(unittest.TestCase):
         # Replace base64 msg with original dict which would be returned by REST api to generate get response
         content["entries"][0]["msg"] = msg
         raw_content = json.dumps(content)
-        mock_client = MockQueryRestClient(raw_content)
+        mock_client = MockRestClient(raw_content)
 
         wasm = WasmRestClient(mock_client)
 
@@ -239,9 +239,9 @@ class WasmTests(unittest.TestCase):
             wasm.ContractHistory(
                 QueryContractHistoryRequest(address="fetchcontractaddress")
             )
-            == expected_response  # noqa W503
+            == expected_response
         )
         assert (
-            mock_client.last_request
-            == "/wasm/v1beta1/contract/fetchcontractaddress/history?"  # noqa W503
+            mock_client.last_base_url
+            == "/wasm/v1beta1/contract/fetchcontractaddress/history"
         )

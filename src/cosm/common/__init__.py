@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the REST Query modules."""
+"""This package contains modules used across other modules in cosm."""

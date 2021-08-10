@@ -28,11 +28,11 @@ from typing import List, Optional, Union
 from google.protobuf.any_pb2 import Any
 from grpc._channel import Channel
 
-from common import JSONLike
 from cosm.clients.cosmwasm_client import CosmWasmClient
+from cosm.common.rest_client import RestClient
+from cosm.common.types import JSONLike
 from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PrivateKey
-from cosm.query.rest_client import QueryRestClient
 from cosm.tx import sign_transaction
 from cosm.tx.rest_client import TxRestClient
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
@@ -64,7 +64,7 @@ class SigningCosmWasmClient(CosmWasmClient):
     def __init__(
         self,
         private_key: PrivateKey,
-        channel: Union[Channel, QueryRestClient],
+        channel: Union[Channel, RestClient],
         chain_id: str,
     ):
         """
@@ -78,7 +78,7 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         if isinstance(channel, Channel):
             self.tx_client = TxGrpcClient(channel)
-        elif isinstance(channel, QueryRestClient):
+        elif isinstance(channel, RestClient):
             self.tx_client = TxRestClient(channel)
         else:
             raise RuntimeError(f"Unsupported channel type {type(channel)}")
