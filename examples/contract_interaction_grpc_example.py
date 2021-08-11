@@ -33,7 +33,7 @@ AMOUNT = "1"
 
 # Path to smart contract
 CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
-CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "..", "contracts", "cw_erc1155.wasm")
+CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "contracts", "cw_erc1155.wasm")
 
 # Node config
 GRPC_ENDPOINT_ADDRESS = "localhost:9090"
