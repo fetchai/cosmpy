@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""REST example of query balance."""
+
 from cosm.bank.rest_client import BankRestClient, QueryBalanceRequest
 from cosm.common.rest_client import RestClient
 
