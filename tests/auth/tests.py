@@ -25,13 +25,13 @@ import unittest
 from google.protobuf.json_format import ParseDict
 
 from cosm.auth.rest_client import AuthRestClient
-from tests.helpers import MockRestClient
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
+from tests.helpers import MockRestClient
 
 
 class AuthTests(unittest.TestCase):

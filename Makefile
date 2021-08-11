@@ -7,7 +7,7 @@ WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
 OUTPUT_FOLDER := src
 PYCOSM_SRC_DIR := src/cosm
-PYCOSM_TESTS_DIR := src/cosm/tests
+PYCOSM_TESTS_DIR := tests
 
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
@@ -76,19 +76,19 @@ $(WASMD_DIR): Makefile
 
 .PHONY: black-check
 black-check:
-	black --check --verbose $(PYCOSM_SRC_DIR)
+	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
 
 .PHONY: isort-check
 isort-check:
-	isort --check-only --verbose $(PYCOSM_SRC_DIR)
+	isort --check-only --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
 
 .PHONY: flake
 flake:
-	flake8 $(PYCOSM_SRC_DIR)
+	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
 
 .PHONY: vulture
 vulture:
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py --exclude "*_pb2.py"
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --exclude "*_pb2.py"
 
 ####################
 ### Security & Safety
@@ -96,7 +96,7 @@ vulture:
 
 .PHONY: bandit
 bandit:
-	bandit -r $(PYCOSM_SRC_DIR) --skip B101
+	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
 
 .PHONY: safety
 safety:
@@ -108,11 +108,11 @@ safety:
 
 .PHONY: mypy
 mypy:
-	mypy $(PYCOSM_SRC_DIR)
+	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR)
+	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
 
 ####################
 ### Tests
@@ -141,10 +141,10 @@ copyright-check:
 
 .PHONY: lint
 lint:
-	black $(PYCOSM_SRC_DIR)
-	isort $(PYCOSM_SRC_DIR)
-	flake8 $(PYCOSM_SRC_DIR)
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py --exclude "*_pb2.py"
+	black $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
+	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
+	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR)
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --exclude "*_pb2.py"
 
 .PHONY: check
 check:
