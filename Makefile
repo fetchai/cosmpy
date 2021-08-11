@@ -77,19 +77,19 @@ $(WASMD_DIR): Makefile
 
 .PHONY: black-check
 black-check:
-	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	tox -e black-check
 
 .PHONY: isort-check
 isort-check:
-	isort --check-only --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	tox -e isort-check
 
 .PHONY: flake
 flake:
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	tox -e flake8
 
 .PHONY: vulture
 vulture:
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
+	tox -e vulture
 
 ####################
 ### Security & Safety
@@ -97,12 +97,11 @@ vulture:
 
 .PHONY: bandit
 bandit:
-	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
-	bandit -r $(PYCOSM_EXAMPLES_DIR) --skip B101,B105
+	tox -e bandit
 
 .PHONY: safety
 safety:
-	safety check -i 41002
+	tox -e safety
 
 ####################
 ### Linters
@@ -110,11 +109,11 @@ safety:
 
 .PHONY: mypy
 mypy:
-	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	tox -e mypy
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	tox -e pylint
 
 ####################
 ### Tests
@@ -122,7 +121,7 @@ pylint:
 
 .PHONY: test
 test:
-	python -m unittest discover -s .
+	tox -e test
 
 ####################
 ### License and copyright checks
@@ -130,12 +129,11 @@ test:
 
 .PHONY: liccheck
 liccheck:
-	pipenv lock -r > requirements.txt
-	liccheck -s strategy.ini -r requirements.txt -l PARANOID
+	tox -e liccheck
 
 .PHONY: copyright-check
 copyright-check:
-	python scripts/check_copyright.py
+	tox -e copyright-check
 
 ####################
 ### Combinations
@@ -143,10 +141,10 @@ copyright-check:
 
 .PHONY: lint
 lint:
-	black $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
+	tox -e black
+	tox -e isort
+	tox -e flake8
+	tox -e vulture
 
 .PHONY: check
 check:
@@ -161,6 +159,11 @@ check:
 	make liccheck
 	make copyright-check
 	make test
+
+# Freeze deps to requirements.txt (needed for some Tox checks)
+.PHONY: check
+freeze:
+	pipenv lock -r > requirements.txt
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
