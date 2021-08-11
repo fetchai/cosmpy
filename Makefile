@@ -97,7 +97,8 @@ vulture:
 
 .PHONY: bandit
 bandit:
-	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --skip B101
+	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
+	bandit -r $(PYCOSM_EXAMPLES_DIR) --skip B101,B105
 
 .PHONY: safety
 safety:
