@@ -32,7 +32,7 @@ from cosm.auth.interface import Auth
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PrivateKey
-from cosm.tests.helpers import MockRestClient
+from tests.helpers import MockRestClient
 from cosm.tx.interface import TxInterface
 from cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,

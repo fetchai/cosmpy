@@ -23,7 +23,7 @@ import json
 from unittest import TestCase
 
 from cosm.staking.rest_client import StakingRestClient
-from cosm.tests.helpers import MockRestClient
+from tests.helpers import MockRestClient
 from cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,

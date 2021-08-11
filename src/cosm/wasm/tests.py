@@ -25,7 +25,6 @@ import unittest
 
 from google.protobuf.json_format import ParseDict
 
-from cosm.tests.helpers import MockRestClient
 from cosm.wasm.rest_client import WasmRestClient
 from cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
@@ -45,6 +44,7 @@ from cosmwasm.wasm.v1beta1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
+from tests.helpers import MockRestClient
 
 
 class WasmTests(unittest.TestCase):

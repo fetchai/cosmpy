@@ -23,7 +23,7 @@ import json
 import unittest
 
 from cosm.bank.rest_client import BankRestClient
-from cosm.tests.helpers import MockRestClient
+from tests.helpers import MockRestClient
 from cosmos.bank.v1beta1.bank_pb2 import Metadata, Params
 from cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
