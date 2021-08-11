@@ -1,10 +1,10 @@
 """ gRPC example of sending and querying funds """
 
-from cosm.crypto.keypairs import PrivateKey
-from cosmos.base.v1beta1.coin_pb2 import Coin
+from grpc import insecure_channel
 
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from grpc import insecure_channel
+from cosm.crypto.keypairs import PrivateKey
+from cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
 DENOM = "stake"
@@ -16,9 +16,7 @@ CHAIN_ID = "testing"
 
 # Private key of sender's account
 FROM_PK = PrivateKey(
-    bytes.fromhex(
-        "0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
-    )
+    bytes.fromhex("0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae")
 )
 # Create client
 channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
