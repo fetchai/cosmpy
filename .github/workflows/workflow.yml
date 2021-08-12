@@ -24,7 +24,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo apt install libssl-dev=1.0.2e
+        sudo apt install openssl=1.0.2e
         pip install tox==3.24.1
     - name: Code style check
       run: |
