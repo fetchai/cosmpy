@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from cosmos.base.tendermint.v1beta1 import query_pb2 as cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2
+from proto.cosmos.base.tendermint.v1beta1 import query_pb2 as cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2
 
 
 class ServiceStub(object):

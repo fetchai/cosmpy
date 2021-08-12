@@ -12,7 +12,7 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
-from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from proto.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 

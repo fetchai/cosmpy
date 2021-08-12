@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from cosmos.distribution.v1beta1 import query_pb2 as cosmos_dot_distribution_dot_v1beta1_dot_query__pb2
+from proto.cosmos.distribution.v1beta1 import query_pb2 as cosmos_dot_distribution_dot_v1beta1_dot_query__pb2
 
 
 class QueryStub(object):

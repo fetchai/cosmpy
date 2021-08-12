@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 from ibc.core.connection.v1 import connection_pb2 as ibc_dot_core_dot_connection_dot_v1_dot_connection__pb2
 from ibc.core.channel.v1 import channel_pb2 as ibc_dot_core_dot_channel_dot_v1_dot_channel__pb2
-from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from proto.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 
 

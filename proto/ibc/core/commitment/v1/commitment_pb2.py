@@ -11,7 +11,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from proto.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from confio import proofs_pb2 as confio_dot_proofs__pb2
 
 

@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from cosmos.slashing.v1beta1 import tx_pb2 as cosmos_dot_slashing_dot_v1beta1_dot_tx__pb2
+from proto.cosmos.slashing.v1beta1 import tx_pb2 as cosmos_dot_slashing_dot_v1beta1_dot_tx__pb2
 
 
 class MsgStub(object):

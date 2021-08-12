@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from cosmos.vesting.v1beta1 import tx_pb2 as cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2
+from proto.cosmos.vesting.v1beta1 import tx_pb2 as cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2
 
 
 class MsgStub(object):
