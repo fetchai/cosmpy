@@ -19,11 +19,11 @@
 
 """ gRPC example of native tokens atomic swap """
 
+from cosmos.base.v1beta1.coin_pb2 import Coin
 from grpc import insecure_channel
 
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from cosm.crypto.keypairs import PrivateKey
-from cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
 DENOM_1 = "stake"

@@ -19,10 +19,11 @@
 
 """ REST example of sending and querying funds """
 
+from cosmos.base.v1beta1.coin_pb2 import Coin
+
 from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from cosm.common.rest_client import RestClient
 from cosm.crypto.keypairs import PrivateKey
-from cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
 DENOM = "stake"

@@ -33,7 +33,10 @@ from cosm.wasm.rest_client import WasmRestClient
 from proto.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from proto.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from proto.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
-from proto.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest, QueryBalanceResponse
+from proto.cosmos.bank.v1beta1.query_pb2 import (
+    QueryBalanceRequest,
+    QueryBalanceResponse,
+)
 from proto.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
 from proto.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
 from proto.cosmwasm.wasm.v1beta1.query_pb2_grpc import QueryStub as CosmWasmGrpcClient

@@ -24,15 +24,6 @@ import unittest
 from dataclasses import dataclass
 from hashlib import sha256
 
-from google.protobuf.any_pb2 import Any
-from google.protobuf.internal.well_known_types import Any as AnyOrig
-from grpc import insecure_channel
-
-from cosm.common.rest_client import RestClient
-from cosm.crypto.address import Address
-from cosm.crypto.keypairs import PrivateKey, PublicKey
-from cosm.tx import sign_transaction
-from cosm.tx.rest_client import TxRestClient
 from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
@@ -52,6 +43,15 @@ from cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
+from google.protobuf.any_pb2 import Any
+from google.protobuf.internal.well_known_types import Any as AnyOrig
+from grpc import insecure_channel
+
+from cosm.common.rest_client import RestClient
+from cosm.crypto.address import Address
+from cosm.crypto.keypairs import PrivateKey, PublicKey
+from cosm.tx import sign_transaction
+from cosm.tx.rest_client import TxRestClient
 
 orig_Pack = AnyOrig.Pack
 

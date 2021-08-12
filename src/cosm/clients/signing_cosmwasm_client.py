@@ -47,7 +47,14 @@ from proto.cosmos.tx.v1beta1.service_pb2 import (
     GetTxResponse,
 )
 from proto.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
-from proto.cosmos.tx.v1beta1.tx_pb2 import AuthInfo, Fee, ModeInfo, SignerInfo, Tx, TxBody
+from proto.cosmos.tx.v1beta1.tx_pb2 import (
+    AuthInfo,
+    Fee,
+    ModeInfo,
+    SignerInfo,
+    Tx,
+    TxBody,
+)
 from proto.cosmwasm.wasm.v1beta1.tx_pb2 import (
     MsgExecuteContract,
     MsgInstantiateContract,
