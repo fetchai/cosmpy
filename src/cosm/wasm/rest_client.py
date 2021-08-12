@@ -27,7 +27,7 @@ from google.protobuf.json_format import Parse, ParseDict
 from cosm.common.rest_client import RestClient
 from cosm.common.types import JSONLike
 from cosm.wasm.interface import Wasm
-from cosmwasm.wasm.v1beta1.query_pb2 import (
+from proto.cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
     QueryCodeRequest,

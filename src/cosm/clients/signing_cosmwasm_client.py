@@ -35,20 +35,20 @@ from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PrivateKey
 from cosm.tx import sign_transaction
 from cosm.tx.rest_client import TxRestClient
-from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from cosmos.base.v1beta1.coin_pb2 import Coin
-from cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
-from cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
-from cosmos.tx.v1beta1.service_pb2 import (
+from proto.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
+from proto.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
+from proto.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
     GetTxRequest,
     GetTxResponse,
 )
-from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
-from cosmos.tx.v1beta1.tx_pb2 import AuthInfo, Fee, ModeInfo, SignerInfo, Tx, TxBody
-from cosmwasm.wasm.v1beta1.tx_pb2 import (
+from proto.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+from proto.cosmos.tx.v1beta1.tx_pb2 import AuthInfo, Fee, ModeInfo, SignerInfo, Tx, TxBody
+from proto.cosmwasm.wasm.v1beta1.tx_pb2 import (
     MsgExecuteContract,
     MsgInstantiateContract,
     MsgStoreCode,

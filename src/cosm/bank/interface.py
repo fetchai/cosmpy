@@ -21,7 +21,7 @@
 
 from abc import ABC, abstractmethod
 
-from cosmos.bank.v1beta1.query_pb2 import (
+from proto.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
     QueryBalanceRequest,

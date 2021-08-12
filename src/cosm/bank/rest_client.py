@@ -23,7 +23,7 @@ from google.protobuf.json_format import Parse
 
 from cosm.bank.interface import Bank
 from cosm.common.rest_client import RestClient
-from cosmos.bank.v1beta1.query_pb2 import (
+from proto.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
     QueryBalanceRequest,

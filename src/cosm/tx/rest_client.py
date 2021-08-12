@@ -28,7 +28,7 @@ from google.protobuf.json_format import Parse, ParseDict
 from cosm.common.rest_client import RestClient
 from cosm.common.types import JSONLike
 from cosm.tx.interface import TxInterface
-from cosmos.tx.v1beta1.service_pb2 import (
+from proto.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
     BroadcastTxResponse,
     GetTxRequest,

@@ -22,8 +22,8 @@
 from typing import List
 
 from cosm.crypto.interface import Signer
-from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from cosmos.tx.v1beta1.tx_pb2 import SignDoc, Tx
+from proto.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from proto.cosmos.tx.v1beta1.tx_pb2 import SignDoc, Tx
 
 
 def sign_transaction(

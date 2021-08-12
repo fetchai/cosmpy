@@ -21,7 +21,7 @@
 
 from abc import ABC, abstractmethod
 
-from cosmos.staking.v1beta1.query_pb2 import (
+from proto.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
     QueryDelegatorDelegationsRequest,
