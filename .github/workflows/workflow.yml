@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9]  # Matching Docker container
+        python-version: [3.7, 3.8, 3.9]  # Matching Docker container
 
     timeout-minutes: 30
 
