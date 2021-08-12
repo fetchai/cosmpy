@@ -24,25 +24,6 @@ import unittest
 from dataclasses import dataclass
 from hashlib import sha256
 
-from cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
-from cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
-from cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from cosmos.base.v1beta1.coin_pb2 import Coin
-from cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
-from cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
-
-# from cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
-from cosmos.tx.v1beta1.service_pb2 import BroadcastMode, BroadcastTxRequest
-from cosmos.tx.v1beta1.tx_pb2 import (
-    AuthInfo,
-    Fee,
-    ModeInfo,
-    SignDoc,
-    SignerInfo,
-    Tx,
-    TxBody,
-)
 from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.well_known_types import Any as AnyOrig
 from grpc import insecure_channel
@@ -52,6 +33,25 @@ from cosm.crypto.address import Address
 from cosm.crypto.keypairs import PrivateKey, PublicKey
 from cosm.tx import sign_transaction
 from cosm.tx.rest_client import TxRestClient
+from proto.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from proto.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
+from proto.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
+from proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from proto.cosmos.base.v1beta1.coin_pb2 import Coin
+from proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
+from proto.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
+
+# from proto.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+from proto.cosmos.tx.v1beta1.service_pb2 import BroadcastMode, BroadcastTxRequest
+from proto.cosmos.tx.v1beta1.tx_pb2 import (
+    AuthInfo,
+    Fee,
+    ModeInfo,
+    SignDoc,
+    SignerInfo,
+    Tx,
+    TxBody,
+)
 
 orig_Pack = AnyOrig.Pack
 
