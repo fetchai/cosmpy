@@ -130,7 +130,6 @@ test:
 
 .PHONY: liccheck
 liccheck:
-	pipenv lock -r > requirements.txt
 	liccheck -s strategy.ini -r requirements.txt -l PARANOID
 
 .PHONY: copyright-check
@@ -161,6 +160,11 @@ check:
 	make liccheck
 	make copyright-check
 	make test
+
+# Freeze deps to requirements.txt (needed for some Tox checks)
+.PHONY: check
+freeze:
+	pipenv lock -r > requirements.txt
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))

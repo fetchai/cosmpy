@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+tox = "==3.24.1"
 flake8 = "==3.9.2"
 black = "==21.6b0"
 mypy = "==0.910"

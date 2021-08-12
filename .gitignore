@@ -6,5 +6,5 @@ build/
 # IDEs
 .idea/
 
-# Requirements file generated for license check (liccheck)
-requirements.txt
+# Tox files
+.tox
