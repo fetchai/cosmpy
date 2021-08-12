@@ -45,5 +45,7 @@ jobs:
       run: tox -e liccheck
     - name: Copyright check
       run: tox -e copyright-check
+    - name: Manifest check
+      run: tox -e check-manifest
     - name: Unit tests
       run: tox -e test
