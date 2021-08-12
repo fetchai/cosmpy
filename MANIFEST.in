@@ -10,3 +10,4 @@ recursive-include scripts *.sh
 recursive-include src *.py
 recursive-include tests *.py
 recursive-include tests *.wasm
+recursive-include proto *.py
