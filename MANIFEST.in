@@ -2,6 +2,7 @@ include *.lock
 include *.txt
 include Makefile
 include Pipfile
+include .pylintrc
 include strategy.ini
 include tox.ini
 recursive-include contracts *.wasm
