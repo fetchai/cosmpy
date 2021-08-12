@@ -1,0 +1,13 @@
+include *.lock
+include *.txt
+include Makefile
+include Pipfile
+include strategy.ini
+include tox.ini
+recursive-include contracts *.wasm
+recursive-include examples *.py
+recursive-include scripts *.py
+recursive-include scripts *.sh
+recursive-include src *.py
+recursive-include tests *.py
+recursive-include tests *.wasm
