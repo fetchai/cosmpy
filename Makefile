@@ -77,19 +77,19 @@ $(WASMD_DIR): Makefile
 
 .PHONY: black-check
 black-check:
-	tox -e black-check
+	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: isort-check
 isort-check:
-	tox -e isort-check
+	isort --check-only --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: flake
 flake:
-	tox -e flake8
+	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: vulture
 vulture:
-	tox -e vulture
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
 
 ####################
 ### Security & Safety
@@ -97,11 +97,12 @@ vulture:
 
 .PHONY: bandit
 bandit:
-	tox -e bandit
+	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
+	bandit -r $(PYCOSM_EXAMPLES_DIR) --skip B101,B105
 
 .PHONY: safety
 safety:
-	tox -e safety
+	safety check -i 41002
 
 ####################
 ### Linters
@@ -109,11 +110,11 @@ safety:
 
 .PHONY: mypy
 mypy:
-	tox -e mypy
+	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: pylint
 pylint:
-	tox -e pylint
+	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 ####################
 ### Tests
@@ -121,7 +122,7 @@ pylint:
 
 .PHONY: test
 test:
-	tox -e test
+	python -m unittest discover -s .
 
 ####################
 ### License and copyright checks
@@ -129,11 +130,11 @@ test:
 
 .PHONY: liccheck
 liccheck:
-	tox -e liccheck
+	liccheck -s strategy.ini -r requirements.txt -l PARANOID
 
 .PHONY: copyright-check
 copyright-check:
-	tox -e copyright-check
+	python scripts/check_copyright.py
 
 ####################
 ### Combinations
@@ -141,10 +142,10 @@ copyright-check:
 
 .PHONY: lint
 lint:
-	tox -e black
-	tox -e isort
-	tox -e flake8
-	tox -e vulture
+	black $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
 
 .PHONY: check
 check:
