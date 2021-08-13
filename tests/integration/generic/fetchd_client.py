@@ -19,9 +19,10 @@
 
 """Module with FetchdClient class for easy usage of Fetchd node with Docker engine."""
 
+import os
 import tempfile
 
-import docker
+import docker  # pylint: disable=import-error
 
 
 class FetchdClient:
@@ -32,6 +33,7 @@ class FetchdClient:
     MOUNT_PATH = "/mnt"
     CONTAINER_NAME = "fetchd_test"
     PORTS = {9090: 9090, 1317: 1317}
+    # pylint: disable=anomalous-backslash-in-string
     ENTRYPOINT_LINES = (
         "#!/usr/bin/env bash",
         # variables
@@ -91,5 +93,4 @@ class FetchdClient:
         """Stop running Docker container with Fetchd node."""
         if self.container is None:
             raise RuntimeError("Fetchd node is not running.")
-        else:
-            self.container.stop()
+        self.container.stop()
