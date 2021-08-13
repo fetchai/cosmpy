@@ -67,6 +67,11 @@ class FetchdClient:
         self.container = None
 
     def _make_entrypoint(self, dirpath):
+        """
+        Make an entrypoint file for Fetchd container.
+
+        :param dirpath: str target directory path.
+        """
         path = os.path.join(dirpath, self.ENTRYPOINT_FILENAME)
         with open(path, "w") as f:
             f.writelines(line + "\n" for line in self.ENTRYPOINT_LINES)
