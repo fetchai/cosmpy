@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Module with PyCosm integration tests."""
+"""Generic tools for PyCosm integration tests."""

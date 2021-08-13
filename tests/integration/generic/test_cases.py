@@ -17,4 +17,23 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Module with PyCosm integration tests."""
+"""Module with base test cases for integration tests."""
+
+from unittest import TestCase
+
+from tests.integration.generic.fetchd_client import FetchdClient
+
+
+class FetchdTestCase(TestCase):
+    """Base test case for Fetchd node."""
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up Fetchd node for testing."""
+        cls.client = FetchdClient()
+        cls.client.run()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Teardown the Fetchd node."""
+        cls.client.stop()
