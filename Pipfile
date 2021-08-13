@@ -16,6 +16,7 @@ vulture = "==2.3"
 pylint = "==2.9.6"
 liccheck = "==0.6.2"
 flake8-copyright = "==0.2.2"
+docker = "*"
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
