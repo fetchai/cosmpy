@@ -76,7 +76,7 @@ def check_copyright(file: Path) -> bool:
 
 if __name__ == "__main__":
     python_files = itertools.chain(
-        Path("src/cosm").glob("**/*.py"),
+        Path("pycosm/cosm").glob("**/*.py"),
         [Path("setup.py")],
     )
 

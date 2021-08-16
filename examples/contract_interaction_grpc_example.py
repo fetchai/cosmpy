@@ -24,8 +24,8 @@ import os
 
 from grpc import insecure_channel
 
-from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosm.crypto.keypairs import PrivateKey
+from clients.signing_cosmwasm_client import SigningCosmWasmClient
+from crypto.keypairs import PrivateKey
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID = "1234"

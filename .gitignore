@@ -8,3 +8,6 @@ build/
 
 # Tox files
 .tox
+
+.DS_Store
+*/.DS_Store

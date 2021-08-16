@@ -28,22 +28,22 @@ from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.well_known_types import Any as AnyOrig
 from grpc import insecure_channel
 
-from cosm.common.rest_client import RestClient
-from cosm.crypto.address import Address
-from cosm.crypto.keypairs import PrivateKey, PublicKey
-from cosm.tx import sign_transaction
-from cosm.tx.rest_client import TxRestClient
-from proto.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from proto.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
-from proto.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
-from proto.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from proto.cosmos.base.v1beta1.coin_pb2 import Coin
-from proto.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
-from proto.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
+from common import RestClient
+from crypto import Address
+from crypto.keypairs import PrivateKey, PublicKey
+from tx import sign_transaction
+from tx.rest_client import TxRestClient
+from protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
+from protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthQueryClient
+from protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from protos import PubKey as ProtoPubKey
+from protos import SignMode
 
-# from proto.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
-from proto.cosmos.tx.v1beta1.service_pb2 import BroadcastMode, BroadcastTxRequest
-from proto.cosmos.tx.v1beta1.tx_pb2 import (
+# from protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+from protos.cosmos.tx.v1beta1.service_pb2 import BroadcastMode, BroadcastTxRequest
+from protos import (
     AuthInfo,
     Fee,
     ModeInfo,

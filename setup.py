@@ -47,8 +47,8 @@ setup(
     ],
 
     keywords='cosmos, gaia, fetchhub, fetchai',
-    package_dir={'': 'src'},
-    packages=find_packages(where='src'),
+    package_dir={'': 'pycosm'},
+    packages=find_packages(where='pycosm'),
     python_requires='>=3.6, <4',
     install_requires=['ecdsa',
                       'bech32',

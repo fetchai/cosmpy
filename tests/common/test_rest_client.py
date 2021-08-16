@@ -25,7 +25,7 @@ from urllib.parse import urlencode
 
 from requests import Response, Session
 
-from cosm.common.rest_client import RestClient
+from common import RestClient
 
 
 class QueryTests(TestCase):

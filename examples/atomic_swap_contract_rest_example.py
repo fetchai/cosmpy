@@ -22,9 +22,9 @@
 import inspect
 import os
 
-from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosm.common.rest_client import RestClient
-from cosm.crypto.keypairs import PrivateKey
+from clients.signing_cosmwasm_client import SigningCosmWasmClient
+from common import RestClient
+from crypto.keypairs import PrivateKey
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID_1 = "1234"

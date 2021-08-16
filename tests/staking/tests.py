@@ -22,8 +22,8 @@
 import json
 from unittest import TestCase
 
-from cosm.staking.rest_client import StakingRestClient
-from proto.cosmos.staking.v1beta1.query_pb2 import (
+from staking import StakingRestClient
+from protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
     QueryDelegatorDelegationsRequest,
