@@ -25,14 +25,13 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
-    name='cosm',
+    name='pycosm',
     version='0.0.1',
-    description='A library for writing tools to interact with cosmos networks',
+    description='A library for interacting with the cosmos networks',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/fetchai/pycosm',
-    author='Ed FitzGerald',
-    author_email='edward.fitzgerald@fetch.ai',
+    author='Fetch.AI Limited',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

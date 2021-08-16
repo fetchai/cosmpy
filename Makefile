@@ -76,7 +76,7 @@ $(WASMD_DIR): Makefile
 ####################
 
 .PHONY: black-check
-black-check:
+black-check:g
 	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: isort-check

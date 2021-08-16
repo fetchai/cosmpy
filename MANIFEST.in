@@ -7,7 +7,6 @@ recursive-include contracts *.wasm
 recursive-include examples *.py
 recursive-include scripts *.py
 recursive-include scripts *.sh
-recursive-include src *.py
+recursive-include pycosm *.py
 recursive-include tests *.py
 recursive-include tests *.wasm
-recursive-include proto *.py

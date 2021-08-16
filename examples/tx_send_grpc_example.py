@@ -21,9 +21,9 @@
 
 from grpc import insecure_channel
 
-from clients.signing_cosmwasm_client import SigningCosmWasmClient
-from crypto.keypairs import PrivateKey
-from protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from pycosm.crypto.keypairs import PrivateKey
+from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
 DENOM = "stake"
