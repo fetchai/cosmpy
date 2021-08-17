@@ -23,8 +23,9 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 from urllib.parse import urlencode
 
-from common import RestClient
 from requests import Response, Session
+
+from pycosm.common import RestClient
 
 
 class QueryTests(TestCase):

@@ -193,7 +193,7 @@ class WasmRestClient(Wasm):
         return Parse(response, QueryCodesResponse())
 
     @staticmethod
-    def _fix_state_response(response: str) -> JSONLike:
+    def _fix_state_response(response: bytes) -> JSONLike:
         """
         Fix raw/smart contract state response to be parsable to protobuf object
         - Converts dict to base64 encoded string
@@ -208,7 +208,7 @@ class WasmRestClient(Wasm):
         return dict_response
 
     @staticmethod
-    def _fix_history_response(response: str) -> JSONLike:
+    def _fix_history_response(response: bytes) -> JSONLike:
         """
         Fix contract history response to be parsable to protobuf object
         - Converts dict to base64 encoded string

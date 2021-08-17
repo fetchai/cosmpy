@@ -22,9 +22,9 @@
 import json
 import unittest
 
-from auth.rest_client import AuthRestClient
 from google.protobuf.json_format import ParseDict
 
+from pycosm.auth.rest_client import AuthRestClient
 from pycosm.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,

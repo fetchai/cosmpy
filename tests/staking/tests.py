@@ -22,8 +22,6 @@
 import json
 from unittest import TestCase
 
-from staking import StakingRestClient
-
 from pycosm.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
@@ -54,6 +52,7 @@ from pycosm.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
 )
+from pycosm.staking.rest_client import StakingRestClient
 from tests.helpers import MockRestClient
 
 

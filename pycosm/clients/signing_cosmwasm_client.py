@@ -84,9 +84,9 @@ class SigningCosmWasmClient(CosmWasmClient):
         super().__init__(channel)
 
         if isinstance(channel, Channel):
-            self.tx_client = TxGrpcClient(channel)
+            self.tx_client: Union[TxRestClient, TxGrpcClient] = TxGrpcClient(channel)
         elif isinstance(channel, RestClient):
-            self.tx_client = TxRestClient(channel)
+            self.tx_client: Union[TxRestClient, TxGrpcClient] = TxRestClient(channel)
         else:
             raise RuntimeError(f"Unsupported channel type {type(channel)}")
 

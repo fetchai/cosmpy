@@ -21,8 +21,8 @@
 
 import unittest
 
-from crypto import Address
-from crypto.keypairs import PublicKey
+from pycosm.crypto.address import Address
+from pycosm.crypto.keypairs import PublicKey
 
 
 class AddressTests(unittest.TestCase):
