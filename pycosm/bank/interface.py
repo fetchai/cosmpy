@@ -21,7 +21,7 @@
 
 from abc import ABC, abstractmethod
 
-from pycosm.protos import (
+from pycosm.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
     QueryBalanceRequest,
