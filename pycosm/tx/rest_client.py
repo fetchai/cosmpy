@@ -23,10 +23,11 @@ import base64
 import json
 from typing import List
 
-from common.rest_client import RestClient
-from common.types import JSONLike
 from google.protobuf.json_format import Parse, ParseDict
-from protos.cosmos.tx.v1beta1.service_pb2 import (
+
+from pycosm.common.rest_client import RestClient
+from pycosm.common.types import JSONLike
+from pycosm.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
     BroadcastTxResponse,
     GetTxRequest,
@@ -36,7 +37,7 @@ from protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
-from tx.interface import TxInterface
+from pycosm.tx.interface import TxInterface
 
 
 class TxRestClient(TxInterface):

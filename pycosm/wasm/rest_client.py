@@ -22,10 +22,11 @@
 import base64
 import json
 
-from common.rest_client import RestClient
-from common.types import JSONLike
 from google.protobuf.json_format import Parse, ParseDict
-from protos.cosmwasm.wasm.v1beta1.query_pb2 import (
+
+from pycosm.common.rest_client import RestClient
+from pycosm.common.types import JSONLike
+from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
     QueryCodeRequest,
@@ -43,7 +44,7 @@ from protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
-from wasm.interface import Wasm
+from pycosm.wasm.interface import Wasm
 
 
 class WasmRestClient(Wasm):

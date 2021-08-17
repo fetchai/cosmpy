@@ -22,8 +22,9 @@
 from typing import Optional, Union
 
 import bech32
-from crypto.hashfuncs import ripemd160, sha256
-from crypto.keypairs import PublicKey
+
+from pycosm.crypto.hashfuncs import ripemd160, sha256
+from pycosm.crypto.keypairs import PublicKey
 
 DEFAULT_PREFIX = "fetch"
 

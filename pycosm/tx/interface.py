@@ -21,7 +21,7 @@
 
 from abc import ABC, abstractmethod
 
-import protos as svc
+import pycosm.protos as svc
 
 
 class TxInterface(ABC):

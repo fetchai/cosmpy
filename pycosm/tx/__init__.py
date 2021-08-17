@@ -19,8 +19,8 @@
 
 """This package contains the Tx modules."""
 
-from crypto.interface import Signer
-from protos import SignDoc, Tx
+from pycosm.crypto.interface import Signer
+from pycosm.protos import SignDoc, Tx
 
 
 def sign_transaction(

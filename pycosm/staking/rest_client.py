@@ -19,9 +19,10 @@
 
 """Implementation of Staking interface using REST."""
 
-from common.rest_client import RestClient
 from google.protobuf.json_format import Parse
-from protos.cosmos.staking.v1beta1.query_pb2 import (
+
+from pycosm.common.rest_client import RestClient
+from pycosm.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
     QueryDelegatorDelegationsRequest,
@@ -51,7 +52,7 @@ from protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
 )
-from staking.interface import Staking
+from pycosm.staking.interface import Staking
 
 
 class StakingRestClient(Staking):

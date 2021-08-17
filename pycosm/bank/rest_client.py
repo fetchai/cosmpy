@@ -19,10 +19,11 @@
 
 """Implementation of Bank interface using REST."""
 
-from bank.interface import Bank
-from common.rest_client import RestClient
 from google.protobuf.json_format import Parse
-from protos import (
+
+from pycosm.bank.interface import Bank
+from pycosm.common.rest_client import RestClient
+from pycosm.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
     QueryBalanceRequest,

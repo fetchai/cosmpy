@@ -25,33 +25,41 @@ import time
 from pathlib import Path
 from typing import List, Optional, Union
 
-from clients.cosmwasm_client import CosmWasmClient
-from common.rest_client import RestClient
-from common.types import JSONLike
-from crypto.address import Address
-from crypto.keypairs import PrivateKey
 from google.protobuf.any_pb2 import Any
 from grpc._channel import Channel
-from protos import AuthInfo, Fee, ModeInfo
-from protos import PubKey as ProtoPubKey
-from protos import ServiceStub as TxGrpcClient
-from protos import SignerInfo, SignMode, Tx, TxBody
-from protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from protos.cosmos.base.v1beta1.coin_pb2 import Coin
-from protos.cosmos.tx.v1beta1.service_pb2 import (
+
+from pycosm.clients.cosmwasm_client import CosmWasmClient
+from pycosm.common.rest_client import RestClient
+from pycosm.common.types import JSONLike
+from pycosm.crypto.address import Address
+from pycosm.crypto.keypairs import PrivateKey
+from pycosm.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from pycosm.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from pycosm.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
+from pycosm.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
+from pycosm.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
     GetTxRequest,
     GetTxResponse,
 )
-from protos.cosmwasm.wasm.v1beta1.tx_pb2 import (
+from pycosm.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+from pycosm.protos.cosmos.tx.v1beta1.tx_pb2 import (
+    AuthInfo,
+    Fee,
+    ModeInfo,
+    SignerInfo,
+    Tx,
+    TxBody,
+)
+from pycosm.protos.cosmwasm.wasm.v1beta1.tx_pb2 import (
     MsgExecuteContract,
     MsgInstantiateContract,
     MsgStoreCode,
 )
-from tx import sign_transaction
-from tx.rest_client import TxRestClient
+from pycosm.tx import sign_transaction
+from pycosm.tx.rest_client import TxRestClient
 
 
 class SigningCosmWasmClient(CosmWasmClient):

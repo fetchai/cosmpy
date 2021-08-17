@@ -19,10 +19,11 @@
 
 """Implementation of Auth interface using REST."""
 
-from auth.interface import Auth
-from common.rest_client import RestClient
 from google.protobuf.json_format import Parse
-from protos.cosmos.auth.v1beta1.query_pb2 import (
+
+from pycosm.auth.interface import Auth
+from pycosm.common.rest_client import RestClient
+from pycosm.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,

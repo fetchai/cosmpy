@@ -22,20 +22,26 @@
 import json
 from typing import Union
 
-from auth.rest_client import AuthRestClient
-from bank.rest_client import BankRestClient
-from common.rest_client import RestClient
-from common.types import JSONLike
-from crypto.address import Address
 from grpc._channel import Channel
-from protos import QueryBalanceRequest, QueryBalanceResponse
-from protos import QueryStub as BankGrpcClient
-from protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
-from protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
-from protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
-from protos.cosmwasm.wasm.v1beta1.query_pb2_grpc import QueryStub as CosmWasmGrpcClient
-from wasm.rest_client import WasmRestClient
+
+from pycosm.auth.rest_client import AuthRestClient
+from pycosm.bank.rest_client import BankRestClient
+from pycosm.common.rest_client import RestClient
+from pycosm.common.types import JSONLike
+from pycosm.crypto.address import Address
+from pycosm.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from pycosm.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
+from pycosm.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
+from pycosm.protos.cosmos.bank.v1beta1.query_pb2 import (
+    QueryBalanceRequest,
+    QueryBalanceResponse,
+)
+from pycosm.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
+from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2_grpc import (
+    QueryStub as CosmWasmGrpcClient,
+)
+from pycosm.wasm.rest_client import WasmRestClient
 
 
 class CosmWasmClient:
