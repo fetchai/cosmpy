@@ -19,10 +19,9 @@
 
 """Implementation of Bank interface using REST."""
 
-from google.protobuf.json_format import Parse
-
 from bank.interface import Bank
 from common.rest_client import RestClient
+from google.protobuf.json_format import Parse
 from protos import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,

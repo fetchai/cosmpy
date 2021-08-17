@@ -24,8 +24,6 @@ import json
 import unittest
 
 from google.protobuf.json_format import ParseDict
-
-from wasm.rest_client import WasmRestClient
 from protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
@@ -44,6 +42,8 @@ from protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
+from wasm.rest_client import WasmRestClient
+
 from tests.helpers import MockRestClient
 
 

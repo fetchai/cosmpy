@@ -22,12 +22,12 @@
 import json
 import unittest
 
-from google.protobuf.json_format import ParseDict
-
 from clients.cosmwasm_client import CosmWasmClient
-from protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
+from google.protobuf.json_format import ParseDict
 from protos import QueryBalanceResponse
+from protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
 from protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateResponse
+
 from tests.helpers import MockRestClient
 
 

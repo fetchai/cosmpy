@@ -22,11 +22,9 @@
 import base64
 import json
 
-from google.protobuf.json_format import Parse, ParseDict
-
 from common.rest_client import RestClient
 from common.types import JSONLike
-from wasm.interface import Wasm
+from google.protobuf.json_format import Parse, ParseDict
 from protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
@@ -45,6 +43,7 @@ from protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
+from wasm.interface import Wasm
 
 
 class WasmRestClient(Wasm):

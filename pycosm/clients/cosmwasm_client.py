@@ -22,24 +22,20 @@
 import json
 from typing import Union
 
-from grpc._channel import Channel
-
 from auth.rest_client import AuthRestClient
 from bank.rest_client import BankRestClient
 from common.rest_client import RestClient
 from common.types import JSONLike
 from crypto.address import Address
-from wasm.rest_client import WasmRestClient
+from grpc._channel import Channel
+from protos import QueryBalanceRequest, QueryBalanceResponse
+from protos import QueryStub as BankGrpcClient
 from protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
-from protos import (
-    QueryBalanceRequest,
-    QueryBalanceResponse,
-)
-from protos import QueryStub as BankGrpcClient
 from protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
 from protos.cosmwasm.wasm.v1beta1.query_pb2_grpc import QueryStub as CosmWasmGrpcClient
+from wasm.rest_client import WasmRestClient
 
 
 class CosmWasmClient:

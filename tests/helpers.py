@@ -21,9 +21,8 @@
 
 from typing import List, Optional
 
-from google.protobuf.descriptor import Descriptor
-
 from common import RestClient
+from google.protobuf.descriptor import Descriptor
 
 
 class MockRestClient(RestClient):

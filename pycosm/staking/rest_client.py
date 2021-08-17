@@ -19,10 +19,8 @@
 
 """Implementation of Staking interface using REST."""
 
-from google.protobuf.json_format import Parse
-
 from common.rest_client import RestClient
-from staking.interface import Staking
+from google.protobuf.json_format import Parse
 from protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
@@ -53,6 +51,7 @@ from protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
 )
+from staking.interface import Staking
 
 
 class StakingRestClient(Staking):

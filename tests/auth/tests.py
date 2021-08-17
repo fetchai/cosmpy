@@ -22,15 +22,15 @@
 import json
 import unittest
 
-from google.protobuf.json_format import ParseDict
-
 from auth.rest_client import AuthRestClient
+from google.protobuf.json_format import ParseDict
 from protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
+
 from tests.helpers import MockRestClient
 
 

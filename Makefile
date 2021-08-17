@@ -6,7 +6,8 @@ COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
 WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
 OUTPUT_FOLDER := pycosm/protos
-PYCOSM_SRC_DIR := pycosm
+PYCOSM_SRC_DIRS := pycosm/auth pycosm/bank pycosm/clients pycosm/common pycosm/crypto pycosm/staking pycosm/tx pycosm/wasm
+
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
 
@@ -77,19 +78,19 @@ $(WASMD_DIR): Makefile
 
 .PHONY: black-check
 black-check:
-	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	black --check --verbose $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: isort-check
 isort-check:
-	isort --check-only --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	isort --check-only --verbose $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: flake
 flake:
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	flake8 $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: vulture
 vulture:
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
+	vulture $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
 
 ####################
 ### Security & Safety
@@ -97,7 +98,7 @@ vulture:
 
 .PHONY: bandit
 bandit:
-	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
+	bandit -r $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) --skip B101
 	bandit -r $(PYCOSM_EXAMPLES_DIR) --skip B101,B105
 
 .PHONY: safety
@@ -110,11 +111,11 @@ safety:
 
 .PHONY: mypy
 mypy:
-	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	mypy $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	pylint $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 ####################
 ### Tests
@@ -142,10 +143,10 @@ copyright-check:
 
 .PHONY: lint
 lint:
-	black $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
+	black $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	isort $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	flake8 $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	vulture $(PYCOSM_SRC_DIRS) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude "*_pb2.py"
 
 .PHONY: check
 check:

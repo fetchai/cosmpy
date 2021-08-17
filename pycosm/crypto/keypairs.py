@@ -24,10 +24,9 @@ import hashlib
 from typing import Callable, Optional, Union
 
 import ecdsa
+from crypto.interface import Signer
 from ecdsa.curves import Curve
 from ecdsa.util import sigencode_string, sigencode_string_canonize
-
-from crypto.interface import Signer
 
 
 class PublicKey:

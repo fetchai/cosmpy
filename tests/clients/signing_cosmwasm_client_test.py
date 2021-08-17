@@ -26,20 +26,18 @@ import unittest
 from typing import Optional
 from unittest.mock import patch
 
-from google.protobuf.json_format import MessageToDict, ParseDict
-
 from auth.interface import Auth
 from clients.signing_cosmwasm_client import SigningCosmWasmClient
 from crypto import Address
 from crypto.keypairs import PrivateKey
-from tx import TxInterface
+from google.protobuf.json_format import MessageToDict, ParseDict
+from protos import Tx, TxResponse
 from protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
-from protos import TxResponse
 from protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
@@ -51,7 +49,8 @@ from protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
-from protos import Tx
+from tx import TxInterface
+
 from tests.helpers import MockRestClient
 
 # Private key
