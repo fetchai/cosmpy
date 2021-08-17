@@ -19,10 +19,11 @@
 
 """ REST example of sending and querying funds """
 
-from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosm.common.rest_client import RestClient
-from cosm.crypto.keypairs import PrivateKey
-from cosmos.base.v1beta1.coin_pb2 import Coin
+from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from pycosm.common.rest_client import RestClient
+from pycosm.crypto.address import Address
+from pycosm.crypto.keypairs import PrivateKey
+from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
 DENOM = "stake"
@@ -41,7 +42,7 @@ channel = RestClient(REST_ENDPOINT_ADDRESS)
 client = SigningCosmWasmClient(FROM_PK, channel, CHAIN_ID)
 
 # Address of recipient account
-TO_ADDRESS = "fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw"
+TO_ADDRESS = Address("fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw")
 
 # Print balance before transfer
 print("Before transaction")
