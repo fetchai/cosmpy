@@ -198,7 +198,7 @@ class SigningCosmWasmClient(CosmWasmClient):
             from_address=str(from_address), to_address=str(to_address), amount=amount
         )
         send_msg_packed = ProtoAny()
-        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
+        send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
         return send_msg_packed
 
@@ -222,7 +222,7 @@ class SigningCosmWasmClient(CosmWasmClient):
             wasm_byte_code=wasm_byte_code,
         )
         send_msg_packed = ProtoAny()
-        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
+        send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
         return send_msg_packed
 
@@ -253,7 +253,7 @@ class SigningCosmWasmClient(CosmWasmClient):
             funds=funds,
         )
         send_msg_packed = ProtoAny()
-        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
+        send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
         return send_msg_packed
 
@@ -281,7 +281,7 @@ class SigningCosmWasmClient(CosmWasmClient):
             funds=funds,
         )
         send_msg_packed = ProtoAny()
-        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
+        send_msg_packed.Pack(msg_send, type_url_prefix="/")
 
         return send_msg_packed
 
@@ -428,7 +428,7 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         from_pub_key_packed = ProtoAny()
         from_pub_key_pb = ProtoPubKey(key=pub_key)
-        from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix=b"/")
+        from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix="/")
 
         # Prepare auth info
         single = ModeInfo.Single(mode=SignMode.SIGN_MODE_DIRECT)

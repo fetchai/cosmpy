@@ -229,7 +229,7 @@ class TxSign(unittest.TestCase):
         # NOTE(pb): Commented-out code intentionally left in as example:
         # tx_body.timeout_height = 0xffffffffffffffff
         send_msg_packed = Any()
-        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
+        send_msg_packed.Pack(msg_send, type_url_prefix="/")
         tx_body.messages.extend([send_msg_packed])
 
         from_pub_key_pb = ProtoPubKey()
@@ -240,7 +240,7 @@ class TxSign(unittest.TestCase):
         mode_info = ModeInfo(single=single)
 
         from_pub_key_packed = Any()
-        from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix=b"/")
+        from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix="/")
         signer_info = SignerInfo(
             public_key=from_pub_key_packed,
             mode_info=mode_info,
