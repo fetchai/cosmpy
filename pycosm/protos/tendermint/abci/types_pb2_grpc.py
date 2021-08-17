@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from protos.tendermint.abci import types_pb2 as tendermint_dot_abci_dot_types__pb2
+from pycosm.protos.tendermint.abci import types_pb2 as tendermint_dot_abci_dot_types__pb2
 
 
 class ABCIApplicationStub(object):

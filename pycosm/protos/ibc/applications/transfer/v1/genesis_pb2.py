@@ -11,7 +11,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from protos.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from pycosm.protos.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from ibc.applications.transfer.v1 import transfer_pb2 as ibc_dot_applications_dot_transfer_dot_v1_dot_transfer__pb2
 
 

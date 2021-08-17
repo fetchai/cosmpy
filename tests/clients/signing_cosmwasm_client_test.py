@@ -32,14 +32,16 @@ from crypto import Address
 from crypto.keypairs import PrivateKey
 from google.protobuf.json_format import MessageToDict, ParseDict
 from protos import Tx, TxResponse
-from protos.cosmos.auth.v1beta1.query_pb2 import (
+from tx import TxInterface
+
+from pycosm.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
-from protos.cosmos.base.v1beta1.coin_pb2 import Coin
-from protos.cosmos.tx.v1beta1.service_pb2 import (
+from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from pycosm.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
     BroadcastTxResponse,
     GetTxRequest,
@@ -49,8 +51,6 @@ from protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
-from tx import TxInterface
-
 from tests.helpers import MockRestClient
 
 # Private key

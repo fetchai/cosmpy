@@ -40,7 +40,7 @@ from pycosm.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from pycosm.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 
-# from protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+# from pycosm.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from pycosm.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,

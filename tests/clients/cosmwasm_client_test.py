@@ -25,9 +25,11 @@ import unittest
 from clients.cosmwasm_client import CosmWasmClient
 from google.protobuf.json_format import ParseDict
 from protos import QueryBalanceResponse
-from protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
-from protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateResponse
 
+from pycosm.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
+from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
+    QuerySmartContractStateResponse,
+)
 from tests.helpers import MockRestClient
 
 

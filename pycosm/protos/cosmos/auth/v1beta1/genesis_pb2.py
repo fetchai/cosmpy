@@ -12,8 +12,8 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
-from protos.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
-from protos.cosmos.auth.v1beta1 import auth_pb2 as cosmos_dot_auth_dot_v1beta1_dot_auth__pb2
+from pycosm.protos.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from pycosm.protos.cosmos.auth.v1beta1 import auth_pb2 as cosmos_dot_auth_dot_v1beta1_dot_auth__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

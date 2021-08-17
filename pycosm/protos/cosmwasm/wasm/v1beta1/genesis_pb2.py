@@ -11,9 +11,9 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from protos.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
-from protos.cosmwasm.wasm.v1beta1 import types_pb2 as cosmwasm_dot_wasm_dot_v1beta1_dot_types__pb2
-from protos.cosmwasm.wasm.v1beta1 import tx_pb2 as cosmwasm_dot_wasm_dot_v1beta1_dot_tx__pb2
+from pycosm.protos.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from pycosm.protos.cosmwasm.wasm.v1beta1 import types_pb2 as cosmwasm_dot_wasm_dot_v1beta1_dot_types__pb2
+from pycosm.protos.cosmwasm.wasm.v1beta1 import tx_pb2 as cosmwasm_dot_wasm_dot_v1beta1_dot_tx__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

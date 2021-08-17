@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from protos.cosmos.tx.v1beta1 import service_pb2 as cosmos_dot_tx_dot_v1beta1_dot_service__pb2
+from pycosm.protos.cosmos.tx.v1beta1 import service_pb2 as cosmos_dot_tx_dot_v1beta1_dot_service__pb2
 
 
 class ServiceStub(object):

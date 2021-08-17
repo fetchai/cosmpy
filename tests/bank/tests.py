@@ -22,8 +22,9 @@
 import json
 import unittest
 
-from bank import BankRestClient
-from protos import (
+from pycosm.bank.rest_client import BankRestClient
+from pycosm.protos.cosmos.bank.v1beta1.bank_pb2 import Metadata, Params
+from pycosm.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
     QueryBalanceRequest,
@@ -39,10 +40,8 @@ from protos import (
     QueryTotalSupplyRequest,
     QueryTotalSupplyResponse,
 )
-from protos.cosmos.bank.v1beta1.bank_pb2 import Metadata, Params
-from protos.cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
-from protos.cosmos.base.v1beta1.coin_pb2 import Coin
-
+from pycosm.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
+from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from tests.helpers import MockRestClient
 
 

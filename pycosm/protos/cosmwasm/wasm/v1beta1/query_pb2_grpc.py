@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from protos.cosmwasm.wasm.v1beta1 import query_pb2 as cosmwasm_dot_wasm_dot_v1beta1_dot_query__pb2
+from pycosm.protos.cosmwasm.wasm.v1beta1 import query_pb2 as cosmwasm_dot_wasm_dot_v1beta1_dot_query__pb2
 
 
 class QueryStub(object):
