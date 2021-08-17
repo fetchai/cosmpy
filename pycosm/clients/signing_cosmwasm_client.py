@@ -203,7 +203,9 @@ class SigningCosmWasmClient(CosmWasmClient):
         return send_msg_packed
 
     @staticmethod
-    def get_packed_store_msg(sender_address: Address, contract_filename: Path) -> ProtoAny:
+    def get_packed_store_msg(
+        sender_address: Address, contract_filename: Path
+    ) -> ProtoAny:
         """
         Loads contract bytecode, generate and return packed MsgStoreCode
 

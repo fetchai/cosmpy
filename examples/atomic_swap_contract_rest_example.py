@@ -21,11 +21,12 @@
 
 import inspect
 import os
+from pathlib import Path
+from typing import Any, Dict
 
 from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from pycosm.common.rest_client import RestClient
 from pycosm.crypto.keypairs import PrivateKey
-from pathlib import Path
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID_1 = "1234"
@@ -61,7 +62,8 @@ code_id = validator_client.deploy_contract(CONTRACT_FILENAME)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
-contract_address = validator_client.instantiate_contract(code_id, {})
+init_msg: Dict[str, Any] = {}
+contract_address = validator_client.instantiate_contract(code_id, init_msg)
 print(f"Contract address: {contract_address}")
 
 # Create 2 tokens in one batch message

@@ -21,9 +21,10 @@
 
 import inspect
 import os
+from pathlib import Path
+from typing import Any, Dict
 
 from grpc import insecure_channel
-from pathlib import Path
 
 from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from pycosm.crypto.keypairs import PrivateKey
@@ -54,7 +55,8 @@ code_id = client.deploy_contract(CONTRACT_FILENAME)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
-contract_address = client.instantiate_contract(code_id, {})
+init_msg: Dict[str, Any] = {}
+contract_address = client.instantiate_contract(code_id, init_msg)
 print(f"Contract address: {contract_address}")
 
 # Create token with ID TOKEN_ID

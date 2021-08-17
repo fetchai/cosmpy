@@ -21,12 +21,11 @@
 
 import base64
 import json
-from typing import List
+from typing import Any, Dict, List
 
 from google.protobuf.json_format import Parse, ParseDict
 
 from pycosm.common.rest_client import RestClient
-from pycosm.common.types import JSONLike
 from pycosm.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
     BroadcastTxResponse,
@@ -102,7 +101,7 @@ class TxRestClient(TxInterface):
         return Parse(response, GetTxsEventResponse())
 
     @staticmethod
-    def _fix_messages(messages: List[JSONLike]):
+    def _fix_messages(messages: List[Dict[str, Any]]):
         """
         Fix for REST api response in case of CosmWasm messages contains dict instead of base64 encoded string
 

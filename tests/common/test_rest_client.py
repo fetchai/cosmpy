@@ -25,7 +25,7 @@ from urllib.parse import urlencode
 
 from requests import Response, Session
 
-from pycosm.common import RestClient
+from pycosm.common.rest_client import RestClient
 
 
 class QueryTests(TestCase):
@@ -33,7 +33,7 @@ class QueryTests(TestCase):
 
     @staticmethod
     @patch("requests.session", spec=Session)
-    @patch("cosm.common.rest_client.MessageToDict")
+    @patch("pycosm.common.rest_client.MessageToDict")
     def test_get_pass(messageToDict_mock, session_mock):
         """Test get method for the positive result."""
 
@@ -60,7 +60,7 @@ class QueryTests(TestCase):
         session_mock.return_value.get.assert_called_once_with(url=expected_url)
 
     @patch("requests.session", spec=Session)
-    @patch("cosm.common.rest_client.MessageToDict")
+    @patch("pycosm.common.rest_client.MessageToDict")
     def test_get_error(self, messageToDict_mock, session_mock):
         """Test get method for the negative result."""
 
@@ -88,7 +88,7 @@ class QueryTests(TestCase):
 
     @staticmethod
     @patch("requests.session", spec=Session)
-    @patch("cosm.common.rest_client.MessageToDict")
+    @patch("pycosm.common.rest_client.MessageToDict")
     def test_post_pass(messageToDict_mock, session_mock):
         """Test post method for the positive result."""
 
@@ -125,7 +125,7 @@ class QueryTests(TestCase):
         assert kwargs["json"] == request_json
 
     @patch("requests.session", spec=Session)
-    @patch("cosm.common.rest_client.MessageToDict")
+    @patch("pycosm.common.rest_client.MessageToDict")
     def test_post_error(self, messageToDict_mock, session_mock):
         """Test post method for the negative result."""
 
