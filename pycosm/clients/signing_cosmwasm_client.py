@@ -25,7 +25,7 @@ import time
 from pathlib import Path
 from typing import List, Optional, Union
 
-from google.protobuf.any_pb2 import Any
+from google.protobuf.any_pb2 import Any as ProtoAny
 from grpc._channel import Channel
 
 from pycosm.clients.cosmwasm_client import CosmWasmClient
@@ -86,7 +86,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         if isinstance(channel, Channel):
             self.tx_client: Union[TxRestClient, TxGrpcClient] = TxGrpcClient(channel)
         elif isinstance(channel, RestClient):
-            self.tx_client: Union[TxRestClient, TxGrpcClient] = TxRestClient(channel)
+            self.tx_client = TxRestClient(channel)
         else:
             raise RuntimeError(f"Unsupported channel type {type(channel)}")
 
@@ -100,7 +100,7 @@ class SigningCosmWasmClient(CosmWasmClient):
 
     def generate_tx(
         self,
-        packed_msgs: List[Any],
+        packed_msgs: List[ProtoAny],
         from_addresses: List[Address],
         pub_keys: List[bytes],
         fee: Optional[List[Coin]] = None,
@@ -184,7 +184,7 @@ class SigningCosmWasmClient(CosmWasmClient):
     @staticmethod
     def get_packed_send_msg(
         from_address: Address, to_address: Address, amount: List[Coin]
-    ) -> Any:
+    ) -> ProtoAny:
         """
         Generate and pack MsgSend
 
@@ -192,18 +192,18 @@ class SigningCosmWasmClient(CosmWasmClient):
         :param to_address: Address of recipient
         :param amount: List of Coins to be sent
 
-        :return: packer Any type message
+        :return: packer ProtoAny type message
         """
         msg_send = MsgSend(
             from_address=str(from_address), to_address=str(to_address), amount=amount
         )
-        send_msg_packed = Any()
-        send_msg_packed.Pack(msg_send, type_url_prefix="/")
+        send_msg_packed = ProtoAny()
+        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
 
         return send_msg_packed
 
     @staticmethod
-    def get_packed_store_msg(sender_address: Address, contract_filename: Path) -> Any:
+    def get_packed_store_msg(sender_address: Address, contract_filename: Path) -> ProtoAny:
         """
         Loads contract bytecode, generate and return packed MsgStoreCode
 
@@ -219,8 +219,8 @@ class SigningCosmWasmClient(CosmWasmClient):
             sender=str(sender_address),
             wasm_byte_code=wasm_byte_code,
         )
-        send_msg_packed = Any()
-        send_msg_packed.Pack(msg_send, type_url_prefix="/")
+        send_msg_packed = ProtoAny()
+        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
 
         return send_msg_packed
 
@@ -231,7 +231,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         init_msg: JSONLike,
         label="contract",
         funds: Optional[List[Coin]] = None,
-    ) -> Any:
+    ) -> ProtoAny:
         """
         Create and pack MsgInstantiateContract
 
@@ -250,8 +250,8 @@ class SigningCosmWasmClient(CosmWasmClient):
             label=label,
             funds=funds,
         )
-        send_msg_packed = Any()
-        send_msg_packed.Pack(msg_send, type_url_prefix="/")
+        send_msg_packed = ProtoAny()
+        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
 
         return send_msg_packed
 
@@ -261,7 +261,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         contract_address: str,
         msg: JSONLike,
         funds: Optional[List[Coin]] = None,
-    ) -> Any:
+    ) -> ProtoAny:
         """
         Create and pack MsgExecuteContract
 
@@ -278,8 +278,8 @@ class SigningCosmWasmClient(CosmWasmClient):
             msg=json.dumps(msg).encode("UTF8"),
             funds=funds,
         )
-        send_msg_packed = Any()
-        send_msg_packed.Pack(msg_send, type_url_prefix="/")
+        send_msg_packed = ProtoAny()
+        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
 
         return send_msg_packed
 
@@ -374,7 +374,7 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :return: GetTxResponse
         """
-        msg = self.get_packed_exec_msg(
+        exec_msg = self.get_packed_exec_msg(
             sender_address=self.address,
             contract_address=contract_address,
             msg=msg,
@@ -382,7 +382,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         )
 
         tx = self.generate_tx(
-            [msg], [self.address], [self.public_key_bytes], gas_limit=gas_limit
+            [exec_msg], [self.address], [self.public_key_bytes], gas_limit=gas_limit
         )
         self.sign_tx(tx)
         return self.broadcast_tx(tx)
@@ -424,9 +424,9 @@ class SigningCosmWasmClient(CosmWasmClient):
         :return: SignerInfo
         """
 
-        from_pub_key_packed = Any()
+        from_pub_key_packed = ProtoAny()
         from_pub_key_pb = ProtoPubKey(key=pub_key)
-        from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix="/")
+        from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix=b"/")
 
         # Prepare auth info
         single = ModeInfo.Single(mode=SignMode.SIGN_MODE_DIRECT)

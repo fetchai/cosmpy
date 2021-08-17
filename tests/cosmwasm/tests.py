@@ -25,6 +25,7 @@ import unittest
 
 from google.protobuf.json_format import ParseDict
 
+from pycosm.cosmwasm.rest_client import CosmWasmRestClient
 from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
@@ -43,7 +44,6 @@ from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
-from pycosm.wasm.rest_client import WasmRestClient
 from tests.helpers import MockRestClient
 
 
@@ -63,7 +63,7 @@ class WasmTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryCodesResponse())
 
         mock_client = MockRestClient(json.dumps(content))
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert wasm.Codes(QueryCodesRequest()) == expected_response
         assert mock_client.last_base_url == "/wasm/v1beta1/code"
@@ -79,7 +79,7 @@ class WasmTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryCodeResponse())
 
         mock_client = MockRestClient(json.dumps(content))
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert wasm.Code(QueryCodeRequest(code_id=1)) == expected_response
         assert mock_client.last_base_url == "/wasm/v1beta1/code/1"
@@ -92,7 +92,7 @@ class WasmTests(unittest.TestCase):
         expected_response = QuerySmartContractStateResponse(data=b'{"balance": "1"}')
 
         mock_client = MockRestClient(raw_content)
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert (
             wasm.SmartContractState(
@@ -115,7 +115,7 @@ class WasmTests(unittest.TestCase):
         expected_response = QueryRawContractStateResponse(data=b'{"balance": "1"}')
 
         mock_client = MockRestClient(raw_content)
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert (
             wasm.RawContractState(
@@ -147,7 +147,7 @@ class WasmTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryAllContractStateResponse())
 
         mock_client = MockRestClient(json.dumps(content))
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert (
             wasm.AllContractState(
@@ -178,7 +178,7 @@ class WasmTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryContractInfoResponse())
 
         mock_client = MockRestClient(json.dumps(content))
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert (
             wasm.ContractInfo(QueryContractInfoRequest(address="fetchcontractaddress"))
@@ -200,7 +200,7 @@ class WasmTests(unittest.TestCase):
         expected_response = ParseDict(content, QueryContractsByCodeResponse())
 
         mock_client = MockRestClient(json.dumps(content))
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert (
             wasm.ContractsByCode(QueryContractsByCodeRequest(code_id=1))
@@ -233,7 +233,7 @@ class WasmTests(unittest.TestCase):
         raw_content = json.dumps(content)
         mock_client = MockRestClient(raw_content)
 
-        wasm = WasmRestClient(mock_client)
+        wasm = CosmWasmRestClient(mock_client)
 
         assert (
             wasm.ContractHistory(

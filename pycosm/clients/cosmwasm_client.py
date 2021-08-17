@@ -28,6 +28,7 @@ from pycosm.auth.rest_client import AuthRestClient
 from pycosm.bank.rest_client import BankRestClient
 from pycosm.common.rest_client import RestClient
 from pycosm.common.types import JSONLike
+from pycosm.cosmwasm.rest_client import CosmWasmRestClient
 from pycosm.crypto.address import Address
 from pycosm.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from pycosm.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
@@ -41,7 +42,6 @@ from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStat
 from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )
-from pycosm.wasm.rest_client import WasmRestClient
 
 
 class CosmWasmClient:
@@ -55,13 +55,19 @@ class CosmWasmClient:
         """
 
         if isinstance(channel, Channel):
-            self.bank_client = BankGrpcClient(channel)
-            self.auth_client = AuthGrpcClient(channel)
-            self.wasm_client = CosmWasmGrpcClient(channel)
+            self.bank_client: Union[BankRestClient, BankGrpcClient] = BankGrpcClient(
+                channel
+            )
+            self.auth_client: Union[AuthRestClient, AuthGrpcClient] = AuthGrpcClient(
+                channel
+            )
+            self.wasm_client: Union[
+                CosmWasmRestClient, CosmWasmGrpcClient
+            ] = CosmWasmGrpcClient(channel)
         elif isinstance(channel, RestClient):
             self.bank_client = BankRestClient(channel)
             self.auth_client = AuthRestClient(channel)
-            self.wasm_client = WasmRestClient(channel)
+            self.wasm_client = CosmWasmRestClient(channel)
         else:
             raise RuntimeError(f"Unsupported channel type {type(channel)}")
 

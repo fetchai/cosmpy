@@ -26,6 +26,7 @@ from google.protobuf.json_format import Parse, ParseDict
 
 from pycosm.common.rest_client import RestClient
 from pycosm.common.types import JSONLike
+from pycosm.cosmwasm.interface import CosmWasm
 from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
@@ -44,10 +45,9 @@ from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
-from pycosm.wasm.interface import Wasm
 
 
-class WasmRestClient(Wasm):
+class CosmWasmRestClient(CosmWasm):
     """Wasm REST client."""
 
     API_URL = "/wasm/v1beta1"

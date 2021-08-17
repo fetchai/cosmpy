@@ -23,8 +23,8 @@ from typing import List, Optional
 from urllib.parse import urlencode
 
 import requests
-from google.protobuf.descriptor import Descriptor
 from google.protobuf.json_format import MessageToDict
+from google.protobuf.message import Message
 
 
 class RestClient:
@@ -42,7 +42,7 @@ class RestClient:
     def get(
         self,
         url_base_path: str,
-        request: Optional[Descriptor] = None,
+        request: Optional[Message] = None,
         used_params: Optional[List[str]] = None,
     ) -> bytes:
         """
@@ -77,7 +77,7 @@ class RestClient:
             )
         return response.content
 
-    def post(self, url_base_path: str, request: Descriptor) -> bytes:
+    def post(self, url_base_path: str, request: Message) -> bytes:
         """
         Send a POST request
 

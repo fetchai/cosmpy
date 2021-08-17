@@ -41,7 +41,7 @@ from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
 )
 
 
-class Wasm(ABC):
+class CosmWasm(ABC):
     """Wasm abstract class."""
 
     @abstractmethod

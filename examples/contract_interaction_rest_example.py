@@ -25,6 +25,7 @@ import os
 from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from pycosm.common.rest_client import RestClient
 from pycosm.crypto.keypairs import PrivateKey
+from pathlib import Path
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID = "1234"
@@ -32,7 +33,7 @@ AMOUNT = "1"
 
 # Path to smart contract
 CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
-CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "contracts", "cw_erc1155.wasm")
+CONTRACT_FILENAME = Path(os.path.join(CUR_PATH, "..", "contracts", "cw_erc1155.wasm"))
 
 # Node config
 REST_ENDPOINT_ADDRESS = "http://localhost:1317"

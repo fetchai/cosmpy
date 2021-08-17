@@ -25,7 +25,6 @@ from dataclasses import dataclass
 from hashlib import sha256
 
 from google.protobuf.any_pb2 import Any
-from google.protobuf.internal.well_known_types import Any as AnyOrig
 from grpc import insecure_channel
 
 from pycosm.common.rest_client import RestClient
@@ -39,8 +38,7 @@ from pycosm.protos.cosmos.auth.v1beta1.query_pb2_grpc import (
 from pycosm.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from pycosm.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
-
-# from pycosm.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+from pycosm.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from pycosm.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
@@ -56,16 +54,6 @@ from pycosm.protos.cosmos.tx.v1beta1.tx_pb2 import (
 )
 from pycosm.tx import sign_transaction
 from pycosm.tx.rest_client import TxRestClient
-
-orig_Pack = AnyOrig.Pack
-
-
-def new_Pack(self, msg, type_url_prefix="/", deterministic=None):
-    """Prefix / character to type_url."""
-    return orig_Pack(self, msg, type_url_prefix, deterministic)
-
-
-AnyOrig.Pack = new_Pack
 
 
 def my_import(name):
@@ -241,7 +229,7 @@ class TxSign(unittest.TestCase):
         # NOTE(pb): Commented-out code intentionally left in as example:
         # tx_body.timeout_height = 0xffffffffffffffff
         send_msg_packed = Any()
-        send_msg_packed.Pack(msg_send)  # , type_url_prefix="/")
+        send_msg_packed.Pack(msg_send, type_url_prefix=b"/")
         tx_body.messages.extend([send_msg_packed])
 
         from_pub_key_pb = ProtoPubKey()
@@ -252,7 +240,7 @@ class TxSign(unittest.TestCase):
         mode_info = ModeInfo(single=single)
 
         from_pub_key_packed = Any()
-        from_pub_key_packed.Pack(from_pub_key_pb)  # , type_url_prefix="/")
+        from_pub_key_packed.Pack(from_pub_key_pb, type_url_prefix=b"/")
         signer_info = SignerInfo(
             public_key=from_pub_key_packed,
             mode_info=mode_info,
