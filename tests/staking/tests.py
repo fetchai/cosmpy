@@ -20,13 +20,10 @@
 """Tests for REST implementation of Staking."""
 
 import json
-from typing import List, Optional
 from unittest import TestCase
 
-from google.protobuf.descriptor import Descriptor
 from google.protobuf.json_format import ParseDict
 
-from pycosm.common.rest_client import RestClient
 from pycosm.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
