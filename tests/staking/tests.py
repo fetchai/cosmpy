@@ -58,53 +58,14 @@ from pycosm.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsResponse,
 )
 from pycosm.staking.rest_client import StakingRestClient
-
-
-class MockRestClient(RestClient):
-    """Mock QueryRestClient"""
-
-    def __init__(self, content: bytes):
-        """Initialize."""
-        self.content: bytes = content
-        self.last_base_url: Optional[str] = None
-        self.last_request: Optional[Descriptor] = None
-        self.last_used_params: Optional[List[str]] = None
-
-        super().__init__("")
-
-    def get(
-        self,
-        url_base_path: str,
-        request: Optional[Descriptor] = None,
-        used_params: Optional[List[str]] = None,
-    ) -> bytes:
-        """Handle GET request."""
-        self.last_base_url = url_base_path
-        self.last_request = request
-        self.last_used_params = used_params
-
-        return self.content
-
-    def post(self, url_base_path: str, request: Descriptor) -> bytes:
-        """Send a POST request"""
-        self.last_base_url = url_base_path
-        self.last_request = request
-
-        return self.content
+from tests.helpers import MockRestClient
 
 
 class StakingRestClientTestCase(TestCase):
     """Test case for StakingRestClient class."""
 
-    @classmethod
-    def setUpClass(cls):
-        """Set up test case."""
-        content = {}
-
-        mock_client = MockRestClient(json.dumps(content))
-        cls.client = StakingRestClient(mock_client)
-
-    def test_Validators(self):
+    @staticmethod
+    def test_Validators():
         """Test Validators method."""
         content = {
             "validators": [
@@ -145,8 +106,10 @@ class StakingRestClientTestCase(TestCase):
         assert staking.Validators(QueryValidatorsRequest() == expected_response)
         assert mock_client.last_base_url == "/cosmos/staking/v1beta1/validators"
 
-    def test_Validator(self):
+    @staticmethod
+    def test_Validator():
         """Test Validator method."""
+
         content = {
             "validator": {
                 "operator_address": "string",
@@ -181,11 +144,9 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/validators/validator_addr"
         )
 
-    def test_ValidatorDelegations(self):
+    @staticmethod
+    def test_ValidatorDelegations():
         """Test ValidatorDelegations method."""
-        request = QueryValidatorDelegationsRequest(validator_addr="validator_addr")
-        result = self.client.ValidatorDelegations(request)
-        self.assertIsInstance(result, QueryValidatorDelegationsResponse)
 
         content = {
             "delegation_responses": [
@@ -217,8 +178,10 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/validators/validator_addr/delegations"
         )
 
-    def test_ValidatorUnbondingDelegations(self):
+    @staticmethod
+    def test_ValidatorUnbondingDelegations():
         """Test ValidatorUnbondingDelegations method."""
+
         content = {
             "unbonding_responses": [
                 {
@@ -257,7 +220,8 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/validators/validator_addr/unbonding_delegations"
         )
 
-    def test_Delegation(self):
+    @staticmethod
+    def test_Delegation():
         """Test Delegation method."""
 
         content = {
@@ -289,7 +253,8 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/validators/validator_addr/delegations/delegator_addr"
         )
 
-    def test_UnbondingDelegation(self):
+    @staticmethod
+    def test_UnbondingDelegation():
         """Test UnbondingDelegation method."""
 
         content = {
@@ -325,7 +290,8 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/validators/validator_addr/delegations/delegator_addr/unbonding_delegation"
         )
 
-    def test_DelegatorDelegations(self):
+    @staticmethod
+    def test_DelegatorDelegations():
         """Test DelegatorDelegations method."""
 
         content = {
@@ -358,7 +324,8 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/delegations/delegator_addr"
         )
 
-    def test_DelegatorUnbondingDelegations(self):
+    @staticmethod
+    def test_DelegatorUnbondingDelegations():
         """Test DelegatorUnbondingDelegations method."""
 
         content = {
@@ -400,7 +367,8 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/delegators/delegator_addr/unbonding_delegations"
         )
 
-    def test_Redelegations(self):
+    @staticmethod
+    def test_Redelegations():
         """Test Redelegations method."""
 
         content = {
@@ -452,7 +420,8 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/delegators/delegator_addr/redelegations"
         )
 
-    def test_DelegatorValidators(self):
+    @staticmethod
+    def test_DelegatorValidators():
         """Test DelegatorValidators method."""
 
         content = {
@@ -503,13 +472,9 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/delegators/delegator_addr/validators"
         )
 
-    def test_DelegatorValidator(self):
+    @staticmethod
+    def test_DelegatorValidator():
         """Test DelegatorValidator method."""
-        request = QueryDelegatorValidatorRequest(
-            validator_addr="validator_addr", delegator_addr="delegator_addr"
-        )
-        result = self.client.DelegatorValidator(request)
-        self.assertIsInstance(result, QueryDelegatorValidatorResponse)
 
         content = {
             "validator": {
@@ -558,20 +523,107 @@ class StakingRestClientTestCase(TestCase):
             == "/cosmos/staking/v1beta1/delegators/delegator_addr/validators/validator_addr"
         )
 
-    def test_HistoricalInfo(self):
+    @staticmethod
+    def test_HistoricalInfo():
         """Test HistoricalInfo method."""
-        request = QueryHistoricalInfoRequest(height=1)
-        result = self.client.HistoricalInfo(request)
-        self.assertIsInstance(result, QueryHistoricalInfoResponse)
 
-    def test_Pool(self):
+        content = {
+            "hist": {
+                "header": {
+                    "version": {"block": "123", "app": "123"},
+                    "chain_id": "string",
+                    "height": "123",
+                    "time": "2021-08-18T12:19:32.225Z",
+                    "last_block_id": {
+                        "hash": "string",
+                        "part_set_header": {"total": 0, "hash": "string"},
+                    },
+                    "last_commit_hash": "string",
+                    "data_hash": "string",
+                    "validators_hash": "string",
+                    "next_validators_hash": "string",
+                    "consensus_hash": "string",
+                    "app_hash": "string",
+                    "last_results_hash": "string",
+                    "evidence_hash": "string",
+                    "proposer_address": "string",
+                },
+                "valset": [
+                    {
+                        "operator_address": "fetchoperator",
+                        "jailed": True,
+                        "status": "BOND_STATUS_UNSPECIFIED",
+                        "tokens": "123",
+                        "delegator_shares": "123",
+                        "description": {
+                            "moniker": "string",
+                            "identity": "string",
+                            "website": "string",
+                            "security_contact": "string",
+                            "details": "string",
+                        },
+                        "unbonding_height": "123",
+                        "unbonding_time": "2021-08-18T12:19:32.225Z",
+                        "commission": {
+                            "commission_rates": {
+                                "rate": "123",
+                                "max_rate": "1234",
+                                "max_change_rate": "1234",
+                            },
+                            "update_time": "2021-08-18T12:19:32.225Z",
+                        },
+                        "min_self_delegation": "123",
+                    }
+                ],
+            }
+        }
+
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryHistoricalInfoResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert (
+            staking.HistoricalInfo(QueryHistoricalInfoRequest(height=1))
+            == expected_response
+        )
+        assert mock_client.last_base_url == "/cosmos/staking/v1beta1/historical_info/1"
+
+    @staticmethod
+    def test_Pool():
         """Test Pool method."""
-        request = QueryPoolRequest()
-        result = self.client.Pool(request)
-        self.assertIsInstance(result, QueryPoolResponse)
 
-    def test_Params(self):
+        content = {"pool": {"not_bonded_tokens": "123", "bonded_tokens": "123"}}
+
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryPoolResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert staking.Pool(QueryPoolRequest()) == expected_response
+        assert mock_client.last_base_url == "/cosmos/staking/v1beta1/pool"
+
+    @staticmethod
+    def test_Params():
         """Test Params method."""
-        request = QueryParamsRequest()
-        result = self.client.Params(request)
-        self.assertIsInstance(result, QueryParamsResponse)
+
+        content = {
+            "params": {
+                "unbonding_time": "123s",
+                "max_validators": 0,
+                "max_entries": 0,
+                "historical_entries": 0,
+                "bond_denom": "atestfet",
+            }
+        }
+
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryParamsResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert staking.Params(QueryParamsRequest()) == expected_response
+        assert mock_client.last_base_url == "/cosmos/staking/v1beta1/params"
