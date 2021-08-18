@@ -291,37 +291,217 @@ class StakingRestClientTestCase(TestCase):
 
     def test_UnbondingDelegation(self):
         """Test UnbondingDelegation method."""
-        request = QueryUnbondingDelegationRequest(
-            validator_addr="validator_addr", delegator_addr="delegator_addr"
+
+        content = {
+            "unbond": {
+                "delegator_address": "fetchdelegator",
+                "validator_address": "fetchvalidator",
+                "entries": [
+                    {
+                        "creation_height": "1",
+                        "completion_time": "2021-08-18T11:55:13.614Z",
+                        "initial_balance": "123",
+                        "balance": "1234",
+                    }
+                ],
+            }
+        }
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryUnbondingDelegationResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert (
+            staking.UnbondingDelegation(
+                QueryUnbondingDelegationRequest(
+                    validator_addr="validator_addr", delegator_addr="delegator_addr"
+                )
+            )
+            == expected_response
         )
-        result = self.client.UnbondingDelegation(request)
-        self.assertIsInstance(result, QueryUnbondingDelegationResponse)
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/staking/v1beta1/validators/validator_addr/delegations/delegator_addr/unbonding_delegation"
+        )
 
     def test_DelegatorDelegations(self):
         """Test DelegatorDelegations method."""
-        request = QueryDelegatorDelegationsRequest(delegator_addr="delegator_addr")
-        result = self.client.DelegatorDelegations(request)
-        self.assertIsInstance(result, QueryDelegatorDelegationsResponse)
+
+        content = {
+            "delegation_responses": [
+                {
+                    "delegation": {
+                        "delegator_address": "fetchdelegator",
+                        "validator_address": "fetchvalidator",
+                        "shares": "123",
+                    },
+                    "balance": {"denom": "atestfet", "amount": "123"},
+                }
+            ],
+            "pagination": {"next_key": "", "total": "0"},
+        }
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryDelegatorDelegationsResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert (
+            staking.DelegatorDelegations(
+                QueryDelegatorDelegationsRequest(delegator_addr="delegator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/staking/v1beta1/delegations/delegator_addr"
+        )
 
     def test_DelegatorUnbondingDelegations(self):
         """Test DelegatorUnbondingDelegations method."""
-        request = QueryDelegatorUnbondingDelegationsRequest(
-            delegator_addr="delegator_addr"
+
+        content = {
+            "unbonding_responses": [
+                {
+                    "delegator_address": "fetchdelegator",
+                    "validator_address": "fetchvalidator",
+                    "entries": [
+                        {
+                            "creation_height": "123",
+                            "completion_time": "2021-08-18T12:07:23.832Z",
+                            "initial_balance": "123",
+                            "balance": "1234",
+                        }
+                    ],
+                }
+            ],
+            "pagination": {"next_key": "", "total": "0"},
+        }
+
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(
+            content, QueryDelegatorUnbondingDelegationsResponse()
         )
-        result = self.client.DelegatorUnbondingDelegations(request)
-        self.assertIsInstance(result, QueryDelegatorUnbondingDelegationsResponse)
+
+        staking = StakingRestClient(mock_client)
+
+        assert (
+            staking.DelegatorUnbondingDelegations(
+                QueryDelegatorUnbondingDelegationsRequest(
+                    delegator_addr="delegator_addr"
+                )
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/staking/v1beta1/delegators/delegator_addr/unbonding_delegations"
+        )
 
     def test_Redelegations(self):
         """Test Redelegations method."""
-        request = QueryRedelegationsRequest(delegator_addr="delegator_addr")
-        result = self.client.Redelegations(request)
-        self.assertIsInstance(result, QueryRedelegationsResponse)
+
+        content = {
+            "redelegation_responses": [
+                {
+                    "redelegation": {
+                        "delegator_address": "fetchdelegator",
+                        "validator_src_address": "fetchsrc",
+                        "validator_dst_address": "fetchdst",
+                        "entries": [
+                            {
+                                "creation_height": "123",
+                                "completion_time": "2021-08-18T12:10:21.412Z",
+                                "initial_balance": "123",
+                                "shares_dst": "123",
+                            }
+                        ],
+                    },
+                    "entries": [
+                        {
+                            "redelegation_entry": {
+                                "creation_height": "123",
+                                "completion_time": "2021-08-18T12:10:21.412Z",
+                                "initial_balance": "123",
+                                "shares_dst": "123",
+                            },
+                            "balance": "123",
+                        }
+                    ],
+                }
+            ],
+            "pagination": {"next_key": "", "total": "0"},
+        }
+
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryRedelegationsResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert (
+            staking.Redelegations(
+                QueryRedelegationsRequest(delegator_addr="delegator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/staking/v1beta1/delegators/delegator_addr/redelegations"
+        )
 
     def test_DelegatorValidators(self):
         """Test DelegatorValidators method."""
-        request = QueryDelegatorValidatorsRequest(delegator_addr="delegator_addr")
-        result = self.client.DelegatorValidators(request)
-        self.assertIsInstance(result, QueryDelegatorValidatorsResponse)
+
+        content = {
+            "validators": [
+                {
+                    "operator_address": "fetchoperator",
+                    "jailed": True,
+                    "status": "BOND_STATUS_UNSPECIFIED",
+                    "tokens": "123",
+                    "delegator_shares": "123",
+                    "description": {
+                        "moniker": "string",
+                        "identity": "string",
+                        "website": "string",
+                        "security_contact": "string",
+                        "details": "string",
+                    },
+                    "unbonding_height": "123",
+                    "unbonding_time": "2021-08-18T12:14:55.780Z",
+                    "commission": {
+                        "commission_rates": {
+                            "rate": "123",
+                            "max_rate": "1234",
+                            "max_change_rate": "1234",
+                        },
+                        "update_time": "2021-08-18T12:14:55.780Z",
+                    },
+                    "min_self_delegation": "123",
+                }
+            ],
+            "pagination": {"next_key": "", "total": "0"},
+        }
+
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryDelegatorValidatorsResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert (
+            staking.DelegatorValidators(
+                QueryDelegatorValidatorsRequest(delegator_addr="delegator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/staking/v1beta1/delegators/delegator_addr/validators"
+        )
 
     def test_DelegatorValidator(self):
         """Test DelegatorValidator method."""
@@ -330,6 +510,53 @@ class StakingRestClientTestCase(TestCase):
         )
         result = self.client.DelegatorValidator(request)
         self.assertIsInstance(result, QueryDelegatorValidatorResponse)
+
+        content = {
+            "validator": {
+                "operator_address": "fetchoperator",
+                "jailed": True,
+                "status": "BOND_STATUS_UNSPECIFIED",
+                "tokens": "123",
+                "delegator_shares": "123",
+                "description": {
+                    "moniker": "string",
+                    "identity": "string",
+                    "website": "string",
+                    "security_contact": "string",
+                    "details": "string",
+                },
+                "unbonding_height": "123",
+                "unbonding_time": "2021-08-18T12:17:33.141Z",
+                "commission": {
+                    "commission_rates": {
+                        "rate": "123",
+                        "max_rate": "1234",
+                        "max_change_rate": "1234",
+                    },
+                    "update_time": "2021-08-18T12:17:33.141Z",
+                },
+                "min_self_delegation": "123",
+            }
+        }
+
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, QueryDelegatorValidatorResponse())
+
+        staking = StakingRestClient(mock_client)
+
+        assert (
+            staking.DelegatorValidator(
+                QueryDelegatorValidatorRequest(
+                    validator_addr="validator_addr", delegator_addr="delegator_addr"
+                )
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/staking/v1beta1/delegators/delegator_addr/validators/validator_addr"
+        )
 
     def test_HistoricalInfo(self):
         """Test HistoricalInfo method."""
