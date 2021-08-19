@@ -60,6 +60,7 @@ setup(
         "protobuf",
         "grpcio",
         "grpcio-tools",
+	"docker"
     ],
     extras_require={
         "dev": ["check-manifest", "flake8", "black", "mypy"],
