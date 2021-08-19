@@ -21,11 +21,13 @@
 
 import inspect
 import os
+from pathlib import Path
+from typing import Any, Dict
 
 from grpc import insecure_channel
 
-from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosm.crypto.keypairs import PrivateKey
+from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from pycosm.crypto.keypairs import PrivateKey
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID = "1234"
@@ -33,7 +35,7 @@ AMOUNT = "1"
 
 # Path to smart contract
 CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
-CONTRACT_FILENAME = os.path.join(CUR_PATH, "..", "contracts", "cw_erc1155.wasm")
+CONTRACT_FILENAME = Path(os.path.join(CUR_PATH, "..", "contracts", "cw_erc1155.wasm"))
 
 # Node config
 GRPC_ENDPOINT_ADDRESS = "localhost:9090"
@@ -53,7 +55,8 @@ code_id = client.deploy_contract(CONTRACT_FILENAME)
 print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
-contract_address = client.instantiate_contract(code_id, {})
+init_msg: Dict[str, Any] = {}
+contract_address = client.instantiate_contract(code_id, init_msg)
 print(f"Contract address: {contract_address}")
 
 # Create token with ID TOKEN_ID
