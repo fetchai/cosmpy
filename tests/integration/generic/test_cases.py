@@ -77,7 +77,7 @@ class FetchdTestCase(TestCase):
                 # Make sure that first block is minted
                 if int(res.balance.amount) >= 1000:
                     successful = True
-            except:  # nosec
+            except:  # nosec pylint: disable=W0702
                 continue
 
     @classmethod
@@ -139,9 +139,6 @@ class FetchdTestCase(TestCase):
         # Create client
         channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
         validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
-
-        # Address of recipient account
-        BOB_ADDRESS = Address("fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw")
 
         # Get balances before transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
