@@ -33,6 +33,28 @@ from pycosm.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from tests.integration.generic.fetchd_client import FetchdClient
 
+# Denomination and amount of transferred tokens
+DENOM = "stake"
+AMOUNT = 1
+COINS = [Coin(amount=str(AMOUNT), denom=DENOM)]
+
+# Node config
+GRPC_ENDPOINT_ADDRESS = "localhost:9090"
+REST_ENDPOINT_ADDRESS = "http://localhost:1317"
+CHAIN_ID = "testing"
+
+# Private key of sender account
+VALIDATOR_PK = PrivateKey(
+    bytes.fromhex("0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae")
+)
+VALIDATOR_ADDRESS = str(Address(VALIDATOR_PK))
+
+# Private key of recipient account
+BOB_PK = PrivateKey(
+    bytes.fromhex("439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636")
+)
+BOB_ADDRESS = str(Address(BOB_PK))
+
 
 class FetchdTestCase(TestCase):
     """Base test case for Fetchd node."""
@@ -42,7 +64,21 @@ class FetchdTestCase(TestCase):
         """Set up Fetchd node for testing."""
         cls.client = FetchdClient()
         cls.client.run()
-        time.sleep(10)
+
+        # Wait for things to start working
+        successful = False
+        while not successful:
+            time.sleep(5)
+
+            try:
+                rest_client = RestClient(REST_ENDPOINT_ADDRESS)
+                client = CosmWasmClient(rest_client)
+                res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
+                # Make sure that first block is minted
+                if int(res.balance.amount) >= 1000:
+                    successful = True
+            except:
+                continue
 
     @classmethod
     def tearDownClass(cls):
@@ -53,11 +89,7 @@ class FetchdTestCase(TestCase):
     def test_query_balance_rest(cls):
         """Test if getting balance using REST api works correctly"""
 
-        REST_URL = "http://localhost:1317"
-        VALIDATOR_ADDRESS = "fetch1mrf5yyjnnlpy0egvpk2pvjdk9667j2gtu8kpfy"
-        DENOM = "stake"
-
-        bank = BankRestClient(RestClient(REST_URL))
+        bank = BankRestClient(RestClient(REST_ENDPOINT_ADDRESS))
         res = bank.Balance(QueryBalanceRequest(address=VALIDATOR_ADDRESS, denom=DENOM))
         assert res.balance.denom == DENOM
         assert int(res.balance.amount) >= 1000
@@ -66,11 +98,7 @@ class FetchdTestCase(TestCase):
     def test_query_balance_client_rest(cls):
         """Test if getting balance using REST api and CosmWasmClient works correctly"""
 
-        REST_URL = "http://localhost:1317"
-        VALIDATOR_ADDRESS = "fetch1mrf5yyjnnlpy0egvpk2pvjdk9667j2gtu8kpfy"
-        DENOM = "stake"
-
-        rest_client = RestClient(REST_URL)
+        rest_client = RestClient(REST_ENDPOINT_ADDRESS)
         client = CosmWasmClient(rest_client)
         res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
 
@@ -81,41 +109,23 @@ class FetchdTestCase(TestCase):
     def test_send_native_tokens_using_client_rest(cls):
         """Test if sending tokens over REST api using CosmWasmClient works correctly"""
 
-        # Denomination and amount of transferred tokens
-        DENOM = "stake"
-        AMOUNT = 1
-        COINS = [Coin(amount=str(AMOUNT), denom=DENOM)]
-
-        # Node config
-        REST_ENDPOINT_ADDRESS = "http://localhost:1317"
-        CHAIN_ID = "testing"
-
-        # Private key of sender's account
-        FROM_PK = PrivateKey(
-            bytes.fromhex(
-                "0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
-            )
-        )
         # Create client
         channel = RestClient(REST_ENDPOINT_ADDRESS)
-        validator_client = SigningCosmWasmClient(FROM_PK, channel, CHAIN_ID)
-
-        # Address of recipient account
-        TO_ADDRESS = Address("fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw")
+        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
 
         # Get balances before transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
         balance_from_before = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(TO_ADDRESS, DENOM)
+        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
         balance_to_before = int(to_balance.balance.amount)
 
         # Generate, sign and broadcast send tokens transaction
-        validator_client.send_tokens(TO_ADDRESS, COINS)
+        validator_client.send_tokens(BOB_ADDRESS, COINS)
 
         # Get balances after transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
         balance_from_after = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(TO_ADDRESS, DENOM)
+        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
         balance_to_after = int(to_balance.balance.amount)
 
         # Check if balances changed
@@ -126,41 +136,26 @@ class FetchdTestCase(TestCase):
     def test_send_native_tokens_using_client_grpc(cls):
         """Test if sending tokens over gRPC api using CosmWasmClient works correctly"""
 
-        # Denomination and amount of transferred tokens
-        DENOM = "stake"
-        AMOUNT = 1
-        COINS = [Coin(amount=str(AMOUNT), denom=DENOM)]
-
-        # Node config
-        GRPC_ENDPOINT_ADDRESS = "localhost:9090"
-        CHAIN_ID = "testing"
-
-        # Private key of sender's account
-        FROM_PK = PrivateKey(
-            bytes.fromhex(
-                "0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
-            )
-        )
         # Create client
         channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
-        validator_client = SigningCosmWasmClient(FROM_PK, channel, CHAIN_ID)
+        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
 
         # Address of recipient account
-        TO_ADDRESS = Address("fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw")
+        BOB_ADDRESS = Address("fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw")
 
         # Get balances before transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
         balance_from_before = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(TO_ADDRESS, DENOM)
+        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
         balance_to_before = int(to_balance.balance.amount)
 
         # Generate, sign and broadcast send tokens transaction
-        validator_client.send_tokens(TO_ADDRESS, COINS)
+        validator_client.send_tokens(BOB_ADDRESS, COINS)
 
         # Get balances after transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
         balance_from_after = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(TO_ADDRESS, DENOM)
+        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
         balance_to_after = int(to_balance.balance.amount)
 
         # Check if balances changed
