@@ -32,7 +32,7 @@ class FetchdClient:
     ENTRYPOINT_FILENAME = "entry.sh"
     MOUNT_PATH = "/mnt"
     CONTAINER_NAME = "fetchd_test"
-    PORTS = {9090: 9090, 1317: 1317}
+    PORTS = {9090: 9090, 1317: 1317, 26657: 26657}
     # pylint: disable=anomalous-backslash-in-string
     ENTRYPOINT_LINES = (
         "#!/usr/bin/env bash",
