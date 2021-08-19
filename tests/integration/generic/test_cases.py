@@ -77,7 +77,7 @@ class FetchdTestCase(TestCase):
                 # Make sure that first block is minted
                 if int(res.balance.amount) >= 1000:
                     successful = True
-            except:
+            except:  # nosec
                 continue
 
     @classmethod
