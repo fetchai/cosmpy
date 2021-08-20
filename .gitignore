@@ -2,6 +2,7 @@
 *.py[cgo]
 *.egg-info/
 build/
+dist/
 
 # IDEs
 .idea/
