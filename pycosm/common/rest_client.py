@@ -51,7 +51,10 @@ class RestClient:
         :param url_base_path: URL base path
         :param request: Protobuf coded request
         :param used_params: Parameters to be removed from request after converting it to dict
-        :return: Content of url response
+
+        :raises RuntimeError: if response code is not 200
+
+        :return: Content of response
         """
         if request is None:
             url = f"{self.rest_address}{url_base_path}"
@@ -83,7 +86,10 @@ class RestClient:
 
         :param url_base_path: URL base path
         :param request: Protobuf coded request
-        :return:
+
+        :raises RuntimeError: if response code is not 200
+
+        :return: Content of response
         """
         json_request = MessageToDict(request)
 

@@ -44,10 +44,10 @@ def ripemd160(contents: bytes) -> bytes:
     :param contents: bytes contents.
 
     :return: bytes ripemd160 hash.
-    :raises RuntimeError: if hash algorithm is unavailable.
     """
-    if "ripemd160" not in hashlib.algorithms_available:
-        raise RuntimeError("ripemd160 hash not supported on your platform")
+    # Next check is disabled because it fails on Python 3.7 even if algorithm is present.
+    # if "ripemd160" not in hashlib.algorithms_available:
+    #     raise RuntimeError("ripemd160 hash not supported on your platform")
 
     h: HASH = hashlib.new("ripemd160")
     h.update(contents)
