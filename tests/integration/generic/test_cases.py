@@ -19,7 +19,11 @@
 
 """Module with base test cases for integration tests."""
 
+import inspect
+import os
 import time
+from pathlib import Path
+from typing import Any, Dict
 from unittest import TestCase
 
 from grpc import insecure_channel
@@ -55,6 +59,13 @@ BOB_PK = PrivateKey(
 )
 BOB_ADDRESS = str(Address(BOB_PK))
 
+# Cosmwasm
+CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
+CONTRACT_FILENAME = Path(
+    os.path.join(CUR_PATH, "..", "..", "..", "contracts", "cw_erc1155.wasm")
+)
+TOKEN_ID = "1234"
+
 
 class FetchdTestCase(TestCase):
     """Base test case for Fetchd node."""
@@ -63,7 +74,6 @@ class FetchdTestCase(TestCase):
     def setUpClass(cls):
         """Set up Fetchd node for testing."""
         cls.client = FetchdClient()
-        time.sleep(60)
         cls.client.run()
 
         # Wait for things to start working
@@ -109,12 +119,11 @@ class FetchdTestCase(TestCase):
         assert int(res.balance.amount) >= 1000
 
     @classmethod
-    def test_send_native_tokens_using_client_rest(cls):
-        """Test if sending tokens over REST api using CosmWasmClient works correctly"""
-
-        # Create client
-        channel = RestClient(REST_ENDPOINT_ADDRESS)
-        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+    def perform_transfer_using_signing_client(
+        cls, validator_client: SigningCosmWasmClient
+    ):
+        """This method is used to perform ERC1155 contract interaction test
+        using SigningCosmWasmClient which can communicate via REST or gRPC interface"""
 
         # Get balances before transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
@@ -136,28 +145,90 @@ class FetchdTestCase(TestCase):
         assert balance_to_after == balance_to_before + AMOUNT
 
     @classmethod
+    def test_send_native_tokens_using_client_rest(cls):
+        """Test if sending tokens over REST api using CosmWasmClient works correctly"""
+
+        # Create client
+        channel = RestClient(REST_ENDPOINT_ADDRESS)
+        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+        cls.perform_transfer_using_signing_client(validator_client)
+
+    @classmethod
     def test_send_native_tokens_using_client_grpc(cls):
         """Test if sending tokens over gRPC api using CosmWasmClient works correctly"""
 
         # Create client
         channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
         validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+        cls.perform_transfer_using_signing_client(validator_client)
 
-        # Get balances before transfer
-        from_balance = validator_client.get_balance(validator_client.address, DENOM)
-        balance_from_before = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
-        balance_to_before = int(to_balance.balance.amount)
+    @classmethod
+    def prepare_contract_using_signing_client(
+        cls, validator_client: SigningCosmWasmClient
+    ):
+        """This method is used to perform ERC1155 contract interaction test
+        using SigningCosmWasmClient which can communicate via REST or gRPC interface"""
 
-        # Generate, sign and broadcast send tokens transaction
-        validator_client.send_tokens(BOB_ADDRESS, COINS)
+        # Store contract
+        code_id = validator_client.deploy_contract(CONTRACT_FILENAME)
 
-        # Get balances after transfer
-        from_balance = validator_client.get_balance(validator_client.address, DENOM)
-        balance_from_after = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
-        balance_to_after = int(to_balance.balance.amount)
+        # Init contract
+        init_msg: Dict[str, Any] = {}
+        contract_address = validator_client.instantiate_contract(code_id, init_msg)
 
-        # Check if balances changed
-        assert balance_from_after == balance_from_before - AMOUNT
-        assert balance_to_after == balance_to_before + AMOUNT
+        # Create token with ID TOKEN_ID
+        create_single_msg = {
+            "create_single": {
+                "item_owner": str(validator_client.address),
+                "id": TOKEN_ID,
+                "path": "some_path",
+            }
+        }
+        res_create = validator_client.execute_contract(
+            contract_address, create_single_msg
+        )
+        assert res_create.tx_response.code == 0
+
+        # Mint 1 token with ID TOKEN_ID and give it to validator
+        mint_single_msg = {
+            "mint_single": {
+                "to_address": str(validator_client.address),
+                "id": TOKEN_ID,
+                "supply": str(AMOUNT),
+                "data": "some_data",
+            },
+        }
+        res_mint = validator_client.execute_contract(contract_address, mint_single_msg)
+        assert res_mint.tx_response.code == 0
+
+        # Query validator's balance of token TOKEN_ID
+        msg = {
+            "balance": {
+                "address": str(validator_client.address),
+                "id": TOKEN_ID,
+            }
+        }
+        res_query = validator_client.query_contract_state(
+            contract_address=contract_address, msg=msg
+        )
+
+        # Check if balance of token with ID TOKEN_ID of validator is correct
+        assert int(res_query["balance"]) == AMOUNT
+
+    @classmethod
+    def test_contract_interaction_using_client_rest(cls):
+        """Test full interaction with ERC1155 contract via REST api using CosmWasmClient"""
+
+        # Create client
+        channel = RestClient(REST_ENDPOINT_ADDRESS)
+        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+        cls.prepare_contract_using_signing_client(validator_client)
+
+    @classmethod
+    def test_contract_interaction_using_client_grpc(cls):
+        """Test full interaction with ERC1155 contract via GRPC api using CosmWasmClient"""
+
+        # Create client
+        channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
+        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+        cls.prepare_contract_using_signing_client(validator_client)
