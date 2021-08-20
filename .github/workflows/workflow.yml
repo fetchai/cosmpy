@@ -1,4 +1,4 @@
-name: PyCosm checks and tests
+name: Checks and Tests
 
 on:
   push:

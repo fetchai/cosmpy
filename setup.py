@@ -29,12 +29,12 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
-    name="pycosm",
+    name="arcturus",
     version="0.1.1",
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/fetchai/pycosm",
+    url="https://github.com/fetchai/arcturus",
     author="Fetch.AI Limited",
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -49,8 +49,8 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="cosmos, gaia, fetchhub, fetchai",
-    package_dir={"pycosm": "pycosm"},
-    packages=find_packages(include=["pycosm*"]),
+    package_dir={"arcturus": "arcturus"},
+    packages=find_packages(include=["arcturus*"]),
     python_requires=">=3.6, <4",
     install_requires=[
         "ecdsa",
@@ -66,7 +66,7 @@ setup(
         "test": ["coverage", "pytest"],
     },
     project_urls={
-        "Bug Reports": "https://github.com/fetchai/pycosm/issues",
-        "Source": "https://github.com/fetchai/pycosm",
+        "Bug Reports": "https://github.com/fetchai/arcturus/issues",
+        "Source": "https://github.com/fetchai/arcturus",
     },
 )

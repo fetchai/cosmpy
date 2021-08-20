@@ -5,8 +5,8 @@ WASMD_VERSION := v0.16.0
 COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
 WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
-OUTPUT_FOLDER := pycosm/protos
-PYCOSM_SRC_DIR := pycosm
+OUTPUT_FOLDER := arcturus/protos
+PYCOSM_SRC_DIR := arcturus
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
@@ -111,11 +111,11 @@ safety:
 
 .PHONY: mypy
 mypy:
-	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude 'vulture_whitelist.py|pycosm/protos'
+	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude 'vulture_whitelist.py|arcturus/protos'
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --ignore-paths "pycosm/protos/"
+	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --ignore-paths "arcturus/protos/"
 
 ####################
 ### Tests
