@@ -31,7 +31,6 @@ class FetchdClient:
     IMG_TAG = "fetchai/fetchd:0.8.4"
     ENTRYPOINT_FILENAME = "entry.sh"
     MOUNT_PATH = "/mnt"
-    CONTAINER_NAME = "fetchd_test"
     PORTS = {9090: 9090, 1317: 1317, 26657: 26657}
     # pylint: disable=anomalous-backslash-in-string
     ENTRYPOINT_LINES = (
@@ -89,7 +88,6 @@ class FetchdClient:
                 # network="host",
                 volumes=volumes,
                 entrypoint=str(entrypoint),
-                name=self.CONTAINER_NAME,
                 auto_remove=True,
                 ports=self.PORTS,
             )
