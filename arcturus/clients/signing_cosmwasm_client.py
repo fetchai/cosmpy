@@ -44,7 +44,9 @@ from arcturus.protos.cosmos.tx.v1beta1.service_pb2 import (
     GetTxRequest,
     GetTxResponse,
 )
-from arcturus.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
+from arcturus.protos.cosmos.tx.v1beta1.service_pb2_grpc import (
+    ServiceStub as TxGrpcClient,
+)
 from arcturus.protos.cosmos.tx.v1beta1.tx_pb2 import (
     AuthInfo,
     Fee,

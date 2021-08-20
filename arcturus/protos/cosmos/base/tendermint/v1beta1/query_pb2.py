@@ -19,7 +19,9 @@ from arcturus.protos.cosmos.base.query.v1beta1 import (
     pagination_pb2 as cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2,
 )
 from arcturus.protos.gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
-from arcturus.protos.tendermint.p2p import types_pb2 as tendermint_dot_p2p_dot_types__pb2
+from arcturus.protos.tendermint.p2p import (
+    types_pb2 as tendermint_dot_p2p_dot_types__pb2,
+)
 from arcturus.protos.tendermint.types import (
     block_pb2 as tendermint_dot_types_dot_block__pb2,
 )

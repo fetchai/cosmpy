@@ -32,13 +32,19 @@ from arcturus.cosmwasm.rest_client import CosmWasmRestClient
 from arcturus.crypto.address import Address
 from arcturus.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from arcturus.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
-from arcturus.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
+from arcturus.protos.cosmos.auth.v1beta1.query_pb2_grpc import (
+    QueryStub as AuthGrpcClient,
+)
 from arcturus.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
     QueryBalanceResponse,
 )
-from arcturus.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
-from arcturus.protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
+from arcturus.protos.cosmos.bank.v1beta1.query_pb2_grpc import (
+    QueryStub as BankGrpcClient,
+)
+from arcturus.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
+    QuerySmartContractStateRequest,
+)
 from arcturus.protos.cosmwasm.wasm.v1beta1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )

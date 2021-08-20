@@ -34,7 +34,7 @@ setup(
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/fetchai/pycosm",
+    url="https://github.com/fetchai/arcturus",
     author="Fetch.AI Limited",
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -66,7 +66,7 @@ setup(
         "test": ["coverage", "pytest"],
     },
     project_urls={
-        "Bug Reports": "https://github.com/fetchai/pycosm/issues",
-        "Source": "https://github.com/fetchai/pycosm",
+        "Bug Reports": "https://github.com/fetchai/arcturus/issues",
+        "Source": "https://github.com/fetchai/arcturus",
     },
 )
