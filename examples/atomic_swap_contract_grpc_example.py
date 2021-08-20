@@ -26,8 +26,8 @@ from typing import Any, Dict
 
 from grpc import insecure_channel
 
-from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from pycosm.crypto.keypairs import PrivateKey
+from arcturus.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from arcturus.crypto.keypairs import PrivateKey
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID_1 = "1234"
