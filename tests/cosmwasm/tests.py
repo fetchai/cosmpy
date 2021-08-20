@@ -25,8 +25,8 @@ import unittest
 
 from google.protobuf.json_format import ParseDict
 
-from pycosm.cosmwasm.rest_client import CosmWasmRestClient
-from pycosm.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
+from arcturus.cosmwasm.rest_client import CosmWasmRestClient
+from arcturus.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
     QueryCodeRequest,

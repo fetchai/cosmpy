@@ -23,7 +23,7 @@ from typing import List, Optional
 
 from google.protobuf.descriptor import Descriptor
 
-from pycosm.common.rest_client import RestClient
+from arcturus.common.rest_client import RestClient
 
 
 class MockRestClient(RestClient):

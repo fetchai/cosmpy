@@ -21,7 +21,7 @@
 
 import unittest
 
-from pycosm.crypto.keypairs import PrivateKey, PublicKey
+from arcturus.crypto.keypairs import PrivateKey, PublicKey
 
 
 class KeyPairTests(unittest.TestCase):

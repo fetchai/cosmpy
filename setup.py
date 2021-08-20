@@ -49,8 +49,8 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="cosmos, gaia, fetchhub, fetchai",
-    package_dir={"pycosm": "pycosm"},
-    packages=find_packages(include=["pycosm*"]),
+    package_dir={"arcturus": "arcturus"},
+    packages=find_packages(include=["arcturus*"]),
     python_requires=">=3.6, <4",
     install_requires=[
         "ecdsa",
