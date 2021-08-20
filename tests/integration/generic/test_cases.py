@@ -74,10 +74,12 @@ class FetchdTestCase(TestCase):
                 rest_client = RestClient(REST_ENDPOINT_ADDRESS)
                 client = CosmWasmClient(rest_client)
                 res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
+                print(f"res: {str(res)}")
                 # Make sure that first block is minted
                 if int(res.balance.amount) >= 1000:
                     successful = True
-            except:  # nosec pylint: disable=W0702
+            except Exception as e:  # nosec pylint: disable=W0702
+                print(f"Exception: {str(e)}, retry")
                 continue
 
     @classmethod
