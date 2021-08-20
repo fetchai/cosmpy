@@ -1,8 +1,3 @@
-# PyCosm
-
-A library for interacting with cosmos based networks
-
-
 # Generate python types form Cosmos-SDK protobuf schema:
 ## First fetch Cosmos-SDK protobuf schema files (ONE-OFF step):
 >NOTE: This is normally one-off step. In the case, that completely new version of Cosmos-SDK is required (see the
