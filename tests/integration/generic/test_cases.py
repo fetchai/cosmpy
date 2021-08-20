@@ -28,13 +28,16 @@ from unittest import TestCase
 
 from grpc import insecure_channel
 
-from pycosm.bank.rest_client import BankRestClient
-from pycosm.clients.signing_cosmwasm_client import CosmWasmClient, SigningCosmWasmClient
-from pycosm.common.rest_client import RestClient
-from pycosm.crypto.address import Address
-from pycosm.crypto.keypairs import PrivateKey
-from pycosm.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
-from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from arcturus.bank.rest_client import BankRestClient
+from arcturus.clients.signing_cosmwasm_client import (
+    CosmWasmClient,
+    SigningCosmWasmClient,
+)
+from arcturus.common.rest_client import RestClient
+from arcturus.crypto.address import Address
+from arcturus.crypto.keypairs import PrivateKey
+from arcturus.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
+from arcturus.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from tests.integration.generic.fetchd_client import FetchdClient
 
 # Denomination and amount of transferred tokens
@@ -123,7 +126,10 @@ class FetchdTestCase(TestCase):
         cls, validator_client: SigningCosmWasmClient
     ):
         """This method is used to perform ERC1155 contract interaction test
-        using SigningCosmWasmClient which can communicate via REST or gRPC interface"""
+        using SigningCosmWasmClient which can communicate via REST or gRPC interface
+
+        :param validator_client: SigningCosmWasmClient
+        """
 
         # Get balances before transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
@@ -167,7 +173,10 @@ class FetchdTestCase(TestCase):
         cls, validator_client: SigningCosmWasmClient
     ):
         """This method is used to perform ERC1155 contract interaction test
-        using SigningCosmWasmClient which can communicate via REST or gRPC interface"""
+        using SigningCosmWasmClient which can communicate via REST or gRPC interface
+
+        :param validator_client: SigningCosmWasmClient
+        """
 
         # Store contract
         code_id = validator_client.deploy_contract(CONTRACT_FILENAME)
