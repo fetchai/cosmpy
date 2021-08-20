@@ -28,20 +28,19 @@ from unittest.mock import patch
 
 from google.protobuf.json_format import MessageToDict, ParseDict
 
-from cosm.auth.interface import Auth
-from cosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosm.crypto.address import Address
-from cosm.crypto.keypairs import PrivateKey
-from cosm.tx.interface import TxInterface
-from cosmos.auth.v1beta1.query_pb2 import (
+from pycosm.auth.interface import Auth
+from pycosm.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from pycosm.crypto.address import Address
+from pycosm.crypto.keypairs import PrivateKey
+from pycosm.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
-from cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
-from cosmos.base.v1beta1.coin_pb2 import Coin
-from cosmos.tx.v1beta1.service_pb2 import (
+from pycosm.protos.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
+from pycosm.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from pycosm.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
     BroadcastTxResponse,
     GetTxRequest,
@@ -51,7 +50,8 @@ from cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
-from cosmos.tx.v1beta1.tx_pb2 import Tx
+from pycosm.protos.cosmos.tx.v1beta1.tx_pb2 import Tx
+from pycosm.tx.interface import TxInterface
 from tests.helpers import MockRestClient
 
 # Private key
