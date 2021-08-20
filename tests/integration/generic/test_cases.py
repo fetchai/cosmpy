@@ -67,7 +67,7 @@ CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ign
 CONTRACT_FILENAME = Path(
     os.path.join(CUR_PATH, "..", "..", "..", "contracts", "cw_erc1155.wasm")
 )
-TOKEN_ID = "1234"
+TOKEN_ID = "444"
 
 
 class FetchdTestCase(TestCase):
