@@ -134,16 +134,16 @@ class FetchdTestCase(TestCase):
         # Get balances before transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
         balance_from_before = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
+        to_balance = validator_client.get_balance(Address(BOB_ADDRESS), DENOM)
         balance_to_before = int(to_balance.balance.amount)
 
         # Generate, sign and broadcast send tokens transaction
-        validator_client.send_tokens(BOB_ADDRESS, COINS)
+        validator_client.send_tokens(Address(BOB_ADDRESS), COINS)
 
         # Get balances after transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
         balance_from_after = int(from_balance.balance.amount)
-        to_balance = validator_client.get_balance(BOB_ADDRESS, DENOM)
+        to_balance = validator_client.get_balance(Address(BOB_ADDRESS), DENOM)
         balance_to_after = int(to_balance.balance.amount)
 
         # Check if balances changed
@@ -222,7 +222,7 @@ class FetchdTestCase(TestCase):
         )
 
         # Check if balance of token with ID TOKEN_ID of validator is correct
-        assert int(res_query["balance"]) == AMOUNT
+        assert res_query["balance"] == str(AMOUNT)
 
     @classmethod
     def test_contract_interaction_using_client_rest(cls):
