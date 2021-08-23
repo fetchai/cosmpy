@@ -1,94 +1,102 @@
-# Generate python types form Cosmos-SDK protobuf schema:
-## First fetch Cosmos-SDK protobuf schema files (ONE-OFF step):
->NOTE: This is normally one-off step. In the case, that completely new version of Cosmos-SDK is required (see the
-`COSMOS_SDK_VERSION` variable in the [Makefile](#Makefile])), it might be
-better to force it to re-fetch manually again - please run following command in that case:
+## Generate python types from Cosmos-SDK protobuf schemas
 
-```shell
+### Fetch Cosmos-SDK protobuf schema files
+>NOTE: When updating to a different version of the Cosmos SDK (see the version currently used under `COSMOS_SDK_VERSION` in [Makefile](#Makefile])), you will need to perform this step once to fetch the relevant protobuf schema files:
+
+```bash
 make fetch_proto_schema_source
 ```
 
->NOTE: Please note that source protobuf schema files are intentionally **NOT** committed in this repo, they are 
-> fetched on demand and stored as **local** files.
+>NOTE: For this library to be functional, only the python types generated from protobuf schemas are required, not the schema files themselves.
+> The schema files are fetched on-demand only to enable the generation of python types.
+> Therefore, the schema files are intentionally stored as **local** files and are **NOT** checked in to this repository to minimise its filesystem footprint.
 
-
-## Generate python types:
-Run the following command:
-```shell
+### Generate python types
+```bash
 make generate_proto_types
 ```
->NOTE: The Cosmos-SDK is intentionally not made part of this repository 
-> (e.g. via `git submodule ...`, or `git subtree ...`, or by-value(
-> trivial copy).
-> The reason being to minimise filesystem footprint of this repository.
-> It is **NOT** necessary to store Cosmos-SDK protobuf schema files in
-> this repository, only python types generated out of protobuf schema is
-> actually necessary.
-> The makefile target id implemented the way, that necessary bits & pieces
-> of Cosmos-SDK repository is downloaded on demand (for python types
-> generation), but they are **NOT** checked-in to this repository
 
+## Setup a local Stargate node
 
-# Setup Stargate local-net
-## Setup FetchD
-```
-bash scripts/setup_fetchd.sh
-```
-Script will ask for root permissions while setting up node.
+### Preliminaries
 
-# Start node
-```
-fetchd start
-```
+You require Go version 15.0 or higher for your platform (see <a href="https://golang.org/doc/install" target="_blank">here</a>)
 
-# Run examples
-Commands bellow should be executed from pipenv shell
-```
-pipenv install
-pipenv shell
-```
+### Setup a node
 
-### Query balance example using REST api
-```
-python src/examples/query_balance_rest_example.py
-```
+- Setup FetchD
+  ```bash
+  bash scripts/setup_fetchd.sh
+  ```
+  The script will ask for root permissions while setting up a node.
 
-### Send funds transaction example
-Using gRPC
-```
-python src/examples/tx_send_grpc_example.py
-```
-Using REST api
-```
-python src/examples/tx_send_rest_example.py
-```
+- Start the node
+  ```bash
+  fetchd start
+  ```
 
-### Contract deployment and interaction example
-Using gRPC
-```
-python src/examples/contract_interaction_grpc_example.py
-```
-Using REST api
-```
-python src/examples/contract_interaction_rest_example.py
-```
+## Examples
 
-### Native tokens atomic swap example 
-Using gRPC
-```
-python src/examples/tx_native_tokens_atomic_swap_grpc_example.py
-```
-Using REST api
-```
-python src/examples/tx_native_tokens_atomic_swap_rest_example.py
-```
+### Preliminaries
 
-### Atomic swap using ERC1155 contract example
-Using gRPC
-```
-python src/examples/atomic_swap_contract_grpc_example.py
-```
-Using REST api
-```
-python src/examples/atomic_swap_contract_rest_example.py
-```
+- Install the package from source:
+  ```bash
+  pipenv install
+  ```
+
+- or in development mode:
+  ```bash
+  pipenv install --dev
+  ```
+
+- Launch a virtual environment
+  ```bash
+  pipenv shell
+  ```
+
+### Run Examples
+
+- Query balance example using REST api
+  ```bash
+  python src/examples/query_balance_rest_example.py
+  ```
+
+- Send funds transaction example
+  - Using gRPC
+    ```bash
+    python src/examples/tx_send_grpc_example.py
+    ```
+  - Using REST api
+    ```bash
+    python src/examples/tx_send_rest_example.py
+    ```
+
+- Contract deployment and interaction example
+  - Using gRPC
+    ```bash
+    python src/examples/contract_interaction_grpc_example.py
+    ```
+  - Using REST api
+    ```bash
+    python src/examples/contract_interaction_rest_example.py
+    ```
+
+- Native tokens atomic swap example 
+  - Using gRPC
+    ```bash
+    python src/examples/tx_native_tokens_atomic_swap_grpc_example.py
+    ```
+  - Using REST api
+    ```bash
+    python src/examples/tx_native_tokens_atomic_swap_rest_example.py
+    ```
+
+- Atomic swap using ERC1155 contract example
+  - Using gRPC
+    ```bash
+    python src/examples/atomic_swap_contract_grpc_example.py
+    ```
+  - Using REST api
+    ```bash
+    python src/examples/atomic_swap_contract_rest_example.py
+    ```
