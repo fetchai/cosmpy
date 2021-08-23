@@ -27,23 +27,23 @@ from hashlib import sha256
 from google.protobuf.any_pb2 import Any
 from grpc import insecure_channel
 
-from arcturus.common.rest_client import RestClient
-from arcturus.crypto.address import Address
-from arcturus.crypto.keypairs import PrivateKey, PublicKey
-from arcturus.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
-from arcturus.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
-from arcturus.protos.cosmos.auth.v1beta1.query_pb2_grpc import (
+from cosmpy.common.rest_client import RestClient
+from cosmpy.crypto.address import Address
+from cosmpy.crypto.keypairs import PrivateKey, PublicKey
+from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
+from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import (
     QueryStub as AuthQueryClient,
 )
-from arcturus.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from arcturus.protos.cosmos.base.v1beta1.coin_pb2 import Coin
-from arcturus.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
-from arcturus.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
-from arcturus.protos.cosmos.tx.v1beta1.service_pb2 import (
+from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
+from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
+from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
 )
-from arcturus.protos.cosmos.tx.v1beta1.tx_pb2 import (
+from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     AuthInfo,
     Fee,
     ModeInfo,
@@ -52,8 +52,8 @@ from arcturus.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
-from arcturus.tx import sign_transaction
-from arcturus.tx.rest_client import TxRestClient
+from cosmpy.tx import sign_transaction
+from cosmpy.tx.rest_client import TxRestClient
 
 
 def my_import(name):

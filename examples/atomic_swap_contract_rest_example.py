@@ -24,9 +24,9 @@ import os
 from pathlib import Path
 from typing import Any, Dict
 
-from arcturus.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from arcturus.common.rest_client import RestClient
-from arcturus.crypto.keypairs import PrivateKey
+from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from cosmpy.common.rest_client import RestClient
+from cosmpy.crypto.keypairs import PrivateKey
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID_1 = "1234"
