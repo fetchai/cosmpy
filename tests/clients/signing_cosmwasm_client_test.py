@@ -28,19 +28,19 @@ from unittest.mock import patch
 
 from google.protobuf.json_format import MessageToDict, ParseDict
 
-from arcturus.auth.interface import Auth
-from arcturus.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from arcturus.crypto.address import Address
-from arcturus.crypto.keypairs import PrivateKey
-from arcturus.protos.cosmos.auth.v1beta1.query_pb2 import (
+from cosmpy.auth.interface import Auth
+from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from cosmpy.crypto.address import Address
+from cosmpy.crypto.keypairs import PrivateKey
+from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
-from arcturus.protos.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
-from arcturus.protos.cosmos.base.v1beta1.coin_pb2 import Coin
-from arcturus.protos.cosmos.tx.v1beta1.service_pb2 import (
+from cosmpy.protos.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
     BroadcastTxResponse,
     GetTxRequest,
@@ -50,8 +50,8 @@ from arcturus.protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
-from arcturus.protos.cosmos.tx.v1beta1.tx_pb2 import Tx
-from arcturus.tx.interface import TxInterface
+from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import Tx
+from cosmpy.tx.interface import TxInterface
 from tests.helpers import MockRestClient
 
 # Private key

@@ -24,7 +24,7 @@ from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
-from arcturus.protos.cosmos.staking.v1beta1.query_pb2 import (
+from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
     QueryDelegatorDelegationsRequest,
@@ -54,7 +54,7 @@ from arcturus.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
 )
-from arcturus.staking.rest_client import StakingRestClient
+from cosmpy.staking.rest_client import StakingRestClient
 from tests.helpers import MockRestClient
 
 

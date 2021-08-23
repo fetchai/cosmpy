@@ -24,10 +24,10 @@ import unittest
 
 from google.protobuf.json_format import ParseDict
 
-from arcturus.clients.cosmwasm_client import CosmWasmClient
-from arcturus.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
-from arcturus.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
-from arcturus.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
+from cosmpy.clients.cosmwasm_client import CosmWasmClient
+from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
+from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
+from cosmpy.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
     QuerySmartContractStateResponse,
 )
 from tests.helpers import MockRestClient

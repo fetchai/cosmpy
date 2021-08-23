@@ -24,8 +24,8 @@ import unittest
 
 from google.protobuf.json_format import ParseDict
 
-from arcturus.auth.rest_client import AuthRestClient
-from arcturus.protos.cosmos.auth.v1beta1.query_pb2 import (
+from cosmpy.auth.rest_client import AuthRestClient
+from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
     QueryParamsRequest,

@@ -1,6 +1,6 @@
-# Arcturus
+# Cosmpy
 
-[![Checks amd Tests](https://github.com/fetchai/arcturus/actions/workflows/workflow.yml/badge.svg)](https://github.com/fetchai/arcturus/actions/workflows/workflow.yml)
+[![Checks amd Tests](https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg)](https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml)
 
 A python library for interacting with cosmos based blockchain networks
 
@@ -8,14 +8,14 @@ A python library for interacting with cosmos based blockchain networks
 
 To install the project use:
 
-    pip3 install arcturus
+    pip3 install cosmpy
 
 ## Getting started
 
 Below is a simple example using the `SigningCosmWasmClient` and the `RestClient` channel.
 
-    from arcturus.clients.signing_cosmwasm_client import SigningCosmWasmClient
-    from arcturus.common.rest_client import RestClient
+    from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
+    from cosmpy.common.rest_client import RestClient
 
     channel = RestClient("http://<rest endpoint addres>")
     client = SigningCosmWasmClient(private_key, channel, "<chain id>")
@@ -25,6 +25,6 @@ Below is a simple example using the `SigningCosmWasmClient` and the `RestClient`
 
 ## Extra Resources
 
-* [Github Repo](https://github.com/fetchai/arcturus)
-* [Bug Reports](https://github.com/fetchai/arcturus/issues)
-* [Discussions](https://github.com/fetchai/arcturus/discussions)
+* [Github Repo](https://github.com/fetchai/cosmpy)
+* [Bug Reports](https://github.com/fetchai/cosmpy/issues)
+* [Discussions](https://github.com/fetchai/cosmpy/discussions)
