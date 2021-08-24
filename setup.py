@@ -58,8 +58,8 @@ setup(
         "requests",
         "google-api-python-client",
         "protobuf",
-        "grpcio",
-        "grpcio-tools",
+        "grpcio>=1.32.0",
+        "grpcio-tools>=1.32.0",
     ],
     extras_require={
         "dev": ["check-manifest", "flake8", "black", "mypy"],
