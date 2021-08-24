@@ -96,7 +96,10 @@ class FetchdDockerImage:
             raise RuntimeError("Docker not in the OS Path; skipping the test")
 
         result = subprocess.run(  # nosec
-            ["docker", "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            ["docker", "--version"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
         )
         if result.returncode != 0:
             raise RuntimeError(
@@ -164,7 +167,7 @@ class FetchdDockerImage:
                 client = CosmWasmClient(rest_client)
                 res = client.get_balance(self.VALIDATOR_ADDRESS, self.DENOM)
                 # Make sure that first block is minted
-                if not int(res.balance.amount) >= 1000:
+                if int(res.balance.amount) < 1000:
                     raise RuntimeError("The node is not set up yet.")
                 return True
             except Exception as e:  # nosec pylint: disable=W0703
@@ -196,9 +199,9 @@ class FetchdDockerImage:
             self.container.stop()
             self.container.remove()
             raise RuntimeError(f"{self.IMG_TAG} doesn't work. Exiting...")
-        else:
-            print("Done!")
-            time.sleep(timeout)
+
+        print("Done!")
+        time.sleep(timeout)
 
     def stop_image(self):
         """Stop the FetchD docker image."""
