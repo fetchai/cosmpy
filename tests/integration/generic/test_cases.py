@@ -27,16 +27,13 @@ from unittest import TestCase
 
 from grpc import insecure_channel
 
-from arcturus.bank.rest_client import BankRestClient
-from arcturus.clients.signing_cosmwasm_client import (
-    CosmWasmClient,
-    SigningCosmWasmClient,
-)
-from arcturus.common.rest_client import RestClient
-from arcturus.crypto.address import Address
-from arcturus.crypto.keypairs import PrivateKey
-from arcturus.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
-from arcturus.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmpy.bank.rest_client import BankRestClient
+from cosmpy.clients.signing_cosmwasm_client import CosmWasmClient, SigningCosmWasmClient
+from cosmpy.common.rest_client import RestClient
+from cosmpy.crypto.address import Address
+from cosmpy.crypto.keypairs import PrivateKey
+from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from tests.integration.generic.fetchd_client import FetchdDockerImage
 
 # Denomination and amount of transferred tokens

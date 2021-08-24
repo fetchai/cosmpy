@@ -28,10 +28,10 @@ import time
 
 import docker  # pylint: disable=import-error
 
-from arcturus.clients.signing_cosmwasm_client import CosmWasmClient
-from arcturus.common.rest_client import RestClient
-from arcturus.crypto.address import Address
-from arcturus.crypto.keypairs import PrivateKey
+from cosmpy.clients.signing_cosmwasm_client import CosmWasmClient
+from cosmpy.common.rest_client import RestClient
+from cosmpy.crypto.address import Address
+from cosmpy.crypto.keypairs import PrivateKey
 
 
 class FetchdDockerImage:
@@ -151,7 +151,11 @@ class FetchdDockerImage:
                 ports=self.PORTS,
             )
 
-    def _wait(self, max_attempts: int = g, sleep_rate: float = DEFAULT_SLEEP_RATE) -> bool:
+    def _wait(
+        self,
+        max_attempts: int = DEFAULT_MAX_ATTEMPTS,
+        sleep_rate: float = DEFAULT_SLEEP_RATE,
+    ) -> bool:
         """Wait until the image is up."""
         for i in range(max_attempts):
             try:
@@ -169,7 +173,11 @@ class FetchdDockerImage:
                 )
         return False
 
-    def launch_image(self, timeout: float = DEFAULT_SLEEP_RATE, max_attempts: int = DEFAULT_MAX_ATTEMPTS):
+    def launch_image(
+        self,
+        timeout: float = DEFAULT_SLEEP_RATE,
+        max_attempts: int = DEFAULT_MAX_ATTEMPTS,
+    ):
         """
         Launch a FetchD docker image.
 
