@@ -77,7 +77,8 @@ class FetchdTestCase(TestCase):
     def setUpClass(cls):
         """Set up Fetchd node for testing."""
         cls.client = FetchdClient()
-        cls.client.run()
+        # cls.client.run()
+        cls.client.launch_image()
 
         # Wait for things to start working
         successful = False
