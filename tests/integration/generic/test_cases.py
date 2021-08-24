@@ -21,7 +21,6 @@
 
 import inspect
 import os
-import time
 from pathlib import Path
 from typing import Any, Dict
 from unittest import TestCase
@@ -38,7 +37,7 @@ from arcturus.crypto.address import Address
 from arcturus.crypto.keypairs import PrivateKey
 from arcturus.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from arcturus.protos.cosmos.base.v1beta1.coin_pb2 import Coin
-from tests.integration.generic.fetchd_client import FetchdClient
+from tests.integration.generic.fetchd_client import FetchdDockerImage
 
 # Denomination and amount of transferred tokens
 DENOM = "stake"
@@ -76,31 +75,13 @@ class FetchdTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up Fetchd node for testing."""
-        cls.client = FetchdClient()
-        # cls.client.run()
+        cls.client = FetchdDockerImage()
         cls.client.launch_image()
-
-        # Wait for things to start working
-        successful = False
-        while not successful:
-            time.sleep(5)
-
-            try:
-                rest_client = RestClient(REST_ENDPOINT_ADDRESS)
-                client = CosmWasmClient(rest_client)
-                res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
-                print(f"res: {str(res)}")
-                # Make sure that first block is minted
-                if int(res.balance.amount) >= 1000:
-                    successful = True
-            except Exception as e:  # nosec pylint: disable=W0703
-                print(f"Exception: {str(e)}, retry")
-                continue
 
     @classmethod
     def tearDownClass(cls):
         """Teardown the Fetchd node."""
-        cls.client.stop()
+        cls.client.stop_image()
 
     @classmethod
     def test_query_balance_rest(cls):

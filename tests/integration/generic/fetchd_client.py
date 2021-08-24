@@ -27,18 +27,36 @@ import tempfile
 import time
 
 import docker  # pylint: disable=import-error
-import requests
+
+from arcturus.clients.signing_cosmwasm_client import CosmWasmClient
+from arcturus.common.rest_client import RestClient
+from arcturus.crypto.address import Address
+from arcturus.crypto.keypairs import PrivateKey
 
 
-class FetchdClient:
+class FetchdDockerImage:
     """Class to operate Fetchd node with Docker engine."""
 
     MINIMUM_DOCKER_VERSION = (19, 0, 0)
     ENDPOINT = "http://127.0.0.1:1317"
+
     IMG_TAG = "fetchai/fetchd:0.8.4"
     ENTRYPOINT_FILENAME = "entry.sh"
     MOUNT_PATH = "/mnt"
     PORTS = {9090: 9090, 1317: 1317, 26657: 26657}
+
+    DENOM = "stake"
+    VALIDATOR_ADDRESS = Address(
+        PrivateKey(
+            bytes.fromhex(
+                "0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
+            )
+        )
+    )
+
+    DEFAULT_MAX_ATTEMPTS = 10
+    DEFAULT_SLEEP_RATE = 2
+
     # pylint: disable=anomalous-backslash-in-string
     ENTRYPOINT_LINES = (
         "#!/usr/bin/env bash",
@@ -67,37 +85,12 @@ class FetchdClient:
     )
 
     def __init__(self):
-        """Initialize Docker and Fetchd."""
+        """Initialize the Fetchd docker image."""
         self.client = docker.from_env()
-        # self.client.images.pull(self.IMG_TAG)
         self.container = None
 
-    def launch_image(self, timeout: float = 2.0, max_attempts: int = 10):
-        """
-        Launch image.
-
-        :return: None
-        """
-        self.check_skip()
-        # self.stop_if_already_running()
-        self.create()
-        self.container.start()
-        print(f"Setting up image {self.IMG_TAG}...")
-        success = self.wait(max_attempts, timeout)
-        if not success:
-            self.container.stop()
-            self.container.remove()
-            raise RuntimeError(f"{self.IMG_TAG} doesn't work. Exiting...")
-        else:
-            print("Done!")
-            time.sleep(timeout)
-            # yield
-            # print(f"Stopping the image {self.IMG_TAG}...")
-            # self.container.stop()
-            # self.container.remove()
-
-    def check_skip(self):
-        """Check the 'Docker' CLI tool is in the OS PATH."""
+    def _check_skip(self):
+        """Check the correct version of docker CLI tool is in the OS PATH."""
         result = shutil.which("docker")
         if result is None:
             raise RuntimeError("Docker not in the OS Path; skipping the test")
@@ -106,31 +99,35 @@ class FetchdClient:
             ["docker", "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         if result.returncode != 0:
-            raise RuntimeError(f"'docker --version' failed with exit code {result.returncode}")
+            raise RuntimeError(
+                f"'docker --version' failed with exit code {result.returncode}"
+            )
 
         match = re.search(
             r"Docker version ([0-9]+)\.([0-9]+)\.([0-9]+)",
             result.stdout.decode("utf-8"),
         )
         if match is None:
-            raise RuntimeError("cannot read version from the output of 'docker --version'")
+            raise RuntimeError(
+                "cannot read version from the output of 'docker --version'"
+            )
         version = (int(match.group(1)), int(match.group(2)), int(match.group(3)))
         if version < self.MINIMUM_DOCKER_VERSION:
             raise RuntimeError(
                 f"expected Docker version to be at least {'.'.join(self.MINIMUM_DOCKER_VERSION)}, found {'.'.join(version)}"
             )
 
-    def stop_if_already_running(self):
+    def _stop_if_already_running(self):
         """Stop the running images with the same tag, if any."""
-        client = docker.from_env()
-        for container in client.containers.list():
+        # client = docker.from_env()
+        for container in self.client.containers.list():
             if self.IMG_TAG in container.image.tags:
                 print(f"Stopping image {self.IMG_TAG}...")
                 container.stop()
 
     def _make_entrypoint(self, dirpath):
         """
-        Make an entrypoint file for Fetchd container.
+        Make a temporary entrypoint file to setup and run the test ledger node.
 
         :param dirpath: str target directory path.
         """
@@ -139,8 +136,8 @@ class FetchdClient:
             f.writelines(line + "\n" for line in self.ENTRYPOINT_LINES)
         os.chmod(path, 300)  # nosec
 
-    def create(self):
-        """Run Fetchd node in Docker container."""
+    def _create(self):
+        """Create a Fetchd docker container."""
         with tempfile.TemporaryDirectory() as tmpdir:
             self._make_entrypoint(tmpdir)
             volumes = {tmpdir: {"bind": self.MOUNT_PATH, "mode": "rw"}}
@@ -154,25 +151,50 @@ class FetchdClient:
                 ports=self.PORTS,
             )
 
-    def stop(self):
-        """Stop running Docker container with Fetchd node."""
+    def _wait(self, max_attempts: int = DEFAULT_MAX_ATTEMPTS, sleep_rate: float = DEFAULT_SLEEP_RATE) -> bool:
+        """Wait until the image is up."""
+        for i in range(max_attempts):
+            try:
+                time.sleep(sleep_rate)
+                rest_client = RestClient(self.ENDPOINT)
+                client = CosmWasmClient(rest_client)
+                res = client.get_balance(self.VALIDATOR_ADDRESS, self.DENOM)
+                # Make sure that first block is minted
+                if not int(res.balance.amount) >= 1000:
+                    raise RuntimeError("The node is not set up yet.")
+                return True
+            except Exception as e:  # nosec pylint: disable=W0703
+                print(
+                    f"Attempt {i} failed. {str(e)}. Retrying in {sleep_rate} seconds..."
+                )
+        return False
+
+    def launch_image(self, timeout: float = DEFAULT_SLEEP_RATE, max_attempts: int = DEFAULT_MAX_ATTEMPTS):
+        """
+        Launch a FetchD docker image.
+
+        :param timeout: number of seconds to wait before checking the image is up.
+        :param max_attempts: the maximum number of times to check the image is up.
+
+        :raises RuntimeError: if node is not up and running.
+        """
+        self._check_skip()
+        self._stop_if_already_running()
+        self._create()
+        self.container.start()
+        print(f"Setting up image {self.IMG_TAG}...")
+        success = self._wait(max_attempts, timeout)
+        if not success:
+            self.container.stop()
+            self.container.remove()
+            raise RuntimeError(f"{self.IMG_TAG} doesn't work. Exiting...")
+        else:
+            print("Done!")
+            time.sleep(timeout)
+
+    def stop_image(self):
+        """Stop the FetchD docker image."""
         if self.container is None:
             raise RuntimeError("Fetchd node is not running.")
         print(f"Stopping the image {self.IMG_TAG}...")
         self.container.stop()
-        self.container.remove()
-
-    def wait(self, max_attempts: int = 15, sleep_rate: float = 1.0) -> bool:
-        """Wait until the image is up."""
-        # request = dict(jsonrpc=2.0, method="web3_clientVersion", params=[], id=1)
-        for i in range(max_attempts):
-            try:
-                response = requests.get(f"{self.ENDPOINT}")
-                if response.status_code != 200:
-                    raise RuntimeError("")
-                return True
-            except Exception as e:
-                import pdb;pdb.set_trace()
-                print(f"Attempt {i} failed. Retrying in {sleep_rate} seconds...")
-                time.sleep(sleep_rate)
-        return False
