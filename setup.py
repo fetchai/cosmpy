@@ -29,12 +29,12 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
-    name="arcturus",
-    version="0.1.1",
+    name="cosmpy",
+    version="0.1.3",
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/fetchai/arcturus",
+    url="https://github.com/fetchai/cosmpy",
     author="Fetch.AI Limited",
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -49,8 +49,8 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="cosmos, gaia, fetchhub, fetchai",
-    package_dir={"arcturus": "arcturus"},
-    packages=find_packages(include=["arcturus*"]),
+    package_dir={"cosmpy": "cosmpy"},
+    packages=find_packages(include=["cosmpy*"]),
     python_requires=">=3.6, <4",
     install_requires=[
         "ecdsa",
@@ -58,16 +58,17 @@ setup(
         "requests",
         "google-api-python-client",
         "protobuf",
-        "grpcio",
-        "grpcio-tools",
         "docker",
+        # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
+        "grpcio==1.32.0",
+        "grpcio-tools==1.32.0",
     ],
     extras_require={
         "dev": ["check-manifest", "flake8", "black", "mypy"],
         "test": ["coverage", "pytest"],
     },
     project_urls={
-        "Bug Reports": "https://github.com/fetchai/arcturus/issues",
-        "Source": "https://github.com/fetchai/arcturus",
+        "Bug Reports": "https://github.com/fetchai/cosmpy/issues",
+        "Source": "https://github.com/fetchai/cosmpy",
     },
 )

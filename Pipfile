@@ -20,6 +20,8 @@ docker = "5.0.0"
 
 [packages]
 cosm = {editable = true, extras = ["dev", "test"], path = "."}
+grpcio = "==1.32.0"
+grpcio-tools = "==1.32.0"
 
 [requires]
 python_version = "3.9"

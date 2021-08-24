@@ -76,13 +76,13 @@ def check_copyright(file: Path) -> bool:
 
 if __name__ == "__main__":
     python_files = itertools.chain(
-        Path("arcturus").glob("**/*.py"),
+        Path("cosmpy").glob("**/*.py"),
         [Path("setup.py")],
     )
 
-    # filter out protobuf files (*_pb2.py) and all files under arcturus/protos
+    # filter out protobuf files (*_pb2.py) and all files under cosmpy/protos
     python_files_filtered = filter(
-        lambda x: not str(x).endswith("_pb2.py") and str(x).find("arcturus/protos/") == -1, python_files
+        lambda x: not str(x).endswith("_pb2.py") and str(x).find("cosmpy/protos/") == -1, python_files
     )
 
     bad_files = [

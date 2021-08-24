@@ -22,9 +22,9 @@
 import json
 import unittest
 
-from arcturus.bank.rest_client import BankRestClient
-from arcturus.protos.cosmos.bank.v1beta1.bank_pb2 import Metadata, Params
-from arcturus.protos.cosmos.bank.v1beta1.query_pb2 import (
+from cosmpy.bank.rest_client import BankRestClient
+from cosmpy.protos.cosmos.bank.v1beta1.bank_pb2 import Metadata, Params
+from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryAllBalancesResponse,
     QueryBalanceRequest,
@@ -40,8 +40,8 @@ from arcturus.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryTotalSupplyRequest,
     QueryTotalSupplyResponse,
 )
-from arcturus.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
-from arcturus.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageResponse
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from tests.helpers import MockRestClient
 
 

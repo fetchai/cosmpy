@@ -151,7 +151,7 @@ class FetchdDockerImage:
                 ports=self.PORTS,
             )
 
-    def _wait(self, max_attempts: int = DEFAULT_MAX_ATTEMPTS, sleep_rate: float = DEFAULT_SLEEP_RATE) -> bool:
+    def _wait(self, max_attempts: int = g, sleep_rate: float = DEFAULT_SLEEP_RATE) -> bool:
         """Wait until the image is up."""
         for i in range(max_attempts):
             try:

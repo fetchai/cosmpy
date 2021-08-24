@@ -3,10 +3,11 @@ include *.txt
 include Pipfile
 include strategy.ini
 include tox.ini
+include *.md
 recursive-include contracts *.wasm
 recursive-include examples *.py
 recursive-include scripts *.py
 recursive-include scripts *.sh
-recursive-include arcturus *.py
+recursive-include cosmpy *.py
 recursive-include tests *.py
 recursive-include tests *.wasm
