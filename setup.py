@@ -61,7 +61,7 @@ setup(
         "grpcio",
     ],
     extras_require={
-        "dev": ["check-manifest", "flake8", "black", "mypy"],
+        "dev": ["check-manifest", "flake8", "black", "mypy", "grpcio-tools==1.32.0"],
         "test": ["coverage", "pytest"],
     },
     project_urls={
