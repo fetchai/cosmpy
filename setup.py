@@ -59,8 +59,7 @@ setup(
         "google-api-python-client",
         "protobuf",
         # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
-        "grpcio==1.32.0",
-        "grpcio-tools==1.32.0",
+        "grpcio>=1.32.0",
     ],
     extras_require={
         "dev": ["check-manifest", "flake8", "black", "mypy"],
