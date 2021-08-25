@@ -21,7 +21,7 @@
 
 from unittest import TestCase
 
-from docker.errors import APIError
+from docker.errors import APIError  # pylint: disable=import-error
 
 from tests.integration.generic.fetchd_client import FetchdDockerImage
 

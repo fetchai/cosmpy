@@ -77,7 +77,8 @@ class FetchdQueriesTestCase(FetchdTestCase):
 
     @staticmethod
     def prepare_contract_using_signing_client(validator_client: SigningCosmWasmClient):
-        """This method is used to perform ERC1155 contract interaction test
+        """
+        This method is used to perform ERC1155 contract interaction test
         using SigningCosmWasmClient which can communicate via REST or gRPC interface
 
         :param validator_client: SigningCosmWasmClient
@@ -129,14 +130,16 @@ class FetchdQueriesTestCase(FetchdTestCase):
         # Check if balance of token with ID TOKEN_ID of validator is correct
         assert res_query["balance"] == str(AMOUNT)
 
-    def test_query_balance_rest(self):
+    @staticmethod
+    def test_query_balance_rest():
         """Test if getting balance using REST api works correctly"""
         bank = BankRestClient(RestClient(REST_ENDPOINT_ADDRESS))
         res = bank.Balance(QueryBalanceRequest(address=VALIDATOR_ADDRESS, denom=DENOM))
         assert res.balance.denom == DENOM
         assert int(res.balance.amount) >= 1000
 
-    def test_query_balance_client_rest(self):
+    @staticmethod
+    def test_query_balance_client_rest():
         """Test if getting balance using REST api and CosmWasmClient works correctly"""
         rest_client = RestClient(REST_ENDPOINT_ADDRESS)
         client = CosmWasmClient(rest_client)
