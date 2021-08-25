@@ -19,6 +19,7 @@
 
 """Module with FetchdClient class for easy usage of Fetchd node with Docker engine."""
 
+import logging
 import os
 import re
 import shutil
@@ -122,10 +123,9 @@ class FetchdDockerImage:
 
     def _stop_if_already_running(self):
         """Stop the running images with the same tag, if any."""
-        # client = docker.from_env()
         for container in self.client.containers.list():
             if self.IMG_TAG in container.image.tags:
-                print(f"Stopping image {self.IMG_TAG}...")
+                logging.debug(f"Stopping image {self.IMG_TAG}...")
                 container.stop()
 
     def _make_entrypoint(self, dirpath):
@@ -171,7 +171,7 @@ class FetchdDockerImage:
                     raise RuntimeError("The node is not set up yet.")
                 return True
             except Exception as e:  # nosec pylint: disable=W0703
-                print(
+                logging.debug(
                     f"Attempt {i} failed. {str(e)}. Retrying in {sleep_rate} seconds..."
                 )
         return False
@@ -193,20 +193,20 @@ class FetchdDockerImage:
         self._stop_if_already_running()
         self._create()
         self.container.start()
-        print(f"Setting up image {self.IMG_TAG}...")
+        logging.debug(f"Setting up image {self.IMG_TAG}...")
         success = self._wait(max_attempts, timeout)
         if not success:
             self.container.stop()
             self.container.remove()
             raise RuntimeError(f"{self.IMG_TAG} doesn't work. Exiting...")
 
-        print("Done!")
+        logging.debug("Done!")
         time.sleep(timeout)
 
     def stop_image(self):
         """Stop the FetchD docker image."""
         if self.container is None:
             raise RuntimeError("Fetchd node is not running.")
-        print(f"Stopping the image {self.IMG_TAG}...")
+        logging.debug(f"Stopping the image {self.IMG_TAG}...")
         self.container.stop()
         self.container = None
