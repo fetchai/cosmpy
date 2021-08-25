@@ -21,7 +21,7 @@
 
 from unittest import TestCase
 
-from docker.errors import APIError, NotFound  # pylint: disable=import-error
+from docker.errors import NotFound  # pylint: disable=import-error
 
 from tests.integration.generic.fetchd_client import FetchdDockerImage
 
@@ -40,8 +40,7 @@ class FetchdTestCase(TestCase):
         """Try to launch image and retry if first run was not successful."""
         try:
             cls.client.launch_image()
-        except (APIError, NotFound):
-            cls.client.stop_image()
+        except NotFound:
             cls.client.launch_image()
 
     @classmethod
