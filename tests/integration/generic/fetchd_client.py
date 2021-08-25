@@ -125,7 +125,7 @@ class FetchdDockerImage:
         """Stop the running images with the same tag, if any."""
         for container in self.client.containers.list():
             if self.IMG_TAG in container.image.tags:
-                logging.debug(f"Stopping image {self.IMG_TAG}...")
+                logging.debug("Stopping image %s...", self.IMG_TAG)
                 container.stop()
 
     def _make_entrypoint(self, dirpath):
@@ -172,7 +172,10 @@ class FetchdDockerImage:
                 return True
             except Exception as e:  # nosec pylint: disable=W0703
                 logging.debug(
-                    f"Attempt {i} failed. {str(e)}. Retrying in {sleep_rate} seconds..."
+                    "Attempt %s failed. %s. Retrying in %s seconds...",
+                    i,
+                    str(e),
+                    sleep_rate,
                 )
         return False
 
@@ -193,7 +196,7 @@ class FetchdDockerImage:
         self._stop_if_already_running()
         self._create()
         self.container.start()
-        logging.debug(f"Setting up image {self.IMG_TAG}...")
+        logging.debug("Setting up image %s...", self.IMG_TAG)
         success = self._wait(max_attempts, timeout)
         if not success:
             self.container.stop()
@@ -207,6 +210,6 @@ class FetchdDockerImage:
         """Stop the FetchD docker image."""
         if self.container is None:
             raise RuntimeError("Fetchd node is not running.")
-        logging.debug(f"Stopping the image {self.IMG_TAG}...")
+        logging.debug("Stopping the image %s...", self.IMG_TAG)
         self.container.stop()
         self.container = None
