@@ -209,3 +209,4 @@ class FetchdDockerImage:
             raise RuntimeError("Fetchd node is not running.")
         print(f"Stopping the image {self.IMG_TAG}...")
         self.container.stop()
+        self.container = None
