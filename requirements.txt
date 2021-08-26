@@ -4,21 +4,21 @@ bech32==1.2.0; python_version >= '3.5'
 cachetools==4.2.2; python_version ~= '3.5'
 certifi==2021.5.30
 charset-normalizer==2.0.4; python_version >= '3'
-ecdsa==0.17.0; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
+ecdsa==0.17.0; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'
 google-api-core==2.0.0; python_version >= '3.6'
 google-api-python-client==2.18.0; python_version >= '3.6'
 google-auth-httplib2==0.1.0
 google-auth==2.0.1; python_version >= '3.6'
 googleapis-common-protos==1.53.0; python_version >= '3.6'
-grpcio==1.32.0
+grpcio==1.39.0
 httplib2==0.19.1
 idna==3.2; python_version >= '3'
 protobuf==3.17.3
 pyasn1-modules==0.2.8
 pyasn1==0.4.8
-pyparsing==2.4.7; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
+pyparsing==2.4.7; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'
 requests==2.26.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'
 rsa==4.7.2; python_version >= '3.5' and python_version < '4'
-six==1.16.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+six==1.16.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'
 uritemplate==3.0.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 urllib3==1.26.6; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'
