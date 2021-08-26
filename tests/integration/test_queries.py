@@ -134,7 +134,9 @@ class FetchdQueriesTestCase(FetchdTestCase):
     def test_query_balance_rest():
         """Test if getting balance using REST api works correctly"""
         bank = BankRestClient(RestClient(REST_ENDPOINT_ADDRESS))
-        res = bank.Balance(QueryBalanceRequest(address=str(VALIDATOR_ADDRESS), denom=DENOM))
+        res = bank.Balance(
+            QueryBalanceRequest(address=str(VALIDATOR_ADDRESS), denom=DENOM)
+        )
         assert res.balance.denom == DENOM
         assert int(res.balance.amount) >= 1000
 
