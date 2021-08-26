@@ -31,8 +31,10 @@ import docker  # pylint: disable=import-error
 
 from cosmpy.clients.signing_cosmwasm_client import CosmWasmClient
 from cosmpy.common.rest_client import RestClient
-from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
+from tests.integration.generic.config import (
+    DENOM,
+    VALIDATOR_ADDRESS,
+)
 
 
 class FetchdDockerImage:
@@ -45,15 +47,6 @@ class FetchdDockerImage:
     ENTRYPOINT_FILENAME = "entry.sh"
     MOUNT_PATH = "/mnt"
     PORTS = {9090: 9090, 1317: 1317, 26657: 26657}
-
-    DENOM = "stake"
-    VALIDATOR_ADDRESS = Address(
-        PrivateKey(
-            bytes.fromhex(
-                "0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
-            )
-        )
-    )
 
     DEFAULT_MAX_ATTEMPTS = 10
     DEFAULT_SLEEP_RATE = 2
@@ -165,7 +158,7 @@ class FetchdDockerImage:
                 time.sleep(sleep_rate)
                 rest_client = RestClient(self.ENDPOINT)
                 client = CosmWasmClient(rest_client)
-                res = client.get_balance(self.VALIDATOR_ADDRESS, self.DENOM)
+                res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
                 # Make sure that first block is minted
                 if int(res.balance.amount) < 1000:
                     raise RuntimeError("The node is not set up yet.")
