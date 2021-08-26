@@ -32,7 +32,7 @@ unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1))
 
 
 FIND_CMD := $(FIND_CMD) -type f -name *.proto $(SOURCES_REGEX_TO_EXCLUDE:%=! -regex "%")
-RELATIVE_SOURCE := $(shell cd $(COSMOS_SDK_DIR) && $(FIND_CMD))
+RELATIVE_SOURCE := $(shell [ -d "$(COSMOS_SDK_DIR)" ] && cd $(COSMOS_SDK_DIR) && $(FIND_CMD))
 UNROOTED_SOURCE := $(foreach _,$(COSMOS_PROTO_RELATIVE_DIRS),$(patsubst $(_)/%,%,$(filter $(_)/%,$(RELATIVE_SOURCE))))
 SOURCE := $(RELATIVE_SOURCE:%=$(COSMOS_SDK_DIR)/%)
 GENERATED := $(UNROOTED_SOURCE:%.proto=$(OUTPUT_FOLDER)/%.py)
