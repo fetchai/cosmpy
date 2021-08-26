@@ -147,8 +147,8 @@ class FetchdDockerImage:
                 ports=self.PORTS,
             )
 
+    @staticmethod
     def _wait(
-        self,
         max_attempts: int = DEFAULT_MAX_ATTEMPTS,
         sleep_rate: float = DEFAULT_SLEEP_RATE,
     ) -> bool:
