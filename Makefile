@@ -10,7 +10,7 @@ PYCOSM_SRC_DIR := cosmpy
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
-REQUIREMENTS_FILES := requirements.txt requirements-dev.txt
+REQUIREMENTS_FILES := requirements.txt requirements-dev.txt Pipfile.lock
 
 
 ifeq ($(OS),Windows_NT)
