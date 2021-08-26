@@ -41,7 +41,7 @@ CHAIN_ID = "testing"
 VALIDATOR_PK = PrivateKey(
     bytes.fromhex("0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae")
 )
-VALIDATOR_ADDRESS = str(Address(VALIDATOR_PK))
+VALIDATOR_ADDRESS = Address(VALIDATOR_PK)
 
 # Private key of recipient account
 BOB_PK = PrivateKey(
