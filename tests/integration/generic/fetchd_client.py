@@ -33,8 +33,8 @@ from cosmpy.clients.signing_cosmwasm_client import CosmWasmClient
 from cosmpy.common.rest_client import RestClient
 from tests.integration.generic.config import (
     DENOM,
-    VALIDATOR_ADDRESS,
     REST_ENDPOINT_ADDRESS,
+    VALIDATOR_ADDRESS,
 )
 
 
