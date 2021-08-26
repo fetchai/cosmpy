@@ -4,23 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-tox = "==3.24.1"
-flake8 = "==3.9.2"
-black = "==21.6b0"
-mypy = "==0.910"
-bandit = "==1.7.0"
-safety = "==1.10.3"
-isort = "==5.9.3"
-darglint = "==1.8.0"
-vulture = "==2.3"
-pylint = "==2.9.6"
-liccheck = "==0.6.2"
-flake8-copyright = "==0.2.2"
+cosmpy = {editable = true, extras = ["dev", "test"], path = "."}
 
 [packages]
-cosm = {editable = true, extras = ["dev", "test"], path = "."}
-grpcio = "==1.32.0"
-grpcio-tools = "==1.32.0"
+cosmpy = {editable = true, extras = [], path = "."}
 
 [requires]
 python_version = "3.9"
