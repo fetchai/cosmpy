@@ -34,6 +34,7 @@ from cosmpy.common.rest_client import RestClient
 from tests.integration.generic.config import (
     DENOM,
     VALIDATOR_ADDRESS,
+    REST_ENDPOINT_ADDRESS,
 )
 
 
@@ -41,7 +42,6 @@ class FetchdDockerImage:
     """Class to operate Fetchd node with Docker engine."""
 
     MINIMUM_DOCKER_VERSION = (19, 0, 0)
-    ENDPOINT = "http://127.0.0.1:1317"
 
     IMG_TAG = "fetchai/fetchd:0.8.4"
     ENTRYPOINT_FILENAME = "entry.sh"
@@ -156,7 +156,7 @@ class FetchdDockerImage:
         for i in range(max_attempts):
             try:
                 time.sleep(sleep_rate)
-                rest_client = RestClient(self.ENDPOINT)
+                rest_client = RestClient(REST_ENDPOINT_ADDRESS)
                 client = CosmWasmClient(rest_client)
                 res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
                 # Make sure that first block is minted

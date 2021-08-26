@@ -47,7 +47,7 @@ VALIDATOR_ADDRESS = str(Address(VALIDATOR_PK))
 BOB_PK = PrivateKey(
     bytes.fromhex("439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636")
 )
-BOB_ADDRESS = str(Address(BOB_PK))
+BOB_ADDRESS = Address(BOB_PK)
 
 # Cosmwasm
 CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore

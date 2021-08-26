@@ -41,6 +41,8 @@ class FetchdTestCase(TestCase):
         try:
             cls.client.launch_image()
         except NotFound:
+            # After machine reboot first run is not successful with NotFound exception.
+            # So if it happens we run it the second time and it is successful.
             cls.client.launch_image()
 
     @classmethod
