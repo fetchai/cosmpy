@@ -58,7 +58,6 @@ setup(
         "requests",
         "google-api-python-client",
         "protobuf",
-        # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
         "grpcio",
     ],
     extras_require={
@@ -76,6 +75,7 @@ setup(
             "pylint==2.9.6",
             "liccheck==0.6.2",
             "flake8-copyright==0.2.2",
+            # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
             "grpcio-tools<=1.32.0",
         ],
         "test": ["coverage", "pytest"],
