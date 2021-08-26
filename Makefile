@@ -10,6 +10,8 @@ PYCOSM_SRC_DIR := cosmpy
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
+REQUIREMENTS_FILES := requirements.txt requirements-dev.txt
+
 
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
@@ -162,10 +164,16 @@ check:
 	make copyright-check
 	make test
 
-# Freeze deps to requirements.txt (needed for some Tox checks)
-.PHONY: check
-freeze:
+$(REQUIREMENTS_FILES): Pipfile
 	pipenv lock -r > requirements.txt
+	pipenv lock -r --dev > requirements-dev.txt
+
+.PHONY: requirements
+requirements: $(REQUIREMENTS_FILES)
+
+# Freeze deps to requirements.txt (needed for some Tox checks)
+.PHONY: freeze
+freeze: requirements
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
