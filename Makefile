@@ -10,6 +10,8 @@ PYCOSM_SRC_DIR := cosmpy
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
+REQUIREMENTS_FILES := requirements.txt requirements-dev.txt Pipfile.lock
+
 
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
@@ -32,7 +34,7 @@ unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1))
 
 
 FIND_CMD := $(FIND_CMD) -type f -name *.proto $(SOURCES_REGEX_TO_EXCLUDE:%=! -regex "%")
-RELATIVE_SOURCE := $(shell cd $(COSMOS_SDK_DIR) && $(FIND_CMD))
+RELATIVE_SOURCE := $(shell [ -d "$(COSMOS_SDK_DIR)" ] && { cd $(COSMOS_SDK_DIR) && $(FIND_CMD); })
 UNROOTED_SOURCE := $(foreach _,$(COSMOS_PROTO_RELATIVE_DIRS),$(patsubst $(_)/%,%,$(filter $(_)/%,$(RELATIVE_SOURCE))))
 SOURCE := $(RELATIVE_SOURCE:%=$(COSMOS_SDK_DIR)/%)
 GENERATED := $(UNROOTED_SOURCE:%.proto=$(OUTPUT_FOLDER)/%.py)
@@ -162,10 +164,12 @@ check:
 	make copyright-check
 	make test
 
-# Freeze deps to requirements.txt (needed for some Tox checks)
-.PHONY: check
-freeze:
+$(REQUIREMENTS_FILES): Pipfile setup.py
 	pipenv lock -r > requirements.txt
+	pipenv lock -r --dev > requirements-dev.txt
+
+.PHONY: requirements
+requirements: $(REQUIREMENTS_FILES)
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))

@@ -30,7 +30,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="cosmpy",
-    version="0.1.3",
+    version="0.1.4",
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -58,13 +58,26 @@ setup(
         "requests",
         "google-api-python-client",
         "protobuf",
-        "docker",
-        # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
-        "grpcio==1.32.0",
-        "grpcio-tools==1.32.0",
+        "grpcio",
     ],
     extras_require={
-        "dev": ["check-manifest", "flake8", "black", "mypy"],
+        "dev": [
+            "check-manifest",
+            "tox==3.24.1",
+            "flake8==3.9.2",
+            "black==21.6b0",
+            "mypy==0.910",
+            "bandit==1.7.0",
+            "safety==1.10.3",
+            "isort==5.9.3",
+            "darglint==1.8.0",
+            "vulture==2.3",
+            "pylint==2.9.6",
+            "liccheck==0.6.2",
+            "flake8-copyright==0.2.2",
+            # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
+            "grpcio-tools<=1.32.0",
+        ],
         "test": ["coverage", "pytest"],
     },
     project_urls={
