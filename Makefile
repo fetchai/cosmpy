@@ -171,10 +171,6 @@ $(REQUIREMENTS_FILES): Pipfile setup.py
 .PHONY: requirements
 requirements: $(REQUIREMENTS_FILES)
 
-# Freeze deps to requirements.txt (needed for some Tox checks)
-.PHONY: freeze
-freeze: requirements
-
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
 	$(info  )
