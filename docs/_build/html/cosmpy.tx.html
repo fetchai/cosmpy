@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cosmpy.tx package &#8212; cosmpy  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cosmpy-tx-package">
+<h1>cosmpy.tx package<a class="headerlink" href="#cosmpy-tx-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cosmpy.tx.interface">
+<span id="cosmpy-tx-interface-module"></span><h2>cosmpy.tx.interface module<a class="headerlink" href="#module-cosmpy.tx.interface" title="Permalink to this headline">¶</a></h2>
+<p>Interface for the Tx functionality of CosmosSDK.</p>
+<dl class="py class">
+<dt id="cosmpy.tx.interface.TxInterface">
+<em class="property">class </em><code class="sig-prename descclassname">cosmpy.tx.interface.</code><code class="sig-name descname">TxInterface</code><a class="headerlink" href="#cosmpy.tx.interface.TxInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Tx abstract class.</p>
+<dl class="py method">
+<dt id="cosmpy.tx.interface.TxInterface.BroadcastTx">
+<em class="property">abstract </em><code class="sig-name descname">BroadcastTx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.BroadcastTxRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.BroadcastTxResponse<a class="headerlink" href="#cosmpy.tx.interface.TxInterface.BroadcastTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>BroadcastTx broadcast transaction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.tx.interface.TxInterface.GetTx">
+<em class="property">abstract </em><code class="sig-name descname">GetTx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.GetTxRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.GetTxResponse<a class="headerlink" href="#cosmpy.tx.interface.TxInterface.GetTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>GetTx fetches a tx by hash.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.tx.interface.TxInterface.GetTxsEvent">
+<em class="property">abstract </em><code class="sig-name descname">GetTxsEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.GetTxsEventRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.GetTxsEventResponse<a class="headerlink" href="#cosmpy.tx.interface.TxInterface.GetTxsEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>GetTxsEvent fetches txs by event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.tx.interface.TxInterface.Simulate">
+<em class="property">abstract </em><code class="sig-name descname">Simulate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.SimulateRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.SimulateResponse<a class="headerlink" href="#cosmpy.tx.interface.TxInterface.Simulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate executing a transaction to estimate gas usage.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cosmpy.tx.rest_client">
+<span id="cosmpy-tx-rest-client-module"></span><h2>cosmpy.tx.rest_client module<a class="headerlink" href="#module-cosmpy.tx.rest_client" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of Tx interface using REST.</p>
+<dl class="py class">
+<dt id="cosmpy.tx.rest_client.TxRestClient">
+<em class="property">class </em><code class="sig-prename descclassname">cosmpy.tx.rest_client.</code><code class="sig-name descname">TxRestClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rest_client</span><span class="p">:</span> <span class="n"><a class="reference internal" href="cosmpy.common.html#cosmpy.common.rest_client.RestClient" title="cosmpy.common.rest_client.RestClient">cosmpy.common.rest_client.RestClient</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cosmpy.tx.rest_client.TxRestClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cosmpy.tx.interface.TxInterface" title="cosmpy.tx.interface.TxInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">cosmpy.tx.interface.TxInterface</span></code></a></p>
+<p>Tx REST client.</p>
+<dl class="py attribute">
+<dt id="cosmpy.tx.rest_client.TxRestClient.API_URL">
+<code class="sig-name descname">API_URL</code><em class="property"> = '/cosmos/tx/v1beta1'</em><a class="headerlink" href="#cosmpy.tx.rest_client.TxRestClient.API_URL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.tx.rest_client.TxRestClient.BroadcastTx">
+<code class="sig-name descname">BroadcastTx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.BroadcastTxRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.BroadcastTxResponse<a class="headerlink" href="#cosmpy.tx.rest_client.TxRestClient.BroadcastTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>BroadcastTx broadcast transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – BroadcastTxRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>BroadcastTxResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.tx.rest_client.TxRestClient.GetTx">
+<code class="sig-name descname">GetTx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.GetTxRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.GetTxResponse<a class="headerlink" href="#cosmpy.tx.rest_client.TxRestClient.GetTx" title="Permalink to this definition">¶</a></dt>
+<dd><p>GetTx fetches a tx by hash.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – GetTxRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GetTxResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.tx.rest_client.TxRestClient.GetTxsEvent">
+<code class="sig-name descname">GetTxsEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.GetTxsEventRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.GetTxsEventResponse<a class="headerlink" href="#cosmpy.tx.rest_client.TxRestClient.GetTxsEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>GetTxsEvent fetches txs by event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – GetTxsEventRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GetTxsEventResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.tx.rest_client.TxRestClient.Simulate">
+<code class="sig-name descname">Simulate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.service_pb2.SimulateRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.tx.v1beta1.service_pb2.SimulateResponse<a class="headerlink" href="#cosmpy.tx.rest_client.TxRestClient.Simulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate executing a transaction to estimate gas usage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – SimulateRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SimulateResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cosmpy.tx">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cosmpy.tx" title="Permalink to this headline">¶</a></h2>
+<p>This package contains the Tx modules.</p>
+<dl class="py function">
+<dt id="cosmpy.tx.sign_transaction">
+<code class="sig-prename descclassname">cosmpy.tx.</code><code class="sig-name descname">sign_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tx</span><span class="p">:</span> <span class="n">cosmos.tx.v1beta1.tx_pb2.Tx</span></em>, <em class="sig-param"><span class="n">signer</span><span class="p">:</span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.interface.Signer" title="cosmpy.crypto.interface.Signer">cosmpy.crypto.interface.Signer</a></span></em>, <em class="sig-param"><span class="n">chain_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">account_number</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">deterministic</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cosmpy.tx.sign_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sign transaction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> – Transaction to be signed</p></li>
+<li><p><strong>signer</strong> – Signer of transaction</p></li>
+<li><p><strong>chain_id</strong> – Chain ID</p></li>
+<li><p><strong>account_number</strong> – Account Number</p></li>
+<li><p><strong>deterministic</strong> – Deterministic mode flag</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cosmpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Fetch.AI Limited.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cosmpy.tx.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

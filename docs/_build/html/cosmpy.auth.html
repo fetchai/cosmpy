@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cosmpy.auth package &#8212; cosmpy  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cosmpy-auth-package">
+<h1>cosmpy.auth package<a class="headerlink" href="#cosmpy-auth-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cosmpy.auth.interface">
+<span id="cosmpy-auth-interface-module"></span><h2>cosmpy.auth.interface module<a class="headerlink" href="#module-cosmpy.auth.interface" title="Permalink to this headline">¶</a></h2>
+<p>Interface for the Auth functionality of CosmosSDK.</p>
+<dl class="py class">
+<dt id="cosmpy.auth.interface.Auth">
+<em class="property">class </em><code class="sig-prename descclassname">cosmpy.auth.interface.</code><code class="sig-name descname">Auth</code><a class="headerlink" href="#cosmpy.auth.interface.Auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Auth abstract class.</p>
+<dl class="py method">
+<dt id="cosmpy.auth.interface.Auth.Account">
+<em class="property">abstract </em><code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.auth.v1beta1.query_pb2.QueryAccountRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.auth.v1beta1.query_pb2.QueryAccountResponse<a class="headerlink" href="#cosmpy.auth.interface.Auth.Account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries account data - sequence, account_id, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryAccountRequest that contains account address</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryAccountResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.auth.interface.Auth.Params">
+<em class="property">abstract </em><code class="sig-name descname">Params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.auth.v1beta1.query_pb2.QueryParamsRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.auth.v1beta1.query_pb2.QueryParamsResponse<a class="headerlink" href="#cosmpy.auth.interface.Auth.Params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries all parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryParamsRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryParamsResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cosmpy.auth.rest_client">
+<span id="cosmpy-auth-rest-client-module"></span><h2>cosmpy.auth.rest_client module<a class="headerlink" href="#module-cosmpy.auth.rest_client" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of Auth interface using REST.</p>
+<dl class="py class">
+<dt id="cosmpy.auth.rest_client.AuthRestClient">
+<em class="property">class </em><code class="sig-prename descclassname">cosmpy.auth.rest_client.</code><code class="sig-name descname">AuthRestClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rest_api</span><span class="p">:</span> <span class="n"><a class="reference internal" href="cosmpy.common.html#cosmpy.common.rest_client.RestClient" title="cosmpy.common.rest_client.RestClient">cosmpy.common.rest_client.RestClient</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cosmpy.auth.rest_client.AuthRestClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cosmpy.auth.interface.Auth" title="cosmpy.auth.interface.Auth"><code class="xref py py-class docutils literal notranslate"><span class="pre">cosmpy.auth.interface.Auth</span></code></a></p>
+<p>Auth REST client.</p>
+<dl class="py attribute">
+<dt id="cosmpy.auth.rest_client.AuthRestClient.API_URL">
+<code class="sig-name descname">API_URL</code><em class="property"> = '/cosmos/auth/v1beta1'</em><a class="headerlink" href="#cosmpy.auth.rest_client.AuthRestClient.API_URL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.auth.rest_client.AuthRestClient.Account">
+<code class="sig-name descname">Account</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.auth.v1beta1.query_pb2.QueryAccountRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.auth.v1beta1.query_pb2.QueryAccountResponse<a class="headerlink" href="#cosmpy.auth.rest_client.AuthRestClient.Account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries account data - sequence, account_id, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryAccountRequest that contains account address</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryAccountResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cosmpy.auth.rest_client.AuthRestClient.Params">
+<code class="sig-name descname">Params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span><span class="p">:</span> <span class="n">cosmos.auth.v1beta1.query_pb2.QueryParamsRequest</span></em><span class="sig-paren">)</span> &#x2192; cosmos.auth.v1beta1.query_pb2.QueryParamsResponse<a class="headerlink" href="#cosmpy.auth.rest_client.AuthRestClient.Params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries all parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryParamsRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryParamsResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cosmpy.auth">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cosmpy.auth" title="Permalink to this headline">¶</a></h2>
+<p>This package contains the Auth modules.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cosmpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Fetch.AI Limited.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cosmpy.auth.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
