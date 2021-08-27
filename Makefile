@@ -10,7 +10,7 @@ PYCOSM_SRC_DIR := cosmpy
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
-REQUIREMENTS_FILES := requirements.txt requirements-dev.txt Pipfile.lock
+REQUIREMENTS_FILES := requirements.txt requirements-dev.txt
 
 
 ifeq ($(OS),Windows_NT)
@@ -164,9 +164,14 @@ check:
 	make copyright-check
 	make test
 
-$(REQUIREMENTS_FILES): Pipfile setup.py
-	pipenv lock -r > requirements.txt
-	pipenv lock -r --dev > requirements-dev.txt
+Pipfile.lock: Pipfile setup.py
+	pipenv lock --dev
+
+requirements.txt: Pipfile.lock
+	pipenv lock -r > $@
+
+requirements-dev.txt: Pipfile.lock
+	pipenv lock -r --dev > $@
 
 .PHONY: requirements
 requirements: $(REQUIREMENTS_FILES)

@@ -62,6 +62,7 @@ setup(
     ],
     extras_require={
         "dev": [
+            "docker==5.0.0",
             "check-manifest",
             "tox==3.24.1",
             "flake8==3.9.2",
