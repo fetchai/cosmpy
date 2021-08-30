@@ -125,7 +125,7 @@ pylint:
 
 .PHONY: test
 test:
-	python -m unittest discover -s .
+	pytest tests
 
 ####################
 ### License and copyright checks
