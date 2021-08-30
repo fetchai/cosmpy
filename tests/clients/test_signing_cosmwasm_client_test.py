@@ -22,6 +22,7 @@
 import base64
 import gzip
 import json
+import tempfile
 import unittest
 from typing import Optional
 from unittest.mock import patch
@@ -245,9 +246,10 @@ class CosmWasmClientTests(unittest.TestCase):
 
     def test_get_packed_store_msg(self):
         """Test correct generation of packed store msg."""
-        msg = self.signing_wasm_client.get_packed_store_msg(
-            ADDRESS_PK, CONTRACT_FILENAME
-        )
+        with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
+            msg = self.signing_wasm_client.get_packed_store_msg(
+                ADDRESS_PK, tmp.name
+            )
 
         msg_dict = MessageToDict(msg)
         assert len(msg_dict) == 3
@@ -255,7 +257,7 @@ class CosmWasmClientTests(unittest.TestCase):
         assert msg_dict["sender"] == str(ADDRESS_PK)
         zipped_bytecode: bytes = base64.b64decode(msg_dict["wasmByteCode"])
         original_bytecode: bytes = gzip.decompress(zipped_bytecode)
-        assert original_bytecode == CONTRACT_BYTECODE
+        self.assertEqual(original_bytecode, CONTRACT_BYTECODE)
 
     def test_generate_tx(self):
         """Test correct generation of Tx."""
