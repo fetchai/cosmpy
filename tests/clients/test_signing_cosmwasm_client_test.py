@@ -22,8 +22,10 @@
 import base64
 import gzip
 import json
+import os
 import tempfile
 import unittest
+from pathlib import Path
 from typing import Optional
 from unittest.mock import patch
 
@@ -88,7 +90,7 @@ WASM_MSG = {"key": "value"}
 WASM_MSG_BASE64 = base64.b64encode(json.dumps(WASM_MSG).encode("UTF8")).decode()
 CODE_ID = 42
 CONTRACT_ADDRESS = "fetchcontractcontractcontractcontractcontrac"
-CONTRACT_FILENAME = "dummy_contract.wasm"
+CONTRACT_FILENAME = Path(os.path.abspath("tests/clients/dummy_contract.wasm"))
 CONTRACT_BYTECODE = b"ABCD"
 
 

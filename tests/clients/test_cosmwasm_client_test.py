@@ -25,6 +25,7 @@ import unittest
 from google.protobuf.json_format import ParseDict
 
 from cosmpy.clients.cosmwasm_client import CosmWasmClient
+from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
 from tests.helpers import MockRestClient
@@ -66,13 +67,17 @@ class CosmWasmClientTests(unittest.TestCase):
                 "sequence": "1",
             }
         }
-        expected_response = ParseDict(content, QueryAccountResponse())
+        account_response = ParseDict(content, QueryAccountResponse())
+
+        account = BaseAccount()
+        if account_response.account.Is(BaseAccount.DESCRIPTOR):
+            account_response.account.Unpack(account)
 
         mock_rest_client = MockRestClient(json.dumps(content))
         wasm_client = CosmWasmClient(mock_rest_client)
-        response = wasm_client.query_account_data("account")
+        response = wasm_client.query_account_data("address")
 
-        assert response == expected_response
+        assert response == account
         assert mock_rest_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
 
     @staticmethod
