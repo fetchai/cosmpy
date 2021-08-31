@@ -125,7 +125,7 @@ pylint:
 
 .PHONY: test
 test:
-	pytest tests
+	pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py
 
 ####################
 ### License and copyright checks
