@@ -4,6 +4,8 @@ omit =
     */.local/*
     # omit tests
     tests/*
+    # omit Tox
+    .tox/*
 
 [html]
   directory = coverage_report
