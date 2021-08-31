@@ -247,6 +247,7 @@ class CosmWasmClientTests(unittest.TestCase):
     def test_get_packed_store_msg(self):
         """Test correct generation of packed store msg."""
         with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
+            tmp.write(CONTRACT_BYTECODE)
             msg = self.signing_wasm_client.get_packed_store_msg(ADDRESS_PK, tmp.name)
 
         msg_dict = MessageToDict(msg)
