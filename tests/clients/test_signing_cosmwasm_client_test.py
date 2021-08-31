@@ -22,10 +22,8 @@
 import base64
 import gzip
 import json
-import os
 import tempfile
 import unittest
-from pathlib import Path
 from typing import Optional
 from unittest.mock import patch
 
@@ -90,7 +88,7 @@ WASM_MSG = {"key": "value"}
 WASM_MSG_BASE64 = base64.b64encode(json.dumps(WASM_MSG).encode("UTF8")).decode()
 CODE_ID = 42
 CONTRACT_ADDRESS = "fetchcontractcontractcontractcontractcontrac"
-CONTRACT_FILENAME = Path(os.path.abspath("tests/clients/dummy_contract.wasm"))
+CONTRACT_FILENAME = "dummy_contract.wasm"
 CONTRACT_BYTECODE = b"ABCD"
 
 
@@ -250,6 +248,7 @@ class CosmWasmClientTests(unittest.TestCase):
         """Test correct generation of packed store msg."""
         with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
             tmp.write(CONTRACT_BYTECODE)
+            tmp.flush()
             msg = self.signing_wasm_client.get_packed_store_msg(ADDRESS_PK, tmp.name)
 
         msg_dict = MessageToDict(msg)
@@ -397,7 +396,11 @@ class CosmWasmClientTests(unittest.TestCase):
         self.signing_wasm_client.tx_client = mock_tx_client
 
         with patch.object(self.signing_wasm_client, "get_code_id", mock_get_code_id):
-            result = self.signing_wasm_client.deploy_contract(CONTRACT_FILENAME)
+            with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
+                tmp.write(CONTRACT_BYTECODE)
+                tmp.flush()
+                result = self.signing_wasm_client.deploy_contract(tmp.name)
+
         assert result == CODE_ID
 
         # Reconstruct original Tx from last tx request bytes
