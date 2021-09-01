@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>cosmpy.bank package &#8212; cosmpy  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="cosmpy-bank-package">
+<h1>cosmpy.bank package<a class="headerlink" href="#cosmpy-bank-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-cosmpy.bank.interface">
+<span id="cosmpy-bank-interface-module"></span><h2>cosmpy.bank.interface module<a class="headerlink" href="#module-cosmpy.bank.interface" title="Permalink to this headline">¶</a></h2>
+<p>Interface for the Bank functionality of CosmosSDK.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cosmpy.bank.interface.</span></span><span class="sig-name descname"><span class="pre">Bank</span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Bank abstract class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank.AllBalances">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">AllBalances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryAllBalancesRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryAllBalancesResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank.AllBalances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries balance of all denominations from specific account</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryAllBalancesRequest with account address</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryAllBalancesResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank.Balance">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">Balance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryBalanceRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryBalanceResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank.Balance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries balance of selected denomination from specific account</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryBalanceRequest with address and denomination</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryBalanceResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank.DenomMetadata">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">DenomMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomMetadataRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomMetadataResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank.DenomMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the client metadata for all registered coin denominations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryDenomMetadataRequest with denomination</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryDenomMetadataResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank.DenomsMetadata">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">DenomsMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomsMetadataRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomsMetadataResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank.DenomsMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the client metadata of a given coin denomination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryDenomsMetadataRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryDenomsMetadataResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank.Params">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">Params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryParamsRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryParamsResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank.Params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the parameters of bank module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryParamsRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryParamsResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank.SupplyOf">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">SupplyOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QuerySupplyOfRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QuerySupplyOfResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank.SupplyOf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries total supply of specific denomination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QuerySupplyOfRequest with denomination</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QuerySupplyOfResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.interface.Bank.TotalSupply">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">TotalSupply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryTotalSupplyRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryTotalSupplyResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.interface.Bank.TotalSupply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries total supply of all denominations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryTotalSupplyRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryTotalSupplyResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cosmpy.bank.rest_client">
+<span id="cosmpy-bank-rest-client-module"></span><h2>cosmpy.bank.rest_client module<a class="headerlink" href="#module-cosmpy.bank.rest_client" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of Bank interface using REST.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cosmpy.bank.rest_client.</span></span><span class="sig-name descname"><span class="pre">BankRestClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rest_api</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.common.html#cosmpy.common.rest_client.RestClient" title="cosmpy.common.rest_client.RestClient"><span class="pre">cosmpy.common.rest_client.RestClient</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cosmpy.bank.interface.Bank" title="cosmpy.bank.interface.Bank"><code class="xref py py-class docutils literal notranslate"><span class="pre">cosmpy.bank.interface.Bank</span></code></a></p>
+<p>Bank REST client.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.API_URL">
+<span class="sig-name descname"><span class="pre">API_URL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/cosmos/bank/v1beta1'</span></em><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.API_URL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.AllBalances">
+<span class="sig-name descname"><span class="pre">AllBalances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryAllBalancesRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryAllBalancesResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.AllBalances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries balance of all denominations from specific account</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryAllBalancesRequest with account address</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryAllBalancesResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.Balance">
+<span class="sig-name descname"><span class="pre">Balance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryBalanceRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryBalanceResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.Balance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries balance of selected denomination from specific account</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryBalanceRequest with address and denomination</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryBalanceResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.DenomMetadata">
+<span class="sig-name descname"><span class="pre">DenomMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomMetadataRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomMetadataResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.DenomMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the client metadata for all registered coin denominations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryDenomMetadataRequest with denomination</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryDenomMetadataResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.DenomsMetadata">
+<span class="sig-name descname"><span class="pre">DenomsMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomsMetadataRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryDenomsMetadataResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.DenomsMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the client metadata of a given coin denomination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryDenomsMetadataRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryDenomsMetadataResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.Params">
+<span class="sig-name descname"><span class="pre">Params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryParamsRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryParamsResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.Params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the parameters of bank module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryParamsRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryParamsResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.SupplyOf">
+<span class="sig-name descname"><span class="pre">SupplyOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QuerySupplyOfRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QuerySupplyOfResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.SupplyOf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries total supply of specific denomination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QuerySupplyOfRequest with denomination</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QuerySupplyOfResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.bank.rest_client.BankRestClient.TotalSupply">
+<span class="sig-name descname"><span class="pre">TotalSupply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryTotalSupplyRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryTotalSupplyResponse</span></span></span><a class="headerlink" href="#cosmpy.bank.rest_client.BankRestClient.TotalSupply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries total supply of all denominations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> – QueryTotalSupplyRequest</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryTotalSupplyResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cosmpy.bank">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cosmpy.bank" title="Permalink to this headline">¶</a></h2>
+<p>This package contains the Bank modules.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cosmpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Fetch.AI Limited.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cosmpy.bank.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,7 +1,7 @@
 # Python specific
 *.py[cgo]
 *.egg-info/
-build/
+./build/
 dist/
 
 # IDEs

@@ -7,6 +7,7 @@ WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
 OUTPUT_FOLDER := cosmpy/protos
 PYCOSM_SRC_DIR := cosmpy
+PYCOSM_DOCS_DIR := docs
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
@@ -140,6 +141,20 @@ liccheck:
 .PHONY: copyright-check
 copyright-check:
 	python scripts/check_copyright.py
+
+####################
+### Docs generation
+####################
+
+.PHONY: docs
+docs:
+	sphinx-apidoc -f $(PYCOSM_SRC_DIR) -o $(PYCOSM_DOCS_DIR)/source
+	cd docs && make html
+
+# Open docs main page in default browser on macOS
+.PHONY: open-docs-mac
+open-docs-mac:
+	open $(PYCOSM_DOCS_DIR)/build/html/index.html
 
 ####################
 ### Combinations

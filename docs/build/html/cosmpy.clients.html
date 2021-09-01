@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>cosmpy.clients package &#8212; cosmpy  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="cosmpy-clients-package">
+<h1>cosmpy.clients package<a class="headerlink" href="#cosmpy-clients-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-cosmpy.clients.cosmwasm_client">
+<span id="cosmpy-clients-cosmwasm-client-module"></span><h2>cosmpy.clients.cosmwasm_client module<a class="headerlink" href="#module-cosmpy.clients.cosmwasm_client" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of CosmWasm query client.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cosmpy.clients.cosmwasm_client.CosmWasmClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cosmpy.clients.cosmwasm_client.</span></span><span class="sig-name descname"><span class="pre">CosmWasmClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">grpc._channel.Channel</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="cosmpy.common.html#cosmpy.common.rest_client.RestClient" title="cosmpy.common.rest_client.RestClient"><span class="pre">cosmpy.common.rest_client.RestClient</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cosmpy.clients.cosmwasm_client.CosmWasmClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>High level client for REST/gRPC node interaction.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.cosmwasm_client.CosmWasmClient.get_balance">
+<span class="sig-name descname"><span class="pre">get_balance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">denom</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.bank.v1beta1.query_pb2.QueryBalanceResponse</span></span></span><a class="headerlink" href="#cosmpy.clients.cosmwasm_client.CosmWasmClient.get_balance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get balance of specific account and denom</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> – Address</p></li>
+<li><p><strong>denom</strong> – Denomination</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>QueryBalanceResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.cosmwasm_client.CosmWasmClient.query_account_data">
+<span class="sig-name descname"><span class="pre">query_account_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.auth.v1beta1.auth_pb2.BaseAccount</span></span></span><a class="headerlink" href="#cosmpy.clients.cosmwasm_client.CosmWasmClient.query_account_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query account data for signing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>address</strong> – Address of account to query data about</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – in case of wrong account type.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>BaseAccount</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.cosmwasm_client.CosmWasmClient.query_contract_state">
+<span class="sig-name descname"><span class="pre">query_contract_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contract_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cosmpy.clients.cosmwasm_client.CosmWasmClient.query_contract_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get state of smart contract</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contract_address</strong> – Contract address</p></li>
+<li><p><strong>msg</strong> – Parameters to be passed to query function inside contract</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>JSON query response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cosmpy.clients.signing_cosmwasm_client">
+<span id="cosmpy-clients-signing-cosmwasm-client-module"></span><h2>cosmpy.clients.signing_cosmwasm_client module<a class="headerlink" href="#module-cosmpy.clients.signing_cosmwasm_client" title="Permalink to this headline">¶</a></h2>
+<p>Implementation of CosmWasm signing client.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cosmpy.clients.signing_cosmwasm_client.</span></span><span class="sig-name descname"><span class="pre">SigningCosmWasmClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.keypairs.PrivateKey" title="cosmpy.crypto.keypairs.PrivateKey"><span class="pre">cosmpy.crypto.keypairs.PrivateKey</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">grpc._channel.Channel</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="cosmpy.common.html#cosmpy.common.rest_client.RestClient" title="cosmpy.common.rest_client.RestClient"><span class="pre">cosmpy.common.rest_client.RestClient</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cosmpy.clients.cosmwasm_client.CosmWasmClient" title="cosmpy.clients.cosmwasm_client.CosmWasmClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">cosmpy.clients.cosmwasm_client.CosmWasmClient</span></code></a></p>
+<p>High level client for REST/gRPC node interaction with ability to sign transactions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.DEFAULT_DEPLOY_GAS_LIMIT">
+<span class="sig-name descname"><span class="pre">DEFAULT_DEPLOY_GAS_LIMIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2000000</span></em><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.DEFAULT_DEPLOY_GAS_LIMIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.DEFAULT_GAS_LIMIT">
+<span class="sig-name descname"><span class="pre">DEFAULT_GAS_LIMIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">200000</span></em><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.DEFAULT_GAS_LIMIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.broadcast_tx">
+<span class="sig-name descname"><span class="pre">broadcast_tx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.tx.v1beta1.tx_pb2.Tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.tx.v1beta1.service_pb2.GetTxResponse</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.broadcast_tx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Broadcast transaction and get receipt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> – Transaction</p></li>
+<li><p><strong>wait_time</strong> – Number of seconds to wait before getting transaction receipt</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – if broadcasting fails.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>GetTxResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.deploy_contract">
+<span class="sig-name descname"><span class="pre">deploy_contract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contract_filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_limit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2000000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.deploy_contract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deploy smart contract on chain</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contract_filename</strong> – Path to smart contract bytecode</p></li>
+<li><p><strong>gas_limit</strong> – Gas limit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Code ID</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.execute_contract">
+<span class="sig-name descname"><span class="pre">execute_contract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contract_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">cosmos.base.v1beta1.coin_pb2.Coin</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_limit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">200000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.tx.v1beta1.service_pb2.GetTxResponse</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.execute_contract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send execute message to interact with smart contract</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contract_address</strong> – Address of contract</p></li>
+<li><p><strong>msg</strong> – Paramaters to be passed to smart contract</p></li>
+<li><p><strong>funds</strong> – Funds to be sent to smart contract</p></li>
+<li><p><strong>gas_limit</strong> – Gas limit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GetTxResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.generate_tx">
+<span class="sig-name descname"><span class="pre">generate_tx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">packed_msgs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">google.protobuf.any_pb2.Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_addresses</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pub_keys</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fee</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">cosmos.base.v1beta1.coin_pb2.Coin</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_limit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">200000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.tx.v1beta1.tx_pb2.Tx</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.generate_tx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate transaction that can be later signed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>packed_msgs</strong> – Messages to be in transaction</p></li>
+<li><p><strong>from_addresses</strong> – List of addresses of each sender</p></li>
+<li><p><strong>pub_keys</strong> – List of public keys</p></li>
+<li><p><strong>fee</strong> – Transaction fee</p></li>
+<li><p><strong>memo</strong> – Memo</p></li>
+<li><p><strong>gas_limit</strong> – Gas limit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tx</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_code_id">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_code_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.tx.v1beta1.service_pb2.GetTxResponse</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_code_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get code id from store code transaction response</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> – Response of store code transaction</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>integer code_id</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_contract_address">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_contract_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.tx.v1beta1.service_pb2.GetTxResponse</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_contract_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get contract address from instantiate msg response
+:param response: Response of MsgInstantiateContract transaction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>contract address string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_exec_msg">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_packed_exec_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contract_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">cosmos.base.v1beta1.coin_pb2.Coin</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">google.protobuf.any_pb2.Any</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_exec_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and pack MsgExecuteContract</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sender_address</strong> – Address of sender</p></li>
+<li><p><strong>contract_address</strong> – Address of contract</p></li>
+<li><p><strong>msg</strong> – Paramaters to be passed to smart contract</p></li>
+<li><p><strong>funds</strong> – Funds to be sent to smart contract</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Packed MsgExecuteContract</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_init_msg">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_packed_init_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">code_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'contract'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">cosmos.base.v1beta1.coin_pb2.Coin</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">google.protobuf.any_pb2.Any</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_init_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and pack MsgInstantiateContract</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sender_address</strong> – Sender’s address</p></li>
+<li><p><strong>code_id</strong> – code_id of stored contract bytecode</p></li>
+<li><p><strong>init_msg</strong> – Parameters to be passed to smart contract constructor</p></li>
+<li><p><strong>label</strong> – Label</p></li>
+<li><p><strong>funds</strong> – Funds transferred to new contract</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Packed MsgInstantiateContract</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_send_msg">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_packed_send_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">cosmos.base.v1beta1.coin_pb2.Coin</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">google.protobuf.any_pb2.Any</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_send_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate and pack MsgSend</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from_address</strong> – Address of sender</p></li>
+<li><p><strong>to_address</strong> – Address of recipient</p></li>
+<li><p><strong>amount</strong> – List of Coins to be sent</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>packer ProtoAny type message</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_store_msg">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_packed_store_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contract_filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">google.protobuf.any_pb2.Any</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.get_packed_store_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads contract bytecode, generate and return packed MsgStoreCode</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sender_address</strong> – Address of transaction sender</p></li>
+<li><p><strong>contract_filename</strong> – Path to smart contract bytecode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Packed MsgStoreCode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.instantiate_contract">
+<span class="sig-name descname"><span class="pre">instantiate_contract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'contract'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">cosmos.base.v1beta1.coin_pb2.Coin</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_limit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">200000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.instantiate_contract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiate smart contract and return contract address</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code_id</strong> – code_id of stored contract bytecode</p></li>
+<li><p><strong>init_msg</strong> – Parameters to be passed to smart contract constructor</p></li>
+<li><p><strong>label</strong> – Label</p></li>
+<li><p><strong>funds</strong> – Funds transferred to new contract</p></li>
+<li><p><strong>gas_limit</strong> – Gas limit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Contract address</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.send_tokens">
+<span class="sig-name descname"><span class="pre">send_tokens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_address</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="cosmpy.crypto.html#cosmpy.crypto.address.Address" title="cosmpy.crypto.address.Address"><span class="pre">cosmpy.crypto.address.Address</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">cosmos.base.v1beta1.coin_pb2.Coin</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cosmos.tx.v1beta1.service_pb2.GetTxResponse</span></span></span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.send_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send native tokens from clients address to to_address</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>to_address</strong> – Address of recipient</p></li>
+<li><p><strong>amount</strong> – List of tokens to be transferred</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GetTxResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.sign_tx">
+<span class="sig-name descname"><span class="pre">sign_tx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cosmos.tx.v1beta1.tx_pb2.Tx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cosmpy.clients.signing_cosmwasm_client.SigningCosmWasmClient.sign_tx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sign transaction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tx</strong> – Transaction to be signed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cosmpy.clients">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cosmpy.clients" title="Permalink to this headline">¶</a></h2>
+<p>This package contains high level clients modules.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cosmpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Fetch.AI Limited.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cosmpy.clients.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
