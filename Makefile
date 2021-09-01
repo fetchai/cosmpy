@@ -10,7 +10,7 @@ PYCOSM_SRC_DIR := cosmpy
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
-REQUIREMENTS_FILES := requirements.txt requirements-dev.txt Pipfile.lock
+REQUIREMENTS_FILES := requirements.txt requirements-dev.txt
 
 
 ifeq ($(OS),Windows_NT)
@@ -34,7 +34,7 @@ unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1))
 
 
 FIND_CMD := $(FIND_CMD) -type f -name *.proto $(SOURCES_REGEX_TO_EXCLUDE:%=! -regex "%")
-RELATIVE_SOURCE := $(shell cd $(COSMOS_SDK_DIR) && $(FIND_CMD))
+RELATIVE_SOURCE := $(shell [ -d "$(COSMOS_SDK_DIR)" ] && { cd $(COSMOS_SDK_DIR) && $(FIND_CMD); })
 UNROOTED_SOURCE := $(foreach _,$(COSMOS_PROTO_RELATIVE_DIRS),$(patsubst $(_)/%,%,$(filter $(_)/%,$(RELATIVE_SOURCE))))
 SOURCE := $(RELATIVE_SOURCE:%=$(COSMOS_SDK_DIR)/%)
 GENERATED := $(UNROOTED_SOURCE:%.proto=$(OUTPUT_FOLDER)/%.py)
@@ -125,7 +125,9 @@ pylint:
 
 .PHONY: test
 test:
-	python -m unittest discover -s .
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py
+	coverage report
+	coverage html
 
 ####################
 ### License and copyright checks
@@ -164,9 +166,14 @@ check:
 	make copyright-check
 	make test
 
-$(REQUIREMENTS_FILES): Pipfile setup.py
-	pipenv lock -r > requirements.txt
-	pipenv lock -r --dev > requirements-dev.txt
+Pipfile.lock: Pipfile setup.py
+	pipenv lock --dev
+
+requirements.txt: Pipfile.lock
+	pipenv lock -r > $@
+
+requirements-dev.txt: Pipfile.lock
+	pipenv lock -r --dev > $@
 
 .PHONY: requirements
 requirements: $(REQUIREMENTS_FILES)

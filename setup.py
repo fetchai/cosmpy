@@ -30,7 +30,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="cosmpy",
-    version="0.1.3",
+    version="0.1.4",
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -62,6 +62,7 @@ setup(
     ],
     extras_require={
         "dev": [
+            "docker==5.0.0",
             "check-manifest",
             "tox==3.24.1",
             "flake8==3.9.2",

@@ -25,11 +25,9 @@ import unittest
 from google.protobuf.json_format import ParseDict
 
 from cosmpy.clients.cosmwasm_client import CosmWasmClient
+from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
-from cosmpy.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
-    QuerySmartContractStateResponse,
-)
 from tests.helpers import MockRestClient
 
 
@@ -69,28 +67,32 @@ class CosmWasmClientTests(unittest.TestCase):
                 "sequence": "1",
             }
         }
-        expected_response = ParseDict(content, QueryAccountResponse())
+        account_response = ParseDict(content, QueryAccountResponse())
+
+        account = BaseAccount()
+        if account_response.account.Is(BaseAccount.DESCRIPTOR):
+            account_response.account.Unpack(account)
 
         mock_rest_client = MockRestClient(json.dumps(content))
         wasm_client = CosmWasmClient(mock_rest_client)
-        response = wasm_client.query_account_data("account")
+        response = wasm_client.query_account_data("address")
 
-        assert response == expected_response
+        assert response == account
         assert mock_rest_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
 
     @staticmethod
     def test_query_contract_state():
         """Test query contract state for the positive result."""
 
-        raw_content = b'{\n  "data": {"balance":"1"}\n}'
-        expected_response = QuerySmartContractStateResponse(data=b'{"balance": "1"}')
+        raw_content = b'{"data": {"balance":"1"}}'
+        expected_response = {"balance": "1"}
 
         mock_rest_client = MockRestClient(raw_content)
         wasm_client = CosmWasmClient(mock_rest_client)
-        response = wasm_client.query_contract_state("account", "denom")
+        response = wasm_client.query_contract_state("fetchcontractaddress", {})
 
         assert response == expected_response
         assert (
             mock_rest_client.last_base_url
-            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30=?"
+            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30="
         )
