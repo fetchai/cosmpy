@@ -5,6 +5,7 @@ include strategy.ini
 include tox.ini
 include *.md
 recursive-include contracts *.wasm
+recursive-include docs *.*
 recursive-include examples *.py
 recursive-include scripts *.py
 recursive-include scripts *.sh
