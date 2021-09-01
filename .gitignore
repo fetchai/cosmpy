@@ -12,3 +12,7 @@ dist/
 
 .DS_Store
 */.DS_Store
+
+# Coverage related files and folders
+.coverage
+coverage_report/

@@ -125,7 +125,9 @@ pylint:
 
 .PHONY: test
 test:
-	python -m unittest discover -s .
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py
+	coverage report
+	coverage html
 
 ####################
 ### License and copyright checks
