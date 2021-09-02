@@ -149,7 +149,7 @@ copyright-check:
 .PHONY: docs
 docs:
 	sphinx-apidoc -f $(PYCOSM_SRC_DIR) -o $(PYCOSM_DOCS_DIR)/source
-	cd docs && make html
+	cd $(PYCOSM_DOCS_DIR) && make html
 
 # Open docs main page in default browser on macOS
 .PHONY: open-docs-mac
