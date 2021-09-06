@@ -154,6 +154,37 @@ copyright-check:
 	python scripts/check_copyright.py
 
 ####################
+### Clean and init commands
+####################
+
+.PHONY: rmcache
+rmcache:
+	find . | grep -E "\(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+
+# Run outside Pipenv
+# To exit Pipenv run "deactivate" or Control+D
+.PHONY: clean
+clean:
+	rm -rf .tox
+	rm -rf arcturus.egg-info
+	rm -rf cosmpy.egg-info
+	rm -rf reqlib-metadata
+	rm -rf coverage_report
+	rm -rf .mypy_cache
+	rm -rf .pytest_cache
+	rm .coverage
+	make rmcache
+	pipenv --rm
+
+.PHONY: init
+init:
+	pipenv install
+
+.PHONY: init-dev
+init-dev:
+	pipenv install --dev
+
+####################
 ### Combinations
 ####################
 
