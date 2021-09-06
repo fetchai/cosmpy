@@ -21,11 +21,13 @@
 
 from unittest import TestCase
 
+import pytest
 from docker.errors import NotFound  # pylint: disable=import-error
 
 from tests.integration.generic.fetchd_client import FetchdDockerImage
 
 
+@pytest.mark.integtest
 class FetchdTestCase(TestCase):
     """Base test case for Fetchd node."""
 
