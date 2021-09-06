@@ -20,9 +20,11 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         FIND_CMD := find $(COSMOS_PROTO_RELATIVE_DIRS) -regextype posix-extended
+				OPEN_CMD := xdg-open
     endif
     ifeq ($(UNAME_S),Darwin)
         FIND_CMD := find -E $(COSMOS_PROTO_RELATIVE_DIRS)
+				OPEN_CMD := open
     endif
 endif
 
@@ -152,9 +154,9 @@ docs:
 	cd $(PYCOSM_DOCS_DIR) && make html
 
 # Open docs main page in default browser on macOS
-.PHONY: open-docs-mac
-open-docs-mac:
-	open $(PYCOSM_DOCS_DIR)/build/html/index.html
+.PHONY: open-docs
+open-docs:
+	$(OPEN_CMD) $(PYCOSM_DOCS_DIR)/build/html/index.html
 
 ####################
 ### Combinations
