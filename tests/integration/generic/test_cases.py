@@ -21,7 +21,7 @@
 
 from unittest import TestCase
 
-import pytest
+import pytest  # pylint: disable=import-error
 from docker.errors import NotFound  # pylint: disable=import-error
 
 from tests.integration.generic.fetchd_client import FetchdDockerImage
