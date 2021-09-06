@@ -48,3 +48,5 @@ jobs:
       run: tox -e check-manifest
     - name: Tests and coverage
       run: tox -e test
+    - name: Show coverage report
+      run: tox -e coverage-report
