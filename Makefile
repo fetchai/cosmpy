@@ -126,7 +126,19 @@ pylint:
 .PHONY: test
 test:
 	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py
-	coverage report
+	make coverage-report
+
+.PHONY: unit-test
+unit-test:
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "not integtest"
+
+.PHONY: integration-test
+integration-test:
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "integtest"
+
+.PHONY: coverage-report
+coverage-report:
+	coverage report -m
 	coverage html
 
 ####################
