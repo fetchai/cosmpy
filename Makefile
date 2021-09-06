@@ -168,6 +168,7 @@ clean:
 	rm -rf .tox
 	rm -rf arcturus.egg-info
 	rm -rf cosmpy.egg-info
+	rm -rf src/cosm.egg-info
 	rm -rf reqlib-metadata
 	rm -rf coverage_report
 	rm -rf .mypy_cache
@@ -176,13 +177,27 @@ clean:
 	make rmcache
 	pipenv --rm
 
-.PHONY: init
-init:
+.PHONY: create
+create:
 	pipenv install
 
-.PHONY: init-dev
-init-dev:
+.PHONY: create-dev
+create-dev:
 	pipenv install --dev
+
+# Run outside Pipenv
+# To exit Pipenv run "deactivate" or Control+D
+.PHONY: recreate
+recreate:
+	make clean
+	make init
+
+.PHONY: recreate-dev
+recreate-dev:
+	make clean
+	make init-dev
+
+
 
 ####################
 ### Combinations
