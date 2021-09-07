@@ -69,7 +69,9 @@ class CosmWasmClient:
             self.auth_client = AuthRestClient(channel)
             self.wasm_client = CosmWasmRestClient(channel)
         else:
-            raise RuntimeError(f"Unsupported channel type {type(channel)}")  # pragma: no cover
+            raise RuntimeError(
+                f"Unsupported channel type {type(channel)}"
+            )  # pragma: no cover
 
     def get_balance(self, address: Address, denom: str) -> QueryBalanceResponse:
         """
