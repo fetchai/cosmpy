@@ -90,7 +90,7 @@ class TxSerialisedTestData:
             self.hash_for_signing = bytes.fromhex(self.hash_for_signing)
 
 
-class TxSign(unittest.TestCase):
+class TxSignTestCase(unittest.TestCase):
     """Test case of Tx module."""
 
     tx_test_data = TxSerialisedTestData(

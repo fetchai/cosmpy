@@ -172,7 +172,7 @@ def mock_get_contract_address(response: GetTxResponse) -> str:
     return CONTRACT_ADDRESS
 
 
-class CosmWasmClientTests(unittest.TestCase):
+class CosmWasmClientTestCase(unittest.TestCase):
     """Test case of CosmWasm client module."""
 
     @classmethod

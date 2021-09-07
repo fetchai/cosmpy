@@ -47,7 +47,7 @@ from cosmpy.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
 from tests.helpers import MockRestClient
 
 
-class WasmTests(unittest.TestCase):
+class WasmRestClientTestCase(unittest.TestCase):
     """Test case for Wasm module."""
 
     @staticmethod

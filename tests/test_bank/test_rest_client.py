@@ -45,7 +45,7 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from tests.helpers import MockRestClient
 
 
-class BankTests(unittest.TestCase):
+class BankRestClientTestCase(unittest.TestCase):
     """Test case of Bank module."""
 
     @staticmethod
