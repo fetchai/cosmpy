@@ -69,7 +69,7 @@ class CosmWasmClient:
             self.auth_client = AuthRestClient(channel)
             self.wasm_client = CosmWasmRestClient(channel)
         else:
-            raise RuntimeError(f"Unsupported channel type {type(channel)}")
+            raise RuntimeError(f"Unsupported channel type {type(channel)}")  # pragma: no cover
 
     def get_balance(self, address: Address, denom: str) -> QueryBalanceResponse:
         """
@@ -103,7 +103,7 @@ class CosmWasmClient:
         if account_response.account.Is(BaseAccount.DESCRIPTOR):
             account_response.account.Unpack(account)
         else:
-            raise TypeError("Unexpected account type")
+            raise TypeError("Unexpected account type")  # pragma: no cover
         return account
 
     def query_contract_state(self, contract_address: str, msg: JSONLike) -> JSONLike:
