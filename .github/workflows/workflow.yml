@@ -22,7 +22,7 @@ jobs:
     - uses: actions/setup-python@master
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: docker-practice/actions-setup-docker@master
+    # - uses: docker-practice/actions-setup-docker@master
     - name: Install dependencies
       run: pip install tox==3.24.1
     - name: Code style check
@@ -47,6 +47,11 @@ jobs:
       run: tox -e copyright-check
     - name: Manifest check
       run: tox -e check-manifest
+    - name: Install Docker
+      run: |
+         if [ "$RUNNER_OS" == "macOS" ]; then
+              brew install --cask docker
+         fi
     - name: Tests and coverage
       run: tox -e test
     - name: Show coverage report
