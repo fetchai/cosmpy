@@ -51,6 +51,7 @@ jobs:
       run: |
          if [ "$RUNNER_OS" == "macOS" ]; then
               brew install --cask docker
+              open /Applications/Docker.app
          fi
     - name: Tests and coverage
       run: tox -e test
