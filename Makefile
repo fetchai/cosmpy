@@ -157,47 +157,68 @@ copyright-check:
 ### Clean and init commands
 ####################
 
-.PHONY: rmcache
-rmcache:
-	find . | grep -E "\(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
-
-# Run outside Pipenv
-# To exit Pipenv run "deactivate" or Control+D
 .PHONY: clean
-clean:
-	rm -rf .tox
-	rm -rf arcturus.egg-info
-	rm -rf cosmpy.egg-info
-	rm -rf src/cosm.egg-info
-	rm -rf reqlib-metadata
-	rm -rf coverage_report
-	rm -rf .mypy_cache
-	rm -rf .pytest_cache
-	rm .coverage
-	make rmcache
-	pipenv --rm
+clean: clean-build clean-pyc clean-test clean-docs
 
-.PHONY: create
-create:
-	pipenv install
+.PHONY: clean-build
+clean-build:
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	rm -fr pip-wheel-metadata
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -fr {} +
 
-.PHONY: create-dev
-create-dev:
-	pipenv install --dev
+.PHONY: clean-docs
+clean-docs:
+#   Update when docs PR is merged to avoid conflicts
+# 	rm -fr docs/build/
 
-# Run outside Pipenv
-# To exit Pipenv run "deactivate" or Control+D
-.PHONY: recreate
-recreate:
-	make clean
-	make init
+# This can be replaced with rmcache
+.PHONY: clean-pyc
+clean-pyc:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '.DS_Store' -exec rm -fr {} +
 
-.PHONY: recreate-dev
-recreate-dev:
-	make clean
-	make init-dev
+.PHONY: clean-test
+clean-test:
+	rm -fr .tox/
+	rm -f .coverage
+	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
+	# rm -fr coverage.xml
+	rm -fr coverage_report/
+	rm -fr .hypothesis
+	rm -fr .pytest_cache
+	rm -fr .mypy_cache/
+	find . -name 'log.txt' -exec rm -fr {} +
+	find . -name 'log.*.txt' -exec rm -fr {} +
 
+v := $(shell pip -V | grep virtualenvs)
 
+.PHONY: new-env
+new-env: clean
+	if [ -z "$v" ];\
+	then\
+		pipenv --rm;\
+		pipenv install;\
+		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
+	else\
+		echo "In a virtual environment! Exit first: 'exit'.";\
+	fi
+
+.PHONY: new-env-dev
+new-env-dev: clean
+	if [ -z "$v" ];\
+	then\
+		pipenv --rm;\
+		pipenv install --dev;\
+		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
+	else\
+		echo "In a virtual environment! Exit first: 'exit'.";\
+	fi
 
 ####################
 ### Combinations
