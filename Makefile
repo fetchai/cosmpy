@@ -174,7 +174,6 @@ clean-docs:
 #   Update when docs PR is merged to avoid conflicts
 # 	rm -fr docs/build/
 
-# This can be replaced with rmcache
 .PHONY: clean-pyc
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -188,7 +187,6 @@ clean-test:
 	rm -fr .tox/
 	rm -f .coverage
 	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
-	# rm -fr coverage.xml
 	rm -fr coverage_report/
 	rm -fr .hypothesis
 	rm -fr .pytest_cache
@@ -198,8 +196,8 @@ clean-test:
 
 v := $(shell pip -V | grep virtualenvs)
 
-.PHONY: new-env
-new-env: clean
+.PHONY: new_env
+new_env: clean
 	if [ -z "$v" ];\
 	then\
 		pipenv --rm;\
@@ -209,8 +207,8 @@ new-env: clean
 		echo "In a virtual environment! Exit first: 'exit'.";\
 	fi
 
-.PHONY: new-env-dev
-new-env-dev: clean
+.PHONY: new_env_dev
+new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
 		pipenv --rm;\
