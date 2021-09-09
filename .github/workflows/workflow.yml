@@ -27,7 +27,8 @@ jobs:
       run: |
          if [ "$RUNNER_OS" == "macOS" ]; then
               brew install --cask docker;
-              open -a Docker;
+              open -g /Applications/Docker.app || exit;
+              sleep 30;
          fi
     - name: Install dependencies
       run: pip install tox==3.24.1
