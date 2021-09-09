@@ -30,6 +30,7 @@ jobs:
               open -g /Applications/Docker.app || exit
               sleep 30
          fi
+      shell: bash
     - name: Install dependencies
       run: pip install tox==3.24.1
     - name: Code style check
