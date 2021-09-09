@@ -1,10 +1,9 @@
-name: Checks and Tests
+name: Pre-release checks and Tests
 
 on:
   push:
     branches:
-      - develop
-      # - master
+      - master
   pull_request:
 
 jobs:
@@ -23,14 +22,7 @@ jobs:
     - uses: actions/setup-python@master
       with:
         python-version: ${{ matrix.python-version }}
-    # - uses: docker-practice/actions-setup-docker@master
-    # - name: Install Docker
-    #   run: |
-    #      if [ "$RUNNER_OS" == "macOS" ]; then
-    #           brew install --cask docker;
-    #           open -g /Applications/Docker.app || exit;
-    #           sleep 30;
-    #      fi
+    - uses: docker-practice/actions-setup-docker@master
     - name: Install dependencies
       run: pip install tox==3.24.1
     - name: Code style check
@@ -56,11 +48,6 @@ jobs:
     - name: Manifest check
       run: tox -e check-manifest
     - name: Tests and coverage
-      run: |
-        if [ "$RUNNER_OS" == "macOS" ]; then
-          tox -e test-unit
-        else
-          tox -e test
-        fi
+      run: tox -e test
     - name: Show coverage report
       run: tox -e coverage-report
