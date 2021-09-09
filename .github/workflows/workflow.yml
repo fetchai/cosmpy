@@ -26,9 +26,9 @@ jobs:
     - name: Install Docker
       run: |
          if [ "$RUNNER_OS" == "macOS" ]; then
-              brew install --cask docker
-              open -g /Applications/Docker.app || exit
-              sleep 30
+              brew install --cask docker;
+              open -g /Applications/Docker.app || exit;
+              sleep 30;
          fi
       shell: bash
     - name: Install dependencies
