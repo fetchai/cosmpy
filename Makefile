@@ -117,7 +117,7 @@ mypy:
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --ignore-paths "cosmpy/protos/"
+	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 
 ####################
 ### Tests
