@@ -25,6 +25,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - uses: docker-practice/actions-setup-docker@master
+    - name: Check docker
+      run: docker ps
     - name: Install dependencies
       run: pip install tox==3.24.1
     - name: Code style check
