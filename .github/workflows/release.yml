@@ -28,7 +28,10 @@ jobs:
     - name: Install dependencies
       run: pip install tox==3.24.1
     - name: Install Pypiwin32 (debug)
-      run: pip install pypiwin32
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          pip install pypiwin32
+        fi
     - name: Code style check
       run: |
         tox -e black-check
