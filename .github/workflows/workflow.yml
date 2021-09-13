@@ -26,10 +26,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: pip install tox==3.24.1
-    - name: Check Docker
-      run: |
-        docker ps
-        docker version
     - name: Code style check
       run: |
         tox -e black-check
