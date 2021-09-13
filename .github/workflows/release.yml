@@ -27,6 +27,8 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
     - name: Install dependencies
       run: pip install tox==3.24.1
+    - name: Install Pypiwin32 (debug)
+      run: pip install pypiwin32
     - name: Code style check
       run: |
         tox -e black-check
