@@ -32,6 +32,7 @@ jobs:
         if [ "$RUNNER_OS" == "Windows" ]; then
           pip install pypiwin32
         fi
+      shell: bash
     - name: Code style check
       run: |
         tox -e black-check
