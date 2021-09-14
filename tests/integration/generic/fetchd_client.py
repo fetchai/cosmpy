@@ -45,7 +45,10 @@ class FetchdDockerImage:
 
     IMG_TAG = "fetchai/fetchd:0.8.4"
     ENTRYPOINT_FILENAME = "entry.sh"
-    MOUNT_PATH = "/mnt"
+    if os.name = "nt":  # Windows
+        MOUNT_PATH = "\\\\mnt"
+    else:
+        MOUNT_PATH = "/mnt"
     PORTS = {9090: 9090, 1317: 1317, 26657: 26657}
 
     DEFAULT_MAX_ATTEMPTS = 10
@@ -136,8 +139,11 @@ class FetchdDockerImage:
         """Create a Fetchd docker container."""
         with tempfile.TemporaryDirectory() as tmpdir:
             self._make_entrypoint(tmpdir)
-            volumes = {tmpdir: {"bind": self.MOUNT_PATH, "mode": "rw"}}
-            entrypoint = f"{self.MOUNT_PATH}/{self.ENTRYPOINT_FILENAME}"  # os.path.join(self.MOUNT_PATH, self.ENTRYPOINT_FILENAME)
+            if os.name == "nt":
+                volumes = {}
+            else:
+                volumes = {tmpdir: {"bind": self.MOUNT_PATH, "mode": "rw"}}
+            entrypoint = os.path.join(self.MOUNT_PATH, self.ENTRYPOINT_FILENAME)
             self.container = self.client.containers.run(
                 self.IMG_TAG,
                 detach=True,
