@@ -17,17 +17,6 @@ Subpackages
    cosmpy.staking
    cosmpy.tx
 
-Submodules
-----------
-
-cosmpy.vulture\_whitelist module
---------------------------------
-
-.. automodule:: cosmpy.vulture_whitelist
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
