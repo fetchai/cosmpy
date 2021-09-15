@@ -150,7 +150,7 @@ copyright-check:
 
 .PHONY: docs
 docs:
-	sphinx-apidoc -f $(PYCOSM_SRC_DIR) -o $(PYCOSM_DOCS_DIR)/source
+	sphinx-apidoc -f -o $(PYCOSM_DOCS_DIR)/source $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
 	cd $(PYCOSM_DOCS_DIR) && make html
 
 # Open docs main page in default browser on macOS
