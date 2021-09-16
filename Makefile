@@ -113,7 +113,7 @@ safety:
 
 .PHONY: mypy
 mypy:
-	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude 'vulture_whitelist.py|cosmpy/protos'
+	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 
 .PHONY: pylint
 pylint:
