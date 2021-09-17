@@ -249,6 +249,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         with tempfile.TemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
             tmp.write(CONTRACT_BYTECODE)
             tmp.flush()
+            tmp.close()
             msg = self.signing_wasm_client.get_packed_store_msg(ADDRESS_PK, tmp.name)
 
         msg_dict = MessageToDict(msg)
@@ -399,6 +400,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
             with tempfile.TemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
                 tmp.write(CONTRACT_BYTECODE)
                 tmp.flush()
+                tmp.close()
                 result = self.signing_wasm_client.deploy_contract(tmp.name)
 
         assert result == CODE_ID
