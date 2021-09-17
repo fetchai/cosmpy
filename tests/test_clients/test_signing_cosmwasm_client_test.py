@@ -246,7 +246,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
 
     def test_get_packed_store_msg(self):
         """Test correct generation of packed store msg."""
-        with tempfile.TemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
+        with tempfile.TemporaryFile(suffix=CONTRACT_FILENAME, delete=False) as tmp:
             tmp.write(CONTRACT_BYTECODE)
             tmp.flush()
             tmp.close()
@@ -397,7 +397,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         self.signing_wasm_client.tx_client = mock_tx_client
 
         with patch.object(self.signing_wasm_client, "get_code_id", mock_get_code_id):
-            with tempfile.TemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
+            with tempfile.TemporaryFile(suffix=CONTRACT_FILENAME, delete=False) as tmp:
                 tmp.write(CONTRACT_BYTECODE)
                 tmp.flush()
                 tmp.close()
