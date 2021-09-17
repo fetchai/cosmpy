@@ -1,4 +1,4 @@
-name: Pre-release checks and Tests
+name: Pre-release checks and tests
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest]
         python-version: [3.7, 3.8, 3.9]
 
     timeout-minutes: 30
@@ -27,35 +27,13 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
     - name: Install dependencies
       run: pip install tox==3.24.1
-    - name: Code style check
+    - name: Integration tests for macOS
+      # Currently ordinary workflow runs full set of tests (with integration) for Linux
+      # and unit tests for other platforms
+      # In pre-release check we run also integration tests for macOS
+      # Windows integration tests are currently disabled
       run: |
-        tox -e black-check
-        tox -e isort-check
-        tox -e flake8
-        tox -e vulture
-    - name: Security check
-      run: tox -e bandit
-    - name: Safety check
-      run: tox -e safety
-    - name: Static type check
-      run: tox -e mypy
-    - name: Pylint check
-      run: tox -e pylint
-    - name: Unused code check
-      run: tox -e vulture
-    - name: License check
-      run: tox -e liccheck
-    - name: Copyright check
-      run: tox -e copyright-check
-    - name: Manifest check
-      run: tox -e check-manifest
-    - name: Tests and coverage
-      run: |
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          tox -e test-unit
-        else
-          tox -e test
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          tox -e test-integration
         fi
       shell: bash
-    - name: Show coverage report
-      run: tox -e coverage-report
