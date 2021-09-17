@@ -56,5 +56,6 @@ jobs:
         else
           tox -e test
         fi
+      shell: bash
     - name: Show coverage report
       run: tox -e coverage-report
