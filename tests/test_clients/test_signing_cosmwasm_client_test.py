@@ -22,7 +22,6 @@
 import base64
 import gzip
 import json
-import os
 import tempfile
 import unittest
 from typing import Optional
@@ -247,13 +246,10 @@ class CosmWasmClientTestCase(unittest.TestCase):
 
     def test_get_packed_store_msg(self):
         """Test correct generation of packed store msg."""
-        # with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
-        tmp = tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME, delete=False)
-        tmp.write(CONTRACT_BYTECODE)
-        tmp.flush()
-        tmp.close()
-        msg = self.signing_wasm_client.get_packed_store_msg(ADDRESS_PK, tmp.name)
-        os.unlink(tmp.name)
+        with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
+            tmp.write(CONTRACT_BYTECODE)
+            tmp.flush()
+            msg = self.signing_wasm_client.get_packed_store_msg(ADDRESS_PK, tmp.name)
 
         msg_dict = MessageToDict(msg)
         assert len(msg_dict) == 3
@@ -400,13 +396,10 @@ class CosmWasmClientTestCase(unittest.TestCase):
         self.signing_wasm_client.tx_client = mock_tx_client
 
         with patch.object(self.signing_wasm_client, "get_code_id", mock_get_code_id):
-            # with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
-            tmp = tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME, delete=False)
-            tmp.write(CONTRACT_BYTECODE)
-            tmp.flush()
-            tmp.close()
-            result = self.signing_wasm_client.deploy_contract(tmp.name)
-            os.unlink(tmp.name)
+            with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME) as tmp:
+                tmp.write(CONTRACT_BYTECODE)
+                tmp.flush()
+                result = self.signing_wasm_client.deploy_contract(tmp.name)
 
         assert result == CODE_ID
 
