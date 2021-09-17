@@ -396,7 +396,9 @@ class CosmWasmClientTestCase(unittest.TestCase):
         self.signing_wasm_client.tx_client = mock_tx_client
 
         with patch.object(self.signing_wasm_client, "get_code_id", mock_get_code_id):
-            with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME, mode="wb") as tmp:
+            with tempfile.NamedTemporaryFile(
+                suffix=CONTRACT_FILENAME, mode="wb"
+            ) as tmp:
                 tmp.write(CONTRACT_BYTECODE)
                 tmp.flush()
                 result = self.signing_wasm_client.deploy_contract(tmp.name)
