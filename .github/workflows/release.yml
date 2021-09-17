@@ -50,6 +50,11 @@ jobs:
     - name: Manifest check
       run: tox -e check-manifest
     - name: Tests and coverage
-      run: tox -e test
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          tox -e test-unit
+        else
+          tox -e test
+        fi
     - name: Show coverage report
       run: tox -e coverage-report
