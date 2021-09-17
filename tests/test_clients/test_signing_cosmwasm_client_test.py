@@ -22,6 +22,7 @@
 import base64
 import gzip
 import json
+import os
 import tempfile
 import unittest
 from typing import Optional
