@@ -29,6 +29,7 @@ It is assumed the script is run from the repository root.
 """
 
 import itertools
+import os
 import re
 import sys
 from pathlib import Path
@@ -82,7 +83,9 @@ if __name__ == "__main__":
 
     # filter out protobuf files (*_pb2.py) and all files under cosmpy/protos
     python_files_filtered = filter(
-        lambda x: not str(x).endswith("_pb2.py") and str(x).find("cosmpy/protos/") == -1, python_files
+        lambda x: not str(x).endswith("_pb2.py")
+        and str(x).find(os.path.join("cosmpy", "protos")) == -1,
+        python_files,
     )
 
     bad_files = [

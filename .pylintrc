@@ -27,3 +27,6 @@ max-attributes=38
 
 [REFACTORING]
 max-nested-blocks=6
+
+[MASTER]
+ignore=protos

@@ -32,7 +32,7 @@ DEFAULT_PREFIX = "fetch"
 def _to_bech32(prefix: str, data: bytes) -> str:
     data_base5 = bech32.convertbits(data, 8, 5, True)
     if data_base5 is None:
-        raise RuntimeError("Unable to parse address")
+        raise RuntimeError("Unable to parse address")  # pragma: no cover
     return bech32.bech32_encode(prefix, data_base5)
 
 
@@ -55,7 +55,7 @@ class Address:
 
             data_base8 = bech32.convertbits(data_base5, 5, 8, False)
             if data_base8 is None:
-                raise RuntimeError("Unable to parse address")
+                raise RuntimeError("Unable to parse address")  # pragma: no cover
 
             self._address = bytes(data_base8)
             self._display = value
@@ -75,7 +75,7 @@ class Address:
             self._address = value._address
             self._display = value._display
         else:
-            raise TypeError("Unexpected type of `value` parameter")
+            raise TypeError("Unexpected type of `value` parameter")  # pragma: no cover
 
     def __str__(self):
         return self._display

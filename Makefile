@@ -117,7 +117,7 @@ mypy:
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --ignore-paths "cosmpy/protos/"
+	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 
 ####################
 ### Tests
@@ -126,7 +126,19 @@ pylint:
 .PHONY: test
 test:
 	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py
-	coverage report
+	make coverage-report
+
+.PHONY: unit-test
+unit-test:
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "not integtest"
+
+.PHONY: integration-test
+integration-test:
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "integtest"
+
+.PHONY: coverage-report
+coverage-report:
+	coverage report -m
 	coverage html
 
 ####################
@@ -140,6 +152,71 @@ liccheck:
 .PHONY: copyright-check
 copyright-check:
 	python scripts/check_copyright.py
+
+####################
+### Clean and init commands
+####################
+
+.PHONY: clean
+clean: clean-build clean-pyc clean-test clean-docs
+
+.PHONY: clean-build
+clean-build:
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	rm -fr pip-wheel-metadata
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -fr {} +
+
+.PHONY: clean-docs
+clean-docs:
+#   Update when docs PR is merged to avoid conflicts
+# 	rm -fr docs/build/
+
+.PHONY: clean-pyc
+clean-pyc:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '.DS_Store' -exec rm -fr {} +
+
+.PHONY: clean-test
+clean-test:
+	rm -fr .tox/
+	rm -f .coverage
+	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
+	rm -fr coverage_report/
+	rm -fr .hypothesis
+	rm -fr .pytest_cache
+	rm -fr .mypy_cache/
+	find . -name 'log.txt' -exec rm -fr {} +
+	find . -name 'log.*.txt' -exec rm -fr {} +
+
+v := $(shell pip -V | grep virtualenvs)
+
+.PHONY: new_env
+new_env: clean
+	if [ -z "$v" ];\
+	then\
+		pipenv --rm;\
+		pipenv install;\
+		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
+	else\
+		echo "In a virtual environment! Exit first: 'exit'.";\
+	fi
+
+.PHONY: new_env_dev
+new_env_dev: clean
+	if [ -z "$v" ];\
+	then\
+		pipenv --rm;\
+		pipenv install --dev;\
+		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
+	else\
+		echo "In a virtual environment! Exit first: 'exit'.";\
+	fi
 
 ####################
 ### Combinations

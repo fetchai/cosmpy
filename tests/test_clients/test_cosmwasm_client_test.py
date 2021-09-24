@@ -31,7 +31,7 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
 from tests.helpers import MockRestClient
 
 
-class CosmWasmClientTests(unittest.TestCase):
+class CosmWasmClientTestCase(unittest.TestCase):
     """Test case of CosmWasm client module."""
 
     @staticmethod

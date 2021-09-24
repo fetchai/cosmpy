@@ -3,6 +3,7 @@ name: Checks and Tests
 on:
   push:
     branches:
+      - develop
       - master
   pull_request:
 
@@ -12,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.7, 3.8, 3.9]
 
     timeout-minutes: 30
@@ -47,4 +48,13 @@ jobs:
     - name: Manifest check
       run: tox -e check-manifest
     - name: Tests and coverage
-      run: tox -e test
+      # Run full set of tests for Linux and unit tests only for other platforms
+      run: |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          tox -e test
+        else
+          tox -e test-unit
+        fi
+      shell: bash
+    - name: Show coverage report
+      run: tox -e coverage-report

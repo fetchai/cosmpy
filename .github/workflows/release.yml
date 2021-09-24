@@ -1,0 +1,39 @@
+name: Pre-release checks and tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest]
+        python-version: [3.7, 3.8, 3.9]
+
+    timeout-minutes: 30
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-python@master
+      with:
+        python-version: ${{ matrix.python-version }}
+    - uses: docker-practice/actions-setup-docker@master
+    - name: Install dependencies
+      run: pip install tox==3.24.1
+    - name: Integration tests for macOS
+      # Currently ordinary workflow runs full set of tests (with integration) for Linux
+      # and unit tests for other platforms
+      # In pre-release check we run also integration tests for macOS
+      # Windows integration tests are currently disabled
+      run: |
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          tox -e test-integration
+        fi
+      shell: bash

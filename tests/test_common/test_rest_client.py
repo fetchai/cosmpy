@@ -28,7 +28,7 @@ from requests import Response, Session
 from cosmpy.common.rest_client import RestClient
 
 
-class QueryTests(TestCase):
+class QueryRestClientTestCase(TestCase):
     """Test case of REST client module."""
 
     @staticmethod
