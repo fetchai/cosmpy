@@ -19,12 +19,14 @@
 
 """Tests for REST implementation of Tx."""
 
+import json
 import os
 import unittest
 from dataclasses import dataclass
 from hashlib import sha256
 
 from google.protobuf.any_pb2 import Any
+from google.protobuf.json_format import ParseDict
 from grpc import insecure_channel
 
 from cosmpy.common.rest_client import RestClient
@@ -42,6 +44,10 @@ from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
+    GetTxsEventRequest,
+    GetTxsEventResponse,
+    SimulateRequest,
+    SimulateResponse,
 )
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     AuthInfo,
@@ -54,6 +60,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
 )
 from cosmpy.tx import sign_transaction
 from cosmpy.tx.rest_client import TxRestClient
+from tests.helpers import MockRestClient
 
 
 def my_import(name):
@@ -269,3 +276,65 @@ class TxSignTestCase(unittest.TestCase):
         broad_tx_resp = tx_client.BroadcastTx(broad_tx_req)
 
         print("broad_tx_resp = ", broad_tx_resp)
+
+
+class TxRestClientTestCase(unittest.TestCase):
+    """Test case for TxRestClient."""
+
+    def test_Simulate_positive(self):
+        """Test Simulate method for positive result."""
+        content = {
+            "gas_info": {"gas_wanted": "10", "gas_used": "1"},
+            "result": {
+                "data": "string",
+                "log": "string",
+                "events": [
+                    {
+                        "type": "string",
+                        "attributes": [
+                            {"key": "string", "value": "string", "index": True}
+                        ],
+                    }
+                ],
+            },
+        }
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, SimulateResponse())
+        rest_client = TxRestClient(mock_client)
+        self.assertEqual(rest_client.Simulate(SimulateRequest()), expected_response)
+
+    def test_GetTxsEvent_positive(self):
+        """Test GetTxsEvent method for positive result."""
+        content = {
+            "txs": [
+                {
+                    "body": {
+                        "messages": [],
+                        "memo": "string",
+                        "timeout_height": "10",
+                        "extension_options": [],
+                        "non_critical_extension_options": [],
+                    },
+                    "auth_info": {
+                        "signer_infos": [],
+                        "fee": {
+                            "amount": [{"denom": "string", "amount": "string"}],
+                            "gas_limit": "10",
+                            "payer": "string",
+                            "granter": "string",
+                        },
+                    },
+                    "signatures": ["string"],
+                }
+            ],
+            "tx_responses": [],
+            "pagination": {"next_key": "string", "total": "10"},
+        }
+        mock_client = MockRestClient(json.dumps(content))
+
+        expected_response = ParseDict(content, GetTxsEventResponse())
+        rest_client = TxRestClient(mock_client)
+        self.assertEqual(
+            rest_client.GetTxsEvent(GetTxsEventRequest()), expected_response
+        )
