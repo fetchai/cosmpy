@@ -1,7 +1,7 @@
 # Install FetchD
 git clone https://github.com/fetchai/fetchd
 cd fetchd
-git checkout v0.8.2
+git checkout v0.8.7
 make install
 
 # Remove FetchD git folder
