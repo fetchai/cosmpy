@@ -24,7 +24,7 @@ import unittest
 from cosmpy.crypto.keypairs import PrivateKey, PublicKey
 
 
-class KeyPairTests(unittest.TestCase):
+class KeyPairTestCase(unittest.TestCase):
     """Test case of KeyPair module."""
 
     def test_basic_signing(self):

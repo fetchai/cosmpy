@@ -88,7 +88,9 @@ class SigningCosmWasmClient(CosmWasmClient):
         elif isinstance(channel, RestClient):
             self.tx_client = TxRestClient(channel)
         else:
-            raise RuntimeError(f"Unsupported channel type {type(channel)}")
+            raise RuntimeError(
+                f"Unsupported channel type {type(channel)}"
+            )  # pragma: no cover
 
         self.private_key = private_key
 

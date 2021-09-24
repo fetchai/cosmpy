@@ -34,7 +34,7 @@ from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
 from tests.helpers import MockRestClient
 
 
-class AuthTests(unittest.TestCase):
+class AuthRestClientTestCase(unittest.TestCase):
     """Test case for Auth module."""
 
     @staticmethod

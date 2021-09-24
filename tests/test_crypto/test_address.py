@@ -25,7 +25,7 @@ from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PublicKey
 
 
-class AddressTests(unittest.TestCase):
+class AddressTestCase(unittest.TestCase):
     """Test case of KeyPair module."""
 
     def test_create_from_public_key(self):

@@ -137,7 +137,7 @@ class FetchdDockerImage:
         with tempfile.TemporaryDirectory() as tmpdir:
             self._make_entrypoint(tmpdir)
             volumes = {tmpdir: {"bind": self.MOUNT_PATH, "mode": "rw"}}
-            entrypoint = os.path.join(self.MOUNT_PATH, self.ENTRYPOINT_FILENAME)
+            entrypoint = f"{self.MOUNT_PATH}/{self.ENTRYPOINT_FILENAME}"
             self.container = self.client.containers.run(
                 self.IMG_TAG,
                 detach=True,

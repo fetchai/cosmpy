@@ -6,6 +6,8 @@ omit =
     tests/*
     # omit Tox
     .tox/*
+    # omit protos
+    cosmpy/protos/*
 
 [html]
   directory = coverage_report

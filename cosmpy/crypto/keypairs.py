@@ -110,7 +110,7 @@ class PublicKey:
         try:
             success = self._verifying_key.verify_digest(signature, digest)
 
-        except ecdsa.keys.BadSignatureError:
+        except ecdsa.keys.BadSignatureError:  # pragma: no cover
             ...
 
         return success
