@@ -66,7 +66,7 @@ class RestClient:
                 for param in used_params:
                     json_request.pop(param)
 
-            url_encoded_request = urlencode(json_request)
+            url_encoded_request = urlencode(json_request, doseq=True)
 
             if len(url_encoded_request) == 0:
                 url = f"{self.rest_address}{url_base_path}"
