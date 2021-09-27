@@ -66,7 +66,7 @@ class SigningCosmWasmClient(CosmWasmClient):
     """High level client for REST/gRPC node interaction with ability to sign transactions."""
 
     DEFAULT_GAS_LIMIT = 200000
-    DEFAULT_DEPLOY_GAS_LIMIT = 2000000
+    DEFAULT_DEPLOY_GAS_LIMIT = 1500000
 
     def __init__(
         self,
