@@ -160,7 +160,7 @@ copyright-check:
 ### Docs generation
 ####################
 
-.PHONY: docs
+.PHONY: generate-docs
 generate-docs:
 	sphinx-apidoc -f -o $(PYCOSM_DOCS_DIR)/source $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
 	cd $(PYCOSM_DOCS_DIR) && make html
