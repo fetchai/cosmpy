@@ -7,6 +7,7 @@ WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
 OUTPUT_FOLDER := cosmpy/protos
 PYCOSM_SRC_DIR := cosmpy
+PYCOSM_DOCS_DIR := docs
 
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
@@ -19,9 +20,11 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         FIND_CMD := find $(COSMOS_PROTO_RELATIVE_DIRS) -regextype posix-extended
+				OPEN_CMD := xdg-open
     endif
     ifeq ($(UNAME_S),Darwin)
         FIND_CMD := find -E $(COSMOS_PROTO_RELATIVE_DIRS)
+				OPEN_CMD := open
     endif
 endif
 
@@ -154,11 +157,29 @@ copyright-check:
 	python scripts/check_copyright.py
 
 ####################
+### Docs generation
+####################
+
+.PHONY: generate-docs
+generate-docs:
+	sphinx-apidoc -f -o $(PYCOSM_DOCS_DIR)/source $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
+	cd $(PYCOSM_DOCS_DIR) && make html
+
+# Open docs main page in default browser
+.PHONY: open-docs
+open-docs:
+ifneq ($(wildcard $(PYCOSM_DOCS_DIR)/build),)
+	$(OPEN_CMD) $(PYCOSM_DOCS_DIR)/build/html/index.html
+else
+	@echo "Built docs are not found. Please run 'make generate-docs' first."
+endif
+
+####################
 ### Clean and init commands
 ####################
 
 .PHONY: clean
-clean: clean-build clean-pyc clean-test clean-docs
+clean: clean-build clean-pyc clean-test
 
 .PHONY: clean-build
 clean-build:
@@ -171,8 +192,7 @@ clean-build:
 
 .PHONY: clean-docs
 clean-docs:
-#   Update when docs PR is merged to avoid conflicts
-# 	rm -fr docs/build/
+	rm -fr docs/build/
 
 .PHONY: clean-pyc
 clean-pyc:
