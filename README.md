@@ -12,16 +12,54 @@ To install the project use:
 
 ## Getting started
 
-Below is a simple example using the `SigningCosmWasmClient` and the `RestClient` channel.
+Below is a simple example for querying an account's balance and sending funds from one account to another using `RestClient`:
 
     from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
     from cosmpy.common.rest_client import RestClient
+    from cosmpy.crypto.address import Address
+    from cosmpy.crypto.keypairs import PrivateKey
+    from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
-    channel = RestClient("http://<rest endpoint addres>")
-    client = SigningCosmWasmClient(private_key, channel, "<chain id>")
+    # Data
+    rest_endpoint_addres = "http://the_rest_endpoint"
+    alice_private_key = PrivateKey(bytes.fromhex("<some_private_key>"))
+    chain_id = "some_chain_id"
+    denom = "some_denomination"
+    bob_address = Address("some_address")
+
+    channel = RestClient(rest_endpoint_addres)
+    client = SigningCosmWasmClient(private_key, channel, chain_id)
     
-    res = client.get_balance(client.address, "stake")
-    print(f"Balance: {res.balance.amount} {res.balance.denom}")
+    # Query Alice's Balance
+    res = client.get_balance(client.address, denom)
+    print(f"Alice's Balance: {res.balance.amount} {res.balance.denom}")
+    
+    # Send 1 <denom> from Alice to Bob
+    client.send_tokens(bob_address, [Coin(amount="1", denom=denom)])
+
+## Documentation
+
+To see the documentation, first run:
+
+```bash
+make generate-docs
+```
+
+Then (if you are on Linux or MacOS):
+
+```bash
+make open-docs
+```
+
+And if on windows, open `docs/build/html/index.html`.
+
+## Examples
+
+Under the `examples` directory, you can find examples of using the `cosmpy` library for doing basic ledger interactions, using both REST and gRPC, e.g. querying, sending a transaction, interacting with a smart contract, and performing atomic swaps. To run any example `<example_file_name.py>`:  
+
+  ```bash
+  python ./examples/<example_file_name.py>
+  ```
 
 ## Extra Resources
 
