@@ -10,7 +10,7 @@ cosmpy = {editable = true, extras = ["dev", "test"], path = "."}
 cosmpy = {editable = true, extras = [], path = "."}
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
 
 [pipenv]
 allow_prereleases = true
