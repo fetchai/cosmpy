@@ -78,6 +78,7 @@ setup(
             "flake8-copyright==0.2.2",
             "sphinx==4.1.2",
             "sphinx-autobuild==2021.3.14",
+            "setuptools==58.2.0",  # Required for sphinx-autobuild subdependency "livehtml" correct setup
             # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
             "grpcio-tools<=1.32.0",
         ],
