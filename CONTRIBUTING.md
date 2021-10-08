@@ -2,14 +2,14 @@
 
 Contributions to this library are welcome.
 
-- If you want to report a bug or ask for features, you can check the [Issues page](https://github.com/fetchai/agents-aea/issues) and raise an issue.
+- If you want to report a bug or ask for features, you can check the [Issues page](https://github.com/fetchai/cosmpy/issues) and raise an issue.
 
-- If you would like to contribute a bug fix or feature then [submit a Pull request](https://github.com/fetchai/agents-aea/pulls).
+- If you would like to contribute a bug fix or feature then [submit a Pull request](https://github.com/fetchai/cosmpy/pulls).
 
 For other kinds of feedback, you can contact one of the
-[authors](https://github.com/fetchai/agents-aea/blob/main/AUTHORS.md) by email.
+[authors](https://github.com/fetchai/cosmpy/blob/main/AUTHORS.md) by email.
 
-Before reading on, please have a look at the [code of conduct](https://github.com/fetchai/agents-aea/blob/main/CODE_OF_CONDUCT.md).
+Before reading on, please have a look at the [code of conduct](https://github.com/fetchai/cosmpy/blob/main/CODE_OF_CONDUCT.md).
 
 ## A few simple rules
 
@@ -37,4 +37,4 @@ If you have improvements, send us your pull requests!
 
 A team member will be assigned to review your pull requests. All tests are run as part of CI as well as various other checks (linters, static type checkers, security checkers, etc). If there are any problems, feedback is provided via GitHub. Once the pull requests is approved and passes continuous integration checks, you or a team member can merge it.
 
-If you want to contribute, start working through the codebase, navigate to the Github [Issues page](https://github.com/fetchai/agents-aea/issues) tab and start looking through interesting issues. If you decide to start on an issue, leave a comment so that other people know that you're working on it. If you want to help out, but not alone, use the issue comment thread to coordinate.
+If you want to contribute, start working through the codebase, navigate to the Github [Issues page](https://github.com/fetchai/cosmpy/issues) tab and start looking through interesting issues. If you decide to start on an issue, leave a comment so that other people know that you're working on it. If you want to help out, but not alone, use the issue comment thread to coordinate.

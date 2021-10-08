@@ -32,7 +32,7 @@ There are various makefile commands which are helpful during development. Some o
 
 ## Generating python types from Cosmos SDK protobuf schemas
 
-This library uses python types which are generated (using [Google's Protocol Buffers](https://developers.google.com/protocol-buffers/) compiler) from protocol buffer schemas in the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk).
+This library uses python types which are generated (using [Google's Protocol Buffers](https://developers.google.com/protocol-buffers/) compiler) from protocol buffer schemas in the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) and [WasmD](https://github.com/CosmWasm/wasmd).
 
 When updating the Cosmos SDK version supported by this library (see the version currently used under `COSMOS_SDK_VERSION` in [Makefile](#Makefile])), you will need to fetch its corresponding protobuf schemas and generate their associated python types, replacing the existing ones.
 
