@@ -30,6 +30,11 @@ class QueryStub(object):
                 request_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryUpgradedConsensusStateRequest.SerializeToString,
                 response_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryUpgradedConsensusStateResponse.FromString,
                 )
+        self.ModuleVersions = channel.unary_unary(
+                '/cosmos.upgrade.v1beta1.Query/ModuleVersions',
+                request_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsRequest.SerializeToString,
+                response_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsResponse.FromString,
+                )
 
 
 class QueryServicer(object):
@@ -60,6 +65,13 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ModuleVersions(self, request, context):
+        """ModuleVersions queries the list of module versions from state.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_QueryServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -77,6 +89,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.UpgradedConsensusState,
                     request_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryUpgradedConsensusStateRequest.FromString,
                     response_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryUpgradedConsensusStateResponse.SerializeToString,
+            ),
+            'ModuleVersions': grpc.unary_unary_rpc_method_handler(
+                    servicer.ModuleVersions,
+                    request_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsRequest.FromString,
+                    response_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -137,5 +154,22 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.upgrade.v1beta1.Query/UpgradedConsensusState',
             cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryUpgradedConsensusStateRequest.SerializeToString,
             cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryUpgradedConsensusStateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ModuleVersions(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.upgrade.v1beta1.Query/ModuleVersions',
+            cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsRequest.SerializeToString,
+            cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

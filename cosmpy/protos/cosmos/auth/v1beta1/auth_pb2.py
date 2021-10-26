@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z)github.com/cosmos/cosmos-sdk/x/auth/types',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1e\x63osmos/auth/v1beta1/auth.proto\x12\x13\x63osmos.auth.v1beta1\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x14gogoproto/gogo.proto\x1a\x19google/protobuf/any.proto\"\xd3\x01\n\x0b\x42\x61seAccount\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12T\n\x07pub_key\x18\x02 \x01(\x0b\x32\x14.google.protobuf.AnyB-\xea\xde\x1f\x14public_key,omitempty\xf2\xde\x1f\x11yaml:\"public_key\"\x12\x31\n\x0e\x61\x63\x63ount_number\x18\x03 \x01(\x04\x42\x19\xf2\xde\x1f\x15yaml:\"account_number\"\x12\x10\n\x08sequence\x18\x04 \x01(\x04:\x18\x88\xa0\x1f\x00\x98\xa0\x1f\x00\xe8\xa0\x1f\x00\xd2\xb4-\x08\x41\x63\x63ountI\"\xa3\x01\n\rModuleAccount\x12S\n\x0c\x62\x61se_account\x18\x01 \x01(\x0b\x32 .cosmos.auth.v1beta1.BaseAccountB\x1b\xd0\xde\x1f\x01\xf2\xde\x1f\x13yaml:\"base_account\"\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bpermissions\x18\x03 \x03(\t:\x1a\x88\xa0\x1f\x00\x98\xa0\x1f\x00\xd2\xb4-\x0eModuleAccountI\"\xff\x02\n\x06Params\x12;\n\x13max_memo_characters\x18\x01 \x01(\x04\x42\x1e\xf2\xde\x1f\x1ayaml:\"max_memo_characters\"\x12-\n\x0ctx_sig_limit\x18\x02 \x01(\x04\x42\x17\xf2\xde\x1f\x13yaml:\"tx_sig_limit\"\x12?\n\x15tx_size_cost_per_byte\x18\x03 \x01(\x04\x42 \xf2\xde\x1f\x1cyaml:\"tx_size_cost_per_byte\"\x12[\n\x17sig_verify_cost_ed25519\x18\x04 \x01(\x04\x42:\xe2\xde\x1f\x14SigVerifyCostED25519\xf2\xde\x1f\x1eyaml:\"sig_verify_cost_ed25519\"\x12\x61\n\x19sig_verify_cost_secp256k1\x18\x05 \x01(\x04\x42>\xe2\xde\x1f\x16SigVerifyCostSecp256k1\xf2\xde\x1f yaml:\"sig_verify_cost_secp256k1\":\x08\xe8\xa0\x1f\x01\x98\xa0\x1f\x00\x42+Z)github.com/cosmos/cosmos-sdk/x/auth/typesb\x06proto3'
+  serialized_pb=b'\n\x1e\x63osmos/auth/v1beta1/auth.proto\x12\x13\x63osmos.auth.v1beta1\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x14gogoproto/gogo.proto\x1a\x19google/protobuf/any.proto\"\xe9\x01\n\x0b\x42\x61seAccount\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12T\n\x07pub_key\x18\x02 \x01(\x0b\x32\x14.google.protobuf.AnyB-\xea\xde\x1f\x14public_key,omitempty\xf2\xde\x1f\x11yaml:\"public_key\"\x12\x31\n\x0e\x61\x63\x63ount_number\x18\x03 \x01(\x04\x42\x19\xf2\xde\x1f\x15yaml:\"account_number\"\x12\x10\n\x08sequence\x18\x04 \x01(\x04\x12\x14\n\x0cpop_is_valid\x18\x05 \x01(\x08:\x18\x88\xa0\x1f\x00\x98\xa0\x1f\x00\xe8\xa0\x1f\x00\xd2\xb4-\x08\x41\x63\x63ountI\"\xa3\x01\n\rModuleAccount\x12S\n\x0c\x62\x61se_account\x18\x01 \x01(\x0b\x32 .cosmos.auth.v1beta1.BaseAccountB\x1b\xd0\xde\x1f\x01\xf2\xde\x1f\x13yaml:\"base_account\"\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bpermissions\x18\x03 \x03(\t:\x1a\x88\xa0\x1f\x00\x98\xa0\x1f\x00\xd2\xb4-\x0eModuleAccountI\"\xdf\x03\n\x06Params\x12;\n\x13max_memo_characters\x18\x01 \x01(\x04\x42\x1e\xf2\xde\x1f\x1ayaml:\"max_memo_characters\"\x12-\n\x0ctx_sig_limit\x18\x02 \x01(\x04\x42\x17\xf2\xde\x1f\x13yaml:\"tx_sig_limit\"\x12?\n\x15tx_size_cost_per_byte\x18\x03 \x01(\x04\x42 \xf2\xde\x1f\x1cyaml:\"tx_size_cost_per_byte\"\x12[\n\x17sig_verify_cost_ed25519\x18\x04 \x01(\x04\x42:\xe2\xde\x1f\x14SigVerifyCostED25519\xf2\xde\x1f\x1eyaml:\"sig_verify_cost_ed25519\"\x12\x61\n\x19sig_verify_cost_secp256k1\x18\x05 \x01(\x04\x42>\xe2\xde\x1f\x16SigVerifyCostSecp256k1\xf2\xde\x1f yaml:\"sig_verify_cost_secp256k1\"\x12^\n\x18sig_verify_cost_bls12381\x18\x06 \x01(\x04\x42<\xe2\xde\x1f\x15SigVerifyCostBls12381\xf2\xde\x1f\x1fyaml:\"sig_verify_cost_bls12381\":\x08\xe8\xa0\x1f\x01\x98\xa0\x1f\x00\x42+Z)github.com/cosmos/cosmos-sdk/x/auth/typesb\x06proto3'
   ,
   dependencies=[cosmos__proto_dot_cosmos__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,])
 
@@ -65,6 +65,13 @@ _BASEACCOUNT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pop_is_valid', full_name='cosmos.auth.v1beta1.BaseAccount.pop_is_valid', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -78,7 +85,7 @@ _BASEACCOUNT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=132,
-  serialized_end=343,
+  serialized_end=365,
 )
 
 
@@ -123,8 +130,8 @@ _MODULEACCOUNT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=346,
-  serialized_end=509,
+  serialized_start=368,
+  serialized_end=531,
 )
 
 
@@ -171,6 +178,13 @@ _PARAMS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=b'\342\336\037\026SigVerifyCostSecp256k1\362\336\037 yaml:\"sig_verify_cost_secp256k1\"', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='sig_verify_cost_bls12381', full_name='cosmos.auth.v1beta1.Params.sig_verify_cost_bls12381', index=5,
+      number=6, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\342\336\037\025SigVerifyCostBls12381\362\336\037\037yaml:\"sig_verify_cost_bls12381\"', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -183,8 +197,8 @@ _PARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=512,
-  serialized_end=895,
+  serialized_start=534,
+  serialized_end=1013,
 )
 
 _BASEACCOUNT.fields_by_name['pub_key'].message_type = google_dot_protobuf_dot_any__pb2._ANY
@@ -227,5 +241,6 @@ _PARAMS.fields_by_name['tx_sig_limit']._options = None
 _PARAMS.fields_by_name['tx_size_cost_per_byte']._options = None
 _PARAMS.fields_by_name['sig_verify_cost_ed25519']._options = None
 _PARAMS.fields_by_name['sig_verify_cost_secp256k1']._options = None
+_PARAMS.fields_by_name['sig_verify_cost_bls12381']._options = None
 _PARAMS._options = None
 # @@protoc_insertion_point(module_scope)

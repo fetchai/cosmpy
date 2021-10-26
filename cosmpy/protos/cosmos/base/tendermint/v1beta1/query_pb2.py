@@ -26,7 +26,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z2github.com/cosmos/cosmos-sdk/client/grpc/tmservice',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n*cosmos/base/tendermint/v1beta1/query.proto\x12\x1e\x63osmos.base.tendermint.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x19google/protobuf/any.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1atendermint/p2p/types.proto\x1a\x1ctendermint/types/block.proto\x1a\x1ctendermint/types/types.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\"l\n\x1eGetValidatorSetByHeightRequest\x12\x0e\n\x06height\x18\x01 \x01(\x03\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xb3\x01\n\x1fGetValidatorSetByHeightResponse\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x03\x12=\n\nvalidators\x18\x02 \x03(\x0b\x32).cosmos.base.tendermint.v1beta1.Validator\x12;\n\npagination\x18\x03 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"Z\n\x1cGetLatestValidatorSetRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xb1\x01\n\x1dGetLatestValidatorSetResponse\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x03\x12=\n\nvalidators\x18\x02 \x03(\x0b\x32).cosmos.base.tendermint.v1beta1.Validator\x12;\n\npagination\x18\x03 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"t\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12%\n\x07pub_key\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x14\n\x0cvoting_power\x18\x03 \x01(\x03\x12\x19\n\x11proposer_priority\x18\x04 \x01(\x03\")\n\x17GetBlockByHeightRequest\x12\x0e\n\x06height\x18\x01 \x01(\x03\"o\n\x18GetBlockByHeightResponse\x12+\n\x08\x62lock_id\x18\x01 \x01(\x0b\x32\x19.tendermint.types.BlockID\x12&\n\x05\x62lock\x18\x02 \x01(\x0b\x32\x17.tendermint.types.Block\"\x17\n\x15GetLatestBlockRequest\"m\n\x16GetLatestBlockResponse\x12+\n\x08\x62lock_id\x18\x01 \x01(\x0b\x32\x19.tendermint.types.BlockID\x12&\n\x05\x62lock\x18\x02 \x01(\x0b\x32\x17.tendermint.types.Block\"\x13\n\x11GetSyncingRequest\"%\n\x12GetSyncingResponse\x12\x0f\n\x07syncing\x18\x01 \x01(\x08\"\x14\n\x12GetNodeInfoRequest\"\x9b\x01\n\x13GetNodeInfoResponse\x12:\n\x11\x64\x65\x66\x61ult_node_info\x18\x01 \x01(\x0b\x32\x1f.tendermint.p2p.DefaultNodeInfo\x12H\n\x13\x61pplication_version\x18\x02 \x01(\x0b\x32+.cosmos.base.tendermint.v1beta1.VersionInfo\"\xb6\x01\n\x0bVersionInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x61pp_name\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x12\n\ngit_commit\x18\x04 \x01(\t\x12\x12\n\nbuild_tags\x18\x05 \x01(\t\x12\x12\n\ngo_version\x18\x06 \x01(\t\x12:\n\nbuild_deps\x18\x07 \x03(\x0b\x32&.cosmos.base.tendermint.v1beta1.Module\"4\n\x06Module\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x0b\n\x03sum\x18\x03 \x01(\t2\x88\t\n\x07Service\x12\xa9\x01\n\x0bGetNodeInfo\x12\x32.cosmos.base.tendermint.v1beta1.GetNodeInfoRequest\x1a\x33.cosmos.base.tendermint.v1beta1.GetNodeInfoResponse\"1\x82\xd3\xe4\x93\x02+\x12)/cosmos/base/tendermint/v1beta1/node_info\x12\xa4\x01\n\nGetSyncing\x12\x31.cosmos.base.tendermint.v1beta1.GetSyncingRequest\x1a\x32.cosmos.base.tendermint.v1beta1.GetSyncingResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/cosmos/base/tendermint/v1beta1/syncing\x12\xb6\x01\n\x0eGetLatestBlock\x12\x35.cosmos.base.tendermint.v1beta1.GetLatestBlockRequest\x1a\x36.cosmos.base.tendermint.v1beta1.GetLatestBlockResponse\"5\x82\xd3\xe4\x93\x02/\x12-/cosmos/base/tendermint/v1beta1/blocks/latest\x12\xbe\x01\n\x10GetBlockByHeight\x12\x37.cosmos.base.tendermint.v1beta1.GetBlockByHeightRequest\x1a\x38.cosmos.base.tendermint.v1beta1.GetBlockByHeightResponse\"7\x82\xd3\xe4\x93\x02\x31\x12//cosmos/base/tendermint/v1beta1/blocks/{height}\x12\xd2\x01\n\x15GetLatestValidatorSet\x12<.cosmos.base.tendermint.v1beta1.GetLatestValidatorSetRequest\x1a=.cosmos.base.tendermint.v1beta1.GetLatestValidatorSetResponse\"<\x82\xd3\xe4\x93\x02\x36\x12\x34/cosmos/base/tendermint/v1beta1/validatorsets/latest\x12\xda\x01\n\x17GetValidatorSetByHeight\x12>.cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightRequest\x1a?.cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightResponse\">\x82\xd3\xe4\x93\x02\x38\x12\x36/cosmos/base/tendermint/v1beta1/validatorsets/{height}B4Z2github.com/cosmos/cosmos-sdk/client/grpc/tmserviceb\x06proto3'
+  serialized_pb=b'\n*cosmos/base/tendermint/v1beta1/query.proto\x12\x1e\x63osmos.base.tendermint.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x19google/protobuf/any.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1atendermint/p2p/types.proto\x1a\x1ctendermint/types/block.proto\x1a\x1ctendermint/types/types.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\"l\n\x1eGetValidatorSetByHeightRequest\x12\x0e\n\x06height\x18\x01 \x01(\x03\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xb3\x01\n\x1fGetValidatorSetByHeightResponse\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x03\x12=\n\nvalidators\x18\x02 \x03(\x0b\x32).cosmos.base.tendermint.v1beta1.Validator\x12;\n\npagination\x18\x03 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"Z\n\x1cGetLatestValidatorSetRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xb1\x01\n\x1dGetLatestValidatorSetResponse\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x03\x12=\n\nvalidators\x18\x02 \x03(\x0b\x32).cosmos.base.tendermint.v1beta1.Validator\x12;\n\npagination\x18\x03 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"t\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12%\n\x07pub_key\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x14\n\x0cvoting_power\x18\x03 \x01(\x03\x12\x19\n\x11proposer_priority\x18\x04 \x01(\x03\")\n\x17GetBlockByHeightRequest\x12\x0e\n\x06height\x18\x01 \x01(\x03\"o\n\x18GetBlockByHeightResponse\x12+\n\x08\x62lock_id\x18\x01 \x01(\x0b\x32\x19.tendermint.types.BlockID\x12&\n\x05\x62lock\x18\x02 \x01(\x0b\x32\x17.tendermint.types.Block\"\x17\n\x15GetLatestBlockRequest\"m\n\x16GetLatestBlockResponse\x12+\n\x08\x62lock_id\x18\x01 \x01(\x0b\x32\x19.tendermint.types.BlockID\x12&\n\x05\x62lock\x18\x02 \x01(\x0b\x32\x17.tendermint.types.Block\"\x13\n\x11GetSyncingRequest\"%\n\x12GetSyncingResponse\x12\x0f\n\x07syncing\x18\x01 \x01(\x08\"\x14\n\x12GetNodeInfoRequest\"\x9b\x01\n\x13GetNodeInfoResponse\x12:\n\x11\x64\x65\x66\x61ult_node_info\x18\x01 \x01(\x0b\x32\x1f.tendermint.p2p.DefaultNodeInfo\x12H\n\x13\x61pplication_version\x18\x02 \x01(\x0b\x32+.cosmos.base.tendermint.v1beta1.VersionInfo\"\xd2\x01\n\x0bVersionInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x61pp_name\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x12\n\ngit_commit\x18\x04 \x01(\t\x12\x12\n\nbuild_tags\x18\x05 \x01(\t\x12\x12\n\ngo_version\x18\x06 \x01(\t\x12:\n\nbuild_deps\x18\x07 \x03(\x0b\x32&.cosmos.base.tendermint.v1beta1.Module\x12\x1a\n\x12\x63osmos_sdk_version\x18\x08 \x01(\t\"4\n\x06Module\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x0b\n\x03sum\x18\x03 \x01(\t2\x88\t\n\x07Service\x12\xa9\x01\n\x0bGetNodeInfo\x12\x32.cosmos.base.tendermint.v1beta1.GetNodeInfoRequest\x1a\x33.cosmos.base.tendermint.v1beta1.GetNodeInfoResponse\"1\x82\xd3\xe4\x93\x02+\x12)/cosmos/base/tendermint/v1beta1/node_info\x12\xa4\x01\n\nGetSyncing\x12\x31.cosmos.base.tendermint.v1beta1.GetSyncingRequest\x1a\x32.cosmos.base.tendermint.v1beta1.GetSyncingResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/cosmos/base/tendermint/v1beta1/syncing\x12\xb6\x01\n\x0eGetLatestBlock\x12\x35.cosmos.base.tendermint.v1beta1.GetLatestBlockRequest\x1a\x36.cosmos.base.tendermint.v1beta1.GetLatestBlockResponse\"5\x82\xd3\xe4\x93\x02/\x12-/cosmos/base/tendermint/v1beta1/blocks/latest\x12\xbe\x01\n\x10GetBlockByHeight\x12\x37.cosmos.base.tendermint.v1beta1.GetBlockByHeightRequest\x1a\x38.cosmos.base.tendermint.v1beta1.GetBlockByHeightResponse\"7\x82\xd3\xe4\x93\x02\x31\x12//cosmos/base/tendermint/v1beta1/blocks/{height}\x12\xd2\x01\n\x15GetLatestValidatorSet\x12<.cosmos.base.tendermint.v1beta1.GetLatestValidatorSetRequest\x1a=.cosmos.base.tendermint.v1beta1.GetLatestValidatorSetResponse\"<\x82\xd3\xe4\x93\x02\x36\x12\x34/cosmos/base/tendermint/v1beta1/validatorsets/latest\x12\xda\x01\n\x17GetValidatorSetByHeight\x12>.cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightRequest\x1a?.cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightResponse\">\x82\xd3\xe4\x93\x02\x38\x12\x36/cosmos/base/tendermint/v1beta1/validatorsets/{height}B4Z2github.com/cosmos/cosmos-sdk/client/grpc/tmserviceb\x06proto3'
   ,
   dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,tendermint_dot_p2p_dot_types__pb2.DESCRIPTOR,tendermint_dot_types_dot_block__pb2.DESCRIPTOR,tendermint_dot_types_dot_types__pb2.DESCRIPTOR,cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2.DESCRIPTOR,])
 
@@ -562,6 +562,13 @@ _VERSIONINFO = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cosmos_sdk_version', full_name='cosmos.base.tendermint.v1beta1.VersionInfo.cosmos_sdk_version', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -575,7 +582,7 @@ _VERSIONINFO = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1504,
-  serialized_end=1686,
+  serialized_end=1714,
 )
 
 
@@ -620,8 +627,8 @@ _MODULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1688,
-  serialized_end=1740,
+  serialized_start=1716,
+  serialized_end=1768,
 )
 
 _GETVALIDATORSETBYHEIGHTREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
@@ -770,8 +777,8 @@ _SERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1743,
-  serialized_end=2903,
+  serialized_start=1771,
+  serialized_end=2931,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetNodeInfo',

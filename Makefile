@@ -1,6 +1,6 @@
 COSMOS_SDK_DIR := cosmos-sdk-proto-schema
 WASMD_DIR := wasm-proto-shema
-COSMOS_SDK_VERSION := v0.17.1
+COSMOS_SDK_VERSION := integration/caelum
 WASMD_VERSION := v0.16.0
 COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
 WASMD_PROTO_RELATIVE_DIRS := proto

@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z)github.com/cosmos/cosmos-sdk/x/bank/types',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1e\x63osmos/bank/v1beta1/bank.proto\x12\x13\x63osmos.bank.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\"\xb2\x01\n\x06Params\x12Y\n\x0csend_enabled\x18\x01 \x03(\x0b\x32 .cosmos.bank.v1beta1.SendEnabledB!\xf2\xde\x1f\x1dyaml:\"send_enabled,omitempty\"\x12G\n\x14\x64\x65\x66\x61ult_send_enabled\x18\x02 \x01(\x08\x42)\xf2\xde\x1f%yaml:\"default_send_enabled,omitempty\":\x04\x98\xa0\x1f\x00\"7\n\x0bSendEnabled\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\x12\x0f\n\x07\x65nabled\x18\x02 \x01(\x08:\x08\xe8\xa0\x1f\x01\x98\xa0\x1f\x00\"~\n\x05Input\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12Z\n\x05\x63oins\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\x7f\n\x06Output\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12Z\n\x05\x63oins\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\xab\x01\n\x06Supply\x12Z\n\x05total\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins:E\xe8\xa0\x1f\x01\x88\xa0\x1f\x00\x98\xa0\x1f\x00\xd2\xb4-5*github.com/cosmos/cosmos-sdk/x/bank/exported.SupplyI\"=\n\tDenomUnit\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\x12\x10\n\x08\x65xponent\x18\x02 \x01(\r\x12\x0f\n\x07\x61liases\x18\x03 \x03(\t\"s\n\x08Metadata\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x33\n\x0b\x64\x65nom_units\x18\x02 \x03(\x0b\x32\x1e.cosmos.bank.v1beta1.DenomUnit\x12\x0c\n\x04\x62\x61se\x18\x03 \x01(\t\x12\x0f\n\x07\x64isplay\x18\x04 \x01(\tB+Z)github.com/cosmos/cosmos-sdk/x/bank/typesb\x06proto3'
+  serialized_pb=b'\n\x1e\x63osmos/bank/v1beta1/bank.proto\x12\x13\x63osmos.bank.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\"\xb2\x01\n\x06Params\x12Y\n\x0csend_enabled\x18\x01 \x03(\x0b\x32 .cosmos.bank.v1beta1.SendEnabledB!\xf2\xde\x1f\x1dyaml:\"send_enabled,omitempty\"\x12G\n\x14\x64\x65\x66\x61ult_send_enabled\x18\x02 \x01(\x08\x42)\xf2\xde\x1f%yaml:\"default_send_enabled,omitempty\":\x04\x98\xa0\x1f\x00\"7\n\x0bSendEnabled\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\x12\x0f\n\x07\x65nabled\x18\x02 \x01(\x08:\x08\xe8\xa0\x1f\x01\x98\xa0\x1f\x00\"~\n\x05Input\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12Z\n\x05\x63oins\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\x7f\n\x06Output\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12Z\n\x05\x63oins\x18\x02 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\xac\x01\n\x06Supply\x12Z\n\x05total\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins:F\x18\x01\xe8\xa0\x1f\x01\x88\xa0\x1f\x00\xd2\xb4-8*github.com/cosmos/cosmos-sdk/x/bank/legacy/v040.SupplyI\"=\n\tDenomUnit\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\x12\x10\n\x08\x65xponent\x18\x02 \x01(\r\x12\x0f\n\x07\x61liases\x18\x03 \x03(\t\"\x91\x01\n\x08Metadata\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x33\n\x0b\x64\x65nom_units\x18\x02 \x03(\x0b\x32\x1e.cosmos.bank.v1beta1.DenomUnit\x12\x0c\n\x04\x62\x61se\x18\x03 \x01(\t\x12\x0f\n\x07\x64isplay\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x0e\n\x06symbol\x18\x06 \x01(\tB+Z)github.com/cosmos/cosmos-sdk/x/bank/typesb\x06proto3'
   ,
   dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,cosmos__proto_dot_cosmos__pb2.DESCRIPTOR,cosmos_dot_base_dot_v1beta1_dot_coin__pb2.DESCRIPTOR,])
 
@@ -206,14 +206,14 @@ _SUPPLY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=b'\350\240\037\001\210\240\037\000\230\240\037\000\322\264-5*github.com/cosmos/cosmos-sdk/x/bank/exported.SupplyI',
+  serialized_options=b'\030\001\350\240\037\001\210\240\037\000\322\264-8*github.com/cosmos/cosmos-sdk/x/bank/legacy/v040.SupplyI',
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
   serialized_start=632,
-  serialized_end=803,
+  serialized_end=804,
 )
 
 
@@ -258,8 +258,8 @@ _DENOMUNIT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=805,
-  serialized_end=866,
+  serialized_start=806,
+  serialized_end=867,
 )
 
 
@@ -299,6 +299,20 @@ _METADATA = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='cosmos.bank.v1beta1.Metadata.name', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='symbol', full_name='cosmos.bank.v1beta1.Metadata.symbol', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -311,8 +325,8 @@ _METADATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=868,
-  serialized_end=983,
+  serialized_start=870,
+  serialized_end=1015,
 )
 
 _PARAMS.fields_by_name['send_enabled'].message_type = _SENDENABLED

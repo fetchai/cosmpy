@@ -25,7 +25,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z%github.com/cosmos/cosmos-sdk/types/tx\300\343\036\001',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1f\x63osmos/tx/v1beta1/service.proto\x12\x11\x63osmos.tx.v1beta1\x1a\x1cgoogle/api/annotations.proto\x1a#cosmos/base/abci/v1beta1/abci.proto\x1a\x1a\x63osmos/tx/v1beta1/tx.proto\x1a\x14gogoproto/gogo.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\"\x8e\x01\n\x12GetTxsEventRequest\x12\x0e\n\x06\x65vents\x18\x01 \x03(\t\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\x12,\n\x08order_by\x18\x03 \x01(\x0e\x32\x1a.cosmos.tx.v1beta1.OrderBy\"\xb2\x01\n\x13GetTxsEventResponse\x12\"\n\x03txs\x18\x01 \x03(\x0b\x32\x15.cosmos.tx.v1beta1.Tx\x12:\n\x0ctx_responses\x18\x02 \x03(\x0b\x32$.cosmos.base.abci.v1beta1.TxResponse\x12;\n\npagination\x18\x03 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"V\n\x12\x42roadcastTxRequest\x12\x10\n\x08tx_bytes\x18\x01 \x01(\x0c\x12.\n\x04mode\x18\x02 \x01(\x0e\x32 .cosmos.tx.v1beta1.BroadcastMode\"P\n\x13\x42roadcastTxResponse\x12\x39\n\x0btx_response\x18\x01 \x01(\x0b\x32$.cosmos.base.abci.v1beta1.TxResponse\"4\n\x0fSimulateRequest\x12!\n\x02tx\x18\x01 \x01(\x0b\x32\x15.cosmos.tx.v1beta1.Tx\"y\n\x10SimulateResponse\x12\x33\n\x08gas_info\x18\x01 \x01(\x0b\x32!.cosmos.base.abci.v1beta1.GasInfo\x12\x30\n\x06result\x18\x02 \x01(\x0b\x32 .cosmos.base.abci.v1beta1.Result\"\x1c\n\x0cGetTxRequest\x12\x0c\n\x04hash\x18\x01 \x01(\t\"m\n\rGetTxResponse\x12!\n\x02tx\x18\x01 \x01(\x0b\x32\x15.cosmos.tx.v1beta1.Tx\x12\x39\n\x0btx_response\x18\x02 \x01(\x0b\x32$.cosmos.base.abci.v1beta1.TxResponse*H\n\x07OrderBy\x12\x18\n\x14ORDER_BY_UNSPECIFIED\x10\x00\x12\x10\n\x0cORDER_BY_ASC\x10\x01\x12\x11\n\rORDER_BY_DESC\x10\x02*|\n\rBroadcastMode\x12\x1e\n\x1a\x42ROADCAST_MODE_UNSPECIFIED\x10\x00\x12\x18\n\x14\x42ROADCAST_MODE_BLOCK\x10\x01\x12\x17\n\x13\x42ROADCAST_MODE_SYNC\x10\x02\x12\x18\n\x14\x42ROADCAST_MODE_ASYNC\x10\x03\x32\xf8\x03\n\x07Service\x12{\n\x08Simulate\x12\".cosmos.tx.v1beta1.SimulateRequest\x1a#.cosmos.tx.v1beta1.SimulateResponse\"&\x82\xd3\xe4\x93\x02 \"\x1b/cosmos/tx/v1beta1/simulate:\x01*\x12q\n\x05GetTx\x12\x1f.cosmos.tx.v1beta1.GetTxRequest\x1a .cosmos.tx.v1beta1.GetTxResponse\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/cosmos/tx/v1beta1/txs/{hash}\x12\x7f\n\x0b\x42roadcastTx\x12%.cosmos.tx.v1beta1.BroadcastTxRequest\x1a&.cosmos.tx.v1beta1.BroadcastTxResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/cosmos/tx/v1beta1/txs:\x01*\x12|\n\x0bGetTxsEvent\x12%.cosmos.tx.v1beta1.GetTxsEventRequest\x1a&.cosmos.tx.v1beta1.GetTxsEventResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/cosmos/tx/v1beta1/txsB+Z%github.com/cosmos/cosmos-sdk/types/tx\xc0\xe3\x1e\x01\x62\x06proto3'
+  serialized_pb=b'\n\x1f\x63osmos/tx/v1beta1/service.proto\x12\x11\x63osmos.tx.v1beta1\x1a\x1cgoogle/api/annotations.proto\x1a#cosmos/base/abci/v1beta1/abci.proto\x1a\x1a\x63osmos/tx/v1beta1/tx.proto\x1a\x14gogoproto/gogo.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\"\x8e\x01\n\x12GetTxsEventRequest\x12\x0e\n\x06\x65vents\x18\x01 \x03(\t\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\x12,\n\x08order_by\x18\x03 \x01(\x0e\x32\x1a.cosmos.tx.v1beta1.OrderBy\"\xb2\x01\n\x13GetTxsEventResponse\x12\"\n\x03txs\x18\x01 \x03(\x0b\x32\x15.cosmos.tx.v1beta1.Tx\x12:\n\x0ctx_responses\x18\x02 \x03(\x0b\x32$.cosmos.base.abci.v1beta1.TxResponse\x12;\n\npagination\x18\x03 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"V\n\x12\x42roadcastTxRequest\x12\x10\n\x08tx_bytes\x18\x01 \x01(\x0c\x12.\n\x04mode\x18\x02 \x01(\x0e\x32 .cosmos.tx.v1beta1.BroadcastMode\"P\n\x13\x42roadcastTxResponse\x12\x39\n\x0btx_response\x18\x01 \x01(\x0b\x32$.cosmos.base.abci.v1beta1.TxResponse\"J\n\x0fSimulateRequest\x12%\n\x02tx\x18\x01 \x01(\x0b\x32\x15.cosmos.tx.v1beta1.TxB\x02\x18\x01\x12\x10\n\x08tx_bytes\x18\x02 \x01(\x0c\"y\n\x10SimulateResponse\x12\x33\n\x08gas_info\x18\x01 \x01(\x0b\x32!.cosmos.base.abci.v1beta1.GasInfo\x12\x30\n\x06result\x18\x02 \x01(\x0b\x32 .cosmos.base.abci.v1beta1.Result\"\x1c\n\x0cGetTxRequest\x12\x0c\n\x04hash\x18\x01 \x01(\t\"m\n\rGetTxResponse\x12!\n\x02tx\x18\x01 \x01(\x0b\x32\x15.cosmos.tx.v1beta1.Tx\x12\x39\n\x0btx_response\x18\x02 \x01(\x0b\x32$.cosmos.base.abci.v1beta1.TxResponse*H\n\x07OrderBy\x12\x18\n\x14ORDER_BY_UNSPECIFIED\x10\x00\x12\x10\n\x0cORDER_BY_ASC\x10\x01\x12\x11\n\rORDER_BY_DESC\x10\x02*|\n\rBroadcastMode\x12\x1e\n\x1a\x42ROADCAST_MODE_UNSPECIFIED\x10\x00\x12\x18\n\x14\x42ROADCAST_MODE_BLOCK\x10\x01\x12\x17\n\x13\x42ROADCAST_MODE_SYNC\x10\x02\x12\x18\n\x14\x42ROADCAST_MODE_ASYNC\x10\x03\x32\xf8\x03\n\x07Service\x12{\n\x08Simulate\x12\".cosmos.tx.v1beta1.SimulateRequest\x1a#.cosmos.tx.v1beta1.SimulateResponse\"&\x82\xd3\xe4\x93\x02 \"\x1b/cosmos/tx/v1beta1/simulate:\x01*\x12q\n\x05GetTx\x12\x1f.cosmos.tx.v1beta1.GetTxRequest\x1a .cosmos.tx.v1beta1.GetTxResponse\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/cosmos/tx/v1beta1/txs/{hash}\x12\x7f\n\x0b\x42roadcastTx\x12%.cosmos.tx.v1beta1.BroadcastTxRequest\x1a&.cosmos.tx.v1beta1.BroadcastTxResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/cosmos/tx/v1beta1/txs:\x01*\x12|\n\x0bGetTxsEvent\x12%.cosmos.tx.v1beta1.GetTxsEventRequest\x1a&.cosmos.tx.v1beta1.GetTxsEventResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/cosmos/tx/v1beta1/txsB+Z%github.com/cosmos/cosmos-sdk/types/tx\xc0\xe3\x1e\x01\x62\x06proto3'
   ,
   dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,cosmos_dot_base_dot_abci_dot_v1beta1_dot_abci__pb2.DESCRIPTOR,cosmos_dot_tx_dot_v1beta1_dot_tx__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2.DESCRIPTOR,])
 
@@ -54,8 +54,8 @@ _ORDERBY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1029,
-  serialized_end=1101,
+  serialized_start=1051,
+  serialized_end=1123,
 )
 _sym_db.RegisterEnumDescriptor(_ORDERBY)
 
@@ -90,8 +90,8 @@ _BROADCASTMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1103,
-  serialized_end=1227,
+  serialized_start=1125,
+  serialized_end=1249,
 )
 _sym_db.RegisterEnumDescriptor(_BROADCASTMODE)
 
@@ -283,6 +283,13 @@ _SIMULATEREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
+      serialized_options=b'\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='tx_bytes', full_name='cosmos.tx.v1beta1.SimulateRequest.tx_bytes', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
@@ -297,7 +304,7 @@ _SIMULATEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=711,
-  serialized_end=763,
+  serialized_end=785,
 )
 
 
@@ -335,8 +342,8 @@ _SIMULATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=765,
-  serialized_end=886,
+  serialized_start=787,
+  serialized_end=908,
 )
 
 
@@ -367,8 +374,8 @@ _GETTXREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=888,
-  serialized_end=916,
+  serialized_start=910,
+  serialized_end=938,
 )
 
 
@@ -406,8 +413,8 @@ _GETTXRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=918,
-  serialized_end=1027,
+  serialized_start=940,
+  serialized_end=1049,
 )
 
 _GETTXSEVENTREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
@@ -492,6 +499,7 @@ _sym_db.RegisterMessage(GetTxResponse)
 
 
 DESCRIPTOR._options = None
+_SIMULATEREQUEST.fields_by_name['tx']._options = None
 
 _SERVICE = _descriptor.ServiceDescriptor(
   name='Service',
@@ -500,8 +508,8 @@ _SERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1230,
-  serialized_end=1734,
+  serialized_start=1252,
+  serialized_end=1756,
   methods=[
   _descriptor.MethodDescriptor(
     name='Simulate',
