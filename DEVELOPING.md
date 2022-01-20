@@ -16,11 +16,11 @@ make fetch_proto_schema_source
 make generate_proto_types
 ```
 
-## Setup a local Stargate node
+## Setup a local Capricorn node
 
 ### Preliminaries
 
-You require Go version 15.0 or higher for your platform (see <a href="https://golang.org/doc/install" target="_blank">here</a>)
+You require Go version 1.16.0 or higher for your platform (see <a href="https://golang.org/doc/install" target="_blank">here</a>)
 
 ### Setup a node
 

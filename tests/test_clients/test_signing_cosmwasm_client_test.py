@@ -217,11 +217,11 @@ class CosmWasmClientTestCase(unittest.TestCase):
     def test_get_packed_init_msg(self):
         """Test correct generation of packed instantiate msg."""
         expected_result = {
-            "@type": "/cosmwasm.wasm.v1beta1.MsgInstantiateContract",
+            "@type": "/cosmwasm.wasm.v1.MsgInstantiateContract",
             "sender": str(ADDRESS_PK),
             "codeId": str(CODE_ID),
             "label": LABEL,
-            "initMsg": WASM_MSG_BASE64,
+            "msg": WASM_MSG_BASE64,
             "funds": [{"denom": DENOM, "amount": AMOUNT}],
         }
 
@@ -233,7 +233,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
     def test_get_packed_exec_msg(self):
         """Test correct generation of packed execute msg."""
         expected_result = {
-            "@type": "/cosmwasm.wasm.v1beta1.MsgExecuteContract",
+            "@type": "/cosmwasm.wasm.v1.MsgExecuteContract",
             "sender": str(ADDRESS_PK),
             "contract": str(CONTRACT_ADDRESS),
             "msg": WASM_MSG_BASE64,
@@ -255,7 +255,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
 
         msg_dict = MessageToDict(msg)
         assert len(msg_dict) == 3
-        assert msg_dict["@type"] == "/cosmwasm.wasm.v1beta1.MsgStoreCode"
+        assert msg_dict["@type"] == "/cosmwasm.wasm.v1.MsgStoreCode"
         assert msg_dict["sender"] == str(ADDRESS_PK)
         zipped_bytecode: bytes = base64.b64decode(msg_dict["wasmByteCode"])
         original_bytecode: bytes = gzip.decompress(zipped_bytecode)
@@ -413,7 +413,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         tx.ParseFromString(mock_tx_client.last_broadcast_tx_request.tx_bytes)
 
         assert len(tx.body.messages) == 1
-        assert tx.body.messages[0].type_url == "/cosmwasm.wasm.v1beta1.MsgStoreCode"
+        assert tx.body.messages[0].type_url == "/cosmwasm.wasm.v1.MsgStoreCode"
 
     def test_init_contract(self):
         """Test init contract method with positive result."""
@@ -433,8 +433,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
 
         assert len(tx.body.messages) == 1
         assert (
-            tx.body.messages[0].type_url
-            == "/cosmwasm.wasm.v1beta1.MsgInstantiateContract"
+            tx.body.messages[0].type_url == "/cosmwasm.wasm.v1.MsgInstantiateContract"
         )
 
     def test_execute_contract(self):
@@ -451,9 +450,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         tx.ParseFromString(mock_tx_client.last_broadcast_tx_request.tx_bytes)
 
         assert len(tx.body.messages) == 1
-        assert (
-            tx.body.messages[0].type_url == "/cosmwasm.wasm.v1beta1.MsgExecuteContract"
-        )
+        assert tx.body.messages[0].type_url == "/cosmwasm.wasm.v1.MsgExecuteContract"
 
     def test_get_code_id(self):
         """Test get code id from response with positive result."""
@@ -461,15 +458,13 @@ class CosmWasmClientTestCase(unittest.TestCase):
         raw_log_dict = [
             {
                 "events": [
+                    {},
                     {
                         "type": "message",
                         "attributes": [
-                            {},
-                            {},
-                            {},
                             {"key": "code_id", "value": str(CODE_ID)},
                         ],
-                    }
+                    },
                 ]
             }
         ]
@@ -486,11 +481,10 @@ class CosmWasmClientTestCase(unittest.TestCase):
         raw_log_dict = [
             {
                 "events": [
-                    {},
                     {
                         "type": "wasm",
                         "attributes": [
-                            {"key": "contract_address", "value": CONTRACT_ADDRESS}
+                            {"key": "_contract_address", "value": CONTRACT_ADDRESS}
                         ],
                     },
                 ]
