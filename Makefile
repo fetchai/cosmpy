@@ -249,6 +249,13 @@ lint:
 	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude '*_pb2.py,*_pb2_grpc.py'
 
+.PHONY: security
+security:
+	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
+	bandit -r $(PYCOSM_EXAMPLES_DIR) --skip B101,B105
+	safety check -i 41002
+
+
 .PHONY: check
 check:
 	make black-check
