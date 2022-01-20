@@ -53,7 +53,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
-from cosmpy.protos.cosmwasm.wasm.v1beta1.tx_pb2 import (
+from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
     MsgExecuteContract,
     MsgInstantiateContract,
     MsgStoreCode,
@@ -66,7 +66,7 @@ class SigningCosmWasmClient(CosmWasmClient):
     """High level client for REST/gRPC node interaction with ability to sign transactions."""
 
     DEFAULT_GAS_LIMIT = 200000
-    DEFAULT_DEPLOY_GAS_LIMIT = 1500000
+    DEFAULT_DEPLOY_GAS_LIMIT = 3000000
 
     def __init__(
         self,
@@ -250,7 +250,7 @@ class SigningCosmWasmClient(CosmWasmClient):
         msg_send = MsgInstantiateContract(
             sender=str(sender_address),
             code_id=code_id,
-            init_msg=json.dumps(init_msg).encode("UTF8"),
+            msg=json.dumps(init_msg).encode("UTF8"),
             label=label,
             funds=funds,
         )
@@ -401,8 +401,8 @@ class SigningCosmWasmClient(CosmWasmClient):
         :return: integer code_id
         """
         raw_log = json.loads(response.tx_response.raw_log)
-        assert raw_log[0]["events"][0]["attributes"][3]["key"] == "code_id"
-        return int(raw_log[0]["events"][0]["attributes"][3]["value"])
+        assert raw_log[0]["events"][1]["attributes"][0]["key"] == "code_id"
+        return int(raw_log[0]["events"][1]["attributes"][0]["value"])
 
     @staticmethod
     def get_contract_address(response: GetTxResponse) -> str:
@@ -413,8 +413,8 @@ class SigningCosmWasmClient(CosmWasmClient):
         :return: contract address string
         """
         raw_log = json.loads(response.tx_response.raw_log)
-        assert raw_log[0]["events"][1]["attributes"][0]["key"] == "contract_address"
-        return str(raw_log[0]["events"][1]["attributes"][0]["value"])
+        assert raw_log[0]["events"][0]["attributes"][0]["key"] == "_contract_address"
+        return str(raw_log[0]["events"][0]["attributes"][0]["value"])
 
     # Protected methods
     @staticmethod

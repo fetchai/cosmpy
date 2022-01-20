@@ -29,9 +29,9 @@ from cosmpy.common.rest_client import RestClient
 from cosmpy.crypto.keypairs import PrivateKey
 
 # ID and amount of tokens to be minted in contract
-TOKEN_ID_1 = "1234"
+TOKEN_ID_1 = "680564733841876926926749214863536422912"
 AMOUNT_1 = "1"
-TOKEN_ID_2 = "1235"
+TOKEN_ID_2 = "680564733841876926926749214863536422913"
 AMOUNT_2 = "1"
 
 # Path to smart contract

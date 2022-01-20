@@ -23,8 +23,8 @@ from cosmpy.bank.rest_client import BankRestClient, QueryBalanceRequest
 from cosmpy.common.rest_client import RestClient
 
 REST_URL = "http://127.0.0.1:1317"
-ADDRESS = "fetch1mrf5yyjnnlpy0egvpk2pvjdk9667j2gtu8kpfy"
-DENOM = "stake"
+ADDRESS = "fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw"
+DENOM = "atestfet"
 
 bank = BankRestClient(RestClient(REST_URL))
 res = bank.Balance(QueryBalanceRequest(address=ADDRESS, denom=DENOM))

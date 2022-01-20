@@ -108,11 +108,11 @@ class TxRestClient(TxInterface):
         :param messages: List of message in Tx response
         """
         for message in messages:
-            if message["@type"] == "/cosmwasm.wasm.v1beta1.MsgInstantiateContract":
-                message["init_msg"] = base64.b64encode(
-                    json.dumps(message["init_msg"]).encode("UTF8")
+            if message["@type"] == "/cosmwasm.wasm.v1.MsgInstantiateContract":
+                message["msg"] = base64.b64encode(
+                    json.dumps(message["msg"]).encode("UTF8")
                 ).decode()
-            if message["@type"] == "/cosmwasm.wasm.v1beta1.MsgExecuteContract":
+            if message["@type"] == "/cosmwasm.wasm.v1.MsgExecuteContract":
                 message["msg"] = base64.b64encode(
                     json.dumps(message["msg"]).encode("UTF8")
                 ).decode()

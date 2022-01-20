@@ -38,8 +38,8 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceResponse,
 )
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
-from cosmpy.protos.cosmwasm.wasm.v1beta1.query_pb2 import QuerySmartContractStateRequest
-from cosmpy.protos.cosmwasm.wasm.v1beta1.query_pb2_grpc import (
+from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import QuerySmartContractStateRequest
+from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )
 
