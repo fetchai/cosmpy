@@ -78,8 +78,6 @@ class SigningCosmWasmClient(CosmWasmClient):
         :param private_key: Private key used for signing
         :param channel: REST or gRPC querying client
         :param chain_id: Chain ID
-        :param faucet_url: Faucet URL
-        :param faucet_retry_interval: Faucet retry interval in seconds
 
         :raises RuntimeError: if channel is of wrong type.
         """
