@@ -31,6 +31,8 @@ from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
 
+""" Common utilities """
+
 _logger = get_logger(__name__)
 
 
@@ -98,7 +100,9 @@ def refill_wealth_from_faucet(
 
                     if response.status_code != 200:
                         _logger.exception(
-                            f"Failed to refill the balance from faucet, retry in {faucet_retry_interval} seconds: {str(response)}"
+                            "Failed to refill the balance from faucet, retry in {%s} seconds: {%s}",
+                            faucet_retry_interval,
+                            str(response),
                         )
 
                     # Wait for wealth to be refilled
@@ -107,7 +111,10 @@ def refill_wealth_from_faucet(
                 break
             except Exception as e:  # pylint: disable=W0703
                 _logger.exception(
-                    f"Failed to refill the balance from faucet, retry in {faucet_retry_interval} second: {e} ({type(e)})"
+                    "Failed to refill the balance from faucet, retry in {%s} second: {%s} ({%s})",
+                    faucet_retry_interval,
+                    e,
+                    type(e),
                 )
                 time.sleep(faucet_retry_interval)
                 continue
