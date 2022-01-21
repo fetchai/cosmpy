@@ -59,6 +59,7 @@ setup(
         "google-api-python-client",
         "protobuf",
         "grpcio",
+        "click",
     ],
     extras_require={
         "dev": [

@@ -8,6 +8,7 @@ cosmpy = {editable = true, extras = ["dev", "test"], path = "."}
 
 [packages]
 cosmpy = {editable = true, extras = [], path = "."}
+click = "*"
 
 [pipenv]
 allow_prereleases = true

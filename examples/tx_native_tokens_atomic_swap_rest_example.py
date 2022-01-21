@@ -53,14 +53,10 @@ bob_client = SigningCosmWasmClient(BOB_PK, channel, CHAIN_ID)
 print("Before transaction")
 denom_1_balance = validator_client.get_balance(validator_client.address, DENOM_1)
 denom_2_balance = validator_client.get_balance(validator_client.address, DENOM_2)
-print(
-    f"Validator has {denom_1_balance.balance.amount} {DENOM_1} and {denom_2_balance.balance.amount} {DENOM_2}"
-)
+print(f"Validator has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")
 denom_1_balance = bob_client.get_balance(bob_client.address, DENOM_1)
 denom_2_balance = bob_client.get_balance(bob_client.address, DENOM_2)
-print(
-    f"Bob has {denom_1_balance.balance.amount} {DENOM_1} and {denom_2_balance.balance.amount} {DENOM_2}"
-)
+print(f"Bob has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")
 
 # Create atomic-swap send messages
 # Transfer AMOUNT_1 from validator to bob
@@ -95,11 +91,7 @@ validator_client.broadcast_tx(tx)
 print("After transaction")
 denom_1_balance = validator_client.get_balance(validator_client.address, DENOM_1)
 denom_2_balance = validator_client.get_balance(validator_client.address, DENOM_2)
-print(
-    f"Validator has {denom_1_balance.balance.amount} {DENOM_1} and {denom_2_balance.balance.amount} {DENOM_2}"
-)
+print(f"Validator has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")
 denom_1_balance = bob_client.get_balance(bob_client.address, DENOM_1)
 denom_2_balance = bob_client.get_balance(bob_client.address, DENOM_2)
-print(
-    f"Bob has {denom_1_balance.balance.amount} {DENOM_1} and {denom_2_balance.balance.amount} {DENOM_2}"
-)
+print(f"Bob has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")

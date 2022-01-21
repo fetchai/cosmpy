@@ -26,6 +26,7 @@ from grpc._channel import Channel
 
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
+from cosmpy.common.loggers import get_logger
 from cosmpy.common.rest_client import RestClient
 from cosmpy.common.types import JSONLike
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
@@ -33,15 +34,14 @@ from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
-from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
-    QueryBalanceRequest,
-    QueryBalanceResponse,
-)
+from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import QuerySmartContractStateRequest
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )
+
+_logger = get_logger(__name__)
 
 
 class CosmWasmClient:
@@ -73,19 +73,19 @@ class CosmWasmClient:
                 f"Unsupported channel type {type(channel)}"
             )  # pragma: no cover
 
-    def get_balance(self, address: Address, denom: str) -> QueryBalanceResponse:
+    def get_balance(self, address: Address, denom: str) -> int:
         """
         Get balance of specific account and denom
 
         :param address: Address
         :param denom: Denomination
 
-        :return: QueryBalanceResponse
+        :return: amount
         """
         res = self.bank_client.Balance(
             QueryBalanceRequest(address=str(address), denom=denom)
         )
-        return res
+        return int(res.balance.amount)
 
     def query_account_data(self, address: Address) -> BaseAccount:
         """

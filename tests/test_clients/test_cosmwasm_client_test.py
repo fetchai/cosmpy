@@ -27,7 +27,6 @@ from google.protobuf.json_format import ParseDict
 from cosmpy.clients.cosmwasm_client import CosmWasmClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
-from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceResponse
 from tests.helpers import MockRestClient
 
 
@@ -39,13 +38,12 @@ class CosmWasmClientTestCase(unittest.TestCase):
         """Test get balance for the positive result."""
 
         content = {"balance": {"denom": "stake", "amount": "1234"}}
-        expected_response = ParseDict(content, QueryBalanceResponse())
 
         mock_rest_client = MockRestClient(json.dumps(content))
         wasm_client = CosmWasmClient(mock_rest_client)
         response = wasm_client.get_balance("account", "denom")
 
-        assert response == expected_response
+        assert response == 1234
         assert (
             mock_rest_client.last_base_url == "/cosmos/bank/v1beta1/balances/account/"
         )
