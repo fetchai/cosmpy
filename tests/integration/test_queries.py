@@ -147,8 +147,7 @@ class FetchdQueriesTestCase(FetchdTestCase):
         client = CosmWasmClient(rest_client)
         res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
 
-        assert res.balance.denom == DENOM
-        assert int(res.balance.amount) >= 1000
+        assert res >= 1000
 
     def test_send_native_tokens_using_client_rest(self):
         """Test if sending tokens over REST api using CosmWasmClient works correctly"""
