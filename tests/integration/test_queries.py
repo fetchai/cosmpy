@@ -58,18 +58,18 @@ class FetchdQueriesTestCase(FetchdTestCase):
 
         # Get balances before transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
-        balance_from_before = int(from_balance.balance.amount)
+        balance_from_before = from_balance
         to_balance = validator_client.get_balance(Address(BOB_ADDRESS), DENOM)
-        balance_to_before = int(to_balance.balance.amount)
+        balance_to_before = to_balance
 
         # Generate, sign and broadcast send tokens transaction
         validator_client.send_tokens(Address(BOB_ADDRESS), COINS)
 
         # Get balances after transfer
         from_balance = validator_client.get_balance(validator_client.address, DENOM)
-        balance_from_after = int(from_balance.balance.amount)
+        balance_from_after = from_balance
         to_balance = validator_client.get_balance(Address(BOB_ADDRESS), DENOM)
-        balance_to_after = int(to_balance.balance.amount)
+        balance_to_after = to_balance
 
         # Check if balances changed
         assert balance_from_after == balance_from_before - AMOUNT
