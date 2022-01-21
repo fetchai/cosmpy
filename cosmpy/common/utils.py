@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
+""" Common utilities """
 
 import time
 from typing import List, Union
@@ -30,8 +31,6 @@ from cosmpy.common.rest_client import RestClient
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
-
-""" Common utilities """
 
 _logger = get_logger(__name__)
 
