@@ -71,7 +71,7 @@ Below is a simple example for querying an account's balance and sending funds fr
     
     # Query Alice's Balance
     res = client.get_balance(client.address, denom)
-    print(f"Alice's Balance: {res.balance.amount} {res.balance.denom}")
+    print(f"Alice's Balance: {res} {denom}")
     
     # Send 1 <denom> from Alice to Bob
     client.send_tokens(bob_address, [Coin(amount="1", denom=denom)])

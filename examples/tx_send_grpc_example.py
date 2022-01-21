@@ -48,9 +48,9 @@ TO_ADDRESS = Address("fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw")
 # Print balance before transfer
 print("Before transaction")
 res = client.get_balance(client.address, DENOM)
-print(f"Validator has {res.balance.amount} {DENOM}")
+print(f"Validator has {res} {DENOM}")
 res = client.get_balance(TO_ADDRESS, DENOM)
-print(f"Bob has {res.balance.amount} {DENOM}")
+print(f"Bob has {res} {DENOM}")
 
 # Generate, sign and broadcast send tokens transaction
 client.send_tokens(TO_ADDRESS, AMOUNT)
@@ -58,6 +58,6 @@ client.send_tokens(TO_ADDRESS, AMOUNT)
 # Print balance after transfer
 print("After transaction")
 res = client.get_balance(client.address, DENOM)
-print(f"Validator has {res.balance.amount} {DENOM}")
+print(f"Validator has {res} {DENOM}")
 res = client.get_balance(TO_ADDRESS, DENOM)
-print(f"Bob has {res.balance.amount} {DENOM}")
+print(f"Bob has {res} {DENOM}")

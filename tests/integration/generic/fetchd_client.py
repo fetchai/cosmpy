@@ -160,7 +160,7 @@ class FetchdDockerImage:
                 client = CosmWasmClient(rest_client)
                 res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
                 # Make sure that first block is minted
-                if int(res.balance.amount) < 1000:
+                if res < 1000:
                     raise RuntimeError("The node is not set up yet.")
                 return True
             except Exception as e:  # nosec pylint: disable=W0703

@@ -28,4 +28,4 @@ DENOM = "atestfet"
 
 bank = BankRestClient(RestClient(REST_URL))
 res = bank.Balance(QueryBalanceRequest(address=ADDRESS, denom=DENOM))
-print(f"Balance of {ADDRESS} is {res.balance.amount} {res.balance.denom}")
+print(f"Balance of {ADDRESS} is {res} {res.balance.denom}")
