@@ -1,3 +1,5 @@
+import binascii
+from os import urandom
 from pathlib import Path
 from typing import Optional
 
@@ -16,21 +18,64 @@ class CosmosCrypto:
 
     def __init__(
         self,
-        private_key: PrivateKey,
-        prefix: Optional[str] = None,
+        private_key_str: Optional[str] = None,
+        private_key: Optional[PrivateKey] = None,
+        keyfile_path: Optional[str] = None,
+        prefix: str = "fetch",
         account_number: Optional[int] = None,
     ):
         """
-        Init ldger crypto key.
+        Init ledger crypto key.
 
-        :param private_key: Cosmos PrivateKey instance
-        :param prefix: optional key prefix str
+        :param private_key: Optional Cosmos PrivateKey instance
+        :param private_key_str: Optional hex string representing Cosmos PrivateKey
+        :param keyfile_path: Optional path to private key file
+        :param prefix: Cosmos string addresses prefix
         :param account_number: optional account number.
         """
 
-        self.private_key = private_key
+        if private_key is not None:
+            self.private_key = private_key
+        elif private_key_str is not None:
+            self.private_key = CosmosCrypto._load_key_from_str(private_key_str)
+        elif keyfile_path is not None:
+            self.private_key = CosmosCrypto._load_key_from_file(keyfile_path)
+        else:
+            self.private_key = CosmosCrypto._generate_key()
+
         self.prefix = prefix
         self.account_number = account_number
+
+    @staticmethod
+    def _load_key_from_str(key_str: str) -> PrivateKey:
+        """
+        Load private key from string
+
+        :return: Private key
+        """
+
+        return PrivateKey(bytes.fromhex(key_str))
+
+    @staticmethod
+    def _load_key_from_file(keyfile_path: str) -> PrivateKey:
+        """
+        Load private key from file
+
+        :return: Private key
+        """
+
+        return CosmosCrypto._load_key_from_str(Path(keyfile_path).read_text())
+
+    @staticmethod
+    def _generate_key() -> PrivateKey:
+        """
+        Generate random private key
+
+        :return: Private key from random hex string
+        """
+
+        key_str = binascii.b2a_hex(urandom(32)).decode("utf-8")
+        return CosmosCrypto._load_key_from_str(key_str)
 
     def get_address(self) -> str:
         """

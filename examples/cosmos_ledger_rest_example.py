@@ -23,6 +23,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict
 
+from cosmpy.ledger.crypto import CosmosCrypto
 from cosmpy.ledger.ledger import CosmosLedger
 
 # ID and amount of tokens to be minted in contract
@@ -41,21 +42,19 @@ DENOM = "atestfet"
 PREFIX = "fetch"
 
 ledger = CosmosLedger(
-    node_address=REST_ENDPOINT_ADDRESS,
-    denom=DENOM,
+    rest_node_address=REST_ENDPOINT_ADDRESS,
     chain_id=CHAIN_ID,
-    prefix=PREFIX,
     faucet_url=FAUCET_ADDRESS,
 )
 
-user_crypto = ledger.make_new_crypto()
+user_crypto = CosmosCrypto(prefix=PREFIX)
 print(f"User address: {user_crypto.get_address()}")
-print(f"User balance: {ledger.get_balance(user_crypto.get_address())}")
+print(f"User balance: {ledger.get_balances(user_crypto.get_address())}")
 
 # Refill balance from faucet
 print("Refilling funds from faucet.")
 ledger.ensure_funds([user_crypto.get_address()])
-print(f"User balance: {ledger.get_balance(user_crypto.get_address())}")
+print(f"User balance: {ledger.get_balances(user_crypto.get_address())}")
 
 code_id, _ = ledger.deploy_contract(user_crypto, CONTRACT_FILENAME)
 print(f"Code ID: {code_id}")

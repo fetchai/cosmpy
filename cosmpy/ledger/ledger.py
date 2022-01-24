@@ -1,16 +1,15 @@
-import binascii
 import gzip
 import json
 import re
 import time
 from enum import Enum
-from os import urandom
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
 import requests
 from google.protobuf.any_pb2 import Any as ProtoAny
 from google.protobuf.json_format import MessageToDict
+from grpc import insecure_channel
 
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
@@ -19,11 +18,12 @@ from cosmpy.common.rest_client import RestClient
 from cosmpy.common.types import JSONLike
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.ledger.crypto import CosmosCrypto
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
+from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
+from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
 from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
@@ -34,6 +34,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     GetTxRequest,
     GetTxResponse,
 )
+from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     AuthInfo,
     Fee,
@@ -43,6 +44,9 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     TxBody,
 )
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import QuerySmartContractStateRequest
+from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
+    QueryStub as CosmWasmGrpcClient,
+)
 from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
     MsgExecuteContract,
     MsgInstantiateContract,
@@ -83,11 +87,10 @@ class CosmosLedger:
 
     def __init__(
         self,
-        denom: str,
         chain_id: str,
-        prefix: str,
-        node_address: str,
-        validator_pk: Optional[str] = None,
+        rest_node_address: Optional[str] = None,
+        rpc_node_address: Optional[str] = None,
+        validator_crypto: Optional[CosmosCrypto] = None,
         faucet_url: Optional[str] = None,
         msg_retry_interval: int = 2,
         msg_failed_retry_interval: int = 10,
@@ -100,11 +103,10 @@ class CosmosLedger:
         """
         Create new instance to deploy and communicate with smart contract
 
-        :param denom: Denom of stake
         :param chain_id: ID of a blockchain
-        :param prefix: Cosmos string addresses prefix
-        :param node_address: web address of the REST node
-        :param validator_pk: Path to Validator's private key - for funding from validator
+        :param rest_node_address: web address of the REST node
+        :param rpc_node_address: web address of the RPC node
+        :param validator_crypto: Validator's private key - for funding from validator
         :param faucet_url: Address of testnet faucet - for funding from testnet
         :param msg_retry_interval: Interval between message partial steps retries
         :param msg_failed_retry_interval: Interval between complete send/settle message attempts
@@ -116,23 +118,27 @@ class CosmosLedger:
         """
         # Override presets when parameters are specified
         self.chain_id = chain_id
-        self.node_address = node_address
         self.faucet_url = faucet_url
-        self.denom = denom
-        self.prefix = prefix
-
-        self.validator_crypto: Optional[CosmosCrypto] = None
-        if validator_pk is not None:
-            self.validator_crypto = self.load_crypto_from_str(
-                validator_pk, prefix=prefix
-            )
+        self.validator_crypto = validator_crypto
 
         # Clients to communicate with Cosmos/CosmWasm REST node
-        self.rpc_client = RestClient(self.node_address)
-        self.tx_client = TxRestClient(self.rpc_client)
-        self.auth_client = AuthRestClient(self.rpc_client)
-        self.wasm_client = CosmWasmRestClient(self.rpc_client)
-        self.bank_client = BankRestClient(self.rpc_client)
+
+        if rest_node_address:
+            self.node_address = rest_node_address
+            self.rest_client = RestClient(self.node_address)
+            self.tx_client = TxRestClient(self.rest_client)
+            self.auth_client = AuthRestClient(self.rest_client)
+            self.wasm_client = CosmWasmRestClient(self.rest_client)
+            self.bank_client = BankRestClient(self.rest_client)
+        elif rpc_node_address:
+            self.node_address = rest_node_address
+            self.rpc_client = insecure_channel(self.node_address)
+            self.tx_client = TxGrpcClient(self.rpc_client)
+            self.auth_client = AuthGrpcClient(self.rpc_client)
+            self.wasm_client = CosmWasmGrpcClient(self.rpc_client)
+            self.bank_client = BankGrpcClient(self.rpc_client)
+        else:
+            raise RuntimeError("No node address specified")
 
         self.msg_retry_interval = msg_retry_interval
         self.msg_failed_retry_interval = msg_failed_retry_interval
@@ -141,22 +147,6 @@ class CosmosLedger:
         self.n_sending_retries = n_sending_retries
         self.n_total_msg_retries = n_total_msg_retries
         self.get_response_retry_interval = get_response_retry_interval
-
-    def load_crypto_from_file(
-        self, keyfile_path: str, prefix: Optional[str] = None
-    ) -> CosmosCrypto:
-        return self.load_crypto_from_str(Path(keyfile_path).read_text(), prefix)
-
-    def load_crypto_from_str(
-        self, key_str: str, prefix: Optional[str] = None
-    ) -> CosmosCrypto:
-        prefix = prefix or self.prefix
-        private_key = PrivateKey(bytes.fromhex(key_str))
-        return CosmosCrypto(private_key=private_key, prefix=prefix)
-
-    def make_new_crypto(self, prefix: Optional[str] = None) -> CosmosCrypto:
-        key_str = self._generate_key()
-        return self.load_crypto_from_str(key_str, prefix)
 
     def _sleep(self, seconds: Union[float, int]):
         time.sleep(seconds)
@@ -399,25 +389,6 @@ class CosmosLedger:
         err_code = res.tx_response.code  # pylint: disable=E1101
         return MessageToDict(res), err_code
 
-    def ensure_funds(self, addresses: List[str], amount: Optional[int] = None):
-        """
-        Refill funds of addresses using faucet or validator
-
-        :param addresses: Address to be refilled
-        :param amount: Amount of refill
-
-        :return: Nothing
-        """
-
-        if self.faucet_url is not None:
-            self._refill_wealth_from_faucet(addresses, amount)
-        elif self.validator_crypto is not None:
-            self._refill_wealth_from_validator(addresses, amount)
-        else:
-            raise RuntimeError(
-                "Faucet or validator was not specified, cannot refill addresses"
-            )
-
     def query_funds(self, address: str) -> str:
         """
         Query funds of address using faucet or validator. Returns the string 'unknown' if it
@@ -433,18 +404,15 @@ class CosmosLedger:
 
         return ret
 
-    def get_balance(self, address: Address, denom: Optional[str] = None) -> int:
+    def get_balance(self, address: Address, denom: str) -> int:
         """
         Query funds of address and denom
 
         :param address: Address to be query
         :param denom: Denom of coins
 
-        :return: String representation of funds: i.e. 10000FET
+        :return: Integer representation of amount
         """
-
-        if denom is None:
-            denom = self.denom
 
         res = None
         last_exception: Optional[Exception] = None
@@ -468,28 +436,63 @@ class CosmosLedger:
 
         return int(res.balance.amount)
 
-    def _refill_wealth_from_faucet(self, addresses, amount: Optional[int] = None):
+    def get_balances(self, address: Address) -> List[Coin]:
+        """
+        Query all funds of address
+
+        :param address: Address to be query
+
+        :return: List of coins
+        """
+
+        res = None
+        last_exception: Optional[Exception] = None
+        for _ in range(self.n_total_msg_retries):
+            try:
+                res = self.bank_client.AllBalances(
+                    QueryBalanceRequest(address=str(address))
+                )
+                if res is not None:
+                    break
+            except Exception as e:  # pylint: disable=W0703
+                last_exception = e
+                _logger.warning(f"Cannot get balances: {e}")
+                self._sleep(self.msg_retry_interval)
+                continue
+
+        if res is None:
+            raise BroadcastException(
+                f"Getting balances failed after multiple attempts: {last_exception}"
+            )
+
+        return res.balances
+
+    def refill_wealth_from_faucet(self, addresses, amount: Optional[int] = None):
         """
         Uses faucet api to refill balance of addresses
 
         :param addresses: List of addresses to be refilled
+        :param amount: Required amount
 
         :return: Nothing
         """
 
+        min_amount_required = amount if amount else 500000000
+
         for address in addresses:
             attempts_allowed = 10
-
-            if amount:
-                min_amount_required = self.get_balance(address) + amount
-            else:
-                min_amount_required = 500000000
 
             # Retry in case of network issues
             while attempts_allowed > 0:
                 try:
                     attempts_allowed -= 1
-                    balance = self.get_balance(address)
+
+                    # Get balance of first available coin
+                    balances = self.get_balances(address)
+                    if balances:
+                        balance = int(balances[0].amount)
+                    else:
+                        balance = 0
 
                     if balance < min_amount_required:
                         _logger.info(
@@ -519,27 +522,22 @@ class CosmosLedger:
                     continue
         # todo: add result of execution?
 
-    def _send_funds(
+    def send_funds(
         self,
         from_crypto: CosmosCrypto,
         to_address: str,
-        amount: int,
-        denom: Optional[str] = None,
+        amount_coins: List[Coin],
     ):
         """
         Transfer funds from one address to another address
 
         :param from_crypto: Crypto with funds to be sent
         :param to_address: Address to receive funds
-        :param amount: Amount of funds
-        :param denom: Denomination
+        :param amount_coins: List of coins to be sent
 
         :return: Transaction response
         """
-        if denom is None:
-            denom = self.denom
 
-        amount_coins = [Coin(amount=str(amount), denom=denom)]
         from_address = str(from_crypto.get_address())
 
         msg = self.get_packed_send_msg(
@@ -574,40 +572,53 @@ class CosmosLedger:
             account = self._query_account_data(crypto.get_address())
             crypto.account_number = account.account_number  # pylint: disable=E1101
 
-    def _refill_wealth_from_validator(
-        self, addresses: List[str], amount: Optional[int] = None
+    def ensure_funds(
+        self, addresses: List[str], amount_coins: Optional[List[Coin]] = None
+    ):
+        """
+        Refill funds of addresses using faucet or validator
+        :param addresses: Address to be refilled
+        :param amount_coins: Amount of refill
+        :return: Nothing
+        """
+
+        if self.faucet_url is not None:
+            self.refill_wealth_from_faucet(addresses)
+        elif self.validator_crypto is not None:
+            if amount_coins is None:
+                raise RuntimeError("Amounts are required for validator refill")
+            self.refill_wealth_from_validator(
+                self.validator_cryptom, addresses, amount_coins
+            )
+        else:
+            raise RuntimeError(
+                "Faucet or validator was not specified, cannot refill addresses"
+            )
+
+    def refill_wealth_from_validator(
+        self,
+        validator_crypto: CosmosCrypto,
+        addresses: List[str],
+        required_amount_coins: List[Coin],
     ):
         """
         Refill funds of addresses using validator
         - Works only for local-net with validator account
 
-        :param addresses: Address to be refilled
+        :param validator_crypto: Validator crypto
+        :param addresses: Addresses to be refilled
+        :param required_amount_coins: Required amounts of coins
 
         :return: Nothing
         """
-        if self.validator_crypto is None:
-            raise RuntimeError(
-                "Cannot refill from validator. Validator is not defined."
-            )
 
         for address in addresses:
-            balance = self.get_balance(address)
-            assert isinstance(balance, int)
-            if balance < 500000000 or amount is not None:
-                _logger.info(
-                    f"Refilling balance of {str(address)} from validator {str(self.validator_crypto.get_address())}"
-                )
-                self._send_funds(self.validator_crypto, address, 100000000)
+            # balances = self.get_balances(address)
 
-    @staticmethod
-    def _generate_key() -> str:
-        """
-        Generate random private key
+            # Subtract coins
+            amount_coins = required_amount_coins
 
-        :return: Random hex string representation of private key
-        """
-
-        return binascii.b2a_hex(urandom(32)).decode("utf-8")
+            self.send_funds(validator_crypto, address, amount_coins)
 
     def generate_tx(
         self,
@@ -775,14 +786,24 @@ class CosmosLedger:
             )
 
         # Transaction cannot be broadcast because of wrong format, sequence, signature, etc.
-        if broad_tx_resp.tx_response.code != 0:
+        if broad_tx_resp.tx_response.code != CLIENT_CODE_MESSAGE_SUCCESSFUL:
             raw_log = broad_tx_resp.tx_response.raw_log
             raise BroadcastException(f"Transaction cannot be broadcast: {raw_log}")
 
         # Wait for transaction to settle
-        return self._make_tx_request(txhash=broad_tx_resp.tx_response.txhash)
+        return self.get_tx(txhash=broad_tx_resp.tx_response.txhash)
 
-    def _make_tx_request(self, txhash):
+    def get_tx(self, txhash) -> GetTxResponse:
+        """
+        Get transaction receipt
+
+        :param txhash: TX hash of the transaction
+
+        :raises BroadcastException: if getting tx receipt fails.
+
+        :return: GetTxResponse
+        """
+
         tx_request = GetTxRequest(hash=txhash)
         last_exception = None
         tx_response = None
@@ -889,16 +910,21 @@ class CosmosLedger:
         return send_msg_packed
 
     def check_availability(self):
-        try:
-            result = json.loads(self.rpc_client.get("/node_info"))
-            if result["node_info"]["network"] != self.chain_id:
-                raise ValueError("Bad chain id")
-        except Exception as e:
-            raise LedgerServerNotAvailable(
-                f"ledger server is not available with address: {self.node_address}: {e}"
-            ) from e
+        if self.rest_client:
+            try:
+                result = json.loads(self.rest_client.get("/node_info"))
+                if result["node_info"]["network"] != self.chain_id:
+                    raise ValueError("Bad chain id")
+            except Exception as e:
+                raise LedgerServerNotAvailable(
+                    f"ledger server is not available with address: {self.node_address}: {e}"
+                ) from e
+        else:
+            raise NotImplementedError(
+                "Checking availability of RPC node not implemented yet"
+            )
 
     @classmethod
     def validate_address(cls, address: str):
         if not cls._ADDR_RE.match(address):
-            raise ValueError(f"Contract address {address} is invalid")
+            raise ValueError(f"Address {address} is invalid")
