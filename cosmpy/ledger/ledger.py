@@ -389,21 +389,6 @@ class CosmosLedger:
         err_code = res.tx_response.code  # pylint: disable=E1101
         return MessageToDict(res), err_code
 
-    def query_funds(self, address: str) -> str:
-        """
-        Query funds of address using faucet or validator. Returns the string 'unknown' if it
-        cannot query the network
-
-        :param address: Address to be query
-
-        :return: String representation of funds: i.e. 10000FET
-        """
-
-        balance = str(self.get_balance(address))
-        ret = "unknown" if balance is None else balance
-
-        return ret
-
     def get_balance(self, address: Address, denom: str) -> int:
         """
         Query funds of address and denom
