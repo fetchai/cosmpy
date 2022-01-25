@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Tests for the CosmWasm client module of the Clients Package."""
+"""Tests for the CosmosLedger client module of the Clients Package."""
 
 import base64
 import gzip
@@ -177,8 +177,8 @@ def mock_get_contract_address(response: GetTxResponse) -> str:
     return CONTRACT_ADDRESS
 
 
-class CosmWasmClientTestCase(unittest.TestCase):
-    """Test case of CosmWasm client module."""
+class CosmosLedgerTestCase(unittest.TestCase):
+    """Test case of CosmosLedger module."""
 
     @classmethod
     def setUpClass(cls):

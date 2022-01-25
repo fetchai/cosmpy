@@ -54,3 +54,4 @@ CONTRACT_FILENAME = Path(
     os.path.join(CUR_PATH, "..", "..", "..", "contracts", "cw_erc1155.wasm")
 )
 TOKEN_ID = "680564733841876926926749214863536422914"  # nosec
+LABEL = "some_label"

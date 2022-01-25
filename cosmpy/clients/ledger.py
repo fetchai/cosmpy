@@ -422,7 +422,7 @@ class CosmosLedger:
         err_code = res.tx_response.code  # pylint: disable=E1101
         return MessageToDict(res), err_code
 
-    def get_balance(self, address: Address, denom: str) -> int:
+    def get_balance(self, address: str, denom: str) -> int:
         """
         Query funds of address and denom
 
@@ -456,7 +456,7 @@ class CosmosLedger:
 
         return int(res.balance.amount)
 
-    def get_balances(self, address: Address) -> List[Coin]:
+    def get_balances(self, address: str) -> List[Coin]:
         """
         Query all funds of address
 
@@ -607,7 +607,7 @@ class CosmosLedger:
             if amount_coins is None:
                 raise RuntimeError("Amounts are required for validator refill")
             self.refill_wealth_from_validator(
-                self.validator_cryptom, addresses, amount_coins
+                self.validator_crypto, addresses, amount_coins
             )
         else:
             raise RuntimeError(
@@ -682,7 +682,7 @@ class CosmosLedger:
         tx = Tx(body=tx_body, auth_info=auth_info)
         return tx
 
-    def query_account_data(self, address: Address) -> BaseAccount:
+    def query_account_data(self, address: str) -> BaseAccount:
         """
         Query account data for signing
 
@@ -748,7 +748,7 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_send_msg(
-        from_address: Address, to_address: Address, amount: List[Coin]
+        from_address: Address, to_address: str, amount: List[Coin]
     ) -> ProtoAny:
         """
         Generate and pack MsgSend
@@ -845,9 +845,7 @@ class CosmosLedger:
         return tx_response
 
     @staticmethod
-    def get_packed_store_msg(
-        sender_address: Address, contract_filename: Path
-    ) -> ProtoAny:
+    def get_packed_store_msg(sender_address: str, contract_filename: Path) -> ProtoAny:
         """
         Loads contract bytecode, generate and return packed MsgStoreCode
 
@@ -870,7 +868,7 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_init_msg(
-        sender_address: Address,
+        sender_address: str,
         code_id: int,
         init_msg: JSONLike,
         label="contract",
@@ -901,7 +899,7 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_exec_msg(
-        sender_address: Address,
+        sender_address: str,
         contract_address: str,
         msg: JSONLike,
         funds: Optional[List[Coin]] = None,

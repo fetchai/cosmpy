@@ -25,7 +25,6 @@ from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.clients.crypto import CosmosCrypto
 from cosmpy.clients.ledger import CosmosLedger
 from cosmpy.common.rest_client import RestClient
-from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from tests.integration.generic.config import (
     AMOUNT,
@@ -35,6 +34,7 @@ from tests.integration.generic.config import (
     CONTRACT_FILENAME,
     DENOM,
     GRPC_ENDPOINT_ADDRESS,
+    LABEL,
     REST_ENDPOINT_ADDRESS,
     TOKEN_ID,
     VALIDATOR_ADDRESS,
@@ -68,9 +68,9 @@ class FetchdQueriesTestCase(FetchdTestCase):
         ledger.send_funds(validator_crypto, BOB_ADDRESS, COINS)
 
         # Get balances after transfer
-        from_balance = ledger.get_balance(ledger.address, DENOM)
+        from_balance = ledger.get_balance(validator_crypto.get_address(), DENOM)
         balance_from_after = from_balance
-        to_balance = ledger.get_balance(Address(BOB_ADDRESS), DENOM)
+        to_balance = ledger.get_balance(BOB_ADDRESS, DENOM)
         balance_to_after = to_balance
 
         # Check if balances changed
@@ -90,12 +90,12 @@ class FetchdQueriesTestCase(FetchdTestCase):
         """
 
         # Store contract
-        code_id, _ = ledger.deploy_contract(validator_crypto, CONTRACT_FILENAME)
+        code_id, _ = ledger.deploy_contract(validator_crypto, str(CONTRACT_FILENAME))
 
         # Init contract
         init_msg: Dict[str, Any] = {}
         contract_address, _ = ledger.instantiate_contract(
-            validator_crypto, code_id, init_msg
+            validator_crypto, code_id, init_msg, LABEL
         )
 
         # Create token with ID TOKEN_ID
@@ -106,29 +106,29 @@ class FetchdQueriesTestCase(FetchdTestCase):
                 "path": "some_path",
             }
         }
-        res_create = ledger.execute_contract(
+        _, err_code = ledger.execute_contract(
             validator_crypto, contract_address, create_single_msg
         )
-        assert res_create.tx_response.code == 0
+        assert err_code == 0
 
         # Mint 1 token with ID TOKEN_ID and give it to validator
         mint_single_msg = {
             "mint_single": {
-                "to_address": str(ledger.address),
+                "to_address": str(validator_crypto.get_address()),
                 "id": TOKEN_ID,
                 "supply": str(AMOUNT),
                 "data": "some_data",
             },
         }
-        res_mint = ledger.execute_contract(
+        _, err_code = ledger.execute_contract(
             validator_crypto, contract_address, mint_single_msg
         )
-        assert res_mint.tx_response.code == 0
+        assert err_code == 0
 
         # Query validator's balance of token TOKEN_ID
         msg = {
             "balance": {
-                "address": str(ledger.address),
+                "address": str(validator_crypto.get_address()),
                 "id": TOKEN_ID,
             }
         }
