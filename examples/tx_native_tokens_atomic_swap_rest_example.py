@@ -20,8 +20,7 @@
 """ REST example of native tokens atomic swap """
 
 from cosmpy.clients.crypto import CosmosCrypto
-from cosmpy.clients.ledger import CosmosLedger
-from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmpy.clients.ledger import Coin, CosmosLedger
 
 # Denomination and amount of transferred tokens
 DENOM_1 = "stake"

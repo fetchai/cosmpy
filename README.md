@@ -54,8 +54,7 @@ To install the project use:
 Below is a simple example for querying an account's balance and sending funds from one account to another using `RestClient`:
 
     from cosmpy.clients.ledger import CosmosLedger
-    from cosmpy.clients.crypto import CosmosCrypto
-    from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+    from cosmpy.clients.crypto import CosmosCrypto, Coin
 
     # Data
     rest_node_address = "http://the_rest_endpoint"
