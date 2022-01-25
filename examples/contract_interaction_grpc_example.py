@@ -24,10 +24,8 @@ import os
 from pathlib import Path
 from typing import Any, Dict
 
-from grpc import insecure_channel
-
-from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosmpy.crypto.keypairs import PrivateKey
+from cosmpy.clients.crypto import CosmosCrypto
+from cosmpy.clients.ledger import CosmosLedger
 
 # ID and amount of tokens to be minted in contract
 TOKEN_ID = "680564733841876926926749214863536422912"
@@ -40,56 +38,61 @@ CONTRACT_FILENAME = Path(os.path.join(CUR_PATH, "..", "contracts", "cw_erc1155.w
 # Node config
 GRPC_ENDPOINT_ADDRESS = "localhost:9090"
 CHAIN_ID = "testing"
+DENOM = "atestfet"
+PREFIX = "fetch"
 
-# Private key of sender's account
-VALIDATOR_PK = PrivateKey(
-    bytes.fromhex("0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae")
+ledger = CosmosLedger(
+    rpc_node_address=GRPC_ENDPOINT_ADDRESS,
+    chain_id=CHAIN_ID,
 )
 
-# Create client
-channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
-client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
+# Private key of Validator on local net that already has funds
+validator_crypto = CosmosCrypto(
+    private_key_str="0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae",
+    prefix=PREFIX,
+)
 
-# Store contract
-code_id = client.deploy_contract(CONTRACT_FILENAME)
-print(f"Contract stored, code ID: {code_id}")
+code_id, _ = ledger.deploy_contract(validator_crypto, CONTRACT_FILENAME)
+print(f"Code ID: {code_id}")
 
-# Init contract
 init_msg: Dict[str, Any] = {}
-contract_address = client.instantiate_contract(code_id, init_msg)
+contract_address, _ = ledger.send_init_msg(
+    validator_crypto, code_id, init_msg, "some_label"
+)
 print(f"Contract address: {contract_address}")
+
 
 # Create token with ID TOKEN_ID
 create_single_msg = {
     "create_single": {
-        "item_owner": str(client.address),
+        "item_owner": validator_crypto.get_address(),
         "id": TOKEN_ID,
         "path": "some_path",
     }
 }
-response = client.execute_contract(contract_address, create_single_msg)
+ledger.send_execute_msg(validator_crypto, contract_address, create_single_msg)
 print(f"Created token with ID {TOKEN_ID}")
 
 # Mint 1 token with ID TOKEN_ID and give it to validator
 mint_single_msg = {
     "mint_single": {
-        "to_address": str(client.address),
+        "to_address": validator_crypto.get_address(),
         "id": TOKEN_ID,
         "supply": AMOUNT,
         "data": "some_data",
     },
 }
-response = client.execute_contract(contract_address, mint_single_msg)
+response = ledger.send_execute_msg(validator_crypto, contract_address, mint_single_msg)
 print(f"Minted 1 token with ID {TOKEN_ID}")
 
 # Query validator's balance of token TOKEN_ID
 msg = {
     "balance": {
-        "address": str(client.address),
+        "address": validator_crypto.get_address(),
         "id": TOKEN_ID,
     }
 }
-res = client.query_contract_state(contract_address=contract_address, msg=msg)
+res = ledger.query_contract_state(contract_address, msg)
 
 # Check if balance of token with ID TOKEN_ID of validator is correct
 assert res["balance"] == AMOUNT

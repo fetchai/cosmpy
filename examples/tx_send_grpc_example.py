@@ -19,11 +19,8 @@
 
 """ gRPC example of sending and querying funds """
 
-from grpc import insecure_channel
-
-from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
+from cosmpy.clients.crypto import CosmosCrypto
+from cosmpy.clients.ledger import CosmosLedger
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
@@ -33,31 +30,33 @@ AMOUNT = [Coin(amount="1", denom=DENOM)]
 # Node config
 GRPC_ENDPOINT_ADDRESS = "localhost:9090"
 CHAIN_ID = "testing"
+PREFIX = "fetch"
 
-# Private key of sender's account
-FROM_PK = PrivateKey(
-    bytes.fromhex("0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae")
+# Private key of Validator on local net that already has funds
+sender_crypto = CosmosCrypto(
+    private_key_str="0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae",
+    prefix=PREFIX,
 )
-# Create client
-channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
-client = SigningCosmWasmClient(FROM_PK, channel, CHAIN_ID)
 
 # Address of recipient account
-TO_ADDRESS = Address("fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw")
+TO_ADDRESS = "fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw"
+
+# Create ledger
+ledger = CosmosLedger(chain_id=CHAIN_ID, rpc_node_address=GRPC_ENDPOINT_ADDRESS)
 
 # Print balance before transfer
 print("Before transaction")
-res = client.get_balance(client.address, DENOM)
+res = ledger.get_balance(sender_crypto.get_address(), DENOM)
 print(f"Validator has {res} {DENOM}")
-res = client.get_balance(TO_ADDRESS, DENOM)
-print(f"Bob has {res} {DENOM}")
+res = ledger.get_balance(TO_ADDRESS, DENOM)
+print(f"Receiver has {res} {DENOM}")
 
 # Generate, sign and broadcast send tokens transaction
-client.send_tokens(TO_ADDRESS, AMOUNT)
+ledger.send_funds(sender_crypto, TO_ADDRESS, AMOUNT)
 
 # Print balance after transfer
 print("After transaction")
-res = client.get_balance(client.address, DENOM)
+res = ledger.get_balance(sender_crypto.get_address(), DENOM)
 print(f"Validator has {res} {DENOM}")
-res = client.get_balance(TO_ADDRESS, DENOM)
-print(f"Bob has {res} {DENOM}")
+res = ledger.get_balance(TO_ADDRESS, DENOM)
+print(f"Receiver has {res} {DENOM}")

@@ -19,13 +19,14 @@
 
 """REST example of query balance."""
 
-from cosmpy.bank.rest_client import BankRestClient, QueryBalanceRequest
-from cosmpy.common.rest_client import RestClient
+from cosmpy.clients.ledger import CosmosLedger
 
 REST_URL = "http://127.0.0.1:1317"
 ADDRESS = "fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw"
 DENOM = "atestfet"
+CHAIN_ID = "testing"
 
-bank = BankRestClient(RestClient(REST_URL))
-res = bank.Balance(QueryBalanceRequest(address=ADDRESS, denom=DENOM))
-print(f"Balance of {ADDRESS} is {res} {res.balance.denom}")
+
+# Create ledger
+ledger = CosmosLedger(chain_id=CHAIN_ID, rest_node_address=REST_URL)
+print(f"Balance of {ADDRESS} is {ledger.get_balance(ADDRESS,DENOM)} {DENOM}")

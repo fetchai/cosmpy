@@ -2,7 +2,6 @@ import gzip
 import json
 import re
 import time
-from enum import Enum
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
@@ -13,12 +12,12 @@ from grpc import insecure_channel
 
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
+from cosmpy.clients.crypto import CosmosCrypto
 from cosmpy.common.loggers import get_logger
 from cosmpy.common.rest_client import RestClient
 from cosmpy.common.types import JSONLike
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
-from cosmpy.ledger.crypto import CosmosCrypto
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
@@ -56,12 +55,6 @@ from cosmpy.tx import sign_transaction
 from cosmpy.tx.rest_client import TxRestClient
 
 _logger = get_logger(__name__)
-
-
-# Pre-configured CosmWasm nodes
-class NodeConfigPreset(Enum):
-    local_net = 0
-    stargate_world = 1
 
 
 class LedgerServerNotAvailable(Exception):
@@ -131,7 +124,7 @@ class CosmosLedger:
             self.wasm_client = CosmWasmRestClient(self.rest_client)
             self.bank_client = BankRestClient(self.rest_client)
         elif rpc_node_address:
-            self.node_address = rest_node_address
+            self.node_address = rpc_node_address
             self.rpc_client = insecure_channel(self.node_address)
             self.tx_client = TxGrpcClient(self.rpc_client)
             self.auth_client = AuthGrpcClient(self.rpc_client)
@@ -182,7 +175,7 @@ class CosmosLedger:
                     [sender_crypto.get_pubkey_as_bytes()],
                     gas_limit=gas,
                 )
-                self.sign_tx(tx, sender_crypto)
+                self.sign_tx(sender_crypto, tx)
 
                 res = self.broadcast_tx(tx)
 
@@ -245,7 +238,7 @@ class CosmosLedger:
                     [sender_crypto.get_pubkey_as_bytes()],
                     gas_limit=gas,
                 )
-                self.sign_tx(tx, sender_crypto)
+                self.sign_tx(sender_crypto, tx)
 
                 res = self.broadcast_tx(tx)
 
@@ -284,10 +277,10 @@ class CosmosLedger:
 
         return contract_address, MessageToDict(res)
 
-    def send_query_msg(
+    def query_contract_state(
         self,
         contract_address: str,
-        query_msg: JSONLike,
+        msg: JSONLike,
         num_retries: Optional[int] = None,
     ) -> JSONLike:
         """
@@ -295,13 +288,13 @@ class CosmosLedger:
         - No signing is required because it works with contract as read only
 
         :param contract_address: Address of contract running on chain
-        :param query_msg: Query message in json format
+        :param msg: Query message in json format
         :param num_retries: Optional number of retries
 
         :return: Query json response
         """
         request = QuerySmartContractStateRequest(
-            address=contract_address, query_data=json.dumps(query_msg).encode("UTF8")
+            address=contract_address, query_data=json.dumps(msg).encode("UTF8")
         )
 
         if num_retries is None:
@@ -368,7 +361,7 @@ class CosmosLedger:
                     [sender_crypto.get_pubkey_as_bytes()],
                     gas_limit=gas,
                 )
-                self.sign_tx(tx, sender_crypto)
+                self.sign_tx(sender_crypto, tx)
                 res = self.broadcast_tx(tx)
                 if res is not None:
                     break
@@ -532,17 +525,17 @@ class CosmosLedger:
         tx = self.generate_tx(
             [msg], [from_address], [from_crypto.get_pubkey_as_bytes()]
         )
-        self.sign_tx(tx, from_crypto)
+        self.sign_tx(from_crypto, tx)
 
         return self.broadcast_tx(tx)
 
-    def sign_tx(self, tx: Tx, crypto: CosmosCrypto):
+    def sign_tx(self, crypto: CosmosCrypto, tx: Tx):
         """
         Sign tx using crypto
         - network is used to query account_number if not already stored in crypto
 
-        :param tx: Transaction to be signed
         :param crypto: Crypto used to sign transaction
+        :param tx: Transaction to be signed
 
         :return: Nothing
         """

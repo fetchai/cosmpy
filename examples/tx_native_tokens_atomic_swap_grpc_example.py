@@ -18,11 +18,8 @@
 # ------------------------------------------------------------------------------
 
 """ gRPC example of native tokens atomic swap """
-
-from grpc import insecure_channel
-
-from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
-from cosmpy.crypto.keypairs import PrivateKey
+from cosmpy.clients.crypto import CosmosCrypto
+from cosmpy.clients.ledger import CosmosLedger
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
@@ -34,65 +31,68 @@ AMOUNT_2 = [Coin(amount="1", denom=DENOM_2)]
 # Node config
 GRPC_ENDPOINT_ADDRESS = "localhost:9090"
 CHAIN_ID = "testing"
+PREFIX = "fetch"
 
-# Private key of validator's account
-VALIDATOR_PK = PrivateKey(
-    bytes.fromhex("0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae")
+# Private key of Validator on local net that already has funds
+validator_crypto = CosmosCrypto(
+    private_key_str="0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae",
+    prefix=PREFIX,
 )
 
 # Private key of bob's account
-BOB_PK = PrivateKey(
-    bytes.fromhex("439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636")
+bob_crypto = CosmosCrypto(
+    private_key_str="439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636",
+    prefix=PREFIX,
 )
 
-# Create clients
-channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
-validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
-bob_client = SigningCosmWasmClient(BOB_PK, channel, CHAIN_ID)
+ledger = CosmosLedger(
+    rpc_node_address=GRPC_ENDPOINT_ADDRESS,
+    chain_id=CHAIN_ID,
+)
 
 # Print balances before transfer
 print("Before transaction")
-denom_1_balance = validator_client.get_balance(validator_client.address, DENOM_1)
-denom_2_balance = validator_client.get_balance(validator_client.address, DENOM_2)
+denom_1_balance = ledger.get_balance(validator_crypto.get_address(), DENOM_1)
+denom_2_balance = ledger.get_balance(validator_crypto.get_address(), DENOM_2)
 print(f"Validator has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")
-denom_1_balance = bob_client.get_balance(bob_client.address, DENOM_1)
-denom_2_balance = bob_client.get_balance(bob_client.address, DENOM_2)
+denom_1_balance = ledger.get_balance(bob_crypto.get_address(), DENOM_1)
+denom_2_balance = ledger.get_balance(bob_crypto.get_address(), DENOM_2)
 print(f"Bob has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")
 
 # Create atomic-swap send messages
 # Transfer AMOUNT_1 from validator to bob
-msg_1 = validator_client.get_packed_send_msg(
-    from_address=validator_client.address,
-    to_address=bob_client.address,
+msg_1 = ledger.get_packed_send_msg(
+    from_address=validator_crypto.get_address(),
+    to_address=bob_crypto.get_address(),
     amount=AMOUNT_1,
 )
 
 # Transfer AMOUNT_2 from bob to validator
-msg_2 = validator_client.get_packed_send_msg(
-    from_address=bob_client.address,
-    to_address=validator_client.address,
+msg_2 = ledger.get_packed_send_msg(
+    from_address=bob_crypto.get_address(),
+    to_address=validator_crypto.get_address(),
     amount=AMOUNT_2,
 )
 
 # Generate one transaction containing both messages
-tx = validator_client.generate_tx(
+tx = ledger.generate_tx(
     packed_msgs=[msg_1, msg_2],
-    from_addresses=[validator_client.address, bob_client.address],
-    pub_keys=[validator_client.public_key_bytes, bob_client.public_key_bytes],
+    from_addresses=[validator_crypto.get_address(), bob_crypto.get_address()],
+    pub_keys=[validator_crypto.get_pubkey_as_bytes(), bob_crypto.get_pubkey_as_bytes()],
 )
 
 # Sign transaction by both clients
-validator_client.sign_tx(tx)
-bob_client.sign_tx(tx)
+ledger.sign_tx(validator_crypto, tx)
+ledger.sign_tx(bob_crypto, tx)
 
 # Broadcast transaction
-validator_client.broadcast_tx(tx)
+ledger.broadcast_tx(tx)
 
 # Print balances after transfer
 print("After transaction")
-denom_1_balance = validator_client.get_balance(validator_client.address, DENOM_1)
-denom_2_balance = validator_client.get_balance(validator_client.address, DENOM_2)
+denom_1_balance = ledger.get_balance(validator_crypto.get_address(), DENOM_1)
+denom_2_balance = ledger.get_balance(validator_crypto.get_address(), DENOM_2)
 print(f"Validator has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")
-denom_1_balance = bob_client.get_balance(bob_client.address, DENOM_1)
-denom_2_balance = bob_client.get_balance(bob_client.address, DENOM_2)
+denom_1_balance = ledger.get_balance(bob_crypto.get_address(), DENOM_1)
+denom_2_balance = ledger.get_balance(bob_crypto.get_address(), DENOM_2)
 print(f"Bob has {denom_1_balance} {DENOM_1} and {denom_2_balance} {DENOM_2}")
