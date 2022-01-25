@@ -19,6 +19,8 @@
 
 """Implementation of a ledger service class."""
 
+# pylint: disable=C0302
+
 import gzip
 import json
 import re
@@ -972,6 +974,9 @@ class CosmosLedger:
         """
         Check node availability
 
+        :raises ValueError: When bad chain ID.
+        :raises LedgerServerNotAvailable: When ledger server is not available.
+        :raises NotImplementedError for RPC node
         """
 
         if self.rest_client:
@@ -995,6 +1000,7 @@ class CosmosLedger:
 
         :param address: Address to be checked
 
+        :raises ValueError: if address is in wrong format.
         """
 
         if not cls._ADDR_RE.match(address):
