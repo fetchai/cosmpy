@@ -35,6 +35,7 @@ from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.clients.crypto import CosmosCrypto
 from cosmpy.clients.ledger import BroadcastException, CosmosLedger
+from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
@@ -550,7 +551,7 @@ class CosmosLedgerTestCase(unittest.TestCase):
         expected_response = {"balance": "1"}
 
         mock_rest_client = MockRestClient(raw_content)
-        self.ledger.wasm_client._rest_api = mock_rest_client
+        self.ledger.wasm_client = CosmWasmRestClient(mock_rest_client)
         response = self.ledger.query_contract_state("fetchcontractaddress", {})
 
         assert response == expected_response

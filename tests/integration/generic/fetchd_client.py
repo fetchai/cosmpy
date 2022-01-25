@@ -128,7 +128,7 @@ class FetchdDockerImage:
         :param dirpath: str target directory path.
         """
         path = os.path.join(dirpath, self.ENTRYPOINT_FILENAME)
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf8") as f:
             f.writelines(line + "\n" for line in self.ENTRYPOINT_LINES)
         os.chmod(path, 300)  # nosec
 

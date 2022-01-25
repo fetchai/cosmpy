@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Implementation of crypto class that represents user on a blockchain."""
+
 import binascii
 from os import urandom
 from pathlib import Path
@@ -87,7 +89,9 @@ class CosmosCrypto:
         :return: Private key
         """
 
-        return CosmosCrypto._load_key_from_str(Path(keyfile_path).read_text())
+        return CosmosCrypto._load_key_from_str(
+            Path(keyfile_path).read_text(encoding="utf-8")
+        )
 
     @staticmethod
     def _generate_key() -> PrivateKey:
@@ -131,7 +135,7 @@ class CosmosCrypto:
 
         :param filename: str, path to file to save key
         """
-        Path(filename).write_text(self.as_str())
+        Path(filename).write_text(self.as_str(), encoding="utf-8")
 
     def as_str(self) -> str:
         """

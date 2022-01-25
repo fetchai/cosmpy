@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Implementation of a ledger service class."""
+
 import gzip
 import json
 import re
@@ -90,11 +92,17 @@ DEFAULT_GAS_LIMIT = (
 
 
 class BroadcastException(Exception):
-    pass
+    """
+    Broadcasting exception.
+    """
 
 
 # Class that provides interface to communicate with CosmWasm/Fetch blockchain
 class CosmosLedger:
+    """
+    Implementation of a ledger service class.
+    """
+
     _ADDR_RE = re.compile("^fetch[0-9a-z]{39}$")
 
     def __init__(
@@ -173,7 +181,14 @@ class CosmosLedger:
         self.n_total_msg_retries = n_total_msg_retries
         self.get_response_retry_interval = get_response_retry_interval
 
-    def _sleep(self, seconds: Union[float, int]):
+    @staticmethod
+    def _sleep(seconds: Union[float, int]):
+        """
+        Sleep n seconds
+
+        :param seconds: Number of seconds to sleep
+        """
+
         time.sleep(seconds)
 
     def deploy_contract(
@@ -218,7 +233,7 @@ class CosmosLedger:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
                 _logger.warning(
-                    f"Failed to deploy contract code due BroadcastException: {e}"
+                    "Failed to deploy contract code due BroadcastException: {%s}", e
                 )
                 self._sleep(self.msg_failed_retry_interval)
                 attempt += 1
@@ -301,12 +316,16 @@ class CosmosLedger:
             except BroadcastException as e:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
-                _logger.warning(f"Failed to init contract due BroadcastException: {e}")
+                _logger.warning(
+                    "Failed to init contract due BroadcastException: {%s}", e
+                )
             except json.decoder.JSONDecodeError as e:
                 # Failure due to response parsing error
                 last_exception = e
                 _logger.warning(
-                    f"Failed to parse init Contract response {res.tx_response.raw_log if res is not None else None} : {e}"
+                    "Failed to parse init Contract response {%s} : {%s}",
+                    res.tx_response.raw_log if res is not None else None,
+                    e,
                 )
 
             if contract_address is None:
@@ -358,7 +377,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning(f"Cannot get contract state: {e}")
+                _logger.warning("Cannot get contract state: {%s}", e)
                 self._sleep(self.msg_failed_retry_interval)
 
         if res is None:
@@ -420,7 +439,7 @@ class CosmosLedger:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
                 _logger.warning(
-                    f"Failed to deploy contract code due BroadcastException: {e}"
+                    "Failed to deploy contract code due BroadcastException: {%s}", e
                 )
                 self._sleep(self.msg_failed_retry_interval)
 
@@ -456,7 +475,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning(f"Cannot get balance: {e}")
+                _logger.warning("Cannot get balance: {%s}", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -489,7 +508,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning(f"Cannot get balances: {e}")
+                _logger.warning("Cannot get balances: {%s}", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -500,7 +519,9 @@ class CosmosLedger:
 
         return res.balances
 
-    def refill_wealth_from_faucet(self, addresses, amount: Optional[int] = None):
+    def refill_wealth_from_faucet(
+        self, addresses: List[str], amount: Optional[int] = None
+    ):
         """
         Uses faucet api to refill balance of addresses
 
@@ -527,7 +548,9 @@ class CosmosLedger:
 
                     if balance < min_amount_required:
                         _logger.info(
-                            f"Refilling balance of {str(address)} from faucet. Currently: {balance}"
+                            "Refilling balance of {%s} from faucet. Currently: {%s}",
+                            address,
+                            balance,
                         )
                         # Send faucet request
                         response = requests.post(
@@ -537,21 +560,25 @@ class CosmosLedger:
 
                         if response.status_code != 200:
                             _logger.exception(
-                                f"Failed to refill the balance from faucet, retry in {self.faucet_retry_interval} seconds: {str(response)}"
+                                "Failed to refill the balance from faucet, retry in {%s} seconds: {%s}",
+                                self.faucet_retry_interval,
+                                str(response),
                             )
 
                         # Wait for wealth to be refilled
                         self._sleep(self.faucet_retry_interval)
                         continue
-                    _logger.info(f"Balance of {str(address)} is {str(balance)}")
+                    _logger.info("Balance of {%s} is {%s}", address, balance)
                     break
                 except Exception as e:  # pylint: disable=W0703
                     _logger.exception(
-                        f"Failed to refill the balance from faucet, retry in {self.faucet_retry_interval} second: {e} ({type(e)})"
+                        "Failed to refill the balance from faucet, retry in {%s} second: {%s} ({%s})",
+                        self.faucet_retry_interval,
+                        e,
+                        type(e),
                     )
                     self._sleep(self.faucet_retry_interval)
                     continue
-        # todo: add result of execution?
 
     def send_funds(
         self,
@@ -721,7 +748,7 @@ class CosmosLedger:
                 break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning(f"Cannot query account data: {e}")
+                _logger.warning("Cannot query account data: {%s}", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -811,7 +838,7 @@ class CosmosLedger:
                 break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning(f"Transaction broadcasting failed: {e}")
+                _logger.warning("Transaction broadcasting failed: {%s}", e)
                 self._sleep(self.msg_retry_interval)
 
         if broad_tx_resp is None:
@@ -942,6 +969,11 @@ class CosmosLedger:
         return send_msg_packed
 
     def check_availability(self):
+        """
+        Check node availability
+
+        """
+
         if self.rest_client:
             try:
                 result = json.loads(self.rest_client.get("/node_info"))
@@ -958,5 +990,12 @@ class CosmosLedger:
 
     @classmethod
     def validate_address(cls, address: str):
+        """
+        Check if given address is in correct format
+
+        :param address: Address to be checked
+
+        """
+
         if not cls._ADDR_RE.match(address):
             raise ValueError(f"Address {address} is invalid")

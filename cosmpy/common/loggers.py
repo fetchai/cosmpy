@@ -45,7 +45,7 @@ class ColorFormatter(logging.Formatter):
             level = record.levelname.lower()
             msg = record.getMessage()
             if level in self.colors:
-                prefix = click.style("{}: ".format(level), **self.colors[level])
+                prefix = click.style(f"{level}: ", **self.colors[level])
                 msg = "\n".join(prefix + x for x in msg.splitlines())
             return msg
         return logging.Formatter.format(self, record)  # pragma: no cover
@@ -65,7 +65,7 @@ _loggers: Dict = {}
 
 def get_logger(name, name_length=1):
     """Get logger by name."""
-    global _loggers  # pylint: disable=W0603
+    global _loggers  # pylint: disable=W0603, W0602
     splitted = name.split(".")
     logger_name = ".".join(splitted[-name_length:])
     logger = logging.getLogger(logger_name)
