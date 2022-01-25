@@ -28,6 +28,7 @@ import requests
 from google.protobuf.any_pb2 import Any as ProtoAny
 from google.protobuf.json_format import MessageToDict
 from grpc import insecure_channel
+from grpc._channel import Channel
 
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
@@ -36,7 +37,6 @@ from cosmpy.common.loggers import get_logger
 from cosmpy.common.rest_client import RestClient
 from cosmpy.common.types import JSONLike
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
-from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
@@ -137,13 +137,24 @@ class CosmosLedger:
 
         # Clients to communicate with Cosmos/CosmWasm REST node
 
+        self.rest_client: Optional[RestClient] = None
+        self.rpc_client: Optional[Channel] = None
+
         if rest_node_address:
             self.node_address = rest_node_address
             self.rest_client = RestClient(self.node_address)
-            self.tx_client = TxRestClient(self.rest_client)
-            self.auth_client = AuthRestClient(self.rest_client)
-            self.wasm_client = CosmWasmRestClient(self.rest_client)
-            self.bank_client = BankRestClient(self.rest_client)
+            self.tx_client: Union[TxRestClient, TxGrpcClient] = TxRestClient(
+                self.rest_client
+            )
+            self.auth_client: Union[AuthRestClient, AuthGrpcClient] = AuthRestClient(
+                self.rest_client
+            )
+            self.wasm_client: Union[
+                CosmWasmRestClient, CosmWasmGrpcClient
+            ] = CosmWasmRestClient(self.rest_client)
+            self.bank_client: Union[BankRestClient, BankGrpcClient] = BankRestClient(
+                self.rest_client
+            )
         elif rpc_node_address:
             self.node_address = rpc_node_address
             self.rpc_client = insecure_channel(self.node_address)
@@ -168,7 +179,7 @@ class CosmosLedger:
     def deploy_contract(
         self,
         sender_crypto: CosmosCrypto,
-        contract_filename: str,
+        contract_filename: Path,
         gas: int = DEFAULT_GAS_LIMIT,
     ) -> Tuple[int, JSONLike]:
         """
@@ -578,10 +589,15 @@ class CosmosLedger:
 
         :param crypto: Crypto used to sign transaction
         :param tx: Transaction to be signed
+
+        :raises RuntimeError: When getting account number fails.
         """
 
         # Update account number if needed - Getting account data might fail if address is not funded
         self._ensure_accont_number(crypto)
+
+        if crypto.account_number is None:
+            raise RuntimeError("Getting account number failed")
 
         sign_transaction(tx, crypto.private_key, self.chain_id, crypto.account_number)
 
@@ -640,7 +656,7 @@ class CosmosLedger:
     def generate_tx(
         self,
         packed_msgs: List[ProtoAny],
-        from_addresses: List[Address],
+        from_addresses: List[str],
         pub_keys: List[bytes],
         fee: Optional[List[Coin]] = None,
         memo: str = "",
@@ -748,7 +764,7 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_send_msg(
-        from_address: Address, to_address: str, amount: List[Coin]
+        from_address: str, to_address: str, amount: List[Coin]
     ) -> ProtoAny:
         """
         Generate and pack MsgSend

@@ -90,7 +90,7 @@ class FetchdQueriesTestCase(FetchdTestCase):
         """
 
         # Store contract
-        code_id, _ = ledger.deploy_contract(validator_crypto, str(CONTRACT_FILENAME))
+        code_id, _ = ledger.deploy_contract(validator_crypto, CONTRACT_FILENAME)
 
         # Init contract
         init_msg: Dict[str, Any] = {}
