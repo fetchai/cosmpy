@@ -31,12 +31,13 @@ from unittest.mock import patch
 from google.protobuf.json_format import MessageToDict, ParseDict
 
 from cosmpy.auth.interface import Auth
+from cosmpy.auth.rest_client import AuthRestClient
+from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.clients.crypto import CosmosCrypto
 from cosmpy.clients.ledger import BroadcastException, CosmosLedger
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
-
-# from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
+from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
@@ -345,7 +346,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         tx = self.ledger.generate_tx(
             [msg], [ADDRESS_PK], [PRIVATE_KEY.public_key_bytes], COINS, LABEL, GAS_LIMIT
         )
-        self.ledger.sign_tx(tx)
+        self.ledger.sign_tx(self.crypto, tx)
         dict_tx = MessageToDict(tx)
 
         # Check if signature has correct length
@@ -506,7 +507,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         content = {"balance": {"denom": "stake", "amount": "1234"}}
 
         mock_rest_client = MockRestClient(json.dumps(content))
-        self.ledger.bank_client._rest_api = mock_rest_client
+        self.ledger.bank_client = BankRestClient(mock_rest_client)
         response = self.ledger.get_balance("account", "denom")
 
         assert response == 1234
@@ -514,9 +515,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
             mock_rest_client.last_base_url == "/cosmos/bank/v1beta1/balances/account/"
         )
 
-    '''
-    @staticmethod
-    def test_query_account_data():
+    def test_query_account_data(self):
         """Test query account data for the positive result."""
 
         content = {
@@ -538,26 +537,24 @@ class CosmWasmClientTestCase(unittest.TestCase):
             account_response.account.Unpack(account)
 
         mock_rest_client = MockRestClient(json.dumps(content))
-        ledger = CosmWasmClient(mock_rest_client)
-        response = ledger.query_account_data("address")
+        self.ledger.auth_client = AuthRestClient(mock_rest_client)
+        response = self.ledger.query_account_data("address")
 
         assert response == account
         assert mock_rest_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
 
-    @staticmethod
-    def test_query_contract_state():
+    def test_query_contract_state(self):
         """Test query contract state for the positive result."""
 
         raw_content = b'{"data": {"balance":"1"}}'
         expected_response = {"balance": "1"}
 
         mock_rest_client = MockRestClient(raw_content)
-        ledger = CosmWasmClient(mock_rest_client)
-        response = ledger.query_contract_state("fetchcontractaddress", {})
+        self.ledger.wasm_client._rest_api = mock_rest_client
+        response = self.ledger.query_contract_state("fetchcontractaddress", {})
 
         assert response == expected_response
         assert (
             mock_rest_client.last_base_url
             == "/wasm/v1/contract/fetchcontractaddress/smart/e30="
         )
-    '''

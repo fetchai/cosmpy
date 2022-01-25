@@ -557,7 +557,7 @@ class CosmosLedger:
 
     def _ensure_accont_number(self, crypto: CosmosCrypto):
         if crypto.account_number is None:
-            account = self._query_account_data(crypto.get_address())
+            account = self.query_account_data(crypto.get_address())
             crypto.account_number = account.account_number  # pylint: disable=E1101
 
     def ensure_funds(
@@ -634,7 +634,7 @@ class CosmosLedger:
         accounts: List[BaseAccount] = []
         signer_infos: List[SignerInfo] = []
         for from_address, pub_key in zip(from_addresses, pub_keys):
-            account = self._query_account_data(from_address)
+            account = self.query_account_data(from_address)
             accounts.append(account)
             signer_infos.append(self._get_signer_info(account, pub_key))
 
@@ -653,7 +653,7 @@ class CosmosLedger:
         tx = Tx(body=tx_body, auth_info=auth_info)
         return tx
 
-    def _query_account_data(self, address: Address) -> BaseAccount:
+    def query_account_data(self, address: Address) -> BaseAccount:
         """
         Query account data for signing
 
