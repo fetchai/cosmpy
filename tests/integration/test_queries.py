@@ -21,10 +21,9 @@
 
 from typing import Any, Dict
 
-from grpc import insecure_channel
-
 from cosmpy.bank.rest_client import BankRestClient
-from cosmpy.clients.signing_cosmwasm_client import CosmWasmClient, SigningCosmWasmClient
+from cosmpy.clients.crypto import CosmosCrypto
+from cosmpy.clients.ledger import CosmosLedger
 from cosmpy.common.rest_client import RestClient
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
@@ -39,7 +38,7 @@ from tests.integration.generic.config import (
     REST_ENDPOINT_ADDRESS,
     TOKEN_ID,
     VALIDATOR_ADDRESS,
-    VALIDATOR_PK,
+    VALIDATOR_CRYPTO,
 )
 from tests.integration.generic.test_cases import FetchdTestCase
 
@@ -48,27 +47,30 @@ class FetchdQueriesTestCase(FetchdTestCase):
     """Test case for Fetchd node."""
 
     @staticmethod
-    def perform_transfer_using_signing_client(validator_client: SigningCosmWasmClient):
+    def perform_transfer_using_ledger(
+        ledger: CosmosLedger, validator_crypto: CosmosCrypto
+    ):
         """
-        This method is used to perform ERC1155 contract interaction test
-        using SigningCosmWasmClient which can communicate via REST or gRPC interface.
+        This method is used to perform ledger interaction test
+        using CosmosLedger which can communicate via REST or gRPC interface.
 
-        :param validator_client: SigningCosmWasmClient
+        :param ledger: CosmosLedger
+        :param validator_crypto: CosmosCrypto
         """
 
         # Get balances before transfer
-        from_balance = validator_client.get_balance(validator_client.address, DENOM)
+        from_balance = ledger.get_balance(validator_crypto.get_address(), DENOM)
         balance_from_before = from_balance
-        to_balance = validator_client.get_balance(Address(BOB_ADDRESS), DENOM)
+        to_balance = ledger.get_balance(BOB_ADDRESS, DENOM)
         balance_to_before = to_balance
 
         # Generate, sign and broadcast send tokens transaction
-        validator_client.send_tokens(Address(BOB_ADDRESS), COINS)
+        ledger.send_funds(validator_crypto, BOB_ADDRESS, COINS)
 
         # Get balances after transfer
-        from_balance = validator_client.get_balance(validator_client.address, DENOM)
+        from_balance = ledger.get_balance(ledger.address, DENOM)
         balance_from_after = from_balance
-        to_balance = validator_client.get_balance(Address(BOB_ADDRESS), DENOM)
+        to_balance = ledger.get_balance(Address(BOB_ADDRESS), DENOM)
         balance_to_after = to_balance
 
         # Check if balances changed
@@ -76,54 +78,61 @@ class FetchdQueriesTestCase(FetchdTestCase):
         assert balance_to_after == balance_to_before + AMOUNT
 
     @staticmethod
-    def prepare_contract_using_signing_client(validator_client: SigningCosmWasmClient):
+    def prepare_contract_using_signing_client(
+        ledger: CosmosLedger, validator_crypto: CosmosCrypto
+    ):
         """
         This method is used to perform ERC1155 contract interaction test
-        using SigningCosmWasmClient which can communicate via REST or gRPC interface
+        using CosmosLedger which can communicate via REST or gRPC interface
 
-        :param validator_client: SigningCosmWasmClient
+        :param ledger: CosmosLedger
+        :param validator_crypto: CosmosCrypto
         """
 
         # Store contract
-        code_id = validator_client.deploy_contract(CONTRACT_FILENAME)
+        code_id, _ = ledger.deploy_contract(validator_crypto, CONTRACT_FILENAME)
 
         # Init contract
         init_msg: Dict[str, Any] = {}
-        contract_address = validator_client.instantiate_contract(code_id, init_msg)
+        contract_address, _ = ledger.instantiate_contract(
+            validator_crypto, code_id, init_msg
+        )
 
         # Create token with ID TOKEN_ID
         create_single_msg = {
             "create_single": {
-                "item_owner": str(validator_client.address),
+                "item_owner": str(validator_crypto.get_address()),
                 "id": TOKEN_ID,
                 "path": "some_path",
             }
         }
-        res_create = validator_client.execute_contract(
-            contract_address, create_single_msg
+        res_create = ledger.execute_contract(
+            validator_crypto, contract_address, create_single_msg
         )
         assert res_create.tx_response.code == 0
 
         # Mint 1 token with ID TOKEN_ID and give it to validator
         mint_single_msg = {
             "mint_single": {
-                "to_address": str(validator_client.address),
+                "to_address": str(ledger.address),
                 "id": TOKEN_ID,
                 "supply": str(AMOUNT),
                 "data": "some_data",
             },
         }
-        res_mint = validator_client.execute_contract(contract_address, mint_single_msg)
+        res_mint = ledger.execute_contract(
+            validator_crypto, contract_address, mint_single_msg
+        )
         assert res_mint.tx_response.code == 0
 
         # Query validator's balance of token TOKEN_ID
         msg = {
             "balance": {
-                "address": str(validator_client.address),
+                "address": str(ledger.address),
                 "id": TOKEN_ID,
             }
         }
-        res_query = validator_client.query_contract_state(
+        res_query = ledger.query_contract_state(
             contract_address=contract_address, msg=msg
         )
 
@@ -143,38 +152,39 @@ class FetchdQueriesTestCase(FetchdTestCase):
     @staticmethod
     def test_query_balance_client_rest():
         """Test if getting balance using REST api and CosmWasmClient works correctly"""
-        rest_client = RestClient(REST_ENDPOINT_ADDRESS)
-        client = CosmWasmClient(rest_client)
-        res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
+        ledger = CosmosLedger(
+            rest_node_address=REST_ENDPOINT_ADDRESS, chain_id=CHAIN_ID
+        )
+        res = ledger.get_balance(VALIDATOR_ADDRESS, DENOM)
 
         assert res >= 1000
 
     def test_send_native_tokens_using_client_rest(self):
         """Test if sending tokens over REST api using CosmWasmClient works correctly"""
         # Create client
-        channel = RestClient(REST_ENDPOINT_ADDRESS)
-        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
-        self.perform_transfer_using_signing_client(validator_client)
+        ledger = CosmosLedger(
+            rest_node_address=REST_ENDPOINT_ADDRESS, chain_id=CHAIN_ID
+        )
+        self.perform_transfer_using_ledger(ledger, VALIDATOR_CRYPTO)
 
     def test_send_native_tokens_using_client_grpc(self):
         """Test if sending tokens over gRPC api using CosmWasmClient works correctly"""
         # Create client
-        channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
-        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
-        self.perform_transfer_using_signing_client(validator_client)
+        ledger = CosmosLedger(rpc_node_address=GRPC_ENDPOINT_ADDRESS, chain_id=CHAIN_ID)
+        self.perform_transfer_using_ledger(ledger, VALIDATOR_CRYPTO)
 
     def test_contract_interaction_using_client_rest(self):
         """Test full interaction with ERC1155 contract via REST api using CosmWasmClient"""
 
         # Create client
-        channel = RestClient(REST_ENDPOINT_ADDRESS)
-        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
-        self.prepare_contract_using_signing_client(validator_client)
+        ledger = CosmosLedger(
+            rest_node_address=REST_ENDPOINT_ADDRESS, chain_id=CHAIN_ID
+        )
+        self.prepare_contract_using_signing_client(ledger, VALIDATOR_CRYPTO)
 
     def test_contract_interaction_using_client_grpc(self):
         """Test full interaction with ERC1155 contract via GRPC api using CosmWasmClient"""
 
         # Create client
-        channel = insecure_channel(GRPC_ENDPOINT_ADDRESS)
-        validator_client = SigningCosmWasmClient(VALIDATOR_PK, channel, CHAIN_ID)
-        self.prepare_contract_using_signing_client(validator_client)
+        ledger = CosmosLedger(rpc_node_address=GRPC_ENDPOINT_ADDRESS, chain_id=CHAIN_ID)
+        self.prepare_contract_using_signing_client(ledger, VALIDATOR_CRYPTO)

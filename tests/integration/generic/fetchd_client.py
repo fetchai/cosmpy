@@ -29,9 +29,9 @@ import time
 
 import docker  # pylint: disable=import-error
 
-from cosmpy.clients.signing_cosmwasm_client import CosmWasmClient
-from cosmpy.common.rest_client import RestClient
+from cosmpy.clients.ledger import CosmosLedger
 from tests.integration.generic.config import (
+    CHAIN_ID,
     DENOM,
     REST_ENDPOINT_ADDRESS,
     VALIDATOR_ADDRESS,
@@ -156,9 +156,10 @@ class FetchdDockerImage:
         for i in range(max_attempts):
             try:
                 time.sleep(sleep_rate)
-                rest_client = RestClient(REST_ENDPOINT_ADDRESS)
-                client = CosmWasmClient(rest_client)
-                res = client.get_balance(VALIDATOR_ADDRESS, DENOM)
+                ledger = CosmosLedger(
+                    rest_node_address=REST_ENDPOINT_ADDRESS, chain_id=CHAIN_ID
+                )
+                res = ledger.get_balance(VALIDATOR_ADDRESS, DENOM)
                 # Make sure that first block is minted
                 if res < 1000:
                     raise RuntimeError("The node is not set up yet.")

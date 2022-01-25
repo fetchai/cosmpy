@@ -65,7 +65,7 @@ print(f"Contract stored, code ID: {code_id}")
 
 # Init contract
 init_msg: Dict[str, Any] = {}
-contract_address, _ = ledger.send_init_msg(
+contract_address, _ = ledger.instantiate_contract(
     validator_crypto, code_id, init_msg, "some_label"
 )
 print(f"Contract address: {contract_address}")
@@ -86,7 +86,7 @@ create_batch_msg = {
         ],
     }
 }
-ledger.send_execute_msg(validator_crypto, contract_address, create_batch_msg)
+ledger.execute_contract(validator_crypto, contract_address, create_batch_msg)
 print(f"Created tokens with ID {TOKEN_ID_1} and {TOKEN_ID_2}")
 
 # Mint 1 token with ID TOKEN_ID_1 and give it to validator
@@ -98,7 +98,7 @@ mint_single_msg = {
         "data": "some_data",
     },
 }
-response = ledger.send_execute_msg(validator_crypto, contract_address, mint_single_msg)
+response = ledger.execute_contract(validator_crypto, contract_address, mint_single_msg)
 print(f"Minted 1 token with ID {TOKEN_ID_1} to validator.")
 
 # Mint 1 token with ID TOKEN_ID_2 and give it to bob
@@ -110,7 +110,7 @@ mint_single_msg = {
         "data": "some_data",
     },
 }
-response = ledger.send_execute_msg(validator_crypto, contract_address, mint_single_msg)
+response = ledger.execute_contract(validator_crypto, contract_address, mint_single_msg)
 print(f"Minted 1 token with ID {TOKEN_ID_2} to bob")
 
 # Create atomic swap messages

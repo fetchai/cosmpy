@@ -31,9 +31,12 @@ from unittest.mock import patch
 from google.protobuf.json_format import MessageToDict, ParseDict
 
 from cosmpy.auth.interface import Auth
-from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
+from cosmpy.clients.crypto import CosmosCrypto
+from cosmpy.clients.ledger import BroadcastException, CosmosLedger
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
+
+# from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
@@ -187,18 +190,22 @@ class CosmWasmClientTestCase(unittest.TestCase):
         )
 
         mock_rest_client = MockRestClient(json.dumps(content))
-        cls.signing_wasm_client = SigningCosmWasmClient(
-            PRIVATE_KEY, mock_rest_client, CHAIN_ID
+        cls.crypto = CosmosCrypto(
+            private_key=PRIVATE_KEY, account_number=ACCOUNT_NUMBER
         )
-        cls.signing_wasm_client.auth_client = mock_auth
+        cls.ledger = CosmosLedger(
+            rest_node_address="some_rest_node_address", chain_id=CHAIN_ID
+        )
+        cls.ledger.auth_client = mock_auth
+        cls.ledger.rest_client = mock_rest_client
 
     def test_init(self):
         """Test correct initialisation."""
-        assert str(ADDRESS_PK) == str(self.signing_wasm_client.address)
-        assert ACCOUNT_NUMBER == self.signing_wasm_client.account_number
-        assert CHAIN_ID == self.signing_wasm_client.chain_id
-        assert PRIVATE_KEY.public_key_bytes == self.signing_wasm_client.public_key_bytes
-        assert PRIVATE_KEY == self.signing_wasm_client.private_key
+        assert str(ADDRESS_PK) == str(self.crypto.get_address())
+        assert ACCOUNT_NUMBER == self.crypto.account_number
+        assert CHAIN_ID == self.ledger.chain_id
+        assert PRIVATE_KEY.public_key_bytes == self.crypto.get_pubkey_as_bytes()
+        assert PRIVATE_KEY == self.crypto.private_key
 
     def test_get_packed_send_msg(self):
         """Test correct generation of packed send msg."""
@@ -209,9 +216,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
             "amount": [{"denom": DENOM, "amount": AMOUNT}],
         }
 
-        msg = self.signing_wasm_client.get_packed_send_msg(
-            ADDRESS_PK, ADDRESS_OTHER, COINS
-        )
+        msg = self.ledger.get_packed_send_msg(ADDRESS_PK, ADDRESS_OTHER, COINS)
         assert MessageToDict(msg) == expected_result
 
     def test_get_packed_init_msg(self):
@@ -225,7 +230,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
             "funds": [{"denom": DENOM, "amount": AMOUNT}],
         }
 
-        msg = self.signing_wasm_client.get_packed_init_msg(
+        msg = self.ledger.get_packed_init_msg(
             ADDRESS_PK, CODE_ID, WASM_MSG, LABEL, COINS
         )
         assert MessageToDict(msg) == expected_result
@@ -240,7 +245,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
             "funds": [{"denom": DENOM, "amount": AMOUNT}],
         }
 
-        msg = self.signing_wasm_client.get_packed_exec_msg(
+        msg = self.ledger.get_packed_exec_msg(
             ADDRESS_PK, CONTRACT_ADDRESS, WASM_MSG, COINS
         )
         assert MessageToDict(msg) == expected_result
@@ -250,7 +255,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         with tempfile.NamedTemporaryFile(suffix=CONTRACT_FILENAME, delete=False) as tmp:
             tmp.write(CONTRACT_BYTECODE)
             tmp.flush()
-        msg = self.signing_wasm_client.get_packed_store_msg(ADDRESS_PK, tmp.name)
+        msg = self.ledger.get_packed_store_msg(ADDRESS_PK, tmp.name)
         os.unlink(tmp.name)
 
         msg_dict = MessageToDict(msg)
@@ -293,10 +298,8 @@ class CosmWasmClientTestCase(unittest.TestCase):
             },
         }
 
-        msg = self.signing_wasm_client.get_packed_send_msg(
-            ADDRESS_PK, ADDRESS_OTHER, COINS
-        )
-        tx = self.signing_wasm_client.generate_tx(
+        msg = self.ledger.get_packed_send_msg(ADDRESS_PK, ADDRESS_OTHER, COINS)
+        tx = self.ledger.generate_tx(
             [msg], [ADDRESS_PK], [PRIVATE_KEY.public_key_bytes], COINS, LABEL, GAS_LIMIT
         )
 
@@ -338,13 +341,11 @@ class CosmWasmClientTestCase(unittest.TestCase):
         }
 
         # Generate and sign transaction
-        msg = self.signing_wasm_client.get_packed_send_msg(
-            ADDRESS_PK, ADDRESS_OTHER, COINS
-        )
-        tx = self.signing_wasm_client.generate_tx(
+        msg = self.ledger.get_packed_send_msg(ADDRESS_PK, ADDRESS_OTHER, COINS)
+        tx = self.ledger.generate_tx(
             [msg], [ADDRESS_PK], [PRIVATE_KEY.public_key_bytes], COINS, LABEL, GAS_LIMIT
         )
-        self.signing_wasm_client.sign_tx(tx)
+        self.ledger.sign_tx(tx)
         dict_tx = MessageToDict(tx)
 
         # Check if signature has correct length
@@ -356,32 +357,32 @@ class CosmWasmClientTestCase(unittest.TestCase):
 
     def test_broadcast_tx_success(self):
         """Test broadcast Tx with positive result."""
-        tx = self.signing_wasm_client.generate_tx([], [], [], COINS, LABEL, GAS_LIMIT)
+        tx = self.ledger.generate_tx([], [], [], COINS, LABEL, GAS_LIMIT)
 
         mock_tx_client = MockTx(response_code=0)
-        self.signing_wasm_client.tx_client = mock_tx_client
+        self.ledger.tx_client = mock_tx_client
 
-        result = self.signing_wasm_client.broadcast_tx(tx, 0)
+        result = self.ledger.broadcast_tx(tx, 1)
         self.assertIsInstance(result, GetTxResponse)
 
     def test_broadcast_tx_fail(self):
         """Test broadcast Tx with negative result."""
-        tx = self.signing_wasm_client.generate_tx([], [], [], COINS, LABEL, GAS_LIMIT)
+        tx = self.ledger.generate_tx([], [], [], COINS, LABEL, GAS_LIMIT)
 
         # Response code different from 0 means Tx error
         mock_tx_client = MockTx(response_code=1)
-        self.signing_wasm_client.tx_client = mock_tx_client
+        self.ledger.tx_client = mock_tx_client
 
         # Check if broadcasting fails
-        self.assertRaises(RuntimeError, self.signing_wasm_client.broadcast_tx, tx, 0)
+        self.assertRaises(BroadcastException, self.ledger.broadcast_tx, tx, 0)
 
     def test_send_tokens(self):
         """Test send tokens method with positive result."""
 
         mock_tx_client = MockTx(response_code=0)
-        self.signing_wasm_client.tx_client = mock_tx_client
+        self.ledger.tx_client = mock_tx_client
 
-        result = self.signing_wasm_client.send_tokens(ADDRESS_OTHER, COINS)
+        result = self.ledger.send_funds(self.crypto, ADDRESS_OTHER, COINS)
         self.assertIsInstance(result, GetTxResponse)
 
         # Reconstruct original Tx from last tx request bytes
@@ -395,18 +396,18 @@ class CosmWasmClientTestCase(unittest.TestCase):
         """Test deploy contract method with positive result."""
 
         mock_tx_client = MockTx(response_code=0)
-        self.signing_wasm_client.tx_client = mock_tx_client
+        self.ledger.tx_client = mock_tx_client
 
-        with patch.object(self.signing_wasm_client, "get_code_id", mock_get_code_id):
+        with patch.object(self.ledger, "get_code_id", mock_get_code_id):
             with tempfile.NamedTemporaryFile(
                 suffix=CONTRACT_FILENAME, delete=False
             ) as tmp:
                 tmp.write(CONTRACT_BYTECODE)
                 tmp.flush()
-            result = self.signing_wasm_client.deploy_contract(tmp.name)
+            code_id, _ = self.ledger.deploy_contract(self.crypto, tmp.name)
             os.unlink(tmp.name)
 
-        assert result == CODE_ID
+        assert code_id == CODE_ID
 
         # Reconstruct original Tx from last tx request bytes
         tx = Tx()
@@ -419,13 +420,15 @@ class CosmWasmClientTestCase(unittest.TestCase):
         """Test init contract method with positive result."""
 
         mock_tx_client = MockTx(response_code=0)
-        self.signing_wasm_client.tx_client = mock_tx_client
+        self.ledger.tx_client = mock_tx_client
 
         with patch.object(
-            self.signing_wasm_client, "get_contract_address", mock_get_contract_address
+            self.ledger, "get_contract_address", mock_get_contract_address
         ):
-            result = self.signing_wasm_client.instantiate_contract(CODE_ID, WASM_MSG)
-        assert result == CONTRACT_ADDRESS
+            contract_address, _ = self.ledger.instantiate_contract(
+                self.crypto, CODE_ID, WASM_MSG, LABEL
+            )
+        assert contract_address == CONTRACT_ADDRESS
 
         # Reconstruct original Tx from last tx request bytes
         tx = Tx()
@@ -440,10 +443,10 @@ class CosmWasmClientTestCase(unittest.TestCase):
         """Test execute contract method with positive result."""
 
         mock_tx_client = MockTx(response_code=0)
-        self.signing_wasm_client.tx_client = mock_tx_client
+        self.ledger.tx_client = mock_tx_client
 
-        result = self.signing_wasm_client.execute_contract(CONTRACT_ADDRESS, WASM_MSG)
-        self.assertIsInstance(result, GetTxResponse)
+        result = self.ledger.execute_contract(self.crypto, CONTRACT_ADDRESS, WASM_MSG)
+        assert result == ({}, 0)
 
         # Reconstruct original Tx from last tx request bytes
         tx = Tx()
@@ -472,7 +475,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
         tx_response = GetTxResponse()
         tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
 
-        result = self.signing_wasm_client.get_code_id(tx_response)
+        result = self.ledger.get_code_id(tx_response)
         assert result == CODE_ID
 
     def test_get_contract_address(self):
@@ -494,5 +497,67 @@ class CosmWasmClientTestCase(unittest.TestCase):
         tx_response = GetTxResponse()
         tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
 
-        result = self.signing_wasm_client.get_contract_address(tx_response)
+        result = self.ledger.get_contract_address(tx_response)
         assert result == CONTRACT_ADDRESS
+
+    def test_get_balance(self):
+        """Test get balance for the positive result."""
+
+        content = {"balance": {"denom": "stake", "amount": "1234"}}
+
+        mock_rest_client = MockRestClient(json.dumps(content))
+        self.ledger.bank_client._rest_api = mock_rest_client
+        response = self.ledger.get_balance("account", "denom")
+
+        assert response == 1234
+        assert (
+            mock_rest_client.last_base_url == "/cosmos/bank/v1beta1/balances/account/"
+        )
+
+    '''
+    @staticmethod
+    def test_query_account_data():
+        """Test query account data for the positive result."""
+
+        content = {
+            "account": {
+                "@type": "/cosmos.auth.v1beta1.BaseAccount",
+                "address": "fetch1h6974x4dspft29r9gyegtajyzaht2cdh0rt93w",
+                "pub_key": {
+                    "@type": "/cosmos.crypto.secp256k1.PubKey",
+                    "key": "A2BjpEo54gBpulf9CrA+6tGBASFC8okaO1DYTimk/Jwp",
+                },
+                "account_number": "0",
+                "sequence": "1",
+            }
+        }
+        account_response = ParseDict(content, QueryAccountResponse())
+
+        account = BaseAccount()
+        if account_response.account.Is(BaseAccount.DESCRIPTOR):
+            account_response.account.Unpack(account)
+
+        mock_rest_client = MockRestClient(json.dumps(content))
+        ledger = CosmWasmClient(mock_rest_client)
+        response = ledger.query_account_data("address")
+
+        assert response == account
+        assert mock_rest_client.last_base_url == "/cosmos/auth/v1beta1/accounts/address"
+
+    @staticmethod
+    def test_query_contract_state():
+        """Test query contract state for the positive result."""
+
+        raw_content = b'{"data": {"balance":"1"}}'
+        expected_response = {"balance": "1"}
+
+        mock_rest_client = MockRestClient(raw_content)
+        ledger = CosmWasmClient(mock_rest_client)
+        response = ledger.query_contract_state("fetchcontractaddress", {})
+
+        assert response == expected_response
+        assert (
+            mock_rest_client.last_base_url
+            == "/wasm/v1/contract/fetchcontractaddress/smart/e30="
+        )
+    '''

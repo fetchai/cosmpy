@@ -60,7 +60,9 @@ code_id, _ = ledger.deploy_contract(user_crypto, CONTRACT_FILENAME)
 print(f"Code ID: {code_id}")
 
 init_msg: Dict[str, Any] = {}
-contract_address, _ = ledger.send_init_msg(user_crypto, code_id, init_msg, "some_label")
+contract_address, _ = ledger.instantiate_contract(
+    user_crypto, code_id, init_msg, "some_label"
+)
 print(f"Contract address: {contract_address}")
 
 
@@ -72,7 +74,7 @@ create_single_msg = {
         "path": "some_path",
     }
 }
-ledger.send_execute_msg(user_crypto, contract_address, create_single_msg)
+ledger.execute_contract(user_crypto, contract_address, create_single_msg)
 print(f"Created token with ID {TOKEN_ID}")
 
 # Mint 1 token with ID TOKEN_ID and give it to validator
@@ -84,7 +86,7 @@ mint_single_msg = {
         "data": "some_data",
     },
 }
-response = ledger.send_execute_msg(user_crypto, contract_address, mint_single_msg)
+response = ledger.execute_contract(user_crypto, contract_address, mint_single_msg)
 print(f"Minted 1 token with ID {TOKEN_ID}")
 
 # Query validator's balance of token TOKEN_ID

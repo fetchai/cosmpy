@@ -178,11 +178,7 @@ class CosmosLedger:
                 self.sign_tx(sender_crypto, tx)
 
                 res = self.broadcast_tx(tx)
-
-                raw_log = json.loads(res.tx_response.raw_log)  # pylint: disable=E1101
-
-                assert raw_log[0]["events"][1]["attributes"][0]["key"] == "code_id"
-                code_id = int(raw_log[0]["events"][1]["attributes"][0]["value"])
+                code_id = self.get_code_id(res)
             except BroadcastException as e:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
@@ -200,7 +196,29 @@ class CosmosLedger:
 
         return code_id, MessageToDict(res)
 
-    def send_init_msg(
+    @staticmethod
+    def get_code_id(response: GetTxResponse) -> int:
+        """
+        Get code id from store code transaction response
+        :param response: Response of store code transaction
+        :return: integer code_id
+        """
+        raw_log = json.loads(response.tx_response.raw_log)
+        assert raw_log[0]["events"][1]["attributes"][0]["key"] == "code_id"
+        return int(raw_log[0]["events"][1]["attributes"][0]["value"])
+
+    @staticmethod
+    def get_contract_address(response: GetTxResponse) -> str:
+        """
+        Get contract address from instantiate msg response
+        :param response: Response of MsgInstantiateContract transaction
+        :return: contract address string
+        """
+        raw_log = json.loads(response.tx_response.raw_log)
+        assert raw_log[0]["events"][0]["attributes"][0]["key"] == "_contract_address"
+        return str(raw_log[0]["events"][0]["attributes"][0]["value"])
+
+    def instantiate_contract(
         self,
         sender_crypto: CosmosCrypto,
         code_id: int,
@@ -241,16 +259,8 @@ class CosmosLedger:
                 self.sign_tx(sender_crypto, tx)
 
                 res = self.broadcast_tx(tx)
+                contract_address = self.get_contract_address(res)
 
-                raw_log = json.loads(res.tx_response.raw_log)  # pylint: disable=E1101
-
-                assert (
-                    raw_log[0]["events"][0]["attributes"][0]["key"]
-                    == "_contract_address"
-                )
-                contract_address = str(
-                    raw_log[0]["events"][0]["attributes"][0]["value"]
-                )
             except BroadcastException as e:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
@@ -318,7 +328,7 @@ class CosmosLedger:
             ) from last_exception
         return json.loads(res.data)  # pylint: disable=E1101
 
-    def send_execute_msg(
+    def execute_contract(
         self,
         sender_crypto: CosmosCrypto,
         contract_address: str,

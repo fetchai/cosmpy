@@ -23,8 +23,7 @@ import inspect
 import os
 from pathlib import Path
 
-from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
+from cosmpy.clients.crypto import CosmosCrypto
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 # Denomination and amount of transferred tokens
@@ -38,16 +37,16 @@ REST_ENDPOINT_ADDRESS = "http://localhost:1317"
 CHAIN_ID = "testing"
 
 # Private key of sender account
-VALIDATOR_PK = PrivateKey(
-    bytes.fromhex("0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae")
+VALIDATOR_CRYPTO = CosmosCrypto(
+    private_key_str="0ba1db680226f19d4a2ea64a1c0ea40d1ffa3cb98532a9fa366994bb689a34ae"
 )
-VALIDATOR_ADDRESS = Address(VALIDATOR_PK)
+VALIDATOR_ADDRESS = VALIDATOR_CRYPTO.get_address()
 
 # Private key of recipient account
-BOB_PK = PrivateKey(
-    bytes.fromhex("439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636")
+BOB_CRYPTO = CosmosCrypto(
+    private_key_str="439861b21d146e83fe99496f4998a305c83cfbc24717c77e32b06d224bf1e636"
 )
-BOB_ADDRESS = Address(BOB_PK)
+BOB_ADDRESS = BOB_CRYPTO.get_address()
 
 # Cosmwasm
 CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ignore
