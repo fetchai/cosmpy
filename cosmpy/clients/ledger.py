@@ -976,7 +976,7 @@ class CosmosLedger:
 
         :raises ValueError: When bad chain ID.
         :raises LedgerServerNotAvailable: When ledger server is not available.
-        :raises NotImplementedError for RPC node
+        :raises NotImplementedError: for RPC node
         """
 
         if self.rest_client:
