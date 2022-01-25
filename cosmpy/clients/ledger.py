@@ -462,6 +462,8 @@ class CosmosLedger:
 
         :param address: Address to be query
 
+        :raises BroadcastException: When communication with node fails.
+
         :return: List of coins
         """
 
@@ -554,8 +556,6 @@ class CosmosLedger:
         :param amount_coins: List of coins to be sent
 
         :return: Transaction response
-
-        :raises BroadcastException: When communication with node fails.
         """
 
         from_address = str(from_crypto.get_address())
@@ -578,8 +578,6 @@ class CosmosLedger:
 
         :param crypto: Crypto used to sign transaction
         :param tx: Transaction to be signed
-
-        :return: Nothing
         """
 
         # Update account number if needed - Getting account data might fail if address is not funded
@@ -599,7 +597,8 @@ class CosmosLedger:
         Refill funds of addresses using faucet or validator
         :param addresses: Address to be refilled
         :param amount_coins: Amount of refill
-        :return: Nothing
+
+        :raises RuntimeError: When parameters are missing.
         """
 
         if self.faucet_url is not None:
@@ -628,8 +627,6 @@ class CosmosLedger:
         :param validator_crypto: Validator crypto
         :param addresses: Addresses to be refilled
         :param required_amount_coins: Required amounts of coins
-
-        :return: Nothing
         """
 
         for address in addresses:
