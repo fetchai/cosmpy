@@ -1,3 +1,22 @@
+# -*- coding: utf-8 -*-
+# ------------------------------------------------------------------------------
+#
+#   Copyright 2018-2021 Fetch.AI Limited
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# ------------------------------------------------------------------------------
+
 import gzip
 import json
 import re
@@ -108,6 +127,8 @@ class CosmosLedger:
         :param n_total_msg_retries: Number of total send/settle transaction retries
         :param get_response_retry_interval: Retry interval for getting receipt
         :param n_get_response_retries: Number of get receipt retries
+
+        :raises RuntimeError: in case of wrong configuration.
         """
         # Override presets when parameters are specified
         self.chain_id = chain_id
@@ -156,7 +177,10 @@ class CosmosLedger:
         :param sender_crypto: Crypto of deployer to sign deploy transaction
         :param contract_filename: Path to contract .wasm bytecode
         :param gas:  Maximum amount of gas to be used on executing command
+
         :return: Deployment transaction response
+
+        :raises BroadcastException: When communication with node fails.
         """
         attempt = 0
         res = None
@@ -236,6 +260,8 @@ class CosmosLedger:
         :param gas: Gas limit
 
         :return: Contract address string, transaction response
+
+        :raises BroadcastException: When communication with node fails.
         """
         elapsed_time = 0
         res: Optional[GetTxResponse] = None
@@ -302,6 +328,8 @@ class CosmosLedger:
         :param num_retries: Optional number of retries
 
         :return: Query json response
+
+        :raises BroadcastException: When communication with node fails.
         """
         request = QuerySmartContractStateRequest(
             address=contract_address, query_data=json.dumps(msg).encode("UTF8")
@@ -346,6 +374,8 @@ class CosmosLedger:
         :param gas: Gas limit
         :param amount: Funds to be transferred to contract address
         :param retries: Optional number of retries
+
+        :raises BroadcastException: When communication with node fails.
 
         :return: Execute message response
         """
@@ -400,6 +430,8 @@ class CosmosLedger:
         :param denom: Denom of coins
 
         :return: Integer representation of amount
+
+        :raises BroadcastException: When communication with node fails.
         """
 
         res = None
@@ -461,8 +493,6 @@ class CosmosLedger:
 
         :param addresses: List of addresses to be refilled
         :param amount: Required amount
-
-        :return: Nothing
         """
 
         min_amount_required = amount if amount else 500000000
@@ -524,6 +554,8 @@ class CosmosLedger:
         :param amount_coins: List of coins to be sent
 
         :return: Transaction response
+
+        :raises BroadcastException: When communication with node fails.
         """
 
         from_address = str(from_crypto.get_address())
@@ -743,6 +775,7 @@ class CosmosLedger:
         Broadcast transaction and get receipt
 
         :param tx: Transaction
+        :param retries: Optional number of broadcasting attempts
 
         :raises BroadcastException: if broadcasting fails.
 
