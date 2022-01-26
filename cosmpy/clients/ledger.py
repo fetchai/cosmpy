@@ -28,6 +28,8 @@ import time
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
+import certifi
+import grpc
 import requests
 from google.protobuf.any_pb2 import Any as ProtoAny
 from google.protobuf.json_format import MessageToDict
@@ -114,6 +116,7 @@ class CosmosLedger:
         rpc_node_address: Optional[str] = None,
         validator_crypto: Optional[CosmosCrypto] = None,
         faucet_url: Optional[str] = None,
+        secure_channel: bool = False,
         msg_retry_interval: int = 2,
         msg_failed_retry_interval: int = 10,
         faucet_retry_interval: int = 20,
@@ -133,6 +136,7 @@ class CosmosLedger:
         :param msg_retry_interval: Interval between message partial steps retries
         :param msg_failed_retry_interval: Interval between complete send/settle message attempts
         :param faucet_retry_interval: Get wealth from faucet retry interval
+        :param secure_channel: Option for RPC node only - default is false = insecure_channel
         :param n_sending_retries: Number of send transaction retries
         :param n_total_msg_retries: Number of total send/settle transaction retries
         :param get_response_retry_interval: Retry interval for getting receipt
@@ -167,7 +171,16 @@ class CosmosLedger:
             )
         elif rpc_node_address:
             self.node_address = rpc_node_address
-            self.rpc_client = insecure_channel(self.node_address)
+
+            if secure_channel:
+                with open(certifi.where(), "rb") as f:
+                    trusted_certs = f.read()
+                credentials = grpc.ssl_channel_credentials(
+                    root_certificates=trusted_certs
+                )
+                self.rpc_client = grpc.secure_channel(self.node_address, credentials)
+            else:
+                self.rpc_client = insecure_channel(self.node_address)
             self.tx_client = TxGrpcClient(self.rpc_client)
             self.auth_client = AuthGrpcClient(self.rpc_client)
             self.wasm_client = CosmWasmGrpcClient(self.rpc_client)
