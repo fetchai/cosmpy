@@ -43,9 +43,6 @@ TO_ADDRESS = "fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw"
 # Create ledger
 ledger = CosmosLedger(chain_id=CHAIN_ID, rpc_node_address=GRPC_ENDPOINT_ADDRESS)
 
-ledger.check_availability()
-exit()
-
 # Print balance before transfer
 print("Before transaction")
 res = ledger.get_balance(sender_crypto.get_address(), DENOM)
