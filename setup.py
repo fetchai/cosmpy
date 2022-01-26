@@ -60,7 +60,7 @@ setup(
         "protobuf",
         "grpcio",
         "click",
-	"certifi",
+        "certifi",
     ],
     extras_require={
         "dev": [
