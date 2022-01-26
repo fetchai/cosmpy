@@ -49,6 +49,10 @@ from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGr
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
 from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import GetNodeInfoRequest
+from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
+    ServiceStub as TendermintGrpcClient,
+)
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
@@ -185,6 +189,7 @@ class CosmosLedger:
             self.auth_client = AuthGrpcClient(self.rpc_client)
             self.wasm_client = CosmWasmGrpcClient(self.rpc_client)
             self.bank_client = BankGrpcClient(self.rpc_client)
+            self.tendermint_client = TendermintGrpcClient(self.rpc_client)
         else:
             raise RuntimeError("No node address specified")
 
@@ -989,7 +994,6 @@ class CosmosLedger:
 
         :raises ValueError: When bad chain ID.
         :raises LedgerServerNotAvailable: When ledger server is not available.
-        :raises NotImplementedError: for RPC node
         """
 
         if self.rest_client:
@@ -1001,10 +1005,15 @@ class CosmosLedger:
                 raise LedgerServerNotAvailable(
                     f"ledger server is not available with address: {self.node_address}: {e}"
                 ) from e
-        else:
-            raise NotImplementedError(
-                "Checking availability of RPC node not implemented yet"
-            )
+        elif self.rpc_client:
+            try:
+                node_info = self.tendermint_client.GetNodeInfo(GetNodeInfoRequest())
+                if node_info.default_node_info.network != self.chain_id:
+                    raise ValueError("Bad chain id")
+            except Exception as e:
+                raise LedgerServerNotAvailable(
+                    f"ledger server is not available with address: {self.node_address}: {e}"
+                ) from e
 
     @classmethod
     def validate_address(cls, address: str):
