@@ -7,7 +7,7 @@
 #   you may not use this file except in compliance with the License.
 #   You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#       http:/www.apache.org/licenses/LICENSE-2.0
 #
 #   Unless required by applicable law or agreed to in writing, software
 #   distributed under the License is distributed on an "AS IS" BASIS,
@@ -72,16 +72,17 @@ _.Pool  # unused method (./staking/rest_client.py:183)
 _.Params  # unused method (./staking/rest_client.py:188)
 _.body_bytes  # unused attribute (./tx/__init__.py:46)
 _.auth_info_bytes  # unused attribute (./tx/__init__.py:47)
-_.formatter  # unused attribute (/home/jiri/fetch/cosmpy/cosmpy/common/loggers.py:37)
-_.handlers  # unused attribute (/home/jiri/fetch/cosmpy/cosmpy/common/loggers.py:38)
 
 _.Simulate  # unused method (./tx/interface.py:30)
 _.GetTxsEvent  # unused method (./tx/interface.py:42)
 _.Simulate  # unused method (./tx/rest_client.py:56)
 _.GetTxsEvent  # unused method (./tx/rest_client.py:94)
 
-_.get_pubkey_as_str  # unused method (/home/jiri/fetch/cosmpy/cosmpy/clients/crypto.py:89)
-_.save_key_to_file  # unused method (/home/jiri/fetch/cosmpy/cosmpy/clients/crypto.py:105)
-CLIENT_CODE_ERROR_EXCEPTION  # unused variable (/home/jiri/fetch/cosmpy/cosmpy/clients/ledger.py:65)
-_.check_availability  # unused method (/home/jiri/fetch/cosmpy/cosmpy/clients/ledger.py:890)
-_.validate_address  # unused method (/home/jiri/fetch/cosmpy/cosmpy/clients/ledger.py:905)
+_.get_pubkey_as_str  # unused method (./clients/crypto.py:116)
+_.save_key_to_file  # unused method (./clients/crypto.py:132)
+CLIENT_CODE_ERROR_EXCEPTION  # unused variable (./clients/ledger.py:94)
+_.check_availability  # unused method (./clients/ledger.py:991)
+_.validate_address  # unused method (./clients/ledger.py:1018)
+_.formatter  # unused attribute (./common/loggers.py:57)
+_.handlers  # unused attribute (./common/loggers.py:58)
+_.ensure_funds  # unused method (./clients/ledger.py:656)

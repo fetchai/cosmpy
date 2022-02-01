@@ -78,7 +78,7 @@ class FetchdQueriesTestCase(FetchdTestCase):
         assert balance_to_after == balance_to_before + AMOUNT
 
     @staticmethod
-    def prepare_contract_using_signing_client(
+    def prepare_contract_using_ledger(
         ledger: CosmosLedger, validator_crypto: CosmosCrypto
     ):
         """
@@ -180,11 +180,11 @@ class FetchdQueriesTestCase(FetchdTestCase):
         ledger = CosmosLedger(
             rest_node_address=REST_ENDPOINT_ADDRESS, chain_id=CHAIN_ID
         )
-        self.prepare_contract_using_signing_client(ledger, VALIDATOR_CRYPTO)
+        self.prepare_contract_using_ledger(ledger, VALIDATOR_CRYPTO)
 
     def test_contract_interaction_using_client_grpc(self):
         """Test full interaction with ERC1155 contract via GRPC api using CosmWasmClient"""
 
         # Create client
         ledger = CosmosLedger(rpc_node_address=GRPC_ENDPOINT_ADDRESS, chain_id=CHAIN_ID)
-        self.prepare_contract_using_signing_client(ledger, VALIDATOR_CRYPTO)
+        self.prepare_contract_using_ledger(ledger, VALIDATOR_CRYPTO)

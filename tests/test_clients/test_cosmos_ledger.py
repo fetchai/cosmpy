@@ -509,12 +509,27 @@ class CosmosLedgerTestCase(unittest.TestCase):
 
         mock_rest_client = MockRestClient(json.dumps(content))
         self.ledger.bank_client = BankRestClient(mock_rest_client)
-        response = self.ledger.get_balance("account", "denom")
+        response = self.ledger.get_balance("address", "stake")
 
         assert response == 1234
         assert (
-            mock_rest_client.last_base_url == "/cosmos/bank/v1beta1/balances/account/"
+            mock_rest_client.last_base_url == "/cosmos/bank/v1beta1/balances/address/"
         )
+
+    def test_get_balances(self):
+        """Test get balances for the positive result."""
+
+        content = {
+            "balances": [{"denom": "stake", "amount": "1234"}],
+            "pagination": {"next_key": None, "total": 0},
+        }
+
+        mock_rest_client = MockRestClient(json.dumps(content))
+        self.ledger.bank_client = BankRestClient(mock_rest_client)
+        response = self.ledger.get_balances("address")
+
+        assert str(response) == '[denom: "stake"\namount: "1234"\n]'
+        assert mock_rest_client.last_base_url == "/cosmos/bank/v1beta1/balances/address"
 
     def test_query_account_data(self):
         """Test query account data for the positive result."""
