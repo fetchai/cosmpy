@@ -148,7 +148,7 @@ class CosmosLedger:
         :param get_response_retry_interval: Retry interval for getting receipt
         :param n_get_response_retries: Number of get receipt retries
 
-        :raises RuntimeError: in case of wrong configuration.
+        :raises ValueError: in case of wrong configuration.
         """
         # Override presets when parameters are specified
         self.chain_id = chain_id
@@ -156,9 +156,11 @@ class CosmosLedger:
         self.validator_crypto = validator_crypto
 
         # Clients to communicate with Cosmos/CosmWasm REST node
-
         self.rest_client: Optional[RestClient] = None
         self.rpc_client: Optional[Channel] = None
+
+        if rpc_node_address and rest_node_address:
+            raise ValueError("Only one node type can be specified.")
 
         if rest_node_address:
             self.node_address = rest_node_address
@@ -193,7 +195,7 @@ class CosmosLedger:
             self.bank_client = BankGrpcClient(self.rpc_client)
             self.tendermint_client = TendermintGrpcClient(self.rpc_client)
         else:
-            raise RuntimeError("No node address specified")
+            raise ValueError("No node address specified")
 
         self.msg_retry_interval = msg_retry_interval
         self.msg_failed_retry_interval = msg_failed_retry_interval
