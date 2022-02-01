@@ -273,7 +273,7 @@ class CosmosLedger:
         return code_id, MessageToDict(res)
 
     @staticmethod
-    def _find_item(obj: JSONLike, re_pattern: Pattern) -> Optional[dict]:
+    def _find_item(obj: Union[dict, List], re_pattern: Pattern) -> Optional[dict]:
         """
         Get dict object that matches Pattern
 
