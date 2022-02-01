@@ -26,8 +26,7 @@ import json
 import re
 import time
 from pathlib import Path
-from re import Pattern
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Pattern, Tuple, Union
 
 import certifi
 import grpc
@@ -308,10 +307,10 @@ class CosmosLedger:
         """
         raw_log = json.loads(response.tx_response.raw_log)
 
-        dict = CosmosLedger._find_item(raw_log, CODE_ID_RE)
+        res_dict = CosmosLedger._find_item(raw_log, CODE_ID_RE)
 
-        assert dict is not None
-        return int(dict["value"])
+        assert res_dict is not None
+        return int(res_dict["value"])
 
     @staticmethod
     def get_contract_address(response: GetTxResponse) -> str:
@@ -322,11 +321,11 @@ class CosmosLedger:
         """
         raw_log = json.loads(response.tx_response.raw_log)
 
-        dict = CosmosLedger._find_item(raw_log, CONTRACT_ADDRESS_RE)
+        res_dict = CosmosLedger._find_item(raw_log, CONTRACT_ADDRESS_RE)
 
-        assert dict is not None
-        assert CosmosLedger.is_valid_crypto_address(str(dict["value"]))
-        return str(dict["value"])
+        assert res_dict is not None
+        assert CosmosLedger.is_valid_crypto_address(str(res_dict["value"]))
+        return str(res_dict["value"])
 
     def instantiate_contract(
         self,
@@ -1072,7 +1071,7 @@ class CosmosLedger:
                 ) from e
 
     @staticmethod
-    def is_valid_crypto_address(address: str, prefix: str = "[a-z]+"):
+    def is_valid_crypto_address(address: str, prefix: str = "[a-z]+") -> bool:
         """
         Check if given address is in correct format
 
@@ -1084,7 +1083,4 @@ class CosmosLedger:
 
         addr_re = re.compile("^" + prefix + "[0-9a-z]{39}$")
 
-        if addr_re.match(address):
-            return True
-        else:
-            return False
+        return bool(addr_re.match(address))
