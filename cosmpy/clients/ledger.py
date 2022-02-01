@@ -278,7 +278,7 @@ class CosmosLedger:
         Get dict object that matches Pattern
 
         :param obj: JSONLike object
-        :param re: Pattern to search for
+        :param re_pattern: Pattern to search for
 
         :return: dict that matches the pattern or None when no dict matches the pattern
         """
@@ -1079,7 +1079,7 @@ class CosmosLedger:
         :param address: Address to be checked
         :param prefix: Prefix of address
 
-        :raises ValueError: if address is in wrong format.
+        :return: Boolean if address is in correct format
         """
 
         addr_re = re.compile("^" + prefix + "[0-9a-z]{39}$")
