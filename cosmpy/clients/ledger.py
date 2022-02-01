@@ -113,8 +113,6 @@ class CosmosLedger:
     Implementation of a ledger service class.
     """
 
-    _ADDR_RE = re.compile("^fetch[0-9a-z]{39}$")
-
     def __init__(
         self,
         chain_id: str,
@@ -237,6 +235,7 @@ class CosmosLedger:
         code_id: Optional[int] = None
         last_exception: Optional[Exception] = None
         while code_id is None and attempt < self.n_total_msg_retries:
+            attempt += 1
             try:
                 msg = self.get_packed_store_msg(
                     sender_address=sender_crypto.get_address(),
@@ -260,8 +259,6 @@ class CosmosLedger:
                     "Failed to deploy contract code due BroadcastException: {%s}", e
                 )
                 self._sleep(self.msg_failed_retry_interval)
-                attempt += 1
-                continue
 
         if code_id is None or res is None:  # pragma: nocover
             raise BroadcastException(
@@ -313,11 +310,13 @@ class CosmosLedger:
 
         :raises BroadcastException: When communication with node fails.
         """
-        elapsed_time = 0
         res: Optional[GetTxResponse] = None
         contract_address: Optional[str] = None
         last_exception: Optional[Exception] = None
-        while contract_address is None and elapsed_time < self.n_total_msg_retries:
+        attempt = 0
+
+        while contract_address is None and attempt < self.n_total_msg_retries:
+            attempt += 1
             try:
                 msg = self.get_packed_init_msg(
                     sender_address=sender_crypto.get_address(),
@@ -354,7 +353,6 @@ class CosmosLedger:
 
             if contract_address is None:
                 self._sleep(self.msg_failed_retry_interval)
-                elapsed_time += 1
 
         if contract_address is None or res is None:
             error_msg = ""
@@ -371,7 +369,7 @@ class CosmosLedger:
         self,
         contract_address: str,
         msg: JSONLike,
-        num_retries: Optional[int] = None,
+        n_retries: Optional[int] = None,
     ) -> JSONLike:
         """
         Generate and send query message to get state of smart contract
@@ -379,7 +377,7 @@ class CosmosLedger:
 
         :param contract_address: Address of contract running on chain
         :param msg: Query message in json format
-        :param num_retries: Optional number of retries
+        :param n_retries: Optional number of retries
 
         :return: Query json response
 
@@ -389,12 +387,15 @@ class CosmosLedger:
             address=contract_address, query_data=json.dumps(msg).encode("UTF8")
         )
 
-        if num_retries is None:
-            num_retries = self.n_total_msg_retries
+        if n_retries is None:
+            n_retries = self.n_total_msg_retries
 
         res = None
         last_exception: Optional[Exception] = None
-        for _ in range(num_retries):
+
+        attempt = 0
+        while attempt < n_retries:
+            attempt += 1
             try:
                 res = self.wasm_client.SmartContractState(request)
                 if res is not None:
@@ -417,7 +418,7 @@ class CosmosLedger:
         execute_msg: JSONLike,
         gas: int = DEFAULT_GAS_LIMIT,
         amount: Optional[List[Coin]] = None,
-        retries: Optional[int] = None,
+        n_retries: Optional[int] = None,
     ) -> Tuple[JSONLike, int]:
         """
         Generate, sign and send handle message
@@ -427,7 +428,7 @@ class CosmosLedger:
         :param execute_msg: Execute message in json format
         :param gas: Gas limit
         :param amount: Funds to be transferred to contract address
-        :param retries: Optional number of retries
+        :param n_retries: Optional number of retries
 
         :raises BroadcastException: When communication with node fails.
 
@@ -436,10 +437,12 @@ class CosmosLedger:
         res: Optional[GetTxResponse] = None
         last_exception: Optional[Exception] = None
 
-        if retries is None:
-            retries = self.n_sending_retries
+        if n_retries is None:
+            n_retries = self.n_sending_retries
 
-        for _ in range(retries):
+        attempt = 0
+        while attempt < n_retries:
+            attempt += 1
             try:
 
                 msg = self.get_packed_exec_msg(
@@ -490,7 +493,10 @@ class CosmosLedger:
 
         res = None
         last_exception: Optional[Exception] = None
-        for _ in range(self.n_total_msg_retries):
+
+        attempt = 0
+        while attempt < self.n_total_msg_retries:
+            attempt += 1
             try:
                 res = self.bank_client.Balance(
                     QueryBalanceRequest(address=str(address), denom=denom)
@@ -523,7 +529,10 @@ class CosmosLedger:
 
         res = None
         last_exception: Optional[Exception] = None
-        for _ in range(self.n_total_msg_retries):
+
+        attempt = 0
+        while attempt < self.n_total_msg_retries:
+            attempt += 1
             try:
                 res = self.bank_client.AllBalances(
                     QueryBalanceRequest(address=str(address))
@@ -556,13 +565,12 @@ class CosmosLedger:
         min_amount_required = amount if amount else 500000000
 
         for address in addresses:
-            attempts_allowed = 10
 
             # Retry in case of network issues
-            while attempts_allowed > 0:
+            attempt = 0
+            while attempt < self.n_total_msg_retries:
+                attempt += 1
                 try:
-                    attempts_allowed -= 1
-
                     # Get balance of first available coin
                     balances = self.get_balances(address)
                     if balances:
@@ -602,7 +610,6 @@ class CosmosLedger:
                         type(e),
                     )
                     self._sleep(self.faucet_retry_interval)
-                    continue
 
     def send_funds(
         self,
@@ -764,7 +771,9 @@ class CosmosLedger:
 
         last_exception: Optional[Exception] = None
         account_response = None
-        for _ in range(self.n_total_msg_retries):
+        attempt = 0
+        while attempt < self.n_total_msg_retries:
+            attempt += 1
             try:
                 account_response = self.auth_client.Account(
                     QueryAccountRequest(address=str(address))
@@ -856,7 +865,9 @@ class CosmosLedger:
 
         last_exception = None
         broad_tx_resp = None
-        for _ in range(retries):
+        attempt = 0
+        while attempt < retries:
+            attempt += 1
             try:
                 broad_tx_resp = self.tx_client.BroadcastTx(broad_tx_req)
                 break
@@ -893,7 +904,9 @@ class CosmosLedger:
         last_exception = None
         tx_response = None
 
-        for _ in range(self.n_get_response_retries):
+        attempt = 0
+        while attempt < self.n_get_response_retries:
+            attempt += 1
             try:
                 # Send GetTx request
                 tx_response = self.tx_client.GetTx(tx_request)
@@ -1019,15 +1032,18 @@ class CosmosLedger:
                     f"ledger server is not available with address: {self.node_address}: {e}"
                 ) from e
 
-    @classmethod
-    def validate_address(cls, address: str):
+    @staticmethod
+    def validate_address(address: str, prefix: str):
         """
         Check if given address is in correct format
 
         :param address: Address to be checked
+        :param prefix: Prefix of address
 
         :raises ValueError: if address is in wrong format.
         """
 
-        if not cls._ADDR_RE.match(address):
+        addr_re = re.compile("^" + prefix + "[0-9a-z]{39}$")
+
+        if not addr_re.match(address):
             raise ValueError(f"Address {address} is invalid")
