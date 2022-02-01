@@ -26,6 +26,7 @@ import json
 import re
 import time
 from pathlib import Path
+from re import Pattern
 from typing import List, Optional, Tuple, Union
 
 import certifi
@@ -88,6 +89,10 @@ _logger = get_logger(__name__)
 # CosmWasm client response codes
 CLIENT_CODE_ERROR_EXCEPTION = 4
 CLIENT_CODE_MESSAGE_SUCCESSFUL = 0
+
+# CosmWasm constants
+CONTRACT_ADDRESS_RE: Pattern = re.compile(".*contract_address.*")
+CODE_ID_RE: Pattern = re.compile(".*code_id.*")
 
 DEFAULT_GAS_LIMIT = (
     3000000  # 3000000 is the maximum gas limit - tx will fail with higher limit
@@ -268,6 +273,33 @@ class CosmosLedger:
         return code_id, MessageToDict(res)
 
     @staticmethod
+    def _find_item(obj: JSONLike, re_pattern: Pattern) -> Optional[dict]:
+        """
+        Get dict object that matches Pattern
+
+        :param obj: JSONLike object
+        :param re: Pattern to search for
+
+        :return: dict that matches the pattern or None when no dict matches the pattern
+        """
+
+        if isinstance(obj, List):
+            for item in obj:
+                res = CosmosLedger._find_item(item, re_pattern)
+                if res is not None:
+                    return res
+
+        elif isinstance(obj, dict):
+            for _, v in obj.items():
+                if isinstance(v, str) and re_pattern.match(v):
+                    return obj
+
+                res = CosmosLedger._find_item(v, re_pattern)
+                if res is not None:
+                    return res
+        return None
+
+    @staticmethod
     def get_code_id(response: GetTxResponse) -> int:
         """
         Get code id from store code transaction response
@@ -275,8 +307,11 @@ class CosmosLedger:
         :return: integer code_id
         """
         raw_log = json.loads(response.tx_response.raw_log)
-        assert raw_log[0]["events"][1]["attributes"][0]["key"] == "code_id"
-        return int(raw_log[0]["events"][1]["attributes"][0]["value"])
+
+        dict = CosmosLedger._find_item(raw_log, CODE_ID_RE)
+
+        assert dict is not None
+        return int(dict["value"])
 
     @staticmethod
     def get_contract_address(response: GetTxResponse) -> str:
@@ -286,8 +321,12 @@ class CosmosLedger:
         :return: contract address string
         """
         raw_log = json.loads(response.tx_response.raw_log)
-        assert raw_log[0]["events"][0]["attributes"][0]["key"] == "_contract_address"
-        return str(raw_log[0]["events"][0]["attributes"][0]["value"])
+
+        dict = CosmosLedger._find_item(raw_log, CONTRACT_ADDRESS_RE)
+
+        assert dict is not None
+        assert CosmosLedger.is_valid_crypto_address(str(dict["value"]))
+        return str(dict["value"])
 
     def instantiate_contract(
         self,
@@ -1033,7 +1072,7 @@ class CosmosLedger:
                 ) from e
 
     @staticmethod
-    def validate_address(address: str, prefix: str):
+    def is_valid_crypto_address(address: str, prefix: str = "[a-z]+"):
         """
         Check if given address is in correct format
 
@@ -1045,5 +1084,7 @@ class CosmosLedger:
 
         addr_re = re.compile("^" + prefix + "[0-9a-z]{39}$")
 
-        if not addr_re.match(address):
-            raise ValueError(f"Address {address} is invalid")
+        if addr_re.match(address):
+            return True
+        else:
+            return False
