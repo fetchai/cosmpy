@@ -35,6 +35,7 @@ from tests.integration.generic.config import (
     DENOM,
     REST_ENDPOINT_ADDRESS,
     VALIDATOR_ADDRESS,
+    MINIMUM_BAlANCE,
 )
 
 
@@ -153,24 +154,26 @@ class FetchdDockerImage:
         sleep_rate: float = DEFAULT_SLEEP_RATE,
     ) -> bool:
         """Wait until the image is up."""
-        for i in range(max_attempts):
+        attempt = 0
+        while attempt < max_attempts:
+            attempt += 1
             try:
-                time.sleep(sleep_rate)
                 ledger = CosmosLedger(
                     rest_node_address=REST_ENDPOINT_ADDRESS, chain_id=CHAIN_ID
                 )
                 res = ledger.get_balance(VALIDATOR_ADDRESS, DENOM)
                 # Make sure that first block is minted
-                if res < 1000:
+                if res < MINIMUM_BAlANCE:
                     raise RuntimeError("The node is not set up yet.")
                 return True
             except Exception as e:  # nosec pylint: disable=W0703
                 logging.debug(
                     "Attempt %s failed. %s. Retrying in %s seconds...",
-                    i,
+                    attempt,
                     str(e),
                     sleep_rate,
                 )
+            time.sleep(sleep_rate)
         return False
 
     def launch_image(
