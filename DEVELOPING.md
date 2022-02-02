@@ -88,7 +88,7 @@ The Makefile in this repo provides various useful commands that ease development
 
 ### Preliminaries
 
-You require Go version 15.0 or higher for your platform (see <a href="https://golang.org/doc/install" target="_blank">here</a>)
+You require Go version 16.0 or higher for your platform (see <a href="https://golang.org/doc/install" target="_blank">here</a>)
 
 ### Setup a node
 
@@ -146,7 +146,7 @@ You require [Docker](https://docs.docker.com/get-docker/) for your platform.
 
 * Execute:
   ```bash
-  docker run -it --rm --entrypoint /scripts/<ENTRYPOINT_SCRIPT_NAME> -p 9090:9090 -p 1317:1317 -v <PATH_TO_ENTRYPOINT_SCRIPT>:/scripts/ fetchai/fetchd:0.8.4
+  docker run -it --rm --entrypoint /scripts/<ENTRYPOINT_SCRIPT_NAME> -p 9090:9090 -p 1317:1317 -v <PATH_TO_ENTRYPOINT_SCRIPT>:/scripts/ fetchai/fetchd:0.9.0-rc4
   ```
 
 where `<ENTRYPOINT_SCRIPT_NAME>` is the name of the entrypoint script (e.g.`fetchd_initialise.sh`) and `<PATH_TO_ENTRYPOINT_SCRIPT>` is the path to the directory you placed the script (e.g.`~/fetchd_docker/`).

@@ -50,7 +50,7 @@ from cosmpy.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
 class CosmWasmRestClient(CosmWasm):
     """Wasm REST client."""
 
-    API_URL = "/wasm/v1beta1"
+    API_URL = "/wasm/v1"
 
     def __init__(self, rest_api: RestClient):
         """

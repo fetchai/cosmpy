@@ -310,7 +310,7 @@ class TxRestClientTestCase(unittest.TestCase):
 
         # Edge case when execute message has field msg that should be base64 encoded but is returned as dict by REST API
         message = {
-            "@type": "/cosmwasm.wasm.v1beta1.MsgExecuteContract",
+            "@type": "/cosmwasm.wasm.v1.MsgExecuteContract",
             "sender": "fetch1mrf5yyjnnlpy0egvpk2pvjdk9667j2gtu8kpfy",
             "contract": "fetch10pyejy66429refv3g35g2t7am0was7yat03waz",
             "msg": {

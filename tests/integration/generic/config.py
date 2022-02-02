@@ -54,4 +54,4 @@ CUR_PATH = os.path.dirname(inspect.getfile(inspect.currentframe()))  # type: ign
 CONTRACT_FILENAME = Path(
     os.path.join(CUR_PATH, "..", "..", "..", "contracts", "cw_erc1155.wasm")
 )
-TOKEN_ID = "444"  # nosec
+TOKEN_ID = "680564733841876926926749214863536422914"  # nosec
