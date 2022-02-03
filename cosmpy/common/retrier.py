@@ -89,7 +89,7 @@ class Retrier:
                 last_exception = e
                 if self.log_retries:
                     _logger.warning(
-                        "%s failed, retry in %s seconds: %s",
+                        "Failed to %s, retry in %s seconds: %s",
                         self.call_name,
                         self.retry_interval,
                         e,
@@ -99,7 +99,7 @@ class Retrier:
 
         if response is None:
             raise self.raise_exception_type(
-                f"{self.call_name} failed after multiple attempts: {last_exception}"
+                f"Failed to {self.call_name} after multiple attempts: {last_exception}"
             ) from last_exception
 
         return response
