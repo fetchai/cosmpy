@@ -385,7 +385,7 @@ class CosmosLedgerTestCase(unittest.TestCase):
         self.ledger.tx_client = mock_tx_client
 
         result = self.ledger.send_funds(self.crypto, ADDRESS_OTHER, COINS)
-        self.assertIsInstance(result, GetTxResponse)
+        self.assertIsInstance(result, dict)
 
         # Reconstruct original Tx from last tx request bytes
         tx = Tx()
