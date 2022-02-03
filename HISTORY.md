@@ -1,8 +1,8 @@
 # Release History
 
-## 0.1.5 (2022-01-20)
+## 0.2.0-rc1 (2022-02-03)
 
-- Added support for a capricorn version of FetchD network
+- Added support for a Capricorn version of FetchD network
 
 ## 0.1.4 (2021-08-25)
 
