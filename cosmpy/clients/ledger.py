@@ -118,11 +118,23 @@ class Retrier:
         retry_interval: float,
         log_retries: bool = True,
         call_name: str = "execution",
+        exception_type: Exception = BroadcastException,
     ):
+        """
+        Call retrier
+
+        :param n_retries: Number of retry attempts
+        :param retry_interval: Length of sleep between retries
+        :param log_retries: bool if retries should be logged
+        :param call_name: str call name for logging
+        :param exception_type: Type of exception to be raised when call fails to execute after multiple attempts
+        """
+
         self.n_retries = n_retries
         self.retry_interval = retry_interval
-        self.log_retries = (log_retries,)
+        self.log_retries = log_retries
         self.call_name = call_name
+        self.exception_type = exception_type
 
     def call_with_retry(
         self,
@@ -130,6 +142,16 @@ class Retrier:
         *args,
         **kwargs,
     ):
+        """
+        Try to execute call, retry if exception is thrown
+
+        :param call: Callable to be called with args and kwargs
+        :param args: Args to be passed to call
+        :param kwargs: Kwargs to be passed to call
+
+        :raises exception_type: When retry fails after specified number of attempts
+        """
+
         last_exception = None
         response = None
 
@@ -153,7 +175,7 @@ class Retrier:
                 continue
 
         if response is None:
-            raise BroadcastException(
+            raise self.exception_type(
                 f"{self.call_name} failed after multiple attempts: {last_exception}"
             ) from last_exception
 
@@ -978,12 +1000,13 @@ class CosmosLedger:
 
         tx_request = GetTxRequest(hash=txhash)
 
-        return self._call_with_retry(
+        return Retrier(
             n_retries=self.n_get_response_retries,
             retry_interval=self.get_response_retry_interval,
-            call=self.tx_client.GetTx,
-            log_retries=False,
             call_name="Getting tx response",
+            log_retries=False,
+        ).call_with_retry(
+            self.tx_client.GetTx,
             request=tx_request,
         )
 
@@ -1109,42 +1132,3 @@ class CosmosLedger:
         addr_re = re.compile("^" + prefix + "[0-9a-z]{39}$")
 
         return bool(addr_re.match(address))
-
-    @staticmethod
-    def _call_with_retry(
-        n_retries: int,
-        retry_interval: float,
-        call: Callable,
-        log_retries: bool = True,
-        call_name: str = "execution",
-        *args,
-        **kwargs,
-    ):
-        last_exception = None
-        response = None
-
-        attempt = 0
-        while attempt < n_retries:
-            attempt += 1
-            try:
-                response = call(*args, **kwargs)
-                if response is not None:
-                    break
-            except Exception as e:  # pylint: disable=W0703
-                last_exception = e
-                if log_retries:
-                    _logger.warning(
-                        "%s failed, retry in %s seconds: %s",
-                        call_name,
-                        retry_interval,
-                        e,
-                    )
-                CosmosLedger._sleep(retry_interval)
-                continue
-
-        if response is None:
-            raise BroadcastException(
-                f"{call_name} failed after multiple attempts: {last_exception}"
-            ) from last_exception
-
-        return response
