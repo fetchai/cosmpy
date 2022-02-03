@@ -150,6 +150,8 @@ class Retrier:
         :param kwargs: Kwargs to be passed to call
 
         :raises exception_type: When retry fails after specified number of attempts
+
+        :return: response returned from call
         """
 
         last_exception = None
@@ -993,13 +995,12 @@ class CosmosLedger:
 
         :param txhash: TX hash of the transaction
 
-        :raises BroadcastException: if getting tx receipt fails.
-
         :return: GetTxResponse
         """
 
         tx_request = GetTxRequest(hash=txhash)
 
+        # raises BroadcastException if getting tx receipt fails.
         return Retrier(
             n_retries=self.n_get_response_retries,
             retry_interval=self.get_response_retry_interval,
