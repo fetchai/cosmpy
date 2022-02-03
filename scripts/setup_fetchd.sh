@@ -1,7 +1,7 @@
 # Install FetchD
 git clone https://github.com/fetchai/fetchd
 cd fetchd
-git checkout v0.8.7
+git checkout integration/capricorn
 make install
 
 # Remove FetchD git folder

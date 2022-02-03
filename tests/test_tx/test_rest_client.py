@@ -19,6 +19,7 @@
 
 """Tests for REST implementation of Tx."""
 
+import base64
 import json
 import os
 import unittest
@@ -306,11 +307,27 @@ class TxRestClientTestCase(unittest.TestCase):
 
     def test_GetTxsEvent_positive(self):
         """Test GetTxsEvent method for positive result."""
+
+        # Edge case when execute message has field msg that should be base64 encoded but is returned as dict by REST API
+        message = {
+            "@type": "/cosmwasm.wasm.v1.MsgExecuteContract",
+            "sender": "fetch1mrf5yyjnnlpy0egvpk2pvjdk9667j2gtu8kpfy",
+            "contract": "fetch10pyejy66429refv3g35g2t7am0was7yat03waz",
+            "msg": {
+                "create_single": {
+                    "item_owner": "fetch1mrf5yyjnnlpy0egvpk2pvjdk9667j2gtu8kpfy",
+                    "id": "1234",
+                    "path": "some_path",
+                }
+            },
+            "funds": [],
+        }
+
         content = {
             "txs": [
                 {
                     "body": {
-                        "messages": [],
+                        "messages": [message],
                         "memo": "string",
                         "timeout_height": "10",
                         "extension_options": [],
@@ -333,7 +350,12 @@ class TxRestClientTestCase(unittest.TestCase):
         }
         mock_client = MockRestClient(json.dumps(content))
 
+        # Apply JSON string workaround and generate expected_response
+        content["txs"][0]["body"]["messages"][0]["msg"] = base64.b64encode(
+            json.dumps(content["txs"][0]["body"]["messages"][0]["msg"]).encode("UTF8")
+        ).decode()
         expected_response = ParseDict(content, GetTxsEventResponse())
+
         rest_client = TxRestClient(mock_client)
         self.assertEqual(
             rest_client.GetTxsEvent(GetTxsEventRequest()), expected_response

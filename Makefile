@@ -1,7 +1,7 @@
 COSMOS_SDK_DIR := cosmos-sdk-proto-schema
 WASMD_DIR := wasm-proto-shema
-COSMOS_SDK_VERSION := v0.17.1
-WASMD_VERSION := v0.16.0
+COSMOS_SDK_VERSION := integration/capricorn
+WASMD_VERSION := v0.21.0
 COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
 WASMD_PROTO_RELATIVE_DIRS := proto
 SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
@@ -248,6 +248,13 @@ lint:
 	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude '*_pb2.py,*_pb2_grpc.py'
+
+.PHONY: security
+security:
+	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
+	bandit -r $(PYCOSM_EXAMPLES_DIR) --skip B101,B105
+	safety check -i 41002
+
 
 .PHONY: check
 check:

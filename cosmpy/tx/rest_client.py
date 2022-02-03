@@ -26,6 +26,9 @@ from typing import Any, Dict, List
 from google.protobuf.json_format import Parse, ParseDict
 
 from cosmpy.common.rest_client import RestClient
+from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import (  # noqa: F401  # pylint: disable=unused-import
+    PubKey as ProtoPubKey,
+)
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastTxRequest,
     BroadcastTxResponse,
@@ -36,7 +39,14 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
+from cosmpy.protos.cosmwasm.wasm.v1beta1.tx_pb2 import (  # noqa: F401  # pylint: disable=unused-import
+    MsgExecuteContract,
+    MsgInstantiateContract,
+    MsgStoreCode,
+)
 from cosmpy.tx.interface import TxInterface
+
+# Unused imports are required to make sure that related types get generated - Parse and ParseDict fail without them
 
 
 class TxRestClient(TxInterface):
@@ -98,7 +108,16 @@ class TxRestClient(TxInterface):
         :return: GetTxsEventResponse
         """
         response = self.rest_client.get(f"{self.API_URL}/txs", request)
-        return Parse(response, GetTxsEventResponse())
+
+        # JSON in JSON in case of CosmWasm messages workaround
+        dict_response = json.loads(response)
+        for tx in dict_response["txs"]:
+            self._fix_messages(tx["body"]["messages"])
+
+        for tx_response in dict_response["tx_responses"]:
+            self._fix_messages(tx_response["tx"]["body"]["messages"])
+
+        return ParseDict(dict_response, GetTxsEventResponse())
 
     @staticmethod
     def _fix_messages(messages: List[Dict[str, Any]]):
@@ -108,11 +127,11 @@ class TxRestClient(TxInterface):
         :param messages: List of message in Tx response
         """
         for message in messages:
-            if message["@type"] == "/cosmwasm.wasm.v1beta1.MsgInstantiateContract":
-                message["init_msg"] = base64.b64encode(
-                    json.dumps(message["init_msg"]).encode("UTF8")
+            if message["@type"] == "/cosmwasm.wasm.v1.MsgInstantiateContract":
+                message["msg"] = base64.b64encode(
+                    json.dumps(message["msg"]).encode("UTF8")
                 ).decode()
-            if message["@type"] == "/cosmwasm.wasm.v1beta1.MsgExecuteContract":
+            if message["@type"] == "/cosmwasm.wasm.v1.MsgExecuteContract":
                 message["msg"] = base64.b64encode(
                     json.dumps(message["msg"]).encode("UTF8")
                 ).decode()

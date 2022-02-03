@@ -43,7 +43,7 @@ class FetchdDockerImage:
 
     MINIMUM_DOCKER_VERSION = (19, 0, 0)
 
-    IMG_TAG = "fetchai/fetchd:0.8.4"
+    IMG_TAG = "fetchai/fetchd:0.9.0-rc4"
     ENTRYPOINT_FILENAME = "entry.sh"
     MOUNT_PATH = "/mnt"
     PORTS = {9090: 9090, 1317: 1317, 26657: 26657}

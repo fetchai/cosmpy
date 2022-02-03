@@ -30,7 +30,7 @@ from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
 from cosmpy.crypto.keypairs import PrivateKey
 
 # ID and amount of tokens to be minted in contract
-TOKEN_ID = "1234"
+TOKEN_ID = "680564733841876926926749214863536422912"
 AMOUNT = "1"
 
 # Path to smart contract

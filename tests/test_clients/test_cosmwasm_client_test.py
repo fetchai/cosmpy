@@ -47,8 +47,7 @@ class CosmWasmClientTestCase(unittest.TestCase):
 
         assert response == expected_response
         assert (
-            mock_rest_client.last_base_url
-            == "/cosmos/bank/v1beta1/balances/account/denom"
+            mock_rest_client.last_base_url == "/cosmos/bank/v1beta1/balances/account/"
         )
 
     @staticmethod
@@ -94,5 +93,5 @@ class CosmWasmClientTestCase(unittest.TestCase):
         assert response == expected_response
         assert (
             mock_rest_client.last_base_url
-            == "/wasm/v1beta1/contract/fetchcontractaddress/smart/e30="
+            == "/wasm/v1/contract/fetchcontractaddress/smart/e30="
         )
