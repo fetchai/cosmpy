@@ -259,7 +259,7 @@ class CosmosLedger:
         except Exception as e:  # pylint: disable=W0703
             if res:
                 raw_log = res.tx_response.raw_log  # pylint: disable=E1101
-                raise BroadcastException(
+                raise BroadcastException(  # pylint: disable=W0707
                     f"Failed to get code ID - {type(e)}, {e}: {raw_log}"
                 )
 
@@ -369,7 +369,7 @@ class CosmosLedger:
         except Exception as e:  # pylint: disable=W0703
             if res:
                 raw_log = res.tx_response.raw_log  # pylint: disable=E1101
-                raise BroadcastException(
+                raise BroadcastException(  # pylint: disable=W0707
                     f"Failed to get contract address - {type(e)}, {e}: {raw_log}"
                 )
 
