@@ -263,6 +263,8 @@ class CosmosLedger:
                     f"Failed to get code ID - {type(e)}, {e}: {raw_log}"
                 )
 
+        if code_id is None:
+            raise BroadcastException("Failed to get code ID.")
         return code_id, MessageToDict(res)
 
     @staticmethod
@@ -370,6 +372,9 @@ class CosmosLedger:
                 raise BroadcastException(
                     f"Failed to get contract address - {type(e)}, {e}: {raw_log}"
                 )
+
+        if contract_address is None:
+            raise BroadcastException("Failed to get contract address.")
 
         return contract_address, MessageToDict(res)
 
