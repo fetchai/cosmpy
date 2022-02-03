@@ -26,7 +26,7 @@ import json
 import re
 import time
 from pathlib import Path
-from typing import Callable, List, Optional, Pattern, Tuple, Union
+from typing import Callable, List, Optional, Pattern, Tuple, Type, Union
 
 import certifi
 import grpc
@@ -118,7 +118,7 @@ class Retrier:
         retry_interval: float,
         log_retries: bool = True,
         call_name: str = "execution",
-        exception_type: Exception = BroadcastException,
+        exception_type: Type[Exception] = BroadcastException,
     ):
         """
         Call retrier
