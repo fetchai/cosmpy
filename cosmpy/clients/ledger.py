@@ -26,7 +26,7 @@ import json
 import re
 import time
 from pathlib import Path
-from typing import List, Optional, Pattern, Tuple, Union
+from typing import Callable, List, Optional, Pattern, Tuple, Union
 
 import certifi
 import grpc
@@ -111,6 +111,56 @@ class LedgerServerNotAvailable(Exception):
     """
 
 
+class Retrier:
+
+    def __init__(
+            self,
+            n_retries: int,
+            retry_interval: float,
+            log_retries: bool = True,
+            call_name: str = "execution",
+    ):
+        self.n_retries = n_retries
+        self.retry_interval = retry_interval
+        self.log_retries = log_retries,
+        self.call_name = call_name
+
+    def call_with_retry(
+            self,
+            call: Callable,
+            *args,
+            **kwargs,
+    ):
+        last_exception = None
+        response = None
+
+        attempt = 0
+        while attempt < self.n_retries:
+            attempt += 1
+            try:
+                response = call(*args, **kwargs)
+                if response is not None:
+                    break
+            except Exception as e:  # pylint: disable=W0703
+                last_exception = e
+                if self.log_retries:
+                    _logger.warning(
+                        "%s failed, retry in %s seconds: %s",
+                        self.call_name,
+                        self.retry_interval,
+                        e,
+                    )
+                time.sleep(self.retry_interval)
+                continue
+
+        if response is None:
+            raise BroadcastException(
+                f"{self.call_name} failed after multiple attempts: {last_exception}"
+            ) from last_exception
+
+        return response
+
+
 # Class that provides interface to communicate with CosmWasm/Fetch blockchain
 class CosmosLedger:
     """
@@ -118,20 +168,20 @@ class CosmosLedger:
     """
 
     def __init__(
-        self,
-        chain_id: str,
-        rest_node_address: Optional[str] = None,
-        rpc_node_address: Optional[str] = None,
-        validator_crypto: Optional[CosmosCrypto] = None,
-        faucet_url: Optional[str] = None,
-        secure_channel: bool = False,
-        msg_retry_interval: int = 2,
-        msg_failed_retry_interval: int = 10,
-        faucet_retry_interval: int = 20,
-        n_sending_retries: int = 1,  # 5,
-        n_total_msg_retries: int = 1,  # 10,
-        get_response_retry_interval: float = 0.5,  # 2,
-        n_get_response_retries: int = 30,  # 30,
+            self,
+            chain_id: str,
+            rest_node_address: Optional[str] = None,
+            rpc_node_address: Optional[str] = None,
+            validator_crypto: Optional[CosmosCrypto] = None,
+            faucet_url: Optional[str] = None,
+            secure_channel: bool = False,
+            msg_retry_interval: int = 2,
+            msg_failed_retry_interval: int = 10,
+            faucet_retry_interval: int = 20,
+            n_sending_retries: int = 1,  # 5,
+            n_total_msg_retries: int = 1,  # 10,
+            get_response_retry_interval: float = 0.5,  # 2,
+            n_get_response_retries: int = 30,  # 30,
     ):
         """
         Create new instance to deploy and communicate with smart contract
@@ -218,10 +268,10 @@ class CosmosLedger:
         time.sleep(seconds)
 
     def deploy_contract(
-        self,
-        sender_crypto: CosmosCrypto,
-        contract_filename: Path,
-        gas: int = DEFAULT_GAS_LIMIT,
+            self,
+            sender_crypto: CosmosCrypto,
+            contract_filename: Path,
+            gas: int = DEFAULT_GAS_LIMIT,
     ) -> Tuple[int, JSONLike]:
         """
         Deploy smart contract on a blockchain
@@ -260,7 +310,7 @@ class CosmosLedger:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
                 _logger.warning(
-                    "Failed to deploy contract code due BroadcastException: {%s}", e
+                    "Failed to deploy contract code due BroadcastException: %s", e
                 )
                 self._sleep(self.msg_failed_retry_interval)
 
@@ -328,12 +378,12 @@ class CosmosLedger:
         return str(res_dict["value"])
 
     def instantiate_contract(
-        self,
-        sender_crypto: CosmosCrypto,
-        code_id: int,
-        init_msg: JSONLike,
-        label: str,
-        gas: int = DEFAULT_GAS_LIMIT,
+            self,
+            sender_crypto: CosmosCrypto,
+            code_id: int,
+            init_msg: JSONLike,
+            label: str,
+            gas: int = DEFAULT_GAS_LIMIT,
     ) -> Tuple[str, JSONLike]:
         """
         Send init contract message
@@ -377,14 +427,12 @@ class CosmosLedger:
             except BroadcastException as e:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
-                _logger.warning(
-                    "Failed to init contract due BroadcastException: {%s}", e
-                )
+                _logger.warning("Failed to init contract due BroadcastException: %s", e)
             except json.decoder.JSONDecodeError as e:
                 # Failure due to response parsing error
                 last_exception = e
                 _logger.warning(
-                    "Failed to parse init Contract response {%s} : {%s}",
+                    "Failed to parse init Contract response %s : %s",
                     res.tx_response.raw_log if res is not None else None,
                     e,
                 )
@@ -404,10 +452,10 @@ class CosmosLedger:
         return contract_address, MessageToDict(res)
 
     def query_contract_state(
-        self,
-        contract_address: str,
-        msg: JSONLike,
-        n_retries: Optional[int] = None,
+            self,
+            contract_address: str,
+            msg: JSONLike,
+            n_retries: Optional[int] = None,
     ) -> JSONLike:
         """
         Generate and send query message to get state of smart contract
@@ -440,7 +488,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot get contract state: {%s}", e)
+                _logger.warning("Cannot get contract state: %s", e)
                 self._sleep(self.msg_failed_retry_interval)
 
         if res is None:
@@ -450,13 +498,13 @@ class CosmosLedger:
         return json.loads(res.data)  # pylint: disable=E1101
 
     def execute_contract(
-        self,
-        sender_crypto: CosmosCrypto,
-        contract_address: str,
-        execute_msg: JSONLike,
-        gas: int = DEFAULT_GAS_LIMIT,
-        amount: Optional[List[Coin]] = None,
-        n_retries: Optional[int] = None,
+            self,
+            sender_crypto: CosmosCrypto,
+            contract_address: str,
+            execute_msg: JSONLike,
+            gas: int = DEFAULT_GAS_LIMIT,
+            amount: Optional[List[Coin]] = None,
+            n_retries: Optional[int] = None,
     ) -> Tuple[JSONLike, int]:
         """
         Generate, sign and send handle message
@@ -504,7 +552,7 @@ class CosmosLedger:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
                 _logger.warning(
-                    "Failed to deploy contract code due BroadcastException: {%s}", e
+                    "Failed to deploy contract code due BroadcastException: %s", e
                 )
                 self._sleep(self.msg_failed_retry_interval)
 
@@ -543,7 +591,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot get balance: {%s}", e)
+                _logger.warning("Cannot get balance: %s", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -579,7 +627,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot get balances: {%s}", e)
+                _logger.warning("Cannot get balances: %s", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -591,7 +639,7 @@ class CosmosLedger:
         return res.balances
 
     def refill_wealth_from_faucet(
-        self, addresses: List[str], amount: Optional[int] = None
+            self, addresses: List[str], amount: Optional[int] = None
     ):
         """
         Uses faucet api to refill balance of addresses
@@ -618,7 +666,7 @@ class CosmosLedger:
 
                     if balance < min_amount_required:
                         _logger.info(
-                            "Refilling balance of {%s} from faucet. Currently: {%s}",
+                            "Refilling balance of %s from faucet. Currently: %s",
                             address,
                             balance,
                         )
@@ -630,7 +678,7 @@ class CosmosLedger:
 
                         if response.status_code != 200:
                             _logger.exception(
-                                "Failed to refill the balance from faucet, retry in {%s} seconds: {%s}",
+                                "Failed to refill the balance from faucet, retry in %s seconds: %s",
                                 self.faucet_retry_interval,
                                 str(response),
                             )
@@ -638,11 +686,11 @@ class CosmosLedger:
                         # Wait for wealth to be refilled
                         self._sleep(self.faucet_retry_interval)
                         continue
-                    _logger.info("Balance of {%s} is {%s}", address, balance)
+                    _logger.info("Balance of %s is %s", address, balance)
                     break
                 except Exception as e:  # pylint: disable=W0703
                     _logger.exception(
-                        "Failed to refill the balance from faucet, retry in {%s} second: {%s} ({%s})",
+                        "Failed to refill the balance from faucet, retry in %s second: %s (%s)",
                         self.faucet_retry_interval,
                         e,
                         type(e),
@@ -650,10 +698,10 @@ class CosmosLedger:
                     self._sleep(self.faucet_retry_interval)
 
     def send_funds(
-        self,
-        from_crypto: CosmosCrypto,
-        to_address: str,
-        amount_coins: List[Coin],
+            self,
+            from_crypto: CosmosCrypto,
+            to_address: str,
+            amount_coins: List[Coin],
     ):
         """
         Transfer funds from one address to another address
@@ -703,7 +751,7 @@ class CosmosLedger:
             crypto.account_number = account.account_number  # pylint: disable=E1101
 
     def ensure_funds(
-        self, addresses: List[str], amount_coins: Optional[List[Coin]] = None
+            self, addresses: List[str], amount_coins: Optional[List[Coin]] = None
     ):
         """
         Refill funds of addresses using faucet or validator
@@ -727,10 +775,10 @@ class CosmosLedger:
             )
 
     def refill_wealth_from_validator(
-        self,
-        validator_crypto: CosmosCrypto,
-        addresses: List[str],
-        required_amount_coins: List[Coin],
+            self,
+            validator_crypto: CosmosCrypto,
+            addresses: List[str],
+            required_amount_coins: List[Coin],
     ):
         """
         Refill funds of addresses using validator
@@ -750,13 +798,13 @@ class CosmosLedger:
             self.send_funds(validator_crypto, address, amount_coins)
 
     def generate_tx(
-        self,
-        packed_msgs: List[ProtoAny],
-        from_addresses: List[str],
-        pub_keys: List[bytes],
-        fee: Optional[List[Coin]] = None,
-        memo: str = "",
-        gas_limit: int = DEFAULT_GAS_LIMIT,
+            self,
+            packed_msgs: List[ProtoAny],
+            from_addresses: List[str],
+            pub_keys: List[bytes],
+            fee: Optional[List[Coin]] = None,
+            memo: str = "",
+            gas_limit: int = DEFAULT_GAS_LIMIT,
     ) -> Tx:
         """
         Generate transaction that can be later signed
@@ -819,7 +867,7 @@ class CosmosLedger:
                 break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot query account data: {%s}", e)
+                _logger.warning("Cannot query account data: %s", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -862,7 +910,7 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_send_msg(
-        from_address: str, to_address: str, amount: List[Coin]
+            from_address: str, to_address: str, amount: List[Coin]
     ) -> ProtoAny:
         """
         Generate and pack MsgSend
@@ -901,23 +949,12 @@ class CosmosLedger:
         if retries is None:
             retries = self.n_total_msg_retries
 
-        last_exception = None
-        broad_tx_resp = None
-        attempt = 0
-        while attempt < retries:
-            attempt += 1
-            try:
-                broad_tx_resp = self.tx_client.BroadcastTx(broad_tx_req)
-                break
-            except Exception as e:  # pylint: disable=W0703
-                last_exception = e
-                _logger.warning("Transaction broadcasting failed: {%s}", e)
-                self._sleep(self.msg_retry_interval)
 
-        if broad_tx_resp is None:
-            raise BroadcastException(
-                f"Broadcasting tx failed after multiple attempts: {last_exception}"
-            )
+        broad_tx_resp = Retrier(n_retries=retries, retry_interval=self.msg_retry_interval,
+                            call_name="Transaction broadcasting").call_with_retry(
+            self.tx_client.BroadcastTx,
+            request=broad_tx_req,
+        )
 
         # Transaction cannot be broadcast because of wrong format, sequence, signature, etc.
         if broad_tx_resp.tx_response.code != CLIENT_CODE_MESSAGE_SUCCESSFUL:
@@ -939,28 +976,15 @@ class CosmosLedger:
         """
 
         tx_request = GetTxRequest(hash=txhash)
-        last_exception = None
-        tx_response = None
 
-        attempt = 0
-        while attempt < self.n_get_response_retries:
-            attempt += 1
-            try:
-                # Send GetTx request
-                tx_response = self.tx_client.GetTx(tx_request)
-                break
-            except Exception as e:  # pylint: disable=W0703
-                # This fails when Tx is not on chain yet - not an actual error
-                last_exception = e
-                self._sleep(self.get_response_retry_interval)
-                continue
-
-        if tx_response is None:
-            raise BroadcastException(
-                f"Getting tx response failed after multiple attempts: {last_exception}"
-            ) from last_exception
-
-        return tx_response
+        return self._call_with_retry(
+            n_retries=self.n_get_response_retries,
+            retry_interval=self.get_response_retry_interval,
+            call=self.tx_client.GetTx,
+            log_retries=False,
+            call_name="Getting tx response",
+            request=tx_request,
+        )
 
     @staticmethod
     def get_packed_store_msg(sender_address: str, contract_filename: Path) -> ProtoAny:
@@ -986,11 +1010,11 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_init_msg(
-        sender_address: str,
-        code_id: int,
-        init_msg: JSONLike,
-        label="contract",
-        funds: Optional[List[Coin]] = None,
+            sender_address: str,
+            code_id: int,
+            init_msg: JSONLike,
+            label="contract",
+            funds: Optional[List[Coin]] = None,
     ) -> ProtoAny:
         """
         Create and pack MsgInstantiateContract
@@ -1017,10 +1041,10 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_exec_msg(
-        sender_address: str,
-        contract_address: str,
-        msg: JSONLike,
-        funds: Optional[List[Coin]] = None,
+            sender_address: str,
+            contract_address: str,
+            msg: JSONLike,
+            funds: Optional[List[Coin]] = None,
     ) -> ProtoAny:
         """
         Create and pack MsgExecuteContract
@@ -1084,3 +1108,42 @@ class CosmosLedger:
         addr_re = re.compile("^" + prefix + "[0-9a-z]{39}$")
 
         return bool(addr_re.match(address))
+
+    @staticmethod
+    def _call_with_retry(
+            n_retries: int,
+            retry_interval: float,
+            call: Callable,
+            log_retries: bool = True,
+            call_name: str = "execution",
+            *args,
+            **kwargs,
+    ):
+        last_exception = None
+        response = None
+
+        attempt = 0
+        while attempt < n_retries:
+            attempt += 1
+            try:
+                response = call(*args, **kwargs)
+                if response is not None:
+                    break
+            except Exception as e:  # pylint: disable=W0703
+                last_exception = e
+                if log_retries:
+                    _logger.warning(
+                        "%s failed, retry in %s seconds: %s",
+                        call_name,
+                        retry_interval,
+                        e,
+                    )
+                CosmosLedger._sleep(retry_interval)
+                continue
+
+        if response is None:
+            raise BroadcastException(
+                f"{call_name} failed after multiple attempts: {last_exception}"
+            ) from last_exception
+
+        return response
