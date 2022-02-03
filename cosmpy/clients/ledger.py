@@ -112,24 +112,23 @@ class LedgerServerNotAvailable(Exception):
 
 
 class Retrier:
-
     def __init__(
-            self,
-            n_retries: int,
-            retry_interval: float,
-            log_retries: bool = True,
-            call_name: str = "execution",
+        self,
+        n_retries: int,
+        retry_interval: float,
+        log_retries: bool = True,
+        call_name: str = "execution",
     ):
         self.n_retries = n_retries
         self.retry_interval = retry_interval
-        self.log_retries = log_retries,
+        self.log_retries = (log_retries,)
         self.call_name = call_name
 
     def call_with_retry(
-            self,
-            call: Callable,
-            *args,
-            **kwargs,
+        self,
+        call: Callable,
+        *args,
+        **kwargs,
     ):
         last_exception = None
         response = None
@@ -168,20 +167,20 @@ class CosmosLedger:
     """
 
     def __init__(
-            self,
-            chain_id: str,
-            rest_node_address: Optional[str] = None,
-            rpc_node_address: Optional[str] = None,
-            validator_crypto: Optional[CosmosCrypto] = None,
-            faucet_url: Optional[str] = None,
-            secure_channel: bool = False,
-            msg_retry_interval: int = 2,
-            msg_failed_retry_interval: int = 10,
-            faucet_retry_interval: int = 20,
-            n_sending_retries: int = 1,  # 5,
-            n_total_msg_retries: int = 1,  # 10,
-            get_response_retry_interval: float = 0.5,  # 2,
-            n_get_response_retries: int = 30,  # 30,
+        self,
+        chain_id: str,
+        rest_node_address: Optional[str] = None,
+        rpc_node_address: Optional[str] = None,
+        validator_crypto: Optional[CosmosCrypto] = None,
+        faucet_url: Optional[str] = None,
+        secure_channel: bool = False,
+        msg_retry_interval: int = 2,
+        msg_failed_retry_interval: int = 10,
+        faucet_retry_interval: int = 20,
+        n_sending_retries: int = 1,  # 5,
+        n_total_msg_retries: int = 1,  # 10,
+        get_response_retry_interval: float = 0.5,  # 2,
+        n_get_response_retries: int = 30,  # 30,
     ):
         """
         Create new instance to deploy and communicate with smart contract
@@ -268,10 +267,10 @@ class CosmosLedger:
         time.sleep(seconds)
 
     def deploy_contract(
-            self,
-            sender_crypto: CosmosCrypto,
-            contract_filename: Path,
-            gas: int = DEFAULT_GAS_LIMIT,
+        self,
+        sender_crypto: CosmosCrypto,
+        contract_filename: Path,
+        gas: int = DEFAULT_GAS_LIMIT,
     ) -> Tuple[int, JSONLike]:
         """
         Deploy smart contract on a blockchain
@@ -378,12 +377,12 @@ class CosmosLedger:
         return str(res_dict["value"])
 
     def instantiate_contract(
-            self,
-            sender_crypto: CosmosCrypto,
-            code_id: int,
-            init_msg: JSONLike,
-            label: str,
-            gas: int = DEFAULT_GAS_LIMIT,
+        self,
+        sender_crypto: CosmosCrypto,
+        code_id: int,
+        init_msg: JSONLike,
+        label: str,
+        gas: int = DEFAULT_GAS_LIMIT,
     ) -> Tuple[str, JSONLike]:
         """
         Send init contract message
@@ -452,10 +451,10 @@ class CosmosLedger:
         return contract_address, MessageToDict(res)
 
     def query_contract_state(
-            self,
-            contract_address: str,
-            msg: JSONLike,
-            n_retries: Optional[int] = None,
+        self,
+        contract_address: str,
+        msg: JSONLike,
+        n_retries: Optional[int] = None,
     ) -> JSONLike:
         """
         Generate and send query message to get state of smart contract
@@ -498,13 +497,13 @@ class CosmosLedger:
         return json.loads(res.data)  # pylint: disable=E1101
 
     def execute_contract(
-            self,
-            sender_crypto: CosmosCrypto,
-            contract_address: str,
-            execute_msg: JSONLike,
-            gas: int = DEFAULT_GAS_LIMIT,
-            amount: Optional[List[Coin]] = None,
-            n_retries: Optional[int] = None,
+        self,
+        sender_crypto: CosmosCrypto,
+        contract_address: str,
+        execute_msg: JSONLike,
+        gas: int = DEFAULT_GAS_LIMIT,
+        amount: Optional[List[Coin]] = None,
+        n_retries: Optional[int] = None,
     ) -> Tuple[JSONLike, int]:
         """
         Generate, sign and send handle message
@@ -639,7 +638,7 @@ class CosmosLedger:
         return res.balances
 
     def refill_wealth_from_faucet(
-            self, addresses: List[str], amount: Optional[int] = None
+        self, addresses: List[str], amount: Optional[int] = None
     ):
         """
         Uses faucet api to refill balance of addresses
@@ -698,10 +697,10 @@ class CosmosLedger:
                     self._sleep(self.faucet_retry_interval)
 
     def send_funds(
-            self,
-            from_crypto: CosmosCrypto,
-            to_address: str,
-            amount_coins: List[Coin],
+        self,
+        from_crypto: CosmosCrypto,
+        to_address: str,
+        amount_coins: List[Coin],
     ):
         """
         Transfer funds from one address to another address
@@ -751,7 +750,7 @@ class CosmosLedger:
             crypto.account_number = account.account_number  # pylint: disable=E1101
 
     def ensure_funds(
-            self, addresses: List[str], amount_coins: Optional[List[Coin]] = None
+        self, addresses: List[str], amount_coins: Optional[List[Coin]] = None
     ):
         """
         Refill funds of addresses using faucet or validator
@@ -775,10 +774,10 @@ class CosmosLedger:
             )
 
     def refill_wealth_from_validator(
-            self,
-            validator_crypto: CosmosCrypto,
-            addresses: List[str],
-            required_amount_coins: List[Coin],
+        self,
+        validator_crypto: CosmosCrypto,
+        addresses: List[str],
+        required_amount_coins: List[Coin],
     ):
         """
         Refill funds of addresses using validator
@@ -798,13 +797,13 @@ class CosmosLedger:
             self.send_funds(validator_crypto, address, amount_coins)
 
     def generate_tx(
-            self,
-            packed_msgs: List[ProtoAny],
-            from_addresses: List[str],
-            pub_keys: List[bytes],
-            fee: Optional[List[Coin]] = None,
-            memo: str = "",
-            gas_limit: int = DEFAULT_GAS_LIMIT,
+        self,
+        packed_msgs: List[ProtoAny],
+        from_addresses: List[str],
+        pub_keys: List[bytes],
+        fee: Optional[List[Coin]] = None,
+        memo: str = "",
+        gas_limit: int = DEFAULT_GAS_LIMIT,
     ) -> Tx:
         """
         Generate transaction that can be later signed
@@ -910,7 +909,7 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_send_msg(
-            from_address: str, to_address: str, amount: List[Coin]
+        from_address: str, to_address: str, amount: List[Coin]
     ) -> ProtoAny:
         """
         Generate and pack MsgSend
@@ -949,9 +948,11 @@ class CosmosLedger:
         if retries is None:
             retries = self.n_total_msg_retries
 
-
-        broad_tx_resp = Retrier(n_retries=retries, retry_interval=self.msg_retry_interval,
-                            call_name="Transaction broadcasting").call_with_retry(
+        broad_tx_resp = Retrier(
+            n_retries=retries,
+            retry_interval=self.msg_retry_interval,
+            call_name="Transaction broadcasting",
+        ).call_with_retry(
             self.tx_client.BroadcastTx,
             request=broad_tx_req,
         )
@@ -1010,11 +1011,11 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_init_msg(
-            sender_address: str,
-            code_id: int,
-            init_msg: JSONLike,
-            label="contract",
-            funds: Optional[List[Coin]] = None,
+        sender_address: str,
+        code_id: int,
+        init_msg: JSONLike,
+        label="contract",
+        funds: Optional[List[Coin]] = None,
     ) -> ProtoAny:
         """
         Create and pack MsgInstantiateContract
@@ -1041,10 +1042,10 @@ class CosmosLedger:
 
     @staticmethod
     def get_packed_exec_msg(
-            sender_address: str,
-            contract_address: str,
-            msg: JSONLike,
-            funds: Optional[List[Coin]] = None,
+        sender_address: str,
+        contract_address: str,
+        msg: JSONLike,
+        funds: Optional[List[Coin]] = None,
     ) -> ProtoAny:
         """
         Create and pack MsgExecuteContract
@@ -1111,13 +1112,13 @@ class CosmosLedger:
 
     @staticmethod
     def _call_with_retry(
-            n_retries: int,
-            retry_interval: float,
-            call: Callable,
-            log_retries: bool = True,
-            call_name: str = "execution",
-            *args,
-            **kwargs,
+        n_retries: int,
+        retry_interval: float,
+        call: Callable,
+        log_retries: bool = True,
+        call_name: str = "execution",
+        *args,
+        **kwargs,
     ):
         last_exception = None
         response = None
