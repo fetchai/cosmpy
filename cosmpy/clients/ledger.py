@@ -241,6 +241,7 @@ class CosmosLedger:
             contract_filename=Path(contract_filename),
         )
 
+        # raises BroadcastException if getting tx receipt fails.
         res = Retrier(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_failed_retry_interval,
@@ -351,6 +352,7 @@ class CosmosLedger:
             label=label,
         )
 
+        # raises BroadcastException if getting tx receipt fails.
         res = Retrier(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_failed_retry_interval,
@@ -402,6 +404,7 @@ class CosmosLedger:
         if n_retries is None:
             n_retries = self.n_total_msg_retries
 
+        # raises BroadcastException if getting tx receipt fails.
         res = Retrier(
             n_retries=n_retries,
             retry_interval=self.msg_failed_retry_interval,
@@ -430,8 +433,6 @@ class CosmosLedger:
         :param amount: Funds to be transferred to contract address
         :param n_retries: Optional number of retries
 
-        :raises BroadcastException: When communication with node fails.
-
         :return: Execute message response
         """
 
@@ -445,6 +446,7 @@ class CosmosLedger:
         if n_retries is None:
             n_retries = self.n_sending_retries
 
+        # raises BroadcastException if getting tx receipt fails.
         res = Retrier(
             n_retries=n_retries,
             retry_interval=self.msg_failed_retry_interval,
@@ -469,12 +471,11 @@ class CosmosLedger:
         :param denom: Denom of coins
 
         :return: Integer representation of amount
-
-        :raises BroadcastException: When communication with node fails.
         """
 
         request = QueryBalanceRequest(address=str(address), denom=denom)
 
+        # raises BroadcastException if getting tx receipt fails.
         res = Retrier(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_retry_interval,
@@ -490,13 +491,12 @@ class CosmosLedger:
 
         :param address: Address to be query
 
-        :raises BroadcastException: When communication with node fails.
-
         :return: List of coins
         """
 
         request = QueryBalanceRequest(address=str(address))
 
+        # raises BroadcastException if getting tx receipt fails.
         res = Retrier(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_retry_interval,
@@ -587,6 +587,7 @@ class CosmosLedger:
             from_address=from_address, to_address=to_address, amount=amount_coins
         )
 
+        # raises BroadcastException if getting tx receipt fails.
         res = Retrier(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_failed_retry_interval,
@@ -724,13 +725,13 @@ class CosmosLedger:
         :param address: Address of account to query data about
 
         :raises TypeError: in case of wrong account type.
-        :raises BroadcastException: if broadcasting fails.
 
         :return: BaseAccount
         """
 
         request = QueryAccountRequest(address=str(address))
 
+        # raises BroadcastException if getting tx receipt fails.
         account_response = Retrier(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_retry_interval,
@@ -811,6 +812,7 @@ class CosmosLedger:
         if retries is None:
             retries = self.n_total_msg_retries
 
+        # raises BroadcastException if getting tx receipt fails.
         broad_tx_resp = Retrier(
             n_retries=retries,
             retry_interval=self.msg_retry_interval,
