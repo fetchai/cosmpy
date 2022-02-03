@@ -393,9 +393,8 @@ class CosmosLedger:
         :param n_retries: Optional number of retries
 
         :return: Query json response
-
-        :raises BroadcastException: When communication with node fails.
         """
+
         request = QuerySmartContractStateRequest(
             address=contract_address, query_data=json.dumps(msg).encode("UTF8")
         )
@@ -403,25 +402,13 @@ class CosmosLedger:
         if n_retries is None:
             n_retries = self.n_total_msg_retries
 
-        res = None
-        last_exception: Optional[Exception] = None
+        res = Retrier(
+            n_retries=n_retries,
+            retry_interval=self.msg_failed_retry_interval,
+            call_name="getting smart contract state",
+            raise_exception_type=BroadcastException,
+        ).call_with_retry(self.wasm_client.SmartContractState, request)
 
-        attempt = 0
-        while attempt < n_retries:
-            attempt += 1
-            try:
-                res = self.wasm_client.SmartContractState(request)
-                if res is not None:
-                    break
-            except Exception as e:  # pylint: disable=W0703
-                last_exception = e
-                _logger.warning("Cannot get contract state: %s", e)
-                self._sleep(self.msg_failed_retry_interval)
-
-        if res is None:
-            raise BroadcastException(
-                f"Getting contract state failed after multiple attempts: {last_exception}"
-            ) from last_exception
         return json.loads(res.data)  # pylint: disable=E1101
 
     def execute_contract(
@@ -447,46 +434,28 @@ class CosmosLedger:
 
         :return: Execute message response
         """
-        res: Optional[GetTxResponse] = None
-        last_exception: Optional[Exception] = None
+
+        msg = self.get_packed_exec_msg(
+            sender_address=sender_crypto.get_address(),
+            contract_address=contract_address,
+            msg=execute_msg,
+            funds=amount,
+        )
 
         if n_retries is None:
             n_retries = self.n_sending_retries
 
-        attempt = 0
-        while attempt < n_retries:
-            attempt += 1
-            try:
-
-                msg = self.get_packed_exec_msg(
-                    sender_address=sender_crypto.get_address(),
-                    contract_address=contract_address,
-                    msg=execute_msg,
-                    funds=amount,
-                )
-
-                tx = self.generate_tx(
-                    [msg],
-                    [sender_crypto.get_address()],
-                    [sender_crypto.get_pubkey_as_bytes()],
-                    gas_limit=gas,
-                )
-                self.sign_tx(sender_crypto, tx)
-                res = self.broadcast_tx(tx)
-                if res is not None:
-                    break
-            except BroadcastException as e:
-                # Failure due to wrong sequence, signature, etc.
-                last_exception = e
-                _logger.warning(
-                    "Failed to deploy contract code due BroadcastException: %s", e
-                )
-                self._sleep(self.msg_failed_retry_interval)
-
-        if res is None:
-            raise BroadcastException(
-                f"Failed to execute contract after multiple attempts: {last_exception}"
-            ) from last_exception
+        res = Retrier(
+            n_retries=n_retries,
+            retry_interval=self.msg_failed_retry_interval,
+            call_name="execute contract",
+            raise_exception_type=BroadcastException,
+        ).call_with_retry(
+            self.generate_sign_and_broadcast_tx,
+            packed_msgs=[msg],
+            signers_cryptos=[sender_crypto],
+            gas_limit=gas,
+        )
 
         # err_code >0 in case of exceptions inside rust contract
         err_code = res.tx_response.code  # pylint: disable=E1101
@@ -504,28 +473,14 @@ class CosmosLedger:
         :raises BroadcastException: When communication with node fails.
         """
 
-        res = None
-        last_exception: Optional[Exception] = None
+        request = QueryBalanceRequest(address=str(address), denom=denom)
 
-        attempt = 0
-        while attempt < self.n_total_msg_retries:
-            attempt += 1
-            try:
-                res = self.bank_client.Balance(
-                    QueryBalanceRequest(address=str(address), denom=denom)
-                )
-                if res is not None:
-                    break
-            except Exception as e:  # pylint: disable=W0703
-                last_exception = e
-                _logger.warning("Cannot get balance: %s", e)
-                self._sleep(self.msg_retry_interval)
-                continue
-
-        if res is None:
-            raise BroadcastException(
-                f"Getting balance failed after multiple attempts: {last_exception}"
-            )
+        res = Retrier(
+            n_retries=self.n_total_msg_retries,
+            retry_interval=self.msg_retry_interval,
+            call_name="get balance",
+            raise_exception_type=BroadcastException,
+        ).call_with_retry(self.bank_client.Balance, request)
 
         return int(res.balance.amount)
 
@@ -540,28 +495,14 @@ class CosmosLedger:
         :return: List of coins
         """
 
-        res = None
-        last_exception: Optional[Exception] = None
+        request = QueryBalanceRequest(address=str(address))
 
-        attempt = 0
-        while attempt < self.n_total_msg_retries:
-            attempt += 1
-            try:
-                res = self.bank_client.AllBalances(
-                    QueryBalanceRequest(address=str(address))
-                )
-                if res is not None:
-                    break
-            except Exception as e:  # pylint: disable=W0703
-                last_exception = e
-                _logger.warning("Cannot get balances: %s", e)
-                self._sleep(self.msg_retry_interval)
-                continue
-
-        if res is None:
-            raise BroadcastException(
-                f"Getting balances failed after multiple attempts: {last_exception}"
-            )
+        res = Retrier(
+            n_retries=self.n_total_msg_retries,
+            retry_interval=self.msg_retry_interval,
+            call_name="get balances",
+            raise_exception_type=BroadcastException,
+        ).call_with_retry(self.bank_client.AllBalances, request)
 
         return res.balances
 
@@ -646,12 +587,19 @@ class CosmosLedger:
             from_address=from_address, to_address=to_address, amount=amount_coins
         )
 
-        tx = self.generate_tx(
-            [msg], [from_address], [from_crypto.get_pubkey_as_bytes()]
+        res = Retrier(
+            n_retries=self.n_total_msg_retries,
+            retry_interval=self.msg_failed_retry_interval,
+            call_name="send funds",
+            raise_exception_type=BroadcastException,
+        ).call_with_retry(
+            self.generate_sign_and_broadcast_tx,
+            packed_msgs=[msg],
+            signers_cryptos=[from_crypto],
         )
-        self.sign_tx(from_crypto, tx)
 
-        return self.broadcast_tx(tx)
+        err_code = res.tx_response.code  # pylint: disable=E1101
+        return MessageToDict(res, err_code)
 
     def sign_tx(self, crypto: CosmosCrypto, tx: Tx):
         """
@@ -780,28 +728,15 @@ class CosmosLedger:
 
         :return: BaseAccount
         """
-        # Get account data for signing
 
-        last_exception: Optional[Exception] = None
-        account_response = None
-        attempt = 0
-        while attempt < self.n_total_msg_retries:
-            attempt += 1
-            try:
-                account_response = self.auth_client.Account(
-                    QueryAccountRequest(address=str(address))
-                )
-                break
-            except Exception as e:  # pylint: disable=W0703
-                last_exception = e
-                _logger.warning("Cannot query account data: %s", e)
-                self._sleep(self.msg_retry_interval)
-                continue
+        request = QueryAccountRequest(address=str(address))
 
-        if account_response is None:
-            raise BroadcastException(
-                f"Getting account data failed after multiple attempts: {last_exception}"
-            )
+        account_response = Retrier(
+            n_retries=self.n_total_msg_retries,
+            retry_interval=self.msg_retry_interval,
+            call_name="query account data",
+            raise_exception_type=BroadcastException,
+        ).call_with_retry(self.auth_client.Account, request)
 
         account = BaseAccount()
         if account_response.account.Is(BaseAccount.DESCRIPTOR):
