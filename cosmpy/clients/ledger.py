@@ -231,7 +231,7 @@ class CosmosLedger:
         :param contract_filename: Path to contract .wasm bytecode
         :param gas:  Maximum amount of gas to be used on executing command
 
-        :return: Deployment transaction response
+        :return: Tuple of code ID and transaction response
 
         :raises BroadcastException: When communication with node fails.
         """
@@ -258,8 +258,9 @@ class CosmosLedger:
             code_id = self.get_code_id(res)
         except Exception as e:  # pylint: disable=W0703
             if res:
+                raw_log = res.tx_response.raw_log  # pylint: disable=E1101
                 raise BroadcastException(
-                    f"Failed to get code ID - {type(e)}, {e}: {res.tx_response.raw_log}"
+                    f"Failed to get code ID - {type(e)}, {e}: {raw_log}"
                 )
 
         return code_id, MessageToDict(res)
@@ -337,7 +338,7 @@ class CosmosLedger:
         :param label: Label of current instance of contract
         :param gas: Gas limit
 
-        :return: Contract address string, transaction response
+        :return: Tuple of contract address string and transaction response
 
         :raises BroadcastException: When communication with node fails.
         """
@@ -365,8 +366,9 @@ class CosmosLedger:
             contract_address = self.get_contract_address(res)
         except Exception as e:  # pylint: disable=W0703
             if res:
+                raw_log = res.tx_response.raw_log  # pylint: disable=E1101
                 raise BroadcastException(
-                    f"Failed to get contract address - {type(e)}, {e}: {res.tx_response.raw_log}"
+                    f"Failed to get contract address - {type(e)}, {e}: {raw_log}"
                 )
 
         return contract_address, MessageToDict(res)
