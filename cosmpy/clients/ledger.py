@@ -260,7 +260,7 @@ class CosmosLedger:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
                 _logger.warning(
-                    "Failed to deploy contract code due BroadcastException: {%s}", e
+                    "Failed to deploy contract code due BroadcastException: %s", e
                 )
                 self._sleep(self.msg_failed_retry_interval)
 
@@ -377,14 +377,12 @@ class CosmosLedger:
             except BroadcastException as e:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
-                _logger.warning(
-                    "Failed to init contract due BroadcastException: {%s}", e
-                )
+                _logger.warning("Failed to init contract due BroadcastException: %s", e)
             except json.decoder.JSONDecodeError as e:
                 # Failure due to response parsing error
                 last_exception = e
                 _logger.warning(
-                    "Failed to parse init Contract response {%s} : {%s}",
+                    "Failed to parse init Contract response %s : %s",
                     res.tx_response.raw_log if res is not None else None,
                     e,
                 )
@@ -440,7 +438,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot get contract state: {%s}", e)
+                _logger.warning("Cannot get contract state: %s", e)
                 self._sleep(self.msg_failed_retry_interval)
 
         if res is None:
@@ -504,7 +502,7 @@ class CosmosLedger:
                 # Failure due to wrong sequence, signature, etc.
                 last_exception = e
                 _logger.warning(
-                    "Failed to deploy contract code due BroadcastException: {%s}", e
+                    "Failed to deploy contract code due BroadcastException: %s", e
                 )
                 self._sleep(self.msg_failed_retry_interval)
 
@@ -543,7 +541,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot get balance: {%s}", e)
+                _logger.warning("Cannot get balance: %s", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -579,7 +577,7 @@ class CosmosLedger:
                     break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot get balances: {%s}", e)
+                _logger.warning("Cannot get balances: %s", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -618,7 +616,7 @@ class CosmosLedger:
 
                     if balance < min_amount_required:
                         _logger.info(
-                            "Refilling balance of {%s} from faucet. Currently: {%s}",
+                            "Refilling balance of %s from faucet. Currently: %s",
                             address,
                             balance,
                         )
@@ -630,7 +628,7 @@ class CosmosLedger:
 
                         if response.status_code != 200:
                             _logger.exception(
-                                "Failed to refill the balance from faucet, retry in {%s} seconds: {%s}",
+                                "Failed to refill the balance from faucet, retry in %s seconds: %s",
                                 self.faucet_retry_interval,
                                 str(response),
                             )
@@ -638,11 +636,11 @@ class CosmosLedger:
                         # Wait for wealth to be refilled
                         self._sleep(self.faucet_retry_interval)
                         continue
-                    _logger.info("Balance of {%s} is {%s}", address, balance)
+                    _logger.info("Balance of %s is %s", address, balance)
                     break
                 except Exception as e:  # pylint: disable=W0703
                     _logger.exception(
-                        "Failed to refill the balance from faucet, retry in {%s} second: {%s} ({%s})",
+                        "Failed to refill the balance from faucet, retry in %s second: %s (%s)",
                         self.faucet_retry_interval,
                         e,
                         type(e),
@@ -819,7 +817,7 @@ class CosmosLedger:
                 break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Cannot query account data: {%s}", e)
+                _logger.warning("Cannot query account data: %s", e)
                 self._sleep(self.msg_retry_interval)
                 continue
 
@@ -911,7 +909,7 @@ class CosmosLedger:
                 break
             except Exception as e:  # pylint: disable=W0703
                 last_exception = e
-                _logger.warning("Transaction broadcasting failed: {%s}", e)
+                _logger.warning("Transaction broadcasting failed: %s", e)
                 self._sleep(self.msg_retry_interval)
 
         if broad_tx_resp is None:
