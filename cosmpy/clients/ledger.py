@@ -129,9 +129,9 @@ class CosmosLedger:
         msg_retry_interval: int = 2,
         msg_failed_retry_interval: int = 10,
         faucet_retry_interval: int = 20,
-        n_sending_retries: int = 1,  # 5,
-        n_total_msg_retries: int = 1,  # 10,
-        get_response_retry_interval: float = 0.5,  # 2,
+        n_sending_retries: int = 5,  # 5,
+        n_total_msg_retries: int = 5,  # 10,
+        get_response_retry_interval: float = 1,  # 2,
         n_get_response_retries: int = 30,  # 30,
     ):
         """
