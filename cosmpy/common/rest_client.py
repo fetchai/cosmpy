@@ -66,7 +66,7 @@ class RestClient:
                 for param in used_params:
                     json_request.pop(param)
 
-            url_encoded_request = urlencode(json_request, doseq=True)
+            url_encoded_request = self._url_encode(json_request)
 
             if len(url_encoded_request) == 0:
                 url = f"{self.rest_address}{url_base_path}"
@@ -105,6 +105,24 @@ class RestClient:
                 f"Error when sending a POST request.\n Request: {json_request}\n Response: {response.status_code}, {str(response.content)})"
             )
         return response.content
+
+    @staticmethod
+    def _url_encode(json_request):
+        """
+        Custom URL encode
+
+        :param json_request: JSON request
+
+        returns: urlencoded json_request
+        """
+
+        for outer_k, outer_v in json_request.copy().items():
+            if isinstance(outer_v, dict):
+                for inner_k, inner_v in outer_v.items():
+                    json_request[f"{outer_k}.{inner_k}"] = inner_v
+                json_request.pop(outer_k)
+
+        return urlencode(json_request, doseq=True)
 
     def __del__(self):
         self._session.close()
