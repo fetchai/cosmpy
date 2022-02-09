@@ -21,7 +21,6 @@
 
 from unittest import TestCase
 from unittest.mock import Mock, patch
-from urllib.parse import urlencode
 
 from requests import Response, Session
 
