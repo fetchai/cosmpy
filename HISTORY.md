@@ -1,5 +1,9 @@
 # Release History
 
+## 0.2.0 (2022-02-09)
+
+- Fixed some REST api bugs
+
 ## 0.2.0-rc1 (2022-02-03)
 
 - Added support for a Capricorn version of FetchD network
