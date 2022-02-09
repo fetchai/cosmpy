@@ -66,7 +66,7 @@ Below is a simple example for querying an account's balance and sending funds fr
     denom = "some_denomination"
     bob_address = Address("some_address")
 
-    channel = RestClient(rest_endpoint_addres)
+    channel = RestClient(rest_endpoint_address)
     client = SigningCosmWasmClient(private_key, channel, chain_id)
     
     # Query Alice's Balance
