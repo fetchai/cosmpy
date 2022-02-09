@@ -109,7 +109,14 @@ class RestClient:
     @staticmethod
     def _url_encode(json_request):
         """
-        Custom URL encode
+        Custom URL encode that breaks down nested dictionaries to match REST api format
+
+        It converts dicts from:
+        {"pagination": {"limit": "1", "something": "2"},}
+
+        To:
+        {"pagination.limit": "1","pagination.something": "2"}
+
 
         :param json_request: JSON request
 

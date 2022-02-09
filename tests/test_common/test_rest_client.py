@@ -49,14 +49,18 @@ class QueryRestClientTestCase(TestCase):
         resp.content = "dfdffdss".encode(encoding="utf8")
 
         request = "some weird request value"
-        request_json = {"a": 1, "b": "something"}
+        request_json = {
+            "a": 1,
+            "b": ["something", "else"],
+            "some_dict": {"x": 1, "y": 2},
+        }
         messageToDict_mock.return_value = request_json
         session_mock.return_value.get.return_value = resp
         client.get(request_url_path, request)
 
         messageToDict_mock.assert_called_once_with(request)
 
-        expected_url = f"{rest_address}{request_url_path}?{urlencode(request_json)}"
+        expected_url = f"{rest_address}{request_url_path}?a=1&b=something&b=else&some_dict.x=1&some_dict.y=2"
         session_mock.return_value.get.assert_called_once_with(url=expected_url)
 
     @patch("requests.session", spec=Session)
