@@ -113,7 +113,7 @@ class RestClient:
 
         :param json_request: JSON request
 
-        returns: urlencoded json_request
+        :return: urlencoded json_request
         """
 
         for outer_k, outer_v in json_request.copy().items():
