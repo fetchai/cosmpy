@@ -398,11 +398,19 @@ class SigningCosmWasmClient(CosmWasmClient):
 
         :param response: Response of store code transaction
 
+        :raise RuntimeError: when instantiate event or code_id attribute cannot be found in the tx logs
+
         :return: integer code_id
         """
-        raw_log = json.loads(response.tx_response.raw_log)
-        assert raw_log[0]["events"][1]["attributes"][0]["key"] == "code_id"
-        return int(raw_log[0]["events"][1]["attributes"][0]["value"])
+        event = next((e for e in response.tx_response.logs[0].events if e.type == "instantiate"), None)
+        if event is None:
+            raise RuntimeError(f"cannot find instantiate event from tx {response.tx_response.txhash}")
+
+        code_id = next((a.value for a in event.attributes if a.key == "code_id"), None)
+        if code_id is None:
+            raise RuntimeError(f"cannot find code_id attribute in instantiate event from tx {response.tx_response.txhash}")
+
+        return int(code_id)
 
     @staticmethod
     def get_contract_address(response: GetTxResponse) -> str:
