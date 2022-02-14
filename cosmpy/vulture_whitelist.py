@@ -80,7 +80,6 @@ _.GetTxsEvent  # unused method (./tx/rest_client.py:94)
 
 _.get_pubkey_as_str  # unused method (./clients/crypto.py:116)
 _.save_key_to_file  # unused method (./clients/crypto.py:132)
-CLIENT_CODE_ERROR_EXCEPTION  # unused variable (./clients/ledger.py:94)
 _.check_availability  # unused method (./clients/ledger.py:991)
 _.validate_address  # unused method (./clients/ledger.py:1018)
 _.formatter  # unused attribute (./common/loggers.py:57)

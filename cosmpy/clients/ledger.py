@@ -87,7 +87,6 @@ from cosmpy.tx.rest_client import TxRestClient
 _logger = get_logger(__name__)
 
 # CosmWasm client response codes
-CLIENT_CODE_ERROR_EXCEPTION = 4
 CLIENT_CODE_MESSAGE_SUCCESSFUL = 0
 
 # CosmWasm constants
