@@ -30,7 +30,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="cosmpy",
-    version="0.1.5",
+    version="0.2.0",
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
