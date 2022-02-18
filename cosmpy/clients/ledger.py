@@ -41,7 +41,7 @@ from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.clients.crypto import CosmosCrypto
 from cosmpy.common.loggers import get_logger
 from cosmpy.common.rest_client import RestClient
-from cosmpy.common.retrier import Retrier
+from cosmpy.common.retry_manager import RetryManager
 from cosmpy.common.types import JSONLike
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
@@ -241,7 +241,7 @@ class CosmosLedger:
         )
 
         # raises BroadcastException if getting tx receipt fails.
-        res = Retrier(
+        res = RetryManager(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_failed_retry_interval,
             call_name="deploy contract",
@@ -352,7 +352,7 @@ class CosmosLedger:
         )
 
         # raises BroadcastException if getting tx receipt fails.
-        res = Retrier(
+        res = RetryManager(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_failed_retry_interval,
             call_name="init contract",
@@ -404,7 +404,7 @@ class CosmosLedger:
             n_retries = self.n_total_msg_retries
 
         # raises BroadcastException if getting tx receipt fails.
-        res = Retrier(
+        res = RetryManager(
             n_retries=n_retries,
             retry_interval=self.msg_failed_retry_interval,
             call_name="getting smart contract state",
@@ -446,7 +446,7 @@ class CosmosLedger:
             n_retries = self.n_sending_retries
 
         # raises BroadcastException if getting tx receipt fails.
-        res = Retrier(
+        res = RetryManager(
             n_retries=n_retries,
             retry_interval=self.msg_failed_retry_interval,
             call_name="execute contract",
@@ -475,7 +475,7 @@ class CosmosLedger:
         request = QueryBalanceRequest(address=str(address), denom=denom)
 
         # raises BroadcastException if getting tx receipt fails.
-        res = Retrier(
+        res = RetryManager(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_retry_interval,
             call_name="get balance",
@@ -496,7 +496,7 @@ class CosmosLedger:
         request = QueryBalanceRequest(address=str(address))
 
         # raises BroadcastException if getting tx receipt fails.
-        res = Retrier(
+        res = RetryManager(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_retry_interval,
             call_name="get balances",
@@ -587,7 +587,7 @@ class CosmosLedger:
         )
 
         # raises BroadcastException if getting tx receipt fails.
-        res = Retrier(
+        res = RetryManager(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_failed_retry_interval,
             call_name="send funds",
@@ -731,7 +731,7 @@ class CosmosLedger:
         request = QueryAccountRequest(address=str(address))
 
         # raises BroadcastException if getting tx receipt fails.
-        account_response = Retrier(
+        account_response = RetryManager(
             n_retries=self.n_total_msg_retries,
             retry_interval=self.msg_retry_interval,
             call_name="query account data",
@@ -812,7 +812,7 @@ class CosmosLedger:
             retries = self.n_total_msg_retries
 
         # raises BroadcastException if getting tx receipt fails.
-        broad_tx_resp = Retrier(
+        broad_tx_resp = RetryManager(
             n_retries=retries,
             retry_interval=self.msg_retry_interval,
             call_name="broadcast transaction",
@@ -842,7 +842,7 @@ class CosmosLedger:
         tx_request = GetTxRequest(hash=txhash)
 
         # raises BroadcastException if getting tx receipt fails.
-        return Retrier(
+        return RetryManager(
             n_retries=self.n_get_response_retries,
             retry_interval=self.get_response_retry_interval,
             call_name="get tx response",

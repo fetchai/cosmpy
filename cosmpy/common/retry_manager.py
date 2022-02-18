@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Implementation of Retrier."""
+"""Implementation of RetryManager."""
 
 
 import time
@@ -28,7 +28,7 @@ from cosmpy.common.loggers import get_logger
 _logger = get_logger(__name__)
 
 
-class Retrier:
+class RetryManager:
     """
     Class for exception handling with retries
     """
@@ -42,7 +42,7 @@ class Retrier:
         raise_exception_type: Type[Exception] = Exception,
     ):
         """
-        Create new instance of Retrier
+        Create new instance of RetryManager
 
         :param n_retries: Number of retry attempts
         :param retry_interval: Length of sleep between retries
