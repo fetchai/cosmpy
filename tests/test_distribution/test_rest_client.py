@@ -32,7 +32,7 @@ from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import QueryCommunityPo
     QueryValidatorCommissionRequest, QueryValidatorCommissionResponse, QueryParamsRequest, QueryParamsResponse, \
     QueryDelegatorWithdrawAddressRequest, QueryDelegatorWithdrawAddressResponse, QueryDelegatorValidatorsRequest, \
     QueryDelegatorValidatorsResponse, QueryDelegationRewardsRequest, QueryDelegationRewardsResponse
-from cosmpy.staking.rest_client import StakingRestClient
+
 from tests.helpers import MockRestClient
 
 
