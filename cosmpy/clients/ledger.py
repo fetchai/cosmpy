@@ -32,7 +32,7 @@ import certifi
 import grpc
 import requests
 from google.protobuf.any_pb2 import Any as ProtoAny
-from google.protobuf.json_format import MessageToDict
+from google.protobuf.json_format import MessageToDict, Parse
 from grpc import insecure_channel
 from grpc._channel import Channel
 
@@ -56,6 +56,13 @@ from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
 )
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import (
+    QueryParamsRequest,
+    QueryParamsResponse,
+)
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
+    QueryStub as QueryParamsGrpcClient,
+)
 from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
@@ -93,9 +100,9 @@ CLIENT_CODE_MESSAGE_SUCCESSFUL = 0
 CONTRACT_ADDRESS_RE: Pattern = re.compile(".*contract_address.*")
 CODE_ID_RE: Pattern = re.compile(".*code_id.*")
 
-DEFAULT_GAS_LIMIT = (
-    3000000  # 3000000 is the maximum gas limit - tx will fail with higher limit
-)
+DEFAULT_TX_MAXIMUM_GAS_LIMIT = 3000000  # tx will fail with higher limit
+DEFAULT_CONTRACT_TX_GAS = 300000
+DEFAULT_SEND_TX_GAS = 120000
 
 
 # Exceptions
@@ -132,6 +139,7 @@ class CosmosLedger:
         n_total_msg_retries: int = 5,  # 10,
         get_response_retry_interval: float = 1,  # 2,
         n_get_response_retries: int = 30,  # 30,
+        minimum_gas_price: Optional[Coin] = None,
     ):
         """
         Create new instance to deploy and communicate with smart contract
@@ -149,6 +157,7 @@ class CosmosLedger:
         :param n_total_msg_retries: Number of total send/settle transaction retries
         :param get_response_retry_interval: Retry interval for getting receipt
         :param n_get_response_retries: Number of get receipt retries
+        :param minimum_gas_price: Minimum gas price amount
 
         :raises ValueError: in case of wrong configuration.
         """
@@ -206,6 +215,7 @@ class CosmosLedger:
         self.n_sending_retries = n_sending_retries
         self.n_total_msg_retries = n_total_msg_retries
         self.get_response_retry_interval = get_response_retry_interval
+        self.minimum_gas_price = minimum_gas_price
 
     @staticmethod
     def _sleep(seconds: Union[float, int]):
@@ -221,14 +231,16 @@ class CosmosLedger:
         self,
         sender_crypto: CosmosCrypto,
         contract_filename: Path,
-        gas: int = DEFAULT_GAS_LIMIT,
+        gas_limit: Optional[int] = DEFAULT_TX_MAXIMUM_GAS_LIMIT,
+        fee: Optional[List[Coin]] = None,
     ) -> Tuple[int, JSONLike]:
         """
         Deploy smart contract on a blockchain
 
         :param sender_crypto: Crypto of deployer to sign deploy transaction
         :param contract_filename: Path to contract .wasm bytecode
-        :param gas:  Maximum amount of gas to be used on executing command
+        :param gas_limit:  Maximum amount of gas to be used on executing command
+        :param fee: Tx fee
 
         :return: Tuple of code ID and transaction response
 
@@ -250,7 +262,8 @@ class CosmosLedger:
             self.generate_sign_and_broadcast_tx,
             packed_msgs=[msg],
             signers_cryptos=[sender_crypto],
-            gas_limit=gas,
+            gas_limit=gas_limit,
+            fee=fee,
         )
 
         code_id: Optional[int] = None
@@ -329,7 +342,8 @@ class CosmosLedger:
         code_id: int,
         init_msg: JSONLike,
         label: str,
-        gas: int = DEFAULT_GAS_LIMIT,
+        gas_limit: int = DEFAULT_CONTRACT_TX_GAS,
+        fee: Optional[List[Coin]] = None,
     ) -> Tuple[str, JSONLike]:
         """
         Send init contract message
@@ -338,7 +352,8 @@ class CosmosLedger:
         :param code_id: ID of binary code stored on chain
         :param init_msg: Init message in json format
         :param label: Label of current instance of contract
-        :param gas: Gas limit
+        :param gas_limit: Gas limit
+        :param fee: Tx fee
 
         :return: Tuple of contract address string and transaction response
 
@@ -361,7 +376,8 @@ class CosmosLedger:
             self.generate_sign_and_broadcast_tx,
             packed_msgs=[msg],
             signers_cryptos=[sender_crypto],
-            gas_limit=gas,
+            gas_limit=gas_limit,
+            fee=fee,
         )
 
         contract_address: Optional[str] = None
@@ -418,9 +434,10 @@ class CosmosLedger:
         sender_crypto: CosmosCrypto,
         contract_address: str,
         execute_msg: JSONLike,
-        gas: int = DEFAULT_GAS_LIMIT,
+        gas: int = DEFAULT_CONTRACT_TX_GAS,
         amount: Optional[List[Coin]] = None,
         n_retries: Optional[int] = None,
+        fee: Optional[List[Coin]] = None,
     ) -> Tuple[JSONLike, int]:
         """
         Generate, sign and send handle message
@@ -431,6 +448,7 @@ class CosmosLedger:
         :param gas: Gas limit
         :param amount: Funds to be transferred to contract address
         :param n_retries: Optional number of retries
+        :param fee: Tx fee
 
         :return: Execute message response
         """
@@ -456,6 +474,7 @@ class CosmosLedger:
             packed_msgs=[msg],
             signers_cryptos=[sender_crypto],
             gas_limit=gas,
+            fee=fee,
         )
 
         # err_code >0 in case of exceptions inside rust contract
@@ -569,6 +588,8 @@ class CosmosLedger:
         from_crypto: CosmosCrypto,
         to_address: str,
         amount_coins: List[Coin],
+        gas_limit: int = DEFAULT_SEND_TX_GAS,
+        fee: Optional[List[Coin]] = None,
     ):
         """
         Transfer funds from one address to another address
@@ -576,6 +597,8 @@ class CosmosLedger:
         :param from_crypto: Crypto with funds to be sent
         :param to_address: Address to receive funds
         :param amount_coins: List of coins to be sent
+        :param gas_limit: Gas limit
+        :param fee: Tx fee
 
         :return: Transaction response
         """
@@ -596,6 +619,8 @@ class CosmosLedger:
             self.generate_sign_and_broadcast_tx,
             packed_msgs=[msg],
             signers_cryptos=[from_crypto],
+            gas_limit=gas_limit,
+            fee=fee,
         )
 
         err_code = res.tx_response.code  # pylint: disable=E1101
@@ -679,7 +704,7 @@ class CosmosLedger:
         pub_keys: List[bytes],
         fee: Optional[List[Coin]] = None,
         memo: str = "",
-        gas_limit: int = DEFAULT_GAS_LIMIT,
+        gas_limit: Optional[int] = None,
     ) -> Tx:
         """
         Generate transaction that can be later signed
@@ -693,6 +718,15 @@ class CosmosLedger:
 
         :return: Tx
         """
+
+        max_gas_limit = self.query_max_gas_limit()
+        gas_limit = gas_limit if gas_limit else max_gas_limit
+
+        # Tx with higher than maximum gas limit cannot be broadcast
+        if gas_limit > max_gas_limit:
+            gas_limit = max_gas_limit
+
+        fee = fee if fee else self.calculate_tx_fee(gas_limit)
 
         # Get account and signer info for each sender
         accounts: List[BaseAccount] = []
@@ -967,7 +1001,7 @@ class CosmosLedger:
         signers_cryptos: List[CosmosCrypto],
         fee: Optional[List[Coin]] = None,
         memo: str = "",
-        gas_limit: int = DEFAULT_GAS_LIMIT,
+        gas_limit: Optional[int] = None,
     ):
 
         """
@@ -1010,3 +1044,72 @@ class CosmosLedger:
         addr_re = re.compile("^" + prefix + "[0-9a-z]{39}$")
 
         return bool(addr_re.match(address))
+
+    def calculate_tx_fee(self, gas_limit) -> List[Coin]:
+        """
+        Calculate tx fee
+
+        :param gas_limit: Gas amount limit
+
+        :return: tx fee
+        """
+
+        gas_price = self.query_minimum_gas_price()
+        if gas_price is None:
+            return []
+
+        # tx_fee = gas_price * gas
+        return [
+            Coin(denom=gas_price.denom, amount=str(gas_limit * int(gas_price.amount)))
+        ]
+
+    def query_params(self, subspace: str, key: str) -> str:
+        """
+        Query node params
+
+        :param subspace: Subspace
+        :param key: Key
+
+        :return: String from QueryParamsResponse.params.value
+        """
+
+        request = QueryParamsRequest(subspace=subspace, key=key)
+
+        if self.rest_client:
+            json_response = self.rest_client.get(
+                "/cosmos/params/v1beta1/params",
+                request,
+            )
+            params_response = Parse(json_response, QueryParamsResponse())
+
+        else:
+            params_client = QueryParamsGrpcClient(self.rpc_client)
+            params_response = params_client.Params(request)
+
+        return params_response.param.value
+
+    def query_max_gas_limit(self) -> int:
+        """
+        Query maximum gas from node
+
+        :return: Maximum gas limit
+        """
+
+        params_value = json.loads(
+            self.query_params(subspace="baseapp", key="BlockParams")
+        )
+        max_gas = int(params_value["max_gas"])
+
+        if max_gas == -1:
+            return DEFAULT_TX_MAXIMUM_GAS_LIMIT
+        else:
+            return max_gas
+
+    def query_minimum_gas_price(self) -> Optional[Coin]:
+        """
+        Query minimum price per gas unit from node
+
+        :return: Coin price per gas unit
+        """
+
+        return self.minimum_gas_price
