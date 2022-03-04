@@ -723,8 +723,7 @@ class CosmosLedger:
         gas_limit = gas_limit if gas_limit else max_gas_limit
 
         # Tx with higher than maximum gas limit cannot be broadcast
-        if gas_limit > max_gas_limit:
-            gas_limit = max_gas_limit
+        gas_limit = min(gas_limit, max_gas_limit)
 
         fee = fee if fee else self.calculate_tx_fee(gas_limit)
 
@@ -1102,8 +1101,8 @@ class CosmosLedger:
 
         if max_gas == -1:
             return DEFAULT_TX_MAXIMUM_GAS_LIMIT
-        else:
-            return max_gas
+
+        return max_gas
 
     def query_minimum_gas_price(self) -> Optional[Coin]:
         """
