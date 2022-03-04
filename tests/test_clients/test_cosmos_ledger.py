@@ -200,10 +200,11 @@ class CosmosLedgerTestCase(unittest.TestCase):
         )
         cls.ledger.auth_client = mock_auth
         cls.ledger.rest_client = mock_rest_client
-        cls.ledger.query_max_gas_limit = cls.query_max_gas_limit
+        cls.ledger.query_max_gas_limit = cls.mock_query_max_gas_limit
 
     @staticmethod
-    def query_max_gas_limit():
+    def mock_query_max_gas_limit():
+        """Mock query max gas limit from node."""
         return GAS_LIMIT
 
     def test_init(self):
