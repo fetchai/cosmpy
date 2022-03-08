@@ -100,7 +100,7 @@ class LedgerContract:
         # extract the code id
         self._code_id = submitted_tx.contract_code_id
         if self._code_id is None:
-            raise RuntimeError(f"Unable to extract contract code id")
+            raise RuntimeError("Unable to extract contract code id")
 
         return self._code_id
 
@@ -148,7 +148,7 @@ class LedgerContract:
         # store the contract address
         self._address = submitted_tx.contract_address
         if self._address is None:
-            raise RuntimeError(f"Unable to extract contract code id")
+            raise RuntimeError("Unable to extract contract code id")
 
         return self._address
 

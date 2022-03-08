@@ -18,9 +18,6 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the Tx modules."""
-from google.protobuf.json_format import MessageToJson
-
-from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.crypto.interface import Signer
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import SignDoc, Tx
 
@@ -32,15 +29,6 @@ def sign_transaction(
     account_number: int,
     deterministic: bool = False,
 ):
-    """
-    Sign transaction
-
-    :param tx: Transaction to be signed
-    :param signer: Signer of transaction
-    :param chain_id: Chain ID
-    :param account_number: Account Number
-    :param deterministic: Deterministic mode flag
-    """
     sd = SignDoc()
     sd.body_bytes = tx.body.SerializeToString()
     sd.auth_info_bytes = tx.auth_info.SerializeToString()
@@ -48,15 +36,6 @@ def sign_transaction(
     sd.account_number = account_number
 
     data_for_signing = sd.SerializeToString()
-
-    print(MessageToJson(tx.body))
-    print(MessageToJson(tx.auth_info))
-
-    print("BODY:", sha256(sd.body_bytes).hex())
-    print("AUTH:", sha256(sd.auth_info_bytes).hex())
-    print("DATA:", sha256(data_for_signing).hex())
-
-    raise RuntimeError("BOOM")
 
     # Generating deterministic signature:
     signature = signer.sign(

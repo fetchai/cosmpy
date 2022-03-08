@@ -242,17 +242,6 @@ class LedgerClient:
         )
 
     def broadcast_tx(self, tx: Transaction) -> SubmittedTx:
-        """
-        Broadcast transaction and get receipt
-
-        :param tx: Transaction
-        :param retries: Optional number of broadcasting attempts
-
-        :raises BroadcastException: if broadcasting fails.
-
-        :return: GetTxResponse
-        """
-
         # create the broadcast request
         broadcast_req = BroadcastTxRequest(
             tx_bytes=tx.tx.SerializeToString(), mode=BroadcastMode.BROADCAST_MODE_SYNC
