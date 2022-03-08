@@ -706,7 +706,6 @@ class CosmosLedger:
         signer_infos: List[SignerInfo] = []
         for from_address, pub_key in zip(from_addresses, pub_keys):
             account = self.query_account_data(from_address)
-            print("ACC2", account)
             accounts.append(account)
             signer_infos.append(self._get_signer_info(account, pub_key))
 
