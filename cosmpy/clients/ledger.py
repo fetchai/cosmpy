@@ -251,7 +251,7 @@ class CosmosLedger:
             packed_msgs=[msg],
             signers_cryptos=[sender_crypto],
             gas_limit=gas,
-            fee=[Coin(amount='10000000000000000', denom='atestfet')]
+            fee=[Coin(amount="10000000000000000", denom="atestfet")],
         )
 
         code_id: Optional[int] = None
@@ -619,7 +619,13 @@ class CosmosLedger:
         if crypto.account_number is None:
             raise RuntimeError("Getting account number failed")
 
-        sign_transaction(tx, crypto.private_key, self.chain_id, crypto.account_number, deterministic=True)
+        sign_transaction(
+            tx,
+            crypto.private_key,
+            self.chain_id,
+            crypto.account_number,
+            deterministic=True,
+        )
 
     def _ensure_accont_number(self, crypto: CosmosCrypto):
         if crypto.account_number is None:
@@ -700,7 +706,7 @@ class CosmosLedger:
         signer_infos: List[SignerInfo] = []
         for from_address, pub_key in zip(from_addresses, pub_keys):
             account = self.query_account_data(from_address)
-            print('ACC2', account)
+            print("ACC2", account)
             accounts.append(account)
             signer_infos.append(self._get_signer_info(account, pub_key))
 

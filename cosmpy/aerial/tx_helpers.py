@@ -27,7 +27,7 @@ class TxResponse:
 
 
 class SubmittedTx:
-    def __init__(self, client: 'LedgerClient', tx_hash: str):
+    def __init__(self, client: "LedgerClient", tx_hash: str):
         self._client = client
         self._response: Optional[TxResponse] = None
         self._tx_hash = str(tx_hash)
@@ -45,7 +45,7 @@ class SubmittedTx:
         if self._response is None:
             return None
 
-        code_id = self._response.events.get('store_code', {}).get('code_id')
+        code_id = self._response.events.get("store_code", {}).get("code_id")
         if code_id is None:
             return None
 
@@ -56,15 +56,18 @@ class SubmittedTx:
         if self._response is None:
             return None
 
-        contract_address = self._response.events.get('instantiate', {}).get('_contract_address')
+        contract_address = self._response.events.get("instantiate", {}).get(
+            "_contract_address"
+        )
         if contract_address is None:
             return None
 
         return Address(contract_address)
 
-    def wait_to_complete(self) -> 'SubmittedTx':
+    def wait_to_complete(self) -> "SubmittedTx":
         self._response = self._client.wait_for_query_tx(self.tx_hash)
         if not self._response.is_successful():
             raise RuntimeError(
-                f'Transaction was unsuccessful (code: {self._response.code} tx: {self._response.hash})')
+                f"Transaction was unsuccessful (code: {self._response.code} tx: {self._response.hash})"
+            )
         return self

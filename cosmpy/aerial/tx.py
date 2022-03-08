@@ -9,7 +9,15 @@ from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
-from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import SignerInfo, TxBody, ModeInfo, AuthInfo, Fee, Tx, SignDoc
+from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
+    SignerInfo,
+    TxBody,
+    ModeInfo,
+    AuthInfo,
+    Fee,
+    Tx,
+    SignDoc,
+)
 
 
 class TxState(Enum):
@@ -41,7 +49,7 @@ def _create_proto_public_key(public_key: PublicKey) -> ProtoAny:
         ProtoPubKey(
             key=public_key.public_key_bytes,
         ),
-        type_url_prefix="/"
+        type_url_prefix="/",
     )
     return proto_public_key
 
@@ -57,7 +65,7 @@ class SigningCfg:
     public_key: PublicKey
 
     @staticmethod
-    def direct(public_key: PublicKey, sequence_num: int) -> 'SigningCfg':
+    def direct(public_key: PublicKey, sequence_num: int) -> "SigningCfg":
         return SigningCfg(
             mode=SigningMode.Direct,
             sequence_num=sequence_num,
@@ -90,16 +98,23 @@ class Transaction:
     @property
     def tx(self):
         if self._state != TxState.Final:
-            raise RuntimeError('The transaction has not been completed')
+            raise RuntimeError("The transaction has not been completed")
         return self._tx
 
     def add_message(self, msg: Any):
         if self._state != TxState.Draft:
-            raise RuntimeError('The transaction is not in the draft state. No further messages may be appended')
+            raise RuntimeError(
+                "The transaction is not in the draft state. No further messages may be appended"
+            )
         self._msgs.append(msg)
 
-    def seal(self, signing_cfgs: Union[SigningCfg, List[SigningCfg]], fee: str,
-             gas_limit: int, memo: Optional[str] = None):
+    def seal(
+        self,
+        signing_cfgs: Union[SigningCfg, List[SigningCfg]],
+        fee: str,
+        gas_limit: int,
+        memo: Optional[str] = None,
+    ):
         self._state = TxState.Sealed
 
         signing_cfgs = signing_cfgs if _is_iterable(signing_cfgs) else [signing_cfgs]
@@ -126,12 +141,20 @@ class Transaction:
         self._fee = fee
 
         self._tx_body = TxBody()
-        self._tx_body.memo = memo or ''
-        self._tx_body.messages.extend(_wrap_in_proto_any(self._msgs))  # pylint: disable=E1101
+        self._tx_body.memo = memo or ""
+        self._tx_body.messages.extend(
+            _wrap_in_proto_any(self._msgs)
+        )  # pylint: disable=E1101
 
         self._tx = Tx(body=self._tx_body, auth_info=auth_info)
 
-    def sign(self, signer: Signer, chain_id: str, account_number: int, deterministic: bool = False):
+    def sign(
+        self,
+        signer: Signer,
+        chain_id: str,
+        account_number: int,
+        deterministic: bool = False,
+    ):
         sd = SignDoc()
         sd.body_bytes = self._tx.body.SerializeToString()
         sd.auth_info_bytes = self._tx.auth_info.SerializeToString()
@@ -142,7 +165,9 @@ class Transaction:
 
         # Generating deterministic signature:
         signature = signer.sign(
-            data_for_signing, deterministic=deterministic, canonicalise=True,
+            data_for_signing,
+            deterministic=deterministic,
+            canonicalise=True,
         )
         self._tx.signatures.extend([signature])
 

@@ -18,48 +18,48 @@ class ParsedUrl:
 
     @property
     def host_and_port(self) -> str:
-        return f'{self.hostname}:{self.port}'
+        return f"{self.hostname}:{self.port}"
 
     @property
     def rest_url(self) -> str:
         assert self.protocol == Protocol.REST
         if self.secure:
-            prefix = 'https'
+            prefix = "https"
             default_port = 443
         else:
-            prefix = 'http'
+            prefix = "http"
             default_port = 80
 
-        url = f'{prefix}://{self.hostname}'
+        url = f"{prefix}://{self.hostname}"
         if self.port != default_port:
-            url += f':{self.port}'
+            url += f":{self.port}"
         return url
 
 
 def parse_url(url: str) -> ParsedUrl:
     result = urlparse(url)
-    if result.scheme == 'grpc+https':
+    if result.scheme == "grpc+https":
         protocol = Protocol.GRPC
         secure = True
         default_port = 443
-    elif result.scheme == 'grpc+http':
+    elif result.scheme == "grpc+http":
         protocol = Protocol.GRPC
         secure = False
         default_port = 80
-    elif result.scheme == 'rest+https':
+    elif result.scheme == "rest+https":
         protocol = Protocol.REST
         secure = True
         default_port = 443
-    elif result.scheme == 'rest+http':
+    elif result.scheme == "rest+http":
         protocol = Protocol.REST
         secure = False
         default_port = 80
     else:
-        raise RuntimeError(f'Unsupported url scheme: {result.scheme}')
+        raise RuntimeError(f"Unsupported url scheme: {result.scheme}")
 
-    match = re.match(r'^(.+?)(?::(\d+))?$', result.netloc)
+    match = re.match(r"^(.+?)(?::(\d+))?$", result.netloc)
     if match is None:
-        raise RuntimeError(f'Unable to parse netloc: {result.netloc}')
+        raise RuntimeError(f"Unable to parse netloc: {result.netloc}")
 
     # hostname = str(match.group(1))
     # port = int(match.group(2))

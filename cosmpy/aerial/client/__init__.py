@@ -9,8 +9,13 @@ import grpc
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.config import NetworkConfig
-from cosmpy.aerial.exceptions import NotFoundError, OutOfGasError, InsufficientFeesError, BroadcastError, \
-    QueryTimeoutError
+from cosmpy.aerial.exceptions import (
+    NotFoundError,
+    OutOfGasError,
+    InsufficientFeesError,
+    BroadcastError,
+    QueryTimeoutError,
+)
 from cosmpy.aerial.tx_helpers import SubmittedTx, TxResponse, MessageLog
 from cosmpy.aerial.tx import Transaction, SigningCfg
 from cosmpy.aerial.urls import parse_url, Protocol
@@ -25,10 +30,18 @@ from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
-from cosmpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import QueryStub as StakingGrpcClient
-from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import BroadcastTxRequest, BroadcastMode, GetTxRequest
+from cosmpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
+    QueryStub as StakingGrpcClient,
+)
+from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
+    BroadcastTxRequest,
+    BroadcastMode,
+    GetTxRequest,
+)
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
-from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import QueryStub as CosmWasmGrpcClient
+from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
+    QueryStub as CosmWasmGrpcClient,
+)
 from cosmpy.staking.rest_client import StakingRestClient
 from cosmpy.tx.rest_client import TxRestClient
 
@@ -104,21 +117,35 @@ class LedgerClient:
 
         return resp.balance.amount
 
-    def send_tokens(self, destination: Address, amount: int, denom: str, sender: PrivateKey,
-                    memo: Optional[str] = None, gas_limit: Optional[int] = None) -> SubmittedTx:
+    def send_tokens(
+        self,
+        destination: Address,
+        amount: int,
+        denom: str,
+        sender: PrivateKey,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
         sender_address = Address(sender)
 
         # query the account information for the sender
         account = self.query_account(sender_address)
 
         # estimate the fee required for this transaction
-        gas_limit = gas_limit or 100000  # TODO: Need to interface to the simulation engine
+        gas_limit = (
+            gas_limit or 100000
+        )  # TODO: Need to interface to the simulation engine
         fee = self.estimate_fee_from_gas(gas_limit)
 
         # build up the store transaction
         tx = Transaction()
         tx.add_message(create_bank_send_msg(sender_address, destination, amount, denom))
-        tx.seal(SigningCfg.direct(sender, account.sequence), fee=fee, gas_limit=gas_limit, memo=memo)
+        tx.seal(
+            SigningCfg.direct(sender, account.sequence),
+            fee=fee,
+            gas_limit=gas_limit,
+            memo=memo,
+        )
         tx.sign(sender, self.network_config.chain_id, account.number)
         tx.complete()
 
@@ -126,10 +153,14 @@ class LedgerClient:
         return self.broadcast_tx(tx)
 
     def estimate_fee_from_gas(self, gas_limit: int):
-        return f'{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}'
+        return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
 
-    def wait_for_query_tx(self, tx_hash: str, timeout: Optional[timedelta] = None,
-                          internal: Optional[timedelta] = None) -> TxResponse:
+    def wait_for_query_tx(
+        self,
+        tx_hash: str,
+        timeout: Optional[timedelta] = None,
+        internal: Optional[timedelta] = None,
+    ) -> TxResponse:
         timeout = timeout or timedelta(seconds=DEFAULT_QUERY_TIMEOUT_SECS)
         internal = internal or timedelta(seconds=DEFAULT_QUERY_INTERVAL_SECS)
 
@@ -153,7 +184,7 @@ class LedgerClient:
             resp = self.txs.GetTx(req)
         except grpc.RpcError as e:
             details = e.details()
-            if 'not found' in details:
+            if "not found" in details:
                 raise NotFoundError()
             else:
                 raise
@@ -166,9 +197,7 @@ class LedgerClient:
                 events[event.type] = {a.key: a.value for a in event.attributes}
             logs.append(
                 MessageLog(
-                    index=int(log_data.msg_index),
-                    log=log_data.msg_index,
-                    events=events
+                    index=int(log_data.msg_index), log=log_data.msg_index, events=events
                 )
             )
 
@@ -188,7 +217,7 @@ class LedgerClient:
             gas_used=int(resp.tx_response.gas_used),
             raw_log=str(resp.tx_response.raw_log),
             logs=logs,
-            events=events
+            events=events,
         )
 
     def broadcast_tx(self, tx: Transaction) -> SubmittedTx:
@@ -205,8 +234,7 @@ class LedgerClient:
 
         # create the broadcast request
         broadcast_req = BroadcastTxRequest(
-            tx_bytes=tx.tx.SerializeToString(),
-            mode=BroadcastMode.BROADCAST_MODE_SYNC
+            tx_bytes=tx.tx.SerializeToString(), mode=BroadcastMode.BROADCAST_MODE_SYNC
         )
 
         # broadcast the transaction
@@ -215,8 +243,10 @@ class LedgerClient:
 
         # process the response
         if resp.tx_response.code:
-            if 'out of gas' in resp.tx_response.raw_log:
-                match = re.search(r'gasWanted:\s*(\d+).*?gasUsed:\s*(\d+)', resp.tx_response.raw_log)
+            if "out of gas" in resp.tx_response.raw_log:
+                match = re.search(
+                    r"gasWanted:\s*(\d+).*?gasUsed:\s*(\d+)", resp.tx_response.raw_log
+                )
                 if match is not None:
                     gas_wanted = int(match.group(1))
                     gas_used = int(match.group(2))
@@ -225,12 +255,12 @@ class LedgerClient:
                     gas_used = -1
 
                 raise OutOfGasError(tx_digest, gas_wanted=gas_wanted, gas_used=gas_used)
-            elif 'insufficient fees' in resp.tx_response.raw_log:
-                match = re.search(r'required:\s*(\d+\w+)', resp.tx_response.raw_log)
+            elif "insufficient fees" in resp.tx_response.raw_log:
+                match = re.search(r"required:\s*(\d+\w+)", resp.tx_response.raw_log)
                 if match is not None:
                     required_fee = match.group(1)
                 else:
-                    required_fee = f'more than {tx.fee}'
+                    required_fee = f"more than {tx.fee}"
                 raise InsufficientFeesError(tx_digest, required_fee)
             else:
                 raise BroadcastError(tx_digest, resp.tx_response.raw_log)
