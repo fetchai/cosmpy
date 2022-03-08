@@ -77,6 +77,8 @@ class Account:
 
 class LedgerClient:
     def __init__(self, cfg: NetworkConfig):
+        cfg.validate()
+
         self._network_config = cfg
 
         parsed_url = parse_url(cfg.url)

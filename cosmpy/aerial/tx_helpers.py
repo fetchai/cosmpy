@@ -25,8 +25,8 @@ from cosmpy.crypto.address import Address
 
 @dataclass
 class MessageLog:
-    index: int
-    log: str
+    index: int  # noqa
+    log: str  # noqa
     events: Dict[str, Dict[str, str]]
 
 

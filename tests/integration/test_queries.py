@@ -21,6 +21,8 @@
 
 from typing import Any, Dict
 
+import pytest
+
 from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.clients.crypto import CosmosCrypto
 from cosmpy.clients.ledger import CosmosLedger
@@ -43,6 +45,7 @@ from tests.integration.generic.config import (
 from tests.integration.generic.test_cases import FetchdTestCase
 
 
+@pytest.mark.skip(reason="no way of currently testing this")
 class FetchdQueriesTestCase(FetchdTestCase):
     """Test case for Fetchd node."""
 
