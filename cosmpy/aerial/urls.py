@@ -1,7 +1,7 @@
-from enum import Enum
-from dataclasses import dataclass
-from urllib.parse import urlparse
 import re
+from dataclasses import dataclass
+from enum import Enum
+from urllib.parse import urlparse
 
 
 class Protocol(Enum):

@@ -18,10 +18,9 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the Tx modules."""
-from cosmpy.crypto.hashfuncs import sha256
 from google.protobuf.json_format import MessageToJson
 
-
+from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.crypto.interface import Signer
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import SignDoc, Tx
 

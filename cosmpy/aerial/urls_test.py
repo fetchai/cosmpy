@@ -1,4 +1,5 @@
 import pytest
+
 from .urls import ParsedUrl, Protocol, parse_url
 
 

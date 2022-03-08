@@ -1,7 +1,7 @@
 import re
 import time
 from dataclasses import dataclass
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 import certifi
@@ -10,15 +10,15 @@ import grpc
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import (
+    BroadcastError,
+    InsufficientFeesError,
     NotFoundError,
     OutOfGasError,
-    InsufficientFeesError,
-    BroadcastError,
     QueryTimeoutError,
 )
-from cosmpy.aerial.tx_helpers import SubmittedTx, TxResponse, MessageLog
-from cosmpy.aerial.tx import Transaction, SigningCfg
-from cosmpy.aerial.urls import parse_url, Protocol
+from cosmpy.aerial.tx import SigningCfg, Transaction
+from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
+from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.common.rest_client import RestClient
@@ -34,8 +34,8 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
     QueryStub as StakingGrpcClient,
 )
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
-    BroadcastTxRequest,
     BroadcastMode,
+    BroadcastTxRequest,
     GetTxRequest,
 )
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient

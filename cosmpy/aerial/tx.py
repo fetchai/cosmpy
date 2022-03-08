@@ -10,13 +10,13 @@ from cosmpy.crypto.keypairs import PublicKey
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
-    SignerInfo,
-    TxBody,
-    ModeInfo,
     AuthInfo,
     Fee,
-    Tx,
+    ModeInfo,
     SignDoc,
+    SignerInfo,
+    Tx,
+    TxBody,
 )
 
 

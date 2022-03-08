@@ -2,8 +2,8 @@ import argparse
 
 from cosmpy.aerial import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.crypto.address import Address
+from cosmpy.crypto.keypairs import PrivateKey
 
 
 def _parse_commandline():

@@ -5,9 +5,9 @@ from typing import Any, Optional
 from cosmpy.aerial.coins import parse_coins
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
-    MsgStoreCode,
-    MsgInstantiateContract,
     MsgExecuteContract,
+    MsgInstantiateContract,
+    MsgStoreCode,
 )
 
 
