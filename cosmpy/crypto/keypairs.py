@@ -119,7 +119,7 @@ class PublicKey:
 class PrivateKey(PublicKey, Signer):
     """Private key class."""
 
-    def __init__(self, private_key: Optional[bytes] = None):
+    def __init__(self, private_key: Optional[Union[bytes, str]] = None):
         """
         Initialize.
 
@@ -134,6 +134,12 @@ class PrivateKey(PublicKey, Signer):
             self._signing_key = ecdsa.SigningKey.from_string(
                 private_key, curve=self.curve, hashfunc=self.hash_function
             )
+        elif isinstance(private_key, str):
+            raw_private_key = base64.b64decode(private_key)
+            self._signing_key = ecdsa.SigningKey.from_string(
+                raw_private_key, curve=self.curve, hashfunc=self.hash_function
+            )
+
         else:
             raise RuntimeError("Unable to load private key from input")
 
