@@ -46,7 +46,7 @@ class TxResponse:
 
 
 class SubmittedTx:
-    def __init__(self, client: "LedgerClient", tx_hash: str):
+    def __init__(self, client: "LedgerClient", tx_hash: str):  # type: ignore
         self._client = client
         self._response: Optional[TxResponse] = None
         self._tx_hash = str(tx_hash)
@@ -85,6 +85,8 @@ class SubmittedTx:
 
     def wait_to_complete(self) -> "SubmittedTx":
         self._response = self._client.wait_for_query_tx(self.tx_hash)
+        assert self._response is not None
+
         if not self._response.is_successful():
             raise RuntimeError(
                 f"Transaction was unsuccessful (code: {self._response.code} tx: {self._response.hash})"

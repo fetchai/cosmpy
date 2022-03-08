@@ -136,10 +136,12 @@ class Transaction:
     ):
         self._state = TxState.Sealed
 
-        signing_cfgs = signing_cfgs if _is_iterable(signing_cfgs) else [signing_cfgs]
+        input_signing_cfgs: List[SigningCfg] = (
+            signing_cfgs if _is_iterable(signing_cfgs) else [signing_cfgs]
+        )  # type: ignore
 
         signer_infos = []
-        for signing_cfg in signing_cfgs:
+        for signing_cfg in input_signing_cfgs:
             assert signing_cfg.mode == SigningMode.Direct
 
             signer_infos.append(

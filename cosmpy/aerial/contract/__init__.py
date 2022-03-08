@@ -193,6 +193,9 @@ class LedgerContract:
     ) -> SubmittedTx:
         sender_address = Address(key)
 
+        if self._address is None:
+            raise RuntimeError("Contract appears not to be deployed currently")
+
         # query the account information for the sender
         account = self._client.query_account(sender_address)
 
@@ -217,6 +220,9 @@ class LedgerContract:
         return self._client.broadcast_tx(tx)
 
     def query(self, args: Any) -> Any:
+        if self._address is None:
+            raise RuntimeError("Contract appears not to be deployed currently")
+
         req = QuerySmartContractStateRequest(
             address=str(self._address), query_data=json.dumps(args).encode("UTF8")
         )

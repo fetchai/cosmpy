@@ -91,6 +91,7 @@ class LedgerClient:
                 grpc_client = grpc.secure_channel(parsed_url.host_and_port, credentials)
             else:
                 grpc_client = grpc.insecure_channel(parsed_url.host_and_port)
+
             self.wasm = CosmWasmGrpcClient(grpc_client)
             self.auth = AuthGrpcClient(grpc_client)
             self.txs = TxGrpcClient(grpc_client)
@@ -98,11 +99,12 @@ class LedgerClient:
             self.staking = StakingGrpcClient(grpc_client)
         else:
             rest_client = RestClient(parsed_url.rest_url)
-            self.wasm = CosmWasmRestClient(rest_client)
-            self.auth = AuthRestClient(rest_client)
-            self.txs = TxRestClient(rest_client)
-            self.bank = BankRestClient(rest_client)
-            self.staking = StakingRestClient(rest_client)
+
+            self.wasm = CosmWasmRestClient(rest_client)  # type: ignore
+            self.auth = AuthRestClient(rest_client)  # type: ignore
+            self.txs = TxRestClient(rest_client)  # type: ignore
+            self.bank = BankRestClient(rest_client)  # type: ignore
+            self.staking = StakingRestClient(rest_client)  # type: ignore
 
     @property
     def network_config(self) -> NetworkConfig:
