@@ -2,13 +2,16 @@ import re
 import time
 from dataclasses import dataclass
 from datetime import timedelta, datetime
-from typing import Dict, List, Optional
+from typing import Optional
 
 import certifi
 import grpc
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.exceptions import NotFoundError, OutOfGasError, InsufficientFeesError, BroadcastError, \
+    QueryTimeoutError
+from cosmpy.aerial.tx_helpers import SubmittedTx, TxResponse, MessageLog
 from cosmpy.aerial.tx import Transaction, SigningCfg
 from cosmpy.aerial.urls import parse_url, Protocol
 from cosmpy.auth.rest_client import AuthRestClient
@@ -33,64 +36,11 @@ DEFAULT_QUERY_TIMEOUT_SECS = 15
 DEFAULT_QUERY_INTERVAL_SECS = 2
 
 
-class QueryError(RuntimeError):
-    pass
-
-
-class NotFoundError(QueryError):
-    pass
-
-
-class TimeoutError(QueryError):
-    pass
-
-
-class BroadcastError(RuntimeError):
-    def __init__(self, tx_hash: str, message: str):
-        super().__init__(message)
-        self.tx_hash = tx_hash
-
-
-class OutOfGasError(BroadcastError):
-    def __init__(self, tx_hash: str, gas_wanted: int, gas_used: int):
-        self.gas_wanted = gas_wanted
-        self.gas_used = gas_used
-        super().__init__(tx_hash, f'Out of Gas (wanted: {self.gas_wanted}, used: {self.gas_used})')
-
-
-class InsufficientFeesError(BroadcastError):
-    def __init__(self, tx_hash: str, minimum_required_fee: str):
-        self.minimum_required_fee = minimum_required_fee
-        super().__init__(tx_hash, f'Insufficient Fees (minimum required: {self.minimum_required_fee})')
-
-
 @dataclass
 class Account:
     address: Address
     number: int
     sequence: int
-
-
-@dataclass
-class MessageLog:
-    index: int
-    log: str
-    events: Dict[str, Dict[str, str]]
-
-
-@dataclass
-class TxResponse:
-    hash: str
-    height: int
-    code: int
-    gas_wanted: int
-    gas_used: int
-    raw_log: str
-    logs: List[MessageLog]
-    events: Dict[str, Dict[str, str]]
-
-    def is_successful(self) -> bool:
-        return self.code == 0
 
 
 class LedgerClient:
@@ -155,7 +105,7 @@ class LedgerClient:
         return resp.balance.amount
 
     def send_tokens(self, destination: Address, amount: int, denom: str, sender: PrivateKey,
-                    memo: Optional[str] = None, gas_limit: Optional[int] = None) -> str:
+                    memo: Optional[str] = None, gas_limit: Optional[int] = None) -> SubmittedTx:
         sender_address = Address(sender)
 
         # query the account information for the sender
@@ -168,21 +118,12 @@ class LedgerClient:
         # build up the store transaction
         tx = Transaction()
         tx.add_message(create_bank_send_msg(sender_address, destination, amount, denom))
-        tx.seal(SigningCfg.direct(sender, account.sequence), fee=fee, gas_limit=gas_limit)
+        tx.seal(SigningCfg.direct(sender, account.sequence), fee=fee, gas_limit=gas_limit, memo=memo)
         tx.sign(sender, self.network_config.chain_id, account.number)
         tx.complete()
 
         # broadcast the store transaction
-        tx_hash = self.broadcast_tx(tx)
-
-        # wait for the transaction to complete
-        resp = self.wait_for_query_tx(tx_hash)
-        if not resp.is_successful():
-            raise RuntimeError(f'Unable to execute contract code. (code: {resp.code} tx: {resp.hash})')
-
-        return resp
-
-        pass
+        return self.broadcast_tx(tx)
 
     def estimate_fee_from_gas(self, gas_limit: int):
         return f'{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}'
@@ -201,7 +142,7 @@ class LedgerClient:
 
             delta = datetime.now() - start
             if delta >= timeout:
-                raise TimeoutError()
+                raise QueryTimeoutError()
 
             time.sleep(internal.total_seconds())
 
@@ -250,7 +191,7 @@ class LedgerClient:
             events=events
         )
 
-    def broadcast_tx(self, tx: Transaction) -> str:
+    def broadcast_tx(self, tx: Transaction) -> SubmittedTx:
         """
         Broadcast transaction and get receipt
 
@@ -294,4 +235,4 @@ class LedgerClient:
             else:
                 raise BroadcastError(tx_digest, resp.tx_response.raw_log)
 
-        return tx_digest
+        return SubmittedTx(self, tx_digest)

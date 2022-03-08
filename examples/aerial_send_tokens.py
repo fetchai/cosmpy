@@ -15,6 +15,15 @@ def main():
     print(f'Alice Address: {alice_address} Balance: {ledger.query_bank_balance(alice_address)}')
     print(f'Bob   Address: {bob_address} Balance: {ledger.query_bank_balance(bob_address)}')
 
+    tx = ledger.send_tokens(bob_address, 10, 'atestfet', alice_private_key)
+
+    print(f'TX {tx.tx_hash} waiting to complete...')
+    tx.wait_to_complete()
+    print(f'TX {tx.tx_hash} waiting to complete...done')
+
+    print(f'Alice Address: {alice_address} Balance: {ledger.query_bank_balance(alice_address)}')
+    print(f'Bob   Address: {bob_address} Balance: {ledger.query_bank_balance(bob_address)}')
+
 
 if __name__ == '__main__':
     main()

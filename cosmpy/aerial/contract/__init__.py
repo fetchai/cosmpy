@@ -7,6 +7,7 @@ from cosmpy.aerial.client import TxResponse
 from cosmpy.aerial.contract.cosmwasm import create_cosmwasm_instantiate_msg, create_cosmwasm_store_code_msg, \
     create_cosmwasm_execute_msg
 from cosmpy.aerial.tx import Transaction, SigningCfg
+from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.crypto.keypairs import PrivateKey
@@ -66,14 +67,13 @@ class LedgerContract:
         tx.complete()
 
         # broadcast the store transaction
-        tx_hash = self._client.broadcast_tx(tx)
+        submitted_tx = self._client.broadcast_tx(tx).wait_to_complete()
 
-        # wait for the transaction to complete
-        resp = self._client.wait_for_query_tx(tx_hash)
-        if not resp.is_successful():
-            raise RuntimeError(f'Unable to store contract code. (code: {resp.code} tx: {resp.hash})')
+        # extract the code id
+        self._code_id = submitted_tx.contract_code_id
+        if self._code_id is None:
+            raise RuntimeError(f'Unable to extract contract code id')
 
-        self._code_id = int(resp.events['store_code']['code_id'])
         return self._code_id
 
     def instantiate(self, code_id: int, args: Any, key: PrivateKey, label: Optional[str] = None,
@@ -99,15 +99,13 @@ class LedgerContract:
         tx.complete()
 
         # broadcast the store transaction
-        tx_hash = self._client.broadcast_tx(tx)
-
-        # wait for the transaction to complete
-        resp = self._client.wait_for_query_tx(tx_hash)
-        if not resp.is_successful():
-            raise RuntimeError(f'Unable to store contract code. (code: {resp.code} tx: {resp.hash})')
+        submitted_tx = self._client.broadcast_tx(tx).wait_to_complete()
 
         # store the contract address
-        self._address = Address(resp.events['instantiate']['_contract_address'])
+        self._address = submitted_tx.contract_address
+        if self._address is None:
+            raise RuntimeError(f'Unable to extract contract code id')
+
         return self._address
 
     def deploy(self, args: Any, key: PrivateKey, label: Optional[str] = None,
@@ -130,7 +128,8 @@ class LedgerContract:
                                 admin_address=admin_address,
                                 funds=funds)
 
-    def execute(self, args: Any, key: PrivateKey, gas_limit: Optional[int] = None, funds: Optional[str] = None) -> TxResponse:
+    def execute(self, args: Any, key: PrivateKey, gas_limit: Optional[int] = None,
+                funds: Optional[str] = None) -> SubmittedTx:
         sender_address = Address(key)
 
         # query the account information for the sender
@@ -149,14 +148,7 @@ class LedgerContract:
         tx.complete()
 
         # broadcast the store transaction
-        tx_hash = self._client.broadcast_tx(tx)
-
-        # wait for the transaction to complete
-        resp = self._client.wait_for_query_tx(tx_hash)
-        if not resp.is_successful():
-            raise RuntimeError(f'Unable to execute contract code. (code: {resp.code} tx: {resp.hash})')
-
-        return resp
+        return self._client.broadcast_tx(tx)
 
     def query(self, args: Any) -> Any:
         req = QuerySmartContractStateRequest(

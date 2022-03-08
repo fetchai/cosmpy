@@ -29,11 +29,15 @@ class NetworkConfig:
             prefix_list = ', '.join(map(lambda x: f'"{x}"', URL_PREFIXES))
             raise NetworkConfigError(f'URL must start with one of the following prefixes: {prefix_list}')
 
-    @staticmethod
-    def capricorn_testnet() -> 'NetworkConfig':
+    @classmethod
+    def capricorn_testnet(cls) -> 'NetworkConfig':
         return NetworkConfig(
             chain_id='capricorn-1',
             url='grpc+https://grpc-capricorn.fetch.ai',
             fee_minimum_gas_price=5000000000,
             fee_denomination='atestfet',
         )
+
+    @classmethod
+    def latest_stable_testnet(cls) -> 'NetworkConfig':
+        return cls.capricorn_testnet()
