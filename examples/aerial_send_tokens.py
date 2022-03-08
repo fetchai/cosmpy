@@ -10,7 +10,7 @@ def main():
     alice_address = Address(alice_private_key)
     bob_address = Address(bob_private_key)
 
-    ledger = LedgerClient(NetworkConfig.capricorn_testnet())
+    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
     print(
         f"Alice Address: {alice_address} Balance: {ledger.query_bank_balance(alice_address)}"

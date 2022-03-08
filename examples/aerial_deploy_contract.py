@@ -24,7 +24,7 @@ def main():
     private_key = PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s=")
     address = Address(private_key)
 
-    ledger = LedgerClient(NetworkConfig.capricorn_testnet())
+    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
     contract.deploy({}, private_key)
