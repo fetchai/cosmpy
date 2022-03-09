@@ -20,6 +20,7 @@ import argparse
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
+from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
 
@@ -39,27 +40,26 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    private_key = PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s=")
-    address = Address(private_key)
+    wallet = LocalWallet(PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
-    contract.deploy({}, private_key)
+    contract.deploy({}, wallet)
 
     print(f"Contract deployed at: {contract.address}")
 
-    result = contract.query({"get": {"owner": str(address)}})
+    result = contract.query({"get": {"owner": str(wallet.address())}})
     print("Initial state:", result)
 
-    contract.execute({"set": {"value": "foobar"}}, private_key).wait_to_complete()
+    contract.execute({"set": {"value": "foobar"}}, wallet).wait_to_complete()
 
-    result = contract.query({"get": {"owner": str(address)}})
+    result = contract.query({"get": {"owner": str(wallet.address())}})
     print("State after set:", result)
 
-    contract.execute({"clear": {}}, private_key).wait_to_complete()
+    contract.execute({"clear": {}}, wallet).wait_to_complete()
 
-    result = contract.query({"get": {"owner": str(address)}})
+    result = contract.query({"get": {"owner": str(wallet.address())}})
     print("State after clear:", result)
 
 
