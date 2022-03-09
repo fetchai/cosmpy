@@ -19,7 +19,7 @@
 
 import pytest
 
-from .urls import ParsedUrl, Protocol, parse_url
+from cosmpy.aerial.urls import ParsedUrl, Protocol, parse_url
 
 
 @pytest.mark.parametrize(

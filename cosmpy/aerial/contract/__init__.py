@@ -21,7 +21,7 @@ import json
 from datetime import datetime
 from typing import Any, Optional
 
-from cosmpy.aerial import LedgerClient
+from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_execute_msg,
     create_cosmwasm_instantiate_msg,
