@@ -139,7 +139,7 @@ class LedgerClient:
         resp = self.bank.Balance(req)
         assert resp.balance.denom == denom  # sanity check
 
-        return resp.balance.amount
+        return int(resp.balance.amount)
 
     def send_tokens(
             self,
