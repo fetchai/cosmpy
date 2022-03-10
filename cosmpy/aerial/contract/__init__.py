@@ -32,7 +32,6 @@ from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QueryCodesRequest,

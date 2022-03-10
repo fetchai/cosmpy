@@ -359,7 +359,7 @@ class TxRestClientTestCase(unittest.TestCase):
         ).decode()
         expected_response = ParseDict(content, GetTxsEventResponse())
 
-        # rest_client = TxRestClient(mock_client)
-        # self.assertEqual(
-        #     rest_client.GetTxsEvent(GetTxsEventRequest()), expected_response
-        # )
+        rest_client = TxRestClient(mock_client)
+        self.assertEqual(
+            rest_client.GetTxsEvent(GetTxsEventRequest()), expected_response
+        )

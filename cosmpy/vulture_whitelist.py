@@ -85,3 +85,5 @@ _.validate_address  # unused method (./clients/ledger.py:1018)
 _.formatter  # unused attribute (./common/loggers.py:57)
 _.handlers  # unused attribute (./common/loggers.py:58)
 _.ensure_funds  # unused method (./clients/ledger.py:656)
+_.staking_denomination
+_.fetch_mainnet

@@ -20,7 +20,6 @@
 """Crypto KeyPairs (Public Key and Private Key)."""
 
 import base64
-import binascii
 import hashlib
 from typing import Callable, Optional, Union
 

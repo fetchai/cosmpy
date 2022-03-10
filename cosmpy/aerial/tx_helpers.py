@@ -47,8 +47,8 @@ class TxResponse:
 
 class SubmittedTx:
     def __init__(
-        self, client: "LedgerClient", tx_hash: str
-    ):  # noqa: F821  # type: ignore
+        self, client: "LedgerClient", tx_hash: str  # type: ignore # noqa: F821
+    ):
         self._client = client
         self._response: Optional[TxResponse] = None
         self._tx_hash = str(tx_hash)
