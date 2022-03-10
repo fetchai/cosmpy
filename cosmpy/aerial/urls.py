@@ -17,7 +17,6 @@
 #
 # ------------------------------------------------------------------------------
 
-import re
 from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urlparse
@@ -76,7 +75,7 @@ def parse_url(url: str) -> ParsedUrl:
     else:
         raise RuntimeError(f"Unsupported url scheme: {result.scheme}")
 
-    hostname = result.hostname
-    port = default_port if result.port is None else result.port
+    hostname = str(result.hostname)
+    port = default_port if result.port is None else int(result.port)
 
     return ParsedUrl(protocol=protocol, secure=secure, hostname=hostname, port=port)
