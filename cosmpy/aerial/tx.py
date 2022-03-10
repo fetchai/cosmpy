@@ -118,12 +118,13 @@ class Transaction:
             raise RuntimeError("The transaction has not been completed")
         return self._tx
 
-    def add_message(self, msg: Any):
+    def add_message(self, msg: Any) -> "Transaction":
         if self._state != TxState.Draft:
             raise RuntimeError(
                 "The transaction is not in the draft state. No further messages may be appended"
             )
         self._msgs.append(msg)
+        return self
 
     def seal(
         self,
@@ -131,7 +132,7 @@ class Transaction:
         fee: str,
         gas_limit: int,
         memo: Optional[str] = None,
-    ):
+    ) -> "Transaction":
         self._state = TxState.Sealed
 
         input_signing_cfgs: List[SigningCfg] = (
@@ -166,6 +167,7 @@ class Transaction:
         )  # pylint: disable=E1101
 
         self._tx = Tx(body=self._tx_body, auth_info=auth_info)
+        return self
 
     def sign(
         self,
@@ -173,7 +175,12 @@ class Transaction:
         chain_id: str,
         account_number: int,
         deterministic: bool = False,
-    ):
+    ) -> "Transaction":
+        if self.state != TxState.Sealed:
+            raise RuntimeError(
+                "Transaction is not sealed. It must be sealed before signing is possible"
+            )
+
         sd = SignDoc()
         sd.body_bytes = self._tx.body.SerializeToString()
         sd.auth_info_bytes = self._tx.auth_info.SerializeToString()
@@ -189,6 +196,8 @@ class Transaction:
             canonicalise=True,
         )
         self._tx.signatures.extend([signature])
+        return self
 
-    def complete(self):
+    def complete(self) -> "Transaction":
         self._state = TxState.Final
+        return self
