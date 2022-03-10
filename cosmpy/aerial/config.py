@@ -26,8 +26,8 @@ class NetworkConfigError(RuntimeError):
 URL_PREFIXES = (
     "grpc+https",
     "grpc+http",
-    "rest-https",
-    "rest-http",
+    "rest+https",
+    "rest+http",
 )
 
 
@@ -36,6 +36,7 @@ class NetworkConfig:
     chain_id: str
     fee_minimum_gas_price: int
     fee_denomination: str
+    staking_denomination: str
     url: str
 
     def validate(self):
@@ -56,6 +57,17 @@ class NetworkConfig:
             url="grpc+https://grpc-capricorn.fetch.ai",
             fee_minimum_gas_price=5000000000,
             fee_denomination="atestfet",
+            staking_denomination="atestfet",
+        )
+
+    @classmethod
+    def fetch_mainnet(cls) -> "NetworkConfig":
+        return NetworkConfig(
+            chain_id="fetchhub-3",
+            url="grpc+https://grpc-fetchhub.fetch.ai",
+            fee_minimum_gas_price=5000000000,
+            fee_denomination="afet",
+            staking_denomination="afet",
         )
 
     @classmethod
