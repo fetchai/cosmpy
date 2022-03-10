@@ -76,13 +76,7 @@ def parse_url(url: str) -> ParsedUrl:
     else:
         raise RuntimeError(f"Unsupported url scheme: {result.scheme}")
 
-    match = re.match(r"^(.+?)(?::(\d+))?$", result.netloc)
-    if match is None:
-        raise RuntimeError(f"Unable to parse netloc: {result.netloc}")
-
-    # hostname = str(match.group(1))
-    # port = int(match.group(2))
-    hostname = str(match.group(1))
-    port = default_port if match.group(2) is None else int(match.group(2))
+    hostname = result.hostname
+    port = default_port if result.port is None else result.port
 
     return ParsedUrl(protocol=protocol, secure=secure, hostname=hostname, port=port)
