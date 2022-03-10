@@ -35,7 +35,7 @@ def _base64_decode(value: str) -> bytes:
     try:
         return base64.b64decode(value)
     except Exception:
-        raise RuntimeError('Unable to parse base64 value')
+        raise RuntimeError("Unable to parse base64 value")
 
 
 class PublicKey:

@@ -4,7 +4,7 @@ import sys
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.contract import LedgerContract, create_cosmwasm_execute_msg
-from cosmpy.aerial.tx import Transaction, SigningCfg
+from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
@@ -36,24 +36,28 @@ def main():
     # check to see if all the clients have enough funds
     alice_balance = client.query_bank_balance(alice.address())
     bob_balance = client.query_bank_balance(bob.address())
-    print(f'Alice balance {alice_balance}')
-    print(f'Bob   balance {bob_balance}')
+    print(f"Alice balance {alice_balance}")
+    print(f"Bob   balance {bob_balance}")
 
     if alice_balance < (10 ** 18):
-        print(f'Alice has insufficient balance to complete operations please funds alice account: {alice.address()}')
+        print(
+            f"Alice has insufficient balance to complete operations please funds alice account: {alice.address()}"
+        )
         sys.exit(1)
 
     if bob_balance < (10 ** 18):
-        print(f'Bob has insufficient balance to complete operations please funds bob account: {bob.address()}')
+        print(
+            f"Bob has insufficient balance to complete operations please funds bob account: {bob.address()}"
+        )
         sys.exit(1)
 
     contract = LedgerContract(args.contract_path, client, address=args.contract_address)
 
     # Step 1. Deploy the contract and setup the initial balances as required
     if contract.address is None:
-        print('Deploying contract...')
+        print("Deploying contract...")
         contract.deploy({}, alice)
-        print(f'Contract deployed at {contract.address}')
+        print(f"Contract deployed at {contract.address}")
 
         create_batch_msg = {
             "create_batch": {
@@ -71,53 +75,55 @@ def main():
             }
         }
 
-        print('Creating tokens...')
+        print("Creating tokens...")
         tx = contract.execute(create_batch_msg, alice).wait_to_complete()
-        print(f'Created tokens (tx: {tx.tx_hash})')
+        print(f"Created tokens (tx: {tx.tx_hash})")
 
         # Create Alice's token
         mint_single_msg = {
             "mint_single": {
                 "to_address": str(alice.address()),
                 "id": TOKEN_ID_1,
-                "supply": '2000',
+                "supply": "2000",
                 "data": "some_data",
             },
         }
 
-        print(f'Minting tokens (id: {TOKEN_ID_1})...')
+        print(f"Minting tokens (id: {TOKEN_ID_1})...")
         tx = contract.execute(mint_single_msg, alice).wait_to_complete()
-        print(f'Minted tokens (id: {TOKEN_ID_1} tx: {tx.tx_hash})')
+        print(f"Minted tokens (id: {TOKEN_ID_1} tx: {tx.tx_hash})")
 
         # Create Bob's token
         mint_single_msg = {
             "mint_single": {
                 "to_address": str(bob.address()),
                 "id": TOKEN_ID_2,
-                "supply": '2000',
+                "supply": "2000",
                 "data": "some_data",
             },
         }
 
-        print(f'Minting tokens (id: {TOKEN_ID_1})...')
+        print(f"Minting tokens (id: {TOKEN_ID_1})...")
         tx = contract.execute(mint_single_msg, alice).wait_to_complete()
-        print(f'Minted tokens (id: {TOKEN_ID_1} tx: {tx.tx_hash})')
+        print(f"Minted tokens (id: {TOKEN_ID_1} tx: {tx.tx_hash})")
 
     # Step 2. Query what the current balance state is
-    result = contract.query({
-        "balance_batch": {
-            "addresses": [
-                {
-                    "address": str(bob.address()),
-                    "id": TOKEN_ID_1,
-                },
-                {
-                    "address": str(alice.address()),
-                    "id": TOKEN_ID_2,
-                },
-            ]
+    result = contract.query(
+        {
+            "balance_batch": {
+                "addresses": [
+                    {
+                        "address": str(bob.address()),
+                        "id": TOKEN_ID_1,
+                    },
+                    {
+                        "address": str(alice.address()),
+                        "id": TOKEN_ID_2,
+                    },
+                ]
+            }
         }
-    })
+    )
     print(f'Alice has {result["balances"][1]} of Bob\'s tokens')
     print(f'Bob has {result["balances"][0]} of Alice\'s tokens')
 
@@ -138,9 +144,9 @@ def main():
                     "from_address": str(alice.address()),
                     "to_address": str(bob.address()),
                     "id": TOKEN_ID_1,
-                    "value": '1',
+                    "value": "1",
                 },
-            }
+            },
         )
     )
 
@@ -155,9 +161,9 @@ def main():
                     "from_address": str(bob.address()),
                     "to_address": str(alice.address()),
                     "id": TOKEN_ID_2,
-                    "value": '1',
+                    "value": "1",
                 },
-            }
+            },
         )
     )
 
@@ -172,10 +178,12 @@ def main():
     # seal the transaction: this stops all further updates to the transactions and this is the step
     # where additional metadata is added like gas, fees and the individual signers sequence numbers
     tx.seal(
-        [SigningCfg.direct(alice.public_key(), alice_account.sequence),
-         SigningCfg.direct(bob.public_key(), bob_account.sequence)],
+        [
+            SigningCfg.direct(alice.public_key(), alice_account.sequence),
+            SigningCfg.direct(bob.public_key(), bob_account.sequence),
+        ],
         fee,
-        gas_limit
+        gas_limit,
     )
 
     # both Alice and Bob sign the transaction
@@ -185,28 +193,30 @@ def main():
     # all done!
     tx.complete()
 
-    print('Executing atomic swap...')
+    print("Executing atomic swap...")
     tx = client.broadcast_tx(tx).wait_to_complete()
-    print(f'Executing atomic swap...complete (tx: {tx.tx_hash})')
+    print(f"Executing atomic swap...complete (tx: {tx.tx_hash})")
 
     # Step 4. Query what the new balance state is
-    result = contract.query({
-        "balance_batch": {
-            "addresses": [
-                {
-                    "address": str(bob.address()),
-                    "id": TOKEN_ID_1,
-                },
-                {
-                    "address": str(alice.address()),
-                    "id": TOKEN_ID_2,
-                },
-            ]
+    result = contract.query(
+        {
+            "balance_batch": {
+                "addresses": [
+                    {
+                        "address": str(bob.address()),
+                        "id": TOKEN_ID_1,
+                    },
+                    {
+                        "address": str(alice.address()),
+                        "id": TOKEN_ID_2,
+                    },
+                ]
+            }
         }
-    })
+    )
     print(f'Alice has {result["balances"][1]} of Bob\'s tokens')
     print(f'Bob has {result["balances"][0]} of Alice\'s tokens')
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

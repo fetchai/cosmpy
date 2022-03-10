@@ -142,13 +142,13 @@ class LedgerClient:
         return int(resp.balance.amount)
 
     def send_tokens(
-            self,
-            destination: Address,
-            amount: int,
-            denom: str,
-            sender: Wallet,
-            memo: Optional[str] = None,
-            gas_limit: Optional[int] = None,
+        self,
+        destination: Address,
+        amount: int,
+        denom: str,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
 
         # query the account information for the sender
@@ -156,13 +156,15 @@ class LedgerClient:
 
         # estimate the fee required for this transaction
         gas_limit = (
-                gas_limit or 100000
+            gas_limit or 100000
         )  # TODO: Need to interface to the simulation engine
         fee = self.estimate_fee_from_gas(gas_limit)
 
         # build up the store transaction
         tx = Transaction()
-        tx.add_message(create_bank_send_msg(sender.address(), destination, amount, denom))
+        tx.add_message(
+            create_bank_send_msg(sender.address(), destination, amount, denom)
+        )
         tx.seal(
             SigningCfg.direct(sender.public_key(), account.sequence),
             fee=fee,
@@ -179,10 +181,10 @@ class LedgerClient:
         return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
 
     def wait_for_query_tx(
-            self,
-            tx_hash: str,
-            timeout: Optional[timedelta] = None,
-            internal: Optional[timedelta] = None,
+        self,
+        tx_hash: str,
+        timeout: Optional[timedelta] = None,
+        internal: Optional[timedelta] = None,
     ) -> TxResponse:
         timeout = timeout or timedelta(seconds=DEFAULT_QUERY_TIMEOUT_SECS)
         internal = internal or timedelta(seconds=DEFAULT_QUERY_INTERVAL_SECS)

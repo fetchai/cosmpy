@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
-from cosmpy.crypto.keypairs import PublicKey, PrivateKey
+from cosmpy.crypto.keypairs import PrivateKey, PublicKey
 
 
 class Wallet(ABC):
@@ -21,7 +21,7 @@ class Wallet(ABC):
 
 class LocalWallet(Wallet):
     @staticmethod
-    def generate() -> 'LocalWallet':
+    def generate() -> "LocalWallet":
         return LocalWallet(PrivateKey())
 
     def __init__(self, private_key: PrivateKey):

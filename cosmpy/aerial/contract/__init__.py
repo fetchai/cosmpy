@@ -52,7 +52,7 @@ def _generate_label(digest: bytes) -> str:
 
 class LedgerContract:
     def __init__(
-            self, path: str, client: LedgerClient, address: Optional[Address] = None
+        self, path: str, client: LedgerClient, address: Optional[Address] = None
     ):
         self._path = path
         self._client = client
@@ -83,14 +83,18 @@ class LedgerContract:
 
         # estimate the fee required for this transaction
         gas_limit = (
-                gas_limit or 2000000
+            gas_limit or 2000000
         )  # TODO: Need to interface to the simulation engine
         fee = self._client.estimate_fee_from_gas(gas_limit)
 
         # build up the store transaction
         tx = Transaction()
         tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
-        tx.seal(SigningCfg.direct(sender.public_key(), account.sequence), fee=fee, gas_limit=gas_limit)
+        tx.seal(
+            SigningCfg.direct(sender.public_key(), account.sequence),
+            fee=fee,
+            gas_limit=gas_limit,
+        )
         tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
         tx.complete()
 
@@ -105,14 +109,14 @@ class LedgerContract:
         return self._code_id
 
     def instantiate(
-            self,
-            code_id: int,
-            args: Any,
-            sender: Wallet,
-            label: Optional[str] = None,
-            gas_limit: Optional[int] = None,
-            admin_address: Optional[Address] = None,
-            funds: Optional[str] = None,
+        self,
+        code_id: int,
+        args: Any,
+        sender: Wallet,
+        label: Optional[str] = None,
+        gas_limit: Optional[int] = None,
+        admin_address: Optional[Address] = None,
+        funds: Optional[str] = None,
     ) -> Address:
         # query the account information for the sender
         account = self._client.query_account(sender.address())
@@ -120,7 +124,7 @@ class LedgerContract:
 
         # estimate the fee required for this transaction
         gas_limit = (
-                gas_limit or 2000000
+            gas_limit or 2000000
         )  # TODO: Need to interface to the simulation engine
         fee = self._client.estimate_fee_from_gas(gas_limit)
 
@@ -136,7 +140,11 @@ class LedgerContract:
                 funds=funds,
             )
         )
-        tx.seal(SigningCfg.direct(sender.public_key(), account.sequence), fee=fee, gas_limit=gas_limit)
+        tx.seal(
+            SigningCfg.direct(sender.public_key(), account.sequence),
+            fee=fee,
+            gas_limit=gas_limit,
+        )
         tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
         tx.complete()
 
@@ -151,14 +159,14 @@ class LedgerContract:
         return self._address
 
     def deploy(
-            self,
-            args: Any,
-            sender: Wallet,
-            label: Optional[str] = None,
-            store_gas_limit: Optional[int] = None,
-            instantiate_gas_limit: Optional[int] = None,
-            admin_address: Optional[Address] = None,
-            funds: Optional[str] = None,
+        self,
+        args: Any,
+        sender: Wallet,
+        label: Optional[str] = None,
+        store_gas_limit: Optional[int] = None,
+        instantiate_gas_limit: Optional[int] = None,
+        admin_address: Optional[Address] = None,
+        funds: Optional[str] = None,
     ) -> Address:
 
         # in the case where the contract is already deployed
@@ -183,11 +191,11 @@ class LedgerContract:
         )
 
     def execute(
-            self,
-            args: Any,
-            sender: Wallet,
-            gas_limit: Optional[int] = None,
-            funds: Optional[str] = None,
+        self,
+        args: Any,
+        sender: Wallet,
+        gas_limit: Optional[int] = None,
+        funds: Optional[str] = None,
     ) -> SubmittedTx:
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
@@ -197,7 +205,7 @@ class LedgerContract:
 
         # estimate the fee required for this transaction
         gas_limit = (
-                gas_limit or 2000000
+            gas_limit or 2000000
         )  # TODO: Need to interface to the simulation engine
         fee = self._client.estimate_fee_from_gas(gas_limit)
 
@@ -208,7 +216,11 @@ class LedgerContract:
                 sender.address(), self._address, args, funds=funds
             )
         )
-        tx.seal(SigningCfg.direct(sender.public_key(), account.sequence), fee=fee, gas_limit=gas_limit)
+        tx.seal(
+            SigningCfg.direct(sender.public_key(), account.sequence),
+            fee=fee,
+            gas_limit=gas_limit,
+        )
         tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
         tx.complete()
 

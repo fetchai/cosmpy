@@ -126,11 +126,11 @@ class Transaction:
         self._msgs.append(msg)
 
     def seal(
-            self,
-            signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-            fee: str,
-            gas_limit: int,
-            memo: Optional[str] = None,
+        self,
+        signing_cfgs: Union[SigningCfg, List[SigningCfg]],
+        fee: str,
+        gas_limit: int,
+        memo: Optional[str] = None,
     ):
         self._state = TxState.Sealed
 
@@ -168,11 +168,11 @@ class Transaction:
         self._tx = Tx(body=self._tx_body, auth_info=auth_info)
 
     def sign(
-            self,
-            signer: Signer,
-            chain_id: str,
-            account_number: int,
-            deterministic: bool = False,
+        self,
+        signer: Signer,
+        chain_id: str,
+        account_number: int,
+        deterministic: bool = False,
     ):
         sd = SignDoc()
         sd.body_bytes = self._tx.body.SerializeToString()
