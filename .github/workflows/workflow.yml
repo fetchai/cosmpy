@@ -37,10 +37,8 @@ jobs:
       run: tox -e safety
     - name: Static type check
       run: tox -e mypy
-    - name: Pylint check
-      run: tox -e pylint
-    - name: Unused code check
-      run: tox -e vulture
+#    - name: Pylint check
+#      run: tox -e pylint
     - name: License check
       run: tox -e liccheck
     - name: Copyright check

@@ -53,28 +53,24 @@ To install the project use:
 
 Below is a simple example for querying an account's balance and sending funds from one account to another using `RestClient`:
 
-    from cosmpy.clients.signing_cosmwasm_client import SigningCosmWasmClient
-    from cosmpy.common.rest_client import RestClient
-    from cosmpy.crypto.address import Address
-    from cosmpy.crypto.keypairs import PrivateKey
-    from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+    from cosmpy.clients.ledger import CosmosLedger
+    from cosmpy.clients.crypto import CosmosCrypto, Coin
 
     # Data
-    rest_endpoint_address = "http://the_rest_endpoint"
-    alice_private_key = PrivateKey(bytes.fromhex("<private_key_in_hex_format>"))
+    rest_node_address = "http://the_rest_endpoint"
+    alice_crypto = CosmosCrypto(private_key_str="<private_key_in_hex_format>"))
     chain_id = "some_chain_id"
     denom = "some_denomination"
-    bob_address = Address("some_address")
+    bob_address = "some_address"
 
-    channel = RestClient(rest_endpoint_address)
-    client = SigningCosmWasmClient(private_key, channel, chain_id)
+    ledger = CosmosLedger(chain_id=chain_id, rest_node_address=rest_endpoint_addres)
     
     # Query Alice's Balance
-    res = client.get_balance(client.address, denom)
-    print(f"Alice's Balance: {res.balance.amount} {res.balance.denom}")
+    res = ledger.get_balance(alice_crypto.get_address(), denom)
+    print(f"Alice's Balance: {res} {denom}")
     
     # Send 1 <denom> from Alice to Bob
-    client.send_tokens(bob_address, [Coin(amount="1", denom=denom)])
+    ledger.send_tokens(alice_crypto, bob_address, [Coin(amount="1", denom=denom)])
 
 ## Documentation
 

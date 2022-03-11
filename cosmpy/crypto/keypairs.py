@@ -30,6 +30,13 @@ from ecdsa.util import sigencode_string, sigencode_string_canonize
 from cosmpy.crypto.interface import Signer
 
 
+def _base64_decode(value: str) -> bytes:
+    try:
+        return base64.b64decode(value)
+    except Exception:
+        raise RuntimeError("Unable to parse base64 value")
+
+
 class PublicKey:
     """Public key class."""
 
@@ -119,7 +126,7 @@ class PublicKey:
 class PrivateKey(PublicKey, Signer):
     """Private key class."""
 
-    def __init__(self, private_key: Optional[bytes] = None):
+    def __init__(self, private_key: Optional[Union[bytes, str]] = None):
         """
         Initialize.
 
@@ -134,6 +141,12 @@ class PrivateKey(PublicKey, Signer):
             self._signing_key = ecdsa.SigningKey.from_string(
                 private_key, curve=self.curve, hashfunc=self.hash_function
             )
+        elif isinstance(private_key, str):
+            raw_private_key = _base64_decode(private_key)
+            self._signing_key = ecdsa.SigningKey.from_string(
+                raw_private_key, curve=self.curve, hashfunc=self.hash_function
+            )
+
         else:
             raise RuntimeError("Unable to load private key from input")
 

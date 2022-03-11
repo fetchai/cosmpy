@@ -59,6 +59,8 @@ setup(
         "google-api-python-client",
         "protobuf",
         "grpcio",
+        "click",
+        "types-certifi",
     ],
     extras_require={
         "dev": [

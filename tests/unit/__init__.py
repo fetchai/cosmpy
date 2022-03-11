@@ -16,5 +16,3 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
-"""Generic tools for PyCosm integration tests."""

@@ -3,12 +3,14 @@
 *.egg-info/
 ./build/
 dist/
+build/
 
 # IDEs
 .idea/
 
 # Tox files
 .tox
+Pipfile.lock
 
 .DS_Store
 */.DS_Store

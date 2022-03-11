@@ -17,15 +17,18 @@
 #
 # ------------------------------------------------------------------------------
 
-"""REST example of query balance."""
+from cosmpy.crypto.address import Address
+from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
-from cosmpy.bank.rest_client import BankRestClient, QueryBalanceRequest
-from cosmpy.common.rest_client import RestClient
 
-REST_URL = "http://127.0.0.1:1317"
-ADDRESS = "fetch128r83uvcxns82535d3da5wmfvhc2e5mut922dw"
-DENOM = "atestfet"
+def create_bank_send_msg(
+    from_address: Address, to_address: Address, amount: int, denom: str
+) -> MsgSend:
+    msg = MsgSend(
+        from_address=str(from_address),
+        to_address=str(to_address),
+        amount=[Coin(amount=str(amount), denom=denom)],
+    )
 
-bank = BankRestClient(RestClient(REST_URL))
-res = bank.Balance(QueryBalanceRequest(address=ADDRESS, denom=DENOM))
-print(f"Balance of {ADDRESS} is {res.balance.amount} {res.balance.denom}")
+    return msg

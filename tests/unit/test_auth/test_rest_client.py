@@ -22,6 +22,7 @@
 import json
 import unittest
 
+import pytest
 from google.protobuf.json_format import ParseDict
 
 from cosmpy.auth.rest_client import AuthRestClient
@@ -37,6 +38,7 @@ from tests.helpers import MockRestClient
 class AuthRestClientTestCase(unittest.TestCase):
     """Test case for Auth module."""
 
+    @pytest.mark.skip()
     @staticmethod
     def test_query_account():
         """Test query account for positive result."""
