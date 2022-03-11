@@ -16,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+from typing import Any
+
 import pytest
 
 from cosmpy.aerial.gas import (
@@ -64,6 +66,9 @@ class MockLedger:
 
     def simulate_tx(self, tx: Transaction) -> int:
         return self._table.estimate_gas(tx)
+
+    def query_params(self, subspace: str, key: str) -> Any:
+        return {"max_gas": -1}
 
 
 @pytest.mark.parametrize(

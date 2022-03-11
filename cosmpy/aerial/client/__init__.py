@@ -16,7 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
+import json
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -26,10 +26,11 @@ import certifi
 import grpc
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
+from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
-from cosmpy.aerial.tx import SigningCfg, Transaction, TxState
+from cosmpy.aerial.tx import Transaction, TxState
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
@@ -43,6 +44,10 @@ from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
+    QueryStub as QueryParamsGrpcClient,
+)
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
     QueryStub as StakingGrpcClient,
 )
@@ -94,6 +99,7 @@ class LedgerClient:
             self.txs = TxGrpcClient(grpc_client)
             self.bank = BankGrpcClient(grpc_client)
             self.staking = StakingGrpcClient(grpc_client)
+            self.params = QueryParamsGrpcClient(grpc_client)
         else:
             rest_client = RestClient(parsed_url.rest_url)
 
@@ -102,6 +108,7 @@ class LedgerClient:
             self.txs = TxRestClient(rest_client)  # type: ignore
             self.bank = BankRestClient(rest_client)  # type: ignore
             self.staking = StakingRestClient(rest_client)  # type: ignore
+            self.params = None  # type: ignore
 
     @property
     def network_config(self) -> NetworkConfig:
@@ -132,6 +139,11 @@ class LedgerClient:
             sequence=account.sequence,
         )
 
+    def query_params(self, subspace: str, key: str) -> Any:
+        req = QueryParamsRequest(subspace=subspace, key=key)
+        resp = self.params.Params(req)
+        return json.loads(resp.param.value)
+
     def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
         denom = denom or self.network_config.fee_denomination
 
@@ -155,36 +167,15 @@ class LedgerClient:
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
 
-        # query the account information for the sender
-        account = self.query_account(sender.address())
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
             create_bank_send_msg(sender.address(), destination, amount, denom)
         )
 
-        tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee="",
-            gas_limit=0,
-            memo=memo,
+        return prepare_and_broadcast_basic_transaction(
+            self, tx, sender, gas_limit=gas_limit, memo=memo
         )
-        tx.sign(sender.signer(), self.network_config.chain_id, account.number)
-        tx.complete()
-
-        gas_limit, fee = self.estimate_gas_and_fee_for_tx(tx)
-
-        tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee=fee,
-            gas_limit=gas_limit,
-            memo=memo,
-        )
-        tx.sign(sender.signer(), self.network_config.chain_id, account.number)
-        tx.complete()
-
-        return self.broadcast_tx(tx)
 
     def estimate_gas_for_tx(self, tx: Transaction) -> int:
         return self._gas_strategy.estimate_gas(tx)
