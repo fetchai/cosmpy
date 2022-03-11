@@ -32,6 +32,21 @@ class GasStrategy(ABC):
         pass  # pragma: no cover
 
 
+class SimulationGasStrategy(GasStrategy):
+    DEFAULT_MULTIPLIER = 1.65
+
+    def __init__(self, client: "LedgerClient", multiplier: Optional[float] = None):  # type: ignore # noqa: F821
+        self._client = client
+        self._multiplier = multiplier or self.DEFAULT_MULTIPLIER
+
+    def estimate_gas(self, tx: Transaction) -> int:
+        gas_estimate = self._client.simulate_tx(tx)
+        return int(gas_estimate * self._multiplier)
+
+    def block_gas_limit(self) -> int:
+        return -1
+
+
 class OfflineMessageTableStrategy(GasStrategy):
     DEFAULT_FALLBACK_GAS_LIMIT = 400_000
     DEFAULT_BLOCK_LIMIT = 2_000_000

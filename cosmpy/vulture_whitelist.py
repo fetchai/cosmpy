@@ -87,3 +87,4 @@ _.handlers  # unused attribute (./common/loggers.py:58)
 _.ensure_funds  # unused method (./clients/ledger.py:656)
 _.staking_denomination
 _.fetch_mainnet
+_.is_successful

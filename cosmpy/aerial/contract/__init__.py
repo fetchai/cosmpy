@@ -83,6 +83,13 @@ class LedgerContract:
         # build up the store transaction
         tx = Transaction()
         tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
+        tx.seal(
+            SigningCfg.direct(sender.public_key(), account.sequence),
+            fee="",
+            gas_limit=0,
+        )
+        tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
+        tx.complete()
 
         # estimate the fee required for this transaction
         gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
@@ -131,6 +138,13 @@ class LedgerContract:
                 funds=funds,
             )
         )
+        tx.seal(
+            SigningCfg.direct(sender.public_key(), account.sequence),
+            fee="",
+            gas_limit=0,
+        )
+        tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
+        tx.complete()
 
         # estimate the fee required for this transaction
         gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
@@ -205,6 +219,13 @@ class LedgerContract:
                 sender.address(), self._address, args, funds=funds
             )
         )
+        tx.seal(
+            SigningCfg.direct(sender.public_key(), account.sequence),
+            fee="",
+            gas_limit=0,
+        )
+        tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
+        tx.complete()
 
         # estimate the fee required for this transaction
         gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)

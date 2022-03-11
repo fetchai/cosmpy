@@ -13,6 +13,10 @@ echo Running flake8 ...
 tox -e flake8
 echo Running flake8 ... complete
 
+echo Running mypy ...
+tox -e mypy
+echo Running mypy ... complete
+
 echo Running vulture ...
 tox -e vulture
 echo Running vulture ... complete
@@ -24,10 +28,6 @@ echo Running bandit ... complete
 echo Running safety ...
 tox -e safety
 echo Running safety ... complete
-
-echo Running mypy ...
-tox -e mypy
-echo Running mypy ... complete
 
 echo Running liccheck ...
 tox -e liccheck
