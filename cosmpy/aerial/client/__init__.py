@@ -21,7 +21,7 @@ import re
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Tuple
 
 import certifi
 import grpc
@@ -35,6 +35,7 @@ from cosmpy.aerial.exceptions import (
     OutOfGasError,
     QueryTimeoutError,
 )
+from cosmpy.aerial.gas import GasStrategy, OfflineMessageTableStrategy
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
 from cosmpy.aerial.urls import Protocol, parse_url
@@ -78,8 +79,9 @@ class Account:
 class LedgerClient:
     def __init__(self, cfg: NetworkConfig):
         cfg.validate()
-
         self._network_config = cfg
+
+        self._gas_strategy: GasStrategy = OfflineMessageTableStrategy.default_table()
 
         parsed_url = parse_url(cfg.url)
 
@@ -111,6 +113,16 @@ class LedgerClient:
     @property
     def network_config(self) -> NetworkConfig:
         return self._network_config
+
+    @property
+    def gas_strategy(self) -> GasStrategy:
+        return self._gas_strategy
+
+    @gas_strategy.setter
+    def gas_strategy(self, strategy: GasStrategy):
+        if not isinstance(strategy, GasStrategy):
+            raise RuntimeError("Invalid strategy must implement GasStrategy interface")
+        self._gas_strategy = strategy
 
     def query_account(self, address: Address) -> Account:
         request = QueryAccountRequest(address=str(address))
@@ -153,17 +165,15 @@ class LedgerClient:
         # query the account information for the sender
         account = self.query_account(sender.address())
 
-        # estimate the fee required for this transaction
-        gas_limit = (
-            gas_limit or 100000
-        )  # TODO: Need to interface to the simulation engine
-        fee = self.estimate_fee_from_gas(gas_limit)
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
             create_bank_send_msg(sender.address(), destination, amount, denom)
         )
+
+        # estimate the fee required for this transaction
+        gas_limit, fee = self.estimate_gas_and_fee_for_tx(tx)
+
         tx.seal(
             SigningCfg.direct(sender.public_key(), account.sequence),
             fee=fee,
@@ -176,8 +186,16 @@ class LedgerClient:
         # broadcast the store transaction
         return self.broadcast_tx(tx)
 
-    def estimate_fee_from_gas(self, gas_limit: int):
+    def estimate_gas_for_tx(self, tx: Transaction) -> int:
+        return self._gas_strategy.estimate_gas(tx)
+
+    def estimate_fee_from_gas(self, gas_limit: int) -> str:
         return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
+
+    def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
+        gas_estimate = self.estimate_gas_for_tx(tx)
+        fee = self.estimate_fee_from_gas(gas_estimate)
+        return gas_estimate, fee
 
     def wait_for_query_tx(
         self,
