@@ -4,10 +4,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-cosmpy = {editable = true, extras = ["dev", "test"], path = "."}
+cosmpy = { editable = true, extras = ["dev", "test"], path = "." }
 
 [packages]
-cosmpy = {editable = true, extras = [], path = "."}
+cosmpy = { editable = true, extras = [], path = "." }
 
 [pipenv]
 allow_prereleases = true
+
+[scripts]
+fmt = "./scripts/run-fmt.sh"
+checks = "./scripts/run-checks.sh"

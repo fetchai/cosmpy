@@ -80,15 +80,13 @@ class LedgerContract:
         # query the account information for the sender
         account = self._client.query_account(sender.address())
 
-        # estimate the fee required for this transaction
-        gas_limit = (
-            gas_limit or 2000000
-        )  # TODO: Need to interface to the simulation engine
-        fee = self._client.estimate_fee_from_gas(gas_limit)
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
+
+        # estimate the fee required for this transaction
+        gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
+
         tx.seal(
             SigningCfg.direct(sender.public_key(), account.sequence),
             fee=fee,
@@ -121,12 +119,6 @@ class LedgerContract:
         account = self._client.query_account(sender.address())
         label = label or _generate_label(self._digest)
 
-        # estimate the fee required for this transaction
-        gas_limit = (
-            gas_limit or 2000000
-        )  # TODO: Need to interface to the simulation engine
-        fee = self._client.estimate_fee_from_gas(gas_limit)
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
@@ -139,6 +131,10 @@ class LedgerContract:
                 funds=funds,
             )
         )
+
+        # estimate the fee required for this transaction
+        gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
+
         tx.seal(
             SigningCfg.direct(sender.public_key(), account.sequence),
             fee=fee,
@@ -202,12 +198,6 @@ class LedgerContract:
         # query the account information for the sender
         account = self._client.query_account(sender.address())
 
-        # estimate the fee required for this transaction
-        gas_limit = (
-            gas_limit or 2000000
-        )  # TODO: Need to interface to the simulation engine
-        fee = self._client.estimate_fee_from_gas(gas_limit)
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
@@ -215,6 +205,10 @@ class LedgerContract:
                 sender.address(), self._address, args, funds=funds
             )
         )
+
+        # estimate the fee required for this transaction
+        gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
+
         tx.seal(
             SigningCfg.direct(sender.public_key(), account.sequence),
             fee=fee,
