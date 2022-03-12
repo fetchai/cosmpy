@@ -19,16 +19,18 @@
 # ------------------------------------------------------------------------------
 
 """Tests for REST implementation of Mint."""
-
+import base64
 import json
 import unittest
 
 from google.protobuf.json_format import ParseDict
 
 from cosmpy.mint.rest_client import MintRestClient
-from cosmpy.protos.cosmos.mint.v1beta1.mint_pb2 import Params
-from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import QueryAnnualProvisionsRequest, QueryAnnualProvisionsResponse, \
-    QueryInflationResponse, QueryInflationRequest, QueryParamsResponse, QueryParamsRequest
+from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
+    QueryAnnualProvisionsResponse,
+    QueryInflationResponse,
+    QueryParamsResponse,
+)
 from tests.helpers import MockRestClient
 
 
@@ -38,9 +40,7 @@ class MintRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_AnnualProvisions():
         """Test query annual provision for the positive result."""
-        content = {
-            "annual_provisions": "string"
-        }
+        content = {"annual_provisions": base64.encode("123")}
 
         mock_client = MockRestClient(json.dumps(content))
 
@@ -48,15 +48,14 @@ class MintRestClientTestCase(unittest.TestCase):
 
         mint = MintRestClient(mock_client)
 
-        assert mint.AnnualProvisions(QueryAnnualProvisionsRequest()) == expected_response
+        assert mint.AnnualProvisions() == expected_response
+        assert expected_response.annual_provision == "123"
         assert mock_client.last_base_url == "/cosmos/mint/v1beta1/annual_provisions"
 
     @staticmethod
     def test_Inflation():
         """Test query inflation for the positive result."""
-        content = {
-            "inflation": "string"
-        }
+        content = {"inflation": "string"}
 
         mock_client = MockRestClient(json.dumps(content))
 
@@ -64,7 +63,7 @@ class MintRestClientTestCase(unittest.TestCase):
 
         mint = MintRestClient(mock_client)
 
-        assert mint.Inflation(QueryInflationRequest()) == expected_response
+        assert mint.Inflation() == expected_response
         assert mock_client.last_base_url == "/cosmos/mint/v1beta1/inflation"
 
     @staticmethod
@@ -77,7 +76,7 @@ class MintRestClientTestCase(unittest.TestCase):
                 "inflation_max": "0.5",
                 "inflation_min": "0.1",
                 "goal_bonded": "0.3",
-                "blocks_per_year": "1234"
+                "blocks_per_year": "1234",
             }
         }
         mock_client = MockRestClient(json.dumps(content))
@@ -86,5 +85,5 @@ class MintRestClientTestCase(unittest.TestCase):
 
         mint = MintRestClient(mock_client)
 
-        assert mint.Params(QueryParamsRequest()) == expected_response
+        assert mint.Params() == expected_response
         assert mock_client.last_base_url == "/cosmos/mint/v1beta1/params"

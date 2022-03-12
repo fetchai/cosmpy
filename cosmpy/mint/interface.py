@@ -22,22 +22,24 @@
 
 from abc import ABC, abstractmethod
 
-from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (QueryAnnualProvisionsRequest, QueryAnnualProvisionsResponse,
-                                                         QueryInflationRequest, QueryInflationResponse,
-                                                         QueryParamsRequest, QueryParamsResponse)
+from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
+    QueryAnnualProvisionsResponse,
+    QueryInflationResponse,
+    QueryParamsResponse,
+)
 
 
 class Mint(ABC):
     """Mint abstract class."""
 
     @abstractmethod
-    def AnnualProvisions(self, request: QueryAnnualProvisionsRequest) -> QueryAnnualProvisionsResponse:
+    def AnnualProvisions(self) -> QueryAnnualProvisionsResponse:
         """AnnualProvisions current minting annual provisions value."""
 
     @abstractmethod
-    def Inflation(self, request: QueryInflationRequest) -> QueryInflationResponse:
+    def Inflation(self) -> QueryInflationResponse:
         """Inflation returns the current minting inflation value."""
 
     @abstractmethod
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(self) -> QueryParamsResponse:
         """Params returns the total set of minting parameters."""

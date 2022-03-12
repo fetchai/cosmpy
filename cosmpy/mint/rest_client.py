@@ -23,10 +23,12 @@
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
-from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (QueryAnnualProvisionsRequest, QueryAnnualProvisionsResponse,
-                                                         QueryInflationRequest, QueryInflationResponse,
-                                                         QueryParamsRequest, QueryParamsResponse)
 from cosmpy.mint.interface import Mint
+from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
+    QueryAnnualProvisionsResponse,
+    QueryInflationResponse,
+    QueryParamsResponse,
+)
 
 
 class MintRestClient(Mint):
@@ -42,17 +44,17 @@ class MintRestClient(Mint):
         """
         self._rest_api = rest_api
 
-    def AnnualProvisions(self, request: QueryAnnualProvisionsRequest) -> QueryAnnualProvisionsResponse:
+    def AnnualProvisions(self) -> QueryAnnualProvisionsResponse:
         """AnnualProvisions current minting annual provisions value."""
         json_response = self._rest_api.get(f"{self.API_URL}/annual_provisions")
         return Parse(json_response, QueryAnnualProvisionsResponse())
 
-    def Inflation(self, request: QueryInflationRequest) -> QueryInflationResponse:
+    def Inflation(self) -> QueryInflationResponse:
         """Inflation returns the current minting inflation value."""
         json_response = self._rest_api.get(f"{self.API_URL}/inflation")
         return Parse(json_response, QueryInflationResponse())
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(self) -> QueryParamsResponse:
         """Params queries params of the Mint module."""
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())
