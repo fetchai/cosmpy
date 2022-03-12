@@ -27,7 +27,6 @@ from google.protobuf.json_format import ParseDict
 
 from cosmpy.distribution.rest_client import DistributionRestClient
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
-    QueryCommunityPoolRequest,
     QueryCommunityPoolResponse,
     QueryDelegationRewardsRequest,
     QueryDelegationRewardsResponse,
@@ -37,7 +36,6 @@ from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
     QueryDelegatorValidatorsResponse,
     QueryDelegatorWithdrawAddressRequest,
     QueryDelegatorWithdrawAddressResponse,
-    QueryParamsRequest,
     QueryParamsResponse,
     QueryValidatorCommissionRequest,
     QueryValidatorCommissionResponse,
@@ -179,7 +177,7 @@ class DistributionRestClientTestCase(TestCase):
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.Params(QueryParamsRequest()) == expected_response
+        assert distribution.Params() == expected_response
         assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/params"
 
     @staticmethod
