@@ -23,50 +23,74 @@
 from abc import ABC, abstractmethod
 
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
-    QueryCommunityPoolRequest, QueryCommunityPoolResponse,
-    QueryDelegationTotalRewardsRequest, QueryDelegationTotalRewardsResponse, QueryDelegationRewardsRequest,
-    QueryDelegationRewardsResponse, QueryDelegatorValidatorsRequest, QueryDelegatorValidatorsResponse,
-    QueryDelegatorWithdrawAddressResponse, QueryDelegatorWithdrawAddressRequest, QueryParamsRequest,
-    QueryValidatorCommissionResponse, QueryValidatorCommissionRequest, QueryParamsResponse,
-    QueryValidatorOutstandingRewardsRequest, QueryValidatorSlashesRequest, QueryValidatorSlashesResponse,
-    QueryValidatorOutstandingRewardsResponse)
+    QueryCommunityPoolResponse,
+    QueryDelegationRewardsRequest,
+    QueryDelegationRewardsResponse,
+    QueryDelegationTotalRewardsRequest,
+    QueryDelegationTotalRewardsResponse,
+    QueryDelegatorValidatorsRequest,
+    QueryDelegatorValidatorsResponse,
+    QueryDelegatorWithdrawAddressRequest,
+    QueryDelegatorWithdrawAddressResponse,
+    QueryParamsResponse,
+    QueryValidatorCommissionRequest,
+    QueryValidatorCommissionResponse,
+    QueryValidatorOutstandingRewardsRequest,
+    QueryValidatorOutstandingRewardsResponse,
+    QueryValidatorSlashesRequest,
+    QueryValidatorSlashesResponse,
+)
 
 
 class Distribution(ABC):
     """Distribution abstract class."""
 
     @abstractmethod
-    def CommunityPool(self, request: QueryCommunityPoolRequest) -> QueryCommunityPoolResponse:
+    def CommunityPool(self) -> QueryCommunityPoolResponse:
         """CommunityPool queries the community pool coins."""
 
     @abstractmethod
-    def DelegationTotalRewards(self, request: QueryDelegationTotalRewardsRequest) -> QueryDelegationTotalRewardsResponse:
+    def DelegationTotalRewards(
+        self, request: QueryDelegationTotalRewardsRequest
+    ) -> QueryDelegationTotalRewardsResponse:
         """DelegationTotalRewards queries the total rewards accrued by a each validator."""
 
     @abstractmethod
-    def DelegationRewards(self, request: QueryDelegationRewardsRequest) -> QueryDelegationRewardsResponse:
+    def DelegationRewards(
+        self, request: QueryDelegationRewardsRequest
+    ) -> QueryDelegationRewardsResponse:
         """DelegationRewards queries the total rewards accrued by a delegation."""
 
     @abstractmethod
-    def DelegatorValidators(self, request: QueryDelegatorValidatorsRequest) -> QueryDelegatorValidatorsResponse:
+    def DelegatorValidators(
+        self, request: QueryDelegatorValidatorsRequest
+    ) -> QueryDelegatorValidatorsResponse:
         """DelegatorValidators queries the validators of a delegator."""
 
     @abstractmethod
-    def DelegatorWithdrawAddress(self, request: QueryDelegatorWithdrawAddressRequest) -> QueryDelegatorWithdrawAddressResponse:
+    def DelegatorWithdrawAddress(
+        self, request: QueryDelegatorWithdrawAddressRequest
+    ) -> QueryDelegatorWithdrawAddressResponse:
         """DelegatorWithdrawAddress queries withdraw address of a delegator."""
 
     @abstractmethod
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(self) -> QueryParamsResponse:
         """Params queries params of the distribution module."""
 
     @abstractmethod
-    def ValidatorCommission(self, request: QueryValidatorCommissionRequest) -> QueryValidatorCommissionResponse:
+    def ValidatorCommission(
+        self, request: QueryValidatorCommissionRequest
+    ) -> QueryValidatorCommissionResponse:
         """ValidatorCommission queries accumulated commission for a validator."""
 
     @abstractmethod
-    def ValidatorOutstandingRewards(self, request: QueryValidatorOutstandingRewardsRequest) -> QueryValidatorOutstandingRewardsResponse:
+    def ValidatorOutstandingRewards(
+        self, request: QueryValidatorOutstandingRewardsRequest
+    ) -> QueryValidatorOutstandingRewardsResponse:
         """ValidatorOutstandingRewards queries rewards of a validator address."""
 
     @abstractmethod
-    def ValidatorSlashes(self, request: QueryValidatorSlashesRequest) -> QueryValidatorSlashesResponse:
+    def ValidatorSlashes(
+        self, request: QueryValidatorSlashesRequest
+    ) -> QueryValidatorSlashesResponse:
         """ValidatorSlashes queries slash events of a validator."""

@@ -26,13 +26,26 @@ from unittest import TestCase
 from google.protobuf.json_format import ParseDict
 
 from cosmpy.distribution.rest_client import DistributionRestClient
-from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import QueryCommunityPoolRequest, QueryCommunityPoolResponse, \
-    QueryDelegationTotalRewardsRequest, QueryDelegationTotalRewardsResponse, QueryValidatorSlashesRequest, \
-    QueryValidatorSlashesResponse, QueryValidatorOutstandingRewardsResponse, QueryValidatorOutstandingRewardsRequest, \
-    QueryValidatorCommissionRequest, QueryValidatorCommissionResponse, QueryParamsRequest, QueryParamsResponse, \
-    QueryDelegatorWithdrawAddressRequest, QueryDelegatorWithdrawAddressResponse, QueryDelegatorValidatorsRequest, \
-    QueryDelegatorValidatorsResponse, QueryDelegationRewardsRequest, QueryDelegationRewardsResponse
-
+from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
+    QueryCommunityPoolRequest,
+    QueryCommunityPoolResponse,
+    QueryDelegationRewardsRequest,
+    QueryDelegationRewardsResponse,
+    QueryDelegationTotalRewardsRequest,
+    QueryDelegationTotalRewardsResponse,
+    QueryDelegatorValidatorsRequest,
+    QueryDelegatorValidatorsResponse,
+    QueryDelegatorWithdrawAddressRequest,
+    QueryDelegatorWithdrawAddressResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QueryValidatorCommissionRequest,
+    QueryValidatorCommissionResponse,
+    QueryValidatorOutstandingRewardsRequest,
+    QueryValidatorOutstandingRewardsResponse,
+    QueryValidatorSlashesRequest,
+    QueryValidatorSlashesResponse,
+)
 from tests.helpers import MockRestClient
 
 
@@ -42,22 +55,17 @@ class DistributionRestClientTestCase(TestCase):
     @staticmethod
     def test_CommunityPool():
         """Test CommunityPool method."""
-        content = {
-            "pool": [
-                {
-                    "denom": "string",
-                    "amount": "123"
-                }
-            ]
-        }
-        mock_client = MockRestClient(json.dumps(content))
+        content = {"pool": [{"denom": "string", "amount": "123"}]}
+        mock_client = MockRestClient(json.dumps(content).encode("utf8"))
 
         expected_response = ParseDict(content, QueryCommunityPoolResponse())
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.CommunityPool(QueryCommunityPoolRequest()) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/community_pool"
+        assert distribution.CommunityPool() == expected_response
+        assert (
+            mock_client.last_base_url == "/cosmos/distribution/v1beta1/community_pool"
+        )
 
     @staticmethod
     def test_DelegationTotalRewards():
@@ -66,20 +74,10 @@ class DistributionRestClientTestCase(TestCase):
             "rewards": [
                 {
                     "validator_address": "string",
-                    "reward": [
-                        {
-                            "denom": "string",
-                            "amount": "123"
-                        }
-                    ]
+                    "reward": [{"denom": "string", "amount": "123"}],
                 }
             ],
-            "total": [
-                {
-                    "denom": "string",
-                    "amount": "123"
-                }
-            ]
+            "total": [{"denom": "string", "amount": "123"}],
         }
         mock_client = MockRestClient(json.dumps(content))
 
@@ -87,65 +85,82 @@ class DistributionRestClientTestCase(TestCase):
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.DelegationTotalRewards(
-            QueryDelegationTotalRewardsRequest(delegator_address='delegator_addr')) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/delegators/delegator_addr/rewards"
+        assert (
+            distribution.DelegationTotalRewards(
+                QueryDelegationTotalRewardsRequest(delegator_address="delegator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/distribution/v1beta1/delegators/delegator_addr/rewards"
+        )
 
     @staticmethod
     def test_DelegationRewards():
         """Test DelegationRewards method."""
-        content = {
-            "rewards": [
-                {
-                    "denom": "string",
-                    "amount": "1234"
-                }
-            ]
-        }
+        content = {"rewards": [{"denom": "string", "amount": "1234"}]}
         mock_client = MockRestClient(json.dumps(content))
 
         expected_response = ParseDict(content, QueryDelegationRewardsResponse())
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.DelegationRewards(
-            QueryDelegationRewardsRequest(delegator_address='delegator_addr',
-                                          validator_address='validator_addr')) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/delegators/delegator_addr/rewards/validator_addr"
+        assert (
+            distribution.DelegationRewards(
+                QueryDelegationRewardsRequest(
+                    delegator_address="delegator_addr",
+                    validator_address="validator_addr",
+                )
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/distribution/v1beta1/delegators/delegator_addr/rewards/validator_addr"
+        )
 
     @staticmethod
     def test_DelegatorValidators():
         """Test DelegatorValidators method."""
-        content = {
-            "validators": [
-                "string"
-            ]
-        }
+        content = {"validators": ["string"]}
         mock_client = MockRestClient(json.dumps(content))
 
         expected_response = ParseDict(content, QueryDelegatorValidatorsResponse())
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.DelegatorValidators(
-            QueryDelegatorValidatorsRequest(delegator_address='delegator_addr')) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/delegators/delegator_addr/validators"
+        assert (
+            distribution.DelegatorValidators(
+                QueryDelegatorValidatorsRequest(delegator_address="delegator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/distribution/v1beta1/delegators/delegator_addr/validators"
+        )
 
     @staticmethod
     def test_DelegatorWithdrawAddress():
         """Test DelegatorWithdrawAddress method."""
-        content = {
-            "withdraw_address": "string"
-        }
+        content = {"withdraw_address": "string"}
         mock_client = MockRestClient(json.dumps(content))
 
         expected_response = ParseDict(content, QueryDelegatorWithdrawAddressResponse())
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.DelegatorWithdrawAddress(
-            QueryDelegatorWithdrawAddressRequest(delegator_address='delegator_addr')) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/delegators/delegator_addr/withdraw_address"
+        assert (
+            distribution.DelegatorWithdrawAddress(
+                QueryDelegatorWithdrawAddressRequest(delegator_address="delegator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/distribution/v1beta1/delegators/delegator_addr/withdraw_address"
+        )
 
     @staticmethod
     def test_Params():
@@ -155,7 +170,7 @@ class DistributionRestClientTestCase(TestCase):
                 "community_tax": "0.1",
                 "base_proposer_reward": "0.2",
                 "bonus_proposer_reward": "0.3",
-                "withdraw_addr_enabled": True
+                "withdraw_addr_enabled": True,
             }
         }
         mock_client = MockRestClient(json.dumps(content))
@@ -171,14 +186,7 @@ class DistributionRestClientTestCase(TestCase):
     def test_ValidatorCommission():
         """Test ValidatorCommission method."""
         content = {
-            "commission": {
-                "commission": [
-                    {
-                        "denom": "string",
-                        "amount": "1234"
-                    }
-                ]
-            }
+            "commission": {"commission": [{"denom": "string", "amount": "1234"}]}
         }
         mock_client = MockRestClient(json.dumps(content))
 
@@ -186,49 +194,59 @@ class DistributionRestClientTestCase(TestCase):
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.ValidatorCommission(
-            QueryValidatorCommissionRequest(validator_address='validator_addr')) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/validators/validator_addr/commission"
+        assert (
+            distribution.ValidatorCommission(
+                QueryValidatorCommissionRequest(validator_address="validator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/distribution/v1beta1/validators/validator_addr/commission"
+        )
 
     @staticmethod
     def test_ValidatorOutstandingRewards():
         """Test ValidatorOutstandingRewards method."""
-        content = {
-            "rewards": {
-                "rewards": [
-                    {
-                        "denom": "string",
-                        "amount": "1234"
-                    }
-                ]
-            }
-        }
+        content = {"rewards": {"rewards": [{"denom": "string", "amount": "1234"}]}}
         mock_client = MockRestClient(json.dumps(content))
 
-        expected_response = ParseDict(content, QueryValidatorOutstandingRewardsResponse())
+        expected_response = ParseDict(
+            content, QueryValidatorOutstandingRewardsResponse()
+        )
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.ValidatorOutstandingRewards(
-            QueryValidatorOutstandingRewardsRequest(validator_address='validator_addr')) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/validators/validator_addr/outstanding_rewards"
+        assert (
+            distribution.ValidatorOutstandingRewards(
+                QueryValidatorOutstandingRewardsRequest(
+                    validator_address="validator_addr"
+                )
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/distribution/v1beta1/validators/validator_addr/outstanding_rewards"
+        )
 
     @staticmethod
     def test_ValidatorSlashes():
         """Test ValidatorSlashes method."""
-        content = {
-            "slashes": [],
-            "pagination": {
-                "next_key": None,
-                "total": "0"
-            }
-        }
+        content = {"slashes": [], "pagination": {"next_key": None, "total": "0"}}
         mock_client = MockRestClient(json.dumps(content))
 
         expected_response = ParseDict(content, QueryValidatorSlashesResponse())
 
         distribution = DistributionRestClient(mock_client)
 
-        assert distribution.ValidatorSlashes(
-            QueryValidatorSlashesRequest(validator_address='validator_addr')) == expected_response
-        assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/validators/validator_addr/slashes"
+        assert (
+            distribution.ValidatorSlashes(
+                QueryValidatorSlashesRequest(validator_address="validator_addr")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/distribution/v1beta1/validators/validator_addr/slashes"
+        )

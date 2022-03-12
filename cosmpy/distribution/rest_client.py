@@ -23,15 +23,25 @@
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
-from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
-    QueryCommunityPoolRequest, QueryCommunityPoolResponse,
-    QueryDelegationTotalRewardsRequest, QueryDelegationTotalRewardsResponse, QueryDelegationRewardsRequest,
-    QueryDelegationRewardsResponse, QueryDelegatorValidatorsRequest, QueryDelegatorValidatorsResponse,
-    QueryDelegatorWithdrawAddressResponse, QueryDelegatorWithdrawAddressRequest, QueryParamsRequest,
-    QueryValidatorCommissionResponse, QueryValidatorCommissionRequest, QueryParamsResponse,
-    QueryValidatorOutstandingRewardsRequest, QueryValidatorSlashesRequest, QueryValidatorSlashesResponse,
-    QueryValidatorOutstandingRewardsResponse)
 from cosmpy.distribution.interface import Distribution
+from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
+    QueryCommunityPoolResponse,
+    QueryDelegationRewardsRequest,
+    QueryDelegationRewardsResponse,
+    QueryDelegationTotalRewardsRequest,
+    QueryDelegationTotalRewardsResponse,
+    QueryDelegatorValidatorsRequest,
+    QueryDelegatorValidatorsResponse,
+    QueryDelegatorWithdrawAddressRequest,
+    QueryDelegatorWithdrawAddressResponse,
+    QueryParamsResponse,
+    QueryValidatorCommissionRequest,
+    QueryValidatorCommissionResponse,
+    QueryValidatorOutstandingRewardsRequest,
+    QueryValidatorOutstandingRewardsResponse,
+    QueryValidatorSlashesRequest,
+    QueryValidatorSlashesResponse,
+)
 
 
 class DistributionRestClient(Distribution):
@@ -47,49 +57,77 @@ class DistributionRestClient(Distribution):
         """
         self._rest_api = rest_api
 
-    def CommunityPool(self, request: QueryCommunityPoolRequest) -> QueryCommunityPoolResponse:
+    def CommunityPool(self) -> QueryCommunityPoolResponse:
         """CommunityPool queries the community pool coins."""
         json_response = self._rest_api.get(f"{self.API_URL}/community_pool")
         return Parse(json_response, QueryCommunityPoolResponse())
 
-    def DelegationTotalRewards(self, request: QueryDelegationTotalRewardsRequest) -> QueryDelegationTotalRewardsResponse:
+    def DelegationTotalRewards(
+        self, request: QueryDelegationTotalRewardsRequest
+    ) -> QueryDelegationTotalRewardsResponse:
         """DelegationTotalRewards queries the total rewards accrued by a each validator."""
-        json_response = self._rest_api.get(f"{self.API_URL}/delegators/{request.delegator_address}/rewards")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/delegators/{request.delegator_address}/rewards"
+        )
         return Parse(json_response, QueryDelegationTotalRewardsResponse())
 
-    def DelegationRewards(self, request: QueryDelegationRewardsRequest) -> QueryDelegationRewardsResponse:
+    def DelegationRewards(
+        self, request: QueryDelegationRewardsRequest
+    ) -> QueryDelegationRewardsResponse:
         """DelegationRewards queries the total rewards accrued by a delegation."""
-        json_response = self._rest_api.get(f"{self.API_URL}/delegators/{request.delegator_address}/rewards/{request.validator_address}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/delegators/{request.delegator_address}/rewards/{request.validator_address}"
+        )
         return Parse(json_response, QueryDelegationRewardsResponse())
 
-    def DelegatorValidators(self, request: QueryDelegatorValidatorsRequest) -> QueryDelegatorValidatorsResponse:
+    def DelegatorValidators(
+        self, request: QueryDelegatorValidatorsRequest
+    ) -> QueryDelegatorValidatorsResponse:
         """DelegatorValidators queries the validators of a delegator."""
-        json_response = self._rest_api.get(f"{self.API_URL}/delegators/{request.delegator_address}/validators")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/delegators/{request.delegator_address}/validators"
+        )
         return Parse(json_response, QueryDelegatorValidatorsResponse())
 
-    def DelegatorWithdrawAddress(self, request: QueryDelegatorWithdrawAddressRequest) -> QueryDelegatorWithdrawAddressResponse:
+    def DelegatorWithdrawAddress(
+        self, request: QueryDelegatorWithdrawAddressRequest
+    ) -> QueryDelegatorWithdrawAddressResponse:
         """DelegatorWithdrawAddress queries withdraw address of a delegator."""
-        json_response = self._rest_api.get(f"{self.API_URL}/delegators/{request.delegator_address}/withdraw_address")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/delegators/{request.delegator_address}/withdraw_address"
+        )
         return Parse(json_response, QueryDelegatorWithdrawAddressResponse())
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(self) -> QueryParamsResponse:
         """Params queries params of the distribution module."""
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())
 
-    def ValidatorCommission(self, request: QueryValidatorCommissionRequest) -> QueryValidatorCommissionResponse:
+    def ValidatorCommission(
+        self, request: QueryValidatorCommissionRequest
+    ) -> QueryValidatorCommissionResponse:
         """ValidatorCommission queries accumulated commission for a validator."""
-        json_response = self._rest_api.get(f"{self.API_URL}/validators/{request.validator_address}/commission")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/validators/{request.validator_address}/commission"
+        )
         return Parse(json_response, QueryValidatorCommissionResponse())
 
-    def ValidatorOutstandingRewards(self, request: QueryValidatorOutstandingRewardsRequest) -> QueryValidatorOutstandingRewardsResponse:
+    def ValidatorOutstandingRewards(
+        self, request: QueryValidatorOutstandingRewardsRequest
+    ) -> QueryValidatorOutstandingRewardsResponse:
         """ValidatorOutstandingRewards queries rewards of a validator address."""
-        json_response = self._rest_api.get(f"{self.API_URL}/validators/{request.validator_address}/outstanding_rewards")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/validators/{request.validator_address}/outstanding_rewards"
+        )
         return Parse(json_response, QueryValidatorOutstandingRewardsResponse())
 
-    def ValidatorSlashes(self, request: QueryValidatorSlashesRequest) -> QueryValidatorSlashesResponse:
+    def ValidatorSlashes(
+        self, request: QueryValidatorSlashesRequest
+    ) -> QueryValidatorSlashesResponse:
         """ValidatorSlashes queries slash events of a validator."""
-        json_response = self._rest_api.get(f"{self.API_URL}/validators/{request.validator_address}/slashes",
-                                           request,
-                                           ['validatorAddress'])
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/validators/{request.validator_address}/slashes",
+            request,
+            ["validatorAddress"],
+        )
         return Parse(json_response, QueryValidatorSlashesResponse())
