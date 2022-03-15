@@ -21,13 +21,13 @@ import json
 from datetime import datetime
 from typing import Any, Optional
 
-from cosmpy.aerial.client import LedgerClient
+from cosmpy.aerial.client import LedgerClient, prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_execute_msg,
     create_cosmwasm_instantiate_msg,
     create_cosmwasm_store_code_msg,
 )
-from cosmpy.aerial.tx import SigningCfg, Transaction
+from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.crypto.address import Address
@@ -75,28 +75,20 @@ class LedgerContract:
     def address(self) -> Optional[Address]:
         return self._address
 
-    def store(self, sender: Wallet, gas_limit: Optional[int] = None) -> int:
-
-        # query the account information for the sender
-        account = self._client.query_account(sender.address())
+    def store(
+        self,
+        sender: Wallet,
+        gas_limit: Optional[int] = None,
+        memo: Optional[str] = None,
+    ) -> int:
 
         # build up the store transaction
         tx = Transaction()
         tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
 
-        # estimate the fee required for this transaction
-        gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
-
-        tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee=fee,
-            gas_limit=gas_limit,
-        )
-        tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
-        tx.complete()
-
-        # broadcast the store transaction
-        submitted_tx = self._client.broadcast_tx(tx).wait_to_complete()
+        submitted_tx = prepare_and_broadcast_basic_transaction(
+            self._client, tx, sender, gas_limit=gas_limit, memo=memo
+        ).wait_to_complete()
 
         # extract the code id
         self._code_id = submitted_tx.contract_code_id
@@ -116,7 +108,6 @@ class LedgerContract:
         funds: Optional[str] = None,
     ) -> Address:
         # query the account information for the sender
-        account = self._client.query_account(sender.address())
         label = label or _generate_label(self._digest)
 
         # build up the store transaction
@@ -132,19 +123,9 @@ class LedgerContract:
             )
         )
 
-        # estimate the fee required for this transaction
-        gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
-
-        tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee=fee,
-            gas_limit=gas_limit,
-        )
-        tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
-        tx.complete()
-
-        # broadcast the store transaction
-        submitted_tx = self._client.broadcast_tx(tx).wait_to_complete()
+        submitted_tx = prepare_and_broadcast_basic_transaction(
+            self._client, tx, sender, gas_limit=gas_limit
+        ).wait_to_complete()
 
         # store the contract address
         self._address = submitted_tx.contract_address
@@ -195,9 +176,6 @@ class LedgerContract:
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
-        # query the account information for the sender
-        account = self._client.query_account(sender.address())
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
@@ -206,19 +184,9 @@ class LedgerContract:
             )
         )
 
-        # estimate the fee required for this transaction
-        gas_limit, fee = self._client.estimate_gas_and_fee_for_tx(tx)
-
-        tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee=fee,
-            gas_limit=gas_limit,
+        return prepare_and_broadcast_basic_transaction(
+            self._client, tx, sender, gas_limit=gas_limit
         )
-        tx.sign(sender.signer(), self._client.network_config.chain_id, account.number)
-        tx.complete()
-
-        # broadcast the store transaction
-        return self._client.broadcast_tx(tx)
 
     def query(self, args: Any) -> Any:
         if self._address is None:

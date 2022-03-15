@@ -17,9 +17,15 @@
 #
 # ------------------------------------------------------------------------------
 
+import re
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
+from cosmpy.aerial.exceptions import (
+    BroadcastError,
+    InsufficientFeesError,
+    OutOfGasError,
+)
 from cosmpy.crypto.address import Address
 
 
@@ -43,6 +49,30 @@ class TxResponse:
 
     def is_successful(self) -> bool:
         return self.code == 0
+
+    def ensure_successful(self):
+        if self.code != 0:
+            if "out of gas" in self.raw_log:
+                match = re.search(
+                    r"gasWanted:\s*(\d+).*?gasUsed:\s*(\d+)", self.raw_log
+                )
+                if match is not None:
+                    gas_wanted = int(match.group(1))
+                    gas_used = int(match.group(2))
+                else:
+                    gas_wanted = -1
+                    gas_used = -1
+
+                raise OutOfGasError(self.hash, gas_wanted=gas_wanted, gas_used=gas_used)
+            elif "insufficient fees" in self.raw_log:
+                match = re.search(r"required:\s*(\d+\w+)", self.raw_log)
+                if match is not None:
+                    required_fee = match.group(1)
+                else:
+                    required_fee = f"more than {self.gas_wanted}"
+                raise InsufficientFeesError(self.hash, required_fee)
+            else:
+                raise BroadcastError(self.hash, self.raw_log)
 
 
 class SubmittedTx:
@@ -88,9 +118,6 @@ class SubmittedTx:
     def wait_to_complete(self) -> "SubmittedTx":
         self._response = self._client.wait_for_query_tx(self.tx_hash)
         assert self._response is not None
+        self._response.ensure_successful()
 
-        if not self._response.is_successful():
-            raise RuntimeError(
-                f"Transaction was unsuccessful (code: {self._response.code} tx: {self._response.hash})"
-            )
         return self

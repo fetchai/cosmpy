@@ -16,27 +16,21 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
-import re
+import json
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 import certifi
 import grpc
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
+from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.config import NetworkConfig
-from cosmpy.aerial.exceptions import (
-    BroadcastError,
-    InsufficientFeesError,
-    NotFoundError,
-    OutOfGasError,
-    QueryTimeoutError,
-)
-from cosmpy.aerial.gas import GasStrategy, OfflineMessageTableStrategy
-from cosmpy.aerial.tx import SigningCfg, Transaction
+from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
+from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
+from cosmpy.aerial.tx import Transaction, TxState
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
@@ -50,6 +44,10 @@ from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
+    QueryStub as QueryParamsGrpcClient,
+)
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
     QueryStub as StakingGrpcClient,
 )
@@ -57,6 +55,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
     GetTxRequest,
+    SimulateRequest,
 )
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
@@ -80,8 +79,7 @@ class LedgerClient:
     def __init__(self, cfg: NetworkConfig):
         cfg.validate()
         self._network_config = cfg
-
-        self._gas_strategy: GasStrategy = OfflineMessageTableStrategy.default_table()
+        self._gas_strategy: GasStrategy = SimulationGasStrategy(self)
 
         parsed_url = parse_url(cfg.url)
 
@@ -101,6 +99,7 @@ class LedgerClient:
             self.txs = TxGrpcClient(grpc_client)
             self.bank = BankGrpcClient(grpc_client)
             self.staking = StakingGrpcClient(grpc_client)
+            self.params = QueryParamsGrpcClient(grpc_client)
         else:
             rest_client = RestClient(parsed_url.rest_url)
 
@@ -109,6 +108,7 @@ class LedgerClient:
             self.txs = TxRestClient(rest_client)  # type: ignore
             self.bank = BankRestClient(rest_client)  # type: ignore
             self.staking = StakingRestClient(rest_client)  # type: ignore
+            self.params = None  # type: ignore
 
     @property
     def network_config(self) -> NetworkConfig:
@@ -139,6 +139,11 @@ class LedgerClient:
             sequence=account.sequence,
         )
 
+    def query_params(self, subspace: str, key: str) -> Any:
+        req = QueryParamsRequest(subspace=subspace, key=key)
+        resp = self.params.Params(req)
+        return json.loads(resp.param.value)
+
     def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
         denom = denom or self.network_config.fee_denomination
 
@@ -162,29 +167,15 @@ class LedgerClient:
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
 
-        # query the account information for the sender
-        account = self.query_account(sender.address())
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
             create_bank_send_msg(sender.address(), destination, amount, denom)
         )
 
-        # estimate the fee required for this transaction
-        gas_limit, fee = self.estimate_gas_and_fee_for_tx(tx)
-
-        tx.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee=fee,
-            gas_limit=gas_limit,
-            memo=memo,
+        return prepare_and_broadcast_basic_transaction(
+            self, tx, sender, gas_limit=gas_limit, memo=memo
         )
-        tx.sign(sender.signer(), self.network_config.chain_id, account.number)
-        tx.complete()
-
-        # broadcast the store transaction
-        return self.broadcast_tx(tx)
 
     def estimate_gas_for_tx(self, tx: Transaction) -> int:
         return self._gas_strategy.estimate_gas(tx)
@@ -231,9 +222,13 @@ class LedgerClient:
             else:
                 raise
 
+        return self._parse_tx_response(resp.tx_response)
+
+    @staticmethod
+    def _parse_tx_response(tx_response: Any) -> TxResponse:
         # parse the transaction logs
         logs = []
-        for log_data in resp.tx_response.logs:
+        for log_data in tx_response.logs:
             events = {}
             for event in log_data.events:
                 events[event.type] = {a.key: a.value for a in event.attributes}
@@ -245,24 +240,34 @@ class LedgerClient:
 
         # parse the transaction events
         events = {}
-        for event in resp.tx_response.events:
+        for event in tx_response.events:
             event_data = events.get(event.type, {})
             for attribute in event.attributes:
                 event_data[attribute.key.decode()] = attribute.value.decode()
             events[event.type] = event_data
 
         return TxResponse(
-            hash=tx_hash,
-            height=int(resp.tx_response.height),
-            code=int(resp.tx_response.code),
-            gas_wanted=int(resp.tx_response.gas_wanted),
-            gas_used=int(resp.tx_response.gas_used),
-            raw_log=str(resp.tx_response.raw_log),
+            hash=str(tx_response.txhash),
+            height=int(tx_response.height),
+            code=int(tx_response.code),
+            gas_wanted=int(tx_response.gas_wanted),
+            gas_used=int(tx_response.gas_used),
+            raw_log=str(tx_response.raw_log),
             logs=logs,
             events=events,
         )
 
+    def simulate_tx(self, tx: Transaction) -> int:
+        if tx.state != TxState.Final:
+            raise RuntimeError("Unable to simulate non final transaction")
+
+        req = SimulateRequest(tx=tx.tx)
+        resp = self.txs.Simulate(req)
+
+        return int(resp.gas_info.gas_used)
+
     def broadcast_tx(self, tx: Transaction) -> SubmittedTx:
+
         # create the broadcast request
         broadcast_req = BroadcastTxRequest(
             tx_bytes=tx.tx.SerializeToString(), mode=BroadcastMode.BROADCAST_MODE_SYNC
@@ -272,28 +277,8 @@ class LedgerClient:
         resp = self.txs.BroadcastTx(broadcast_req)
         tx_digest = resp.tx_response.txhash
 
-        # process the response
-        if resp.tx_response.code:
-            if "out of gas" in resp.tx_response.raw_log:
-                match = re.search(
-                    r"gasWanted:\s*(\d+).*?gasUsed:\s*(\d+)", resp.tx_response.raw_log
-                )
-                if match is not None:
-                    gas_wanted = int(match.group(1))
-                    gas_used = int(match.group(2))
-                else:
-                    gas_wanted = -1
-                    gas_used = -1
-
-                raise OutOfGasError(tx_digest, gas_wanted=gas_wanted, gas_used=gas_used)
-            elif "insufficient fees" in resp.tx_response.raw_log:
-                match = re.search(r"required:\s*(\d+\w+)", resp.tx_response.raw_log)
-                if match is not None:
-                    required_fee = match.group(1)
-                else:
-                    required_fee = f"more than {tx.fee}"
-                raise InsufficientFeesError(tx_digest, required_fee)
-            else:
-                raise BroadcastError(tx_digest, resp.tx_response.raw_log)
+        # check that the response is successful
+        initial_tx_response = self._parse_tx_response(resp.tx_response)
+        initial_tx_response.ensure_successful()
 
         return SubmittedTx(self, tx_digest)
