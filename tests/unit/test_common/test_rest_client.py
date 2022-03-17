@@ -34,8 +34,12 @@ class QueryRestClientTestCase(TestCase):
     @patch("requests.session", spec=Session)
     @patch("cosmpy.common.rest_client.MessageToDict")
     def test_get_pass(messageToDict_mock, session_mock):
-        """Test get method for the positive result."""
+        """
+        Test get method for the positive result.
 
+        :param messageToDict_mock: mock
+        :param session_mock: mock
+        """
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -65,7 +69,12 @@ class QueryRestClientTestCase(TestCase):
     @patch("requests.session", spec=Session)
     @patch("cosmpy.common.rest_client.MessageToDict")
     def test_get_error(self, messageToDict_mock, session_mock):
-        """Test get method for the negative result."""
+        """
+        Test get method for the negative result.
+
+        :param messageToDict_mock: mock
+        :param session_mock: mock
+        """
 
         rest_address = "some url"
         client = RestClient(rest_address)
@@ -93,7 +102,12 @@ class QueryRestClientTestCase(TestCase):
     @patch("requests.session", spec=Session)
     @patch("cosmpy.common.rest_client.MessageToDict")
     def test_post_pass(messageToDict_mock, session_mock):
-        """Test post method for the positive result."""
+        """
+        Test post method for the positive result.
+
+        :param messageToDict_mock: mock
+        :param session_mock: mock
+        """
 
         rest_address = "some url"
         client = RestClient(rest_address)
@@ -130,7 +144,12 @@ class QueryRestClientTestCase(TestCase):
     @patch("requests.session", spec=Session)
     @patch("cosmpy.common.rest_client.MessageToDict")
     def test_post_error(self, messageToDict_mock, session_mock):
-        """Test post method for the negative result."""
+        """
+        Test post method for the negative result.
+
+        :param messageToDict_mock: mock
+        :param session_mock: mock
+        """
 
         rest_address = "some url"
         client = RestClient(rest_address)
@@ -158,7 +177,11 @@ class QueryRestClientTestCase(TestCase):
     @staticmethod
     @patch("requests.session", spec=Session)
     def test_session_close_on_object_deletion(session_mock):
-        """Test session close for the positive result."""
+        """
+        Test session close for the positive result.
+
+        :param session_mock: mock
+        """
 
         rest_address = "some url"
         client = RestClient(rest_address)

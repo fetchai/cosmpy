@@ -53,7 +53,12 @@ class GovRestClientTestCase(TestCase):
     def make_clients(
         self, response_content: Dict
     ) -> Tuple[MockRestClient, GovRestClient]:
-        """Make  mock client and rest client api for specific content."""
+        """
+        Make  mock client and rest client api for specific content.
+
+        :param response_content: dict
+        :return: rest client instance
+        """
         mock_client = MockRestClient(json.dumps(response_content).encode("utf-8"))
         rest_client = self.REST_CLIENT(mock_client)
         return mock_client, rest_client
