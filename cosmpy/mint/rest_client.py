@@ -19,6 +19,9 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of Mint interface using REST."""
+import base64
+import json
+from typing import Union
 
 from google.protobuf.json_format import Parse
 
@@ -29,6 +32,13 @@ from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
     QueryInflationResponse,
     QueryParamsResponse,
 )
+
+
+def isNumber(value: Union[str, bytes]):
+    try:
+        return float(str(value))
+    except:
+        return False
 
 
 class MintRestClient(Mint):
@@ -47,11 +57,27 @@ class MintRestClient(Mint):
     def AnnualProvisions(self) -> QueryAnnualProvisionsResponse:
         """AnnualProvisions current minting annual provisions value."""
         json_response = self._rest_api.get(f"{self.API_URL}/annual_provisions")
+        # The QueryAnnualProvisionsResponse expect a base64 encoded value
+        # but the Rest endpoint return digits
+        j = json.loads(json_response)
+        if isNumber(j["annual_provisions"]):
+            j["annual_provisions"] = base64.b64encode(
+                j["annual_provisions"].encode()
+            ).decode("utf8")
+        json_response = json.dumps(j)
+
         return Parse(json_response, QueryAnnualProvisionsResponse())
 
     def Inflation(self) -> QueryInflationResponse:
         """Inflation returns the current minting inflation value."""
         json_response = self._rest_api.get(f"{self.API_URL}/inflation")
+        # The QueryInflationResponse expect a base64 encoded value
+        # but the Rest endpoint return digits
+        j = json.loads(json_response)
+        if isNumber(j["inflation"]):
+            j["inflation"] = base64.b64encode(j["inflation"].encode()).decode("utf8")
+        json_response = json.dumps(j)
+
         return Parse(json_response, QueryInflationResponse())
 
     def Params(self) -> QueryParamsResponse:
