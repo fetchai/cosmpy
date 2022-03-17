@@ -44,7 +44,11 @@ class PublicKey:
     hash_function: Callable = hashlib.sha256
 
     def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
-        """Initialize."""
+        """
+        Initialize.
+
+        :param public_key: butes, public key or ecdsa verifying key instance
+        """
         if isinstance(public_key, bytes):
             self._verifying_key = ecdsa.VerifyingKey.from_string(
                 public_key, curve=self.curve, hashfunc=self.hash_function
