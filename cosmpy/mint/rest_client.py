@@ -37,7 +37,7 @@ from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
 def isNumber(value: Union[str, bytes]):
     try:
         return float(str(value))
-    except:
+    except ValueError:
         return False
 
 
@@ -64,7 +64,7 @@ class MintRestClient(Mint):
             j["annual_provisions"] = base64.b64encode(
                 j["annual_provisions"].encode()
             ).decode("utf8")
-        json_response = json.dumps(j)
+        json_response = json.dumps(j).encode("utf-8")
 
         return Parse(json_response, QueryAnnualProvisionsResponse())
 
@@ -76,7 +76,7 @@ class MintRestClient(Mint):
         j = json.loads(json_response)
         if isNumber(j["inflation"]):
             j["inflation"] = base64.b64encode(j["inflation"].encode()).decode("utf8")
-        json_response = json.dumps(j)
+        json_response = json.dumps(j).encode("utf-8")
 
         return Parse(json_response, QueryInflationResponse())
 
