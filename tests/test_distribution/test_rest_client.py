@@ -177,6 +177,12 @@ class DistributionRestClientTestCase(TestCase):
 
         distribution = DistributionRestClient(mock_client)
 
+        # Check that the parameters are in the right format
+        assert expected_response.params.community_tax == "0.1"
+        assert expected_response.params.base_proposer_reward == "0.2"
+        assert expected_response.params.bonus_proposer_reward == "0.3"
+        assert expected_response.params.withdraw_addr_enabled is True
+
         assert distribution.Params() == expected_response
         assert mock_client.last_base_url == "/cosmos/distribution/v1beta1/params"
 
