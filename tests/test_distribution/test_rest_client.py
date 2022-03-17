@@ -231,7 +231,10 @@ class DistributionRestClientTestCase(TestCase):
     @staticmethod
     def test_ValidatorSlashes():
         """Test ValidatorSlashes method."""
-        content = {"slashes": [], "pagination": {"next_key": None, "total": "0"}}
+        content = {
+            "slashes": [{"validator_period": "1", "fraction": "1"}],
+            "pagination": {"next_key": None, "total": "1"},
+        }
         mock_client = MockRestClient(json.dumps(content))
 
         expected_response = ParseDict(content, QueryValidatorSlashesResponse())
