@@ -97,6 +97,8 @@ class BankRestClient(Bank):
         """
         Queries total supply of specific denomination
 
+        :param request: QuerySupplyOfRequest with denomination
+
         :return: QuerySupplyOfResponse
         """
         response = self._rest_api.get(f"{self.API_URL}/supply/{request.denom}")
