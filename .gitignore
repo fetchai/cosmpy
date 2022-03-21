@@ -4,13 +4,13 @@
 ./build/
 dist/
 build/
+Pipfile.lock
 
 # IDEs
 .idea/
 
 # Tox files
 .tox
-Pipfile.lock
 
 .DS_Store
 */.DS_Store

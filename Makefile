@@ -232,7 +232,7 @@ new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
 		pipenv --rm;\
-		pipenv install --dev;\
+		pipenv install --dev --skip-lock --clear;\
 		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
