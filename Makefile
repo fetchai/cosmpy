@@ -129,7 +129,7 @@ pylint:
 .PHONY: test
 test:
 	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py
-	make coverage-report
+	$(MAKE) coverage-report
 
 .PHONY: unit-test
 unit-test:
@@ -163,7 +163,7 @@ copyright-check:
 .PHONY: generate-docs
 generate-docs:
 	sphinx-apidoc -f -o $(PYCOSM_DOCS_DIR)/source $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
-	cd $(PYCOSM_DOCS_DIR) && make html
+	cd $(PYCOSM_DOCS_DIR) && $(MAKE) html
 
 # Open docs main page in default browser
 .PHONY: open-docs
@@ -171,7 +171,7 @@ open-docs:
 ifneq ($(wildcard $(PYCOSM_DOCS_DIR)/build),)
 	$(OPEN_CMD) $(PYCOSM_DOCS_DIR)/build/html/index.html
 else
-	@echo "Built docs are not found. Please run 'make generate-docs' first."
+	@echo "Built docs are not found. Please run '$(MAKE) generate-docs' first."
 endif
 
 ####################
@@ -258,17 +258,17 @@ security:
 
 .PHONY: check
 check:
-	make black-check
-	make isort-check
-	make flake
-	make vulture
-	make bandit
-	make safety
-	make mypy
-	make pylint
-	make liccheck
-	make copyright-check
-	make test
+	$(MAKE) black-check
+	$(MAKE) isort-check
+	$(MAKE) flake
+	$(MAKE) vulture
+	$(MAKE) bandit
+	$(MAKE) safety
+	$(MAKE) mypy
+	$(MAKE) pylint
+	$(MAKE) liccheck
+	$(MAKE) copyright-check
+	$(MAKE) test
 
 Pipfile.lock: Pipfile setup.py
 	pipenv lock --dev
