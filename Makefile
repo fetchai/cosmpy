@@ -1,6 +1,7 @@
 COSMOS_SDK_DIR := cosmos-sdk-proto-schema
 WASMD_DIR := wasm-proto-shema
-COSMOS_SDK_VERSION := v0.17.7
+COSMOS_SDK_VERSION := v0.17.8
+COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
 WASMD_VERSION := v0.21.0
 COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
 WASMD_PROTO_RELATIVE_DIRS := proto
@@ -68,7 +69,7 @@ $(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR)
 
 $(COSMOS_SDK_DIR): Makefile
 	rm -rfv $(COSMOS_SDK_DIR)
-	git clone --branch $(COSMOS_SDK_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none https://github.com/fetchai/cosmos-sdk $(COSMOS_SDK_DIR)
+	git clone --branch $(COSMOS_SDK_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(COSMOS_SDK_URL) $(COSMOS_SDK_DIR)
 	cd $(COSMOS_SDK_DIR) && git checkout $(COSMOS_SDK_VERSION) -- $(COSMOS_PROTO_RELATIVE_DIRS)
 
 $(WASMD_DIR): Makefile
