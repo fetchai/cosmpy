@@ -3,6 +3,7 @@
 # source: cosmos/airdrop/v1beta1/query.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -17,223 +18,16 @@ from cosmos.base.query.v1beta1 import pagination_pb2 as cosmos_dot_base_dot_quer
 from cosmos.airdrop.v1beta1 import airdrop_pb2 as cosmos_dot_airdrop_dot_v1beta1_dot_airdrop__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='cosmos/airdrop/v1beta1/query.proto',
-  package='cosmos.airdrop.v1beta1',
-  syntax='proto3',
-  serialized_options=b'Z,github.com/cosmos/cosmos-sdk/x/airdrop/types',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\"cosmos/airdrop/v1beta1/query.proto\x12\x16\x63osmos.airdrop.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a$cosmos/airdrop/v1beta1/airdrop.proto\"R\n\x14QueryAllFundsRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\x87\x01\n\x15QueryAllFundsResponse\x12\x31\n\x05\x66unds\x18\x01 \x03(\x0b\x32\".cosmos.airdrop.v1beta1.ActiveFund\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\")\n\x10QueryFundRequest\x12\x15\n\x07\x61\x64\x64ress\x18\x01 \x01(\tB\x04\xc8\xde\x1f\x01\"?\n\x11QueryFundResponse\x12*\n\x04\x66und\x18\x01 \x01(\x0b\x32\x1c.cosmos.airdrop.v1beta1.Fund\"\x14\n\x12QueryParamsRequest\"K\n\x13QueryParamsResponse\x12\x34\n\x06params\x18\x01 \x01(\x0b\x32\x1e.cosmos.airdrop.v1beta1.ParamsB\x04\xc8\xde\x1f\x00\x32\xb3\x03\n\x05Query\x12\x8e\x01\n\x08\x41llFunds\x12,.cosmos.airdrop.v1beta1.QueryAllFundsRequest\x1a-.cosmos.airdrop.v1beta1.QueryAllFundsResponse\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/cosmos/airdrop/v1beta1/funds\x12\x8c\x01\n\x04\x46und\x12(.cosmos.airdrop.v1beta1.QueryFundRequest\x1a).cosmos.airdrop.v1beta1.QueryFundResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/cosmos/airdrop/v1beta1/funds/{address}\x12\x89\x01\n\x06Params\x12*.cosmos.airdrop.v1beta1.QueryParamsRequest\x1a+.cosmos.airdrop.v1beta1.QueryParamsResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/cosmos/airdrop/v1beta1/paramsB.Z,github.com/cosmos/cosmos-sdk/x/airdrop/typesb\x06proto3'
-  ,
-  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2.DESCRIPTOR,cosmos_dot_airdrop_dot_v1beta1_dot_airdrop__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\"cosmos/airdrop/v1beta1/query.proto\x12\x16\x63osmos.airdrop.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a$cosmos/airdrop/v1beta1/airdrop.proto\"R\n\x14QueryAllFundsRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\x87\x01\n\x15QueryAllFundsResponse\x12\x31\n\x05\x66unds\x18\x01 \x03(\x0b\x32\".cosmos.airdrop.v1beta1.ActiveFund\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\")\n\x10QueryFundRequest\x12\x15\n\x07\x61\x64\x64ress\x18\x01 \x01(\tB\x04\xc8\xde\x1f\x01\"?\n\x11QueryFundResponse\x12*\n\x04\x66und\x18\x01 \x01(\x0b\x32\x1c.cosmos.airdrop.v1beta1.Fund\"\x14\n\x12QueryParamsRequest\"K\n\x13QueryParamsResponse\x12\x34\n\x06params\x18\x01 \x01(\x0b\x32\x1e.cosmos.airdrop.v1beta1.ParamsB\x04\xc8\xde\x1f\x00\x32\xb3\x03\n\x05Query\x12\x8e\x01\n\x08\x41llFunds\x12,.cosmos.airdrop.v1beta1.QueryAllFundsRequest\x1a-.cosmos.airdrop.v1beta1.QueryAllFundsResponse\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/cosmos/airdrop/v1beta1/funds\x12\x8c\x01\n\x04\x46und\x12(.cosmos.airdrop.v1beta1.QueryFundRequest\x1a).cosmos.airdrop.v1beta1.QueryFundResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/cosmos/airdrop/v1beta1/funds/{address}\x12\x89\x01\n\x06Params\x12*.cosmos.airdrop.v1beta1.QueryParamsRequest\x1a+.cosmos.airdrop.v1beta1.QueryParamsResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/cosmos/airdrop/v1beta1/paramsB.Z,github.com/cosmos/cosmos-sdk/x/airdrop/typesb\x06proto3')
 
 
 
-
-_QUERYALLFUNDSREQUEST = _descriptor.Descriptor(
-  name='QueryAllFundsRequest',
-  full_name='cosmos.airdrop.v1beta1.QueryAllFundsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='cosmos.airdrop.v1beta1.QueryAllFundsRequest.pagination', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=196,
-  serialized_end=278,
-)
-
-
-_QUERYALLFUNDSRESPONSE = _descriptor.Descriptor(
-  name='QueryAllFundsResponse',
-  full_name='cosmos.airdrop.v1beta1.QueryAllFundsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='funds', full_name='cosmos.airdrop.v1beta1.QueryAllFundsResponse.funds', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='cosmos.airdrop.v1beta1.QueryAllFundsResponse.pagination', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=281,
-  serialized_end=416,
-)
-
-
-_QUERYFUNDREQUEST = _descriptor.Descriptor(
-  name='QueryFundRequest',
-  full_name='cosmos.airdrop.v1beta1.QueryFundRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='address', full_name='cosmos.airdrop.v1beta1.QueryFundRequest.address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=418,
-  serialized_end=459,
-)
-
-
-_QUERYFUNDRESPONSE = _descriptor.Descriptor(
-  name='QueryFundResponse',
-  full_name='cosmos.airdrop.v1beta1.QueryFundResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='fund', full_name='cosmos.airdrop.v1beta1.QueryFundResponse.fund', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=461,
-  serialized_end=524,
-)
-
-
-_QUERYPARAMSREQUEST = _descriptor.Descriptor(
-  name='QueryParamsRequest',
-  full_name='cosmos.airdrop.v1beta1.QueryParamsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=526,
-  serialized_end=546,
-)
-
-
-_QUERYPARAMSRESPONSE = _descriptor.Descriptor(
-  name='QueryParamsResponse',
-  full_name='cosmos.airdrop.v1beta1.QueryParamsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='params', full_name='cosmos.airdrop.v1beta1.QueryParamsResponse.params', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=548,
-  serialized_end=623,
-)
-
-_QUERYALLFUNDSREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
-_QUERYALLFUNDSRESPONSE.fields_by_name['funds'].message_type = cosmos_dot_airdrop_dot_v1beta1_dot_airdrop__pb2._ACTIVEFUND
-_QUERYALLFUNDSRESPONSE.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGERESPONSE
-_QUERYFUNDRESPONSE.fields_by_name['fund'].message_type = cosmos_dot_airdrop_dot_v1beta1_dot_airdrop__pb2._FUND
-_QUERYPARAMSRESPONSE.fields_by_name['params'].message_type = cosmos_dot_airdrop_dot_v1beta1_dot_airdrop__pb2._PARAMS
-DESCRIPTOR.message_types_by_name['QueryAllFundsRequest'] = _QUERYALLFUNDSREQUEST
-DESCRIPTOR.message_types_by_name['QueryAllFundsResponse'] = _QUERYALLFUNDSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryFundRequest'] = _QUERYFUNDREQUEST
-DESCRIPTOR.message_types_by_name['QueryFundResponse'] = _QUERYFUNDRESPONSE
-DESCRIPTOR.message_types_by_name['QueryParamsRequest'] = _QUERYPARAMSREQUEST
-DESCRIPTOR.message_types_by_name['QueryParamsResponse'] = _QUERYPARAMSRESPONSE
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_QUERYALLFUNDSREQUEST = DESCRIPTOR.message_types_by_name['QueryAllFundsRequest']
+_QUERYALLFUNDSRESPONSE = DESCRIPTOR.message_types_by_name['QueryAllFundsResponse']
+_QUERYFUNDREQUEST = DESCRIPTOR.message_types_by_name['QueryFundRequest']
+_QUERYFUNDRESPONSE = DESCRIPTOR.message_types_by_name['QueryFundResponse']
+_QUERYPARAMSREQUEST = DESCRIPTOR.message_types_by_name['QueryParamsRequest']
+_QUERYPARAMSRESPONSE = DESCRIPTOR.message_types_by_name['QueryParamsResponse']
 QueryAllFundsRequest = _reflection.GeneratedProtocolMessageType('QueryAllFundsRequest', (_message.Message,), {
   'DESCRIPTOR' : _QUERYALLFUNDSREQUEST,
   '__module__' : 'cosmos.airdrop.v1beta1.query_pb2'
@@ -276,54 +70,33 @@ QueryParamsResponse = _reflection.GeneratedProtocolMessageType('QueryParamsRespo
   })
 _sym_db.RegisterMessage(QueryParamsResponse)
 
+_QUERY = DESCRIPTOR.services_by_name['Query']
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-DESCRIPTOR._options = None
-_QUERYFUNDREQUEST.fields_by_name['address']._options = None
-_QUERYPARAMSRESPONSE.fields_by_name['params']._options = None
-
-_QUERY = _descriptor.ServiceDescriptor(
-  name='Query',
-  full_name='cosmos.airdrop.v1beta1.Query',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=626,
-  serialized_end=1061,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='AllFunds',
-    full_name='cosmos.airdrop.v1beta1.Query.AllFunds',
-    index=0,
-    containing_service=None,
-    input_type=_QUERYALLFUNDSREQUEST,
-    output_type=_QUERYALLFUNDSRESPONSE,
-    serialized_options=b'\202\323\344\223\002\037\022\035/cosmos/airdrop/v1beta1/funds',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='Fund',
-    full_name='cosmos.airdrop.v1beta1.Query.Fund',
-    index=1,
-    containing_service=None,
-    input_type=_QUERYFUNDREQUEST,
-    output_type=_QUERYFUNDRESPONSE,
-    serialized_options=b'\202\323\344\223\002)\022\'/cosmos/airdrop/v1beta1/funds/{address}',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='Params',
-    full_name='cosmos.airdrop.v1beta1.Query.Params',
-    index=2,
-    containing_service=None,
-    input_type=_QUERYPARAMSREQUEST,
-    output_type=_QUERYPARAMSRESPONSE,
-    serialized_options=b'\202\323\344\223\002 \022\036/cosmos/airdrop/v1beta1/params',
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_QUERY)
-
-DESCRIPTOR.services_by_name['Query'] = _QUERY
-
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'Z,github.com/cosmos/cosmos-sdk/x/airdrop/types'
+  _QUERYFUNDREQUEST.fields_by_name['address']._options = None
+  _QUERYFUNDREQUEST.fields_by_name['address']._serialized_options = b'\310\336\037\001'
+  _QUERYPARAMSRESPONSE.fields_by_name['params']._options = None
+  _QUERYPARAMSRESPONSE.fields_by_name['params']._serialized_options = b'\310\336\037\000'
+  _QUERY.methods_by_name['AllFunds']._options = None
+  _QUERY.methods_by_name['AllFunds']._serialized_options = b'\202\323\344\223\002\037\022\035/cosmos/airdrop/v1beta1/funds'
+  _QUERY.methods_by_name['Fund']._options = None
+  _QUERY.methods_by_name['Fund']._serialized_options = b'\202\323\344\223\002)\022\'/cosmos/airdrop/v1beta1/funds/{address}'
+  _QUERY.methods_by_name['Params']._options = None
+  _QUERY.methods_by_name['Params']._serialized_options = b'\202\323\344\223\002 \022\036/cosmos/airdrop/v1beta1/params'
+  _QUERYALLFUNDSREQUEST._serialized_start=196
+  _QUERYALLFUNDSREQUEST._serialized_end=278
+  _QUERYALLFUNDSRESPONSE._serialized_start=281
+  _QUERYALLFUNDSRESPONSE._serialized_end=416
+  _QUERYFUNDREQUEST._serialized_start=418
+  _QUERYFUNDREQUEST._serialized_end=459
+  _QUERYFUNDRESPONSE._serialized_start=461
+  _QUERYFUNDRESPONSE._serialized_end=524
+  _QUERYPARAMSREQUEST._serialized_start=526
+  _QUERYPARAMSREQUEST._serialized_end=546
+  _QUERYPARAMSRESPONSE._serialized_start=548
+  _QUERYPARAMSRESPONSE._serialized_end=623
+  _QUERY._serialized_start=626
+  _QUERY._serialized_end=1061
 # @@protoc_insertion_point(module_scope)

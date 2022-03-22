@@ -18,3 +18,7 @@ Pipfile.lock
 # Coverage related files and folders
 .coverage
 coverage_report/
+
+# Proto generation workdirs
+cosmos-sdk-proto-schema/
+wasm-proto-shema/
