@@ -1,11 +1,15 @@
-COSMOS_SDK_DIR := cosmos-sdk-proto-schema
-WASMD_DIR := wasm-proto-shema
-COSMOS_SDK_VERSION := v0.17.8
-COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
-WASMD_VERSION := v0.21.0
-COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
-WASMD_PROTO_RELATIVE_DIRS := proto
-SOURCES_REGEX_TO_EXCLUDE := third_party/proto/google/.*
+COSMOS_SDK_URL := https://github.com/cosmos/cosmos-sdk
+COSMOS_SDK_VERSION := v0.45.1
+COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
+
+WASMD_URL := https://github.com/CosmWasm/wasmd
+WASMD_VERSION := v0.24.0
+WASMD_DIR := build/wasm-proto-shema
+
+IBCGO_URL := https://github.com/cosmos/ibc-go
+IBCGO_VERSION := v2.2.0
+IBCGO_DIR := build/ibcgo-proto-schema
+
 OUTPUT_FOLDER := cosmpy/protos
 PYCOSM_SRC_DIR := cosmpy
 PYCOSM_DOCS_DIR := docs
@@ -14,18 +18,15 @@ PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
 REQUIREMENTS_FILES := requirements.txt requirements-dev.txt
 
-
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
-        FIND_CMD := find $(COSMOS_PROTO_RELATIVE_DIRS) -regextype posix-extended
-				OPEN_CMD := xdg-open
+		OPEN_CMD := xdg-open
     endif
     ifeq ($(UNAME_S),Darwin)
-        FIND_CMD := find -E $(COSMOS_PROTO_RELATIVE_DIRS)
-				OPEN_CMD := open
+		OPEN_CMD := open
     endif
 endif
 
@@ -36,26 +37,21 @@ define unique
 endef
 unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1)))
 
+proto: fetch_proto_schema_source generate_proto_types generate_init_py_files
 
-FIND_CMD := $(FIND_CMD) -type f -name *.proto $(SOURCES_REGEX_TO_EXCLUDE:%=! -regex "%")
-RELATIVE_SOURCE := $(shell [ -d "$(COSMOS_SDK_DIR)" ] && { cd $(COSMOS_SDK_DIR) && $(FIND_CMD); })
-UNROOTED_SOURCE := $(foreach _,$(COSMOS_PROTO_RELATIVE_DIRS),$(patsubst $(_)/%,%,$(filter $(_)/%,$(RELATIVE_SOURCE))))
-SOURCE := $(RELATIVE_SOURCE:%=$(COSMOS_SDK_DIR)/%)
-GENERATED := $(UNROOTED_SOURCE:%.proto=$(OUTPUT_FOLDER)/%.py)
-PROTO_ROOT_DIRS := $(COSMOS_PROTO_RELATIVE_DIRS:%=$(COSMOS_SDK_DIR)/%)
+generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
+	rm -fr $(OUTPUT_FOLDER)/*
+	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(COSMOS_SDK_DIR)/third_party/proto  --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(shell find $(COSMOS_SDK_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python -m grpc_tools.protoc --proto_path=$(WASMD_DIR)/proto --proto_path=$(WASMD_DIR)/third_party/proto  --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(shell find $(WASMD_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(IBCGO_DIR)/third_party/proto  --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 
-GENERATED_DIRS := $(call unique,$(foreach _,$(UNROOTED_SOURCE),$(dir $(_))))
-INIT_PY_FILES_TO_CREATE :=  $(GENERATED_DIRS:%=$(OUTPUT_FOLDER)/%__init__.py)
+fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
 
-COMPILE_PROTOBUFS_COMMAND := python -m grpc_tools.protoc $(PROTO_ROOT_DIRS:%=--proto_path=%) --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(UNROOTED_SOURCE)
-
-
-generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR)
-	$(COMPILE_PROTOBUFS_COMMAND)
-
-fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR)
-
-generate_init_py_files: $(INIT_PY_FILES_TO_CREATE)
+.PHONY: generate_init_py_files
+generate_init_py_files: generate_proto_types
+	find $(OUTPUT_FOLDER)/ -type d -exec touch {}/__init__.py \;
+# restore root __init__.py as it contains code to have the proto files module available
+	git restore $(OUTPUT_FOLDER)/__init__.py
 
 $(SOURCE): $(COSMOS_SDK_DIR)
 
@@ -65,7 +61,7 @@ $(GENERATED): $(SOURCE)
 $(INIT_PY_FILES_TO_CREATE): $(GENERATED_DIRS)
 	touch $(INIT_PY_FILES_TO_CREATE)
 
-$(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR)
+$(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
 
 $(COSMOS_SDK_DIR): Makefile
 	rm -rfv $(COSMOS_SDK_DIR)
@@ -74,9 +70,13 @@ $(COSMOS_SDK_DIR): Makefile
 
 $(WASMD_DIR): Makefile
 	rm -rfv $(WASMD_DIR)
-	git clone --branch $(WASMD_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none https://github.com/CosmWasm/wasmd $(WASMD_DIR)
+	git clone --branch $(WASMD_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(WASMD_URL) $(WASMD_DIR)
 	cd $(WASMD_DIR) && git checkout $(WASMD_VERSION) -- $(WASMD_PROTO_RELATIVE_DIRS)
-	cp -rpv $(WASMD_PROTO_RELATIVE_DIRS:%=$(WASMD_DIR)/%) $(COSMOS_SDK_DIR)
+
+$(IBCGO_DIR): Makefile
+	rm -rfv $(IBCGO_DIR)
+	git clone --branch $(IBCGO_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(IBCGO_URL) $(IBCGO_DIR)
+	cd $(IBCGO_DIR) && git checkout $(IBCGO_VERSION) -- $(IBCGO_PROTO_RELATIVE_DIRS)
 
 ####################
 ### Code style
