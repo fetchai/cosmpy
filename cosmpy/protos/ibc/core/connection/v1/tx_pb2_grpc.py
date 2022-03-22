@@ -63,7 +63,8 @@ class MsgServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ConnectionOpenConfirm(self, request, context):
-        """ConnectionOpenConfirm defines a rpc handler method for MsgConnectionOpenConfirm.
+        """ConnectionOpenConfirm defines a rpc handler method for
+        MsgConnectionOpenConfirm.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

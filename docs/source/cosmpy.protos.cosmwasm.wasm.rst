@@ -7,7 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   cosmpy.protos.cosmwasm.wasm.v1beta1
+   cosmpy.protos.cosmwasm.wasm.v1
 
 Module contents
 ---------------

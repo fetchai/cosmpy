@@ -40,16 +40,9 @@ When updating the Cosmos SDK version supported by this library (see the version 
 
 >Note: To generate python types from Cosmos SDK protobuf schemas, you will need [Google Protocol Buffers](https://developers.google.com/protocol-buffers/) compiler. A guide on how to install it can be found [here](https://fetchai.github.io/oef-sdk-python/user/install.html#protobuf-compiler).
 
-Below are the steps you need to take in order to achieve this:
-
-* Fetch the Cosmos SDK protobuf schema files:
+* To regenerate the protobuf schema files, run the following:
   ```bash
-  make fetch_proto_schema_source
-  ```
-
-* Generate python types:
-  ```bash
-  make generate_proto_types
+  make proto
   ```
 
 >Note: For this library to be functional, only the python types generated from protobuf schemas are required, not the schema files themselves.
