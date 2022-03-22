@@ -39,7 +39,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
     SimulateResponse,
 )
-from cosmpy.protos.cosmwasm.wasm.v1beta1.tx_pb2 import (  # noqa: F401  # pylint: disable=unused-import
+from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (  # noqa: F401  # pylint: disable=unused-import
     MsgExecuteContract,
     MsgInstantiateContract,
     MsgStoreCode,
