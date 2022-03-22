@@ -21,7 +21,7 @@
 
 from abc import ABC, abstractmethod
 
-from cosmpy.protos.cosmwasm.wasm.v1beta1.query_pb2 import (
+from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QueryAllContractStateRequest,
     QueryAllContractStateResponse,
     QueryCodeRequest,
