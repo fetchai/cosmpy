@@ -17,24 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Interface for the Params functionality of CosmosSDK."""
-
-from abc import ABC, abstractmethod
-
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
-)
-
-
-class Params(ABC):
-    """Params abstract class."""
-
-    @abstractmethod
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        """
-        Params queries a specific Cosmos SDK parameter.
-
-        :param request: QueryParamsRequest
-        :return: QueryParamsResponse
-        """
+"""This package contains test for the Params modules."""

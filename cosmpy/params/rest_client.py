@@ -23,7 +23,10 @@ from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
 from cosmpy.params.interface import Params
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest, QueryParamsResponse
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import (
+    QueryParamsRequest,
+    QueryParamsResponse,
+)
 
 
 class ParamsRestClient(Params):
@@ -38,7 +41,7 @@ class ParamsRestClient(Params):
         :param rest_api: RestClient api
         """
         self._rest_api = rest_api
-    
+
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
         Params queries a specific Cosmos SDK parameter.

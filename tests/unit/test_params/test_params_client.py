@@ -21,26 +21,28 @@
 
 import json
 from unittest import TestCase
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
-
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsResponse
-from cosmpy.params.rest_client import ParamsRestClient
 
 from google.protobuf.json_format import ParseDict
+
+from cosmpy.params.rest_client import ParamsRestClient
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import (
+    QueryParamsRequest,
+    QueryParamsResponse,
+)
 from tests.helpers import MockRestClient
 
 
 class ParamsRestClientTestCase(TestCase):
     """Test case for ParamsRestClient class."""
-    
+
     @staticmethod
     def test_Validators():
         """Test Validators method."""
         content = {
             "param": {
-                "subspace":"baseapp",
-                "key":"BlockParams",
-                "value":"{\"max_bytes\":\"200000\",\"max_gas\":\"2000000\"}",
+                "subspace": "baseapp",
+                "key": "BlockParams",
+                "value": '{"max_bytes":"200000","max_gas":"2000000"}',
             },
         }
         mock_client = MockRestClient(json.dumps(content))
@@ -49,5 +51,8 @@ class ParamsRestClientTestCase(TestCase):
 
         params = ParamsRestClient(mock_client)
 
-        assert params.Params(QueryParamsRequest(subspace="baseapp", key="BlockParams")) == expected_response
+        assert (
+            params.Params(QueryParamsRequest(subspace="baseapp", key="BlockParams"))
+            == expected_response
+        )
         assert mock_client.last_base_url == "/cosmos/params/v1beta1/params"
