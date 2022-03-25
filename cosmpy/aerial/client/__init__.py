@@ -241,7 +241,9 @@ class LedgerClient:
 
         # parse the transaction events
         events = {}
-        for event in tx_response.events:
+        # cosmos v0.45.x seems to not set events key anymore when there's no events.
+        resp_events = tx_response.events if hasattr(tx_response, "events") else []
+        for event in resp_events:
             event_data = events.get(event.type, {})
             for attribute in event.attributes:
                 event_data[attribute.key.decode()] = attribute.value.decode()
