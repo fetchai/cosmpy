@@ -47,50 +47,84 @@ class Distribution(ABC):
 
     @abstractmethod
     def CommunityPool(self) -> QueryCommunityPoolResponse:
-        """CommunityPool queries the community pool coins."""
+        """
+        CommunityPool queries the community pool coins.
+        :return: a QueryCommunityPoolResponse instance
+        """
 
     @abstractmethod
     def DelegationTotalRewards(
         self, request: QueryDelegationTotalRewardsRequest
     ) -> QueryDelegationTotalRewardsResponse:
-        """DelegationTotalRewards queries the total rewards accrued by a each validator."""
+        """
+        DelegationTotalRewards queries the total rewards accrued by a each validator.
+        :param request: a QueryDelegationTotalRewardsRequest instance
+        :return: a QueryDelegationTotalRewardsResponse instance
+        """
 
     @abstractmethod
     def DelegationRewards(
         self, request: QueryDelegationRewardsRequest
     ) -> QueryDelegationRewardsResponse:
-        """DelegationRewards queries the total rewards accrued by a delegation."""
+        """
+        DelegationRewards queries the total rewards accrued by a delegation.
+        :param request: a QueryDelegationRewardsRequest instance
+        :return: a QueryDelegationRewardsResponse instance
+        """
 
     @abstractmethod
     def DelegatorValidators(
         self, request: QueryDelegatorValidatorsRequest
     ) -> QueryDelegatorValidatorsResponse:
-        """DelegatorValidators queries the validators of a delegator."""
+        """
+        DelegatorValidators queries the validators of a delegator.
+        :param request: a QueryDelegatorValidatorsRequest instance
+        :return: a QueryDelegatorValidatorsResponse instance
+        """
 
     @abstractmethod
     def DelegatorWithdrawAddress(
         self, request: QueryDelegatorWithdrawAddressRequest
     ) -> QueryDelegatorWithdrawAddressResponse:
-        """DelegatorWithdrawAddress queries withdraw address of a delegator."""
+        """
+        DelegatorWithdrawAddress queries withdraw address of a delegator.
+        :param request: a QueryDelegatorWithdrawAddressRequest instance
+        :return: a QueryDelegatorWithdrawAddressResponse instance
+        """
 
     @abstractmethod
     def Params(self) -> QueryParamsResponse:
-        """Params queries params of the distribution module."""
+        """
+        Params queries params of the distribution module.
+        :return: a QueryParamsResponse instance
+        """
 
     @abstractmethod
     def ValidatorCommission(
         self, request: QueryValidatorCommissionRequest
     ) -> QueryValidatorCommissionResponse:
-        """ValidatorCommission queries accumulated commission for a validator."""
+        """
+        ValidatorCommission queries accumulated commission for a validator.
+        :param request: QueryValidatorCommissionRequest
+        :return: QueryValidatorCommissionResponse
+        """
 
     @abstractmethod
     def ValidatorOutstandingRewards(
         self, request: QueryValidatorOutstandingRewardsRequest
     ) -> QueryValidatorOutstandingRewardsResponse:
-        """ValidatorOutstandingRewards queries rewards of a validator address."""
+        """
+        ValidatorOutstandingRewards queries rewards of a validator address.
+        :param request: QueryValidatorOutstandingRewardsRequest
+        :return: QueryValidatorOutstandingRewardsResponse
+        """
 
     @abstractmethod
     def ValidatorSlashes(
         self, request: QueryValidatorSlashesRequest
     ) -> QueryValidatorSlashesResponse:
-        """ValidatorSlashes queries slash events of a validator."""
+        """
+        ValidatorSlashes queries slash events of a validator.
+        :param request: QueryValidatorSlashesRequest
+        :return: QueryValidatorSlashesResponse
+        """
