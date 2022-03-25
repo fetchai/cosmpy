@@ -100,7 +100,7 @@ class StakingRestClientTestCase(TestCase):
 
         staking = StakingRestClient(mock_client)
 
-        assert staking.Validators(QueryValidatorsRequest() == expected_response)
+        assert staking.Validators(QueryValidatorsRequest()) == expected_response
         assert mock_client.last_base_url == "/cosmos/staking/v1beta1/validators"
 
     @staticmethod
