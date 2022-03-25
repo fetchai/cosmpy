@@ -36,6 +36,7 @@ from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
+from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.common.rest_client import RestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
@@ -108,7 +109,7 @@ class LedgerClient:
             self.txs = TxRestClient(rest_client)  # type: ignore
             self.bank = BankRestClient(rest_client)  # type: ignore
             self.staking = StakingRestClient(rest_client)  # type: ignore
-            self.params = None  # type: ignore
+            self.params = ParamsRestClient(rest_client)  # type: ignore 
 
     @property
     def network_config(self) -> NetworkConfig:
