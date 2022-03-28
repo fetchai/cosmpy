@@ -55,7 +55,10 @@ class MintRestClient(Mint):
         self._rest_api = rest_api
 
     def AnnualProvisions(self) -> QueryAnnualProvisionsResponse:
-        """AnnualProvisions current minting annual provisions value."""
+        """
+        AnnualProvisions current minting annual provisions value.
+        :return: a QueryAnnualProvisionsResponse instance
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/annual_provisions")
         # The QueryAnnualProvisionsResponse expect a base64 encoded value
         # but the Rest endpoint return digits
@@ -69,7 +72,10 @@ class MintRestClient(Mint):
         return Parse(json_response, QueryAnnualProvisionsResponse())
 
     def Inflation(self) -> QueryInflationResponse:
-        """Inflation returns the current minting inflation value."""
+        """
+        Inflation returns the current minting inflation value.
+        :return: a QueryInflationResponse instance
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/inflation")
         # The QueryInflationResponse expect a base64 encoded value
         # but the Rest endpoint return digits
@@ -81,6 +87,9 @@ class MintRestClient(Mint):
         return Parse(json_response, QueryInflationResponse())
 
     def Params(self) -> QueryParamsResponse:
-        """Params queries params of the Mint module."""
+        """
+        Params queries params of the Mint module.
+        :return: a QueryParamsResponse instance
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())
