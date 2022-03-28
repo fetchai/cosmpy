@@ -34,9 +34,16 @@ from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
 )
 
 
-def isNumber(value: Union[str, bytes]):
+def isNumber(value: Union[str, bytes]) -> bool:
+    """
+    Check is string ob bytes is number.
+
+    :param value: str, bytes
+    :return: bool
+    """
     try:
-        return float(str(value))
+        float(str(value))
+        return True
     except ValueError:
         return False
 

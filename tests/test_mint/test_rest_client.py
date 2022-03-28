@@ -97,7 +97,7 @@ class MintRestClientTestCase(unittest.TestCase):
 
         expected_response = ParseDict(content, QueryInflationResponse())
         # The Inflation object is expecting a base64 encoded value
-        # FIXME: The create an issue by loosing the decimal dot and adding padding '='
+        # FIXME: The create an issue by loosing the decimal dot and adding padding '='  # pylint: disable=W0511
         expected_response.inflation = base64.b64encode(expected_response.inflation)
 
         mint = MintRestClient(mock_client)
