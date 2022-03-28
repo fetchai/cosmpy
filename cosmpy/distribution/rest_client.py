@@ -58,14 +58,21 @@ class DistributionRestClient(Distribution):
         self._rest_api = rest_api
 
     def CommunityPool(self) -> QueryCommunityPoolResponse:
-        """CommunityPool queries the community pool coins."""
+        """
+        CommunityPool queries the community pool coins.
+        :return: a QueryCommunityPoolResponse instance
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/community_pool")
         return Parse(json_response, QueryCommunityPoolResponse())
 
     def DelegationTotalRewards(
         self, request: QueryDelegationTotalRewardsRequest
     ) -> QueryDelegationTotalRewardsResponse:
-        """DelegationTotalRewards queries the total rewards accrued by a each validator."""
+        """
+        DelegationTotalRewards queries the total rewards accrued by a each validator.
+        :param request: a QueryDelegationTotalRewardsRequest instance
+        :return: a QueryDelegationTotalRewardsResponse instance
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_address}/rewards"
         )
@@ -74,7 +81,11 @@ class DistributionRestClient(Distribution):
     def DelegationRewards(
         self, request: QueryDelegationRewardsRequest
     ) -> QueryDelegationRewardsResponse:
-        """DelegationRewards queries the total rewards accrued by a delegation."""
+        """
+        DelegationRewards queries the total rewards accrued by a delegation.
+        :param request: a QueryDelegationRewardsRequest instance
+        :return: a QueryDelegationRewardsResponse instance
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_address}/rewards/{request.validator_address}"
         )
@@ -83,7 +94,11 @@ class DistributionRestClient(Distribution):
     def DelegatorValidators(
         self, request: QueryDelegatorValidatorsRequest
     ) -> QueryDelegatorValidatorsResponse:
-        """DelegatorValidators queries the validators of a delegator."""
+        """
+        DelegatorValidators queries the validators of a delegator.
+        :param request: a QueryDelegatorValidatorsRequest instance
+        :return: a QueryDelegatorValidatorsResponse instance
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_address}/validators"
         )
@@ -92,21 +107,32 @@ class DistributionRestClient(Distribution):
     def DelegatorWithdrawAddress(
         self, request: QueryDelegatorWithdrawAddressRequest
     ) -> QueryDelegatorWithdrawAddressResponse:
-        """DelegatorWithdrawAddress queries withdraw address of a delegator."""
+        """
+        DelegatorWithdrawAddress queries withdraw address of a delegator.
+        :param request: a QueryDelegatorWithdrawAddressRequest instance
+        :return: a QueryDelegatorWithdrawAddressResponse instance
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_address}/withdraw_address"
         )
         return Parse(json_response, QueryDelegatorWithdrawAddressResponse())
 
     def Params(self) -> QueryParamsResponse:
-        """Params queries params of the distribution module."""
+        """
+        Params queries params of the distribution module.
+        :return: a QueryParamsResponse instance
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())
 
     def ValidatorCommission(
         self, request: QueryValidatorCommissionRequest
     ) -> QueryValidatorCommissionResponse:
-        """ValidatorCommission queries accumulated commission for a validator."""
+        """
+        ValidatorCommission queries accumulated commission for a validator.
+        :param request: QueryValidatorCommissionRequest
+        :return: QueryValidatorCommissionResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_address}/commission"
         )
@@ -115,7 +141,11 @@ class DistributionRestClient(Distribution):
     def ValidatorOutstandingRewards(
         self, request: QueryValidatorOutstandingRewardsRequest
     ) -> QueryValidatorOutstandingRewardsResponse:
-        """ValidatorOutstandingRewards queries rewards of a validator address."""
+        """
+        ValidatorOutstandingRewards queries rewards of a validator address.
+        :param request: QueryValidatorOutstandingRewardsRequest
+        :return: QueryValidatorOutstandingRewardsResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_address}/outstanding_rewards"
         )
@@ -124,7 +154,11 @@ class DistributionRestClient(Distribution):
     def ValidatorSlashes(
         self, request: QueryValidatorSlashesRequest
     ) -> QueryValidatorSlashesResponse:
-        """ValidatorSlashes queries slash events of a validator."""
+        """
+        ValidatorSlashes queries slash events of a validator.
+        :param request: QueryValidatorSlashesRequest
+        :return: QueryValidatorSlashesResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_address}/slashes",
             request,
