@@ -69,12 +69,22 @@ class StakingRestClient(Staking):
         self._rest_api = rest_api
 
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
-        """Validators queries all validators that match the given status."""
+        """
+        Validators queries all validators that match the given status.
+
+        :param request: QueryValidatorsRequest
+        :return: QueryValidatorsResponse
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/validators", request)
         return Parse(json_response, QueryValidatorsResponse())
 
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
-        """Validator queries validator info for given validator address."""
+        """
+        Validator queries validator info for given validator address.
+
+        :param request: QueryValidatorRequest
+        :return: QueryValidatorResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}",
         )
@@ -83,7 +93,12 @@ class StakingRestClient(Staking):
     def ValidatorDelegations(
         self, request: QueryValidatorDelegationsRequest
     ) -> QueryValidatorDelegationsResponse:
-        """ValidatorDelegations queries delegate info for given validator."""
+        """
+        ValidatorDelegations queries delegate info for given validator.
+
+        :param request: QueryValidatorDelegationsRequest
+        :return: QueryValidatorDelegationsResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/delegations",
             request,
@@ -94,7 +109,12 @@ class StakingRestClient(Staking):
     def ValidatorUnbondingDelegations(
         self, request: QueryValidatorUnbondingDelegationsRequest
     ) -> QueryValidatorUnbondingDelegationsResponse:
-        """ValidatorUnbondingDelegations queries unbonding delegations of a validator."""
+        """
+        ValidatorUnbondingDelegations queries unbonding delegations of a validator.
+
+        :param request: ValidatorUnbondingDelegations
+        :return: QueryValidatorUnbondingDelegationsResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/unbonding_delegations",
             request,
@@ -103,7 +123,12 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryValidatorUnbondingDelegationsResponse())
 
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
-        """Delegation queries delegate info for given validator delegator pair."""
+        """
+        Delegation queries delegate info for given validator delegator pair.
+
+        :param request: QueryDelegationRequest
+        :return: QueryDelegationResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}",
         )
@@ -112,7 +137,12 @@ class StakingRestClient(Staking):
     def UnbondingDelegation(
         self, request: QueryUnbondingDelegationRequest
     ) -> QueryUnbondingDelegationResponse:
-        """UnbondingDelegation queries unbonding info for given validator delegator pair."""
+        """
+        UnbondingDelegation queries unbonding info for given validator delegator pair.
+
+        :param request: QueryUnbondingDelegationRequest
+        :return: QueryUnbondingDelegationResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/validators/{request.validator_addr}/delegations/{request.delegator_addr}/unbonding_delegation",
         )
@@ -121,7 +151,12 @@ class StakingRestClient(Staking):
     def DelegatorDelegations(
         self, request: QueryDelegatorDelegationsRequest
     ) -> QueryDelegatorDelegationsResponse:
-        """DelegatorDelegations queries all delegations of a given delegator address."""
+        """
+        DelegatorDelegations queries all delegations of a given delegator address.
+
+        :param request: QueryDelegatorDelegationsRequest
+        :return: QueryDelegatorDelegationsResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegations/{request.delegator_addr}",
             request,
@@ -132,7 +167,12 @@ class StakingRestClient(Staking):
     def DelegatorUnbondingDelegations(
         self, request: QueryDelegatorUnbondingDelegationsRequest
     ) -> QueryDelegatorUnbondingDelegationsResponse:
-        """DelegatorUnbondingDelegations queries all unbonding delegations of a given delegator address."""
+        """
+        DelegatorUnbondingDelegations queries all unbonding delegations of a given delegator address.
+
+        :param request: QueryDelegatorUnbondingDelegationsRequest
+        :return: QueryDelegatorUnbondingDelegationsResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/unbonding_delegations",
             request,
@@ -143,7 +183,12 @@ class StakingRestClient(Staking):
     def Redelegations(
         self, request: QueryRedelegationsRequest
     ) -> QueryRedelegationsResponse:
-        """Redelegations queries redelegations of given address."""
+        """
+        Redelegations queries redelegations of given address.
+
+        :param request: QueryRedelegationsRequest
+        :return: QueryRedelegationsResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/redelegations",
             request,
@@ -154,7 +199,12 @@ class StakingRestClient(Staking):
     def DelegatorValidators(
         self, request: QueryDelegatorValidatorsRequest
     ) -> QueryDelegatorValidatorsResponse:
-        """DelegatorValidators queries all validators info for given delegator address."""
+        """
+        DelegatorValidators queries all validators info for given delegator address.
+
+        :param request: QueryDelegatorValidatorsRequest
+        :return: QueryDelegatorValidatorsRequest
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/validators",
             request,
@@ -165,7 +215,12 @@ class StakingRestClient(Staking):
     def DelegatorValidator(
         self, request: QueryDelegatorValidatorRequest
     ) -> QueryDelegatorValidatorResponse:
-        """DelegatorValidator queries validator info for given delegator validator pair."""
+        """
+        DelegatorValidator queries validator info for given delegator validator pair.
+
+        :param request: QueryDelegatorValidatorRequest
+        :return: QueryDelegatorValidatorResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/delegators/{request.delegator_addr}/validators/{request.validator_addr}",
         )
@@ -174,18 +229,33 @@ class StakingRestClient(Staking):
     def HistoricalInfo(
         self, request: QueryHistoricalInfoRequest
     ) -> QueryHistoricalInfoResponse:
-        """HistoricalInfo queries the historical info for given height."""
+        """
+        HistoricalInfo queries the historical info for given height.
+
+        :param request: QueryHistoricalInfoRequest
+        :return: QueryHistoricalInfoResponse
+        """
         json_response = self._rest_api.get(
             f"{self.API_URL}/historical_info/{request.height}"
         )
         return Parse(json_response, QueryHistoricalInfoResponse())
 
     def Pool(self, request: QueryPoolRequest) -> QueryPoolResponse:
-        """Pool queries the pool info."""
+        """
+        Pool queries the pool info.
+
+        :param request: QueryPoolRequest
+        :return: QueryPoolResponse
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/pool")
         return Parse(json_response, QueryPoolResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        """Parameters queries the staking parameters."""
+        """
+        Parameters queries the staking parameters.
+
+        :param request: QueryParamsRequest
+        :return: QueryParamsResponse
+        """
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())

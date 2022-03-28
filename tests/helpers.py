@@ -30,7 +30,11 @@ class MockRestClient(RestClient):
     """Mock QueryRestClient"""
 
     def __init__(self, content: bytes):
-        """Initialize."""
+        """
+        Initialize.
+
+        :param content: bytes
+        """
         self.content: bytes = content
         self.last_base_url: Optional[str] = None
         self.last_request: Optional[Descriptor] = None
@@ -44,7 +48,15 @@ class MockRestClient(RestClient):
         request: Optional[Descriptor] = None,
         used_params: Optional[List[str]] = None,
     ) -> bytes:
-        """Handle GET request."""
+        """
+        Handle GET request.
+
+        :param url_base_path: url base path
+        :param request:  optional request descriptor instance
+        :param used_params: optional list of params name used in path
+
+        :return: bytes
+        """
         self.last_base_url = url_base_path
         self.last_request = request
         self.last_used_params = used_params
@@ -52,7 +64,14 @@ class MockRestClient(RestClient):
         return self.content
 
     def post(self, url_base_path: str, request: Descriptor) -> bytes:
-        """Send a POST request"""
+        """
+        Send a POST request
+
+        :param url_base_path: url base path
+        :param request: request descriptor
+
+        :return: bytes
+        """
         self.last_base_url = url_base_path
         self.last_request = request
 

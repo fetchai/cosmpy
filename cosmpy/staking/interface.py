@@ -58,74 +58,144 @@ class Staking(ABC):
 
     @abstractmethod
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
-        """Validators queries all validators that match the given status."""
+        """
+        Validators queries all validators that match the given status.
+
+        :param request: QueryValidatorsRequest
+        :return: QueryValidatorsResponse
+        """
 
     @abstractmethod
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
-        """Validator queries validator info for given validator address."""
+        """
+        Validator queries validator info for given validator address.
+
+        :param request: QueryValidatorRequest
+        :return: QueryValidatorResponse
+        """
 
     @abstractmethod
     def ValidatorDelegations(
         self, request: QueryValidatorDelegationsRequest
     ) -> QueryValidatorDelegationsResponse:
-        """ValidatorDelegations queries delegate info for given validator."""
+        """
+        ValidatorDelegations queries delegate info for given validator.
+
+        :param request: QueryValidatorDelegationsRequest
+        :return: QueryValidatorDelegationsResponse
+        """
 
     @abstractmethod
     def ValidatorUnbondingDelegations(
         self, request: QueryValidatorUnbondingDelegationsRequest
     ) -> QueryValidatorUnbondingDelegationsResponse:
-        """ValidatorUnbondingDelegations queries unbonding delegations of a validator."""
+        """
+        ValidatorUnbondingDelegations queries unbonding delegations of a validator.
+
+        :param request: ValidatorUnbondingDelegations
+        :return: QueryValidatorUnbondingDelegationsResponse
+        """
 
     @abstractmethod
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
-        """Delegation queries delegate info for given validator delegator pair."""
+        """
+        Delegation queries delegate info for given validator delegator pair.
+
+        :param request: QueryDelegationRequest
+        :return: QueryDelegationResponse
+        """
 
     @abstractmethod
     def UnbondingDelegation(
         self, request: QueryUnbondingDelegationRequest
     ) -> QueryUnbondingDelegationResponse:
-        """UnbondingDelegation queries unbonding info for given validator delegator pair."""
+        """
+        UnbondingDelegation queries unbonding info for given validator delegator pair.
+
+        :param request: QueryUnbondingDelegationRequest
+        :return: QueryUnbondingDelegationResponse
+        """
 
     @abstractmethod
     def DelegatorDelegations(
         self, request: QueryDelegatorDelegationsRequest
     ) -> QueryDelegatorDelegationsResponse:
-        """DelegatorDelegations queries all delegations of a given delegator address."""
+        """
+        DelegatorDelegations queries all delegations of a given delegator address.
+
+        :param request: QueryDelegatorDelegationsRequest
+        :return: QueryDelegatorDelegationsResponse
+        """
 
     @abstractmethod
     def DelegatorUnbondingDelegations(
         self, request: QueryDelegatorUnbondingDelegationsRequest
     ) -> QueryDelegatorUnbondingDelegationsResponse:
-        """DelegatorUnbondingDelegations queries all unbonding delegations of a given delegator address."""
+        """
+        DelegatorUnbondingDelegations queries all unbonding delegations of a given delegator address.
+
+        :param request: QueryDelegatorUnbondingDelegationsRequest
+        :return: QueryDelegatorUnbondingDelegationsResponse
+        """
 
     @abstractmethod
     def Redelegations(
         self, request: QueryRedelegationsRequest
     ) -> QueryRedelegationsResponse:
-        """Redelegations queries redelegations of given address."""
+        """
+        Redelegations queries redelegations of given address.
+
+        :param request: QueryRedelegationsRequest
+        :return: QueryRedelegationsResponse
+        """
 
     @abstractmethod
     def DelegatorValidators(
         self, request: QueryDelegatorValidatorsRequest
     ) -> QueryDelegatorValidatorsResponse:
-        """DelegatorValidators queries all validators info for given delegator address."""
+        """
+        DelegatorValidators queries all validators info for given delegator address.
+
+        :param request: QueryDelegatorValidatorsRequest
+        :return: QueryDelegatorValidatorsRequest
+        """
 
     @abstractmethod
     def DelegatorValidator(
         self, request: QueryDelegatorValidatorRequest
     ) -> QueryDelegatorValidatorResponse:
-        """DelegatorValidator queries validator info for given delegator validator pair."""
+        """
+        DelegatorValidator queries validator info for given delegator validator pair.
+
+        :param request: QueryDelegatorValidatorRequest
+        :return: QueryDelegatorValidatorResponse
+        """
 
     @abstractmethod
     def HistoricalInfo(
         self, request: QueryHistoricalInfoRequest
     ) -> QueryHistoricalInfoResponse:
-        """HistoricalInfo queries the historical info for given height."""
+        """
+        HistoricalInfo queries the historical info for given height.
+
+        :param request: QueryHistoricalInfoRequest
+        :return: QueryHistoricalInfoResponse
+        """
 
     @abstractmethod
     def Pool(self, request: QueryPoolRequest) -> QueryPoolResponse:
-        """Pool queries the pool info."""
+        """
+        Pool queries the pool info.
+
+        :param request: QueryPoolRequest
+        :return: QueryPoolResponse
+        """
 
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
-        """Parameters queries the staking parameters."""
+        """
+        Parameters queries the staking parameters.
+
+        :param request: QueryParamsRequest
+        :return: QueryParamsResponse
+        """

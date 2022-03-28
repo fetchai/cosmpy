@@ -27,12 +27,24 @@ class Signer(ABC):
 
     @abstractmethod
     def sign(
-        self, message: bytes, deterministic=False, canonicalise: bool = True
+        self, message: bytes, deterministic: bool = False, canonicalise: bool = True
     ) -> bytes:
-        """Perform signing."""
+        """
+        Perform signing.
+
+        :param message: bytes to sign
+        :param deterministic: bool, default false
+        :param canonicalise: bool,default True
+        """
 
     @abstractmethod
     def sign_digest(
         self, digest: bytes, deterministic=False, canonicalise: bool = True
     ) -> bytes:
-        """Perform digest signing."""
+        """
+        Perform digest signing.
+
+        :param digest: bytes to sign
+        :param deterministic: bool, default false
+        :param canonicalise: bool,default True
+        """

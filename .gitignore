@@ -3,6 +3,8 @@
 *.egg-info/
 ./build/
 dist/
+build/
+Pipfile.lock
 
 # IDEs
 .idea/
@@ -16,3 +18,7 @@ dist/
 # Coverage related files and folders
 .coverage
 coverage_report/
+
+# Proto generation workdirs
+cosmos-sdk-proto-schema/
+wasm-proto-shema/
