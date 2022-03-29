@@ -68,7 +68,7 @@ setup(
             "check-manifest",
             "tox==3.24.1",
             "flake8==3.9.2",
-            "black==21.6b0",
+            "black==22.3",
             "mypy==0.910",
             "mkdocs==1.3",
             "mkdocs-material==8.2.8",
