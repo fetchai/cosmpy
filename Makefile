@@ -161,19 +161,9 @@ copyright-check:
 ### Docs generation
 ####################
 
-.PHONY: generate-docs
-generate-docs:
-	sphinx-apidoc -f -o $(PYCOSM_DOCS_DIR)/source $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
-	cd $(PYCOSM_DOCS_DIR) && $(MAKE) html
-
-# Open docs main page in default browser
-.PHONY: open-docs
-open-docs:
-ifneq ($(wildcard $(PYCOSM_DOCS_DIR)/build),)
-	$(OPEN_CMD) $(PYCOSM_DOCS_DIR)/build/html/index.html
-else
-	@echo "Built docs are not found. Please run '$(MAKE) generate-docs' first."
-endif
+.PHONY: docs
+docs:
+	mkdocs build --clean
 
 ####################
 ### Clean and init commands
@@ -193,7 +183,7 @@ clean-build:
 
 .PHONY: clean-docs
 clean-docs:
-	rm -fr docs/build/
+	rm -fr site/
 
 .PHONY: clean-pyc
 clean-pyc:
@@ -233,7 +223,7 @@ new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
 		pipenv --rm;\
-		pipenv install --python 3.9 --dev --skip-lock --clear;\
+		pipenv install --python 3.8 --dev --skip-lock --clear;\
 		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\

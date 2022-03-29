@@ -4,6 +4,7 @@ include Pipfile
 include strategy.ini
 include tox.ini
 include *.md
+include mkdocs.yml
 recursive-include contracts *.wasm
 recursive-include docs *.*
 recursive-include examples *.py

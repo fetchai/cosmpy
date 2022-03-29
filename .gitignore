@@ -6,6 +6,9 @@ dist/
 build/
 Pipfile.lock
 
+# mkdocs documentation
+/site
+
 # IDEs
 .idea/
 

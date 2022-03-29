@@ -70,6 +70,8 @@ setup(
             "flake8==3.9.2",
             "black==21.6b0",
             "mypy==0.910",
+            "mkdocs==1.3",
+            "mkdocs-material==8.2.8",
             "bandit==1.7.0",
             "safety==1.10.3",
             "isort==5.9.3",
