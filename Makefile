@@ -161,19 +161,9 @@ copyright-check:
 ### Docs generation
 ####################
 
-.PHONY: generate-docs
-generate-docs:
-	sphinx-apidoc -f -o $(PYCOSM_DOCS_DIR)/source $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
-	cd $(PYCOSM_DOCS_DIR) && $(MAKE) html
-
-# Open docs main page in default browser
-.PHONY: open-docs
-open-docs:
-ifneq ($(wildcard $(PYCOSM_DOCS_DIR)/build),)
-	$(OPEN_CMD) $(PYCOSM_DOCS_DIR)/build/html/index.html
-else
-	@echo "Built docs are not found. Please run '$(MAKE) generate-docs' first."
-endif
+.PHONY: docs
+docs:
+	mkdocs build --clean
 
 ####################
 ### Clean and init commands
@@ -193,7 +183,7 @@ clean-build:
 
 .PHONY: clean-docs
 clean-docs:
-	rm -fr docs/build/
+	rm -fr site/
 
 .PHONY: clean-pyc
 clean-pyc:
