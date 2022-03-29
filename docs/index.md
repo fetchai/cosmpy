@@ -22,9 +22,11 @@ pip3 install cosmpy
 
 [comment]: <> (CosmPy can be used in Linux, MacOS, Windows)
 
-[comment]: <> (## Repository)
+## Repository
 
-[comment]: <> (CosmPy repository: `https://github.com/fetchai/cosmpy`)
+```
+https://github.com/fetchai/cosmpy`
+```
 
 ## To contribute
 

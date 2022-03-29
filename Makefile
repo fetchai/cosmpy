@@ -223,7 +223,7 @@ new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
 		pipenv --rm;\
-		pipenv install --python 3.8 --dev --skip-lock --clear;\
+		pipenv install --python 3.9 --dev --skip-lock --clear;\
 		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
