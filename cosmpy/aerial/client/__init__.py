@@ -20,12 +20,19 @@ import json
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
 import grpc
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
+from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
+from cosmpy.aerial.client.staking import (
+    ValidatorStatus,
+    create_delegate_msg,
+    create_redelegate_msg,
+    create_undelegate_msg,
+)
 from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
@@ -39,15 +46,27 @@ from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.common.rest_client import RestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
+from cosmpy.distribution.rest_client import DistributionRestClient
 from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
+    QueryDelegationRewardsRequest,
+)
+from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2_grpc import (
+    QueryStub as DistributionGrpcClient,
+)
 from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
 from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
     QueryStub as QueryParamsGrpcClient,
+)
+from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
+    QueryDelegatorDelegationsRequest,
+    QueryDelegatorUnbondingDelegationsRequest,
+    QueryValidatorsRequest,
 )
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
     QueryStub as StakingGrpcClient,
@@ -76,6 +95,45 @@ class Account:
     sequence: int
 
 
+@dataclass
+class StakingPosition:
+    validator: Address
+    amount: int
+    reward: int
+
+
+@dataclass
+class UnbondingPositions:
+    validator: Address
+    amount: int
+
+
+@dataclass
+class Validator:
+    address: Address  # the operators address
+    tokens: int  # The total amount of tokens for the validator
+    moniker: str
+    status: ValidatorStatus
+
+
+@dataclass
+class StakingSummary:
+    current_positions: List[StakingPosition]
+    unbonding_positions: List[UnbondingPositions]
+
+    @property
+    def total_staked(self) -> int:
+        return sum(map(lambda p: p.amount, self.current_positions))
+
+    @property
+    def total_rewards(self) -> int:
+        return sum(map(lambda p: p.reward, self.current_positions))
+
+    @property
+    def total_unbonding(self) -> int:
+        return sum(map(lambda p: p.amount, self.unbonding_positions))
+
+
 class LedgerClient:
     def __init__(self, cfg: NetworkConfig):
         cfg.validate()
@@ -100,6 +158,7 @@ class LedgerClient:
             self.txs = TxGrpcClient(grpc_client)
             self.bank = BankGrpcClient(grpc_client)
             self.staking = StakingGrpcClient(grpc_client)
+            self.distribution = DistributionGrpcClient(grpc_client)
             self.params = QueryParamsGrpcClient(grpc_client)
         else:
             rest_client = RestClient(parsed_url.rest_url)
@@ -109,6 +168,7 @@ class LedgerClient:
             self.txs = TxRestClient(rest_client)  # type: ignore
             self.bank = BankRestClient(rest_client)  # type: ignore
             self.staking = StakingRestClient(rest_client)  # type: ignore
+            self.distribution = DistributionRestClient(rest_client)  # type: ignore
             self.params = ParamsRestClient(rest_client)  # type: ignore
 
     @property
@@ -173,6 +233,169 @@ class LedgerClient:
         tx.add_message(
             create_bank_send_msg(sender.address(), destination, amount, denom)
         )
+
+        return prepare_and_broadcast_basic_transaction(
+            self, tx, sender, gas_limit=gas_limit, memo=memo
+        )
+
+    def query_validators(
+        self, status: Optional[ValidatorStatus] = None
+    ) -> List[Validator]:
+        filtered_status = status or ValidatorStatus.BONDED
+
+        req = QueryValidatorsRequest()
+        if filtered_status != ValidatorStatus.UNSPECIFIED:
+            req.status = filtered_status.value
+
+        resp = self.staking.Validators(req)
+
+        validators: List[Validator] = []
+        for validator in resp.validators:
+            validators.append(
+                Validator(
+                    address=Address(validator.operator_address),
+                    tokens=int(validator.tokens),
+                    moniker=str(validator.description.moniker),
+                    status=ValidatorStatus.from_proto(validator.status),
+                )
+            )
+        return validators
+
+    def query_staking_summary(self, address: Address) -> StakingSummary:
+        current_positions: List[StakingPosition] = []
+
+        req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
+        resp = self.staking.DelegatorDelegations(req)
+
+        # TODO: Need pagination support
+        for item in resp.delegation_responses:
+
+            req = QueryDelegationRewardsRequest(
+                delegator_address=str(address),
+                validator_address=str(item.delegation.validator_address),
+            )
+            rewards_resp = self.distribution.DelegationRewards(req)
+
+            stake_reward = 0
+            for reward in rewards_resp.rewards:
+                if reward.denom == self.network_config.staking_denomination:
+                    stake_reward = int(reward.amount) // (10**18)
+                    break
+
+            current_positions.append(
+                StakingPosition(
+                    validator=Address(item.delegation.validator_address),
+                    amount=int(item.balance.amount),
+                    reward=stake_reward,
+                )
+            )
+
+        # req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
+        req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
+        resp = self.staking.DelegatorUnbondingDelegations(req)
+
+        unbonding_summary: Dict[str, int] = {}
+        for item in resp.unbonding_responses:
+            validator = str(item.validator_address)
+            total_unbonding = unbonding_summary.get(validator, 0)
+
+            for entry in item.entries:
+                total_unbonding += int(entry.balance)
+
+            unbonding_summary[validator] = total_unbonding
+
+        # build the final list of unbonding positions
+        unbonding_positions: List[UnbondingPositions] = []
+        for validator, total_unbonding in unbonding_summary.items():
+            unbonding_positions.append(
+                UnbondingPositions(
+                    validator=Address(validator),
+                    amount=total_unbonding,
+                )
+            )
+
+        return StakingSummary(
+            current_positions=current_positions, unbonding_positions=unbonding_positions
+        )
+
+    def delegate_tokens(
+        self,
+        validator: Address,
+        amount: int,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        tx = Transaction()
+        tx.add_message(
+            create_delegate_msg(
+                sender.address(),
+                validator,
+                amount,
+                self.network_config.staking_denomination,
+            )
+        )
+
+        return prepare_and_broadcast_basic_transaction(
+            self, tx, sender, gas_limit=gas_limit, memo=memo
+        )
+
+    def redelegate_tokens(
+        self,
+        current_validator: Address,
+        next_validator: Address,
+        amount: int,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        tx = Transaction()
+        tx.add_message(
+            create_redelegate_msg(
+                sender.address(),
+                current_validator,
+                next_validator,
+                amount,
+                self.network_config.staking_denomination,
+            )
+        )
+
+        return prepare_and_broadcast_basic_transaction(
+            self, tx, sender, gas_limit=gas_limit, memo=memo
+        )
+
+    def undelegate_tokens(
+        self,
+        validator: Address,
+        amount: int,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+
+        tx = Transaction()
+        tx.add_message(
+            create_undelegate_msg(
+                sender.address(),
+                validator,
+                amount,
+                self.network_config.staking_denomination,
+            )
+        )
+
+        return prepare_and_broadcast_basic_transaction(
+            self, tx, sender, gas_limit=gas_limit, memo=memo
+        )
+
+    def claim_rewards(
+        self,
+        validator: Address,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        tx = Transaction()
+        tx.add_message(create_withdraw_delegator_reward(sender.address(), validator))
 
         return prepare_and_broadcast_basic_transaction(
             self, tx, sender, gas_limit=gas_limit, memo=memo
