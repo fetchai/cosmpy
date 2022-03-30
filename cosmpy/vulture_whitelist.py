@@ -35,7 +35,6 @@ _.DenomMetadata  # unused method (./bank/rest_client.py:116)
 _.DenomsMetadata  # unused method (./bank/rest_client.py:129)
 _.get_balance  # unused method (./clients/cosmwasm_client.py:63)
 _.query_contract_state  # unused method (./clients/cosmwasm_client.py:98)
-SigningCosmWasmClient  # unused class (./clients/signing_cosmwasm_client.py:58)
 _.send_tokens  # unused method (./clients/signing_cosmwasm_client.py:280)
 _.deploy_contract  # unused method (./clients/signing_cosmwasm_client.py:297)
 _.instantiate_contract  # unused method (./clients/signing_cosmwasm_client.py:319)
@@ -73,7 +72,19 @@ _.Pool  # unused method (./staking/rest_client.py:183)
 _.Params  # unused method (./staking/rest_client.py:188)
 _.body_bytes  # unused attribute (./tx/__init__.py:46)
 _.auth_info_bytes  # unused attribute (./tx/__init__.py:47)
+
 _.Simulate  # unused method (./tx/interface.py:30)
 _.GetTxsEvent  # unused method (./tx/interface.py:42)
 _.Simulate  # unused method (./tx/rest_client.py:56)
 _.GetTxsEvent  # unused method (./tx/rest_client.py:94)
+
+_.get_pubkey_as_str  # unused method (./clients/crypto.py:116)
+_.save_key_to_file  # unused method (./clients/crypto.py:132)
+_.check_availability  # unused method (./clients/ledger.py:991)
+_.validate_address  # unused method (./clients/ledger.py:1018)
+_.formatter  # unused attribute (./common/loggers.py:57)
+_.handlers  # unused attribute (./common/loggers.py:58)
+_.ensure_funds  # unused method (./clients/ledger.py:656)
+_.staking_denomination
+_.fetch_mainnet
+_.is_successful

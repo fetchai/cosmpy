@@ -1,5 +1,25 @@
 # Release History
 
+## 0.3.0 (2022-03-30)
+
+- Introduced `Aerial` high-level API.
+  - Groundwork for a strategy engine for choosing tx gas fees
+  - Simulation-based gas estimation
+  - Support for queries, sending tokens, wallets, basic smart contract interactions
+  - Support for staking-related logic
+
+- Added documentation using MkDocs
+  
+- Added low-level support for Cosmos SDK's `gov` module
+- Added low-level support for Cosmos SDK's `distribution` module
+- Added low-level support for Cosmos SDK's `mint` module
+- Added low-level support for Cosmos SDK's `slashing` module
+- Added low-level support for Cosmos SDK's `evidence` module
+
+- Improvement to linters (added `darglint` to `make lint`). Resolved `darglint` complains.
+
+- Various fixes and cleanups
+
 ## 0.2.0 (2022-02-09)
 
 - Fixed some REST api bugs

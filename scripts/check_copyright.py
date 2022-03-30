@@ -17,7 +17,6 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
 """
 This script checks that all the Python files of the repository have:
 
@@ -27,15 +26,14 @@ This script checks that all the Python files of the repository have:
 
 It is assumed the script is run from the repository root.
 """
-
+import datetime
 import itertools
 import os
 import re
 import sys
 from pathlib import Path
 
-
-SUPPORTED_YEARS = ["2019", "2020", "2021"]
+SUPPORTED_YEARS = list(map(str, range(2019, datetime.datetime.now().year +1 )))
 
 
 HEADER_REGEX = fr"""(#!/usr/bin/env python3
@@ -43,7 +41,8 @@ HEADER_REGEX = fr"""(#!/usr/bin/env python3
 # ------------------------------------------------------------------------------
 #
 #   (Copyright 2018-({"|".join(SUPPORTED_YEARS)}) Fetch.AI Limited|Copyright [0-9]{{4}}(-[0-9]{{4}})? [a-zA-Z_]+)
-#
+(#   Modifications copyright \(C\) [0-9]{{4}} [a-zA-Z_-]+
+)*#
 #   Licensed under the Apache License, Version 2\.0 \(the \"License\"\);
 #   you may not use this file except in compliance with the License\.
 #   You may obtain a copy of the License at
@@ -76,10 +75,7 @@ def check_copyright(file: Path) -> bool:
 
 
 if __name__ == "__main__":
-    python_files = itertools.chain(
-        Path("cosmpy").glob("**/*.py"),
-        [Path("setup.py")],
-    )
+    python_files = itertools.chain(Path("cosmpy").glob("**/*.py"), [Path("setup.py")],)
 
     # filter out protobuf files (*_pb2.py) and all files under cosmpy/protos
     python_files_filtered = filter(

@@ -1,6 +1,7 @@
 COSMOS_SDK_DIR := cosmos-sdk-proto-schema
 WASMD_DIR := wasm-proto-shema
-COSMOS_SDK_VERSION := v0.17.7
+COSMOS_SDK_VERSION := v0.17.8
+COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
 WASMD_VERSION := v0.21.0
 COSMOS_PROTO_RELATIVE_DIRS := proto third_party/proto
 WASMD_PROTO_RELATIVE_DIRS := proto
@@ -68,7 +69,7 @@ $(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR)
 
 $(COSMOS_SDK_DIR): Makefile
 	rm -rfv $(COSMOS_SDK_DIR)
-	git clone --branch $(COSMOS_SDK_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none https://github.com/fetchai/cosmos-sdk $(COSMOS_SDK_DIR)
+	git clone --branch $(COSMOS_SDK_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(COSMOS_SDK_URL) $(COSMOS_SDK_DIR)
 	cd $(COSMOS_SDK_DIR) && git checkout $(COSMOS_SDK_VERSION) -- $(COSMOS_PROTO_RELATIVE_DIRS)
 
 $(WASMD_DIR): Makefile
@@ -129,7 +130,7 @@ pylint:
 .PHONY: test
 test:
 	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py
-	make coverage-report
+	$(MAKE) coverage-report
 
 .PHONY: unit-test
 unit-test:
@@ -160,19 +161,9 @@ copyright-check:
 ### Docs generation
 ####################
 
-.PHONY: generate-docs
-generate-docs:
-	sphinx-apidoc -f -o $(PYCOSM_DOCS_DIR)/source $(PYCOSM_SRC_DIR) $(PYCOSM_SRC_DIR)/vulture_whitelist.py
-	cd $(PYCOSM_DOCS_DIR) && make html
-
-# Open docs main page in default browser
-.PHONY: open-docs
-open-docs:
-ifneq ($(wildcard $(PYCOSM_DOCS_DIR)/build),)
-	$(OPEN_CMD) $(PYCOSM_DOCS_DIR)/build/html/index.html
-else
-	@echo "Built docs are not found. Please run 'make generate-docs' first."
-endif
+.PHONY: docs
+docs:
+	mkdocs build --clean
 
 ####################
 ### Clean and init commands
@@ -192,7 +183,7 @@ clean-build:
 
 .PHONY: clean-docs
 clean-docs:
-	rm -fr docs/build/
+	rm -fr site/
 
 .PHONY: clean-pyc
 clean-pyc:
@@ -221,7 +212,7 @@ new_env: clean
 	if [ -z "$v" ];\
 	then\
 		pipenv --rm;\
-		pipenv install;\
+		pipenv install --python 3.9;\
 		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
@@ -232,7 +223,7 @@ new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
 		pipenv --rm;\
-		pipenv install --dev;\
+		pipenv install --python 3.9 --dev --skip-lock --clear;\
 		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
@@ -258,17 +249,17 @@ security:
 
 .PHONY: check
 check:
-	make black-check
-	make isort-check
-	make flake
-	make vulture
-	make bandit
-	make safety
-	make mypy
-	make pylint
-	make liccheck
-	make copyright-check
-	make test
+	$(MAKE) black-check
+	$(MAKE) isort-check
+	$(MAKE) flake
+	$(MAKE) vulture
+	$(MAKE) bandit
+	$(MAKE) safety
+	$(MAKE) mypy
+	$(MAKE) pylint
+	$(MAKE) liccheck
+	$(MAKE) copyright-check
+	$(MAKE) test
 
 Pipfile.lock: Pipfile setup.py
 	pipenv lock --dev

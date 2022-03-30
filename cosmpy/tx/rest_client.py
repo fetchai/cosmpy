@@ -69,8 +69,9 @@ class TxRestClient(TxInterface):
         :param request: SimulateRequest
         :return: SimulateResponse
         """
-        response = self.rest_client.get(
+        response = self.rest_client.post(
             f"{self.API_URL}/simulate",
+            request,
         )
         return Parse(response, SimulateResponse())
 

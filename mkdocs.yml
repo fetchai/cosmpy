@@ -1,0 +1,35 @@
+site_name: CosmPy
+site_url: https://docs.fetch.ai/cosmpy
+site_description: Everything you need to know about CosmPy.
+repo_url: https://github.com/fetchai/cosmpy
+site_author: developer@fetch.ai
+
+nav:
+  - Getting started: 'index.md'
+  - Beginner:
+    - Connect to a network: 'connect-to-network.md'
+    - Query the balance: 'query-balance.md'
+    - Wallets and Keys: 'wallets-and-keys.md'
+    - Send tokens: 'send-tokens.md'
+    - Staking: 'staking.md'
+    - Smart Contracts:
+      - Deploy a contract: 'deploy-a-contract.md'
+  - Advanced (coming soon!):
+      - Governance: 'governance.md'
+
+theme:
+  name: 'material'
+  icon:
+    logo: material/alpha-c-circle
+  feature:
+    tabs: true
+
+strict: true
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - admonition
+
+extra_css:
+    - css/my-styles.css

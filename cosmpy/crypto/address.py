@@ -44,7 +44,12 @@ class Address:
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
     ):
-        """Initialize."""
+        """
+        Initialize Address instance.
+
+        :param value: str, byte, public key or Address another instance
+        :param prefix: optional string
+        """
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
