@@ -14,10 +14,8 @@ nav:
     - Staking: 'staking.md'
     - Smart Contracts:
       - Deploy a contract: 'deploy-a-contract.md'
-  - Advanced:
-    - Governance: 'governance.md'
-    - Smart Contracts:
-      - Atomic Swaps: 'atomic-swaps.md'
+  - Advanced (coming soon!):
+      - Governance: 'governance.md'
 
 theme:
   name: 'material'

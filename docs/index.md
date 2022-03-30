@@ -1,6 +1,6 @@
 Cosmpy is a Python library for interacting with Cosmos-based blockchains.
 
-* A simplified Cosmos-SDK agnostic API for basic chain operations.
+* A simplified Cosmos SDK agnostic API for basic chain operations.
 * An easy API for deploying and interacting with CosmWasm-based smart contracts.
 * Low-level access to primitive ledger APIs if required.
 
@@ -13,14 +13,6 @@ pip3 install cosmpy
 ## Version
 
 <a href="https://img.shields.io/pypi/v/cosmpy" target="_blank"><img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy" /></a>.
-
-[comment]: <> (## Dependencies)
-
-[comment]: <> (CosmPy works with any version of Python >= 3.7.)
-
-[comment]: <> (## Platforms)
-
-[comment]: <> (CosmPy can be used in Linux, MacOS, Windows)
 
 ## Repository
 
