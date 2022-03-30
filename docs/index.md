@@ -14,14 +14,6 @@ pip3 install cosmpy
 
 <a href="https://img.shields.io/pypi/v/cosmpy" target="_blank"><img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy" /></a>.
 
-[comment]: <> (## Dependencies)
-
-[comment]: <> (CosmPy works with any version of Python >= 3.7.)
-
-[comment]: <> (## Platforms)
-
-[comment]: <> (CosmPy can be used in Linux, MacOS, Windows)
-
 ## Repository
 
 ```
