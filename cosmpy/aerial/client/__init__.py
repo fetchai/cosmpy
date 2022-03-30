@@ -86,7 +86,7 @@ from cosmpy.tx.rest_client import TxRestClient
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
 DEFAULT_QUERY_INTERVAL_SECS = 2
-
+COSMOS_SDK_DEC_COIN_PRECISION = 10 ** 18
 
 @dataclass
 class Account:
@@ -279,7 +279,7 @@ class LedgerClient:
             stake_reward = 0
             for reward in rewards_resp.rewards:
                 if reward.denom == self.network_config.staking_denomination:
-                    stake_reward = int(reward.amount) // (10**18)
+                    stake_reward = int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
                     break
 
             current_positions.append(
