@@ -290,7 +290,6 @@ class LedgerClient:
                 )
             )
 
-        # req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
         req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
         resp = self.staking.DelegatorUnbondingDelegations(req)
 
