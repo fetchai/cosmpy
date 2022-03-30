@@ -86,7 +86,8 @@ from cosmpy.tx.rest_client import TxRestClient
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
 DEFAULT_QUERY_INTERVAL_SECS = 2
-COSMOS_SDK_DEC_COIN_PRECISION = 10 ** 18
+COSMOS_SDK_DEC_COIN_PRECISION = 10**18
+
 
 @dataclass
 class Account:
