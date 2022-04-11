@@ -76,7 +76,7 @@ class IBCCoreClientRestClient(IBCCoreClient):
         self, request: QueryConsensusStateRequest
     ) -> QueryConsensusStateResponse:
         """
-        ConsensusState queries a consensus state associated with a client state ata given height.
+        ConsensusState queries a consensus state associated with a client state at a given height.
 
         :param request: QueryConsensusStateRequest
         :return: QueryConsensusStateResponse
@@ -90,7 +90,7 @@ class IBCCoreClientRestClient(IBCCoreClient):
         self, request: QueryConsensusStatesRequest
     ) -> QueryConsensusStatesResponse:
         """
-        ConsensusStates queries all the consensus state associated with a givenclient.
+        ConsensusStates queries all the consensus states associated with a given client.
 
         :param request: QueryConsensusStatesRequest
         :return: QueryConsensusStatesResponse
@@ -104,7 +104,7 @@ class IBCCoreClientRestClient(IBCCoreClient):
         self, request: QueryClientParamsRequest
     ) -> QueryClientParamsResponse:
         """
-        ClientParams queries all parameters of the ibc client.
+        ClientParams queries all parameters of the IBC client.
 
         :param request: QueryClientParamsRequest
         :return: QueryClientParamsResponse
