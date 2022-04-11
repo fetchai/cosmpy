@@ -335,7 +335,7 @@ class IBCCoreChannelRestClientTestCase(TestCase):
         assert (
             rest_client.UnreceivedPackets(
                 QueryUnreceivedPacketsRequest(
-                    channel_id=u"1", port_id="1", packet_commitment_sequences=[1]
+                    channel_id="1", port_id="1", packet_commitment_sequences=[1]
                 )
             )
             == expected_response

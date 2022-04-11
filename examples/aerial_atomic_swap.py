@@ -58,13 +58,13 @@ def main():
     print(f"Alice balance {alice_balance}")
     print(f"Bob   balance {bob_balance}")
 
-    if alice_balance < (10 ** 18):
+    if alice_balance < (10**18):
         print(
             f"Alice has insufficient balance to complete operations please funds alice account: {alice.address()}"
         )
         sys.exit(1)
 
-    if bob_balance < (10 ** 18):
+    if bob_balance < (10**18):
         print(
             f"Bob has insufficient balance to complete operations please funds bob account: {bob.address()}"
         )
