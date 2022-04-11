@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+import warnings
 from dataclasses import dataclass
 
 
@@ -51,17 +52,29 @@ class NetworkConfig:
             )
 
     @classmethod
-    def capricorn_testnet(cls) -> "NetworkConfig":
+    def fetchai_dorado_testnet(cls) -> "NetworkConfig":
         return NetworkConfig(
-            chain_id="capricorn-1",
-            url="grpc+https://grpc-capricorn.fetch.ai",
+            chain_id="dorado-1",
+            url="grpc+https://grpc-dorado.fetch.ai",
             fee_minimum_gas_price=5000000000,
             fee_denomination="atestfet",
             staking_denomination="atestfet",
         )
 
     @classmethod
-    def fetch_mainnet(cls) -> "NetworkConfig":
+    def fetchai_alpha_testnet(cls):
+        raise RuntimeError('No alpha testnet available')
+
+    @classmethod
+    def fetchai_beta_testnet(cls):
+        raise RuntimeError('No beta testnet available')
+
+    @classmethod
+    def fetchai_stable_testnet(cls):
+        return cls.fetchai_dorado_testnet()
+
+    @classmethod
+    def fetchai_mainnet(cls) -> "NetworkConfig":
         return NetworkConfig(
             chain_id="fetchhub-3",
             url="grpc+https://grpc-fetchhub.fetch.ai",
@@ -71,5 +84,17 @@ class NetworkConfig:
         )
 
     @classmethod
+    def fetch_mainnet(cls) -> "NetworkConfig":
+        warnings.warn(
+            "fetch_mainnet is deprecated, use fetchai_mainnet instead",
+            DeprecationWarning
+        )
+        return cls.fetchai_mainnet()
+
+    @classmethod
     def latest_stable_testnet(cls) -> "NetworkConfig":
-        return cls.capricorn_testnet()
+        warnings.warn(
+            "latest_stable_testnet is deprecated, use fetchai_stable_testnet instead",
+            DeprecationWarning
+        )
+        return cls.fetchai_stable_testnet()
