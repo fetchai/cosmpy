@@ -60,7 +60,7 @@ class IBCCoreConnection(ABC):
         self, request: QueryClientConnectionsRequest
     ) -> QueryClientConnectionsResponse:
         """
-        ClientConnections queries the connection paths associated with a clientstate.
+        ClientConnections queries the connection paths associated with a client state.
 
         :param request: QueryClientConnectionsRequest
         :return: QueryClientConnectionsResponse
@@ -71,7 +71,7 @@ class IBCCoreConnection(ABC):
         self, request: QueryConnectionClientStateRequest
     ) -> QueryConnectionClientStateResponse:
         """
-        ConnectionClientState queries the client state associated with theconnection.
+        ConnectionClientState queries the client state associated with the connection.
 
         :param request: QueryConnectionClientStateRequest
         :return: QueryConnectionClientStateResponse
@@ -82,7 +82,7 @@ class IBCCoreConnection(ABC):
         self, request: QueryConnectionConsensusStateRequest
     ) -> QueryConnectionConsensusStateResponse:
         """
-        ConnectionConsensusState queries the consensus state associated with theconnection.
+        ConnectionConsensusState queries the consensus state associated with the connection.
 
         :param request: QueryConnectionConsensusStateRequest
         :return: QueryConnectionConsensusStateResponse

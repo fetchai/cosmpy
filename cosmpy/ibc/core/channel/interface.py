@@ -76,7 +76,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryConnectionChannelsRequest
     ) -> QueryConnectionChannelsResponse:
         """
-        ConnectionChannels queries all the channels associated with a connectionend.
+        ConnectionChannels queries all the channels associated with a connection.
 
         :param request: QueryConnectionChannelsRequest
         :return: QueryConnectionChannelsResponse
@@ -87,7 +87,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryChannelClientStateRequest
     ) -> QueryChannelClientStateResponse:
         """
-        ChannelClientState queries for the client state for the channel associatedwith the provided channel identifiers.
+        ChannelClientState queries for the client state for the channel associated with the provided channel identifiers.
 
         :param request: QueryChannelClientStateRequest
         :return: QueryChannelClientStateResponse
@@ -98,7 +98,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryChannelConsensusStateRequest
     ) -> QueryChannelConsensusStateResponse:
         """
-        ChannelConsensusState queries for the consensus state for the channelassociated with the provided channel identifiers.
+        ChannelConsensusState queries for the consensus state for the channel associated with the provided channel identifiers.
 
         :param request: QueryChannelConsensusStateRequest
         :return: QueryChannelConsensusStateResponse
@@ -120,7 +120,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryPacketCommitmentsRequest
     ) -> QueryPacketCommitmentsResponse:
         """
-        PacketCommitments returns all the packet commitments hashes associatedwith a channel.
+        PacketCommitments returns all the packet commitments hashes associated with a channel.
 
         :param request: QueryPacketCommitmentsRequest
         :return: QueryPacketCommitmentsResponse
@@ -142,7 +142,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryPacketAcknowledgementRequest
     ) -> QueryPacketAcknowledgementResponse:
         """
-        PacketAcknowledgement queries a stored packet acknowledgement hash.
+        PacketAcknowledgement queries a stored packet acknowledgment hash.
 
         :param request: QueryPacketAcknowledgementRequest
         :return: QueryPacketAcknowledgementResponse
@@ -153,7 +153,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryPacketAcknowledgementsRequest
     ) -> QueryPacketAcknowledgementsResponse:
         """
-        PacketAcknowledgements returns all the packet acknowledgements associatedwith a channel.
+        PacketAcknowledgements returns all the packet acknowledgments associated with a channel.
 
         :param request: QueryPacketAcknowledgementsRequest
         :return: QueryPacketAcknowledgementsResponse
@@ -164,7 +164,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryUnreceivedPacketsRequest
     ) -> QueryUnreceivedPacketsResponse:
         """
-        UnreceivedPackets returns all the unreceived IBC packets associated with achannel and sequences.
+        UnreceivedPackets returns all the unreceived IBC packets associated with a channel and sequences.
 
         :param request: QueryUnreceivedPacketsRequest
         :return: QueryUnreceivedPacketsResponse
@@ -175,7 +175,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryUnreceivedAcksRequest
     ) -> QueryUnreceivedAcksResponse:
         """
-        UnreceivedAcks returns all the unreceived IBC acknowledgements associated with achannel and sequences.
+        UnreceivedAcks returns all the unreceived IBC acknowledgments associated with a channel and sequences.
 
         :param request: QueryUnreceivedAcksRequest
         :return: QueryUnreceivedAcksResponse
