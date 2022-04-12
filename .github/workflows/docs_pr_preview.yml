@@ -52,4 +52,4 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           expires: 5d
           projectId: fetch-docs-preview
-          entryPoint: docs/
+          # entryPoint: docs/
