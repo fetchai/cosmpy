@@ -16,10 +16,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use python 3.7
+      - name: Use python 3.9
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.9'
 
       - name: Install Dependencies
         run: cd docs && pip3 install pipenv && pipenv install
