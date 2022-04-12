@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: dist
-          path: docs/site
+          path: site
 
   deploy:
     name: Docs Ephemerial Deploy
@@ -44,7 +44,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: dist
-          path: docs/site
+          path: site
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
