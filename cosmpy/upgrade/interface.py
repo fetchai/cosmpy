@@ -56,7 +56,7 @@ class CosmosUpgrade(ABC):
         self, request: QueryUpgradedConsensusStateRequest
     ) -> QueryUpgradedConsensusStateResponse:
         """
-        UpgradedConsensusState queries the consensus state that will serveas a trusted kernel for the next version of this chain. It will only bestored at the last height of this chain.UpgradedConsensusState RPC not supported with legacy querier
+        UpgradedConsensusState queries the consensus state that will serve as a trusted kernel for the next version of this chain. It will only be stored at the last height of this chain.UpgradedConsensusState RPC not supported with legacy querier
 
         :param request: QueryUpgradedConsensusStateRequest
         :return: QueryUpgradedConsensusStateResponse
