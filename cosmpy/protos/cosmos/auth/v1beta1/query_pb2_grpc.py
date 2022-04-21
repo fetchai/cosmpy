@@ -15,6 +15,11 @@ class QueryStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.Accounts = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/Accounts',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountsRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountsResponse.FromString,
+                )
         self.Account = channel.unary_unary(
                 '/cosmos.auth.v1beta1.Query/Account',
                 request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountRequest.SerializeToString,
@@ -30,6 +35,15 @@ class QueryStub(object):
 class QueryServicer(object):
     """Query defines the gRPC querier service.
     """
+
+    def Accounts(self, request, context):
+        """Accounts returns all the existing accounts
+
+        Since: cosmos-sdk 0.43
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def Account(self, request, context):
         """Account returns account details based on address.
@@ -48,6 +62,11 @@ class QueryServicer(object):
 
 def add_QueryServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'Accounts': grpc.unary_unary_rpc_method_handler(
+                    servicer.Accounts,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountsRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountsResponse.SerializeToString,
+            ),
             'Account': grpc.unary_unary_rpc_method_handler(
                     servicer.Account,
                     request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountRequest.FromString,
@@ -68,6 +87,23 @@ def add_QueryServicer_to_server(servicer, server):
 class Query(object):
     """Query defines the gRPC querier service.
     """
+
+    @staticmethod
+    def Accounts(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/Accounts',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountsRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def Account(request,

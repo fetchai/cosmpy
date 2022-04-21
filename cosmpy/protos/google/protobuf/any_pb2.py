@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n\023com.google.protobufB\010AnyProtoP\001Z\005types\242\002\003GPB\252\002\036Google.Protobuf.WellKnownTypes\300\343\036\000',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x19google/protobuf/any.proto\x12\x0fgoogle.protobuf\x1a\x14gogoproto/gogo.proto\",\n\x03\x41ny\x12\x10\n\x08type_url\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x04\xf0\xa1\x1f\x00\x42S\n\x13\x63om.google.protobufB\x08\x41nyProtoP\x01Z\x05types\xa2\x02\x03GPB\xaa\x02\x1eGoogle.Protobuf.WellKnownTypes\xc0\xe3\x1e\x00\x62\x06proto3'
+  serialized_pb=b'\n\x19google/protobuf/any.proto\x12\x0fgoogle.protobuf\x1a\x14gogoproto/gogo.proto\"8\n\x03\x41ny\x12\x10\n\x08type_url\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x10\xf0\xa1\x1f\x00\x98\xa0\x1f\x00\xb0\xa0\x1f\x00\x80\xdc \x00\x42S\n\x13\x63om.google.protobufB\x08\x41nyProtoP\x01Z\x05types\xa2\x02\x03GPB\xaa\x02\x1eGoogle.Protobuf.WellKnownTypes\xc0\xe3\x1e\x00\x62\x06proto3'
   ,
   dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,])
 
@@ -55,14 +55,14 @@ _ANY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=b'\360\241\037\000',
+  serialized_options=b'\360\241\037\000\230\240\037\000\260\240\037\000\200\334 \000',
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
   serialized_start=68,
-  serialized_end=112,
+  serialized_end=124,
 )
 
 DESCRIPTOR.message_types_by_name['Any'] = _ANY

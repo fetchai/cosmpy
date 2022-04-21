@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z,github.com/cosmos/cosmos-sdk/x/upgrade/types',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\"cosmos/upgrade/v1beta1/query.proto\x12\x16\x63osmos.upgrade.v1beta1\x1a\x19google/protobuf/any.proto\x1a\x1cgoogle/api/annotations.proto\x1a$cosmos/upgrade/v1beta1/upgrade.proto\"\x19\n\x17QueryCurrentPlanRequest\"F\n\x18QueryCurrentPlanResponse\x12*\n\x04plan\x18\x01 \x01(\x0b\x32\x1c.cosmos.upgrade.v1beta1.Plan\"\'\n\x17QueryAppliedPlanRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"*\n\x18QueryAppliedPlanResponse\x12\x0e\n\x06height\x18\x01 \x01(\x03\"9\n\"QueryUpgradedConsensusStateRequest\x12\x13\n\x0blast_height\x18\x01 \x01(\x03\"]\n#QueryUpgradedConsensusStateResponse\x12\x36\n\x18upgraded_consensus_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any2\xac\x04\n\x05Query\x12\x9e\x01\n\x0b\x43urrentPlan\x12/.cosmos.upgrade.v1beta1.QueryCurrentPlanRequest\x1a\x30.cosmos.upgrade.v1beta1.QueryCurrentPlanResponse\",\x82\xd3\xe4\x93\x02&\x12$/cosmos/upgrade/v1beta1/current_plan\x12\xa5\x01\n\x0b\x41ppliedPlan\x12/.cosmos.upgrade.v1beta1.QueryAppliedPlanRequest\x1a\x30.cosmos.upgrade.v1beta1.QueryAppliedPlanResponse\"3\x82\xd3\xe4\x93\x02-\x12+/cosmos/upgrade/v1beta1/applied_plan/{name}\x12\xd9\x01\n\x16UpgradedConsensusState\x12:.cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateRequest\x1a;.cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateResponse\"F\x82\xd3\xe4\x93\x02@\x12>/cosmos/upgrade/v1beta1/upgraded_consensus_state/{last_height}B.Z,github.com/cosmos/cosmos-sdk/x/upgrade/typesb\x06proto3'
+  serialized_pb=b'\n\"cosmos/upgrade/v1beta1/query.proto\x12\x16\x63osmos.upgrade.v1beta1\x1a\x19google/protobuf/any.proto\x1a\x1cgoogle/api/annotations.proto\x1a$cosmos/upgrade/v1beta1/upgrade.proto\"\x19\n\x17QueryCurrentPlanRequest\"F\n\x18QueryCurrentPlanResponse\x12*\n\x04plan\x18\x01 \x01(\x0b\x32\x1c.cosmos.upgrade.v1beta1.Plan\"\'\n\x17QueryAppliedPlanRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"*\n\x18QueryAppliedPlanResponse\x12\x0e\n\x06height\x18\x01 \x01(\x03\"=\n\"QueryUpgradedConsensusStateRequest\x12\x13\n\x0blast_height\x18\x01 \x01(\x03:\x02\x18\x01\"Q\n#QueryUpgradedConsensusStateResponse\x12 \n\x18upgraded_consensus_state\x18\x02 \x01(\x0c:\x02\x18\x01J\x04\x08\x01\x10\x02\"1\n\x1aQueryModuleVersionsRequest\x12\x13\n\x0bmodule_name\x18\x01 \x01(\t\"]\n\x1bQueryModuleVersionsResponse\x12>\n\x0fmodule_versions\x18\x01 \x03(\x0b\x32%.cosmos.upgrade.v1beta1.ModuleVersion2\xdc\x05\n\x05Query\x12\x9e\x01\n\x0b\x43urrentPlan\x12/.cosmos.upgrade.v1beta1.QueryCurrentPlanRequest\x1a\x30.cosmos.upgrade.v1beta1.QueryCurrentPlanResponse\",\x82\xd3\xe4\x93\x02&\x12$/cosmos/upgrade/v1beta1/current_plan\x12\xa5\x01\n\x0b\x41ppliedPlan\x12/.cosmos.upgrade.v1beta1.QueryAppliedPlanRequest\x1a\x30.cosmos.upgrade.v1beta1.QueryAppliedPlanResponse\"3\x82\xd3\xe4\x93\x02-\x12+/cosmos/upgrade/v1beta1/applied_plan/{name}\x12\xdc\x01\n\x16UpgradedConsensusState\x12:.cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateRequest\x1a;.cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateResponse\"I\x88\x02\x01\x82\xd3\xe4\x93\x02@\x12>/cosmos/upgrade/v1beta1/upgraded_consensus_state/{last_height}\x12\xaa\x01\n\x0eModuleVersions\x12\x32.cosmos.upgrade.v1beta1.QueryModuleVersionsRequest\x1a\x33.cosmos.upgrade.v1beta1.QueryModuleVersionsResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/cosmos/upgrade/v1beta1/module_versionsB.Z,github.com/cosmos/cosmos-sdk/x/upgrade/typesb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,cosmos_dot_upgrade_dot_v1beta1_dot_upgrade__pb2.DESCRIPTOR,])
 
@@ -171,14 +171,14 @@ _QUERYUPGRADEDCONSENSUSSTATEREQUEST = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=None,
+  serialized_options=b'\030\001',
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
   serialized_start=341,
-  serialized_end=398,
+  serialized_end=402,
 )
 
 
@@ -192,8 +192,40 @@ _QUERYUPGRADEDCONSENSUSSTATERESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='upgraded_consensus_state', full_name='cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateResponse.upgraded_consensus_state', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'\030\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=404,
+  serialized_end=485,
+)
+
+
+_QUERYMODULEVERSIONSREQUEST = _descriptor.Descriptor(
+  name='QueryModuleVersionsRequest',
+  full_name='cosmos.upgrade.v1beta1.QueryModuleVersionsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='module_name', full_name='cosmos.upgrade.v1beta1.QueryModuleVersionsRequest.module_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -209,18 +241,52 @@ _QUERYUPGRADEDCONSENSUSSTATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=400,
-  serialized_end=493,
+  serialized_start=487,
+  serialized_end=536,
+)
+
+
+_QUERYMODULEVERSIONSRESPONSE = _descriptor.Descriptor(
+  name='QueryModuleVersionsResponse',
+  full_name='cosmos.upgrade.v1beta1.QueryModuleVersionsResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='module_versions', full_name='cosmos.upgrade.v1beta1.QueryModuleVersionsResponse.module_versions', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=538,
+  serialized_end=631,
 )
 
 _QUERYCURRENTPLANRESPONSE.fields_by_name['plan'].message_type = cosmos_dot_upgrade_dot_v1beta1_dot_upgrade__pb2._PLAN
-_QUERYUPGRADEDCONSENSUSSTATERESPONSE.fields_by_name['upgraded_consensus_state'].message_type = google_dot_protobuf_dot_any__pb2._ANY
+_QUERYMODULEVERSIONSRESPONSE.fields_by_name['module_versions'].message_type = cosmos_dot_upgrade_dot_v1beta1_dot_upgrade__pb2._MODULEVERSION
 DESCRIPTOR.message_types_by_name['QueryCurrentPlanRequest'] = _QUERYCURRENTPLANREQUEST
 DESCRIPTOR.message_types_by_name['QueryCurrentPlanResponse'] = _QUERYCURRENTPLANRESPONSE
 DESCRIPTOR.message_types_by_name['QueryAppliedPlanRequest'] = _QUERYAPPLIEDPLANREQUEST
 DESCRIPTOR.message_types_by_name['QueryAppliedPlanResponse'] = _QUERYAPPLIEDPLANRESPONSE
 DESCRIPTOR.message_types_by_name['QueryUpgradedConsensusStateRequest'] = _QUERYUPGRADEDCONSENSUSSTATEREQUEST
 DESCRIPTOR.message_types_by_name['QueryUpgradedConsensusStateResponse'] = _QUERYUPGRADEDCONSENSUSSTATERESPONSE
+DESCRIPTOR.message_types_by_name['QueryModuleVersionsRequest'] = _QUERYMODULEVERSIONSREQUEST
+DESCRIPTOR.message_types_by_name['QueryModuleVersionsResponse'] = _QUERYMODULEVERSIONSRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 QueryCurrentPlanRequest = _reflection.GeneratedProtocolMessageType('QueryCurrentPlanRequest', (_message.Message,), {
@@ -265,8 +331,24 @@ QueryUpgradedConsensusStateResponse = _reflection.GeneratedProtocolMessageType('
   })
 _sym_db.RegisterMessage(QueryUpgradedConsensusStateResponse)
 
+QueryModuleVersionsRequest = _reflection.GeneratedProtocolMessageType('QueryModuleVersionsRequest', (_message.Message,), {
+  'DESCRIPTOR' : _QUERYMODULEVERSIONSREQUEST,
+  '__module__' : 'cosmos.upgrade.v1beta1.query_pb2'
+  # @@protoc_insertion_point(class_scope:cosmos.upgrade.v1beta1.QueryModuleVersionsRequest)
+  })
+_sym_db.RegisterMessage(QueryModuleVersionsRequest)
+
+QueryModuleVersionsResponse = _reflection.GeneratedProtocolMessageType('QueryModuleVersionsResponse', (_message.Message,), {
+  'DESCRIPTOR' : _QUERYMODULEVERSIONSRESPONSE,
+  '__module__' : 'cosmos.upgrade.v1beta1.query_pb2'
+  # @@protoc_insertion_point(class_scope:cosmos.upgrade.v1beta1.QueryModuleVersionsResponse)
+  })
+_sym_db.RegisterMessage(QueryModuleVersionsResponse)
+
 
 DESCRIPTOR._options = None
+_QUERYUPGRADEDCONSENSUSSTATEREQUEST._options = None
+_QUERYUPGRADEDCONSENSUSSTATERESPONSE._options = None
 
 _QUERY = _descriptor.ServiceDescriptor(
   name='Query',
@@ -275,8 +357,8 @@ _QUERY = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=496,
-  serialized_end=1052,
+  serialized_start=634,
+  serialized_end=1366,
   methods=[
   _descriptor.MethodDescriptor(
     name='CurrentPlan',
@@ -305,7 +387,17 @@ _QUERY = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_QUERYUPGRADEDCONSENSUSSTATEREQUEST,
     output_type=_QUERYUPGRADEDCONSENSUSSTATERESPONSE,
-    serialized_options=b'\202\323\344\223\002@\022>/cosmos/upgrade/v1beta1/upgraded_consensus_state/{last_height}',
+    serialized_options=b'\210\002\001\202\323\344\223\002@\022>/cosmos/upgrade/v1beta1/upgraded_consensus_state/{last_height}',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='ModuleVersions',
+    full_name='cosmos.upgrade.v1beta1.Query.ModuleVersions',
+    index=3,
+    containing_service=None,
+    input_type=_QUERYMODULEVERSIONSREQUEST,
+    output_type=_QUERYMODULEVERSIONSRESPONSE,
+    serialized_options=b'\202\323\344\223\002)\022\'/cosmos/upgrade/v1beta1/module_versions',
     create_key=_descriptor._internal_create_key,
   ),
 ])

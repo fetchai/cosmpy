@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z(github.com/cosmos/cosmos-sdk/types/query',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n*cosmos/base/query/v1beta1/pagination.proto\x12\x19\x63osmos.base.query.v1beta1\"N\n\x0bPageRequest\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\x0e\n\x06offset\x18\x02 \x01(\x04\x12\r\n\x05limit\x18\x03 \x01(\x04\x12\x13\n\x0b\x63ount_total\x18\x04 \x01(\x08\"/\n\x0cPageResponse\x12\x10\n\x08next_key\x18\x01 \x01(\x0c\x12\r\n\x05total\x18\x02 \x01(\x04\x42*Z(github.com/cosmos/cosmos-sdk/types/queryb\x06proto3'
+  serialized_pb=b'\n*cosmos/base/query/v1beta1/pagination.proto\x12\x19\x63osmos.base.query.v1beta1\"_\n\x0bPageRequest\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\x0e\n\x06offset\x18\x02 \x01(\x04\x12\r\n\x05limit\x18\x03 \x01(\x04\x12\x13\n\x0b\x63ount_total\x18\x04 \x01(\x08\x12\x0f\n\x07reverse\x18\x05 \x01(\x08\"/\n\x0cPageResponse\x12\x10\n\x08next_key\x18\x01 \x01(\x0c\x12\r\n\x05total\x18\x02 \x01(\x04\x42*Z(github.com/cosmos/cosmos-sdk/types/queryb\x06proto3'
 )
 
 
@@ -61,6 +61,13 @@ _PAGEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='reverse', full_name='cosmos.base.query.v1beta1.PageRequest.reverse', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -74,7 +81,7 @@ _PAGEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=73,
-  serialized_end=151,
+  serialized_end=168,
 )
 
 
@@ -112,8 +119,8 @@ _PAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=153,
-  serialized_end=200,
+  serialized_start=170,
+  serialized_end=217,
 )
 
 DESCRIPTOR.message_types_by_name['PageRequest'] = _PAGEREQUEST

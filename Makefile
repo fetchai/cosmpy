@@ -1,5 +1,5 @@
-COSMOS_SDK_URL := https://github.com/cosmos/cosmos-sdk
-COSMOS_SDK_VERSION := v0.45.1
+COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
+COSMOS_SDK_VERSION := v0.18.0
 COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
 
 WASMD_URL := https://github.com/CosmWasm/wasmd
@@ -41,9 +41,10 @@ proto: fetch_proto_schema_source generate_proto_types generate_init_py_files
 
 generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
 	rm -fr $(OUTPUT_FOLDER)/*
-	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(COSMOS_SDK_DIR)/third_party/proto  --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(shell find $(COSMOS_SDK_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 	python -m grpc_tools.protoc --proto_path=$(WASMD_DIR)/proto --proto_path=$(WASMD_DIR)/third_party/proto  --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(shell find $(WASMD_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 	python -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(IBCGO_DIR)/third_party/proto  --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+# ensure cosmos-sdk is last as previous modules may have duplicated proto models which are now outdated
+	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(COSMOS_SDK_DIR)/third_party/proto  --python_out=$(OUTPUT_FOLDER) --grpc_python_out=$(OUTPUT_FOLDER) $(shell find $(COSMOS_SDK_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 
 fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
 

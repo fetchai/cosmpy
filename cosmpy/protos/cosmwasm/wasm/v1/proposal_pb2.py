@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z&github.com/CosmWasm/wasmd/x/wasm/types\330\341\036\000\310\341\036\000\250\342\036\001',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1f\x63osmwasm/wasm/v1/proposal.proto\x12\x10\x63osmwasm.wasm.v1\x1a\x14gogoproto/gogo.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x1c\x63osmwasm/wasm/v1/types.proto\"\xbd\x01\n\x11StoreCodeProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06run_as\x18\x03 \x01(\t\x12(\n\x0ewasm_byte_code\x18\x04 \x01(\x0c\x42\x10\xe2\xde\x1f\x0cWASMByteCode\x12>\n\x16instantiate_permission\x18\x07 \x01(\x0b\x32\x1e.cosmwasm.wasm.v1.AccessConfigJ\x04\x08\x05\x10\x06J\x04\x08\x06\x10\x07\"\x8d\x02\n\x1bInstantiateContractProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06run_as\x18\x03 \x01(\t\x12\r\n\x05\x61\x64min\x18\x04 \x01(\t\x12\x1b\n\x07\x63ode_id\x18\x05 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12\r\n\x05label\x18\x06 \x01(\t\x12#\n\x03msg\x18\x07 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\x12Z\n\x05\x66unds\x18\x08 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\"\xa1\x01\n\x17MigrateContractProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06run_as\x18\x03 \x01(\t\x12\x10\n\x08\x63ontract\x18\x04 \x01(\t\x12\x1b\n\x07\x63ode_id\x18\x05 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12#\n\x03msg\x18\x06 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\"t\n\x13UpdateAdminProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\'\n\tnew_admin\x18\x03 \x01(\tB\x14\xf2\xde\x1f\x10yaml:\"new_admin\"\x12\x10\n\x08\x63ontract\x18\x04 \x01(\t\"J\n\x12\x43learAdminProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08\x63ontract\x18\x03 \x01(\t\"\x92\x01\n\x10PinCodesProposal\x12\x1f\n\x05title\x18\x01 \x01(\tB\x10\xf2\xde\x1f\x0cyaml:\"title\"\x12+\n\x0b\x64\x65scription\x18\x02 \x01(\tB\x16\xf2\xde\x1f\x12yaml:\"description\"\x12\x30\n\x08\x63ode_ids\x18\x03 \x03(\x04\x42\x1e\xe2\xde\x1f\x07\x43odeIDs\xf2\xde\x1f\x0fyaml:\"code_ids\"\"\x94\x01\n\x12UnpinCodesProposal\x12\x1f\n\x05title\x18\x01 \x01(\tB\x10\xf2\xde\x1f\x0cyaml:\"title\"\x12+\n\x0b\x64\x65scription\x18\x02 \x01(\tB\x16\xf2\xde\x1f\x12yaml:\"description\"\x12\x30\n\x08\x63ode_ids\x18\x03 \x03(\x04\x42\x1e\xe2\xde\x1f\x07\x43odeIDs\xf2\xde\x1f\x0fyaml:\"code_ids\"B4Z&github.com/CosmWasm/wasmd/x/wasm/types\xd8\xe1\x1e\x00\xc8\xe1\x1e\x00\xa8\xe2\x1e\x01\x62\x06proto3'
+  serialized_pb=b'\n\x1f\x63osmwasm/wasm/v1/proposal.proto\x12\x10\x63osmwasm.wasm.v1\x1a\x14gogoproto/gogo.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x1c\x63osmwasm/wasm/v1/types.proto\"\xbd\x01\n\x11StoreCodeProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06run_as\x18\x03 \x01(\t\x12(\n\x0ewasm_byte_code\x18\x04 \x01(\x0c\x42\x10\xe2\xde\x1f\x0cWASMByteCode\x12>\n\x16instantiate_permission\x18\x07 \x01(\x0b\x32\x1e.cosmwasm.wasm.v1.AccessConfigJ\x04\x08\x05\x10\x06J\x04\x08\x06\x10\x07\"\x8d\x02\n\x1bInstantiateContractProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06run_as\x18\x03 \x01(\t\x12\r\n\x05\x61\x64min\x18\x04 \x01(\t\x12\x1b\n\x07\x63ode_id\x18\x05 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12\r\n\x05label\x18\x06 \x01(\t\x12#\n\x03msg\x18\x07 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\x12Z\n\x05\x66unds\x18\x08 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\"\x91\x01\n\x17MigrateContractProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08\x63ontract\x18\x04 \x01(\t\x12\x1b\n\x07\x63ode_id\x18\x05 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12#\n\x03msg\x18\x06 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\"q\n\x14SudoContractProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08\x63ontract\x18\x03 \x01(\t\x12#\n\x03msg\x18\x04 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\"\xe0\x01\n\x17\x45xecuteContractProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06run_as\x18\x03 \x01(\t\x12\x10\n\x08\x63ontract\x18\x04 \x01(\t\x12#\n\x03msg\x18\x05 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\x12Z\n\x05\x66unds\x18\x06 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\"t\n\x13UpdateAdminProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\'\n\tnew_admin\x18\x03 \x01(\tB\x14\xf2\xde\x1f\x10yaml:\"new_admin\"\x12\x10\n\x08\x63ontract\x18\x04 \x01(\t\"J\n\x12\x43learAdminProposal\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08\x63ontract\x18\x03 \x01(\t\"\x92\x01\n\x10PinCodesProposal\x12\x1f\n\x05title\x18\x01 \x01(\tB\x10\xf2\xde\x1f\x0cyaml:\"title\"\x12+\n\x0b\x64\x65scription\x18\x02 \x01(\tB\x16\xf2\xde\x1f\x12yaml:\"description\"\x12\x30\n\x08\x63ode_ids\x18\x03 \x03(\x04\x42\x1e\xe2\xde\x1f\x07\x43odeIDs\xf2\xde\x1f\x0fyaml:\"code_ids\"\"\x94\x01\n\x12UnpinCodesProposal\x12\x1f\n\x05title\x18\x01 \x01(\tB\x10\xf2\xde\x1f\x0cyaml:\"title\"\x12+\n\x0b\x64\x65scription\x18\x02 \x01(\tB\x16\xf2\xde\x1f\x12yaml:\"description\"\x12\x30\n\x08\x63ode_ids\x18\x03 \x03(\x04\x42\x1e\xe2\xde\x1f\x07\x43odeIDs\xf2\xde\x1f\x0fyaml:\"code_ids\"B4Z&github.com/CosmWasm/wasmd/x/wasm/types\xd8\xe1\x1e\x00\xc8\xe1\x1e\x00\xa8\xe2\x1e\x01\x62\x06proto3'
   ,
   dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,cosmos_dot_base_dot_v1beta1_dot_coin__pb2.DESCRIPTOR,cosmwasm_dot_wasm_dot_v1_dot_types__pb2.DESCRIPTOR,])
 
@@ -193,28 +193,21 @@ _MIGRATECONTRACTPROPOSAL = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='run_as', full_name='cosmwasm.wasm.v1.MigrateContractProposal.run_as', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='contract', full_name='cosmwasm.wasm.v1.MigrateContractProposal.contract', index=3,
+      name='contract', full_name='cosmwasm.wasm.v1.MigrateContractProposal.contract', index=2,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='code_id', full_name='cosmwasm.wasm.v1.MigrateContractProposal.code_id', index=4,
+      name='code_id', full_name='cosmwasm.wasm.v1.MigrateContractProposal.code_id', index=3,
       number=5, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=b'\342\336\037\006CodeID', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='msg', full_name='cosmwasm.wasm.v1.MigrateContractProposal.msg', index=5,
+      name='msg', full_name='cosmwasm.wasm.v1.MigrateContractProposal.msg', index=4,
       number=6, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
@@ -233,7 +226,127 @@ _MIGRATECONTRACTPROPOSAL = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=602,
-  serialized_end=763,
+  serialized_end=747,
+)
+
+
+_SUDOCONTRACTPROPOSAL = _descriptor.Descriptor(
+  name='SudoContractProposal',
+  full_name='cosmwasm.wasm.v1.SudoContractProposal',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='title', full_name='cosmwasm.wasm.v1.SudoContractProposal.title', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='cosmwasm.wasm.v1.SudoContractProposal.description', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='contract', full_name='cosmwasm.wasm.v1.SudoContractProposal.contract', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='cosmwasm.wasm.v1.SudoContractProposal.msg', index=3,
+      number=4, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\372\336\037\022RawContractMessage', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=749,
+  serialized_end=862,
+)
+
+
+_EXECUTECONTRACTPROPOSAL = _descriptor.Descriptor(
+  name='ExecuteContractProposal',
+  full_name='cosmwasm.wasm.v1.ExecuteContractProposal',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='title', full_name='cosmwasm.wasm.v1.ExecuteContractProposal.title', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='cosmwasm.wasm.v1.ExecuteContractProposal.description', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='run_as', full_name='cosmwasm.wasm.v1.ExecuteContractProposal.run_as', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='contract', full_name='cosmwasm.wasm.v1.ExecuteContractProposal.contract', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='cosmwasm.wasm.v1.ExecuteContractProposal.msg', index=4,
+      number=5, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\372\336\037\022RawContractMessage', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='funds', full_name='cosmwasm.wasm.v1.ExecuteContractProposal.funds', index=5,
+      number=6, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=b'\310\336\037\000\252\337\037(github.com/cosmos/cosmos-sdk/types.Coins', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=865,
+  serialized_end=1089,
 )
 
 
@@ -285,8 +398,8 @@ _UPDATEADMINPROPOSAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=765,
-  serialized_end=881,
+  serialized_start=1091,
+  serialized_end=1207,
 )
 
 
@@ -331,8 +444,8 @@ _CLEARADMINPROPOSAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=883,
-  serialized_end=957,
+  serialized_start=1209,
+  serialized_end=1283,
 )
 
 
@@ -377,8 +490,8 @@ _PINCODESPROPOSAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=960,
-  serialized_end=1106,
+  serialized_start=1286,
+  serialized_end=1432,
 )
 
 
@@ -423,15 +536,18 @@ _UNPINCODESPROPOSAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1109,
-  serialized_end=1257,
+  serialized_start=1435,
+  serialized_end=1583,
 )
 
 _STORECODEPROPOSAL.fields_by_name['instantiate_permission'].message_type = cosmwasm_dot_wasm_dot_v1_dot_types__pb2._ACCESSCONFIG
 _INSTANTIATECONTRACTPROPOSAL.fields_by_name['funds'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._COIN
+_EXECUTECONTRACTPROPOSAL.fields_by_name['funds'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._COIN
 DESCRIPTOR.message_types_by_name['StoreCodeProposal'] = _STORECODEPROPOSAL
 DESCRIPTOR.message_types_by_name['InstantiateContractProposal'] = _INSTANTIATECONTRACTPROPOSAL
 DESCRIPTOR.message_types_by_name['MigrateContractProposal'] = _MIGRATECONTRACTPROPOSAL
+DESCRIPTOR.message_types_by_name['SudoContractProposal'] = _SUDOCONTRACTPROPOSAL
+DESCRIPTOR.message_types_by_name['ExecuteContractProposal'] = _EXECUTECONTRACTPROPOSAL
 DESCRIPTOR.message_types_by_name['UpdateAdminProposal'] = _UPDATEADMINPROPOSAL
 DESCRIPTOR.message_types_by_name['ClearAdminProposal'] = _CLEARADMINPROPOSAL
 DESCRIPTOR.message_types_by_name['PinCodesProposal'] = _PINCODESPROPOSAL
@@ -458,6 +574,20 @@ MigrateContractProposal = _reflection.GeneratedProtocolMessageType('MigrateContr
   # @@protoc_insertion_point(class_scope:cosmwasm.wasm.v1.MigrateContractProposal)
   })
 _sym_db.RegisterMessage(MigrateContractProposal)
+
+SudoContractProposal = _reflection.GeneratedProtocolMessageType('SudoContractProposal', (_message.Message,), {
+  'DESCRIPTOR' : _SUDOCONTRACTPROPOSAL,
+  '__module__' : 'cosmwasm.wasm.v1.proposal_pb2'
+  # @@protoc_insertion_point(class_scope:cosmwasm.wasm.v1.SudoContractProposal)
+  })
+_sym_db.RegisterMessage(SudoContractProposal)
+
+ExecuteContractProposal = _reflection.GeneratedProtocolMessageType('ExecuteContractProposal', (_message.Message,), {
+  'DESCRIPTOR' : _EXECUTECONTRACTPROPOSAL,
+  '__module__' : 'cosmwasm.wasm.v1.proposal_pb2'
+  # @@protoc_insertion_point(class_scope:cosmwasm.wasm.v1.ExecuteContractProposal)
+  })
+_sym_db.RegisterMessage(ExecuteContractProposal)
 
 UpdateAdminProposal = _reflection.GeneratedProtocolMessageType('UpdateAdminProposal', (_message.Message,), {
   'DESCRIPTOR' : _UPDATEADMINPROPOSAL,
@@ -495,6 +625,9 @@ _INSTANTIATECONTRACTPROPOSAL.fields_by_name['msg']._options = None
 _INSTANTIATECONTRACTPROPOSAL.fields_by_name['funds']._options = None
 _MIGRATECONTRACTPROPOSAL.fields_by_name['code_id']._options = None
 _MIGRATECONTRACTPROPOSAL.fields_by_name['msg']._options = None
+_SUDOCONTRACTPROPOSAL.fields_by_name['msg']._options = None
+_EXECUTECONTRACTPROPOSAL.fields_by_name['msg']._options = None
+_EXECUTECONTRACTPROPOSAL.fields_by_name['funds']._options = None
 _UPDATEADMINPROPOSAL.fields_by_name['new_admin']._options = None
 _PINCODESPROPOSAL.fields_by_name['title']._options = None
 _PINCODESPROPOSAL.fields_by_name['description']._options = None

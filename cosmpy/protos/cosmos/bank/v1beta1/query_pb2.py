@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z)github.com/cosmos/cosmos-sdk/x/bank/types',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1f\x63osmos/bank/v1beta1/query.proto\x12\x13\x63osmos.bank.v1beta1\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x1e\x63osmos/bank/v1beta1/bank.proto\"?\n\x13QueryBalanceRequest\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05\x64\x65nom\x18\x02 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"B\n\x14QueryBalanceResponse\x12*\n\x07\x62\x61lance\x18\x01 \x01(\x0b\x32\x19.cosmos.base.v1beta1.Coin\"p\n\x17QueryAllBalancesRequest\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\xb6\x01\n\x18QueryAllBalancesResponse\x12]\n\x08\x62\x61lances\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"\x19\n\x17QueryTotalSupplyRequest\"w\n\x18QueryTotalSupplyResponse\x12[\n\x06supply\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\"%\n\x14QuerySupplyOfRequest\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\"H\n\x15QuerySupplyOfResponse\x12/\n\x06\x61mount\x18\x01 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x04\xc8\xde\x1f\x00\"\x14\n\x12QueryParamsRequest\"H\n\x13QueryParamsResponse\x12\x31\n\x06params\x18\x01 \x01(\x0b\x32\x1b.cosmos.bank.v1beta1.ParamsB\x04\xc8\xde\x1f\x00\"X\n\x1aQueryDenomsMetadataRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\x92\x01\n\x1bQueryDenomsMetadataResponse\x12\x36\n\tmetadatas\x18\x01 \x03(\x0b\x32\x1d.cosmos.bank.v1beta1.MetadataB\x04\xc8\xde\x1f\x00\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"*\n\x19QueryDenomMetadataRequest\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\"S\n\x1aQueryDenomMetadataResponse\x12\x35\n\x08metadata\x18\x01 \x01(\x0b\x32\x1d.cosmos.bank.v1beta1.MetadataB\x04\xc8\xde\x1f\x00\x32\xb2\x08\n\x05Query\x12\x97\x01\n\x07\x42\x61lance\x12(.cosmos.bank.v1beta1.QueryBalanceRequest\x1a).cosmos.bank.v1beta1.QueryBalanceResponse\"7\x82\xd3\xe4\x93\x02\x31\x12//cosmos/bank/v1beta1/balances/{address}/{denom}\x12\x9b\x01\n\x0b\x41llBalances\x12,.cosmos.bank.v1beta1.QueryAllBalancesRequest\x1a-.cosmos.bank.v1beta1.QueryAllBalancesResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/cosmos/bank/v1beta1/balances/{address}\x12\x8f\x01\n\x0bTotalSupply\x12,.cosmos.bank.v1beta1.QueryTotalSupplyRequest\x1a-.cosmos.bank.v1beta1.QueryTotalSupplyResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/cosmos/bank/v1beta1/supply\x12\x8e\x01\n\x08SupplyOf\x12).cosmos.bank.v1beta1.QuerySupplyOfRequest\x1a*.cosmos.bank.v1beta1.QuerySupplyOfResponse\"+\x82\xd3\xe4\x93\x02%\x12#/cosmos/bank/v1beta1/supply/{denom}\x12\x80\x01\n\x06Params\x12\'.cosmos.bank.v1beta1.QueryParamsRequest\x1a(.cosmos.bank.v1beta1.QueryParamsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/cosmos/bank/v1beta1/params\x12\xa6\x01\n\rDenomMetadata\x12..cosmos.bank.v1beta1.QueryDenomMetadataRequest\x1a/.cosmos.bank.v1beta1.QueryDenomMetadataResponse\"4\x82\xd3\xe4\x93\x02.\x12,/cosmos/bank/v1beta1/denoms_metadata/{denom}\x12\xa1\x01\n\x0e\x44\x65nomsMetadata\x12/.cosmos.bank.v1beta1.QueryDenomsMetadataRequest\x1a\x30.cosmos.bank.v1beta1.QueryDenomsMetadataResponse\",\x82\xd3\xe4\x93\x02&\x12$/cosmos/bank/v1beta1/denoms_metadataB+Z)github.com/cosmos/cosmos-sdk/x/bank/typesb\x06proto3'
+  serialized_pb=b'\n\x1f\x63osmos/bank/v1beta1/query.proto\x12\x13\x63osmos.bank.v1beta1\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a\x1e\x63osmos/bank/v1beta1/bank.proto\"?\n\x13QueryBalanceRequest\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05\x64\x65nom\x18\x02 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"B\n\x14QueryBalanceResponse\x12*\n\x07\x62\x61lance\x18\x01 \x01(\x0b\x32\x19.cosmos.base.v1beta1.Coin\"p\n\x17QueryAllBalancesRequest\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\xb6\x01\n\x18QueryAllBalancesResponse\x12]\n\x08\x62\x61lances\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"_\n\x17QueryTotalSupplyRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\xb4\x01\n\x18QueryTotalSupplyResponse\x12[\n\x06supply\x18\x01 \x03(\x0b\x32\x19.cosmos.base.v1beta1.CoinB0\xc8\xde\x1f\x00\xaa\xdf\x1f(github.com/cosmos/cosmos-sdk/types.Coins\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"%\n\x14QuerySupplyOfRequest\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\"H\n\x15QuerySupplyOfResponse\x12/\n\x06\x61mount\x18\x01 \x01(\x0b\x32\x19.cosmos.base.v1beta1.CoinB\x04\xc8\xde\x1f\x00\"\x14\n\x12QueryParamsRequest\"H\n\x13QueryParamsResponse\x12\x31\n\x06params\x18\x01 \x01(\x0b\x32\x1b.cosmos.bank.v1beta1.ParamsB\x04\xc8\xde\x1f\x00\"X\n\x1aQueryDenomsMetadataRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\x92\x01\n\x1bQueryDenomsMetadataResponse\x12\x36\n\tmetadatas\x18\x01 \x03(\x0b\x32\x1d.cosmos.bank.v1beta1.MetadataB\x04\xc8\xde\x1f\x00\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"*\n\x19QueryDenomMetadataRequest\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\"S\n\x1aQueryDenomMetadataResponse\x12\x35\n\x08metadata\x18\x01 \x01(\x0b\x32\x1d.cosmos.bank.v1beta1.MetadataB\x04\xc8\xde\x1f\x00\x32\xb3\x08\n\x05Query\x12\x98\x01\n\x07\x42\x61lance\x12(.cosmos.bank.v1beta1.QueryBalanceRequest\x1a).cosmos.bank.v1beta1.QueryBalanceResponse\"8\x82\xd3\xe4\x93\x02\x32\x12\x30/cosmos/bank/v1beta1/balances/{address}/by_denom\x12\x9b\x01\n\x0b\x41llBalances\x12,.cosmos.bank.v1beta1.QueryAllBalancesRequest\x1a-.cosmos.bank.v1beta1.QueryAllBalancesResponse\"/\x82\xd3\xe4\x93\x02)\x12\'/cosmos/bank/v1beta1/balances/{address}\x12\x8f\x01\n\x0bTotalSupply\x12,.cosmos.bank.v1beta1.QueryTotalSupplyRequest\x1a-.cosmos.bank.v1beta1.QueryTotalSupplyResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/cosmos/bank/v1beta1/supply\x12\x8e\x01\n\x08SupplyOf\x12).cosmos.bank.v1beta1.QuerySupplyOfRequest\x1a*.cosmos.bank.v1beta1.QuerySupplyOfResponse\"+\x82\xd3\xe4\x93\x02%\x12#/cosmos/bank/v1beta1/supply/{denom}\x12\x80\x01\n\x06Params\x12\'.cosmos.bank.v1beta1.QueryParamsRequest\x1a(.cosmos.bank.v1beta1.QueryParamsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/cosmos/bank/v1beta1/params\x12\xa6\x01\n\rDenomMetadata\x12..cosmos.bank.v1beta1.QueryDenomMetadataRequest\x1a/.cosmos.bank.v1beta1.QueryDenomMetadataResponse\"4\x82\xd3\xe4\x93\x02.\x12,/cosmos/bank/v1beta1/denoms_metadata/{denom}\x12\xa1\x01\n\x0e\x44\x65nomsMetadata\x12/.cosmos.bank.v1beta1.QueryDenomsMetadataRequest\x1a\x30.cosmos.bank.v1beta1.QueryDenomsMetadataResponse\",\x82\xd3\xe4\x93\x02&\x12$/cosmos/bank/v1beta1/denoms_metadataB+Z)github.com/cosmos/cosmos-sdk/x/bank/typesb\x06proto3'
   ,
   dependencies=[cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,cosmos_dot_base_dot_v1beta1_dot_coin__pb2.DESCRIPTOR,cosmos_dot_bank_dot_v1beta1_dot_bank__pb2.DESCRIPTOR,])
 
@@ -188,20 +188,27 @@ _QUERYTOTALSUPPLYREQUEST = _descriptor.Descriptor(
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='pagination', full_name='cosmos.bank.v1beta1.QueryTotalSupplyRequest.pagination', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=None,
+  serialized_options=b'\350\240\037\000\210\240\037\000',
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
   oneofs=[
   ],
   serialized_start=648,
-  serialized_end=673,
+  serialized_end=743,
 )
 
 
@@ -220,6 +227,13 @@ _QUERYTOTALSUPPLYRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=b'\310\336\037\000\252\337\037(github.com/cosmos/cosmos-sdk/types.Coins', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pagination', full_name='cosmos.bank.v1beta1.QueryTotalSupplyResponse.pagination', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -232,8 +246,8 @@ _QUERYTOTALSUPPLYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=675,
-  serialized_end=794,
+  serialized_start=746,
+  serialized_end=926,
 )
 
 
@@ -264,8 +278,8 @@ _QUERYSUPPLYOFREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=796,
-  serialized_end=833,
+  serialized_start=928,
+  serialized_end=965,
 )
 
 
@@ -296,8 +310,8 @@ _QUERYSUPPLYOFRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=835,
-  serialized_end=907,
+  serialized_start=967,
+  serialized_end=1039,
 )
 
 
@@ -321,8 +335,8 @@ _QUERYPARAMSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=909,
-  serialized_end=929,
+  serialized_start=1041,
+  serialized_end=1061,
 )
 
 
@@ -353,8 +367,8 @@ _QUERYPARAMSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=931,
-  serialized_end=1003,
+  serialized_start=1063,
+  serialized_end=1135,
 )
 
 
@@ -385,8 +399,8 @@ _QUERYDENOMSMETADATAREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1005,
-  serialized_end=1093,
+  serialized_start=1137,
+  serialized_end=1225,
 )
 
 
@@ -424,8 +438,8 @@ _QUERYDENOMSMETADATARESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1096,
-  serialized_end=1242,
+  serialized_start=1228,
+  serialized_end=1374,
 )
 
 
@@ -456,8 +470,8 @@ _QUERYDENOMMETADATAREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1244,
-  serialized_end=1286,
+  serialized_start=1376,
+  serialized_end=1418,
 )
 
 
@@ -488,15 +502,17 @@ _QUERYDENOMMETADATARESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1288,
-  serialized_end=1371,
+  serialized_start=1420,
+  serialized_end=1503,
 )
 
 _QUERYBALANCERESPONSE.fields_by_name['balance'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._COIN
 _QUERYALLBALANCESREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
 _QUERYALLBALANCESRESPONSE.fields_by_name['balances'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._COIN
 _QUERYALLBALANCESRESPONSE.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGERESPONSE
+_QUERYTOTALSUPPLYREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
 _QUERYTOTALSUPPLYRESPONSE.fields_by_name['supply'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._COIN
+_QUERYTOTALSUPPLYRESPONSE.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGERESPONSE
 _QUERYSUPPLYOFRESPONSE.fields_by_name['amount'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._COIN
 _QUERYPARAMSRESPONSE.fields_by_name['params'].message_type = cosmos_dot_bank_dot_v1beta1_dot_bank__pb2._PARAMS
 _QUERYDENOMSMETADATAREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
@@ -622,6 +638,7 @@ DESCRIPTOR._options = None
 _QUERYBALANCEREQUEST._options = None
 _QUERYALLBALANCESREQUEST._options = None
 _QUERYALLBALANCESRESPONSE.fields_by_name['balances']._options = None
+_QUERYTOTALSUPPLYREQUEST._options = None
 _QUERYTOTALSUPPLYRESPONSE.fields_by_name['supply']._options = None
 _QUERYSUPPLYOFRESPONSE.fields_by_name['amount']._options = None
 _QUERYPARAMSRESPONSE.fields_by_name['params']._options = None
@@ -635,8 +652,8 @@ _QUERY = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1374,
-  serialized_end=2448,
+  serialized_start=1506,
+  serialized_end=2581,
   methods=[
   _descriptor.MethodDescriptor(
     name='Balance',
@@ -645,7 +662,7 @@ _QUERY = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_QUERYBALANCEREQUEST,
     output_type=_QUERYBALANCERESPONSE,
-    serialized_options=b'\202\323\344\223\0021\022//cosmos/bank/v1beta1/balances/{address}/{denom}',
+    serialized_options=b'\202\323\344\223\0022\0220/cosmos/bank/v1beta1/balances/{address}/by_denom',
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
