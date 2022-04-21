@@ -436,12 +436,17 @@ class LedgerClient:
 
     def query_tx(self, tx_hash: str) -> TxResponse:
         req = GetTxRequest(hash=tx_hash)
-
         try:
             resp = self.txs.GetTx(req)
         except grpc.RpcError as e:
             details = e.details()
             if "not found" in details:
+                raise NotFoundError()
+            else:
+                raise
+        except RuntimeError as e:
+            details = str(e)
+            if "code = NotFound desc = tx not found" in details:
                 raise NotFoundError()
             else:
                 raise

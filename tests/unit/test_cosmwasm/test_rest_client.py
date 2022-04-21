@@ -66,7 +66,7 @@ class WasmRestClientTestCase(unittest.TestCase):
         wasm = CosmWasmRestClient(mock_client)
 
         assert wasm.Codes(QueryCodesRequest()) == expected_response
-        assert mock_client.last_base_url == "/wasm/v1/code"
+        assert mock_client.last_base_url == "/cosmwasm/wasm/v1/code"
 
     @staticmethod
     def test_query_code():
@@ -82,7 +82,7 @@ class WasmRestClientTestCase(unittest.TestCase):
         wasm = CosmWasmRestClient(mock_client)
 
         assert wasm.Code(QueryCodeRequest(code_id=1)) == expected_response
-        assert mock_client.last_base_url == "/wasm/v1/code/1"
+        assert mock_client.last_base_url == "/cosmwasm/wasm/v1/code/1"
 
     @staticmethod
     def test_query_smart_contract_state():
@@ -104,7 +104,7 @@ class WasmRestClientTestCase(unittest.TestCase):
         )
         assert (
             mock_client.last_base_url
-            == "/wasm/v1/contract/fetchcontractaddress/smart/e30="
+            == "/cosmwasm/wasm/v1/contract/fetchcontractaddress/smart/e30="
         )
 
     @staticmethod
@@ -127,7 +127,7 @@ class WasmRestClientTestCase(unittest.TestCase):
         )
         assert (
             mock_client.last_base_url
-            == "/wasm/v1/contract/fetchcontractaddress/raw/e30="
+            == "/cosmwasm/wasm/v1/contract/fetchcontractaddress/raw/e30="
         )
 
     @staticmethod
@@ -156,7 +156,8 @@ class WasmRestClientTestCase(unittest.TestCase):
             == expected_response
         )
         assert (
-            mock_client.last_base_url == "/wasm/v1/contract/fetchcontractaddress/state"
+            mock_client.last_base_url
+            == "/cosmwasm/wasm/v1/contract/fetchcontractaddress/state"
         )
 
     @staticmethod
@@ -183,7 +184,10 @@ class WasmRestClientTestCase(unittest.TestCase):
             wasm.ContractInfo(QueryContractInfoRequest(address="fetchcontractaddress"))
             == expected_response
         )
-        assert mock_client.last_base_url == "/wasm/v1/contract/fetchcontractaddress"
+        assert (
+            mock_client.last_base_url
+            == "/cosmwasm/wasm/v1/contract/fetchcontractaddress"
+        )
 
     @staticmethod
     def test_query_contract_by_code():
@@ -203,7 +207,7 @@ class WasmRestClientTestCase(unittest.TestCase):
             wasm.ContractsByCode(QueryContractsByCodeRequest(code_id=1))
             == expected_response
         )
-        assert mock_client.last_base_url == "/wasm/v1/code/1/contracts"
+        assert mock_client.last_base_url == "/cosmwasm/wasm/v1/code/1/contracts"
 
     @staticmethod
     def test_query_contract_history():
@@ -240,5 +244,5 @@ class WasmRestClientTestCase(unittest.TestCase):
         )
         assert (
             mock_client.last_base_url
-            == "/wasm/v1/contract/fetchcontractaddress/history"
+            == "/cosmwasm/wasm/v1/contract/fetchcontractaddress/history"
         )
