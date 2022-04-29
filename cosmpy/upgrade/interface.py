@@ -25,8 +25,6 @@ from cosmpy.protos.cosmos.upgrade.v1beta1.query_pb2 import (
     QueryAppliedPlanResponse,
     QueryCurrentPlanRequest,
     QueryCurrentPlanResponse,
-    QueryUpgradedConsensusStateRequest,
-    QueryUpgradedConsensusStateResponse,
 )
 
 
@@ -49,15 +47,4 @@ class CosmosUpgrade(ABC):
 
         :param request: QueryAppliedPlanRequest
         :return: QueryAppliedPlanResponse
-        """
-
-    @abstractmethod
-    def UpgradedConsensusState(
-        self, request: QueryUpgradedConsensusStateRequest
-    ) -> QueryUpgradedConsensusStateResponse:
-        """
-        UpgradedConsensusState queries the consensus state that will serve as a trusted kernel for the next version of this chain. It will only be stored at the last height of this chain.UpgradedConsensusState RPC not supported with legacy querier
-
-        :param request: QueryUpgradedConsensusStateRequest
-        :return: QueryUpgradedConsensusStateResponse
         """

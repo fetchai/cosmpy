@@ -29,16 +29,9 @@ from cosmpy.protos.cosmos.upgrade.v1beta1.query_pb2 import (
     QueryAppliedPlanResponse,
     QueryCurrentPlanRequest,
     QueryCurrentPlanResponse,
-    QueryUpgradedConsensusStateRequest,
-    QueryUpgradedConsensusStateResponse,
 )
 from cosmpy.upgrade.rest_client import CosmosUpgradeRestClient
 from tests.helpers import MockRestClient
-
-TYPE = {
-    "@type": "type.googleapis.com/google.protobuf.Int32Value",
-    "value": "42",
-}
 
 
 class CosmosUpgradeRestClientTestCase(TestCase):
@@ -67,7 +60,6 @@ class CosmosUpgradeRestClientTestCase(TestCase):
                 "time": "2022-03-29T10:02:52.926Z",
                 "height": "1",
                 "info": "string",
-                "upgraded_client_state": TYPE,
             }
         }
         mock_client, rest_client = self.make_clients(content)
@@ -87,20 +79,3 @@ class CosmosUpgradeRestClientTestCase(TestCase):
             == expected_response
         )
         assert mock_client.last_base_url == "/cosmos/upgrade/v1beta1/applied_plan/test"
-
-    def test_UpgradedConsensusState(self):
-        """Test UpgradedConsensusState method."""
-        content = {"upgraded_consensus_state": TYPE}
-        mock_client, rest_client = self.make_clients(content)
-        expected_response = ParseDict(content, QueryUpgradedConsensusStateResponse())
-
-        assert (
-            rest_client.UpgradedConsensusState(
-                QueryUpgradedConsensusStateRequest(last_height=123)
-            )
-            == expected_response
-        )
-        assert (
-            mock_client.last_base_url
-            == "/cosmos/upgrade/v1beta1/upgraded_consensus_state/123"
-        )
