@@ -63,7 +63,10 @@ class BankRestClientTestCase(unittest.TestCase):
             bank.Balance(QueryBalanceRequest(address="account", denom="denom"))
             == expected_response
         )
-        assert mock_client.last_base_url == "/cosmos/bank/v1beta1/balances/account/"
+        assert (
+            mock_client.last_base_url
+            == "/cosmos/bank/v1beta1/balances/account/by_denom?denom=denom"
+        )
 
     @staticmethod
     def test_query_all_balances():

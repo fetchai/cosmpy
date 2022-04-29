@@ -63,9 +63,9 @@ class BankRestClient(Bank):
         :return: QueryBalanceResponse
         """
         response = self._rest_api.get(
-            f"{self.API_URL}/balances/{request.address}/",
+            f"{self.API_URL}/balances/{request.address}/by_denom?denom={request.denom}",
             request,
-            ["address"],
+            ["address", "denom"],
         )
         return Parse(response, QueryBalanceResponse())
 
