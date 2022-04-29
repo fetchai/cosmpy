@@ -107,7 +107,8 @@ class MsgServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ChannelCloseConfirm(self, request, context):
-        """ChannelCloseConfirm defines a rpc handler method for MsgChannelCloseConfirm.
+        """ChannelCloseConfirm defines a rpc handler method for
+        MsgChannelCloseConfirm.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

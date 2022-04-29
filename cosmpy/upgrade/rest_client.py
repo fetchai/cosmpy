@@ -25,8 +25,6 @@ from cosmpy.protos.cosmos.upgrade.v1beta1.query_pb2 import (
     QueryAppliedPlanResponse,
     QueryCurrentPlanRequest,
     QueryCurrentPlanResponse,
-    QueryUpgradedConsensusStateRequest,
-    QueryUpgradedConsensusStateResponse,
 )
 from cosmpy.upgrade.interface import CosmosUpgrade
 
@@ -67,17 +65,3 @@ class CosmosUpgradeRestClient(CosmosUpgrade):
             f"{self.API_URL}/applied_plan/{request.name}", request
         )
         return Parse(json_response, QueryAppliedPlanResponse())
-
-    def UpgradedConsensusState(
-        self, request: QueryUpgradedConsensusStateRequest
-    ) -> QueryUpgradedConsensusStateResponse:
-        """
-        UpgradedConsensusState queries the consensus state that will serve as a trusted kernel for the next version of this chain. It will only be stored at the last height of this chain.UpgradedConsensusState RPC not supported with legacy querier
-
-        :param request: QueryUpgradedConsensusStateRequest
-        :return: QueryUpgradedConsensusStateResponse
-        """
-        json_response = self._rest_api.get(
-            f"{self.API_URL}/upgraded_consensus_state/{request.last_height}", request
-        )
-        return Parse(json_response, QueryUpgradedConsensusStateResponse())

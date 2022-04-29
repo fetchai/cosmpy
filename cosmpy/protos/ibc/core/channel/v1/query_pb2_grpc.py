@@ -140,7 +140,8 @@ class QueryServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def PacketReceipt(self, request, context):
-        """PacketReceipt queries if a given packet sequence has been received on the queried chain
+        """PacketReceipt queries if a given packet sequence has been received on the
+        queried chain
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -170,8 +171,8 @@ class QueryServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def UnreceivedAcks(self, request, context):
-        """UnreceivedAcks returns all the unreceived IBC acknowledgements associated with a
-        channel and sequences.
+        """UnreceivedAcks returns all the unreceived IBC acknowledgements associated
+        with a channel and sequences.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
