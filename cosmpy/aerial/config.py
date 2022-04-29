@@ -76,9 +76,9 @@ class NetworkConfig:
     @classmethod
     def fetchai_mainnet(cls) -> "NetworkConfig":
         return NetworkConfig(
-            chain_id="fetchhub-3",
+            chain_id="fetchhub-4",
             url="grpc+https://grpc-fetchhub.fetch.ai",
-            fee_minimum_gas_price=5000000000,
+            fee_minimum_gas_price=0,
             fee_denomination="afet",
             staking_denomination="afet",
         )
