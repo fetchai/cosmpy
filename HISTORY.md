@@ -1,5 +1,36 @@
 # Release History
 
+## 0.4.0
+
+* fixes for rest api support (#138)
+* configuration updates for dorado (#135)
+* dorado updates (#115)
+* upgrade module (#130)
+* add docs preview (#136)
+* ibc module (#118)
+* tendermint module (#128)
+
+## 0.3.1
+
+* Aerial High Level API by @ejfitzgerald in #96
+* Aerial: Initial offline table based gas strategy by @ejfitzgerald in #107
+* gov module queries support by @solarw in #91
+* Aerial: Simulation based Gas estimation by @ejfitzgerald in #108
+* added darglint to make lint command by @solarw in #109
+* unused darglint config removed from the setup.cfg by @solarw in #111
+* chores: update protos, fix Makefile by @daeMOn63 in #113
+* add slashing module API by @solarw in #116
+* added evidence module API by @solarw in #117
+* fix staking tests by @daeMOn63 in #119
+* feat: add params rest client by @daeMOn63 in #120
+* Add distribution module by @Galadrin in #92
+* Mint module by @solarw in #122
+* Initial documentation using MkDocs by @5A11 in #123
+* Basic staking support by @ejfitzgerald in #125
+* Minor docs edit by @5A11 in #129
+* Feature/release 0.3.0 by @5A11 in #131
+* Release 0.3.0 by @5A11 in #132
+
 ## 0.3.0 (2022-03-30)
 
 - Introduced `Aerial` high-level API.
