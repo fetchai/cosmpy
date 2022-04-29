@@ -63,11 +63,11 @@ class NetworkConfig:
 
     @classmethod
     def fetchai_alpha_testnet(cls):
-        raise RuntimeError('No alpha testnet available')
+        raise RuntimeError("No alpha testnet available")
 
     @classmethod
     def fetchai_beta_testnet(cls):
-        raise RuntimeError('No beta testnet available')
+        raise RuntimeError("No beta testnet available")
 
     @classmethod
     def fetchai_stable_testnet(cls):
@@ -87,7 +87,7 @@ class NetworkConfig:
     def fetch_mainnet(cls) -> "NetworkConfig":
         warnings.warn(
             "fetch_mainnet is deprecated, use fetchai_mainnet instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
         return cls.fetchai_mainnet()
 
@@ -95,6 +95,6 @@ class NetworkConfig:
     def latest_stable_testnet(cls) -> "NetworkConfig":
         warnings.warn(
             "latest_stable_testnet is deprecated, use fetchai_stable_testnet instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
         return cls.fetchai_stable_testnet()
