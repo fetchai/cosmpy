@@ -1,5 +1,9 @@
 # Release History
 
+## 0.4.1
+
+* fix: mainnet chain_id and fee (#141)
+
 ## 0.4.0
 
 * fixes for rest api support (#138)
