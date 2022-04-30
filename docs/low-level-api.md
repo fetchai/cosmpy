@@ -127,11 +127,11 @@ For Ledger Nano users (other hardware wallets are available), that might mean an
 to the command line, such as...
 
 ```bash
-fetchd tx authz grant $(fetchd keys show grantee --output json | jq -r .address) generic --msg-type "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward" --from=$(fetchd keys show grantor --output json | jq -r .address) --gas auto --gas-adjustment 1.5 --gas-prices 5000000000atestfet
+fetchd tx authz grant $(fetchd keys show grantee --output json | jq -r .address) generic --msg-type "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission" --from=$(fetchd keys show grantor --output json | jq -r .address) --gas auto --gas-adjustment 1.5 --gas-prices 5000000000atestfet
 ```
 
-...which, by default, will provide one year's worth of authorization to withdraw delegator
-rewards, using accounts already present in the keyring.
+...which, by default, will provide one year's worth of authorization to withdraw validator
+commission, using accounts already present in the keyring.
 
 But for those with access to their keys in python, and with a bit more handling of protobuf messages...
 
