@@ -1,5 +1,3 @@
-# Connect to a network
-
 To start interacting with a blockchain, you first need to establish a connection to a network node. You can use `LedgerClient` as a client object which takes a `NetworkConfig` as an argument.
 
 ```python

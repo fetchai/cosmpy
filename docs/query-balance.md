@@ -1,5 +1,3 @@
-# ️Querying balance
-
 To query the balance of an account using a [`LedgerClient`](connect-to-network.md) object `ledger_client`:
 
 ```python

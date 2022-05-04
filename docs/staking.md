@@ -1,5 +1,3 @@
-# Staking
-
 A big part of the cosmos networks is staking. Staking is the process where you delegate your tokens to the network's validators in order to secure the network. There are three main actions you can take when staking:
 
 * **Delegating**: This is the process where you send your tokens to a chosen validator. They are applied immediately and you start earning rewards as soon as this transaction completes. The more tokens you stake, the more rewards you will earn.
