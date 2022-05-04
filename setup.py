@@ -61,6 +61,7 @@ setup(
         "grpcio",
         "click",
         "types-certifi",
+        "blspy",
     ],
     extras_require={
         "dev": [
