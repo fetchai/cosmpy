@@ -20,7 +20,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
+from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # type: ignore
 
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
