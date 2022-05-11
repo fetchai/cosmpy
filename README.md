@@ -71,7 +71,7 @@ for coin in balances:
 
 ## Documentation
 
-To see the documentation, first run:
+To see the documentation:
 
 ```bash
 make docs-live
