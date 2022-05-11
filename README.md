@@ -83,7 +83,7 @@ Then (if on Linux or MacOS):
 make open-docs
 ```
 
-This will launch the local documentation [pages](http://127.0.0.1:8000/cosmpy/). On windows, open `docs/build/html/index.html`.
+This will launch the documentation [pages](http://127.0.0.1:8000/cosmpy/) locally on your machine. On windows, open `docs/build/html/index.html`.
 
 ## Examples
 
