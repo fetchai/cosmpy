@@ -18,10 +18,13 @@
 # ------------------------------------------------------------------------------
 
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from cosmpy.crypto.address import Address
+from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PrivateKey, PublicKey
+from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
 
 
 class Wallet(ABC):
@@ -42,6 +45,19 @@ class LocalWallet(Wallet):
     @staticmethod
     def generate() -> "LocalWallet":
         return LocalWallet(PrivateKey())
+
+    @staticmethod
+    def from_mnemonic(mnemonic: str) -> "LocalWallet":
+        seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
+        bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath()
+        return LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
+
+    @staticmethod
+    def from_unsafe_seed(text: str, index: Optional[int] = None) -> "LocalWallet":
+        private_key_bytes = sha256(text.encode())
+        if index is not None:
+            private_key_bytes = sha256(private_key_bytes + index.to_bytes(4, byteorder='big'))
+        return LocalWallet(PrivateKey(private_key_bytes))
 
     def __init__(self, private_key: PrivateKey):
         self._private_key = private_key
