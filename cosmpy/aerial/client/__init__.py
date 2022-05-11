@@ -51,8 +51,10 @@ from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
-from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryBalanceRequest
-from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryAllBalancesRequest
+from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
+    QueryAllBalancesRequest,
+    QueryBalanceRequest,
+)
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
     QueryDelegationRewardsRequest,
