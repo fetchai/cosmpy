@@ -13,7 +13,7 @@
     <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/cosmpy">
   </a>
   <a href="https://github.com/fetchai/cosmpy/blob/main/LICENSE">
-    <img alt="License" src="https://img.shields.io/pypi/l/cosmpy"> 
+    <img alt="License" src="https://img.shields.io/pypi/l/cosmpy">
   </a>
 </p>
 <p align="center">
@@ -45,39 +45,36 @@ A python library for interacting with cosmos based blockchain networks
 
 ## Installing
 
-To install the project use:
+To install the library use:
 
-    pip3 install cosmpy
+```bash
+pip3 install cosmpy
+```
 
-## Getting started
+## Getting Started
 
-Below is a simple example for querying an account's balance and sending funds from one account to another using `RestClient`:
+Below is a simple example for querying an account's balance using the REST/Grpc client:
 
-    from cosmpy.clients.ledger import CosmosLedger
-    from cosmpy.clients.crypto import CosmosCrypto, Coin
+```python
+from cosmpy.aerial.client import LedgerClient, NetworkConfig
 
-    # Data
-    rest_node_address = "http://the_rest_endpoint"
-    alice_crypto = CosmosCrypto(private_key_str="<private_key_in_hex_format>"))
-    chain_id = "some_chain_id"
-    denom = "some_denomination"
-    bob_address = "some_address"
+# connect to Fetch.ai network using default parameters
+ledger_client = LedgerClient(NetworkConfig.fetch_mainnet())
 
-    ledger = CosmosLedger(chain_id=chain_id, rest_node_address=rest_endpoint_addres)
-    
-    # Query Alice's Balance
-    res = ledger.get_balance(alice_crypto.get_address(), denom)
-    print(f"Alice's Balance: {res} {denom}")
-    
-    # Send 1 <denom> from Alice to Bob
-    ledger.send_tokens(alice_crypto, bob_address, [Coin(amount="1", denom=denom)])
+alice: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
+balance = ledger_client.query_bank_all_balances(alice)
+
+# show all coin balances
+for coin in balances:
+  print(f'{coin.amount}{coin.denom}')
+```
 
 ## Documentation
 
 To see the documentation, first run:
 
 ```bash
-make generate-docs
+make docs
 ```
 
 Then (if on Linux or MacOS):
@@ -86,15 +83,15 @@ Then (if on Linux or MacOS):
 make open-docs
 ```
 
-And if on windows, open `docs/build/html/index.html`.
+This will launch the local documentation [pages](http://127.0.0.1:8000/cosmpy/). On windows, open `docs/build/html/index.html`.
 
 ## Examples
 
 Under the `examples` directory, you can find examples of basic ledger interactions with `cosmpy` using both REST and gRPC, e.g. querying, sending a transaction, interacting with a smart contract, and performing atomic swaps. To run any example `<example_file_name>`:  
 
-  ```bash
-  python ./examples/<example_file_name>.py
-  ```
+```bash
+python ./examples/<example_file_name>.py
+```
 
 ## Extra Resources
 

@@ -166,6 +166,11 @@ copyright-check:
 docs:
 	mkdocs build --clean
 
+
+.PHONY: open-docs
+open-docs:
+	mkdocs serve
+
 ####################
 ### Clean and init commands
 ####################
