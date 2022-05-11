@@ -1,5 +1,3 @@
-# Sending Tokens
-
 Once you have your [`wallet`](wallets-and-keys.md) configured, you can send transactions to the network. The `LedgerClient` object provides useful utilities to do common operations. The following example shows how to send `10` `atestfet` to another address:
 
 ```python

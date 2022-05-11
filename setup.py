@@ -71,7 +71,7 @@ setup(
             "black==22.3",
             "mypy==0.910",
             "mkdocs==1.3",
-            "mkdocs-material==8.2.8",
+            "mkdocs-material==8.2.11",
             "bandit==1.7.0",
             "safety==1.10.3",
             "isort==5.9.3",
@@ -80,7 +80,6 @@ setup(
             "pylint==2.9.6",
             "liccheck==0.6.2",
             "flake8-copyright==0.2.2",
-            "sphinx==4.1.2",
             # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
             "grpcio-tools<=1.32.0",
         ],

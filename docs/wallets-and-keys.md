@@ -1,5 +1,3 @@
-# Wallets and Keys
-
 To make changes on a network, you will need to start sending transactions to it. This in tern involves managing private keys and addresses. Luckily, CosmPy makes this relatively straightforward.
 
 The following code outlines how to both generate a completely new private key and how to recover a previously generated one:
