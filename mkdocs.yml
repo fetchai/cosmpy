@@ -15,6 +15,8 @@ nav:
     - Staking: 'staking.md'
     - Smart Contracts:
       - Deploy a contract: 'deploy-a-contract.md'
+  - Advanced:
+      - Low-level API: 'low-level-api.md'
 
 theme:
   name: material
