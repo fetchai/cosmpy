@@ -24,3 +24,29 @@ Creating the wallet allows users to query useful information such as the address
 ```python
 print(wallet.address()) # will print the address for the wallet
 ```
+
+## Exporting private keys from your CLI keyring
+
+If you wish to use cosmpy with an account already present in your CLI keyring, extract the private key and convert it into a base64 encoded string as follows (using the fetchd CLI
+as an example)...
+
+```bash
+fetchd keys export mykeyname --unsafe --unarmored-hex | xxd -r -p | base64
+```
+
+## Recovering keys from a mnemonic, using python
+
+If you wish to use cosmpy with an account for which you have the mnemonic phrase, although you
+could always add it to your fetchd keyring then export it as above, it is also possible to
+achieve this in python as follows...
+
+```python
+from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
+
+mnemonic = "person knife december tail tortoise jewel warm when worry limit reward memory piece cool sphere kitchen knee embody soft own victory sauce silly page"
+seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
+bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath()
+wallet = LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
+```
+
+(Obviously, in real life, you would _never_ include a mnemonic in code that is checked in to git!)
