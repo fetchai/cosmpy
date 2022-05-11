@@ -53,16 +53,16 @@ pip3 install cosmpy
 
 ## Getting Started
 
-Below is a simple example for querying an account's balance using the REST/Grpc client:
+Below is a simple example for querying an account's balances:
 
 ```python
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 
 # connect to Fetch.ai network using default parameters
-ledger_client = LedgerClient(NetworkConfig.fetch_mainnet())
+ledger_client = LedgerClient(NetworkConfig.fetchai_mainnet())
 
 alice: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
-balance = ledger_client.query_bank_all_balances(alice)
+balances = ledger_client.query_bank_all_balances(alice)
 
 # show all coin balances
 for coin in balances:
@@ -74,24 +74,16 @@ for coin in balances:
 To see the documentation, first run:
 
 ```bash
-make docs
+make docs-live
 ```
 
-Then (if on Linux or MacOS):
+Then navigate to the following URL in your browser: 
 
-```bash
-make open-docs
-```
-
-This will launch the local documentation [pages](http://127.0.0.1:8000/cosmpy/). On windows, open `docs/build/html/index.html`.
+[http://127.0.0.1:8000/cosmpy/](http://127.0.0.1:8000/cosmpy/)
 
 ## Examples
 
-Under the `examples` directory, you can find examples of basic ledger interactions with `cosmpy` using both REST and gRPC, e.g. querying, sending a transaction, interacting with a smart contract, and performing atomic swaps. To run any example `<example_file_name>`:  
-
-```bash
-python ./examples/<example_file_name>.py
-```
+Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy` e.g. transferring tokens, staking, deployinig and interacting with a smart contract, and performing atomic swaps.
 
 ## Extra Resources
 

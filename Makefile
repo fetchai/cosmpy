@@ -167,7 +167,7 @@ docs:
 	mkdocs build --clean
 
 
-.PHONY: open-docs
+.PHONY: docs-live
 open-docs:
 	mkdocs serve
 
