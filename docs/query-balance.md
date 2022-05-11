@@ -1,6 +1,6 @@
 # ️Querying balances
 
-To query the balances of an account using a [`LedgerClient`](connect-to-network.md) object named `ledger_client`:
+A  [`LedgerClient`](connect-to-network.md) object can be used to query the balances associated with a particular address:
 
 ```python
 address: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
