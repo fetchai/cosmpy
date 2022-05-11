@@ -117,6 +117,7 @@ class Validator:
     moniker: str
     status: ValidatorStatus
 
+
 @dataclass
 class Coin:
     amount: int
