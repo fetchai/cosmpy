@@ -1,5 +1,3 @@
-# ️Querying balances
-
 A  [`LedgerClient`](connect-to-network.md) object can be used to query the balances associated with a particular address:
 
 ```python

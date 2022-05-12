@@ -1,5 +1,3 @@
-# Contract Deployment
-
 You can deploy smart contracts in CosmPy using `LedgerContract`. For this, you will need the path to where the contract is stored (in this case `simple.wasm`), a [`LedgerClient`](connect-to-network.md) and a [`Wallet`](wallets-and-keys.md):
 
 ```python
