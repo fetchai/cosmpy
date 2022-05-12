@@ -9,12 +9,14 @@ nav:
   - Getting started: 'index.md'
   - Beginner:
     - Connect to a network: 'connect-to-network.md'
-    - Query the balance: 'query-balance.md'
+    - Querying balances: 'query-balance.md'
     - Wallets and Keys: 'wallets-and-keys.md'
     - Send tokens: 'send-tokens.md'
     - Staking: 'staking.md'
     - Smart Contracts:
       - Deploy a contract: 'deploy-a-contract.md'
+  - Advanced:
+      - Low-level API: 'low-level-api.md'
 
 theme:
   name: material

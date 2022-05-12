@@ -1,22 +1,16 @@
-# Cosmpy - Low level API examples
+The Cosmpy library provides a high-level API which greatly simplifies the
+most common use cases when interacting with Cosmos-based chains (e.g. [sending
+tokens](send-tokens.md), [staking](staking.md), [deploying and interacting with contracts](deploy-a-contract.md)). There are [documentation](connect-to-network.md) and
+[example code](https://github.com/fetchai/cosmpy/tree/master/examples) covering such use cases.
 
-The Cosmpy library provides a high level API which greatly simplifies the
-most common use cases when interacting with Cosmos based chains (sending
-tokens, staking, deploying and interacting with contracts etc). This repo contains
-[documentation](https://github.com/fetchai/cosmpy/blob/master/docs/) and
-[example code](https://github.com/fetchai/cosmpy/tree/master/examples) covering
-the use of Cosmpy for such use cases.
-
-However it also provides low-level access to the entire Cosmos SDK, enabling the
+However, cosmpy also provides low-level access to the entire Cosmos-SDK, enabling the
 full gamut of functionality to be accessed, albeit with a little more boiler-plate.
 
-This document is intended to help developers navigate the low-level, protobuf based API functionality, provided by Cosmpy.
+Here, we aim to help developers navigate the low-level, protobuf-based API functionality, provided by Cosmpy.
 
 ## Recap: High Level API - Aerial
 
-As a reminder, here is a quick example of using the high level functionality
-provided by Cosmpy. In this case, we connect to a testnet, create a wallet,
-stake some tokens with a validator, then claim our rewards...
+As a reminder, here is a quick example of using the high level functionality provided by Cosmpy. In this case, we connect to a testnet, create a wallet, stake some tokens with a validator, then claim our rewards:
 
 ```python
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
@@ -31,25 +25,21 @@ tx = client.claim_rewards("fetchvaloper1rsane988vksrgp2mlqzclmt8wucxv0ej4hrn2k",
 tx.wait_to_complete()
 ```
 
-The available high-level helper functions provided by Cosmpy can be found by browsing eg
+The available high-level helper functions provided by cosmpy can be found by browsing for instance
 [the aerial client package]("https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/client/__init__.py").
 
-## Low Level API - simple messages
+## Low Level API
 
-However, not all cosmos-sdk functionality is encapsulated in the high level aerial packages.
-In which case it is necessary to locate, and use, the definition of the relevant protobuf message.
+### Simple Messages
 
-For example, analagous to the reward claim example given above, what if a validator operator
-wished to claim their commission? Now, at the time of writing, there is no
-`client.claim_commission()` high level API method available, so the low level API
-must be used.
+Not all Cosmos-SDK functionality is encapsulated in the high level aerial packages. In which case, it is necessary to locate and use the definition of the relevant protobuf message.
 
-Drilling down into the [protos](cosmpy/cosmpy/protos/) directory, we come across the definition
-of a [MsgWithdrawValidatorCommission](https://github.com/fetchai/cosmpy/blob/6d7b5f49722b67c803145d55aa291fe426c19994/cosmpy/protos/cosmos/distribution/v1beta1/tx_pb2.py#L160)
-message, which looks like just what we need. It takes a single field, `validator_address`,
-which is a utf-8 string.
+Analogous to the rewards claim example above, what if a validator operator wanted to claim their commission? At the time of writing, there is no high-level API to achieve this, so the low level API must be used.
 
-The code to send a transaction containing such a message might look something like...
+In the [protos](https://github.com/fetchai/cosmpy/tree/master/cosmpy/protos) directory, there is a [MsgWithdrawValidatorCommission](https://github.com/fetchai/cosmpy/blob/6d7b5f49722b67c803145d55aa291fe426c19994/cosmpy/protos/cosmos/distribution/v1beta1/tx_pb2.py#L160)
+message, which is what we need. It takes a single `validator_address` parameter which is a `utf-8` string.
+
+To send a transaction containing such a message:
 
 ```python
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
@@ -72,25 +62,18 @@ tx = prepare_and_broadcast_basic_transaction(client, tx, wallet)
 tx.wait_to_complete()
 ```
 
-## Low Level API - nested messages using protobuf.Any
+### Nested messages
 
-The above example created and broadcast a simple `MsgWithdrawValidatorCommission` message.  
-However sometimes it is necessary to include one message in another. For example what if
-we wanted to use the above message, but execute it from a different account using authz?
-(ie use an account which holds minimal funds, whose keys need not be treated with the
-same level of care as those of the validator itself).
+The above example creates and broadcasts a simple `MsgWithdrawValidatorCommission` message. However, sometimes it is necessary to include one message in another. For example, what if we wanted to use the above message but execute it from a different account using `authz` (i.e. use an account which holds minimal funds, whose keys need not be treated with the same level of care as those of the validator itself)?
 
-In this case, we'll need to send an authz
+In this case, we'll need to send an `authz`
 [MsgExec](https://github.com/fetchai/cosmpy/blob/4abb976753edcab402fcc23d4dce3ab67b73b608/cosmpy/protos/cosmos/authz/v1beta1/tx_pb2.py#L114)
-message, which we found by browsing the
-[tx_pb2.py](https://github.com/fetchai/cosmpy/blob/4abb976753edcab402fcc23d4dce3ab67b73b608/cosmpy/protos/cosmos/authz/v1beta1/tx_pb2.py) file in the cosmos/authz area of the cosmpy/protos.
-This message consists of two fields. The "grantee" is a simple string address, as above.
-But the msgs field needs to support multiple types of message, not just
-MsgWithdrawValidatorCommission.
-Protobuf is strongly typed, so to facilitate this flexibility, it is necesssary to first pack the
-nested message into a protobuf.Any message.
+message, which can be found in [tx_pb2.py](https://github.com/fetchai/cosmpy/blob/4abb976753edcab402fcc23d4dce3ab67b73b608/cosmpy/protos/cosmos/authz/v1beta1/tx_pb2.py) under `cosmos/authz` area of `cosmpy/protos`.
+This message takes two parameters. The `grantee` is a simple string address similar to the above. But the `msgs` field needs to support multiple types of messages and not just `MsgWithdrawValidatorCommission`. 
 
-Therefore we arrive at code looking something like...
+Protobuf is strongly typed, so to facilitate this flexibility, it is necessary to first pack the nested message into a `protobuf.Any` message.
+
+Therefore, we arrive at the code looking like:
 
 ```python
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
@@ -120,20 +103,17 @@ tx = prepare_and_broadcast_basic_transaction(client, tx, wallet)
 tx.wait_to_complete()
 ```
 
-## Low Level API - more protobuf examples
+### More protobuf examples
 
-However, before running the above, the necessary authz grant must first be put in place.
-For Ledger Nano users (other hardware wallets are available), that might mean an excursion
-to the command line, such as...
+Before running the above, the necessary `authz` grant must first be put in place. For Ledger Nano users (other hardware wallets are also available) that might mean an excursion to the command line. For the Fetchai network using [FetchD](https://docs.fetch.ai/ledger_v2/):
 
 ```bash
 fetchd tx authz grant $(fetchd keys show grantee --output json | jq -r .address) generic --msg-type "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission" --from=$(fetchd keys show grantor --output json | jq -r .address) --gas auto --gas-adjustment 1.5 --gas-prices 5000000000atestfet
 ```
 
-...which, by default, will provide one year's worth of authorization to withdraw validator
-commission, using accounts already present in the keyring.
+By default, the above provides one year's worth of authorization to withdraw validator commission using accounts already present in the keyring.
 
-But for those with access to their keys in python, and with a bit more handling of protobuf messages...
+For those with access to their keys in python:
 
 ```python
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
