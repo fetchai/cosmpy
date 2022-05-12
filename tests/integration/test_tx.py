@@ -25,6 +25,7 @@ from cosmpy.aerial.wallet import LocalWallet
 from tests.integration.utils import TestNetFaucetApi
 
 
+@pytest.mark.integration
 def test_faucet_transaction_balance():
     """Test faucet claims, tx settled, balance check."""
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())

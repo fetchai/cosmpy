@@ -30,6 +30,7 @@ from tests.integration.utils import TestNetFaucetApi
 CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
 
 
+@pytest.mark.integration
 def test_contract():
     """Test simple contract deploy execute and query."""
     wallet = LocalWallet.generate()
