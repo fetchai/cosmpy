@@ -1,13 +1,21 @@
-To query the balance of an account using a [`LedgerClient`](connect-to-network.md) object `ledger_client`:
+A  [`LedgerClient`](connect-to-network.md) object can be used to query the balances associated with a particular address:
 
 ```python
-balance = ledger_client.query_bank_balance('fetch1h2l3cnu7e23whmd5yrfeunacez9tv0plv5rxqy')
+address: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
+balances = ledger_client.query_bank_all_balances(address)
 ```
 
-`fetch1h2l3cnu7e23whmd5yrfeunacez9tv0plv5rxqy` in the above code is the account's address.
-
-By default, this will query the fee denomination that is in the network config associated with `ledger_client`. To explicitly specify the denomination value:
+This will return a `List` of `Coin` objects that contain `amount` and  `denom` variables that correspond to all of the funds held at the address and their denominations. This list includes all natively defined coins along with any tokens transferred using the inter-blockchain communication ([IBC](https://ibcprotocol.org/)) protocol.  
 
 ```python
-balance = ledger_client.query_bank_balance('cosmos1h2l3cnu7e23whmd5yrfeunacez9tv0plv5rxqy', denom='uatom')
+>>> balances
+[Coin(amount='29263221445595384075', denom='afet')]
 ```
+
+It's also possible to query the funds associated with a particular denomination by calling  
+
+```python
+balance = ledger_client.query_bank_balance(address, denom='afet')
+```
+
+which will return the value of the (integer) funds held by the address with the specified denomination. If the `denom` argument is omitted the function will return the fee denomination specified in the `NetworkConfig` object used to initialise the `LedgerClient`.
