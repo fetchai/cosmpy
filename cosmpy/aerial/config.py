@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 import warnings
 from dataclasses import dataclass
+from typing import Optional
 
 
 class NetworkConfigError(RuntimeError):
@@ -39,6 +40,7 @@ class NetworkConfig:
     fee_denomination: str
     staking_denomination: str
     url: str
+    faucet_url: Optional[str]
 
     def validate(self):
         if self.chain_id == "":
@@ -59,6 +61,7 @@ class NetworkConfig:
             fee_minimum_gas_price=5000000000,
             fee_denomination="atestfet",
             staking_denomination="atestfet",
+            faucet_url="https://faucet-dorado.fetch.ai",
         )
 
     @classmethod

@@ -16,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+from cosmpy.aerial.faucet import FaucetApi
+
 """Integration tests for contract functions."""
 from pathlib import Path
 
@@ -25,7 +27,6 @@ from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
 from cosmpy.aerial.wallet import LocalWallet
-from tests.integration.utils import TestNetFaucetApi
 
 CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
 
@@ -34,7 +35,8 @@ CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
 def test_contract():
     """Test simple contract deploy execute and query."""
     wallet = LocalWallet.generate()
-    TestNetFaucetApi.get_wealth(wallet.address())
+    faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
+    faucet_api.get_wealth(wallet.address())
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
     contract = LedgerContract(CONTRACT_PATH, ledger)
     contract_address = contract.deploy({}, wallet)

@@ -21,19 +21,20 @@ import pytest
 
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
-from tests.integration.utils import TestNetFaucetApi
 
 
 @pytest.mark.integration
 def test_faucet_transaction_balance():
     """Test faucet claims, tx settled, balance check."""
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
     wallet1 = LocalWallet.generate()
     wallet2 = LocalWallet.generate()
     balance1 = ledger.query_bank_balance(wallet1.address())
 
-    TestNetFaucetApi.get_wealth(wallet1.address())
+    faucet_api.get_wealth(wallet1.address())
     balance2 = ledger.query_bank_balance(wallet1.address())
 
     assert balance2 > balance1
