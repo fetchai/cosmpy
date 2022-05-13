@@ -9,7 +9,7 @@ The easiest way to get set up for development is to install Python `>=3.7` and `
 
 ## Development commands
 
-There are various makefile commands which are helpful during development. Some of the more prominent ones are listed below:
+There are various makefile commands that help the development. Some of them are:
 
 - For linting:
   ```bash
@@ -20,25 +20,22 @@ There are various makefile commands which are helpful during development. Some o
     make mypy
     make pylint
   ```
-- For code security analysis:
-  ```bash
-    make security
-  ```
-
 - To run tests:
   ```bash
     make test
   ```
+  
+Before committing and opening a PR, use the above commands to run the checks locally. This saves CI hours and ensures you only commit clean code.
 
 ## Generating python types from Cosmos SDK protobuf schemas
 
 This library uses python types which are generated (using [Google's Protocol Buffers](https://developers.google.com/protocol-buffers/) compiler) from protocol buffer schemas in the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) and [WasmD](https://github.com/CosmWasm/wasmd).
 
-When updating the Cosmos SDK version supported by this library (see the version currently used under `COSMOS_SDK_VERSION` in [Makefile](#Makefile])), you will need to fetch its corresponding protobuf schemas and generate their associated python types, replacing the existing ones.
+When updating the Cosmos-SDK version that is supported by this library (see the version currently used under `COSMOS_SDK_VERSION` in [Makefile](#Makefile])), you will need to fetch its corresponding protobuf schemas and generate their associated python types, replacing the existing ones.
 
->Note: This process has to be done only once when the Cosmos SDK version supported by this library is changed.
+>Note: This process has to be done only once when the Cosmos-SDK version supported by this library is changed.
 
->Note: To generate python types from Cosmos SDK protobuf schemas, you will need [Google Protocol Buffers](https://developers.google.com/protocol-buffers/) compiler. A guide on how to install it can be found [here](https://fetchai.github.io/oef-sdk-python/user/install.html#protobuf-compiler).
+>Note: To generate python types from Cosmos-SDK protobuf schemas, you will need [Google Protocol Buffers](https://developers.google.com/protocol-buffers/) compiler. A guide on how to install it can be found [here](https://fetchai.github.io/oef-sdk-python/user/install.html#protobuf-compiler).
 
 * To regenerate the protobuf schema files, run the following:
   ```bash
@@ -74,29 +71,14 @@ The Makefile in this repo provides various useful commands that ease development
 * `make liccheck`: checks dependencies and reports any license issues
 * `make copyright-check`: checks that files have the correct copyright headers 
 * documentation:
-  * `make generate-docs`: generates documentation from the source code
-  * `make open-docs`: opens `index.html` page of the documentation (if on Linux or MacOS).
+  * `make docs`: generates documentation from the source code
+  * `make docs-live`: creates a live-reloading docs server on localhost.
 
-## To setup a local Stargate node
+## To set up a local Fetchai node
 
-### Preliminaries
+To set up a local Fetchai node refer to [this guide](https://docs.fetch.ai/ledger_v2/single-node-network/).
 
-You require Go version 16.0 or higher for your platform (see <a href="https://golang.org/doc/install" target="_blank">here</a>)
-
-### Setup a node
-
-- Setup FetchD
-  ```bash
-  bash scripts/setup_fetchd.sh
-  ```
-  The script will ask for root permissions while setting up a node.
-
-- Start the node
-  ```bash
-  fetchd start
-  ```
-
-## To run a local Stargate node in docker
+## To run a local Fetchai node in docker
 
 ### Preliminaries
 
@@ -139,7 +121,10 @@ You require [Docker](https://docs.docker.com/get-docker/) for your platform.
 
 * Execute:
   ```bash
-  docker run -it --rm --entrypoint /scripts/<ENTRYPOINT_SCRIPT_NAME> -p 9090:9090 -p 1317:1317 -v <PATH_TO_ENTRYPOINT_SCRIPT>:/scripts/ fetchai/fetchd:0.9.0-rc4
+  docker run -it --rm --entrypoint /scripts/<ENTRYPOINT-SCRIPT-NAME> -p 9090:9090 -p 1317:1317 -v <PATH-TO-ENTRYPOINT-SCRIPT>:/scripts/ <FETCH-IMAGE-TAG>
   ```
 
-where `<ENTRYPOINT_SCRIPT_NAME>` is the name of the entrypoint script (e.g.`fetchd_initialise.sh`) and `<PATH_TO_ENTRYPOINT_SCRIPT>` is the path to the directory you placed the script (e.g.`~/fetchd_docker/`).
+where
+* `<ENTRYPOINT-SCRIPT-NAME>` is the name of the entrypoint script (e.g.`fetchd_initialise.sh`)
+* `<PATH-TO-ENTRYPOINT-SCRIPT>` is the path to the directory you placed the script (e.g.`~/fetchd_docker/`),
+* `<FETCH-IMAGE-TAG>` is the tag of the FetchD docker image you want to run (e.g. `fetchai/fetchd:0.10.0` for Dorado) 

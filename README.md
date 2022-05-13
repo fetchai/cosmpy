@@ -85,6 +85,10 @@ Then navigate to the following URL in your browser:
 
 Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy` e.g. transferring tokens, staking, deployinig and interacting with a smart contract, and performing atomic swaps.
 
+## To contribute
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) and [DEVELOPING](DEVELOPING.md) guides. 
+
 ## Extra Resources
 
 * [Github Repo](https://github.com/fetchai/cosmpy)
