@@ -1,8 +1,8 @@
 ---
-name: Feature request ☝️
+name: ☝️ Feature request
 about: Suggest an idea for this project
-title: ''
-labels: ['Status: Unconfirmed', 'Type: Enhancement 🧠']
+title: 'Feature: '
+labels: ['unconfirmed', 'enhancement']
 assignees: ''
 
 ---
