@@ -2,7 +2,7 @@
 name: Feature request ☝️
 about: Suggest an idea for this project
 title: ''
-labels: ['Status: Unconfirmed', 'Enhancement 🧠']
+labels: ['Status: Unconfirmed', 'Type: Enhancement 🧠']
 assignees: ''
 
 ---
