@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 import time
+
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.wallet import LocalWallet
