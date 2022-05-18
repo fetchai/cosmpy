@@ -22,6 +22,7 @@ from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.keypairs import PrivateKey
 
+
 def main():
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
@@ -72,7 +73,6 @@ def main():
             tx = ledger.delegate_tokens(validator.address, true_reward, alice)
             tx.wait_to_complete()
 
-
         else:
             print("Fees from claim rewards transaction exceeded reward")
 
@@ -80,6 +80,6 @@ def main():
         time.sleep(period)
         time_check = time.monotonic() - start_time
 
+
 if __name__ == "__main__":
     main()
-        
