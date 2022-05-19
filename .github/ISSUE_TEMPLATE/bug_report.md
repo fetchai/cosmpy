@@ -8,11 +8,11 @@ labels: ['unconfirmed', 'bug']
 
 # Prerequisites
 
-Please answer the following questions for yourself before submitting an issue.
+Please answer the following questions before submitting an issue.
 
 - [ ] I am running the latest version
 - [ ] I checked the documentation and found no answer
-- [ ] I checked to make sure that this issue has not already been filed
+- [ ] I checked to make sure that this issue has not already been reported
 
 # Expected Behavior
 
