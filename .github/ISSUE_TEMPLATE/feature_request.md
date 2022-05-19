@@ -7,14 +7,23 @@ assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+Please read and confirm before submitting a feature request:
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+- [ ] I checked the [documentation](http://docs.fetch.ai/cosmPy/) and made sure this feature does not already exist.
+- [ ] I checked [here](https://github.com/fetchai/cosmpy/issues) to make sure that this feature has not already been requested.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## Problem
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+If your feature request relates to a problem, provide a description here, e.g. I'm always frustrated when [...]
+
+## Solution
+
+Provide a description of what you want to happen.
+
+## Alternatives
+
+Provide any alternative solutions or features you've considered.
+
+## Additional context
+
+Any other context or screenshots about the feature request.
