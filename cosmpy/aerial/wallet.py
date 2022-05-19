@@ -43,11 +43,12 @@ class LocalWallet(Wallet):
     def generate() -> "LocalWallet":
         return LocalWallet(PrivateKey())
 
-    def __init__(self, private_key: PrivateKey):
+    def __init__(self, private_key: PrivateKey, prefix: str=None):
         self._private_key = private_key
+        self._prefix = prefix
 
     def address(self) -> Address:
-        return Address(self._private_key)
+        return Address(self._private_key, self._prefix)
 
     def public_key(self) -> PublicKey:
         return self._private_key
