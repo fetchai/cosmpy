@@ -51,13 +51,15 @@ def _generate_label(digest: bytes) -> str:
 
 class LedgerContract:
     def __init__(
-        self, path: str, client: LedgerClient, address: Optional[Address] = None
+        self, client: LedgerClient, path: Optional[str] = None, address: Optional[Address] = None
     ):
         self._path = path
         self._client = client
-        self._digest = _compute_digest(self._path)
-        self._code_id = self._find_contract_id_by_digest(self._digest)
         self._address = address
+        
+        if path != None:
+            self._digest = _compute_digest(self._path)
+            self._code_id = self._find_contract_id_by_digest(self._digest)
 
     @property
     def path(self) -> str:
