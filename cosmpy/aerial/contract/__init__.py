@@ -61,9 +61,18 @@ class LedgerContract:
         self._client = client
         self._address = address
 
-        if path != None:
+        # select the digest either by computing it from the provided contract or by the value specified by
+        # the user
+        if path is not None:
             self._digest = _compute_digest(self._path)
+        elif digest is not None:
+            self._digest = digest
+
+        # attempt to lookup the code id from the network by digest
+        if self._digest is not None:
             self._code_id = self._find_contract_id_by_digest(self._digest)
+        else:
+            self._code_id = None            
 
     @property
     def path(self) -> str:
@@ -87,12 +96,12 @@ class LedgerContract:
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
     ) -> int:
+        if self._path is None:
+            raise RuntimeError('Unable to upload code, no contract provided')
 
         # build up the store transaction
         tx = Transaction()
-
-        if self._path != None:
-            tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
+        tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
             self._client, tx, sender, gas_limit=gas_limit, memo=memo
