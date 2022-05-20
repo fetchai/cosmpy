@@ -52,9 +52,10 @@ def _generate_label(digest: bytes) -> str:
 class LedgerContract:
     def __init__(
         self,
+        path: Optional[str],
         client: LedgerClient,
-        path: Optional[str] = None,
         address: Optional[Address] = None,
+        digest: Optional[bytes] = None,
     ):
         self._path = path
         self._client = client
@@ -89,7 +90,9 @@ class LedgerContract:
 
         # build up the store transaction
         tx = Transaction()
-        tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
+
+        if self._path != None:
+            tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
             self._client, tx, sender, gas_limit=gas_limit, memo=memo
