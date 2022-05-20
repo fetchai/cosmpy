@@ -1,7 +1,7 @@
 name: Feature request
 description: Let us know anything that we can do better 
 title: "Feature request: <short description>"
-labels: ["request: feature"]
+labels: ["enhancement", "unconfirmed"]
 body:
   - type: markdown
     attributes:
@@ -36,6 +36,6 @@ body:
     attributes:
       label: Additional Info
       description: |
-        Provide additional information or links to resources that can help with the creation of this command.
+        Provide additional information or links to resources that can help with the creation of this feature.
     validations:
       required: false

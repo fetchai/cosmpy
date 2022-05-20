@@ -1,7 +1,7 @@
 name: Bug report
 description: Let us know about functionality that is not working as expected
 title: "Bug report: <short description>"
-labels: ["bug: product"]
+labels: ["bug", "unconfirmed"]
 body:
   - type: markdown
     attributes:
@@ -9,6 +9,18 @@ body:
         Thank you for reporting the issue you are facing.
 
         Please complete the below form to ensure we have the necessary details to assist you.
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please answer the following questions for yourself before submitting an issue
+      options:
+        - label: I am running the latest version
+          required: true
+        - label: I checked the documentation and found no answer
+          required: true
+        - label: I checked to make sure that this issue has not already been filed
+          required: true
   - type: textarea
     id: description
     attributes:
@@ -49,6 +61,14 @@ body:
         - Other
     validations:
       required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Setup details
+      description: |
+        Provide your setup details like the versions of the software/tools you are using 
+    validations:
+      required: false
   - type: textarea
     id: info
     attributes:
