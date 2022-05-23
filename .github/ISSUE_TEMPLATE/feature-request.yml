@@ -15,7 +15,7 @@ body:
       label: Prerequisites
       description: Please read and confirm before submitting a feature request.
       options:
-        - label: I checked the [documentation](http://docs.fetch.ai/cosmPy/) and made sure this feature does not already exist.
+        - label: I checked the [documentation](http://docs.fetch.ai/CosmPy/) and made sure this feature does not already exist.
           required: true
         - label: I checked [here](https://github.com/fetchai/cosmpy/issues) to make sure that this feature has not already been requested.
           required: true
