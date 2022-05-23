@@ -1,59 +1,66 @@
-name: Bug report
-description: Let us know about functionality that is not working as expected
+name: 🐛 Bug Report
+description: Report a reproducible bug.
 title: "Bug report: <short description>"
-labels: ["bug: product"]
+labels: ["bug", "unconfirmed"]
 body:
   - type: markdown
     attributes:
       value: |
         Thank you for reporting the issue you are facing.
 
-        Please complete the below form to ensure we have the necessary details to assist you.
-  - type: textarea
-    id: description
+        Please complete the following so we can have the details necessary to assist you.
+  - type: checkboxes
+    id: prerequisites
     attributes:
-      label: Description
-      description: Provide a short description of the issue you are facing
-    validations:
-      required: true
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to reproduce
-      description: Provide the steps you have taken so that we can reproduce the error
-    validations:
-      required: true
+      label: Prerequisites
+      description: Please read and confirm before submitting an issue.
+      options:
+        - label: I am running the latest CosmPy version. [![cosmpy PyPI version](https://img.shields.io/pypi/v/cosmpy?label=cosmpy%20%28PyPI%29)]
+          required: true
+        - label: I checked the [documentation](http://docs.fetch.ai/CosmPy/) and found no answer to my problem.
+          required: true
+        - label: I checked [here](https://github.com/fetchai/cosmpy/issues) to make sure that this issue has not already been reported.
+          required: true
   - type: textarea
     id: expected
     attributes:
-      label: Expected results
-      description: Provide a description of what you expect to happen
+      label: Expected Behavior
+      description: Describe the behavior you are expecting.
     validations:
       required: true
   - type: textarea
     id: actual
     attributes:
-      label: Actual results
-      description: Provide a description of what actually happens
-    validations:
-      required: true
-  - type: dropdown
-    id: os
-    attributes:
-      label: Operating system (environment)
-      description: Provide the operating system that you are using
-      options:
-        - Windows
-        - macOS
-        - Linux
-        - Other
+      label: Current Behavior
+      description: Describe the current behavior.
     validations:
       required: true
   - type: textarea
-    id: info
+    id: steps
     attributes:
-      label: Additional Info
-      description: |
-        Provide any additional information (screenshots) that may help with the identification of the root cause of this issue
+      label: Steps to Reproduce the Behavior.
+      description: Detailed steps for reproducing the issue.
+      placeholder: |
+        1. step 1
+        2. step 2
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Any relevant information about your setup (this is important in case the issue is not reproducible except for under certain conditions)
+      placeholder: |
+        * Operating system: 
+        * Python version: 
+        * CosmPy version:
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Failure Logs
+      description: Include any relevant log snippets or files here.
     validations:
       required: false
