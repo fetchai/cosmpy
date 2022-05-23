@@ -1,23 +1,21 @@
 name: ☝️ Feature request
-description: Suggest an idea for this project 
+description: Suggest an idea for this project
 title: "Feature request: <short description>"
 labels: ["enhancement", "unconfirmed"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting an idea to make better.
-
-        Please complete the below form to ensure we have all the details to get things started.
+        Thank you for suggesting a new idea for this project. Please complete the following to ensure we have all the details to get things started.
   - type: checkboxes
     id: prerequisites
     attributes:
       label: Prerequisites
-      description: Please read and confirm before submitting a feature request.
+      description: Please confirm before submitting a feature request.
       options:
         - label: I checked the [documentation](http://docs.fetch.ai/CosmPy/) and made sure this feature does not already exist.
           required: true
-        - label: I checked [here](https://github.com/fetchai/cosmpy/issues) to make sure that this feature has not already been requested.
+        - label: I checked the [existing issues](https://github.com/fetchai/cosmpy/issues) to make sure this feature has not already been requested.
           required: true
   - type: textarea
     id: problem
@@ -26,13 +24,13 @@ body:
       description: |
         If your feature request relates to a problem, provide a description here, e.g. I'm always frustrated when [...]
     validations:
-      required: true
+      required: false
   - type: textarea
     id: solution
     attributes:
-      label: Solution
+      label: Feature / Solution
       description: |
-        Provide a description of what you want to happen.
+        Provide a description of what you want to happen
     validations:
       required: true
   - type: textarea
@@ -40,12 +38,12 @@ body:
     attributes:
       label: Alternatives
       description: |
-        Provide any alternative solutions or features you've considered.
+        Provide any alternative solutions or features you've considered
   - type: textarea
     id: info
     attributes:
       label: Additional Context
       description: |
-        Any other context or screenshots about the feature request.
+        Any other context or screenshots about the feature request
     validations:
       required: false
