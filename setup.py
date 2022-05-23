@@ -61,6 +61,7 @@ setup(
         "grpcio",
         "click",
         "types-certifi",
+        "bip-utils",
     ],
     extras_require={
         "dev": [
