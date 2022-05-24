@@ -13,7 +13,7 @@ body:
       label: Prerequisites
       description: Please confirm before submitting a new issue
       options:
-        - label: I am running the [latest CosmPy version](https://docs.fetch.ai/CosmPy/#version).
+        - label: I am running the latest CosmPy version. [![cosmpy PyPI version](https://img.shields.io/pypi/v/cosmpy?label=cosmpy%20%28PyPI%29)](https://pypi.org/project/cosmpy/)
           required: true
         - label: I checked the [documentation](http://docs.fetch.ai/CosmPy/) and found no answer to my problem.
           required: true
