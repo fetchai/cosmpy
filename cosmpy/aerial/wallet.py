@@ -64,11 +64,12 @@ class LocalWallet(Wallet):
             )
         return LocalWallet(PrivateKey(private_key_bytes))
 
-    def __init__(self, private_key: PrivateKey):
+    def __init__(self, private_key: PrivateKey, prefix: str = None):
         self._private_key = private_key
+        self._prefix = prefix
 
     def address(self) -> Address:
-        return Address(self._private_key)
+        return Address(self._private_key, self._prefix)
 
     def public_key(self) -> PublicKey:
         return self._private_key
