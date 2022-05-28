@@ -7,13 +7,13 @@ Contributions to this library are welcome.
 - If you would like to contribute a bug fix or feature then [submit a Pull request](https://github.com/fetchai/cosmpy/pulls).
 
 For other kinds of feedback, you can contact one of the
-[authors](https://github.com/fetchai/cosmpy/blob/main/AUTHORS.md) by email.
+[authors](https://github.com/fetchai/cosmpy/blob/master/AUTHORS.md) by email.
 
-Before reading on, please have a look at the [code of conduct](https://github.com/fetchai/cosmpy/blob/main/CODE_OF_CONDUCT.md).
+Before reading on, please have a look at the [code of conduct](https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md).
 
 ## A few simple rules
 
-- All Pull Requests should be opened against the `develop` branch. Do **not** open a Pull Request against `main`!
+- All Pull Requests should be opened against the `develop` branch. Do **not** open a Pull Request against `master`!
 
 - Before working on a feature, reach out to one of the core developers or discuss the feature in an issue. The framework caters a diverse audience and new features require upfront coordination.
 
