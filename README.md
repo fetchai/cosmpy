@@ -20,23 +20,6 @@
   <a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
     <img alt="AEA framework sanity checks and tests" src="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg">
   </a>
-
-[comment]: <> (  <a href="">)
-[comment]: <> (    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/fetchai/cosmpy">)
-[comment]: <> (  </a>)
-
-  <a href="https://img.shields.io/badge/lint-flake8-blueviolet">
-    <img alt="flake8" src="https://img.shields.io/badge/lint-flake8-yellow" >
-  </a>
-  <a href="https://github.com/python/mypy">
-    <img alt="mypy" src="https://img.shields.io/badge/static%20check-mypy-blue">
-  </a>
-  <a href="https://github.com/psf/black">
-    <img alt="Black" src="https://img.shields.io/badge/code%20style-black-black">
-  </a>
-  <a href="https://github.com/PyCQA/bandit">
-    <img alt="mypy" src="https://img.shields.io/badge/security-bandit-lightgrey">
-  </a>
 </p>
 
 <p align="center">
@@ -77,17 +60,17 @@ To see the documentation:
 make docs-live
 ```
 
-Then navigate to the following URL in your browser: 
+Then navigate to the following URL in your browser:
 
 [http://127.0.0.1:8000/cosmpy/](http://127.0.0.1:8000/cosmpy/)
 
 ## Examples
 
-Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy` e.g. transferring tokens, staking, deployinig and interacting with a smart contract, and performing atomic swaps.
+Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy` e.g. transferring tokens, staking, deploying and interacting with a smart contract, and performing atomic swaps.
 
 ## To contribute
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [DEVELOPING](DEVELOPING.md) guides. 
+Please see [CONTRIBUTING](CONTRIBUTING.md) and [DEVELOPING](DEVELOPING.md) guides.
 
 ## Extra Resources
 
