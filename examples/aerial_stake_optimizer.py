@@ -1,24 +1,21 @@
+import json
+
+import numpy as np
+from scipy.optimize import brentq
+from sympy import *
+from sympy.utilities.lambdify import lambdify
+
 from cosmpy.aerial.client import LedgerClient
-from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import create_delegate_msg
-from cosmpy.aerial.tx import SigningCfg
+from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.aerial.tx import Transaction
-
-from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsRequest
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
-from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryTotalSupplyRequest
-
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.crypto.address import Address
-
-import json
-import numpy as np
-
-from scipy.optimize import brentq
-from sympy.utilities.lambdify import lambdify
-from sympy import *
+from cosmpy.crypto.keypairs import PrivateKey
+from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryTotalSupplyRequest
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
+from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsRequest
 
 
 def main():
