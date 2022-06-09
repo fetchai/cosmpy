@@ -1,8 +1,8 @@
-When an account delegates tokens to a network's validator, it will start generating rewards, they will be proportional to the amount of [`Stake`](staking.md) delegated. But since rewards aren't automatically added to your stake and therefore don't contribute to future rewards, we can perform a `compounding strategy` to generate exponential rewards.
+When an account delegates tokens to a network's validator, it will start generating rewards proportional to the amount of [`Stake`](staking.md) delegated. But since rewards aren't automatically added to your stake and therefore don't contribute to future rewards, we can perform a compounding strategy to generate exponential rewards.
 
 ## Delegate
 
-The first thing we need to do is delegate some tokens to a validator. You can do so by using a [`Wallet`](wallets-and-keys.md) and specifying the `validator address` and amount.
+The first thing we need to do is delegate some tokens to a `validator`. You can do so by using a [`Wallet`](wallets-and-keys.md) and specifying the validator address and amount.
 
 ```python
 validators = ledger_client.query_validators()
@@ -20,16 +20,16 @@ tx.wait_to_complete()
 
 ## Auto Compounder
 
-Then we can construct a code that `claims` rewards and `delegates` the rewarded tokens back to the `validator`. This way we keep growing our [`Stake`](staking.md) and therefore we generate compounded rewards. We first need to define the time limit and the compounding period.
+Then we can construct a code that claims rewards and delegates the rewarded tokens back to the `validator`. This way we keep growing our [`Stake`](staking.md) and therefore we generate compounded rewards. We first need to define the `time limit` and the compounding `period`.
 
-It is important to note that each time an account performs a claim or a delegate `transaction` it has to pay certain `fees`, therefore the compounding period has to be long enough to generate sufficient rewards to exceed the fees that will be paid in each transaction.
+It is important to note that each time an account performs a claim or a delegate transaction it has to pay certain fees, therefore the compounding period has to be long enough to generate sufficient rewards to exceed the fees that will be paid in each transaction.
 
 ```python
 # set time limit and compounding period in seconds
 time_limit = 600
 period = 100
 ```
-Finally, we start a timer that `claims` rewards and `delegates` them in each `time period`. Notice that in the code below we constructed a while loop that will be running until the timer exceeds the time limit. Each loop will last the time specified in `period`. We query the balance before and after claiming rewards to get the value of the reward after any fees. If the true reward value is positive, we delegate those tokens to the validator, if it is negative, it means that the fees from claiming and delegating transactions exceeded the rewards and therefore we won't delegate.
+Finally, we start a timer that claims rewards and delegates them in each time period. Notice that in the code below we constructed a while loop that will be running until the timer exceeds the `time limit`. Each loop will last the time specified in `period`. We query the balance before and after claiming rewards to get the value of the reward after any fees. If the true reward value is positive, we delegate those tokens to the validator, if it is negative, it means that the fees from claiming and delegating transactions exceeded the rewards and therefore we won't delegate.
 
 
 ```python
@@ -71,4 +71,4 @@ while time_check < time_limit:
     time_check = time.monotonic() - start_time
 ```
 
-You can view the full `staking auto-compounder` example at [examples/aerial_compounder.py](../examples/aerial_compounder.py)
+You can view the full python example at [staking auto-compounder](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_compounder.py)
