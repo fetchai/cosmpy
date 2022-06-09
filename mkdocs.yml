@@ -16,8 +16,10 @@ nav:
     - Smart Contracts:
       - Deploy a contract: 'deploy-a-contract.md'
   - Advanced:
-      - Low-level API: 'low-level-api.md'
-      - Staking Auto-Compounder: 'auto-compounder.md'
+    - Low-level API: 'low-level-api.md'
+  - Use-Cases:
+    - Staking Auto-Compounder: 'auto-compounder.md'
+    - Oracles: 'oracles.md'
 
 theme:
   name: material
