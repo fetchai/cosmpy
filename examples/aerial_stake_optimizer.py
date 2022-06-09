@@ -1,6 +1,5 @@
 import json
 
-import numpy as np
 from scipy.optimize import brentq
 from sympy import *
 from sympy.utilities.lambdify import lambdify
@@ -121,7 +120,6 @@ def main():
     M = (S * (1 + (k * x)) ** (D / x)) + (
         (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
     ) * f
-    Mx = lambdify(x, M)
 
     # Take the derivativa of the function with respect to x
     M_prime = M.diff(x)
