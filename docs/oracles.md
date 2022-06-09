@@ -77,6 +77,8 @@ while True:
     sleep(UPDATE_INTERVAL_SECONDS)
 ```
 
+For the complete example script, see [aerial_oracle.py](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_oracle.py).
+
 ## Oracle client
 
 Now we'll write a script that deploys a contract that can request the oracle value in exchange for the required fee.
@@ -112,4 +114,4 @@ while True:
     sleep(REQUEST_INTERVAL_SECONDS)
 ```
 
-For the complete example script, see [oracles](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_oracles.py).
+For the complete example script, see [aerial_oracle_client.py](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_oracle_client.py).
