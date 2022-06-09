@@ -18,7 +18,8 @@ nav:
   - Advanced:
     - Low-level API: 'low-level-api.md'
   - Use-Cases:
-    - Staking Auto-Compounder: 'auto-compounder.md'
+    - Stake Auto-Compounder: 'auto-compounder.md'
+    - Stake Optimizer: 'stake-optimizer.md'
     - Oracles: 'oracles.md'
 
 theme:
