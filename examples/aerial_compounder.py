@@ -33,7 +33,7 @@ def main():
     # choose any validator
     validator = validators[0]
 
-    key = PrivateKey("JM5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
+    key = PrivateKey("FX5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
     alice = LocalWallet(key)
 
     # delegate some tokens to this validator
@@ -45,14 +45,14 @@ def main():
     time_limit = 600
     period = 100
 
-    # keep in mind that querying, claiming and staking rewards takes around 10 extra seconds
-
     time_check = 0
     start_time = time.monotonic()
     time.sleep(period)
 
     # query, claim and stake rewards after time period
     while time_check < time_limit:
+
+        begin = time.monotonic()
 
         summary = ledger.query_staking_summary(alice.address())
         print(f"Staked: {summary.total_staked}")
@@ -78,7 +78,9 @@ def main():
             print("Fees from claim rewards transaction exceeded reward")
 
         print()
-        time.sleep(period)
+
+        end = time.monotonic()
+        time.sleep(period - (end - begin))
         time_check = time.monotonic() - start_time
 
 
