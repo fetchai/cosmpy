@@ -51,7 +51,7 @@ def main():
 
     # query, claim and stake rewards after time period
     while time_check < time_limit:
-        
+
         begin = time.monotonic()
 
         summary = ledger.query_staking_summary(alice.address())
@@ -78,9 +78,9 @@ def main():
             print("Fees from claim rewards transaction exceeded reward")
 
         print()
-        
+
         end = time.monotonic()
-        time.sleep(period-(end-begin))
+        time.sleep(period - (end - begin))
         time_check = time.monotonic() - start_time
 
 
