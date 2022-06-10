@@ -31,3 +31,9 @@ When the security team receives a security bug report, they will assign it to a 
 ## Comments on this Policy
 
 If you have suggestions on how this process could be improved please submit a pull request.
+
+## Bug Bounty
+
+We have a [**bug bounty program**](https://docs.fetch.ai/bug_bounty/). Please report any security issues you find, or reach out to `developer@fetch.ai`.
+
+Critical bug fixes will be backported to past major releases.
