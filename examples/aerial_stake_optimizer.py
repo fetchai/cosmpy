@@ -18,10 +18,6 @@
 # ------------------------------------------------------------------------------
 import json
 
-from scipy.optimize import brentq
-from sympy import Symbol
-from sympy.utilities.lambdify import lambdify
-
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import create_delegate_msg
@@ -33,6 +29,12 @@ from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryTotalSupplyRequest
 from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsRequest
+
+
+def M(x, f, S, k, D):
+    return (S * (1 + (k * x)) ** (D / x)) + (
+        (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
+    ) * f
 
 
 def main():
@@ -127,24 +129,20 @@ def main():
     minuteReward = anualDelegatorReward / 360 / 24 / 60
     rate = minuteReward / initial_stake
 
-    # Compoute optimal compounding period
-    x = Symbol("x")
+    # Compute optimal period
     f = fee
     S = initial_stake
     k = rate
     D = total_period
 
-    # Function that calculates total rewards as function of period x
-    M = (S * (1 + (k * x)) ** (D / x)) + (
-        (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
-    ) * f
+    # List of compounding periods
+    X = [i for i in range(1, D)]
 
-    # Take the derivativa of the function with respect to x
-    M_prime = M.diff(x)
-    Mx_prime = lambdify(x, M_prime)
+    # Evaluate function M on each compounding period
+    R = [M(x, f, S, k, D) for x in X]
 
-    # Get optimal period when derivative = 0 in the range (0,D]
-    optimal_period = round(brentq(Mx_prime, 0.1, D))
+    # Fnd the period that maximizes rewards
+    optimal_period = R.index(max(R)) + 1
 
     # These values can be used in aerial_compounder.py to maximize rewards
     print("total period: ", total_period, "minutes")
