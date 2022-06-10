@@ -18,7 +18,7 @@ ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 ### Staking Variables
 
 First, we need to define the desired amount and the total period that we would like to stake in:
-`initial_stake` and `total_period` variables. Here we will stake 50 TESTFET for 60000 minutes. For this guide, we will work with minutes as a time unit, feel free to change the time unit if it is more convenient for your specific case.
+`initial_stake` and `total_period` variables. Here we will stake 50 TESTFET for 60000 minutes. For this guide, we will work with minutes as a time unit.
 
 ```python
 initial_stake = 50000000000000000000
