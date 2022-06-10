@@ -4,13 +4,13 @@ When you delegate tokens to a validator for a determined period, you can use the
 * **Calculate Reward Rate**: After you select and query all the variables needed, you will calculate the reward rate
 * **Calculate Optimal Compounding Period**: You will calculate the optimal compounding period that will maximize your rewards
 
-First, you need to define a network to work with, in this case, we will interact with dorado testnet.
+First, you need to define a network to work with.
 
 ```python
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 
-ledger = LedgerClient(NetworkConfig.fetchai_dorado_testnet())
+ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 ```
 
 ## Set and Query Variables
