@@ -1,7 +1,7 @@
 import json
 
 from scipy.optimize import brentq
-from sympy import *
+from sympy import Symbol
 from sympy.utilities.lambdify import lambdify
 
 from cosmpy.aerial.client import LedgerClient
