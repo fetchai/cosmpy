@@ -27,7 +27,7 @@ print(wallet.address()) # will print the address for the wallet
 
 ## Existing account
 
-To use cosmpy with an existing account, extract the private key and convert it into a base64 encoded string. 
+To use cosmpy with an existing account, extract the private key and convert it into a base64 encoded string.
 
 For example, to do this on MacOS or Linux for the Fetch.ai network using its [FetchD](https://docs.fetch.ai/ledger_v2/) CLI:
 
@@ -49,5 +49,5 @@ bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath(
 wallet = LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
 ```
 
-!!! danger 
+!!! danger
     Of course in real applications, you should **never** include a mnemonic in public code.
