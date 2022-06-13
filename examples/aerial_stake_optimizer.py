@@ -31,6 +31,12 @@ from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsRequest
 
 
+# This function returns the total reward for given:
+# * f -> fee
+# * S -> Initial Stake
+# * k -> Reward Rate
+# * D -> Total staking period
+# * x -> Compounding Period
 def M(x, f, S, k, D):
     return (S * (1 + (k * x)) ** (D / x)) + (
         (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
@@ -38,7 +44,7 @@ def M(x, f, S, k, D):
 
 
 def main():
-    ledger = LedgerClient(NetworkConfig.fetchai_dorado_testnet())
+    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
     # Set initial stake and desired stake period
     initial_stake = 50000000000000000000
@@ -56,15 +62,54 @@ def main():
     ]
     total_stake = sum(validators_stake)
 
-    # Choose a validator
+    validators_comission = [
+        int(validator.commission.commission_rates.rate)
+        for validator in resp.validators
+        if validator.status == 3
+    ]
+
     validators = ledger.query_validators()
-    validator = validators[0]
+    validator = "not_selected"
+
+    # Choose a threshold for a validators minimum percentage of total stake delegated
+    stake_threshold = 0.10
+
+    for i in range(len(validators_comission)):
+
+        # Choose validator with lower commission
+        validator_index = validators_comission.index(min(validators_comission))
+
+        # Verify that it meets the minimum % threshold
+        validator_stake_pct = validators_stake[validator_index] / total_stake
+        if validator_stake_pct >= stake_threshold:
+
+            # Set the selected validator
+            validator = validators[validator_index]
+            break
+
+        else:
+            # We omit this validator by setting his commssion to infinity
+            validators_comission[validator_index] = float("inf")
+
+    if validator == "not_selected":
+        # Restart validators_comission list with oiriginal values
+        validators_comission = [
+            int(validator.commission.commission_rates.rate)
+            for validator in resp.validators
+            if validator.status == 3
+        ]
+
+        print("No validator meets the minium stake threshold requirement")
+
+        # Proceed to select the validator with lowest commission
+        validator_index = validators_comission.index(min(validators_comission))
+        validator = validators[validator_index]
 
     # Query validator commission
     commission = float(resp.validators[0].commission.commission_rates.rate) / 1e18
 
     # Set percentage delegated of total stake
-    pctDelegatedOfTotalStake = initial_stake / total_stake
+    pct_delegated = initial_stake / total_stake
 
     # Estmate fees for claiming and delegating rewards
 
@@ -97,15 +142,15 @@ def main():
     denom = "atestfet"
     tx_fee = str_tx_fee[: -len(denom)]
 
-    # Round up to get a conservative estimate
-    fee = round(int(tx_fee), -len(tx_fee) + 1)
+    # Add a 20% to the fee estimation to get a more conservative estimate
+    fee = int(tx_fee) * 1.20
 
     # Query chain variables
 
     # Total Supply of tokens
     req = QueryTotalSupplyRequest()
     resp = ledger.bank.TotalSupply(req)
-    totalSupply = float(json.loads(resp.supply[0].amount))
+    total_supply = float(json.loads(resp.supply[0].amount))
 
     # Inflation
     req = QueryParamsRequest(subspace="mint", key="InflationRate")
@@ -115,19 +160,19 @@ def main():
     # Community Tax
     req = QueryParamsRequest(subspace="distribution", key="communitytax")
     resp = ledger.params.Params(req)
-    communityTax = float(json.loads(resp.param.value))
+    community_tax = float(json.loads(resp.param.value))
 
     # Anual reward calculation
-    anualDelegatorReward = (
-        (inflation * totalSupply)
-        * pctDelegatedOfTotalStake
-        * (1 - communityTax)
+    anual_reward = (
+        (inflation * total_supply)
+        * pct_delegated
+        * (1 - community_tax)
         * (1 - commission)
     )
 
     # Convert from anual reward to minute reward
-    minuteReward = anualDelegatorReward / 360 / 24 / 60
-    rate = minuteReward / initial_stake
+    minute_reward = anual_reward / 360 / 24 / 60
+    rate = minute_reward / initial_stake
 
     # Compute optimal period
     f = fee

@@ -64,7 +64,7 @@ query_validator = [v for v in resp.validators if v.description.moniker == select
 commission = int(query_validator.commission.commission_rates.rate)/1e18
 
 # Set percentage delegated of total stake
-pctDelegatedOfTotalStake = initial_stake/total_stake
+pct_delegated = initial_stake/total_stake
 ```
 
 ### Estimate Transaction Fees
@@ -116,7 +116,7 @@ There are three network variables that we need to query since they will contribu
 # Total Supply of tokens
 req = QueryTotalSupplyRequest()
 resp = ledger.bank.TotalSupply(req)
-totalSupply = float(json.loads(resp.supply[0].amount))
+total_supply = float(json.loads(resp.supply[0].amount))
 
 # Inflation
 req = QueryParamsRequest(subspace="mint", key="InflationRate") 
@@ -126,7 +126,7 @@ inflation = float(json.loads(resp.param.value))
 # Community Tax
 req = QueryParamsRequest(subspace="distribution", key="communitytax") 
 resp = ledger.params.Params(req)
-communityTax = float(json.loads(resp.param.value))
+community_tax = float(json.loads(resp.param.value))
 ```
 
 ## Calculate Reward Rate
@@ -136,13 +136,13 @@ We can now proceed to calculate a theoretical staking rewards rate using the var
 ```python
 
 # Calculate anual reward
-anualDelegatorReward = (inflation * totalSupply) *pctDelegatedOfTotalStake* (1- communityTax)*(1- commission)
+anual_reward = (inflation * total_supply) *pct_delegated* (1- community_tax)*(1- commission)
 
 # Convert from anual reward to minute reward
-minuteReward = anualDelegatorReward/360/24/60
+minute_reward = anual_reward/360/24/60
 
 # Set the rate
-rate = minuteReward/initial_stake
+rate = minute_reward/initial_stake
 ```
 
 ## Calculate Optimal Compounding Period
@@ -257,4 +257,4 @@ plt.legend()
 
 plt.yscale('log')
 ```
-You can view the full code at [`stake optimizer`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_stake_optimizer.py)
+You can view an abbreviated version of the code at [`stake optimizer`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_stake_optimizer.py)
