@@ -79,7 +79,7 @@ from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.crypto.address import Address
 from cosmpy.aerial.tx import Transaction
 
-# Use any address with tokens available
+# Use any address with at least the amount of initial_stake available
 key = PrivateKey("XZ5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
 alice = LocalWallet(key)
 alice_address = Address(key)._display
@@ -106,11 +106,11 @@ Since the output of this function is a string, we will convert it to an int and 
 denom = "atestfet"
 tx_fee = str_tx_fee[:-len(denom)]
 
-# Round up
-fee = round(int(tx_fee), -len(tx_fee)+1)
+# Add a 20% to the fee estimation to get a more conservative estimate
+fee = int(tx_fee) * 1.20
 ```
 ### Query Network Variables
-There are three network variables that we need to query since they will contribute to the staking rewards calculation: `total supply`, `inflation` and `community tax`
+There are three network variables that we need to query since they will contribute to the staking rewards calculation: `total_supply`, `inflation` and `community_tax`
 
 ```python
 # Total Supply of tokens
@@ -131,7 +131,7 @@ community_tax = float(json.loads(resp.param.value))
 
 ## Calculate Reward Rate
 
-We can now proceed to calculate a theoretical staking rewards rate using the variables gathered above. These are: `inflation`, `totalSupply`, `pctDelegatedOfTotalStake`, `communityTax` and `commission`
+We can now proceed to calculate a theoretical staking rewards rate using the variables gathered above. These are: `inflation`, `total_supply`, `pct_delegated`, `community_tax` and `commission`
 
 ```python
 
@@ -147,25 +147,25 @@ rate = minute_reward/initial_stake
 
 ## Calculate Optimal Compounding Period
 
-We can calculate the optimal compounding period that maximizes our staking rewards analytically by using the following function.
+We can calculate the optimal compounding period that maximizes our staking rewards analytically by using the following formula.
 
 
-$M(n)=S(1+k n)^{D/n}+\left(\frac{1-\left(1+k_{n}\right)^{D/n}}{k n}\right) f$
+<img src="images/reward_equation.png" width="400">
 
 Where:
 
-$M$  = Stake on day **D**
+*M*  = Total stake at time *D*
 
-$S$ = Initial Stake \
-$f$ = Transaction Fee \
-$k$ = Reward Rate
+*S*= Initial Stake \
+*f* = Transaction Fee \
+*k* = Reward Rate
 
-$m$ = Number Of Compounding Transactions \
-$n$ = Compounding Period
+*m* = Number Of Compounding Transactions \
+*n* = Compounding Period
 
-$D$ = $m*n$ = Total Staking Time
+*D* = *m x n* = Total Staking Time
 
-We will now find the value that maximizes reward by taking the first derivative with respect to $n$ and finding the root in the interval $(0,D]$
+We will now find the value that maximizes reward by taking the first derivative with respect to *n* and finding the root in the interval *(0,D]*
 
 ```python
 import numpy as np
@@ -205,7 +205,7 @@ plot = plt.figure(0,figsize=(6,4), dpi=100)
 
 y = np.linspace(1,300, 100)
 plt.plot(y,Mx(y),"k", label = 'analytical function')
-plt.axvline(x = optimal_period, color = 'r', linewidth = 2, label = 'optimal period')
+plt.axvline(x = optimal_period, color = 'g', linewidth = 2, label = f'optimal period: {round(optimal_period)}')
 plt.legend()
 
 plt.xlabel("Compounding periods")
@@ -213,6 +213,8 @@ plt.ylabel('Total Reward')
 plt.title('Maximizing Rewards')
 plt.grid()
 ```
+<img src="images/maximizing_rewards.png" width="400">
+
 
 Finally we can compare the compounding staking rewards to a simple non-compounding strategy
 
@@ -248,13 +250,15 @@ plt.legend()
 
 plt.subplot(1,2,2)
 
-plt.plot(comp_rewards, label = "Compounded Rewards")
+plt.plot(total_rewards, label = "Compounded Rewards")
 plt.plot(simple_rewards, label = "Simple Rewards")
 plt.xlabel("time in minutes")
 plt.ylabel('Reward')
-plt.title('log(Staking Rewards)')
+plt.title('Staking Rewards (log scale)')
 plt.legend()
 
 plt.yscale('log')
 ```
+<img src="images/compounded_vs_simple.png" width="800"> 
+
 You can view an abbreviated version of the code at [`stake optimizer`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_stake_optimizer.py)

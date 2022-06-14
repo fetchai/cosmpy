@@ -62,6 +62,7 @@ def main():
     ]
     total_stake = sum(validators_stake)
 
+    # Get validators comissions
     validators_comission = [
         int(validator.commission.commission_rates.rate)
         for validator in resp.validators
