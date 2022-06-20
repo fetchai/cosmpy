@@ -57,6 +57,8 @@ for coin in balances:
 
 ## Documentation
 
+Before running this command make sure your development environment is set up. Check [Development setup](DEVELOPING.md#development-commands) for more details.
+
 To see the documentation:
 
 ```bash
