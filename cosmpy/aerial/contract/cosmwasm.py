@@ -59,7 +59,7 @@ def create_cosmwasm_instantiate_msg(
     )
 
     if funds is not None:
-        msg.funds = parse_coins(funds)
+        msg.funds.extend(parse_coins(funds))
     if admin_address is not None:
         msg.admin = str(admin_address)  # noqa
 
@@ -78,6 +78,6 @@ def create_cosmwasm_execute_msg(
         msg=json.dumps(args).encode("UTF8"),
     )
     if funds is not None:
-        msg.funds = parse_coins(funds)
+        msg.funds.extend(parse_coins(funds))
 
     return msg
