@@ -16,8 +16,6 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-from cosmpy.aerial.faucet import FaucetApi
-
 """Integration tests for contract functions."""
 from pathlib import Path
 
@@ -26,6 +24,7 @@ import pytest
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
 CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"

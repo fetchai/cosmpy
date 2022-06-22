@@ -84,6 +84,7 @@ class NetworkConfig:
             fee_minimum_gas_price=0,
             fee_denomination="afet",
             staking_denomination="afet",
+            faucet_url=None,
         )
 
     @classmethod

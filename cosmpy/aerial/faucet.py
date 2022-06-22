@@ -16,15 +16,14 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-from cosmpy.aerial.config import NetworkConfig
-
-"""Integration tests for basic transactions."""
+"""Ledger faucet API interface."""
 import time
 from collections import namedtuple
 from typing import Optional, Union
 
 import requests
 
+from cosmpy.aerial.config import NetworkConfig
 from cosmpy.crypto.address import Address
 
 CosmosFaucetStatus = namedtuple("CosmosFaucetStatus", ["tx_digest", "status"])

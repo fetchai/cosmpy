@@ -16,8 +16,6 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-from cosmpy.crypto.keypairs import _base64_decode
-import base64
 """Integration tests for basic transactions."""
 import pytest
 
@@ -34,16 +32,14 @@ def test_faucet_transaction_balance():
     faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
     wallet1 = LocalWallet.generate()
     wallet2 = LocalWallet.generate()
-    
-    print(base64.b64encode(wallet1._private_key.private_key_bytes).decode())
-    print(base64.b64encode(wallet2._private_key.private_key_bytes).decode())
+
     balance1 = ledger.query_bank_balance(wallet1.address())
 
     faucet_api.get_wealth(wallet1.address())
     balance2 = ledger.query_bank_balance(wallet1.address())
 
     assert balance2 > balance1
-    
+
     wallet2_balance1 = ledger.query_bank_balance(wallet2.address())
     tokens_to_send = int(balance2 / 2)
     tx = ledger.send_tokens(wallet2.address(), tokens_to_send, "atestfet", wallet1)
