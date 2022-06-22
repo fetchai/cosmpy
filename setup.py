@@ -57,7 +57,7 @@ setup(
         "bech32",
         "requests",
         "google-api-python-client",
-        "protobuf",
+        "protobuf==3.20.1",
         "grpcio",
         "click",
         "types-certifi",
