@@ -7,6 +7,7 @@ include *.json
 include .firebaserc
 include mkdocs.yml
 recursive-include contracts *.wasm
+recursive-include contracts *.txt
 recursive-include docs *
 recursive-include examples *.py
 recursive-include scripts *.py

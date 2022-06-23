@@ -40,7 +40,7 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    wallet = LocalWallet(PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
+    wallet = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
