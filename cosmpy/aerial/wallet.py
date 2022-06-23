@@ -45,7 +45,7 @@ class Wallet(ABC):
 class LocalWallet(Wallet):
     @staticmethod
     def generate(prefix: Optional[str] = None) -> "LocalWallet":
-        return LocalWallet(PrivateKey(prefix=prefix))
+        return LocalWallet(PrivateKey(), prefix=prefix)
 
     @staticmethod
     def from_mnemonic(mnemonic: str, prefix: Optional[str] = None) -> "LocalWallet":
@@ -68,7 +68,7 @@ class LocalWallet(Wallet):
             )
         return LocalWallet(PrivateKey(private_key_bytes), prefix=prefix)
 
-    def __init__(self, private_key: PrivateKey, prefix: str = None):
+    def __init__(self, private_key: PrivateKey, prefix: Optional[str] = None):
         self._private_key = private_key
         self._prefix = prefix
 
