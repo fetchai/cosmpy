@@ -53,10 +53,14 @@ class LocalWallet(Wallet):
         bip44_def_ctx = Bip44.FromSeed(
             seed_bytes, Bip44Coins.COSMOS
         ).DeriveDefaultPath()
-        return LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()), prefix=prefix)
+        return LocalWallet(
+            PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()), prefix=prefix
+        )
 
     @staticmethod
-    def from_unsafe_seed(text: str, index: Optional[int] = None, prefix: Optional[str] = None) -> "LocalWallet":
+    def from_unsafe_seed(
+        text: str, index: Optional[int] = None, prefix: Optional[str] = None
+    ) -> "LocalWallet":
         private_key_bytes = sha256(text.encode())
         if index is not None:
             private_key_bytes = sha256(
