@@ -62,6 +62,7 @@ setup(
         "click",
         "types-certifi",
         "bip-utils",
+        "blspy",
     ],
     extras_require={
         "dev": [
