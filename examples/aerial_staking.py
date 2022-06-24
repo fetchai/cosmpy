@@ -32,7 +32,7 @@ def _wait_for_tx(operation: str, tx: SubmittedTx):
 
 
 def main():
-    alice = LocalWallet(PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
+    alice = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
