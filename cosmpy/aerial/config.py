@@ -40,7 +40,7 @@ class NetworkConfig:
     fee_denomination: str
     staking_denomination: str
     url: str
-    faucet_url: Optional[str]
+    faucet_url: Optional[str] = None
 
     def validate(self):
         if self.chain_id == "":

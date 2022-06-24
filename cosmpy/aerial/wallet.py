@@ -44,27 +44,31 @@ class Wallet(ABC):
 
 class LocalWallet(Wallet):
     @staticmethod
-    def generate() -> "LocalWallet":
-        return LocalWallet(PrivateKey())
+    def generate(prefix: Optional[str] = None) -> "LocalWallet":
+        return LocalWallet(PrivateKey(), prefix=prefix)
 
     @staticmethod
-    def from_mnemonic(mnemonic: str) -> "LocalWallet":
+    def from_mnemonic(mnemonic: str, prefix: Optional[str] = None) -> "LocalWallet":
         seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
         bip44_def_ctx = Bip44.FromSeed(
             seed_bytes, Bip44Coins.COSMOS
         ).DeriveDefaultPath()
-        return LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
+        return LocalWallet(
+            PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()), prefix=prefix
+        )
 
     @staticmethod
-    def from_unsafe_seed(text: str, index: Optional[int] = None) -> "LocalWallet":
+    def from_unsafe_seed(
+        text: str, index: Optional[int] = None, prefix: Optional[str] = None
+    ) -> "LocalWallet":
         private_key_bytes = sha256(text.encode())
         if index is not None:
             private_key_bytes = sha256(
                 private_key_bytes + index.to_bytes(4, byteorder="big")
             )
-        return LocalWallet(PrivateKey(private_key_bytes))
+        return LocalWallet(PrivateKey(private_key_bytes), prefix=prefix)
 
-    def __init__(self, private_key: PrivateKey, prefix: str = None):
+    def __init__(self, private_key: PrivateKey, prefix: Optional[str] = None):
         self._private_key = private_key
         self._prefix = prefix
 
