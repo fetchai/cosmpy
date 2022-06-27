@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+import argparse
 import time
 
 from google.protobuf import any_pb2
@@ -30,39 +31,64 @@ from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
-def main():
-
-    wallet = LocalWallet(PrivateKey("F7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
-    task_wallet = LocalWallet(
-        PrivateKey("HI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8=")
+def _parse_commandline():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("wallet_address", help="main wallet address")
+    parser.add_argument(
+        "task_wallet_address", help="wallet address that will perform transactions"
+    )
+    parser.add_argument(
+        "top_up_amount",
+        type=int,
+        help="top-up amount from wallet address to task_wallet address",
+    )
+    parser.add_argument(
+        "minimum_balance",
+        type=int,
+        help="minimum task_wallet address balance that will trigger top-up",
+    )
+    parser.add_argument(
+        "interval_time",
+        type=int,
+        help="interval time in seconds to query task_wallet's balance",
     )
 
-    # authz_wallet must have authorization to send tokens from wallet. see aerial_authz.py
+    return parser.parse_args()
+
+
+def main():
+    args = _parse_commandline()
+
+    wallet_address = args.wallet_address
+
+    task_wallet_address = args.task_wallet_address
+
+    # Use aerial_authz.py to authorize authz_wallet address to send tokens from wallet
     authz_wallet = LocalWallet(
         PrivateKey("KI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8=")
     )
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
-    # Set top-up amount
-    amount = 10000000000000000
+    # Top-up amount
+    amount = args.top_up_amount
     top_up_amount = Coin(amount=str(amount), denom="atestfet")
 
-    # Set minimum balance for task_wallet
-    minimum_balance = 1000000000000000
+    # Minimum balance for task_wallet
+    minimum_balance = args.minimum_balance
 
-    # Set interval to query task_wallet's balance
-    interval_time = 5
+    # Interval to query task_wallet's balance
+    interval_time = args.interval_time
 
     while True:
 
-        wallet_balance = ledger.query_bank_balance(str(wallet.address()))
+        wallet_balance = ledger.query_bank_balance(wallet_address)
 
         if wallet_balance < amount:
             print("Wallet doesnt have enought balance to top-up task_wallet")
             break
 
-        task_wallet_balance = ledger.query_bank_balance(str(task_wallet.address()))
+        task_wallet_balance = ledger.query_bank_balance(task_wallet_address)
 
         if task_wallet_balance < minimum_balance:
 
@@ -71,8 +97,8 @@ def main():
             msg = any_pb2.Any()
             msg.Pack(
                 MsgSend(
-                    from_address=str(wallet.address()),
-                    to_address=str(task_wallet.address()),
+                    from_address=wallet_address,
+                    to_address=task_wallet_address,
                     amount=[top_up_amount],
                 ),
                 "",

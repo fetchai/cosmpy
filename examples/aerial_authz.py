@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+import argparse
 from datetime import datetime, timedelta
 
 from google.protobuf import any_pb2, timestamp_pb2
@@ -29,21 +30,33 @@ from cosmpy.protos.cosmos.authz.v1beta1.authz_pb2 import GenericAuthorization, G
 from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgGrant
 
 
+def _parse_commandline():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "authz_address",
+        help="address that will be granted authorization to send tokens from wallet",
+    )
+    parser.add_argument(
+        "total_authz_time",
+        type=int,
+        help="authorization time for authz_address in minutes",
+    )
+
+    return parser.parse_args()
+
+
 def main():
+    args = _parse_commandline()
 
     wallet = LocalWallet(PrivateKey("F7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
 
-    # Set authz_wallet that will be granted authorization to send tokens from wallet
-    authz_wallet = LocalWallet(
-        PrivateKey("KI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8=")
-    )
+    authz_address = args.authz_address
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
-    # Set authorization time for authz_wallet in minutes
-    total_authz_time = 1000
+    total_authz_time = args.total_authz_time
 
-    # Authorize authz_wallet to send tokens from wallet
+    # Authorize authz_address to send tokens from wallet
     authz_any = any_pb2.Any()
     authz_any.Pack(
         GenericAuthorization(msg="/cosmos.bank.v1beta1.MsgSend"),
@@ -56,7 +69,7 @@ def main():
 
     msg = MsgGrant(
         granter=str(wallet.address()),
-        grantee=str(authz_wallet.address()),
+        grantee=authz_address,
         grant=grant,
     )
 
