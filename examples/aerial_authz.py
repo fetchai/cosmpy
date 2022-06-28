@@ -39,6 +39,8 @@ def _parse_commandline():
     parser.add_argument(
         "total_authz_time",
         type=int,
+        nargs="?",
+        default=10,
         help="authorization time for authz_address in minutes",
     )
 

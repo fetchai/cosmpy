@@ -40,16 +40,22 @@ def _parse_commandline():
     parser.add_argument(
         "top_up_amount",
         type=int,
+        nargs="?",
+        default=10000000000000000,
         help="top-up amount from wallet address to task_wallet address",
     )
     parser.add_argument(
         "minimum_balance",
         type=int,
+        nargs="?",
+        default=1000000000000000,
         help="minimum task_wallet address balance that will trigger top-up",
     )
     parser.add_argument(
         "interval_time",
         type=int,
+        nargs="?",
+        default=5,
         help="interval time in seconds to query task_wallet's balance",
     )
 
