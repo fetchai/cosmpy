@@ -60,6 +60,7 @@ def ripemd160(contents: bytes) -> bytes:
     :return: bytes ripemd160 hash.
     """
     # Next check is disabled because it fails on Python 3.7 even if algorithm is present.
+    print(hashlib.algorithms_available)
     if "ripemd160" not in hashlib.algorithms_available:
         return _ripemd160_mbedtls(contents)
 
