@@ -26,8 +26,10 @@ from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.keypairs import PrivateKey
-from cosmpy.protos.cosmos.authz.v1beta1.authz_pb2 import GenericAuthorization, Grant
+from cosmpy.protos.cosmos.authz.v1beta1.authz_pb2 import Grant
 from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgGrant
+from cosmpy.protos.cosmos.bank.v1beta1.authz_pb2 import SendAuthorization
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 def _parse_commandline():
@@ -42,6 +44,13 @@ def _parse_commandline():
         nargs="?",
         default=10,
         help="authorization time for authz_address in minutes",
+    )
+    parser.add_argument(
+        "spend_limit",
+        type=int,
+        nargs="?",
+        default=10000000000000000,
+        help="maximum tokens that authz_wallet will be able to spend from wallet",
     )
 
     return parser.parse_args()
@@ -58,10 +67,14 @@ def main():
 
     total_authz_time = args.total_authz_time
 
-    # Authorize authz_address to send tokens from wallet
+    amount = args.spend_limit
+
+    spend_amount = Coin(amount=str(amount), denom="atestfet")
+
+    # Authorize authz_wallet to send tokens from wallet
     authz_any = any_pb2.Any()
     authz_any.Pack(
-        GenericAuthorization(msg="/cosmos.bank.v1beta1.MsgSend"),
+        SendAuthorization(spend_limit=[spend_amount]),
         "",
     )
 
