@@ -58,6 +58,7 @@ setup(
         "requests",
         "google-api-python-client",
         "protobuf",
+        "python-mbedtls==2.2.0",
         "grpcio",
         "click",
         "types-certifi",
