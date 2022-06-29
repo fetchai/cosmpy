@@ -91,7 +91,7 @@ def main():
         wallet_balance = ledger.query_bank_balance(wallet_address)
 
         if wallet_balance < amount:
-            print("Wallet doesnt have enought balance to top-up task_wallet")
+            print("Wallet doesn't have enough balance to top-up task_wallet")
             break
 
         task_wallet_balance = ledger.query_bank_balance(task_wallet_address)
