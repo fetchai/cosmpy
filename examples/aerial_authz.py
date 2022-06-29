@@ -49,7 +49,7 @@ def _parse_commandline():
         "spend_limit",
         type=int,
         nargs="?",
-        default=10000000000000000,
+        default=1000000000000000000,
         help="maximum tokens that authz_wallet will be able to spend from wallet",
     )
 
