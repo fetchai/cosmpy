@@ -75,11 +75,11 @@ class LedgerContract:
             self._code_id = None
 
     @property
-    def path(self) -> str:
+    def path(self) -> Optional[str]:
         return self._path
 
     @property
-    def digest(self) -> bytes:
+    def digest(self) -> Optional[bytes]:
         return self._digest
 
     @property
