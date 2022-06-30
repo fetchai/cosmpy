@@ -57,7 +57,7 @@ class LedgerContract:
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
     ):
-        self._path =  path
+        self._path = path
         self._client = client
         self._address = address
 
