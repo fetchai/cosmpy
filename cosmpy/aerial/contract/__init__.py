@@ -57,14 +57,15 @@ class LedgerContract:
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
     ):
-        self._path = path
-        self._client = client
-        self._address = address
+        self._path: Optional[str] = path
+        self._client: LedgerClient = client
+        self._address: Optional[Address] = address
 
         # select the digest either by computing it from the provided contract or by the value specified by
         # the user
+        self._digest: Optional[bytes] = digest
         if path is not None:
-            self._digest = _compute_digest(self._path)
+            self._digest = _compute_digest(str(self._path))
         else:
             self._digest = digest
 
@@ -124,8 +125,10 @@ class LedgerContract:
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
-        # query the account information for the sender
-        label = label or _generate_label(self._digest)
+
+        assert self._digest is not None
+
+        label = label or _generate_label(bytes(self._digest))
 
         # build up the store transaction
         tx = Transaction()
