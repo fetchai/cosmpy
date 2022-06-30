@@ -65,7 +65,7 @@ class LedgerContract:
         # the user
         if path is not None:
             self._digest = _compute_digest(self._path)
-        elif digest is not None:
+        else:
             self._digest = digest
 
         # attempt to lookup the code id from the network by digest

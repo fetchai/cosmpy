@@ -168,7 +168,7 @@ docs:
 
 
 .PHONY: docs-live
-open-docs:
+docs-live:
 	mkdocs serve
 
 ####################

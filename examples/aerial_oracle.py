@@ -17,6 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 import argparse
+from time import sleep
+
+import requests
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
@@ -24,15 +27,23 @@ from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
 
+COIN_PRICE_URL = (
+    "https://api.coingecko.com/api/v3/simple/price?ids=fetch-ai&vs_currencies=usd"
+)
+UPDATE_INTERVAL_SECONDS = 10
+ORACLE_VALUE_DECIMALS = 5
+
 
 def _parse_commandline():
     parser = argparse.ArgumentParser()
-    parser.add_argument("contract_path", help="The path to the contract to upload")
+    parser.add_argument(
+        "contract_path", help="The path to the oracle contract to upload"
+    )
     parser.add_argument(
         "contract_address",
         nargs="?",
         type=Address,
-        help="The address of the contract is already deployed",
+        help="The address of the oracle contract if already deployed",
     )
     return parser.parse_args()
 
@@ -40,27 +51,39 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    wallet = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
+    wallet = LocalWallet(PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
-    contract.deploy({}, wallet)
 
-    print(f"Contract deployed at: {contract.address}")
+    if not args.contract_address:
+        instantiation_message = {"fee": "100"}
+        contract.deploy(instantiation_message, wallet, funds="1atestfet")
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
-    print("Initial state:", result)
+    print(f"Oracle contract deployed at: {contract.address}")
 
-    contract.execute({"set": {"value": "foobar"}}, wallet).wait_to_complete()
+    grant_role_message = {"grant_oracle_role": {"address": str(wallet.address())}}
+    contract.execute(grant_role_message, wallet).wait_to_complete()
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
-    print("State after set:", result)
+    print(f"Oracle role granted to address: {str(wallet.address())}")
 
-    contract.execute({"clear": {}}, wallet).wait_to_complete()
+    while True:
+        resp = requests.get(COIN_PRICE_URL).json()
+        price = resp["fetch-ai"]["usd"]
+        value = int(price * 10**ORACLE_VALUE_DECIMALS)
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
-    print("State after clear:", result)
+        update_message = {
+            "update_oracle_value": {
+                "value": str(value),
+                "decimals": str(ORACLE_VALUE_DECIMALS),
+            }
+        }
+        contract.execute(update_message, wallet).wait_to_complete()
+
+        print(f"Oracle value updated to: {price} USD")
+        print(f"Next update in {UPDATE_INTERVAL_SECONDS} seconds...")
+        sleep(UPDATE_INTERVAL_SECONDS)
 
 
 if __name__ == "__main__":

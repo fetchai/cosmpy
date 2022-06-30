@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 import argparse
+from time import sleep
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
@@ -24,15 +25,24 @@ from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
 
+REQUEST_INTERVAL_SECONDS = 10
+
 
 def _parse_commandline():
     parser = argparse.ArgumentParser()
-    parser.add_argument("contract_path", help="The path to the contract to upload")
+    parser.add_argument(
+        "contract_path", help="The path to the oracle client contract to upload"
+    )
+    parser.add_argument(
+        "oracle_contract_address",
+        type=Address,
+        help="The address of the oracle contract",
+    )
     parser.add_argument(
         "contract_address",
         nargs="?",
         type=Address,
-        help="The address of the contract is already deployed",
+        help="The address of the oracle client contract if already deployed",
     )
     return parser.parse_args()
 
@@ -40,27 +50,30 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    wallet = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
+    wallet = LocalWallet(PrivateKey("CI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8="))
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
-    contract.deploy({}, wallet)
 
-    print(f"Contract deployed at: {contract.address}")
+    if not args.contract_address:
+        instantiation_message = {
+            "oracle_contract_address": str(args.oracle_contract_address)
+        }
+        contract.deploy(instantiation_message, wallet)
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
-    print("Initial state:", result)
+    print(f"Oracle client contract deployed at: {contract.address}")
 
-    contract.execute({"set": {"value": "foobar"}}, wallet).wait_to_complete()
+    while True:
+        request_message = {"query_oracle_value": {}}
+        contract.execute(
+            request_message, wallet, funds="100atestfet"
+        ).wait_to_complete()
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
-    print("State after set:", result)
+        result = contract.query({"oracle_value": {}})
+        print(f"Oracle value successfully retrieved: {result}")
 
-    contract.execute({"clear": {}}, wallet).wait_to_complete()
-
-    result = contract.query({"get": {"owner": str(wallet.address())}})
-    print("State after clear:", result)
+        sleep(REQUEST_INTERVAL_SECONDS)
 
 
 if __name__ == "__main__":
