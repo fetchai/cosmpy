@@ -72,7 +72,7 @@ class LedgerContract:
         if self._digest is not None:
             self._code_id = self._find_contract_id_by_digest(self._digest)
         else:
-            self._code_id = None            
+            self._code_id = None
 
     @property
     def path(self) -> str:
@@ -97,7 +97,7 @@ class LedgerContract:
         memo: Optional[str] = None,
     ) -> int:
         if self._path is None:
-            raise RuntimeError('Unable to upload code, no contract provided')
+            raise RuntimeError("Unable to upload code, no contract provided")
 
         # build up the store transaction
         tx = Transaction()
