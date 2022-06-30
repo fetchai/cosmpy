@@ -57,9 +57,9 @@ class LedgerContract:
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
     ):
-        self._path: Optional[str] = path
-        self._client: LedgerClient = client
-        self._address: Optional[Address] = address
+        self._path =  path
+        self._client = client
+        self._address = address
 
         # select the digest either by computing it from the provided contract or by the value specified by
         # the user
