@@ -51,20 +51,34 @@ def _generate_label(digest: bytes) -> str:
 
 class LedgerContract:
     def __init__(
-        self, path: str, client: LedgerClient, address: Optional[Address] = None
+        self,
+        path: Optional[str],
+        client: LedgerClient,
+        address: Optional[Address] = None,
+        digest: Optional[bytes] = None,
     ):
         self._path = path
         self._client = client
-        self._digest = _compute_digest(self._path)
-        self._code_id = self._find_contract_id_by_digest(self._digest)
         self._address = address
 
+        # select the digest either by computing it from the provided contract or by the value specified by
+        # the user
+        self._digest: Optional[bytes] = digest
+        if path is not None:
+            self._digest = _compute_digest(str(self._path))
+
+        # attempt to lookup the code id from the network by digest
+        if self._digest is not None:
+            self._code_id = self._find_contract_id_by_digest(self._digest)
+        else:
+            self._code_id = None
+
     @property
-    def path(self) -> str:
+    def path(self) -> Optional[str]:
         return self._path
 
     @property
-    def digest(self) -> bytes:
+    def digest(self) -> Optional[bytes]:
         return self._digest
 
     @property
@@ -81,6 +95,8 @@ class LedgerContract:
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
     ) -> int:
+        if self._path is None:
+            raise RuntimeError("Unable to upload code, no contract provided")
 
         # build up the store transaction
         tx = Transaction()
@@ -107,8 +123,10 @@ class LedgerContract:
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
-        # query the account information for the sender
-        label = label or _generate_label(self._digest)
+
+        assert self._digest is not None
+
+        label = label or _generate_label(bytes(self._digest))
 
         # build up the store transaction
         tx = Transaction()
