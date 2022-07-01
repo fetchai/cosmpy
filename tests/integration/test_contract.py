@@ -34,9 +34,9 @@ CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
 def test_contract():
     """Test simple contract deploy execute and query."""
     wallet = LocalWallet.generate()
-    faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
     faucet_api.get_wealth(wallet.address())
-    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     contract = LedgerContract(CONTRACT_PATH, ledger)
     contract_address = contract.deploy({}, wallet)
     assert contract_address
@@ -53,12 +53,13 @@ def test_contract():
     assert result["value"] == value
 
 
+@pytest.mark.integration
 def test_deployed_contract():
     """Test interaction with already deployed contract."""
     wallet = LocalWallet.generate()
-    faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
     faucet_api.get_wealth(wallet.address())
-    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     contract = LedgerContract(CONTRACT_PATH, ledger)
     contract_address = contract.deploy({}, wallet)
     assert contract_address

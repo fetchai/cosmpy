@@ -10,7 +10,7 @@ First, you need to define a network to work with.
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 
-ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 ```
 
 ## Set and Query Variables

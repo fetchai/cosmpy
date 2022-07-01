@@ -44,7 +44,7 @@ def M(x, f, S, k, D):
 
 
 def main():
-    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
     # Set initial stake and desired stake period
     initial_stake = 50000000000000000000

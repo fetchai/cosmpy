@@ -42,7 +42,7 @@ def main():
 
     wallet = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
 
-    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
     contract.deploy({}, wallet)

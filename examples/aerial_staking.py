@@ -34,7 +34,7 @@ def _wait_for_tx(operation: str, tx: SubmittedTx):
 def main():
     alice = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
 
-    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
     # get all the active validators on the network
     validators = ledger.query_validators()

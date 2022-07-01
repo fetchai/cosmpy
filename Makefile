@@ -135,11 +135,11 @@ test:
 
 .PHONY: unit-test
 unit-test:
-	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "not integtest"
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "not integration"
 
 .PHONY: integration-test
 integration-test:
-	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "integtest"
+	coverage run -m pytest $(PYCOSM_TESTS_DIR) --doctest-modules --ignore $(PYCOSM_TESTS_DIR)/vulture_whitelist.py -m "integration"
 
 .PHONY: coverage-report
 coverage-report:
