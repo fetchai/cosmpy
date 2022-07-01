@@ -52,6 +52,7 @@ def test_contract():
     assert result["exists"]
     assert result["value"] == value
 
+
 @pytest.mark.integration
 def test_deployed_contract():
     """Test interaction with already deployed contract."""
