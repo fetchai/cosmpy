@@ -150,7 +150,7 @@ rate = minute_reward/initial_stake
 We can calculate the optimal compounding period that maximizes our staking rewards analytically by using the following formula.
 
 
-![Reward Equation](images/reward_equation.png)
+<img src="../images/reward_equation.png" width="400">
 
 Where:
 
