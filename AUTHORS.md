@@ -9,4 +9,3 @@ This is the official list of Fetch.ai authors for copyright purposes.
 * Oleg Panasevych <oleg.panasevych@n-cube.co.uk> [Panasevychol](https://github.com/panasevychol)
 * Peter Bukva <peter.bukva@fetch.ai> [pbukva](https://github.com/pbukva)
 * Yuri Turchenkov <yuri.turchenkov@fetch.ai> [solarw](https://github.com/solarw)
-

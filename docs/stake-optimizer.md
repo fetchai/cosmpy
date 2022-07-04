@@ -150,7 +150,7 @@ rate = minute_reward/initial_stake
 We can calculate the optimal compounding period that maximizes our staking rewards analytically by using the following formula.
 
 
-<img src="images/reward_equation.png" width="400">
+<img src="../images/reward_equation.png" width="400">
 
 Where:
 
@@ -213,7 +213,8 @@ plt.ylabel('Total Reward')
 plt.title('Maximizing Rewards')
 plt.grid()
 ```
-<img src="images/maximizing_rewards.png" width="400">
+
+<img src="../images/maximizing_rewards.png" width="400">
 
 
 Finally we can compare the compounding staking rewards to a simple non-compounding strategy
@@ -259,6 +260,6 @@ plt.legend()
 
 plt.yscale('log')
 ```
-<img src="images/compounded_vs_simple.png" width="800"> 
+<img src="../images/compounded_vs_simple.png" width="800"> 
 
 You can view an abbreviated version of the code at [`stake optimizer`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_stake_optimizer.py)
