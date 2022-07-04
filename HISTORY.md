@@ -1,6 +1,6 @@
 # Release History
 
-## 0.4.2
+## 0.5.0
 
 * add BLS support
 * add ability to create wallet from mnemonic or unsafe seed
