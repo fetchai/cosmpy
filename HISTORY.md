@@ -66,7 +66,6 @@
 * Added documentation using MkDocs
   
 * Added low-level support for Cosmos SDK's `gov` module
-
 * Added low-level support for Cosmos SDK's `distribution` module
 * Added low-level support for Cosmos SDK's `mint` module
 
