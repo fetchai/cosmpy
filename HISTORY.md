@@ -1,5 +1,25 @@
 # Release History
 
+## 0.4.2
+
+* add BLS support
+* add ability to create wallet from mnemonic or unsafe seed
+* add integration tests
+* LedgerContract switches path to optional
+* add address prefix to wallet
+* Add fallback hashlib for Ubuntu 22.04 LTS
+
+* fix: send funds in contract methods 
+* fix integration tests
+* fix: improve support for other chains
+
+* staking auto-compounder use-case
+* oracle example use-case
+* stake optimizer use-case
+* top-up wallet use-case
+
+* update documentation
+
 ## 0.4.1
 
 * fix: mainnet chain_id and fee (#141)
