@@ -7,9 +7,9 @@ Contributions to this library are welcome.
 - If you would like to contribute a bug fix or feature then [submit a Pull request](https://github.com/fetchai/cosmpy/pulls).
 
 For other kinds of feedback, you can contact one of the
-[authors](https://github.com/fetchai/cosmpy/blob/master/AUTHORS.md) by email.
+[authors](AUTHORS.md) by email.
 
-Before reading on, please have a look at the [code of conduct](https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md).
+Before reading on, please have a look at the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## A few simple rules
 
@@ -25,7 +25,7 @@ Before reading on, please have a look at the [code of conduct](https://github.co
   
 - When you contribute a new feature to `cosmpy`, the maintenance burden is transferred to the core team. This means that the benefit of the contribution must be compared against the cost of maintaining the feature.
 
-- Where possible, extend existing features instead of replacing one. 
+- Where possible, extend existing features instead of replacing one.
 
 - All files must include a license header.
 
