@@ -35,7 +35,7 @@ ORACLE_VALUE_DECIMALS = 5
 Next, we create a wallet and ledger interface to interact with the latest stable testnet:
 ```python
 wallet = LocalWallet(PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
-ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 ```
 
 Create the `LedgerContract` object:
@@ -86,7 +86,7 @@ Now we'll write a script that deploys a contract that can request the oracle val
 We again start by creating a wallet and ledger interface in a new terminal session:
 ```python
 wallet = LocalWallet(PrivateKey("CI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8="))
-ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 ```
 
 Set `ORACLE_CONTRACT_ADDRESS` to the address of the contract deployed in the previous script:

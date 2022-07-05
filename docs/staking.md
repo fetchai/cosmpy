@@ -8,7 +8,7 @@ A big part of the cosmos networks is staking. Staking is the process where you d
 
 `LedgerClient` provides useful utilities for interacting with the staking component of the network.
 
-!!! note 
+!!! note
     For simplicity, the staking methods do not have an option for specifying the `denom` field. This is because in almost all networks, there is only one staking denomination. Therefore, the denomination used is the one specified in the [`NetworkConfig`](connect-to-network.md) supplied to the `LedgerClient` object.
 
 ### Delegate
@@ -65,7 +65,7 @@ tx = ledger_client.claim_rewards(validator_address, wallet)
 tx.wait_to_complete()
 ```
 
-## Queries 
+## Queries
 
 ### Stake Summary
 

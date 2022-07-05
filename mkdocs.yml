@@ -21,6 +21,7 @@ nav:
     - Stake Auto-Compounder: 'auto-compounder.md'
     - Stake Optimizer: 'stake-optimizer.md'
     - Oracles: 'oracles.md'
+    - Wallet Top-up: 'wallet-topup.md'
 
 theme:
   name: material

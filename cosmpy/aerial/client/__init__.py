@@ -462,7 +462,7 @@ class LedgerClient:
                 raise
         except RuntimeError as e:
             details = str(e)
-            if "code = NotFound desc = tx not found" in details:
+            if "tx" in details and "not found" in details:
                 raise NotFoundError()
             else:
                 raise

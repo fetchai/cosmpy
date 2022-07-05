@@ -25,7 +25,7 @@ from cosmpy.crypto.keypairs import PrivateKey
 
 
 def main():
-    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
     # get all the active validators on the network
     validators = ledger.query_validators()

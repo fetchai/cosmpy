@@ -23,6 +23,14 @@ import hashlib
 
 from _hashlib import HASH  # type: ignore  # pylint: disable=no-name-in-module
 
+# Detect if ripemd160 can actually be used in the system. Querying `hashlib.algorithms_available`
+# does not mean much and will fail on 22.04 LTS
+try:
+    hashlib.new("ripemd160")
+    _ripemd160_present = True
+except ValueError:
+    _ripemd160_present = False
+
 
 def sha256(contents: bytes) -> bytes:
     """
@@ -37,6 +45,20 @@ def sha256(contents: bytes) -> bytes:
     return h.digest()
 
 
+def _ripemd160_stdlib(contents: bytes) -> bytes:
+    h: HASH = hashlib.new("ripemd160")
+    h.update(contents)
+    return h.digest()
+
+
+def _ripemd160_mbedtls(contents: bytes) -> bytes:
+    from mbedtls import hashlib as alt_hashlib
+
+    h: HASH = alt_hashlib.new("ripemd160")
+    h.update(contents)
+    return h.digest()
+
+
 def ripemd160(contents: bytes) -> bytes:
     """
     Get ripemd160 hash.
@@ -45,10 +67,10 @@ def ripemd160(contents: bytes) -> bytes:
 
     :return: bytes ripemd160 hash.
     """
-    # Next check is disabled because it fails on Python 3.7 even if algorithm is present.
-    # if "ripemd160" not in hashlib.algorithms_available:
-    #     raise RuntimeError("ripemd160 hash not supported on your platform")
 
-    h: HASH = hashlib.new("ripemd160")
-    h.update(contents)
-    return h.digest()
+    # Check if we need to use the fallback hashlib
+    if not _ripemd160_present:
+        return _ripemd160_mbedtls(contents)
+
+    # Prefer the stdlib implementation
+    return _ripemd160_stdlib(contents)
