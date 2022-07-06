@@ -31,7 +31,7 @@ def _parse_commandline():
         "swap_amount",
         type=int,
         nargs="?",
-        default=10000000,
+        default=10000,
         help="atestfet swap amount to get some cw20 tokens on wallet's address",
     )
     parser.add_argument(
@@ -45,17 +45,9 @@ def _parse_commandline():
         "native_liquidity_amount",
         type=int,
         nargs="?",
-        default=1000,
+        default=2470,
         help="amount of atestfet tokens that will be provided to LP",
     )
-    parser.add_argument(
-        "withdraw_liquidity_token",
-        type=int,
-        nargs="?",
-        default=100,
-        help="amount of LP tokens to be withdrawn from LP",
-    )
-
     return parser.parse_args()
 
 
@@ -138,6 +130,7 @@ def main():
     tx.wait_to_complete()
 
     # Provide Liquidity
+    # Liquidity should be added so that the slippage tolerance parameter isn't exceeded
 
     tx = pair_contract.execute(
         {
@@ -151,7 +144,8 @@ def main():
                         "info": {"native_token": {"denom": native_denom}},
                         "amount": native_liquidity_amount,
                     },
-                ]
+                ],
+            "slippage_tolerance":"0.1"
             }
         },
         sender=wallet,
@@ -167,7 +161,7 @@ def main():
     print(pair_contract.query({"pool": {}}), "\n")
 
     # Withdraw Liquidity
-    pair_withdraw_amount = str(args.withdraw_liquidity_token)
+    LP_token_balance = liq_token_contract.query({"balance": {"address": str(wallet.address())}})["balance"]
 
     withdraw_msg = '{"withdraw_liquidity": {}}'
     withdraw_msg_bytes = withdraw_msg.encode("ascii")
@@ -178,14 +172,14 @@ def main():
         {
             "send": {
                 "contract": pair_contract_address,
-                "amount": pair_withdraw_amount,
+                "amount": LP_token_balance,
                 "msg": msg,
             }
         },
         sender=wallet,
     )
 
-    print(f"Withdrawing {pair_withdraw_amount} from pool's total share...")
+    print(f"Withdrawing {LP_token_balance} from pool's total share...")
     tx.wait_to_complete()
 
     print("Pool (after withdrawing liquidity): ")
