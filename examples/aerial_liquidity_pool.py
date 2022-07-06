@@ -145,7 +145,7 @@ def main():
                         "amount": native_liquidity_amount,
                     },
                 ],
-            "slippage_tolerance":"0.1"
+                "slippage_tolerance": "0.1",
             }
         },
         sender=wallet,
@@ -161,7 +161,9 @@ def main():
     print(pair_contract.query({"pool": {}}), "\n")
 
     # Withdraw Liquidity
-    LP_token_balance = liq_token_contract.query({"balance": {"address": str(wallet.address())}})["balance"]
+    LP_token_balance = liq_token_contract.query(
+        {"balance": {"address": str(wallet.address())}}
+    )["balance"]
 
     withdraw_msg = '{"withdraw_liquidity": {}}'
     withdraw_msg_bytes = withdraw_msg.encode("ascii")
