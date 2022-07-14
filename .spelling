@@ -1,0 +1,94 @@
+# markdown-spellcheck spelling configuration file
+# Format - lines beginning # are comments
+# global dictionary is at the start, file overrides afterwards
+# one word per line, to define a file override use ' - filename'
+# where filename is relative to this configuration file
+Fetchai
+entrypoint
+FetchD
+ - AUTHORS.md
+Fetch.ai
+Hosseini
+ejfitzgerald
+Jiri
+Vestfal
+MissingNO57
+Lokman
+Rahmani
+lrahmani
+Panasevych
+Panasevychol
+Bukva
+pbukva
+Turchenkov
+solarw
+ - CODE_OF_CONDUCT.md
+behavior
+behaviors
+ - CONTRIBUTING.md
+linters
+Github
+ - DEVELOPING.md
+protobuf
+WasmD
+linter
+localhost
+ - docs/connect-to-network.md
+blockchain
+ - docs/deploy-a-contract.md
+CosmPy
+ - docs/index.md
+Cosmpy
+blockchains
+Cosmwasm
+ - docs/low-level-api.md
+cosmpy
+testnet
+protos
+MsgWithdrawValidatorCommission
+MsgExec
+tx_pb2.py
+ - docs/oracles.md
+deployer
+aerial_oracle.py
+aerial_oracle_client.py
+ - docs/stake-optimizer.md
+analyzing
+validator0
+multi-msg
+int
+ - docs/staking.md
+Redelegating
+Undelegating
+undelegate
+Redelegate
+redelegate
+ - docs/wallet-topup.md
+task_wallet
+authz_wallet
+task_wallet_address
+ - docs/wallets-and-keys.md
+base64
+ - HISTORY.md
+LedgerContract
+hashlib
+mainnet
+chain_id
+api
+dorado
+ibc
+tendermint
+darglint
+config
+setup.cfg
+daeMOn63
+params
+Galadrin
+MkDocs
+tx
+cleanups
+rc1
+grpcio
+ - SECURITY.md
+white_check_mark
+PyPI
