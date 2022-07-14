@@ -78,7 +78,8 @@ class Address:
 
         elif isinstance(value, Address):
             self._address = value._address
-            self._display = value._display
+            # prefix might be different from the original Address so we need to reencode it here.
+            self._display = _to_bech32(prefix, self._address)
         else:
             raise TypeError("Unexpected type of `value` parameter")  # pragma: no cover
 
