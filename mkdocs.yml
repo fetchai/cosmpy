@@ -3,7 +3,7 @@ site_url: https://docs.fetch.ai/cosmpy
 site_description: Everything you need to know about CosmPy.
 repo_url: https://github.com/fetchai/cosmpy
 edit_uri: ""
-site_author: developer@fetch.a
+site_author: developer@fetch.ai
 
 nav:
   - Getting started: 'index.md'
