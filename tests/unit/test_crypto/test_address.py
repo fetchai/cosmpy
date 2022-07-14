@@ -77,4 +77,6 @@ class AddressTestCase(unittest.TestCase):
         """Test create an Address from another but with a custom prefix."""
         address = Address("fetch12hyw0z8za0sc9wwfhkdz2qrc89a87z42py23vn")
         val_address = Address(address, prefix="fetchvaloper")
-        self.assertEqual(str(val_address), "fetchvaloper12hyw0z8za0sc9wwfhkdz2qrc89a87z42yq4jl5")
+        self.assertEqual(
+            str(val_address), "fetchvaloper12hyw0z8za0sc9wwfhkdz2qrc89a87z42yq4jl5"
+        )
