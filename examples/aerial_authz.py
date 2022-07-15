@@ -30,6 +30,7 @@ from cosmpy.protos.cosmos.authz.v1beta1.authz_pb2 import Grant
 from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgGrant
 from cosmpy.protos.cosmos.bank.v1beta1.authz_pb2 import SendAuthorization
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmpy.aerial.faucet import FaucetApi
 
 
 def _parse_commandline():
@@ -64,10 +65,15 @@ def main():
     authz_address = args.authz_address
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
 
     total_authz_time = args.total_authz_time
+    wallet_balance = ledger.query_bank_balance(wallet.address())
 
     amount = args.spend_limit
+
+    if wallet_balance < (amount):
+        faucet_api.get_wealth(wallet.address())
 
     spend_amount = Coin(amount=str(amount), denom="atestfet")
 
