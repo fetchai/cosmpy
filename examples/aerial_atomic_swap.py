@@ -18,16 +18,15 @@
 # ------------------------------------------------------------------------------
 
 import argparse
-import sys
 
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.contract import LedgerContract, create_cosmwasm_execute_msg
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PrivateKey
-from cosmpy.aerial.faucet import FaucetApi
 
 TOKEN_ID_1 = "680564733841876926926749214863536422912"
 TOKEN_ID_2 = "680564733841876926926749214863536422913"
@@ -60,11 +59,11 @@ def main():
     print(f"Alice balance {alice_balance}")
     print(f"Bob   balance {bob_balance}")
 
-    if alice_balance < (10**18):
+    if alice_balance < (10 ** 18):
         print("Providing wealth to alice...")
         faucet_api.get_wealth(alice.address())
 
-    if bob_balance < (10**18):
+    if bob_balance < (10 ** 18):
         print("Providing wealth to bob...")
         faucet_api.get_wealth(bob.address())
 
