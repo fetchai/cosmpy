@@ -31,7 +31,7 @@ def main():
 
     bob_balance = ledger.query_bank_balance(bob.address())
 
-    if bob_balance < (10 ** 18):
+    if bob_balance < (10**18):
         faucet_api.get_wealth(bob.address())
 
     print(

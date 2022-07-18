@@ -40,7 +40,7 @@ def main():
 
     alice_balance = ledger.query_bank_balance(alice.address())
 
-    if alice_balance < (10 ** 18):
+    if alice_balance < (10**18):
         faucet_api.get_wealth(alice.address())
 
     # get all the active validators on the network

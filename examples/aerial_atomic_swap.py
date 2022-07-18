@@ -59,11 +59,11 @@ def main():
     print(f"Alice balance {alice_balance}")
     print(f"Bob   balance {bob_balance}")
 
-    if alice_balance < (10 ** 18):
+    if alice_balance < (10**18):
         print("Providing wealth to alice...")
         faucet_api.get_wealth(alice.address())
 
-    if bob_balance < (10 ** 18):
+    if bob_balance < (10**18):
         print("Providing wealth to bob...")
         faucet_api.get_wealth(bob.address())
 

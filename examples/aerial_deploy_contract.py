@@ -48,7 +48,7 @@ def main():
 
     wallet_balance = ledger.query_bank_balance(wallet.address())
 
-    if wallet_balance < (10 ** 18):
+    if wallet_balance < (10**18):
         faucet_api.get_wealth(wallet.address())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
