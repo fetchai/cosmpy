@@ -26,7 +26,7 @@ tx.wait_to_complete()
 ```
 
 The available high-level helper functions provided by cosmpy can be found by browsing for instance
-[the aerial client package]("https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/client/__init__.py").
+[the aerial client package](https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/client/__init__.py).
 
 ## Low Level API
 
