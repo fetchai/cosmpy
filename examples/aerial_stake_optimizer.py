@@ -22,6 +22,7 @@ from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import create_delegate_msg
 from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
@@ -45,6 +46,7 @@ def M(x, f, S, k, D):
 
 def main():
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     # Set initial stake and desired stake period
     initial_stake = 50000000000000000000
@@ -118,6 +120,11 @@ def main():
     key = PrivateKey("XZ5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
     alice = LocalWallet(key)
     alice_address = Address(key)._display
+
+    alice_balance = ledger.query_bank_balance(alice.address())
+
+    if alice_balance < (10 ** 18):
+        faucet_api.get_wealth(alice.address())
 
     tx = Transaction()
 

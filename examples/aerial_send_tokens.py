@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.keypairs import PrivateKey
 
@@ -26,6 +27,12 @@ def main():
     bob = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+
+    bob_balance = ledger.query_bank_balance(bob.address())
+
+    if bob_balance < (10 ** 18):
+        faucet_api.get_wealth(bob.address())
 
     print(
         f"Alice Address: {alice.address()} Balance: {ledger.query_bank_balance(alice.address())}"

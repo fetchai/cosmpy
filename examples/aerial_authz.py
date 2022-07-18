@@ -64,8 +64,8 @@ def main():
 
     authz_address = args.authz_address
 
-    ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     total_authz_time = args.total_authz_time
     wallet_balance = ledger.query_bank_balance(wallet.address())
