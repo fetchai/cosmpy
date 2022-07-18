@@ -19,8 +19,10 @@
 
 """Tests for the Address module of the Crypto Package."""
 
+import json
 import unittest
 
+from cosmpy.common.utils import json_encode
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PublicKey
 
@@ -35,6 +37,7 @@ class AddressTestCase(unittest.TestCase):
         )
         address = Address(pk)
         self.assertEqual(str(address), "fetch12hyw0z8za0sc9wwfhkdz2qrc89a87z42py23vn")
+        self.assertEqual(address, "fetch12hyw0z8za0sc9wwfhkdz2qrc89a87z42py23vn")
         self.assertEqual(
             bytes(address),
             b"U\xc8\xe7\x88\xe2\xeb\xe1\x82\xb9\xc9\xbd\x9a%\x00x9z\x7f\n\xaa",
@@ -80,3 +83,10 @@ class AddressTestCase(unittest.TestCase):
         self.assertEqual(
             str(val_address), "fetchvaloper12hyw0z8za0sc9wwfhkdz2qrc89a87z42yq4jl5"
         )
+
+    def test_string_compatible_address(self):
+        """Test address can be dumped to json using json_encode utility method."""
+        address = Address("fetch12hyw0z8za0sc9wwfhkdz2qrc89a87z42py23vn")
+        json_data = json_encode({"address": address})
+        restored_address = Address(json.loads(json_data)["address"])
+        assert restored_address == address

@@ -19,13 +19,13 @@
 
 """Tests for REST implementation of Auth."""
 
-import json
 import unittest
 
 import pytest
 from google.protobuf.json_format import ParseDict
 
 from cosmpy.auth.rest_client import AuthRestClient
+from cosmpy.common.utils import json_encode
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
     QueryAccountResponse,
@@ -56,7 +56,7 @@ class AuthRestClientTestCase(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryAccountResponse())
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
         auth = AuthRestClient(mock_client)
 
         assert auth.Account(QueryAccountRequest(address="address")) == expected_response
@@ -76,7 +76,7 @@ class AuthRestClientTestCase(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryParamsResponse())
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
         auth = AuthRestClient(mock_client)
 
         assert auth.Params(QueryParamsRequest()) == expected_response

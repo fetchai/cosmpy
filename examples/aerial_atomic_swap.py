@@ -80,7 +80,7 @@ def main():
 
         create_batch_msg = {
             "create_batch": {
-                "item_owner": str(alice.address()),
+                "item_owner": alice,
                 "tokens": [
                     {
                         "id": TOKEN_ID_1,
@@ -101,7 +101,7 @@ def main():
         # Create Alice's token
         mint_single_msg = {
             "mint_single": {
-                "to_address": str(alice.address()),
+                "to_address": alice,
                 "id": TOKEN_ID_1,
                 "supply": "2000",
                 "data": "some_data",
@@ -115,7 +115,7 @@ def main():
         # Create Bob's token
         mint_single_msg = {
             "mint_single": {
-                "to_address": str(bob.address()),
+                "to_address": bob.address(),
                 "id": TOKEN_ID_2,
                 "supply": "2000",
                 "data": "some_data",
@@ -132,11 +132,11 @@ def main():
             "balance_batch": {
                 "addresses": [
                     {
-                        "address": str(bob.address()),
+                        "address": bob,
                         "id": TOKEN_ID_1,
                     },
                     {
-                        "address": str(alice.address()),
+                        "address": alice,
                         "id": TOKEN_ID_2,
                     },
                 ]
@@ -159,9 +159,9 @@ def main():
             contract.address,
             {
                 "transfer_single": {
-                    "operator": str(alice.address()),
-                    "from_address": str(alice.address()),
-                    "to_address": str(bob.address()),
+                    "operator": alice,
+                    "from_address": alice,
+                    "to_address": bob,
                     "id": TOKEN_ID_1,
                     "value": "1",
                 },
@@ -176,9 +176,9 @@ def main():
             contract.address,
             {
                 "transfer_single": {
-                    "operator": str(bob.address()),
-                    "from_address": str(bob.address()),
-                    "to_address": str(alice.address()),
+                    "operator": bob,
+                    "from_address": bob,
+                    "to_address": alice,
                     "id": TOKEN_ID_2,
                     "value": "1",
                 },
@@ -222,11 +222,11 @@ def main():
             "balance_batch": {
                 "addresses": [
                     {
-                        "address": str(bob.address()),
+                        "address": bob,
                         "id": TOKEN_ID_1,
                     },
                     {
-                        "address": str(alice.address()),
+                        "address": alice,
                         "id": TOKEN_ID_2,
                     },
                 ]

@@ -49,17 +49,17 @@ def main():
 
     print(f"Contract deployed at: {contract.address}")
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
+    result = contract.query({"get": {"owner": wallet}})
     print("Initial state:", result)
 
     contract.execute({"set": {"value": "foobar"}}, wallet).wait_to_complete()
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
+    result = contract.query({"get": {"owner": wallet}})
     print("State after set:", result)
 
     contract.execute({"clear": {}}, wallet).wait_to_complete()
 
-    result = contract.query({"get": {"owner": str(wallet.address())}})
+    result = contract.query({"get": {"owner": wallet}})
     print("State after clear:", result)
 
 
