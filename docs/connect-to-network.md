@@ -21,3 +21,15 @@ ledger_client = LedgerClient(cfg)
 ```
 
 A full list of chain identifiers, denominations and end-points can be found at the Cosmos [chain registry](https://github.com/cosmos/chain-registry/).
+
+
+
+### Custom prefix network:
+In case custom prefix network you need to create wallets with proper prefix specified:
+
+```
+alice = LocalWallet(PrivateKey("L1GsisFk+oaIug3XZlILWk2pJDVFS5aPJsrovvUEDrE="), prefix="custom_prefix")
+address = alice.address()
+print(f"Address: {address}")
+balance = client.query_bank_balance(address, "uatom")
+```
