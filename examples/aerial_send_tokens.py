@@ -17,13 +17,18 @@
 #
 # ------------------------------------------------------------------------------
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 
 
 def main():
-    alice = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
-    bob = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
+    alice = LocalWallet.generate()
+
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    faucet_api.get_wealth(alice.address())
+    bob = LocalWallet.generate()
+
+    faucet_api.get_wealth(bob.address())
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 

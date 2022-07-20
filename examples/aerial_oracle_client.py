@@ -21,9 +21,9 @@ from time import sleep
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
 
 REQUEST_INTERVAL_SECONDS = 10
 
@@ -50,7 +50,10 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    wallet = LocalWallet(PrivateKey("CI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8="))
+    wallet = LocalWallet.generate()
+
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    faucet_api.get_wealth(wallet.address())
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 

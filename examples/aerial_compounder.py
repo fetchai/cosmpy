@@ -18,10 +18,9 @@
 # ------------------------------------------------------------------------------
 import time
 
-from cosmpy.aerial.client import LedgerClient
-from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.client import LedgerClient, NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 
 
 def main():
@@ -33,8 +32,10 @@ def main():
     # choose any validator
     validator = validators[0]
 
-    key = PrivateKey("FX5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
-    alice = LocalWallet(key)
+    alice = LocalWallet.generate()
+
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    faucet_api.get_wealth(alice.address())
 
     # delegate some tokens to this validator
     initial_stake = 9000000000000000000

@@ -23,9 +23,9 @@ from google.protobuf import any_pb2
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgExec
 from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -70,9 +70,9 @@ def main():
     task_wallet_address = args.task_wallet_address
 
     # Use aerial_authz.py to authorize authz_wallet address to send tokens from wallet
-    authz_wallet = LocalWallet(
-        PrivateKey("KI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8=")
-    )
+    authz_wallet = LocalWallet.genereate()
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    faucet_api.get_wealth(authz_wallet.address())
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
