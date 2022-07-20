@@ -51,3 +51,14 @@ wallet = LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
 
 !!! danger
     Of course in real applications, you should **never** include a mnemonic in public code.
+
+
+### Custom prefix network:
+In case you are using network other than fetch.ai's, you can provide the custom prefix when creating the wallet:
+
+```
+alice = LocalWallet(PrivateKey("L1GsisFk+oaIug3XZlILWk2pJDVFS5aPJsrovvUEDrE="), prefix="custom_prefix")
+address = alice.address()
+print(f"Address: {address}")
+balance = client.query_bank_balance(address, "uatom")
+```
