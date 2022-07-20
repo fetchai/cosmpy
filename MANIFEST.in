@@ -1,5 +1,6 @@
 include *.txt
 include Pipfile
+include .spelling
 include strategy.ini
 include tox.ini
 include *.md
