@@ -18,11 +18,10 @@
 # ------------------------------------------------------------------------------
 import random
 
-from cosmpy.aerial.client import LedgerClient
-from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.client import LedgerClient, NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 
 
 def _wait_for_tx(operation: str, tx: SubmittedTx):
@@ -32,7 +31,10 @@ def _wait_for_tx(operation: str, tx: SubmittedTx):
 
 
 def main():
-    alice = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
+    alice = LocalWallet.generate()
+
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    faucet_api.get_wealth(alice.address())
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
 

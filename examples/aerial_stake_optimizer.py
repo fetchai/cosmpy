@@ -18,14 +18,12 @@
 # ------------------------------------------------------------------------------
 import json
 
-from cosmpy.aerial.client import LedgerClient
+from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import create_delegate_msg
-from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryTotalSupplyRequest
 from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsRequest
@@ -115,9 +113,11 @@ def main():
     # Estmate fees for claiming and delegating rewards
 
     # Use any address with tokens available
-    key = PrivateKey("XZ5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
-    alice = LocalWallet(key)
-    alice_address = Address(key)._display
+    alice = LocalWallet.generate()
+    alice_address = alice.address()
+
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    faucet_api.get_wealth(alice.address())
 
     tx = Transaction()
 
