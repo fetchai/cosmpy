@@ -26,7 +26,6 @@ from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
 
 TOKEN_ID_1 = "680564733841876926926749214863536422912"
 TOKEN_ID_2 = "680564733841876926926749214863536422913"
@@ -47,8 +46,8 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    alice = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
-    bob = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
+    alice = LocalWallet.generate()
+    bob = LocalWallet.generate()
 
     client = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
@@ -59,13 +58,15 @@ def main():
     print(f"Alice balance {alice_balance}")
     print(f"Bob   balance {bob_balance}")
 
-    if alice_balance < (10**18):
+    while alice_balance < (10**18):
         print("Providing wealth to alice...")
         faucet_api.get_wealth(alice.address())
+        alice_balance = client.query_bank_balance(alice.address())
 
-    if bob_balance < (10**18):
+    while bob_balance < (10**18):
         print("Providing wealth to bob...")
         faucet_api.get_wealth(bob.address())
+        bob_balance = client.query_bank_balance(bob.address())
 
     contract = LedgerContract(args.contract_path, client, address=args.contract_address)
 

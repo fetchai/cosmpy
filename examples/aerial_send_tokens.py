@@ -19,20 +19,21 @@
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 
 
 def main():
-    alice = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
-    bob = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
+    alice = LocalWallet.generate()
+    bob = LocalWallet.generate()
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
-    bob_balance = ledger.query_bank_balance(bob.address())
+    alice_balance = ledger.query_bank_balance(bob.address())
 
-    if bob_balance < (10**18):
-        faucet_api.get_wealth(bob.address())
+    while alice_balance < (10**18):
+        print("Providing wealth to alice...")
+        faucet_api.get_wealth(alice.address())
+        alice_balance = ledger.query_bank_balance(alice.address())
 
     print(
         f"Alice Address: {alice.address()} Balance: {ledger.query_bank_balance(alice.address())}"

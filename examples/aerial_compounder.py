@@ -23,7 +23,6 @@ from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 
 
 def _parse_commandline():
@@ -65,14 +64,15 @@ def main():
     # choose any validator
     validator = validators[0]
 
-    key = PrivateKey("FX5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
-    alice = LocalWallet(key)
+    alice = LocalWallet.generate()
 
     wallet_balance = ledger.query_bank_balance(alice.address())
     initial_stake = args.initial_stake
 
-    if wallet_balance < (initial_stake):
+    while wallet_balance < (initial_stake):
+        print("Providing wealth to wallet...")
         faucet_api.get_wealth(alice.address())
+        wallet_balance = ledger.query_bank_balance(alice.address())
 
     # delegate some tokens to this validator
     tx = ledger.delegate_tokens(validator.address, initial_stake, alice)

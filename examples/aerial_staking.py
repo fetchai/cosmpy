@@ -23,7 +23,6 @@ from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 
 
 def _wait_for_tx(operation: str, tx: SubmittedTx):
@@ -33,15 +32,17 @@ def _wait_for_tx(operation: str, tx: SubmittedTx):
 
 
 def main():
-    alice = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
+    alice = LocalWallet.generate()
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     alice_balance = ledger.query_bank_balance(alice.address())
 
-    if alice_balance < (10**18):
+    while alice_balance < (10**18):
+        print("Providing wealth to alice...")
         faucet_api.get_wealth(alice.address())
+        alice_balance = ledger.query_bank_balance(alice.address())
 
     # get all the active validators on the network
     validators = ledger.query_validators()

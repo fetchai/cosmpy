@@ -23,7 +23,6 @@ from cosmpy.aerial.contract import LedgerContract
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
 
 
 def _parse_commandline():
@@ -41,15 +40,17 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    wallet = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
+    wallet = LocalWallet.generate()
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     wallet_balance = ledger.query_bank_balance(wallet.address())
 
-    if wallet_balance < (10**18):
+    while wallet_balance < (10**18):
+        print("Providing wealth to wallet...")
         faucet_api.get_wealth(wallet.address())
+        wallet_balance = ledger.query_bank_balance(wallet.address())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
     contract.deploy({}, wallet)

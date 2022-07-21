@@ -69,7 +69,7 @@ def main():
 
     task_wallet_address = args.task_wallet_address
 
-    # Use aerial_authz.py to authorize authz_wallet address to send tokens from wallet
+    # Use aerial_authz.py to authorize an authz_wallet address to send tokens from wallet
     authz_wallet = LocalWallet(
         PrivateKey("KI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8=")
     )
