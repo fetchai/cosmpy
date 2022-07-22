@@ -2,6 +2,7 @@ include *.txt
 include Pipfile
 include strategy.ini
 include tox.ini
+include *.yml
 include *.md
 include *.json
 include .firebaserc
