@@ -172,14 +172,6 @@ docs-live:
 	mkdocs serve
 
 ####################
-### Md spell check
-####################
-
-.PHONY: mdspell-check
-mdspell-check: 
-	python scripts/spell-check.py
-
-####################
 ### Clean and init commands
 ####################
 
