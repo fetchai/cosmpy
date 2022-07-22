@@ -56,3 +56,14 @@ jobs:
       shell: bash
     - name: Show coverage report
       run: tox -e coverage-report
+  
+  markdown-link-check:
+    name: Broken Links
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        use-verbose-mode: 'yes'
+        config-file: '.md-link-check.json'
