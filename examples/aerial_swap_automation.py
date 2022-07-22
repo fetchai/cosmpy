@@ -112,7 +112,13 @@ def main():
 
     # Add tokens to wallet
     faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
-    faucet_api.get_wealth(wallet.address())
+
+    wallet_balance = ledger.query_bank_balance(wallet.address())
+
+    while wallet_balance < (10**18):
+        print("Providing wealth to wallet...")
+        faucet_api.get_wealth(wallet.address())
+        wallet_balance = ledger.query_bank_balance(wallet.address())
 
     # Define cw20, pair and liquidity token contracts
     token_contract_address = (

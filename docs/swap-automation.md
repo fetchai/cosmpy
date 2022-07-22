@@ -30,7 +30,7 @@ def swap_native_for_cw20(swap_amount, pair_contract, wallet):
     print("swapping native for cw20 tokens")
     tx.wait_to_complete()
 ```
-Now, we will define the *swap_cw20_for_native* function that does exactly the opposite of the function defined above: trades `swap_amount` of CW20 tokens from `wallet` for atestfet. This time the CW20 `token_contract` is executed using the `pair_contract_address` and  a base64 encoded msg *{"swap":{}} = eyJzd2FwIjp7fX0*
+Now, we will define the *swap_cw20_for_native* function that does exactly the opposite of the function defined above: trades `swap_amount` of CW20 tokens from `wallet` for atestfet. This time the CW20 `token_contract` is executed using the `pair_contract_address`. Finally you need to include the {"swap":{}} message in the "msg" field. However, this swap message has to be encoded into base64. When you encode {"swap":{}} message into base64 you get: eyJzd2FwIjp7fX0=
 
 ```python
 def swap_cw20_for_native(swap_amount, pair_contract_address, token_contract, wallet):
@@ -55,7 +55,12 @@ ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
 # Add tokens to wallet
 faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
-faucet_api.get_wealth(wallet.address())
+wallet_balance = ledger.query_bank_balance(wallet.address())
+
+while wallet_balance < (10**18):
+    print("Providing wealth to wallet...")
+    faucet_api.get_wealth(wallet.address())
+    wallet_balance = ledger.query_bank_balance(wallet.address())
 
 ```
 Define the CW20, pair, and liquidity token contracts with the following addresses:
