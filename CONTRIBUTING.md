@@ -38,3 +38,21 @@ If you have improvements, send us your pull requests!
 A team member will be assigned to review your pull requests. All tests are run as part of CI as well as various other checks (linters, static type checkers, security checkers, etc). If there are any problems, feedback is provided via GitHub. Once the pull requests is approved and passes continuous integration checks, you or a team member can merge it.
 
 If you want to contribute, start working through the codebase, navigate to the Github [Issues page](https://github.com/fetchai/cosmpy/issues) tab and start looking through interesting issues. If you decide to start on an issue, leave a comment so that other people know that you're working on it. If you want to help out, but not alone, use the issue comment thread to coordinate.
+
+## Commits and PRs
+
+This project uses Conventional Commits to generate release notes and to determine versioning. Commit messages should adhere to this standard and be of the form:
+
+```bash
+git commit -m "feat: Add new feature x"
+git commit -m "fix: Fix bug in feature x"
+git commit -m "docs: Add documentation for feature x"
+git commit -m "test: Add test suite for feature x"
+```
+
+Further details on `conventional commits` can be found here: <https://www.conventionalcommits.org/en/v1.0.0/>
+
+When merging a branch to `develop`, PRs should be squashed into one conventional commit by selecting the `Squash and merge` option. This ensures Release notes are useful and readable when releases are created.
+
+<!-- ![alt text](https://docs.github.com/assets/images/help/pull_requests/select-squash-and-merge-from-drop-down-menu.png) -->
+<img src="https://docs.github.com/assets/images/help/pull_requests/select-squash-and-merge-from-drop-down-menu.png" alt="drawing" style="width:600px;"/>
