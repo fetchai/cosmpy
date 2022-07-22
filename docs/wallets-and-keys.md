@@ -54,7 +54,7 @@ wallet = LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
 
 
 ### Custom prefix network:
-In case you are using network other than fetch.ai's, you can provide the custom prefix when creating the wallet:
+In case you are using a network other than fetch.ai's, you can provide the custom prefix when creating the wallet:
 
 ```
 alice = LocalWallet(PrivateKey("L1GsisFk+oaIug3XZlILWk2pJDVFS5aPJsrovvUEDrE="), prefix="custom_prefix")
