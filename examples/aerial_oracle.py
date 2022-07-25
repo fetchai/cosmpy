@@ -23,9 +23,9 @@ import requests
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
 
 COIN_PRICE_URL = (
     "https://api.coingecko.com/api/v3/simple/price?ids=fetch-ai&vs_currencies=usd"
@@ -51,9 +51,17 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    wallet = LocalWallet(PrivateKey("T7w1yHq1QIcQiSqV27YSwk+i1i+Y4JMKhkpawCQIh6s="))
+    wallet = LocalWallet.generate()
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+
+    wallet_balance = ledger.query_bank_balance(wallet.address())
+
+    while wallet_balance < (10**18):
+        print("Providing wealth to wallet...")
+        faucet_api.get_wealth(wallet.address())
+        wallet_balance = ledger.query_bank_balance(wallet.address())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
 
