@@ -20,11 +20,11 @@
 
 """Tests for REST implementation of Distribution."""
 
-import json
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
+from cosmpy.common.utils import json_encode
 from cosmpy.distribution.rest_client import DistributionRestClient
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
     QueryCommunityPoolResponse,
@@ -54,7 +54,7 @@ class DistributionRestClientTestCase(TestCase):
     def test_CommunityPool():
         """Test CommunityPool method."""
         content = {"pool": [{"denom": "string", "amount": "123"}]}
-        mock_client = MockRestClient(json.dumps(content).encode("utf8"))
+        mock_client = MockRestClient(json_encode(content).encode("utf8"))
 
         expected_response = ParseDict(content, QueryCommunityPoolResponse())
 
@@ -77,7 +77,7 @@ class DistributionRestClientTestCase(TestCase):
             ],
             "total": [{"denom": "string", "amount": "123"}],
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegationTotalRewardsResponse())
 
@@ -98,7 +98,7 @@ class DistributionRestClientTestCase(TestCase):
     def test_DelegationRewards():
         """Test DelegationRewards method."""
         content = {"rewards": [{"denom": "string", "amount": "1234"}]}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegationRewardsResponse())
 
@@ -122,7 +122,7 @@ class DistributionRestClientTestCase(TestCase):
     def test_DelegatorValidators():
         """Test DelegatorValidators method."""
         content = {"validators": ["string"]}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegatorValidatorsResponse())
 
@@ -143,7 +143,7 @@ class DistributionRestClientTestCase(TestCase):
     def test_DelegatorWithdrawAddress():
         """Test DelegatorWithdrawAddress method."""
         content = {"withdraw_address": "string"}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegatorWithdrawAddressResponse())
 
@@ -171,7 +171,7 @@ class DistributionRestClientTestCase(TestCase):
                 "withdraw_addr_enabled": True,
             }
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryParamsResponse())
 
@@ -192,7 +192,7 @@ class DistributionRestClientTestCase(TestCase):
         content = {
             "commission": {"commission": [{"denom": "string", "amount": "1234"}]}
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryValidatorCommissionResponse())
 
@@ -213,7 +213,7 @@ class DistributionRestClientTestCase(TestCase):
     def test_ValidatorOutstandingRewards():
         """Test ValidatorOutstandingRewards method."""
         content = {"rewards": {"rewards": [{"denom": "string", "amount": "1234"}]}}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(
             content, QueryValidatorOutstandingRewardsResponse()
@@ -241,7 +241,7 @@ class DistributionRestClientTestCase(TestCase):
             "slashes": [{"validator_period": "1", "fraction": "1"}],
             "pagination": {"next_key": None, "total": "1"},
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryValidatorSlashesResponse())
 

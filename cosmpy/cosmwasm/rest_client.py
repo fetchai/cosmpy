@@ -26,6 +26,7 @@ from google.protobuf.json_format import Parse, ParseDict
 
 from cosmpy.common.rest_client import RestClient
 from cosmpy.common.types import JSONLike
+from cosmpy.common.utils import json_encode
 from cosmpy.cosmwasm.interface import CosmWasm
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QueryAllContractStateRequest,
@@ -203,7 +204,7 @@ class CosmWasmRestClient(CosmWasm):
         """
         dict_response = json.loads(response)
         dict_response["data"] = base64.b64encode(
-            json.dumps(dict_response["data"]).encode("UTF8")
+            json_encode(dict_response["data"]).encode("UTF8")
         ).decode()
         return dict_response
 
@@ -219,6 +220,6 @@ class CosmWasmRestClient(CosmWasm):
         dict_response = json.loads(response)
         for entry in dict_response["entries"]:
             entry["msg"] = base64.b64encode(
-                json.dumps(entry["msg"]).encode("UTF8")
+                json_encode(entry["msg"]).encode("UTF8")
             ).decode()
         return dict_response

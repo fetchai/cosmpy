@@ -19,11 +19,11 @@
 
 """Tests for REST implementation of Staking."""
 
-import json
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
+from cosmpy.common.utils import json_encode
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegationRequest,
     QueryDelegationResponse,
@@ -94,7 +94,7 @@ class StakingRestClientTestCase(TestCase):
             ],
             "pagination": {"next_key": "", "total": "1"},
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryValidatorsResponse())
 
@@ -126,7 +126,7 @@ class StakingRestClientTestCase(TestCase):
                 "min_self_delegation": "string",
             }
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryValidatorResponse())
 
@@ -158,7 +158,7 @@ class StakingRestClientTestCase(TestCase):
             ],
             "pagination": {"next_key": "", "total": "0"},
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryValidatorDelegationsResponse())
 
@@ -196,7 +196,7 @@ class StakingRestClientTestCase(TestCase):
             ],
             "pagination": {"next_key": "", "total": "0"},
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(
             content, QueryValidatorUnbondingDelegationsResponse()
@@ -231,7 +231,7 @@ class StakingRestClientTestCase(TestCase):
                 "balance": {"denom": "atestfet", "amount": "123"},
             }
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegationResponse())
 
@@ -268,7 +268,7 @@ class StakingRestClientTestCase(TestCase):
                 ],
             }
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryUnbondingDelegationResponse())
 
@@ -304,7 +304,7 @@ class StakingRestClientTestCase(TestCase):
             ],
             "pagination": {"next_key": "", "total": "0"},
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegatorDelegationsResponse())
 
@@ -343,7 +343,7 @@ class StakingRestClientTestCase(TestCase):
             "pagination": {"next_key": "", "total": "0"},
         }
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(
             content, QueryDelegatorUnbondingDelegationsResponse()
@@ -400,7 +400,7 @@ class StakingRestClientTestCase(TestCase):
             "pagination": {"next_key": "", "total": "0"},
         }
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryRedelegationsResponse())
 
@@ -452,7 +452,7 @@ class StakingRestClientTestCase(TestCase):
             "pagination": {"next_key": "", "total": "0"},
         }
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegatorValidatorsResponse())
 
@@ -501,7 +501,7 @@ class StakingRestClientTestCase(TestCase):
             }
         }
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryDelegatorValidatorResponse())
 
@@ -575,7 +575,7 @@ class StakingRestClientTestCase(TestCase):
             }
         }
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryHistoricalInfoResponse())
 
@@ -593,7 +593,7 @@ class StakingRestClientTestCase(TestCase):
 
         content = {"pool": {"not_bonded_tokens": "123", "bonded_tokens": "123"}}
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryPoolResponse())
 
@@ -616,7 +616,7 @@ class StakingRestClientTestCase(TestCase):
             }
         }
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryParamsResponse())
 

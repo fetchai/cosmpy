@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 import json
+from collections import UserString
 from datetime import datetime
 from typing import Any, Optional
 
@@ -30,6 +31,7 @@ from cosmpy.aerial.contract.cosmwasm import (
 from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.wallet import Wallet
+from cosmpy.common.utils import json_encode
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
@@ -49,7 +51,7 @@ def _generate_label(digest: bytes) -> str:
     return f"{digest.hex()[:14]}-{now.strftime('%Y%m%d%H%M%S')}"
 
 
-class LedgerContract:
+class LedgerContract(UserString):
     def __init__(
         self,
         path: Optional[str],
@@ -211,7 +213,7 @@ class LedgerContract:
             raise RuntimeError("Contract appears not to be deployed currently")
 
         req = QuerySmartContractStateRequest(
-            address=str(self._address), query_data=json.dumps(args).encode("UTF8")
+            address=str(self._address), query_data=json_encode(args).encode("UTF8")
         )
         resp = self._client.wasm.SmartContractState(req)
         return json.loads(resp.data)
@@ -241,3 +243,10 @@ class LedgerContract:
             pagination = PageRequest(key=resp.pagination.next_key)
 
         return code_id
+
+    @property
+    def data(self):
+        return self.address
+
+    def __json__(self):
+        return str(self)

@@ -20,11 +20,11 @@
 
 """Tests for REST implementation of Mint."""
 import base64
-import json
 import unittest
 
 from google.protobuf.json_format import ParseDict
 
+from cosmpy.common.utils import json_encode
 from cosmpy.mint.rest_client import MintRestClient
 from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
     QueryAnnualProvisionsResponse,
@@ -44,7 +44,7 @@ class MintRestClientTestCase(unittest.TestCase):
             "annual_provisions": "MTIzNA=="
         }  # use value "1234" in base64 encoded format
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryAnnualProvisionsResponse())
 
@@ -59,7 +59,7 @@ class MintRestClientTestCase(unittest.TestCase):
         """Test query annual provision for the positive result."""
         content = {"annual_provisions": "1234"}
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryAnnualProvisionsResponse())
         # The AnnualProvisions object is expecting a base64 encoded value
@@ -78,7 +78,7 @@ class MintRestClientTestCase(unittest.TestCase):
         """Test query inflation for the positive result."""
         content = {"inflation": "MC4wMTIzNDU="}
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryInflationResponse())
 
@@ -93,7 +93,7 @@ class MintRestClientTestCase(unittest.TestCase):
         """Test query inflation for the positive result."""
         content = {"inflation": "0.012345"}
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryInflationResponse())
         # The Inflation object is expecting a base64 encoded value
@@ -117,7 +117,7 @@ class MintRestClientTestCase(unittest.TestCase):
                 "blocksPerYear": "1234",
             }
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryParamsResponse())
 

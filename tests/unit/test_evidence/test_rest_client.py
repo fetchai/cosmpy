@@ -17,7 +17,6 @@
 #
 # ------------------------------------------------------------------------------
 """Tests for REST implementation of Evidence."""
-import json
 from typing import Dict, Tuple
 from unittest import TestCase
 
@@ -26,6 +25,7 @@ from google.protobuf.wrappers_pb2 import (  # noqa  # needed for protobuf decode
     Int32Value,
 )
 
+from cosmpy.common.utils import json_encode
 from cosmpy.evidence.rest_client import EvidenceRestClient
 from cosmpy.protos.cosmos.evidence.v1beta1.query_pb2 import (
     QueryAllEvidenceRequest,
@@ -50,7 +50,7 @@ class EvidenceRestClientTestCase(TestCase):
         :param response_content: dict
         :return: rest client instance
         """
-        mock_client = MockRestClient(json.dumps(response_content).encode("utf-8"))
+        mock_client = MockRestClient(json_encode(response_content).encode("utf-8"))
         rest_client = self.REST_CLIENT(mock_client)
         return mock_client, rest_client
 

@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 from abc import ABC, abstractmethod
+from collections import UserString
 from typing import Optional
 
 from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # type: ignore
@@ -28,7 +29,7 @@ from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PrivateKey, PublicKey
 
 
-class Wallet(ABC):
+class Wallet(ABC, UserString):
     @abstractmethod
     def address(self) -> Address:
         pass
@@ -40,6 +41,13 @@ class Wallet(ABC):
     @abstractmethod
     def signer(self) -> Signer:
         pass
+
+    @property
+    def data(self):
+        return self.address()
+
+    def __json__(self):
+        return str(self.address())
 
 
 class LocalWallet(Wallet):

@@ -26,6 +26,7 @@ from typing import Union
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
+from cosmpy.common.utils import json_encode
 from cosmpy.mint.interface import Mint
 from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
     QueryAnnualProvisionsResponse,
@@ -74,7 +75,7 @@ class MintRestClient(Mint):
             j["annual_provisions"] = base64.b64encode(
                 j["annual_provisions"].encode()
             ).decode("utf8")
-        json_response = json.dumps(j).encode("utf-8")
+        json_response = json_encode(j).encode("utf-8")
 
         return Parse(json_response, QueryAnnualProvisionsResponse())
 
@@ -89,7 +90,7 @@ class MintRestClient(Mint):
         j = json.loads(json_response)
         if isNumber(j["inflation"]):
             j["inflation"] = base64.b64encode(j["inflation"].encode()).decode("utf8")
-        json_response = json.dumps(j).encode("utf-8")
+        json_response = json_encode(j).encode("utf-8")
 
         return Parse(json_response, QueryInflationResponse())
 

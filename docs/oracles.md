@@ -55,7 +55,7 @@ Save the oracle contract address to use for the oracle client script below (`ORA
 As the deployer of the contract, we have permission to grant the oracle to a particular address.
 In this case, we'll grant the oracle role to our own wallet:
 ```python
-grant_role_message = {"grant_oracle_role": {"address": str(wallet.address())}}
+grant_role_message = {"grant_oracle_role": {"address": wallet)}}
 contract.execute(grant_role_message, wallet).wait_to_complete()
 ```
 

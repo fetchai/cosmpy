@@ -71,10 +71,10 @@ def main():
 
     print(f"Oracle contract deployed at: {contract.address}")
 
-    grant_role_message = {"grant_oracle_role": {"address": str(wallet.address())}}
+    grant_role_message = {"grant_oracle_role": {"address": wallet}}
     contract.execute(grant_role_message, wallet).wait_to_complete()
 
-    print(f"Oracle role granted to address: {str(wallet.address())}")
+    print(f"Oracle role granted to address: {wallet}")
 
     while True:
         resp = requests.get(COIN_PRICE_URL).json()

@@ -17,13 +17,13 @@
 #
 # ------------------------------------------------------------------------------
 """Tests for REST implementation of IBC Core Client."""
-import json
 from typing import Dict, Tuple
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 from google.protobuf.wrappers_pb2 import Int32Value  # noqa # needed for protobuf decode
 
+from cosmpy.common.utils import json_encode
 from cosmpy.ibc.core.client.rest_client import IBCCoreClientRestClient  # type: ignore
 from cosmpy.protos.ibc.core.client.v1.query_pb2 import (
     QueryClientParamsRequest,
@@ -59,7 +59,7 @@ class IBCCoreClientRestClientTestCase(TestCase):
         :param response_content: dict
         :return: rest client instance
         """
-        mock_client = MockRestClient(json.dumps(response_content).encode("utf-8"))
+        mock_client = MockRestClient(json_encode(response_content).encode("utf-8"))
         rest_client = self.REST_CLIENT(mock_client)
         return mock_client, rest_client
 
