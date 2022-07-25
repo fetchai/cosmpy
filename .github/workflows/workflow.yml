@@ -66,4 +66,4 @@ jobs:
       with:
         use-quiet-mode: 'yes'
         use-verbose-mode: 'yes'
-        config-file: '.md-link-check.json'
+        config-file: '.md-link-check.json' 
