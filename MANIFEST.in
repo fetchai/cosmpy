@@ -3,6 +3,7 @@ include Pipfile
 include strategy.ini
 include tox.ini
 include *.md
+include *.yml
 include *.json
 include .firebaserc
 include mkdocs.yml

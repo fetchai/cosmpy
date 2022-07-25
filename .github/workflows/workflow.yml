@@ -56,3 +56,12 @@ jobs:
       shell: bash
     - name: Show coverage report
       run: tox -e coverage-report
+    
+  spell-check:
+    name: Spellcheck
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: rojopolis/spellcheck-github-actions@0.25.0
+      with:
+        config-file: '.spellcheck.yml'
