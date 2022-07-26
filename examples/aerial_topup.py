@@ -23,9 +23,9 @@ from google.protobuf import any_pb2
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgExec
 from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -63,16 +63,23 @@ def _parse_commandline():
 
 
 def main():
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     args = _parse_commandline()
 
     wallet_address = args.wallet_address
 
     task_wallet_address = args.task_wallet_address
 
-    # Use aerial_authz.py to authorize an authz_wallet address to send tokens from wallet
-    authz_wallet = LocalWallet(
-        PrivateKey("KI5AZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV8=")
-    )
+    # Use aerial_authz.py to authorize authz_wallet address to send tokens from wallet
+    authz_wallet = LocalWallet.generate()
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+
+    wallet_balance = ledger.query_bank_balance(authz_wallet.address())
+
+    while wallet_balance < (10**18):
+        print("Providing wealth to wallet...")
+        faucet_api.get_wealth(authz_wallet.address())
+        wallet_balance = ledger.query_bank_balance(authz_wallet.address())
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 

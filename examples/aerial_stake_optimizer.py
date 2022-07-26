@@ -18,10 +18,9 @@
 # ------------------------------------------------------------------------------
 import json
 
-from cosmpy.aerial.client import LedgerClient
+from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import create_delegate_msg
-from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
