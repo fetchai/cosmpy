@@ -31,6 +31,8 @@ jobs:
         tox -e isort-check
         tox -e flake8
         tox -e vulture
+    - name: Docstring check
+      run: tox -e darglint
     - name: Security check
       run: tox -e bandit
     - name: Safety check
