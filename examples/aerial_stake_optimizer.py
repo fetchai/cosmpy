@@ -43,6 +43,7 @@ def M(x, f, S, k, D):
 
 def main():
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     # Set initial stake and desired stake period
     initial_stake = 50000000000000000000
@@ -112,12 +113,15 @@ def main():
 
     # Estmate fees for claiming and delegating rewards
 
-    # Use any address with tokens available
     alice = LocalWallet.generate()
-    alice_address = alice.address()
+    alice_address = str(alice.address())
 
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(alice.address())
+    alice_balance = ledger.query_bank_balance(alice.address())
+
+    while alice_balance < initial_stake:
+        print("Providing wealth to alice...")
+        faucet_api.get_wealth(alice.address())
+        alice_balance = ledger.query_bank_balance(alice.address())
 
     tx = Transaction()
 

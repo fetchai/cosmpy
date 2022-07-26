@@ -18,7 +18,6 @@
 # ------------------------------------------------------------------------------
 
 import argparse
-import sys
 
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract, create_cosmwasm_execute_msg
@@ -47,13 +46,10 @@ def main():
     args = _parse_commandline()
 
     alice = LocalWallet.generate()
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(alice.address())
     bob = LocalWallet.generate()
 
-    faucet_api.get_wealth(bob.address())
-
     client = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     # check to see if all the clients have enough funds
     alice_balance = client.query_bank_balance(alice.address())
@@ -61,17 +57,15 @@ def main():
     print(f"Alice balance {alice_balance}")
     print(f"Bob   balance {bob_balance}")
 
-    if alice_balance < (10**18):
-        print(
-            f"Alice has insufficient balance to complete operations please funds alice account: {alice.address()}"
-        )
-        sys.exit(1)
+    while alice_balance < (10**18):
+        print("Providing wealth to alice...")
+        faucet_api.get_wealth(alice.address())
+        alice_balance = client.query_bank_balance(alice.address())
 
-    if bob_balance < (10**18):
-        print(
-            f"Bob has insufficient balance to complete operations please funds bob account: {bob.address()}"
-        )
-        sys.exit(1)
+    while bob_balance < (10**18):
+        print("Providing wealth to bob...")
+        faucet_api.get_wealth(bob.address())
+        bob_balance = client.query_bank_balance(bob.address())
 
     contract = LedgerContract(args.contract_path, client, address=args.contract_address)
 

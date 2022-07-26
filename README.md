@@ -12,7 +12,7 @@
   <a>
     <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/cosmpy">
   </a>
-  <a href="https://github.com/fetchai/cosmpy/blob/main/LICENSE">
+  <a href="https://github.com/fetchai/cosmpy/blob/master/LICENSE">
     <img alt="License" src="https://img.shields.io/pypi/l/cosmpy">
   </a>
 </p>
@@ -61,7 +61,7 @@ make docs-live
 ```
 
 Then navigate to the following URL in your browser:
-
+<!-- markdown-link-check-disable-next-line -->
 [http://127.0.0.1:8000/cosmpy/](http://127.0.0.1:8000/cosmpy/)
 
 ## Examples

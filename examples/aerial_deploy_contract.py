@@ -42,10 +42,15 @@ def main():
 
     wallet = LocalWallet.generate()
 
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(wallet.address())
-
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+
+    wallet_balance = ledger.query_bank_balance(wallet.address())
+
+    while wallet_balance < (10**18):
+        print("Providing wealth to wallet...")
+        faucet_api.get_wealth(wallet.address())
+        wallet_balance = ledger.query_bank_balance(wallet.address())
 
     contract = LedgerContract(args.contract_path, ledger, address=args.contract_address)
     contract.deploy({}, wallet)

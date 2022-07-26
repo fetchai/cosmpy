@@ -23,14 +23,17 @@ from cosmpy.aerial.wallet import LocalWallet
 
 def main():
     alice = LocalWallet.generate()
-
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(alice.address())
     bob = LocalWallet.generate()
 
-    faucet_api.get_wealth(bob.address())
-
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+
+    alice_balance = ledger.query_bank_balance(bob.address())
+
+    while alice_balance < (10**18):
+        print("Providing wealth to alice...")
+        faucet_api.get_wealth(alice.address())
+        alice_balance = ledger.query_bank_balance(alice.address())
 
     print(
         f"Alice Address: {alice.address()} Balance: {ledger.query_bank_balance(alice.address())}"

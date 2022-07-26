@@ -63,6 +63,7 @@ def _parse_commandline():
 
 
 def main():
+    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     args = _parse_commandline()
 
     wallet_address = args.wallet_address
@@ -70,9 +71,15 @@ def main():
     task_wallet_address = args.task_wallet_address
 
     # Use aerial_authz.py to authorize authz_wallet address to send tokens from wallet
-    authz_wallet = LocalWallet.genereate()
+    authz_wallet = LocalWallet.generate()
     faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(authz_wallet.address())
+
+    wallet_balance = ledger.query_bank_balance(authz_wallet.address())
+
+    while wallet_balance < (10**18):
+        print("Providing wealth to wallet...")
+        faucet_api.get_wealth(authz_wallet.address())
+        wallet_balance = ledger.query_bank_balance(authz_wallet.address())
 
     ledger = LedgerClient(NetworkConfig.latest_stable_testnet())
 
