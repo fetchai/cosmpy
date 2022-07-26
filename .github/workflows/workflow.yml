@@ -64,7 +64,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: rojopolis/spellcheck-github-actions@0.25.0
       with:
-        config-file: '.spellcheck.yml'
+        config_path: .spellcheck.yml
   
   markdown-link-check:
     name: Broken Links
