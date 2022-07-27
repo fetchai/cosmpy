@@ -103,7 +103,7 @@ class MintRestClientTestCase(unittest.TestCase):
         mint = MintRestClient(mock_client)
 
         # This test is expected to fail because of the loss of the decimal dot.
-        # assert mint.Inflation() == expected_response
+        # assert mint.Inflation() == expected_response # noqa: E800
         assert mint.Inflation().inflation == b"0.012345"
         assert mock_client.last_base_url == "/cosmos/mint/v1beta1/inflation"
 

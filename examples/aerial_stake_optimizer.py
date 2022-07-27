@@ -74,7 +74,7 @@ def main():
     # Choose a threshold for a validators minimum percentage of total stake delegated
     stake_threshold = 0.10
 
-    for i in range(len(validators_comission)):
+    for _i in range(len(validators_comission)):
 
         # Choose validator with lower commission
         validator_index = validators_comission.index(min(validators_comission))

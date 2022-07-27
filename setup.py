@@ -85,6 +85,10 @@ setup(
             "flake8-copyright==0.2.2",
             # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
             "grpcio-tools<=1.32.0",
+            "flake8-bugbear==20.1.4",
+            "flake8-eradicate==0.4.0",
+            "flake8-docstrings==1.6.0",
+            "pydocstyle==3.0.0",
         ],
         "test": ["coverage", "pytest"],
     },
