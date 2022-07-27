@@ -1,5 +1,10 @@
 # Release History
 
+## 0.5.1
+
+* dev dependency grpcio-tools updated to 1.47.0
+* cosmos sdk proto files regenerated with newer grpcio tool
+
 ## 0.5.0
 
 * add BLS support
