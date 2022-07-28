@@ -3,6 +3,7 @@
 # source: ibc/core/client/v1/query.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -18,610 +19,26 @@ from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='ibc/core/client/v1/query.proto',
-  package='ibc.core.client.v1',
-  syntax='proto3',
-  serialized_options=b'Z8github.com/cosmos/ibc-go/v2/modules/core/02-client/types',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1eibc/core/client/v1/query.proto\x12\x12ibc.core.client.v1\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x1fibc/core/client/v1/client.proto\x1a\x19google/protobuf/any.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x14gogoproto/gogo.proto\",\n\x17QueryClientStateRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\"\x8d\x01\n\x18QueryClientStateResponse\x12*\n\x0c\x63lient_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\r\n\x05proof\x18\x02 \x01(\x0c\x12\x36\n\x0cproof_height\x18\x03 \x01(\x0b\x32\x1a.ibc.core.client.v1.HeightB\x04\xc8\xde\x1f\x00\"V\n\x18QueryClientStatesRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xba\x01\n\x19QueryClientStatesResponse\x12`\n\rclient_states\x18\x01 \x03(\x0b\x32).ibc.core.client.v1.IdentifiedClientStateB\x1e\xc8\xde\x1f\x00\xaa\xdf\x1f\x16IdentifiedClientStates\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"x\n\x1aQueryConsensusStateRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x17\n\x0frevision_number\x18\x02 \x01(\x04\x12\x17\n\x0frevision_height\x18\x03 \x01(\x04\x12\x15\n\rlatest_height\x18\x04 \x01(\x08\"\x93\x01\n\x1bQueryConsensusStateResponse\x12-\n\x0f\x63onsensus_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\r\n\x05proof\x18\x02 \x01(\x0c\x12\x36\n\x0cproof_height\x18\x03 \x01(\x0b\x32\x1a.ibc.core.client.v1.HeightB\x04\xc8\xde\x1f\x00\"l\n\x1bQueryConsensusStatesRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xa9\x01\n\x1cQueryConsensusStatesResponse\x12L\n\x10\x63onsensus_states\x18\x01 \x03(\x0b\x32,.ibc.core.client.v1.ConsensusStateWithHeightB\x04\xc8\xde\x1f\x00\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"-\n\x18QueryClientStatusRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\"+\n\x19QueryClientStatusResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\"\x1a\n\x18QueryClientParamsRequest\"G\n\x19QueryClientParamsResponse\x12*\n\x06params\x18\x01 \x01(\x0b\x32\x1a.ibc.core.client.v1.Params\"!\n\x1fQueryUpgradedClientStateRequest\"W\n QueryUpgradedClientStateResponse\x12\x33\n\x15upgraded_client_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\"$\n\"QueryUpgradedConsensusStateRequest\"]\n#QueryUpgradedConsensusStateResponse\x12\x36\n\x18upgraded_consensus_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any2\x81\x0b\n\x05Query\x12\x9f\x01\n\x0b\x43lientState\x12+.ibc.core.client.v1.QueryClientStateRequest\x1a,.ibc.core.client.v1.QueryClientStateResponse\"5\x82\xd3\xe4\x93\x02/\x12-/ibc/core/client/v1/client_states/{client_id}\x12\x96\x01\n\x0c\x43lientStates\x12,.ibc.core.client.v1.QueryClientStatesRequest\x1a-.ibc.core.client.v1.QueryClientStatesResponse\")\x82\xd3\xe4\x93\x02#\x12!/ibc/core/client/v1/client_states\x12\xdf\x01\n\x0e\x43onsensusState\x12..ibc.core.client.v1.QueryConsensusStateRequest\x1a/.ibc.core.client.v1.QueryConsensusStateResponse\"l\x82\xd3\xe4\x93\x02\x66\x12\x64/ibc/core/client/v1/consensus_states/{client_id}/revision/{revision_number}/height/{revision_height}\x12\xae\x01\n\x0f\x43onsensusStates\x12/.ibc.core.client.v1.QueryConsensusStatesRequest\x1a\x30.ibc.core.client.v1.QueryConsensusStatesResponse\"8\x82\xd3\xe4\x93\x02\x32\x12\x30/ibc/core/client/v1/consensus_states/{client_id}\x12\xa2\x01\n\x0c\x43lientStatus\x12,.ibc.core.client.v1.QueryClientStatusRequest\x1a-.ibc.core.client.v1.QueryClientStatusResponse\"5\x82\xd3\xe4\x93\x02/\x12-/ibc/core/client/v1/client_status/{client_id}\x12\x8a\x01\n\x0c\x43lientParams\x12,.ibc.core.client.v1.QueryClientParamsRequest\x1a-.ibc.core.client.v1.QueryClientParamsResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/ibc/client/v1/params\x12\xb4\x01\n\x13UpgradedClientState\x12\x33.ibc.core.client.v1.QueryUpgradedClientStateRequest\x1a\x34.ibc.core.client.v1.QueryUpgradedClientStateResponse\"2\x82\xd3\xe4\x93\x02,\x12*/ibc/core/client/v1/upgraded_client_states\x12\xc0\x01\n\x16UpgradedConsensusState\x12\x36.ibc.core.client.v1.QueryUpgradedConsensusStateRequest\x1a\x37.ibc.core.client.v1.QueryUpgradedConsensusStateResponse\"5\x82\xd3\xe4\x93\x02/\x12-/ibc/core/client/v1/upgraded_consensus_statesB:Z8github.com/cosmos/ibc-go/v2/modules/core/02-client/typesb\x06proto3'
-  ,
-  dependencies=[cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2.DESCRIPTOR,ibc_dot_core_dot_client_dot_v1_dot_client__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1eibc/core/client/v1/query.proto\x12\x12ibc.core.client.v1\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x1fibc/core/client/v1/client.proto\x1a\x19google/protobuf/any.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x14gogoproto/gogo.proto\",\n\x17QueryClientStateRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\"\x8d\x01\n\x18QueryClientStateResponse\x12*\n\x0c\x63lient_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\r\n\x05proof\x18\x02 \x01(\x0c\x12\x36\n\x0cproof_height\x18\x03 \x01(\x0b\x32\x1a.ibc.core.client.v1.HeightB\x04\xc8\xde\x1f\x00\"V\n\x18QueryClientStatesRequest\x12:\n\npagination\x18\x01 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xba\x01\n\x19QueryClientStatesResponse\x12`\n\rclient_states\x18\x01 \x03(\x0b\x32).ibc.core.client.v1.IdentifiedClientStateB\x1e\xc8\xde\x1f\x00\xaa\xdf\x1f\x16IdentifiedClientStates\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"x\n\x1aQueryConsensusStateRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x17\n\x0frevision_number\x18\x02 \x01(\x04\x12\x17\n\x0frevision_height\x18\x03 \x01(\x04\x12\x15\n\rlatest_height\x18\x04 \x01(\x08\"\x93\x01\n\x1bQueryConsensusStateResponse\x12-\n\x0f\x63onsensus_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\r\n\x05proof\x18\x02 \x01(\x0c\x12\x36\n\x0cproof_height\x18\x03 \x01(\x0b\x32\x1a.ibc.core.client.v1.HeightB\x04\xc8\xde\x1f\x00\"l\n\x1bQueryConsensusStatesRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12:\n\npagination\x18\x02 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest\"\xa9\x01\n\x1cQueryConsensusStatesResponse\x12L\n\x10\x63onsensus_states\x18\x01 \x03(\x0b\x32,.ibc.core.client.v1.ConsensusStateWithHeightB\x04\xc8\xde\x1f\x00\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"-\n\x18QueryClientStatusRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\"+\n\x19QueryClientStatusResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\"\x1a\n\x18QueryClientParamsRequest\"G\n\x19QueryClientParamsResponse\x12*\n\x06params\x18\x01 \x01(\x0b\x32\x1a.ibc.core.client.v1.Params\"!\n\x1fQueryUpgradedClientStateRequest\"W\n QueryUpgradedClientStateResponse\x12\x33\n\x15upgraded_client_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\"$\n\"QueryUpgradedConsensusStateRequest\"]\n#QueryUpgradedConsensusStateResponse\x12\x36\n\x18upgraded_consensus_state\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any2\x81\x0b\n\x05Query\x12\x9f\x01\n\x0b\x43lientState\x12+.ibc.core.client.v1.QueryClientStateRequest\x1a,.ibc.core.client.v1.QueryClientStateResponse\"5\x82\xd3\xe4\x93\x02/\x12-/ibc/core/client/v1/client_states/{client_id}\x12\x96\x01\n\x0c\x43lientStates\x12,.ibc.core.client.v1.QueryClientStatesRequest\x1a-.ibc.core.client.v1.QueryClientStatesResponse\")\x82\xd3\xe4\x93\x02#\x12!/ibc/core/client/v1/client_states\x12\xdf\x01\n\x0e\x43onsensusState\x12..ibc.core.client.v1.QueryConsensusStateRequest\x1a/.ibc.core.client.v1.QueryConsensusStateResponse\"l\x82\xd3\xe4\x93\x02\x66\x12\x64/ibc/core/client/v1/consensus_states/{client_id}/revision/{revision_number}/height/{revision_height}\x12\xae\x01\n\x0f\x43onsensusStates\x12/.ibc.core.client.v1.QueryConsensusStatesRequest\x1a\x30.ibc.core.client.v1.QueryConsensusStatesResponse\"8\x82\xd3\xe4\x93\x02\x32\x12\x30/ibc/core/client/v1/consensus_states/{client_id}\x12\xa2\x01\n\x0c\x43lientStatus\x12,.ibc.core.client.v1.QueryClientStatusRequest\x1a-.ibc.core.client.v1.QueryClientStatusResponse\"5\x82\xd3\xe4\x93\x02/\x12-/ibc/core/client/v1/client_status/{client_id}\x12\x8a\x01\n\x0c\x43lientParams\x12,.ibc.core.client.v1.QueryClientParamsRequest\x1a-.ibc.core.client.v1.QueryClientParamsResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/ibc/client/v1/params\x12\xb4\x01\n\x13UpgradedClientState\x12\x33.ibc.core.client.v1.QueryUpgradedClientStateRequest\x1a\x34.ibc.core.client.v1.QueryUpgradedClientStateResponse\"2\x82\xd3\xe4\x93\x02,\x12*/ibc/core/client/v1/upgraded_client_states\x12\xc0\x01\n\x16UpgradedConsensusState\x12\x36.ibc.core.client.v1.QueryUpgradedConsensusStateRequest\x1a\x37.ibc.core.client.v1.QueryUpgradedConsensusStateResponse\"5\x82\xd3\xe4\x93\x02/\x12-/ibc/core/client/v1/upgraded_consensus_statesB:Z8github.com/cosmos/ibc-go/v2/modules/core/02-client/typesb\x06proto3')
 
 
 
-
-_QUERYCLIENTSTATEREQUEST = _descriptor.Descriptor(
-  name='QueryClientStateRequest',
-  full_name='ibc.core.client.v1.QueryClientStateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='client_id', full_name='ibc.core.client.v1.QueryClientStateRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=210,
-  serialized_end=254,
-)
-
-
-_QUERYCLIENTSTATERESPONSE = _descriptor.Descriptor(
-  name='QueryClientStateResponse',
-  full_name='ibc.core.client.v1.QueryClientStateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='client_state', full_name='ibc.core.client.v1.QueryClientStateResponse.client_state', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='proof', full_name='ibc.core.client.v1.QueryClientStateResponse.proof', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='proof_height', full_name='ibc.core.client.v1.QueryClientStateResponse.proof_height', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=257,
-  serialized_end=398,
-)
-
-
-_QUERYCLIENTSTATESREQUEST = _descriptor.Descriptor(
-  name='QueryClientStatesRequest',
-  full_name='ibc.core.client.v1.QueryClientStatesRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='ibc.core.client.v1.QueryClientStatesRequest.pagination', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=400,
-  serialized_end=486,
-)
-
-
-_QUERYCLIENTSTATESRESPONSE = _descriptor.Descriptor(
-  name='QueryClientStatesResponse',
-  full_name='ibc.core.client.v1.QueryClientStatesResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='client_states', full_name='ibc.core.client.v1.QueryClientStatesResponse.client_states', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000\252\337\037\026IdentifiedClientStates', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='ibc.core.client.v1.QueryClientStatesResponse.pagination', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=489,
-  serialized_end=675,
-)
-
-
-_QUERYCONSENSUSSTATEREQUEST = _descriptor.Descriptor(
-  name='QueryConsensusStateRequest',
-  full_name='ibc.core.client.v1.QueryConsensusStateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='client_id', full_name='ibc.core.client.v1.QueryConsensusStateRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='revision_number', full_name='ibc.core.client.v1.QueryConsensusStateRequest.revision_number', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='revision_height', full_name='ibc.core.client.v1.QueryConsensusStateRequest.revision_height', index=2,
-      number=3, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='latest_height', full_name='ibc.core.client.v1.QueryConsensusStateRequest.latest_height', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=677,
-  serialized_end=797,
-)
-
-
-_QUERYCONSENSUSSTATERESPONSE = _descriptor.Descriptor(
-  name='QueryConsensusStateResponse',
-  full_name='ibc.core.client.v1.QueryConsensusStateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='consensus_state', full_name='ibc.core.client.v1.QueryConsensusStateResponse.consensus_state', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='proof', full_name='ibc.core.client.v1.QueryConsensusStateResponse.proof', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='proof_height', full_name='ibc.core.client.v1.QueryConsensusStateResponse.proof_height', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=800,
-  serialized_end=947,
-)
-
-
-_QUERYCONSENSUSSTATESREQUEST = _descriptor.Descriptor(
-  name='QueryConsensusStatesRequest',
-  full_name='ibc.core.client.v1.QueryConsensusStatesRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='client_id', full_name='ibc.core.client.v1.QueryConsensusStatesRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='ibc.core.client.v1.QueryConsensusStatesRequest.pagination', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=949,
-  serialized_end=1057,
-)
-
-
-_QUERYCONSENSUSSTATESRESPONSE = _descriptor.Descriptor(
-  name='QueryConsensusStatesResponse',
-  full_name='ibc.core.client.v1.QueryConsensusStatesResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='consensus_states', full_name='ibc.core.client.v1.QueryConsensusStatesResponse.consensus_states', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='ibc.core.client.v1.QueryConsensusStatesResponse.pagination', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1060,
-  serialized_end=1229,
-)
-
-
-_QUERYCLIENTSTATUSREQUEST = _descriptor.Descriptor(
-  name='QueryClientStatusRequest',
-  full_name='ibc.core.client.v1.QueryClientStatusRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='client_id', full_name='ibc.core.client.v1.QueryClientStatusRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1231,
-  serialized_end=1276,
-)
-
-
-_QUERYCLIENTSTATUSRESPONSE = _descriptor.Descriptor(
-  name='QueryClientStatusResponse',
-  full_name='ibc.core.client.v1.QueryClientStatusResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='status', full_name='ibc.core.client.v1.QueryClientStatusResponse.status', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1278,
-  serialized_end=1321,
-)
-
-
-_QUERYCLIENTPARAMSREQUEST = _descriptor.Descriptor(
-  name='QueryClientParamsRequest',
-  full_name='ibc.core.client.v1.QueryClientParamsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1323,
-  serialized_end=1349,
-)
-
-
-_QUERYCLIENTPARAMSRESPONSE = _descriptor.Descriptor(
-  name='QueryClientParamsResponse',
-  full_name='ibc.core.client.v1.QueryClientParamsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='params', full_name='ibc.core.client.v1.QueryClientParamsResponse.params', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1351,
-  serialized_end=1422,
-)
-
-
-_QUERYUPGRADEDCLIENTSTATEREQUEST = _descriptor.Descriptor(
-  name='QueryUpgradedClientStateRequest',
-  full_name='ibc.core.client.v1.QueryUpgradedClientStateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1424,
-  serialized_end=1457,
-)
-
-
-_QUERYUPGRADEDCLIENTSTATERESPONSE = _descriptor.Descriptor(
-  name='QueryUpgradedClientStateResponse',
-  full_name='ibc.core.client.v1.QueryUpgradedClientStateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='upgraded_client_state', full_name='ibc.core.client.v1.QueryUpgradedClientStateResponse.upgraded_client_state', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1459,
-  serialized_end=1546,
-)
-
-
-_QUERYUPGRADEDCONSENSUSSTATEREQUEST = _descriptor.Descriptor(
-  name='QueryUpgradedConsensusStateRequest',
-  full_name='ibc.core.client.v1.QueryUpgradedConsensusStateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1548,
-  serialized_end=1584,
-)
-
-
-_QUERYUPGRADEDCONSENSUSSTATERESPONSE = _descriptor.Descriptor(
-  name='QueryUpgradedConsensusStateResponse',
-  full_name='ibc.core.client.v1.QueryUpgradedConsensusStateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='upgraded_consensus_state', full_name='ibc.core.client.v1.QueryUpgradedConsensusStateResponse.upgraded_consensus_state', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1586,
-  serialized_end=1679,
-)
-
-_QUERYCLIENTSTATERESPONSE.fields_by_name['client_state'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_QUERYCLIENTSTATERESPONSE.fields_by_name['proof_height'].message_type = ibc_dot_core_dot_client_dot_v1_dot_client__pb2._HEIGHT
-_QUERYCLIENTSTATESREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
-_QUERYCLIENTSTATESRESPONSE.fields_by_name['client_states'].message_type = ibc_dot_core_dot_client_dot_v1_dot_client__pb2._IDENTIFIEDCLIENTSTATE
-_QUERYCLIENTSTATESRESPONSE.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGERESPONSE
-_QUERYCONSENSUSSTATERESPONSE.fields_by_name['consensus_state'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_QUERYCONSENSUSSTATERESPONSE.fields_by_name['proof_height'].message_type = ibc_dot_core_dot_client_dot_v1_dot_client__pb2._HEIGHT
-_QUERYCONSENSUSSTATESREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
-_QUERYCONSENSUSSTATESRESPONSE.fields_by_name['consensus_states'].message_type = ibc_dot_core_dot_client_dot_v1_dot_client__pb2._CONSENSUSSTATEWITHHEIGHT
-_QUERYCONSENSUSSTATESRESPONSE.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGERESPONSE
-_QUERYCLIENTPARAMSRESPONSE.fields_by_name['params'].message_type = ibc_dot_core_dot_client_dot_v1_dot_client__pb2._PARAMS
-_QUERYUPGRADEDCLIENTSTATERESPONSE.fields_by_name['upgraded_client_state'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_QUERYUPGRADEDCONSENSUSSTATERESPONSE.fields_by_name['upgraded_consensus_state'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-DESCRIPTOR.message_types_by_name['QueryClientStateRequest'] = _QUERYCLIENTSTATEREQUEST
-DESCRIPTOR.message_types_by_name['QueryClientStateResponse'] = _QUERYCLIENTSTATERESPONSE
-DESCRIPTOR.message_types_by_name['QueryClientStatesRequest'] = _QUERYCLIENTSTATESREQUEST
-DESCRIPTOR.message_types_by_name['QueryClientStatesResponse'] = _QUERYCLIENTSTATESRESPONSE
-DESCRIPTOR.message_types_by_name['QueryConsensusStateRequest'] = _QUERYCONSENSUSSTATEREQUEST
-DESCRIPTOR.message_types_by_name['QueryConsensusStateResponse'] = _QUERYCONSENSUSSTATERESPONSE
-DESCRIPTOR.message_types_by_name['QueryConsensusStatesRequest'] = _QUERYCONSENSUSSTATESREQUEST
-DESCRIPTOR.message_types_by_name['QueryConsensusStatesResponse'] = _QUERYCONSENSUSSTATESRESPONSE
-DESCRIPTOR.message_types_by_name['QueryClientStatusRequest'] = _QUERYCLIENTSTATUSREQUEST
-DESCRIPTOR.message_types_by_name['QueryClientStatusResponse'] = _QUERYCLIENTSTATUSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryClientParamsRequest'] = _QUERYCLIENTPARAMSREQUEST
-DESCRIPTOR.message_types_by_name['QueryClientParamsResponse'] = _QUERYCLIENTPARAMSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryUpgradedClientStateRequest'] = _QUERYUPGRADEDCLIENTSTATEREQUEST
-DESCRIPTOR.message_types_by_name['QueryUpgradedClientStateResponse'] = _QUERYUPGRADEDCLIENTSTATERESPONSE
-DESCRIPTOR.message_types_by_name['QueryUpgradedConsensusStateRequest'] = _QUERYUPGRADEDCONSENSUSSTATEREQUEST
-DESCRIPTOR.message_types_by_name['QueryUpgradedConsensusStateResponse'] = _QUERYUPGRADEDCONSENSUSSTATERESPONSE
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_QUERYCLIENTSTATEREQUEST = DESCRIPTOR.message_types_by_name['QueryClientStateRequest']
+_QUERYCLIENTSTATERESPONSE = DESCRIPTOR.message_types_by_name['QueryClientStateResponse']
+_QUERYCLIENTSTATESREQUEST = DESCRIPTOR.message_types_by_name['QueryClientStatesRequest']
+_QUERYCLIENTSTATESRESPONSE = DESCRIPTOR.message_types_by_name['QueryClientStatesResponse']
+_QUERYCONSENSUSSTATEREQUEST = DESCRIPTOR.message_types_by_name['QueryConsensusStateRequest']
+_QUERYCONSENSUSSTATERESPONSE = DESCRIPTOR.message_types_by_name['QueryConsensusStateResponse']
+_QUERYCONSENSUSSTATESREQUEST = DESCRIPTOR.message_types_by_name['QueryConsensusStatesRequest']
+_QUERYCONSENSUSSTATESRESPONSE = DESCRIPTOR.message_types_by_name['QueryConsensusStatesResponse']
+_QUERYCLIENTSTATUSREQUEST = DESCRIPTOR.message_types_by_name['QueryClientStatusRequest']
+_QUERYCLIENTSTATUSRESPONSE = DESCRIPTOR.message_types_by_name['QueryClientStatusResponse']
+_QUERYCLIENTPARAMSREQUEST = DESCRIPTOR.message_types_by_name['QueryClientParamsRequest']
+_QUERYCLIENTPARAMSRESPONSE = DESCRIPTOR.message_types_by_name['QueryClientParamsResponse']
+_QUERYUPGRADEDCLIENTSTATEREQUEST = DESCRIPTOR.message_types_by_name['QueryUpgradedClientStateRequest']
+_QUERYUPGRADEDCLIENTSTATERESPONSE = DESCRIPTOR.message_types_by_name['QueryUpgradedClientStateResponse']
+_QUERYUPGRADEDCONSENSUSSTATEREQUEST = DESCRIPTOR.message_types_by_name['QueryUpgradedConsensusStateRequest']
+_QUERYUPGRADEDCONSENSUSSTATERESPONSE = DESCRIPTOR.message_types_by_name['QueryUpgradedConsensusStateResponse']
 QueryClientStateRequest = _reflection.GeneratedProtocolMessageType('QueryClientStateRequest', (_message.Message,), {
   'DESCRIPTOR' : _QUERYCLIENTSTATEREQUEST,
   '__module__' : 'ibc.core.client.v1.query_pb2'
@@ -734,106 +151,67 @@ QueryUpgradedConsensusStateResponse = _reflection.GeneratedProtocolMessageType('
   })
 _sym_db.RegisterMessage(QueryUpgradedConsensusStateResponse)
 
+_QUERY = DESCRIPTOR.services_by_name['Query']
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-DESCRIPTOR._options = None
-_QUERYCLIENTSTATERESPONSE.fields_by_name['proof_height']._options = None
-_QUERYCLIENTSTATESRESPONSE.fields_by_name['client_states']._options = None
-_QUERYCONSENSUSSTATERESPONSE.fields_by_name['proof_height']._options = None
-_QUERYCONSENSUSSTATESRESPONSE.fields_by_name['consensus_states']._options = None
-
-_QUERY = _descriptor.ServiceDescriptor(
-  name='Query',
-  full_name='ibc.core.client.v1.Query',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=1682,
-  serialized_end=3091,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='ClientState',
-    full_name='ibc.core.client.v1.Query.ClientState',
-    index=0,
-    containing_service=None,
-    input_type=_QUERYCLIENTSTATEREQUEST,
-    output_type=_QUERYCLIENTSTATERESPONSE,
-    serialized_options=b'\202\323\344\223\002/\022-/ibc/core/client/v1/client_states/{client_id}',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ClientStates',
-    full_name='ibc.core.client.v1.Query.ClientStates',
-    index=1,
-    containing_service=None,
-    input_type=_QUERYCLIENTSTATESREQUEST,
-    output_type=_QUERYCLIENTSTATESRESPONSE,
-    serialized_options=b'\202\323\344\223\002#\022!/ibc/core/client/v1/client_states',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ConsensusState',
-    full_name='ibc.core.client.v1.Query.ConsensusState',
-    index=2,
-    containing_service=None,
-    input_type=_QUERYCONSENSUSSTATEREQUEST,
-    output_type=_QUERYCONSENSUSSTATERESPONSE,
-    serialized_options=b'\202\323\344\223\002f\022d/ibc/core/client/v1/consensus_states/{client_id}/revision/{revision_number}/height/{revision_height}',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ConsensusStates',
-    full_name='ibc.core.client.v1.Query.ConsensusStates',
-    index=3,
-    containing_service=None,
-    input_type=_QUERYCONSENSUSSTATESREQUEST,
-    output_type=_QUERYCONSENSUSSTATESRESPONSE,
-    serialized_options=b'\202\323\344\223\0022\0220/ibc/core/client/v1/consensus_states/{client_id}',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ClientStatus',
-    full_name='ibc.core.client.v1.Query.ClientStatus',
-    index=4,
-    containing_service=None,
-    input_type=_QUERYCLIENTSTATUSREQUEST,
-    output_type=_QUERYCLIENTSTATUSRESPONSE,
-    serialized_options=b'\202\323\344\223\002/\022-/ibc/core/client/v1/client_status/{client_id}',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ClientParams',
-    full_name='ibc.core.client.v1.Query.ClientParams',
-    index=5,
-    containing_service=None,
-    input_type=_QUERYCLIENTPARAMSREQUEST,
-    output_type=_QUERYCLIENTPARAMSRESPONSE,
-    serialized_options=b'\202\323\344\223\002\027\022\025/ibc/client/v1/params',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='UpgradedClientState',
-    full_name='ibc.core.client.v1.Query.UpgradedClientState',
-    index=6,
-    containing_service=None,
-    input_type=_QUERYUPGRADEDCLIENTSTATEREQUEST,
-    output_type=_QUERYUPGRADEDCLIENTSTATERESPONSE,
-    serialized_options=b'\202\323\344\223\002,\022*/ibc/core/client/v1/upgraded_client_states',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='UpgradedConsensusState',
-    full_name='ibc.core.client.v1.Query.UpgradedConsensusState',
-    index=7,
-    containing_service=None,
-    input_type=_QUERYUPGRADEDCONSENSUSSTATEREQUEST,
-    output_type=_QUERYUPGRADEDCONSENSUSSTATERESPONSE,
-    serialized_options=b'\202\323\344\223\002/\022-/ibc/core/client/v1/upgraded_consensus_states',
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_QUERY)
-
-DESCRIPTOR.services_by_name['Query'] = _QUERY
-
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'Z8github.com/cosmos/ibc-go/v2/modules/core/02-client/types'
+  _QUERYCLIENTSTATERESPONSE.fields_by_name['proof_height']._options = None
+  _QUERYCLIENTSTATERESPONSE.fields_by_name['proof_height']._serialized_options = b'\310\336\037\000'
+  _QUERYCLIENTSTATESRESPONSE.fields_by_name['client_states']._options = None
+  _QUERYCLIENTSTATESRESPONSE.fields_by_name['client_states']._serialized_options = b'\310\336\037\000\252\337\037\026IdentifiedClientStates'
+  _QUERYCONSENSUSSTATERESPONSE.fields_by_name['proof_height']._options = None
+  _QUERYCONSENSUSSTATERESPONSE.fields_by_name['proof_height']._serialized_options = b'\310\336\037\000'
+  _QUERYCONSENSUSSTATESRESPONSE.fields_by_name['consensus_states']._options = None
+  _QUERYCONSENSUSSTATESRESPONSE.fields_by_name['consensus_states']._serialized_options = b'\310\336\037\000'
+  _QUERY.methods_by_name['ClientState']._options = None
+  _QUERY.methods_by_name['ClientState']._serialized_options = b'\202\323\344\223\002/\022-/ibc/core/client/v1/client_states/{client_id}'
+  _QUERY.methods_by_name['ClientStates']._options = None
+  _QUERY.methods_by_name['ClientStates']._serialized_options = b'\202\323\344\223\002#\022!/ibc/core/client/v1/client_states'
+  _QUERY.methods_by_name['ConsensusState']._options = None
+  _QUERY.methods_by_name['ConsensusState']._serialized_options = b'\202\323\344\223\002f\022d/ibc/core/client/v1/consensus_states/{client_id}/revision/{revision_number}/height/{revision_height}'
+  _QUERY.methods_by_name['ConsensusStates']._options = None
+  _QUERY.methods_by_name['ConsensusStates']._serialized_options = b'\202\323\344\223\0022\0220/ibc/core/client/v1/consensus_states/{client_id}'
+  _QUERY.methods_by_name['ClientStatus']._options = None
+  _QUERY.methods_by_name['ClientStatus']._serialized_options = b'\202\323\344\223\002/\022-/ibc/core/client/v1/client_status/{client_id}'
+  _QUERY.methods_by_name['ClientParams']._options = None
+  _QUERY.methods_by_name['ClientParams']._serialized_options = b'\202\323\344\223\002\027\022\025/ibc/client/v1/params'
+  _QUERY.methods_by_name['UpgradedClientState']._options = None
+  _QUERY.methods_by_name['UpgradedClientState']._serialized_options = b'\202\323\344\223\002,\022*/ibc/core/client/v1/upgraded_client_states'
+  _QUERY.methods_by_name['UpgradedConsensusState']._options = None
+  _QUERY.methods_by_name['UpgradedConsensusState']._serialized_options = b'\202\323\344\223\002/\022-/ibc/core/client/v1/upgraded_consensus_states'
+  _QUERYCLIENTSTATEREQUEST._serialized_start=210
+  _QUERYCLIENTSTATEREQUEST._serialized_end=254
+  _QUERYCLIENTSTATERESPONSE._serialized_start=257
+  _QUERYCLIENTSTATERESPONSE._serialized_end=398
+  _QUERYCLIENTSTATESREQUEST._serialized_start=400
+  _QUERYCLIENTSTATESREQUEST._serialized_end=486
+  _QUERYCLIENTSTATESRESPONSE._serialized_start=489
+  _QUERYCLIENTSTATESRESPONSE._serialized_end=675
+  _QUERYCONSENSUSSTATEREQUEST._serialized_start=677
+  _QUERYCONSENSUSSTATEREQUEST._serialized_end=797
+  _QUERYCONSENSUSSTATERESPONSE._serialized_start=800
+  _QUERYCONSENSUSSTATERESPONSE._serialized_end=947
+  _QUERYCONSENSUSSTATESREQUEST._serialized_start=949
+  _QUERYCONSENSUSSTATESREQUEST._serialized_end=1057
+  _QUERYCONSENSUSSTATESRESPONSE._serialized_start=1060
+  _QUERYCONSENSUSSTATESRESPONSE._serialized_end=1229
+  _QUERYCLIENTSTATUSREQUEST._serialized_start=1231
+  _QUERYCLIENTSTATUSREQUEST._serialized_end=1276
+  _QUERYCLIENTSTATUSRESPONSE._serialized_start=1278
+  _QUERYCLIENTSTATUSRESPONSE._serialized_end=1321
+  _QUERYCLIENTPARAMSREQUEST._serialized_start=1323
+  _QUERYCLIENTPARAMSREQUEST._serialized_end=1349
+  _QUERYCLIENTPARAMSRESPONSE._serialized_start=1351
+  _QUERYCLIENTPARAMSRESPONSE._serialized_end=1422
+  _QUERYUPGRADEDCLIENTSTATEREQUEST._serialized_start=1424
+  _QUERYUPGRADEDCLIENTSTATEREQUEST._serialized_end=1457
+  _QUERYUPGRADEDCLIENTSTATERESPONSE._serialized_start=1459
+  _QUERYUPGRADEDCLIENTSTATERESPONSE._serialized_end=1546
+  _QUERYUPGRADEDCONSENSUSSTATEREQUEST._serialized_start=1548
+  _QUERYUPGRADEDCONSENSUSSTATEREQUEST._serialized_end=1584
+  _QUERYUPGRADEDCONSENSUSSTATERESPONSE._serialized_start=1586
+  _QUERYUPGRADEDCONSENSUSSTATERESPONSE._serialized_end=1679
+  _QUERY._serialized_start=1682
+  _QUERY._serialized_end=3091
 # @@protoc_insertion_point(module_scope)

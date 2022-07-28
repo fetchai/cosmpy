@@ -3,6 +3,7 @@
 # source: cosmos/distribution/v1beta1/query.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -18,652 +19,28 @@ from cosmos.base.v1beta1 import coin_pb2 as cosmos_dot_base_dot_v1beta1_dot_coin
 from cosmos.distribution.v1beta1 import distribution_pb2 as cosmos_dot_distribution_dot_v1beta1_dot_distribution__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='cosmos/distribution/v1beta1/query.proto',
-  package='cosmos.distribution.v1beta1',
-  syntax='proto3',
-  serialized_options=b'Z1github.com/cosmos/cosmos-sdk/x/distribution/types',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\'cosmos/distribution/v1beta1/query.proto\x12\x1b\x63osmos.distribution.v1beta1\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a.cosmos/distribution/v1beta1/distribution.proto\"\x14\n\x12QueryParamsRequest\"P\n\x13QueryParamsResponse\x12\x39\n\x06params\x18\x01 \x01(\x0b\x32#.cosmos.distribution.v1beta1.ParamsB\x04\xc8\xde\x1f\x00\"D\n\'QueryValidatorOutstandingRewardsRequest\x12\x19\n\x11validator_address\x18\x01 \x01(\t\"{\n(QueryValidatorOutstandingRewardsResponse\x12O\n\x07rewards\x18\x01 \x01(\x0b\x32\x38.cosmos.distribution.v1beta1.ValidatorOutstandingRewardsB\x04\xc8\xde\x1f\x00\"<\n\x1fQueryValidatorCommissionRequest\x12\x19\n\x11validator_address\x18\x01 \x01(\t\"y\n QueryValidatorCommissionResponse\x12U\n\ncommission\x18\x01 \x01(\x0b\x32;.cosmos.distribution.v1beta1.ValidatorAccumulatedCommissionB\x04\xc8\xde\x1f\x00\"\xaf\x01\n\x1cQueryValidatorSlashesRequest\x12\x19\n\x11validator_address\x18\x01 \x01(\t\x12\x17\n\x0fstarting_height\x18\x02 \x01(\x04\x12\x15\n\rending_height\x18\x03 \x01(\x04\x12:\n\npagination\x18\x04 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest:\x08\x88\xa0\x1f\x00\x98\xa0\x1f\x01\"\xa5\x01\n\x1dQueryValidatorSlashesResponse\x12G\n\x07slashes\x18\x01 \x03(\x0b\x32\x30.cosmos.distribution.v1beta1.ValidatorSlashEventB\x04\xc8\xde\x1f\x00\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"_\n\x1dQueryDelegationRewardsRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t\x12\x19\n\x11validator_address\x18\x02 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\x84\x01\n\x1eQueryDelegationRewardsResponse\x12\x62\n\x07rewards\x18\x01 \x03(\x0b\x32\x1c.cosmos.base.v1beta1.DecCoinB3\xc8\xde\x1f\x00\xaa\xdf\x1f+github.com/cosmos/cosmos-sdk/types.DecCoins\"I\n\"QueryDelegationTotalRewardsRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\xd6\x01\n#QueryDelegationTotalRewardsResponse\x12M\n\x07rewards\x18\x01 \x03(\x0b\x32\x36.cosmos.distribution.v1beta1.DelegationDelegatorRewardB\x04\xc8\xde\x1f\x00\x12`\n\x05total\x18\x02 \x03(\x0b\x32\x1c.cosmos.base.v1beta1.DecCoinB3\xc8\xde\x1f\x00\xaa\xdf\x1f+github.com/cosmos/cosmos-sdk/types.DecCoins\"F\n\x1fQueryDelegatorValidatorsRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"@\n QueryDelegatorValidatorsResponse\x12\x12\n\nvalidators\x18\x01 \x03(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"K\n$QueryDelegatorWithdrawAddressRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"K\n%QueryDelegatorWithdrawAddressResponse\x12\x18\n\x10withdraw_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\x1b\n\x19QueryCommunityPoolRequest\"}\n\x1aQueryCommunityPoolResponse\x12_\n\x04pool\x18\x01 \x03(\x0b\x32\x1c.cosmos.base.v1beta1.DecCoinB3\xaa\xdf\x1f+github.com/cosmos/cosmos-sdk/types.DecCoins\xc8\xde\x1f\x00\x32\xd8\x0f\n\x05Query\x12\x98\x01\n\x06Params\x12/.cosmos.distribution.v1beta1.QueryParamsRequest\x1a\x30.cosmos.distribution.v1beta1.QueryParamsResponse\"+\x82\xd3\xe4\x93\x02%\x12#/cosmos/distribution/v1beta1/params\x12\x83\x02\n\x1bValidatorOutstandingRewards\x12\x44.cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsRequest\x1a\x45.cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsResponse\"W\x82\xd3\xe4\x93\x02Q\x12O/cosmos/distribution/v1beta1/validators/{validator_address}/outstanding_rewards\x12\xe2\x01\n\x13ValidatorCommission\x12<.cosmos.distribution.v1beta1.QueryValidatorCommissionRequest\x1a=.cosmos.distribution.v1beta1.QueryValidatorCommissionResponse\"N\x82\xd3\xe4\x93\x02H\x12\x46/cosmos/distribution/v1beta1/validators/{validator_address}/commission\x12\xd6\x01\n\x10ValidatorSlashes\x12\x39.cosmos.distribution.v1beta1.QueryValidatorSlashesRequest\x1a:.cosmos.distribution.v1beta1.QueryValidatorSlashesResponse\"K\x82\xd3\xe4\x93\x02\x45\x12\x43/cosmos/distribution/v1beta1/validators/{validator_address}/slashes\x12\xed\x01\n\x11\x44\x65legationRewards\x12:.cosmos.distribution.v1beta1.QueryDelegationRewardsRequest\x1a;.cosmos.distribution.v1beta1.QueryDelegationRewardsResponse\"_\x82\xd3\xe4\x93\x02Y\x12W/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards/{validator_address}\x12\xe8\x01\n\x16\x44\x65legationTotalRewards\x12?.cosmos.distribution.v1beta1.QueryDelegationTotalRewardsRequest\x1a@.cosmos.distribution.v1beta1.QueryDelegationTotalRewardsResponse\"K\x82\xd3\xe4\x93\x02\x45\x12\x43/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards\x12\xe2\x01\n\x13\x44\x65legatorValidators\x12<.cosmos.distribution.v1beta1.QueryDelegatorValidatorsRequest\x1a=.cosmos.distribution.v1beta1.QueryDelegatorValidatorsResponse\"N\x82\xd3\xe4\x93\x02H\x12\x46/cosmos/distribution/v1beta1/delegators/{delegator_address}/validators\x12\xf7\x01\n\x18\x44\x65legatorWithdrawAddress\x12\x41.cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressRequest\x1a\x42.cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressResponse\"T\x82\xd3\xe4\x93\x02N\x12L/cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address\x12\xb5\x01\n\rCommunityPool\x12\x36.cosmos.distribution.v1beta1.QueryCommunityPoolRequest\x1a\x37.cosmos.distribution.v1beta1.QueryCommunityPoolResponse\"3\x82\xd3\xe4\x93\x02-\x12+/cosmos/distribution/v1beta1/community_poolB3Z1github.com/cosmos/cosmos-sdk/x/distribution/typesb\x06proto3'
-  ,
-  dependencies=[cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,cosmos_dot_base_dot_v1beta1_dot_coin__pb2.DESCRIPTOR,cosmos_dot_distribution_dot_v1beta1_dot_distribution__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'cosmos/distribution/v1beta1/query.proto\x12\x1b\x63osmos.distribution.v1beta1\x1a*cosmos/base/query/v1beta1/pagination.proto\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1e\x63osmos/base/v1beta1/coin.proto\x1a.cosmos/distribution/v1beta1/distribution.proto\"\x14\n\x12QueryParamsRequest\"P\n\x13QueryParamsResponse\x12\x39\n\x06params\x18\x01 \x01(\x0b\x32#.cosmos.distribution.v1beta1.ParamsB\x04\xc8\xde\x1f\x00\"D\n\'QueryValidatorOutstandingRewardsRequest\x12\x19\n\x11validator_address\x18\x01 \x01(\t\"{\n(QueryValidatorOutstandingRewardsResponse\x12O\n\x07rewards\x18\x01 \x01(\x0b\x32\x38.cosmos.distribution.v1beta1.ValidatorOutstandingRewardsB\x04\xc8\xde\x1f\x00\"<\n\x1fQueryValidatorCommissionRequest\x12\x19\n\x11validator_address\x18\x01 \x01(\t\"y\n QueryValidatorCommissionResponse\x12U\n\ncommission\x18\x01 \x01(\x0b\x32;.cosmos.distribution.v1beta1.ValidatorAccumulatedCommissionB\x04\xc8\xde\x1f\x00\"\xaf\x01\n\x1cQueryValidatorSlashesRequest\x12\x19\n\x11validator_address\x18\x01 \x01(\t\x12\x17\n\x0fstarting_height\x18\x02 \x01(\x04\x12\x15\n\rending_height\x18\x03 \x01(\x04\x12:\n\npagination\x18\x04 \x01(\x0b\x32&.cosmos.base.query.v1beta1.PageRequest:\x08\x88\xa0\x1f\x00\x98\xa0\x1f\x01\"\xa5\x01\n\x1dQueryValidatorSlashesResponse\x12G\n\x07slashes\x18\x01 \x03(\x0b\x32\x30.cosmos.distribution.v1beta1.ValidatorSlashEventB\x04\xc8\xde\x1f\x00\x12;\n\npagination\x18\x02 \x01(\x0b\x32\'.cosmos.base.query.v1beta1.PageResponse\"_\n\x1dQueryDelegationRewardsRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t\x12\x19\n\x11validator_address\x18\x02 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\x84\x01\n\x1eQueryDelegationRewardsResponse\x12\x62\n\x07rewards\x18\x01 \x03(\x0b\x32\x1c.cosmos.base.v1beta1.DecCoinB3\xc8\xde\x1f\x00\xaa\xdf\x1f+github.com/cosmos/cosmos-sdk/types.DecCoins\"I\n\"QueryDelegationTotalRewardsRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\xd6\x01\n#QueryDelegationTotalRewardsResponse\x12M\n\x07rewards\x18\x01 \x03(\x0b\x32\x36.cosmos.distribution.v1beta1.DelegationDelegatorRewardB\x04\xc8\xde\x1f\x00\x12`\n\x05total\x18\x02 \x03(\x0b\x32\x1c.cosmos.base.v1beta1.DecCoinB3\xc8\xde\x1f\x00\xaa\xdf\x1f+github.com/cosmos/cosmos-sdk/types.DecCoins\"F\n\x1fQueryDelegatorValidatorsRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"@\n QueryDelegatorValidatorsResponse\x12\x12\n\nvalidators\x18\x01 \x03(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"K\n$QueryDelegatorWithdrawAddressRequest\x12\x19\n\x11\x64\x65legator_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"K\n%QueryDelegatorWithdrawAddressResponse\x12\x18\n\x10withdraw_address\x18\x01 \x01(\t:\x08\xe8\xa0\x1f\x00\x88\xa0\x1f\x00\"\x1b\n\x19QueryCommunityPoolRequest\"}\n\x1aQueryCommunityPoolResponse\x12_\n\x04pool\x18\x01 \x03(\x0b\x32\x1c.cosmos.base.v1beta1.DecCoinB3\xaa\xdf\x1f+github.com/cosmos/cosmos-sdk/types.DecCoins\xc8\xde\x1f\x00\x32\xd8\x0f\n\x05Query\x12\x98\x01\n\x06Params\x12/.cosmos.distribution.v1beta1.QueryParamsRequest\x1a\x30.cosmos.distribution.v1beta1.QueryParamsResponse\"+\x82\xd3\xe4\x93\x02%\x12#/cosmos/distribution/v1beta1/params\x12\x83\x02\n\x1bValidatorOutstandingRewards\x12\x44.cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsRequest\x1a\x45.cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsResponse\"W\x82\xd3\xe4\x93\x02Q\x12O/cosmos/distribution/v1beta1/validators/{validator_address}/outstanding_rewards\x12\xe2\x01\n\x13ValidatorCommission\x12<.cosmos.distribution.v1beta1.QueryValidatorCommissionRequest\x1a=.cosmos.distribution.v1beta1.QueryValidatorCommissionResponse\"N\x82\xd3\xe4\x93\x02H\x12\x46/cosmos/distribution/v1beta1/validators/{validator_address}/commission\x12\xd6\x01\n\x10ValidatorSlashes\x12\x39.cosmos.distribution.v1beta1.QueryValidatorSlashesRequest\x1a:.cosmos.distribution.v1beta1.QueryValidatorSlashesResponse\"K\x82\xd3\xe4\x93\x02\x45\x12\x43/cosmos/distribution/v1beta1/validators/{validator_address}/slashes\x12\xed\x01\n\x11\x44\x65legationRewards\x12:.cosmos.distribution.v1beta1.QueryDelegationRewardsRequest\x1a;.cosmos.distribution.v1beta1.QueryDelegationRewardsResponse\"_\x82\xd3\xe4\x93\x02Y\x12W/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards/{validator_address}\x12\xe8\x01\n\x16\x44\x65legationTotalRewards\x12?.cosmos.distribution.v1beta1.QueryDelegationTotalRewardsRequest\x1a@.cosmos.distribution.v1beta1.QueryDelegationTotalRewardsResponse\"K\x82\xd3\xe4\x93\x02\x45\x12\x43/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards\x12\xe2\x01\n\x13\x44\x65legatorValidators\x12<.cosmos.distribution.v1beta1.QueryDelegatorValidatorsRequest\x1a=.cosmos.distribution.v1beta1.QueryDelegatorValidatorsResponse\"N\x82\xd3\xe4\x93\x02H\x12\x46/cosmos/distribution/v1beta1/delegators/{delegator_address}/validators\x12\xf7\x01\n\x18\x44\x65legatorWithdrawAddress\x12\x41.cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressRequest\x1a\x42.cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressResponse\"T\x82\xd3\xe4\x93\x02N\x12L/cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address\x12\xb5\x01\n\rCommunityPool\x12\x36.cosmos.distribution.v1beta1.QueryCommunityPoolRequest\x1a\x37.cosmos.distribution.v1beta1.QueryCommunityPoolResponse\"3\x82\xd3\xe4\x93\x02-\x12+/cosmos/distribution/v1beta1/community_poolB3Z1github.com/cosmos/cosmos-sdk/x/distribution/typesb\x06proto3')
 
 
 
-
-_QUERYPARAMSREQUEST = _descriptor.Descriptor(
-  name='QueryParamsRequest',
-  full_name='cosmos.distribution.v1beta1.QueryParamsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=248,
-  serialized_end=268,
-)
-
-
-_QUERYPARAMSRESPONSE = _descriptor.Descriptor(
-  name='QueryParamsResponse',
-  full_name='cosmos.distribution.v1beta1.QueryParamsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='params', full_name='cosmos.distribution.v1beta1.QueryParamsResponse.params', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=270,
-  serialized_end=350,
-)
-
-
-_QUERYVALIDATOROUTSTANDINGREWARDSREQUEST = _descriptor.Descriptor(
-  name='QueryValidatorOutstandingRewardsRequest',
-  full_name='cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='validator_address', full_name='cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsRequest.validator_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=352,
-  serialized_end=420,
-)
-
-
-_QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE = _descriptor.Descriptor(
-  name='QueryValidatorOutstandingRewardsResponse',
-  full_name='cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='rewards', full_name='cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsResponse.rewards', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=422,
-  serialized_end=545,
-)
-
-
-_QUERYVALIDATORCOMMISSIONREQUEST = _descriptor.Descriptor(
-  name='QueryValidatorCommissionRequest',
-  full_name='cosmos.distribution.v1beta1.QueryValidatorCommissionRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='validator_address', full_name='cosmos.distribution.v1beta1.QueryValidatorCommissionRequest.validator_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=547,
-  serialized_end=607,
-)
-
-
-_QUERYVALIDATORCOMMISSIONRESPONSE = _descriptor.Descriptor(
-  name='QueryValidatorCommissionResponse',
-  full_name='cosmos.distribution.v1beta1.QueryValidatorCommissionResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='commission', full_name='cosmos.distribution.v1beta1.QueryValidatorCommissionResponse.commission', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=609,
-  serialized_end=730,
-)
-
-
-_QUERYVALIDATORSLASHESREQUEST = _descriptor.Descriptor(
-  name='QueryValidatorSlashesRequest',
-  full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='validator_address', full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesRequest.validator_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='starting_height', full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesRequest.starting_height', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='ending_height', full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesRequest.ending_height', index=2,
-      number=3, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesRequest.pagination', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'\210\240\037\000\230\240\037\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=733,
-  serialized_end=908,
-)
-
-
-_QUERYVALIDATORSLASHESRESPONSE = _descriptor.Descriptor(
-  name='QueryValidatorSlashesResponse',
-  full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='slashes', full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesResponse.slashes', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pagination', full_name='cosmos.distribution.v1beta1.QueryValidatorSlashesResponse.pagination', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=911,
-  serialized_end=1076,
-)
-
-
-_QUERYDELEGATIONREWARDSREQUEST = _descriptor.Descriptor(
-  name='QueryDelegationRewardsRequest',
-  full_name='cosmos.distribution.v1beta1.QueryDelegationRewardsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='delegator_address', full_name='cosmos.distribution.v1beta1.QueryDelegationRewardsRequest.delegator_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='validator_address', full_name='cosmos.distribution.v1beta1.QueryDelegationRewardsRequest.validator_address', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'\350\240\037\000\210\240\037\000',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1078,
-  serialized_end=1173,
-)
-
-
-_QUERYDELEGATIONREWARDSRESPONSE = _descriptor.Descriptor(
-  name='QueryDelegationRewardsResponse',
-  full_name='cosmos.distribution.v1beta1.QueryDelegationRewardsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='rewards', full_name='cosmos.distribution.v1beta1.QueryDelegationRewardsResponse.rewards', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000\252\337\037+github.com/cosmos/cosmos-sdk/types.DecCoins', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1176,
-  serialized_end=1308,
-)
-
-
-_QUERYDELEGATIONTOTALREWARDSREQUEST = _descriptor.Descriptor(
-  name='QueryDelegationTotalRewardsRequest',
-  full_name='cosmos.distribution.v1beta1.QueryDelegationTotalRewardsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='delegator_address', full_name='cosmos.distribution.v1beta1.QueryDelegationTotalRewardsRequest.delegator_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'\350\240\037\000\210\240\037\000',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1310,
-  serialized_end=1383,
-)
-
-
-_QUERYDELEGATIONTOTALREWARDSRESPONSE = _descriptor.Descriptor(
-  name='QueryDelegationTotalRewardsResponse',
-  full_name='cosmos.distribution.v1beta1.QueryDelegationTotalRewardsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='rewards', full_name='cosmos.distribution.v1beta1.QueryDelegationTotalRewardsResponse.rewards', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='total', full_name='cosmos.distribution.v1beta1.QueryDelegationTotalRewardsResponse.total', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\310\336\037\000\252\337\037+github.com/cosmos/cosmos-sdk/types.DecCoins', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1386,
-  serialized_end=1600,
-)
-
-
-_QUERYDELEGATORVALIDATORSREQUEST = _descriptor.Descriptor(
-  name='QueryDelegatorValidatorsRequest',
-  full_name='cosmos.distribution.v1beta1.QueryDelegatorValidatorsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='delegator_address', full_name='cosmos.distribution.v1beta1.QueryDelegatorValidatorsRequest.delegator_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'\350\240\037\000\210\240\037\000',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1602,
-  serialized_end=1672,
-)
-
-
-_QUERYDELEGATORVALIDATORSRESPONSE = _descriptor.Descriptor(
-  name='QueryDelegatorValidatorsResponse',
-  full_name='cosmos.distribution.v1beta1.QueryDelegatorValidatorsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='validators', full_name='cosmos.distribution.v1beta1.QueryDelegatorValidatorsResponse.validators', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'\350\240\037\000\210\240\037\000',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1674,
-  serialized_end=1738,
-)
-
-
-_QUERYDELEGATORWITHDRAWADDRESSREQUEST = _descriptor.Descriptor(
-  name='QueryDelegatorWithdrawAddressRequest',
-  full_name='cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='delegator_address', full_name='cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressRequest.delegator_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'\350\240\037\000\210\240\037\000',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1740,
-  serialized_end=1815,
-)
-
-
-_QUERYDELEGATORWITHDRAWADDRESSRESPONSE = _descriptor.Descriptor(
-  name='QueryDelegatorWithdrawAddressResponse',
-  full_name='cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='withdraw_address', full_name='cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressResponse.withdraw_address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'\350\240\037\000\210\240\037\000',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1817,
-  serialized_end=1892,
-)
-
-
-_QUERYCOMMUNITYPOOLREQUEST = _descriptor.Descriptor(
-  name='QueryCommunityPoolRequest',
-  full_name='cosmos.distribution.v1beta1.QueryCommunityPoolRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1894,
-  serialized_end=1921,
-)
-
-
-_QUERYCOMMUNITYPOOLRESPONSE = _descriptor.Descriptor(
-  name='QueryCommunityPoolResponse',
-  full_name='cosmos.distribution.v1beta1.QueryCommunityPoolResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='pool', full_name='cosmos.distribution.v1beta1.QueryCommunityPoolResponse.pool', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\252\337\037+github.com/cosmos/cosmos-sdk/types.DecCoins\310\336\037\000', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1923,
-  serialized_end=2048,
-)
-
-_QUERYPARAMSRESPONSE.fields_by_name['params'].message_type = cosmos_dot_distribution_dot_v1beta1_dot_distribution__pb2._PARAMS
-_QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE.fields_by_name['rewards'].message_type = cosmos_dot_distribution_dot_v1beta1_dot_distribution__pb2._VALIDATOROUTSTANDINGREWARDS
-_QUERYVALIDATORCOMMISSIONRESPONSE.fields_by_name['commission'].message_type = cosmos_dot_distribution_dot_v1beta1_dot_distribution__pb2._VALIDATORACCUMULATEDCOMMISSION
-_QUERYVALIDATORSLASHESREQUEST.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGEREQUEST
-_QUERYVALIDATORSLASHESRESPONSE.fields_by_name['slashes'].message_type = cosmos_dot_distribution_dot_v1beta1_dot_distribution__pb2._VALIDATORSLASHEVENT
-_QUERYVALIDATORSLASHESRESPONSE.fields_by_name['pagination'].message_type = cosmos_dot_base_dot_query_dot_v1beta1_dot_pagination__pb2._PAGERESPONSE
-_QUERYDELEGATIONREWARDSRESPONSE.fields_by_name['rewards'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._DECCOIN
-_QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['rewards'].message_type = cosmos_dot_distribution_dot_v1beta1_dot_distribution__pb2._DELEGATIONDELEGATORREWARD
-_QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['total'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._DECCOIN
-_QUERYCOMMUNITYPOOLRESPONSE.fields_by_name['pool'].message_type = cosmos_dot_base_dot_v1beta1_dot_coin__pb2._DECCOIN
-DESCRIPTOR.message_types_by_name['QueryParamsRequest'] = _QUERYPARAMSREQUEST
-DESCRIPTOR.message_types_by_name['QueryParamsResponse'] = _QUERYPARAMSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryValidatorOutstandingRewardsRequest'] = _QUERYVALIDATOROUTSTANDINGREWARDSREQUEST
-DESCRIPTOR.message_types_by_name['QueryValidatorOutstandingRewardsResponse'] = _QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryValidatorCommissionRequest'] = _QUERYVALIDATORCOMMISSIONREQUEST
-DESCRIPTOR.message_types_by_name['QueryValidatorCommissionResponse'] = _QUERYVALIDATORCOMMISSIONRESPONSE
-DESCRIPTOR.message_types_by_name['QueryValidatorSlashesRequest'] = _QUERYVALIDATORSLASHESREQUEST
-DESCRIPTOR.message_types_by_name['QueryValidatorSlashesResponse'] = _QUERYVALIDATORSLASHESRESPONSE
-DESCRIPTOR.message_types_by_name['QueryDelegationRewardsRequest'] = _QUERYDELEGATIONREWARDSREQUEST
-DESCRIPTOR.message_types_by_name['QueryDelegationRewardsResponse'] = _QUERYDELEGATIONREWARDSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryDelegationTotalRewardsRequest'] = _QUERYDELEGATIONTOTALREWARDSREQUEST
-DESCRIPTOR.message_types_by_name['QueryDelegationTotalRewardsResponse'] = _QUERYDELEGATIONTOTALREWARDSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryDelegatorValidatorsRequest'] = _QUERYDELEGATORVALIDATORSREQUEST
-DESCRIPTOR.message_types_by_name['QueryDelegatorValidatorsResponse'] = _QUERYDELEGATORVALIDATORSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryDelegatorWithdrawAddressRequest'] = _QUERYDELEGATORWITHDRAWADDRESSREQUEST
-DESCRIPTOR.message_types_by_name['QueryDelegatorWithdrawAddressResponse'] = _QUERYDELEGATORWITHDRAWADDRESSRESPONSE
-DESCRIPTOR.message_types_by_name['QueryCommunityPoolRequest'] = _QUERYCOMMUNITYPOOLREQUEST
-DESCRIPTOR.message_types_by_name['QueryCommunityPoolResponse'] = _QUERYCOMMUNITYPOOLRESPONSE
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_QUERYPARAMSREQUEST = DESCRIPTOR.message_types_by_name['QueryParamsRequest']
+_QUERYPARAMSRESPONSE = DESCRIPTOR.message_types_by_name['QueryParamsResponse']
+_QUERYVALIDATOROUTSTANDINGREWARDSREQUEST = DESCRIPTOR.message_types_by_name['QueryValidatorOutstandingRewardsRequest']
+_QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE = DESCRIPTOR.message_types_by_name['QueryValidatorOutstandingRewardsResponse']
+_QUERYVALIDATORCOMMISSIONREQUEST = DESCRIPTOR.message_types_by_name['QueryValidatorCommissionRequest']
+_QUERYVALIDATORCOMMISSIONRESPONSE = DESCRIPTOR.message_types_by_name['QueryValidatorCommissionResponse']
+_QUERYVALIDATORSLASHESREQUEST = DESCRIPTOR.message_types_by_name['QueryValidatorSlashesRequest']
+_QUERYVALIDATORSLASHESRESPONSE = DESCRIPTOR.message_types_by_name['QueryValidatorSlashesResponse']
+_QUERYDELEGATIONREWARDSREQUEST = DESCRIPTOR.message_types_by_name['QueryDelegationRewardsRequest']
+_QUERYDELEGATIONREWARDSRESPONSE = DESCRIPTOR.message_types_by_name['QueryDelegationRewardsResponse']
+_QUERYDELEGATIONTOTALREWARDSREQUEST = DESCRIPTOR.message_types_by_name['QueryDelegationTotalRewardsRequest']
+_QUERYDELEGATIONTOTALREWARDSRESPONSE = DESCRIPTOR.message_types_by_name['QueryDelegationTotalRewardsResponse']
+_QUERYDELEGATORVALIDATORSREQUEST = DESCRIPTOR.message_types_by_name['QueryDelegatorValidatorsRequest']
+_QUERYDELEGATORVALIDATORSRESPONSE = DESCRIPTOR.message_types_by_name['QueryDelegatorValidatorsResponse']
+_QUERYDELEGATORWITHDRAWADDRESSREQUEST = DESCRIPTOR.message_types_by_name['QueryDelegatorWithdrawAddressRequest']
+_QUERYDELEGATORWITHDRAWADDRESSRESPONSE = DESCRIPTOR.message_types_by_name['QueryDelegatorWithdrawAddressResponse']
+_QUERYCOMMUNITYPOOLREQUEST = DESCRIPTOR.message_types_by_name['QueryCommunityPoolRequest']
+_QUERYCOMMUNITYPOOLRESPONSE = DESCRIPTOR.message_types_by_name['QueryCommunityPoolResponse']
 QueryParamsRequest = _reflection.GeneratedProtocolMessageType('QueryParamsRequest', (_message.Message,), {
   'DESCRIPTOR' : _QUERYPARAMSREQUEST,
   '__module__' : 'cosmos.distribution.v1beta1.query_pb2'
@@ -790,127 +167,95 @@ QueryCommunityPoolResponse = _reflection.GeneratedProtocolMessageType('QueryComm
   })
 _sym_db.RegisterMessage(QueryCommunityPoolResponse)
 
+_QUERY = DESCRIPTOR.services_by_name['Query']
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-DESCRIPTOR._options = None
-_QUERYPARAMSRESPONSE.fields_by_name['params']._options = None
-_QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE.fields_by_name['rewards']._options = None
-_QUERYVALIDATORCOMMISSIONRESPONSE.fields_by_name['commission']._options = None
-_QUERYVALIDATORSLASHESREQUEST._options = None
-_QUERYVALIDATORSLASHESRESPONSE.fields_by_name['slashes']._options = None
-_QUERYDELEGATIONREWARDSREQUEST._options = None
-_QUERYDELEGATIONREWARDSRESPONSE.fields_by_name['rewards']._options = None
-_QUERYDELEGATIONTOTALREWARDSREQUEST._options = None
-_QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['rewards']._options = None
-_QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['total']._options = None
-_QUERYDELEGATORVALIDATORSREQUEST._options = None
-_QUERYDELEGATORVALIDATORSRESPONSE._options = None
-_QUERYDELEGATORWITHDRAWADDRESSREQUEST._options = None
-_QUERYDELEGATORWITHDRAWADDRESSRESPONSE._options = None
-_QUERYCOMMUNITYPOOLRESPONSE.fields_by_name['pool']._options = None
-
-_QUERY = _descriptor.ServiceDescriptor(
-  name='Query',
-  full_name='cosmos.distribution.v1beta1.Query',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=2051,
-  serialized_end=4059,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='Params',
-    full_name='cosmos.distribution.v1beta1.Query.Params',
-    index=0,
-    containing_service=None,
-    input_type=_QUERYPARAMSREQUEST,
-    output_type=_QUERYPARAMSRESPONSE,
-    serialized_options=b'\202\323\344\223\002%\022#/cosmos/distribution/v1beta1/params',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ValidatorOutstandingRewards',
-    full_name='cosmos.distribution.v1beta1.Query.ValidatorOutstandingRewards',
-    index=1,
-    containing_service=None,
-    input_type=_QUERYVALIDATOROUTSTANDINGREWARDSREQUEST,
-    output_type=_QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE,
-    serialized_options=b'\202\323\344\223\002Q\022O/cosmos/distribution/v1beta1/validators/{validator_address}/outstanding_rewards',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ValidatorCommission',
-    full_name='cosmos.distribution.v1beta1.Query.ValidatorCommission',
-    index=2,
-    containing_service=None,
-    input_type=_QUERYVALIDATORCOMMISSIONREQUEST,
-    output_type=_QUERYVALIDATORCOMMISSIONRESPONSE,
-    serialized_options=b'\202\323\344\223\002H\022F/cosmos/distribution/v1beta1/validators/{validator_address}/commission',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ValidatorSlashes',
-    full_name='cosmos.distribution.v1beta1.Query.ValidatorSlashes',
-    index=3,
-    containing_service=None,
-    input_type=_QUERYVALIDATORSLASHESREQUEST,
-    output_type=_QUERYVALIDATORSLASHESRESPONSE,
-    serialized_options=b'\202\323\344\223\002E\022C/cosmos/distribution/v1beta1/validators/{validator_address}/slashes',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='DelegationRewards',
-    full_name='cosmos.distribution.v1beta1.Query.DelegationRewards',
-    index=4,
-    containing_service=None,
-    input_type=_QUERYDELEGATIONREWARDSREQUEST,
-    output_type=_QUERYDELEGATIONREWARDSRESPONSE,
-    serialized_options=b'\202\323\344\223\002Y\022W/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards/{validator_address}',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='DelegationTotalRewards',
-    full_name='cosmos.distribution.v1beta1.Query.DelegationTotalRewards',
-    index=5,
-    containing_service=None,
-    input_type=_QUERYDELEGATIONTOTALREWARDSREQUEST,
-    output_type=_QUERYDELEGATIONTOTALREWARDSRESPONSE,
-    serialized_options=b'\202\323\344\223\002E\022C/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='DelegatorValidators',
-    full_name='cosmos.distribution.v1beta1.Query.DelegatorValidators',
-    index=6,
-    containing_service=None,
-    input_type=_QUERYDELEGATORVALIDATORSREQUEST,
-    output_type=_QUERYDELEGATORVALIDATORSRESPONSE,
-    serialized_options=b'\202\323\344\223\002H\022F/cosmos/distribution/v1beta1/delegators/{delegator_address}/validators',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='DelegatorWithdrawAddress',
-    full_name='cosmos.distribution.v1beta1.Query.DelegatorWithdrawAddress',
-    index=7,
-    containing_service=None,
-    input_type=_QUERYDELEGATORWITHDRAWADDRESSREQUEST,
-    output_type=_QUERYDELEGATORWITHDRAWADDRESSRESPONSE,
-    serialized_options=b'\202\323\344\223\002N\022L/cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='CommunityPool',
-    full_name='cosmos.distribution.v1beta1.Query.CommunityPool',
-    index=8,
-    containing_service=None,
-    input_type=_QUERYCOMMUNITYPOOLREQUEST,
-    output_type=_QUERYCOMMUNITYPOOLRESPONSE,
-    serialized_options=b'\202\323\344\223\002-\022+/cosmos/distribution/v1beta1/community_pool',
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_QUERY)
-
-DESCRIPTOR.services_by_name['Query'] = _QUERY
-
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'Z1github.com/cosmos/cosmos-sdk/x/distribution/types'
+  _QUERYPARAMSRESPONSE.fields_by_name['params']._options = None
+  _QUERYPARAMSRESPONSE.fields_by_name['params']._serialized_options = b'\310\336\037\000'
+  _QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE.fields_by_name['rewards']._options = None
+  _QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE.fields_by_name['rewards']._serialized_options = b'\310\336\037\000'
+  _QUERYVALIDATORCOMMISSIONRESPONSE.fields_by_name['commission']._options = None
+  _QUERYVALIDATORCOMMISSIONRESPONSE.fields_by_name['commission']._serialized_options = b'\310\336\037\000'
+  _QUERYVALIDATORSLASHESREQUEST._options = None
+  _QUERYVALIDATORSLASHESREQUEST._serialized_options = b'\210\240\037\000\230\240\037\001'
+  _QUERYVALIDATORSLASHESRESPONSE.fields_by_name['slashes']._options = None
+  _QUERYVALIDATORSLASHESRESPONSE.fields_by_name['slashes']._serialized_options = b'\310\336\037\000'
+  _QUERYDELEGATIONREWARDSREQUEST._options = None
+  _QUERYDELEGATIONREWARDSREQUEST._serialized_options = b'\350\240\037\000\210\240\037\000'
+  _QUERYDELEGATIONREWARDSRESPONSE.fields_by_name['rewards']._options = None
+  _QUERYDELEGATIONREWARDSRESPONSE.fields_by_name['rewards']._serialized_options = b'\310\336\037\000\252\337\037+github.com/cosmos/cosmos-sdk/types.DecCoins'
+  _QUERYDELEGATIONTOTALREWARDSREQUEST._options = None
+  _QUERYDELEGATIONTOTALREWARDSREQUEST._serialized_options = b'\350\240\037\000\210\240\037\000'
+  _QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['rewards']._options = None
+  _QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['rewards']._serialized_options = b'\310\336\037\000'
+  _QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['total']._options = None
+  _QUERYDELEGATIONTOTALREWARDSRESPONSE.fields_by_name['total']._serialized_options = b'\310\336\037\000\252\337\037+github.com/cosmos/cosmos-sdk/types.DecCoins'
+  _QUERYDELEGATORVALIDATORSREQUEST._options = None
+  _QUERYDELEGATORVALIDATORSREQUEST._serialized_options = b'\350\240\037\000\210\240\037\000'
+  _QUERYDELEGATORVALIDATORSRESPONSE._options = None
+  _QUERYDELEGATORVALIDATORSRESPONSE._serialized_options = b'\350\240\037\000\210\240\037\000'
+  _QUERYDELEGATORWITHDRAWADDRESSREQUEST._options = None
+  _QUERYDELEGATORWITHDRAWADDRESSREQUEST._serialized_options = b'\350\240\037\000\210\240\037\000'
+  _QUERYDELEGATORWITHDRAWADDRESSRESPONSE._options = None
+  _QUERYDELEGATORWITHDRAWADDRESSRESPONSE._serialized_options = b'\350\240\037\000\210\240\037\000'
+  _QUERYCOMMUNITYPOOLRESPONSE.fields_by_name['pool']._options = None
+  _QUERYCOMMUNITYPOOLRESPONSE.fields_by_name['pool']._serialized_options = b'\252\337\037+github.com/cosmos/cosmos-sdk/types.DecCoins\310\336\037\000'
+  _QUERY.methods_by_name['Params']._options = None
+  _QUERY.methods_by_name['Params']._serialized_options = b'\202\323\344\223\002%\022#/cosmos/distribution/v1beta1/params'
+  _QUERY.methods_by_name['ValidatorOutstandingRewards']._options = None
+  _QUERY.methods_by_name['ValidatorOutstandingRewards']._serialized_options = b'\202\323\344\223\002Q\022O/cosmos/distribution/v1beta1/validators/{validator_address}/outstanding_rewards'
+  _QUERY.methods_by_name['ValidatorCommission']._options = None
+  _QUERY.methods_by_name['ValidatorCommission']._serialized_options = b'\202\323\344\223\002H\022F/cosmos/distribution/v1beta1/validators/{validator_address}/commission'
+  _QUERY.methods_by_name['ValidatorSlashes']._options = None
+  _QUERY.methods_by_name['ValidatorSlashes']._serialized_options = b'\202\323\344\223\002E\022C/cosmos/distribution/v1beta1/validators/{validator_address}/slashes'
+  _QUERY.methods_by_name['DelegationRewards']._options = None
+  _QUERY.methods_by_name['DelegationRewards']._serialized_options = b'\202\323\344\223\002Y\022W/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards/{validator_address}'
+  _QUERY.methods_by_name['DelegationTotalRewards']._options = None
+  _QUERY.methods_by_name['DelegationTotalRewards']._serialized_options = b'\202\323\344\223\002E\022C/cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards'
+  _QUERY.methods_by_name['DelegatorValidators']._options = None
+  _QUERY.methods_by_name['DelegatorValidators']._serialized_options = b'\202\323\344\223\002H\022F/cosmos/distribution/v1beta1/delegators/{delegator_address}/validators'
+  _QUERY.methods_by_name['DelegatorWithdrawAddress']._options = None
+  _QUERY.methods_by_name['DelegatorWithdrawAddress']._serialized_options = b'\202\323\344\223\002N\022L/cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address'
+  _QUERY.methods_by_name['CommunityPool']._options = None
+  _QUERY.methods_by_name['CommunityPool']._serialized_options = b'\202\323\344\223\002-\022+/cosmos/distribution/v1beta1/community_pool'
+  _QUERYPARAMSREQUEST._serialized_start=248
+  _QUERYPARAMSREQUEST._serialized_end=268
+  _QUERYPARAMSRESPONSE._serialized_start=270
+  _QUERYPARAMSRESPONSE._serialized_end=350
+  _QUERYVALIDATOROUTSTANDINGREWARDSREQUEST._serialized_start=352
+  _QUERYVALIDATOROUTSTANDINGREWARDSREQUEST._serialized_end=420
+  _QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE._serialized_start=422
+  _QUERYVALIDATOROUTSTANDINGREWARDSRESPONSE._serialized_end=545
+  _QUERYVALIDATORCOMMISSIONREQUEST._serialized_start=547
+  _QUERYVALIDATORCOMMISSIONREQUEST._serialized_end=607
+  _QUERYVALIDATORCOMMISSIONRESPONSE._serialized_start=609
+  _QUERYVALIDATORCOMMISSIONRESPONSE._serialized_end=730
+  _QUERYVALIDATORSLASHESREQUEST._serialized_start=733
+  _QUERYVALIDATORSLASHESREQUEST._serialized_end=908
+  _QUERYVALIDATORSLASHESRESPONSE._serialized_start=911
+  _QUERYVALIDATORSLASHESRESPONSE._serialized_end=1076
+  _QUERYDELEGATIONREWARDSREQUEST._serialized_start=1078
+  _QUERYDELEGATIONREWARDSREQUEST._serialized_end=1173
+  _QUERYDELEGATIONREWARDSRESPONSE._serialized_start=1176
+  _QUERYDELEGATIONREWARDSRESPONSE._serialized_end=1308
+  _QUERYDELEGATIONTOTALREWARDSREQUEST._serialized_start=1310
+  _QUERYDELEGATIONTOTALREWARDSREQUEST._serialized_end=1383
+  _QUERYDELEGATIONTOTALREWARDSRESPONSE._serialized_start=1386
+  _QUERYDELEGATIONTOTALREWARDSRESPONSE._serialized_end=1600
+  _QUERYDELEGATORVALIDATORSREQUEST._serialized_start=1602
+  _QUERYDELEGATORVALIDATORSREQUEST._serialized_end=1672
+  _QUERYDELEGATORVALIDATORSRESPONSE._serialized_start=1674
+  _QUERYDELEGATORVALIDATORSRESPONSE._serialized_end=1738
+  _QUERYDELEGATORWITHDRAWADDRESSREQUEST._serialized_start=1740
+  _QUERYDELEGATORWITHDRAWADDRESSREQUEST._serialized_end=1815
+  _QUERYDELEGATORWITHDRAWADDRESSRESPONSE._serialized_start=1817
+  _QUERYDELEGATORWITHDRAWADDRESSRESPONSE._serialized_end=1892
+  _QUERYCOMMUNITYPOOLREQUEST._serialized_start=1894
+  _QUERYCOMMUNITYPOOLREQUEST._serialized_end=1921
+  _QUERYCOMMUNITYPOOLRESPONSE._serialized_start=1923
+  _QUERYCOMMUNITYPOOLRESPONSE._serialized_end=2048
+  _QUERY._serialized_start=2051
+  _QUERY._serialized_end=4059
 # @@protoc_insertion_point(module_scope)
