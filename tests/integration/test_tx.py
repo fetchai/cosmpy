@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 """Integration tests for basic transactions."""
+from typing import Optional
+
 import pytest
 
 from cosmpy.aerial.client import LedgerClient
@@ -25,27 +27,45 @@ from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
 
-@pytest.mark.integration
-def test_faucet_transaction_balance():
-    """Test faucet claims, tx settled, balance check."""
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    wallet1 = LocalWallet.generate()
-    wallet2 = LocalWallet.generate()
+class TestTx:
+    COIN = "atestfet"
+    GAS_LIMIT: Optional[int] = None
 
-    balance1 = ledger.query_bank_balance(wallet1.address())
+    def get_ledger(self):
+        return LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
-    faucet_api.get_wealth(wallet1.address())
-    balance2 = ledger.query_bank_balance(wallet1.address())
+    def get_wallet_1(self):
+        faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+        wallet1 = LocalWallet.generate()
+        faucet_api.get_wealth(wallet1.address())
+        return wallet1
 
-    assert balance2 > balance1
+    def get_wallet_2(self):
+        wallet2 = LocalWallet.generate()
+        return wallet2
 
-    wallet2_balance1 = ledger.query_bank_balance(wallet2.address())
-    tokens_to_send = int(balance2 / 2)
-    tx = ledger.send_tokens(wallet2.address(), tokens_to_send, "atestfet", wallet1)
-    tx.wait_to_complete()
-    wallet2_balance2 = ledger.query_bank_balance(wallet2.address())
-    assert wallet2_balance2 == wallet2_balance1 + tokens_to_send
+    @pytest.mark.integration
+    def test_faucet_transaction_balance(self):
+        """Test faucet claims, tx settled, balance check."""
+        ledger = self.get_ledger()
+        wallet1 = self.get_wallet_1()
+        wallet2 = self.get_wallet_2()
+
+        wallet1_initial_balance = ledger.query_bank_balance(wallet1.address())
+        wallet2_balance1 = ledger.query_bank_balance(wallet2.address())
+        tokens_to_send = int(10)
+        tx = ledger.send_tokens(
+            wallet2.address(),
+            tokens_to_send,
+            self.COIN,
+            wallet1,
+            gas_limit=self.GAS_LIMIT,
+        )
+        tx.wait_to_complete()
+        wallet2_balance2 = ledger.query_bank_balance(wallet2.address())
+        assert wallet2_balance2 == wallet2_balance1 + tokens_to_send
+        wallet1_balance = ledger.query_bank_balance(wallet1.address())
+        assert wallet1_balance < wallet1_initial_balance
 
 
 if __name__ == "__main__":
