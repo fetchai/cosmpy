@@ -16,4 +16,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""This package contains Implementation of Wasm functionality."""
+"""This package contains implementation of the CosmWasm functionality."""

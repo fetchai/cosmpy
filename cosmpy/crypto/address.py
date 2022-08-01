@@ -84,9 +84,9 @@ class Address:
             raise TypeError("Unexpected type of `value` parameter")  # pragma: no cover
 
     def __str__(self):
-        """string representation of a public key or address."""
+        """string representation of the address."""
         return self._display
 
     def __bytes__(self):
-        """bytes representation of an address."""
+        """bytes representation of the address."""
         return self._address
