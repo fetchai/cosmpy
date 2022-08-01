@@ -30,7 +30,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="cosmpy",
-    version="0.5.0",
+    version="0.5.1",
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -57,7 +57,7 @@ setup(
         "bech32",
         "requests",
         "google-api-python-client",
-        "protobuf",
+        "protobuf>=3.19.4,<4",
         "python-mbedtls==2.2.0",
         "grpcio",
         "click",
@@ -89,6 +89,7 @@ setup(
             "flake8-eradicate==0.4.0",
             "flake8-docstrings==1.6.0",
             "pydocstyle==3.0.0",
+            "grpcio-tools==1.47.0",
         ],
         "test": ["coverage", "pytest"],
     },
