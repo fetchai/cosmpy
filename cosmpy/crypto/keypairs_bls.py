@@ -111,7 +111,7 @@ class PrivateKey(Signer, PublicKey):
         """
         Initialize.
 
-        :param private_key (Optional[bytes], optional). Defaults to None.
+        :param private_key: the private key. Defaults to None..
         """
         self._private_key_bytes = private_key or self._generate_bytes()
         self._private_key = base64.b64encode(self._private_key_bytes).decode()
