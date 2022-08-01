@@ -26,6 +26,9 @@ from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
+MAX_FLAKY_RERUNS = 3
+RERUNS_DELAY = 10
+
 
 class TestTx:
     COIN = "atestfet"
@@ -45,6 +48,7 @@ class TestTx:
         return wallet2
 
     @pytest.mark.integration
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_faucet_transaction_balance(self):
         """Test faucet claims, tx settled, balance check."""
         ledger = self.get_ledger()
