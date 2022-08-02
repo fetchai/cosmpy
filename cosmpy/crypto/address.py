@@ -93,8 +93,8 @@ class Address(UserString):
         return self._address
 
     @property
-    def data(self):
+    def data(self): # noqa:
         return str(self)
 
-    def __json__(self):
+    def __json__(self): # noqa:
         return str(self)
