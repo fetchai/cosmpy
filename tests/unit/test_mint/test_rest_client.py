@@ -95,15 +95,19 @@ class MintRestClientTestCase(unittest.TestCase):
 
         mock_client = MockRestClient(json.dumps(content))
 
-        expected_response = ParseDict(content, QueryInflationResponse())
-        # The Inflation object is expecting a base64 encoded value
-        # FIXME: The create an issue by loosing the decimal dot and adding padding '='  # pylint: disable=W0511
-        expected_response.inflation = base64.b64encode(expected_response.inflation)
-
+        # The Inflation object is expecting a base64 encoded value, not digits as json from REST provides
+        expected_response = ParseDict(
+            {
+                "inflation": base64.b64encode(content["inflation"].encode()).decode(
+                    "utf8"
+                )
+            },
+            QueryInflationResponse(),
+        )
         mint = MintRestClient(mock_client)
 
         # This test is expected to fail because of the loss of the decimal dot.
-        # assert mint.Inflation() == expected_response
+        assert mint.Inflation() == expected_response
         assert mint.Inflation().inflation == b"0.012345"
         assert mock_client.last_base_url == "/cosmos/mint/v1beta1/inflation"
 
