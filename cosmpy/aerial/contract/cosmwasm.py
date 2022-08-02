@@ -17,10 +17,10 @@
 #
 # ------------------------------------------------------------------------------
 import gzip
-import json
 from typing import Any, Optional
 
 from cosmpy.aerial.coins import parse_coins
+from cosmpy.common.utils import json_encode
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
     MsgExecuteContract,
@@ -54,7 +54,7 @@ def create_cosmwasm_instantiate_msg(
     msg = MsgInstantiateContract(
         sender=str(sender_address),
         code_id=code_id,
-        msg=json.dumps(args).encode("UTF8"),
+        msg=json_encode(args).encode("UTF8"),
         label=label,
     )
 
@@ -75,7 +75,7 @@ def create_cosmwasm_execute_msg(
     msg = MsgExecuteContract(
         sender=str(sender_address),
         contract=str(contract_address),
-        msg=json.dumps(args).encode("UTF8"),
+        msg=json_encode(args).encode("UTF8"),
     )
     if funds is not None:
         msg.funds.extend(parse_coins(funds))

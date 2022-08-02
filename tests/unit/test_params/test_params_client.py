@@ -19,11 +19,11 @@
 
 """Tests for REST implementation of Staking."""
 
-import json
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
+from cosmpy.common.utils import json_encode
 from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import (
     QueryParamsRequest,
@@ -45,7 +45,7 @@ class ParamsRestClientTestCase(TestCase):
                 "value": '{"max_bytes":"200000","max_gas":"2000000"}',
             },
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         expected_response = ParseDict(content, QueryParamsResponse())
 

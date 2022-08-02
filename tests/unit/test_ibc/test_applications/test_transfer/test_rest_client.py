@@ -17,12 +17,12 @@
 #
 # ------------------------------------------------------------------------------
 """Tests for REST implementation of IBC Applications Transfer."""
-import json
 from typing import Dict, Tuple
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
+from cosmpy.common.utils import json_encode
 from cosmpy.ibc.applications.transfer.rest_client import (  # type: ignore
     IBCApplicationsTransferRestClient,
 )
@@ -51,7 +51,7 @@ class IBCApplicationsTransferRestClientTestCase(TestCase):
         :param response_content: dict
         :return: rest client instance
         """
-        mock_client = MockRestClient(json.dumps(response_content).encode("utf-8"))
+        mock_client = MockRestClient(json_encode(response_content).encode("utf-8"))
         rest_client = self.REST_CLIENT(mock_client)
         return mock_client, rest_client
 

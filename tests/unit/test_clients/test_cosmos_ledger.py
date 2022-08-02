@@ -90,7 +90,7 @@
 #
 # # CosmWasm
 # WASM_MSG = {"key": "value"}
-# WASM_MSG_BASE64 = base64.b64encode(json.dumps(WASM_MSG).encode("UTF8")).decode()
+# WASM_MSG_BASE64 = base64.b64encode(json_encode(WASM_MSG).encode("UTF8")).decode()
 # CODE_ID = 42
 # CONTRACT_ADDRESS = "fetchcontractcontractcontractcontractcontrac"
 # CONTRACT_FILENAME = "dummy_contract.wasm"
@@ -190,7 +190,7 @@
 #             mock_auth.Account(QueryAccountRequest(address=str(ADDRESS_PK)))
 #         )
 #
-#         mock_rest_client = MockRestClient(json.dumps(content))
+#         mock_rest_client = MockRestClient(json_encode(content))
 #         cls.crypto = CosmosCrypto(
 #             private_key=PRIVATE_KEY, account_number=ACCOUNT_NUMBER
 #         )
@@ -474,7 +474,7 @@
 #         ]
 #
 #         tx_response = GetTxResponse()
-#         tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
+#         tx_response.tx_response.raw_log = json_encode(raw_log_dict)
 #
 #         result = self.ledger.get_code_id(tx_response)
 #         assert result == CODE_ID
@@ -496,7 +496,7 @@
 #         ]
 #
 #         tx_response = GetTxResponse()
-#         tx_response.tx_response.raw_log = json.dumps(raw_log_dict)
+#         tx_response.tx_response.raw_log = json_encode(raw_log_dict)
 #
 #         result = self.ledger.get_contract_address(tx_response)
 #         assert result == CONTRACT_ADDRESS
@@ -506,7 +506,7 @@
 #
 #         content = {"balance": {"denom": "stake", "amount": "1234"}}
 #
-#         mock_rest_client = MockRestClient(json.dumps(content))
+#         mock_rest_client = MockRestClient(json_encode(content))
 #         self.ledger.bank_client = BankRestClient(mock_rest_client)
 #         response = self.ledger.get_balance("address", "stake")
 #
@@ -523,7 +523,7 @@
 #             "pagination": {"next_key": None, "total": 0},
 #         }
 #
-#         mock_rest_client = MockRestClient(json.dumps(content))
+#         mock_rest_client = MockRestClient(json_encode(content))
 #         self.ledger.bank_client = BankRestClient(mock_rest_client)
 #         response = self.ledger.get_balances("address")
 #
@@ -551,7 +551,7 @@
 #         if account_response.account.Is(BaseAccount.DESCRIPTOR):
 #             account_response.account.Unpack(account)
 #
-#         mock_rest_client = MockRestClient(json.dumps(content))
+#         mock_rest_client = MockRestClient(json_encode(content))
 #         self.ledger.auth_client = AuthRestClient(mock_rest_client)
 #         response = self.ledger.query_account_data("address")
 #
