@@ -48,11 +48,7 @@ jobs:
     - name: Tests and coverage
       # Run full set of tests for Linux and unit tests only for other platforms
       run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          tox -e test
-        else
-          tox -e test-unit
-        fi
+        tox -e test-unit
       shell: bash
     - name: Show coverage report
       run: tox -e coverage-report
@@ -76,3 +72,23 @@ jobs:
         use-quiet-mode: 'yes'
         use-verbose-mode: 'yes'
         config-file: '.md-link-check.json' 
+  integration_on_windows:
+    name: Integration tests
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest]
+        python-version: [3.9]
+
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-python@master
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: pip install tox==3.24.1
+    - name: Integration tests
+      run: |
+          tox -e test-integration
