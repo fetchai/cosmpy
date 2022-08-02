@@ -17,12 +17,12 @@
 #
 # ------------------------------------------------------------------------------
 """Tests for REST implementation of Gov."""
-import json
 from typing import Dict, Tuple
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
+from cosmpy.common.utils import json_encode
 from cosmpy.gov.rest_client import GovRestClient
 from cosmpy.protos.cosmos.gov.v1beta1.query_pb2 import (
     QueryDepositRequest,
@@ -59,7 +59,7 @@ class GovRestClientTestCase(TestCase):
         :param response_content: dict
         :return: rest client instance
         """
-        mock_client = MockRestClient(json.dumps(response_content).encode("utf-8"))
+        mock_client = MockRestClient(json_encode(response_content).encode("utf-8"))
         rest_client = self.REST_CLIENT(mock_client)
         return mock_client, rest_client
 

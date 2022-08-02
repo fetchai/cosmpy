@@ -19,6 +19,7 @@
 
 """Address of the Crypto package."""
 
+from collections import UserString
 from typing import Optional, Union
 
 import bech32
@@ -36,7 +37,7 @@ def _to_bech32(prefix: str, data: bytes) -> str:
     return bech32.bech32_encode(prefix, data_base5)
 
 
-class Address:
+class Address(UserString):
     """Address class."""
 
     def __init__(
@@ -90,3 +91,10 @@ class Address:
     def __bytes__(self):
         """bytes representation of the address."""
         return self._address
+
+    @property
+    def data(self):
+        return str(self)
+
+    def __json__(self):
+        return str(self)
