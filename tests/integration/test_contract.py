@@ -40,14 +40,15 @@ def test_contract():
     contract = LedgerContract(CONTRACT_PATH, ledger)
     contract_address = contract.deploy({}, wallet)
     assert contract_address
-    result = contract.query({"get": {"owner": str(wallet.address())}})
+    assert contract == contract_address
+    result = contract.query({"get": {"owner": wallet}})
 
     assert not result["exists"]
     assert not result["value"]
 
     value = "foobar"
     contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
-    result = contract.query({"get": {"owner": str(wallet.address())}})
+    result = contract.query({"get": {"owner": wallet}})
 
     assert result["exists"]
     assert result["value"] == value
@@ -66,14 +67,14 @@ def test_deployed_contract():
 
     deployed_contract = LedgerContract(None, ledger, contract_address)
 
-    result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
+    result = deployed_contract.query({"get": {"owner": wallet}})
 
     assert not result["exists"]
     assert not result["value"]
 
     value = "foobar"
     deployed_contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
-    result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
+    result = deployed_contract.query({"get": {"owner": wallet}})
 
     assert result["exists"]
     assert result["value"] == value

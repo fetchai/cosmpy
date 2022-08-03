@@ -26,7 +26,7 @@ tx.wait_to_complete()
 ```
 
 The available high-level helper functions provided by cosmpy can be found by browsing for instance
-[the aerial client package]("https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/client/__init__.py").
+[the aerial client package](https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/client/__init__.py).
 
 ## Low Level API
 
@@ -69,7 +69,7 @@ The above example creates and broadcasts a simple `MsgWithdrawValidatorCommissio
 In this case, we'll need to send an `authz`
 [MsgExec](https://github.com/fetchai/cosmpy/blob/4abb976753edcab402fcc23d4dce3ab67b73b608/cosmpy/protos/cosmos/authz/v1beta1/tx_pb2.py#L114)
 message, which can be found in [tx_pb2.py](https://github.com/fetchai/cosmpy/blob/4abb976753edcab402fcc23d4dce3ab67b73b608/cosmpy/protos/cosmos/authz/v1beta1/tx_pb2.py) under `cosmos/authz` area of `cosmpy/protos`.
-This message takes two parameters. The `grantee` is a simple string address similar to the above. But the `msgs` field needs to support multiple types of messages and not just `MsgWithdrawValidatorCommission`. 
+This message takes two parameters. The `grantee` is a simple string address similar to the above. But the `msgs` field needs to support multiple types of messages and not just `MsgWithdrawValidatorCommission`.
 
 Protobuf is strongly typed, so to facilitate this flexibility, it is necessary to first pack the nested message into a `protobuf.Any` message.
 

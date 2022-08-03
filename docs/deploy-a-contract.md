@@ -18,7 +18,7 @@ print(f"Contract deployed at: {contract.address}")
 You can query the values of the contract's state variables: 
 
 ```python
-result = contract.query({"get": {"owner": str(wallet.address())}})
+result = contract.query({"get": {"owner": wallet}})
 print("Initial state:", result)
 ```
 
@@ -31,7 +31,7 @@ contract.execute({"set": {"value": "foobar"}}, wallet).wait_to_complete()
 Let's check if this was set correctly:
 
 ```python
-result = contract.query({"get": {"owner": str(wallet.address())}})
+result = contract.query({"get": {"owner": wallet)}})
 print("State after set:", result)
 ```
 
@@ -40,6 +40,6 @@ Similarly, you can clear the state variables:
 ```python
 contract.execute({"clear": {}}, wallet).wait_to_complete()
 
-result = contract.query({"get": {"owner": str(wallet.address())}})
+result = contract.query({"get": {"owner": wallet}})
 print("State after clear:", result)
 ```

@@ -22,6 +22,7 @@ nav:
     - Stake Optimizer: 'stake-optimizer.md'
     - Oracles: 'oracles.md'
     - Wallet Top-up: 'wallet-topup.md'
+    - Liquidity Pool: 'liquidity-pool.md'
 
 theme:
   name: material
