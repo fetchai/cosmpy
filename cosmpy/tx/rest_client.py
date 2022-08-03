@@ -26,6 +26,7 @@ from typing import Any, Dict, List
 from google.protobuf.json_format import Parse, ParseDict
 
 from cosmpy.common.rest_client import RestClient
+from cosmpy.common.utils import json_encode
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import (  # noqa: F401  # pylint: disable=unused-import
     PubKey as ProtoPubKey,
 )
@@ -130,9 +131,9 @@ class TxRestClient(TxInterface):
         for message in messages:
             if message["@type"] == "/cosmwasm.wasm.v1.MsgInstantiateContract":
                 message["msg"] = base64.b64encode(
-                    json.dumps(message["msg"]).encode("UTF8")
+                    json_encode(message["msg"]).encode("UTF8")
                 ).decode()
             if message["@type"] == "/cosmwasm.wasm.v1.MsgExecuteContract":
                 message["msg"] = base64.b64encode(
-                    json.dumps(message["msg"]).encode("UTF8")
+                    json_encode(message["msg"]).encode("UTF8")
                 ).decode()

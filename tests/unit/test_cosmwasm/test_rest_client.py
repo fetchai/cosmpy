@@ -20,11 +20,11 @@
 """Tests for REST implementation of Wasm."""
 
 import base64
-import json
 import unittest
 
 from google.protobuf.json_format import ParseDict
 
+from cosmpy.common.utils import json_encode
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QueryAllContractStateRequest,
@@ -62,7 +62,7 @@ class WasmRestClientTestCase(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryCodesResponse())
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
         wasm = CosmWasmRestClient(mock_client)
 
         assert wasm.Codes(QueryCodesRequest()) == expected_response
@@ -78,7 +78,7 @@ class WasmRestClientTestCase(unittest.TestCase):
         }
         expected_response = ParseDict(content, QueryCodeResponse())
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
         wasm = CosmWasmRestClient(mock_client)
 
         assert wasm.Code(QueryCodeRequest(code_id=1)) == expected_response
@@ -146,7 +146,7 @@ class WasmRestClientTestCase(unittest.TestCase):
 
         expected_response = ParseDict(content, QueryAllContractStateResponse())
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
         wasm = CosmWasmRestClient(mock_client)
 
         assert (
@@ -177,7 +177,7 @@ class WasmRestClientTestCase(unittest.TestCase):
 
         expected_response = ParseDict(content, QueryContractInfoResponse())
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
         wasm = CosmWasmRestClient(mock_client)
 
         assert (
@@ -200,7 +200,7 @@ class WasmRestClientTestCase(unittest.TestCase):
 
         expected_response = ParseDict(content, QueryContractsByCodeResponse())
 
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
         wasm = CosmWasmRestClient(mock_client)
 
         assert (
@@ -214,7 +214,7 @@ class WasmRestClientTestCase(unittest.TestCase):
         """Test query contract history for positive result."""
 
         msg = {}
-        base64_msg = base64.b64encode(json.dumps(msg).encode("UTF8")).decode()
+        base64_msg = base64.b64encode(json_encode(msg).encode("UTF8")).decode()
 
         content = {
             "entries": [
@@ -231,7 +231,7 @@ class WasmRestClientTestCase(unittest.TestCase):
 
         # Replace base64 msg with original dict which would be returned by REST api to generate get response
         content["entries"][0]["msg"] = msg
-        raw_content = json.dumps(content)
+        raw_content = json_encode(content)
         mock_client = MockRestClient(raw_content)
 
         wasm = CosmWasmRestClient(mock_client)

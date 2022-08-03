@@ -18,15 +18,13 @@
 # ------------------------------------------------------------------------------
 
 import argparse
-import sys
 
-from cosmpy.aerial.client import LedgerClient
-from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.contract import LedgerContract, create_cosmwasm_execute_msg
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.keypairs import PrivateKey
 
 TOKEN_ID_1 = "680564733841876926926749214863536422912"
 TOKEN_ID_2 = "680564733841876926926749214863536422913"
@@ -47,10 +45,11 @@ def _parse_commandline():
 def main():
     args = _parse_commandline()
 
-    alice = LocalWallet(PrivateKey("X2Tv0Ok3RN2yi9GhWjLUX7RIfX5go9Wu+fwoJlqK2Og="))
-    bob = LocalWallet(PrivateKey("p0h0sYImB4xGq3Zz+xfIrY4QR6CPqeNg8w6X3NUWLe4="))
+    alice = LocalWallet.generate()
+    bob = LocalWallet.generate()
 
     client = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     # check to see if all the clients have enough funds
     alice_balance = client.query_bank_balance(alice.address())
@@ -58,17 +57,15 @@ def main():
     print(f"Alice balance {alice_balance}")
     print(f"Bob   balance {bob_balance}")
 
-    if alice_balance < (10**18):
-        print(
-            f"Alice has insufficient balance to complete operations please funds alice account: {alice.address()}"
-        )
-        sys.exit(1)
+    while alice_balance < (10**18):
+        print("Providing wealth to alice...")
+        faucet_api.get_wealth(alice.address())
+        alice_balance = client.query_bank_balance(alice.address())
 
-    if bob_balance < (10**18):
-        print(
-            f"Bob has insufficient balance to complete operations please funds bob account: {bob.address()}"
-        )
-        sys.exit(1)
+    while bob_balance < (10**18):
+        print("Providing wealth to bob...")
+        faucet_api.get_wealth(bob.address())
+        bob_balance = client.query_bank_balance(bob.address())
 
     contract = LedgerContract(args.contract_path, client, address=args.contract_address)
 
@@ -80,7 +77,7 @@ def main():
 
         create_batch_msg = {
             "create_batch": {
-                "item_owner": str(alice.address()),
+                "item_owner": alice,
                 "tokens": [
                     {
                         "id": TOKEN_ID_1,
@@ -101,7 +98,7 @@ def main():
         # Create Alice's token
         mint_single_msg = {
             "mint_single": {
-                "to_address": str(alice.address()),
+                "to_address": alice,
                 "id": TOKEN_ID_1,
                 "supply": "2000",
                 "data": "some_data",
@@ -115,7 +112,7 @@ def main():
         # Create Bob's token
         mint_single_msg = {
             "mint_single": {
-                "to_address": str(bob.address()),
+                "to_address": bob.address(),
                 "id": TOKEN_ID_2,
                 "supply": "2000",
                 "data": "some_data",
@@ -132,11 +129,11 @@ def main():
             "balance_batch": {
                 "addresses": [
                     {
-                        "address": str(bob.address()),
+                        "address": bob,
                         "id": TOKEN_ID_1,
                     },
                     {
-                        "address": str(alice.address()),
+                        "address": alice,
                         "id": TOKEN_ID_2,
                     },
                 ]
@@ -159,9 +156,9 @@ def main():
             contract.address,
             {
                 "transfer_single": {
-                    "operator": str(alice.address()),
-                    "from_address": str(alice.address()),
-                    "to_address": str(bob.address()),
+                    "operator": alice,
+                    "from_address": alice,
+                    "to_address": bob,
                     "id": TOKEN_ID_1,
                     "value": "1",
                 },
@@ -176,9 +173,9 @@ def main():
             contract.address,
             {
                 "transfer_single": {
-                    "operator": str(bob.address()),
-                    "from_address": str(bob.address()),
-                    "to_address": str(alice.address()),
+                    "operator": bob,
+                    "from_address": bob,
+                    "to_address": alice,
                     "id": TOKEN_ID_2,
                     "value": "1",
                 },
@@ -222,11 +219,11 @@ def main():
             "balance_batch": {
                 "addresses": [
                     {
-                        "address": str(bob.address()),
+                        "address": bob,
                         "id": TOKEN_ID_1,
                     },
                     {
-                        "address": str(alice.address()),
+                        "address": alice,
                         "id": TOKEN_ID_2,
                     },
                 ]
