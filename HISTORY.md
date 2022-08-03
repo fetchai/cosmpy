@@ -5,6 +5,7 @@
 * dev dependency grpcio-tools updated to 1.47.0
 * dev dependency protobuf pinned to 3.19.4
 * cosmos sdk proto files regenerated with newer grpcio tool
+* Wallet and Address objects are json and string friendly now
 
 ## 0.5.0
 
