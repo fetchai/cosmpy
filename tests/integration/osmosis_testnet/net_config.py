@@ -17,20 +17,33 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Theta contract test."""
-from cosmpy.aerial.client import LedgerClient
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
-from tests.integration.cosmos_theta_testnet.net_config import THETA_NET_CONFIG
-from tests.integration.test_contract import TestContract as BaseTestContract
+"""Osmosis network config."""
+from time import sleep
+
+import requests
+
+from cosmpy.aerial.config import NetworkConfig
+
+NET_CONFIG = NetworkConfig(
+    chain_id="osmo-test-4",
+    url="rest+https://lcd-test.osmosis.zone/",
+    fee_minimum_gas_price=1,
+    fee_denomination="uosmo",
+    staking_denomination="uosmo",
+)
 
 
-class DisabledTestContract(BaseTestContract):
-    def get_ledger(self):
-        return LedgerClient(THETA_NET_CONFIG)
-
-    def get_wallet(self):
-        prefix = "cosmos"
-        return LocalWallet(
-            PrivateKey("L1GsisFk+oaIug3XZlILWk2pJDVFS5aPJsrovvUEDrE="), prefix=prefix
+class FaucetMixIn:
+    def _ask_funds(self, wallet):
+        resp = requests.post(
+            "https://testnet-faucet.dev-osmosis.zone/request",
+            json={"address": str(wallet.address())},
         )
+        assert resp.status_code == 200
+        ledger = self.get_ledger()
+        for i in range(10):
+            if ledger.query_bank_balance(wallet.address()) > 0:
+                break
+            sleep(i * 2)
+        else:
+            raise Exception("fail to topup")

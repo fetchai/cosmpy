@@ -17,27 +17,26 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Theta tx test."""
+"""Osmosis tx test."""
 
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
-from tests.integration.cosmos_theta_testnet.net_config import THETA_NET_CONFIG
+from tests.integration.osmosis_testnet.net_config import NET_CONFIG, FaucetMixIn
 from tests.integration.test_tx import TestTx as BaseTestTx
 
 
-class TestTx(BaseTestTx):
-    COIN = "uatom"
+class TestTx(BaseTestTx, FaucetMixIn):
+    COIN = "uosmo"
     GAS_LIMIT = 120000
+    PREFIX = "osmo"
 
     def get_wallet_1(self):
-        prefix = "cosmos"
-        return LocalWallet(
-            PrivateKey("L1GsisFk+oaIug3XZlILWk2pJDVFS5aPJsrovvUEDrE="), prefix=prefix
-        )
+        wallet = LocalWallet.generate(prefix=self.PREFIX)
+        self._ask_funds(wallet)
+        return wallet
 
     def get_wallet_2(self):
-        return LocalWallet.generate(prefix="cosmos")
+        return LocalWallet.generate(prefix=self.PREFIX)
 
     def get_ledger(self):
-        return LedgerClient(THETA_NET_CONFIG)
+        return LedgerClient(NET_CONFIG)

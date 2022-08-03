@@ -58,6 +58,7 @@ class TestTx:
         wallet1_initial_balance = ledger.query_bank_balance(wallet1.address())
         wallet2_balance1 = ledger.query_bank_balance(wallet2.address())
         tokens_to_send = int(10)
+        assert wallet1_initial_balance >= tokens_to_send
         tx = ledger.send_tokens(
             wallet2.address(),
             tokens_to_send,

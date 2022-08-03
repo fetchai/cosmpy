@@ -17,13 +17,20 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Theta network config."""
-from cosmpy.aerial.config import NetworkConfig
+"""Osmosis contract test."""
+from cosmpy.aerial.client import LedgerClient
+from cosmpy.aerial.wallet import LocalWallet
+from tests.integration.osmosis_testnet.net_config import NET_CONFIG, FaucetMixIn
+from tests.integration.test_contract import TestContract as BaseTestContract
 
-THETA_NET_CONFIG = NetworkConfig(
-    chain_id="theta-testnet-001",
-    url="rest+https://rest.sentry-02.theta-testnet.polypore.xyz:443",
-    fee_minimum_gas_price=1,
-    fee_denomination="uatom",
-    staking_denomination="uatom",
-)
+
+class DisabledTestContract(BaseTestContract, FaucetMixIn):
+    PREFIX = "osmo"
+
+    def get_ledger(self):
+        return LedgerClient(NET_CONFIG)
+
+    def get_wallet(self):
+        wallet = LocalWallet.generate(prefix=self.PREFIX)
+        self._ask_funds(wallet)
+        return wallet
