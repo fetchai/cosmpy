@@ -1,3 +1,5 @@
+"""Cosmwasm contract store, instantiate, execute messages"""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -32,6 +34,12 @@ from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
 def create_cosmwasm_store_code_msg(
     contract_path: str, sender_address: Address
 ) -> MsgStoreCode:
+    """Create cosmwasm store code message
+
+    :param contract_path: contract path
+    :param sender_address: sender address
+    :return: cosmwasm store code message
+    """
     with open(contract_path, "rb") as contract_file:
         wasm_byte_code = gzip.compress(contract_file.read(), 9)
 
@@ -51,6 +59,16 @@ def create_cosmwasm_instantiate_msg(
     funds: Optional[str] = None,
     admin_address: Optional[Address] = None,
 ) -> MsgInstantiateContract:
+    """Create cosmwasm instantiate message
+
+    :param code_id: code id
+    :param args: args
+    :param label: label
+    :param sender_address: sender address
+    :param funds: funds, defaults to None
+    :param admin_address: admin address, defaults to None
+    :return: cosmwasm instantiate message
+    """
     msg = MsgInstantiateContract(
         sender=str(sender_address),
         code_id=code_id,
@@ -72,6 +90,14 @@ def create_cosmwasm_execute_msg(
     args: Any,
     funds: Optional[str] = None,
 ) -> MsgExecuteContract:
+    """Create cosmwasm execute message
+
+    :param sender_address: sender address
+    :param contract_address: contract address
+    :param args: args
+    :param funds: funds, defaults to None
+    :return: cosmwasm execute message
+    """
     msg = MsgExecuteContract(
         sender=str(sender_address),
         contract=str(contract_address),

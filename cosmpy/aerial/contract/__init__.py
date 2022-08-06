@@ -1,3 +1,5 @@
+"""cosmeasm contract functionlity"""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -52,6 +54,8 @@ def _generate_label(digest: bytes) -> str:
 
 
 class LedgerContract(UserString):
+    """Ledger contract"""
+
     def __init__(
         self,
         path: Optional[str],
@@ -59,6 +63,13 @@ class LedgerContract(UserString):
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
     ):
+        """_summary_
+
+        :param path: Path
+        :param client: Ledger client
+        :param address: address, defaults to None
+        :param digest: digest, defaults to None
+        """
         self._path = path
         self._client = client
         self._address = address
@@ -77,18 +88,34 @@ class LedgerContract(UserString):
 
     @property
     def path(self) -> Optional[str]:
+        """Get contract path
+
+        :return: contract path
+        """
         return self._path
 
     @property
     def digest(self) -> Optional[bytes]:
+        """Get the contract digest
+
+        :return: contract digest
+        """
         return self._digest
 
     @property
     def code_id(self) -> Optional[int]:
+        """Get the code id
+
+        :return: code id
+        """
         return self._code_id
 
     @property
     def address(self) -> Optional[Address]:
+        """Get the contract address
+
+        :return: contract address
+        """
         return self._address
 
     def store(
@@ -97,6 +124,14 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
     ) -> int:
+        """Store the contract
+
+        :param sender: sender wallet address
+        :param gas_limit: transaction gas limit, defaults to None
+        :param memo: transaction memo, defaults to None
+        :raises RuntimeError: Runtime error
+        :return: code id
+        """
         if self._path is None:
             raise RuntimeError("Unable to upload code, no contract provided")
 
@@ -125,6 +160,18 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
+        """instantiate the contract
+
+        :param code_id: code id
+        :param args: args
+        :param sender: sender wallet address
+        :param label: label, defaults to None
+        :param gas_limit: transaction gas limit, defaults to None
+        :param admin_address: admin address, defaults to None
+        :param funds: funds, defaults to None
+        :raises RuntimeError: Unable to extract contract code id
+        :return: contract address
+        """
 
         assert self._digest is not None
 
@@ -164,6 +211,17 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
+        """Deploy the contract
+
+        :param args: args
+        :param sender: sender address
+        :param label: label, defaults to None
+        :param store_gas_limit: store gas limit, defaults to None
+        :param instantiate_gas_limit: instantiate gas limit, defaults to None
+        :param admin_address: admin address, defaults to None
+        :param funds: funds, defaults to None
+        :return: instantiate contract details
+        """
 
         # in the case where the contract is already deployed
         if self._address is not None and self._code_id is not None:
@@ -193,6 +251,15 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         funds: Optional[str] = None,
     ) -> SubmittedTx:
+        """execute the contract
+
+        :param args: args
+        :param sender: sender address
+        :param gas_limit: transaction gas limit, defaults to None
+        :param funds: funds, defaults to None
+        :raises RuntimeError: Contract appears not to be deployed currently
+        :return: brodcasted transaction details
+        """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
@@ -209,6 +276,12 @@ class LedgerContract(UserString):
         )
 
     def query(self, args: Any) -> Any:
+        """Query on contract
+
+        :param args: args
+        :raises RuntimeError: Contract appears not to be deployed currently
+        :return: query result
+        """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
@@ -246,7 +319,15 @@ class LedgerContract(UserString):
 
     @property
     def data(self):
+        """Get the contract address
+
+        :return: conntract address
+        """
         return self.address
 
     def __json__(self):
+        """Get the contract details in json
+
+        :return: jsonify contract details
+        """
         return str(self)

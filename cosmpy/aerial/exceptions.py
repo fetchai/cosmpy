@@ -1,3 +1,5 @@
+"""Exceptions"""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -16,26 +18,49 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+
 class QueryError(RuntimeError):
+    """Invald Query Error"""
+
     pass
 
 
 class NotFoundError(QueryError):
+    """Not found Error"""
+
     pass
 
 
 class QueryTimeoutError(QueryError):
+    """Query timeout Error"""
+
     pass
 
 
 class BroadcastError(RuntimeError):
+    """Brodcast Error"""
+
     def __init__(self, tx_hash: str, message: str):
+        """Init Brodcast error
+
+        :param tx_hash: transaction hash
+        :param message: message
+        """
         super().__init__(message)
         self.tx_hash = tx_hash
 
 
 class OutOfGasError(BroadcastError):
+    """Insufficient Fess Error"""
+
     def __init__(self, tx_hash: str, gas_wanted: int, gas_used: int):
+        """_summary_
+
+        :param tx_hash: transaction hash
+        :param gas_wanted: gas required to complete the transaction
+        :param gas_used: gas used
+        """
         self.gas_wanted = gas_wanted
         self.gas_used = gas_used
         super().__init__(
@@ -44,7 +69,14 @@ class OutOfGasError(BroadcastError):
 
 
 class InsufficientFeesError(BroadcastError):
+    """Insufficient Fess Error"""
+
     def __init__(self, tx_hash: str, minimum_required_fee: str):
+        """_summary_
+
+        :param tx_hash: transaction hash
+        :param minimum_required_fee: Minimum required fee
+        """
         self.minimum_required_fee = minimum_required_fee
         super().__init__(
             tx_hash,

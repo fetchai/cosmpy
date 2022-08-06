@@ -1,3 +1,5 @@
+"""Parse the coins"""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -24,6 +26,12 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 def parse_coins(value: str) -> List[Coin]:
+    """Parse the coins
+
+    :param value: coins
+    :raises RuntimeError: If unable to parse the value
+    :return: coins
+    """
     coins = []
 
     parts = re.split(r",\s*", value)

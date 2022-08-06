@@ -1,3 +1,5 @@
+"""Test urls"""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -76,4 +78,5 @@ from cosmpy.aerial.urls import ParsedUrl, Protocol, parse_url
     ],
 )
 def test_parsing_urls(input_url, parse_result):
+    """Test parsing url"""
     assert parse_url(input_url) == parse_result
