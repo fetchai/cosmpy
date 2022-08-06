@@ -1,3 +1,5 @@
+"""Staking functionlity"""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -28,6 +30,8 @@ from cosmpy.protos.cosmos.staking.v1beta1.tx_pb2 import (
 
 
 class ValidatorStatus(Enum):
+    """Validator status"""
+
     UNSPECIFIED = "BOND_STATUS_UNSPECIFIED"
     BONDED = "BOND_STATUS_BONDED"
     UNBONDING = "BOND_STATUS_UNBONDING"
@@ -35,6 +39,12 @@ class ValidatorStatus(Enum):
 
     @classmethod
     def from_proto(cls, value: int) -> "ValidatorStatus":
+        """Get the validator status from proto
+
+        :param value: value
+        :raises RuntimeError: Unable to decode validator status
+        :return: Validator status
+        """
         if value == 0:
             return cls.UNSPECIFIED
         if value == 1:
@@ -50,6 +60,14 @@ class ValidatorStatus(Enum):
 def create_delegate_msg(
     delegator: Address, validator: Address, amount: int, denom: str
 ) -> MsgDelegate:
+    """Create delegate message
+
+    :param delegator: delegator
+    :param validator: validator
+    :param amount: amount
+    :param denom: denom
+    :return: Delegate message
+    """
     return MsgDelegate(
         delegator_address=str(delegator),
         validator_address=str(validator),
@@ -67,6 +85,15 @@ def create_redelegate_msg(
     amount: int,
     denom: str,
 ) -> MsgBeginRedelegate:
+    """Create redelegate message
+
+    :param delegator_address: delegator address
+    :param validator_src_address: source validation address
+    :param validator_dst_address: destination validation address
+    :param amount: amount
+    :param denom: denom
+    :return: Redelegate message
+    """
     return MsgBeginRedelegate(
         delegator_address=str(delegator_address),
         validator_src_address=str(validator_src_address),
@@ -81,6 +108,14 @@ def create_redelegate_msg(
 def create_undelegate_msg(
     delegator_address: Address, validator_address: Address, amount: int, denom: str
 ) -> MsgUndelegate:
+    """Create undelegate message
+
+    :param delegator_address: delegator address
+    :param validator_address: validator address
+    :param amount: amount
+    :param denom: denom
+    :return: Undelegate message
+    """
     return MsgUndelegate(
         delegator_address=str(delegator_address),
         validator_address=str(validator_address),

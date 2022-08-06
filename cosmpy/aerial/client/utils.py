@@ -1,3 +1,5 @@
+"""Helper functions"""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -30,6 +32,12 @@ def prepare_and_broadcast_basic_transaction(
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
 ) -> SubmittedTx:
+    """Prepare and broadcast basic transaction
+
+    :param client: Ledger client
+    :param memo: Transaction memo, defaults to None
+    :return: broadcasted transaction
+    """
     # query the account information for the sender
     if account is None:
         account = client.query_account(sender.address())
