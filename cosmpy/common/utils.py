@@ -26,7 +26,8 @@ from typing import Any
 class JSONEncoder(json.JSONEncoder):
     """JSONEncoder subclass that encode basic python objects."""
 
-    def default(self, o: Any) -> Any:  # noqa:
+    def default(self, o: Any) -> Any:
+        """Default json encode"""
         if not hasattr(o, "__json__"):
             return super().default(o)
         if callable(o.__json__):
@@ -34,5 +35,6 @@ class JSONEncoder(json.JSONEncoder):
         return o.__json__
 
 
-def json_encode(data, **kwargs):  # noqa:
+def json_encode(data, **kwargs):
+    """Json encode"""
     return JSONEncoder(**kwargs).encode(data)
