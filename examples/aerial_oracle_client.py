@@ -1,3 +1,5 @@
+"""Example of aerial oracle client."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -48,6 +50,7 @@ def _parse_commandline():
 
 
 def main():
+    """Run main."""
     args = _parse_commandline()
 
     wallet = LocalWallet.generate()
