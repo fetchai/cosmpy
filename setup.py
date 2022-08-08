@@ -84,6 +84,7 @@ setup(
             "liccheck==0.6.2",
             "flake8-copyright==0.2.2",
             "grpcio-tools==1.47.0",
+            "pytest-rerunfailures==10.2",
         ],
         "test": ["coverage", "pytest"],
     },

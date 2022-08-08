@@ -30,53 +30,60 @@ from cosmpy.aerial.wallet import LocalWallet
 CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
 
 
-@pytest.mark.integration
-def test_contract():
-    """Test simple contract deploy execute and query."""
-    wallet = LocalWallet.generate()
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(wallet.address())
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    contract = LedgerContract(CONTRACT_PATH, ledger)
-    contract_address = contract.deploy({}, wallet)
-    assert contract_address
-    result = contract.query({"get": {"owner": str(wallet.address())}})
+class TestContract:
+    def get_wallet(self):
+        wallet = LocalWallet.generate()
+        faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+        faucet_api.get_wealth(wallet.address())
+        return wallet
 
-    assert not result["exists"]
-    assert not result["value"]
+    def get_ledger(self):
+        return LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
-    value = "foobar"
-    contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
-    result = contract.query({"get": {"owner": str(wallet.address())}})
+    def get_contract(self):
+        return LedgerContract(CONTRACT_PATH, self.get_ledger())
 
-    assert result["exists"]
-    assert result["value"] == value
+    @pytest.mark.integration
+    def test_contract(self):
+        """Test simple contract deploy execute and query."""
+        wallet = self.get_wallet()
+        contract = self.get_contract()
+        contract_address = contract.deploy({}, wallet)
+        assert contract_address
+        result = contract.query({"get": {"owner": str(wallet.address())}})
 
+        assert not result["exists"]
+        assert not result["value"]
 
-@pytest.mark.integration
-def test_deployed_contract():
-    """Test interaction with already deployed contract."""
-    wallet = LocalWallet.generate()
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(wallet.address())
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    contract = LedgerContract(CONTRACT_PATH, ledger)
-    contract_address = contract.deploy({}, wallet)
-    assert contract_address
+        value = "foobar"
+        contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
+        result = contract.query({"get": {"owner": str(wallet.address())}})
 
-    deployed_contract = LedgerContract(None, ledger, contract_address)
+        assert result["exists"]
+        assert result["value"] == value
 
-    result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
+    @pytest.mark.integration
+    def test_deployed_contract(self):
+        """Test interaction with already deployed contract."""
+        wallet = self.get_wallet()
+        ledger = self.get_ledger()
+        contract = self.get_contract()
+        contract_address = contract.deploy({}, wallet)
+        assert contract_address
 
-    assert not result["exists"]
-    assert not result["value"]
+        deployed_contract = LedgerContract(None, ledger, contract_address)
 
-    value = "foobar"
-    deployed_contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
-    result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
+        result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
 
-    assert result["exists"]
-    assert result["value"] == value
+        assert not result["exists"]
+        assert not result["value"]
+
+        value = "foobar"
+        deployed_contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
+        result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
+
+        assert result["exists"]
+        assert result["value"] == value
 
 
 if __name__ == "__main__":
