@@ -1,5 +1,3 @@
-"""Network configurations"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Network configurations"""
+
 import warnings
 from dataclasses import dataclass
 from typing import Optional

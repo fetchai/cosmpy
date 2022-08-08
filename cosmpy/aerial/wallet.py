@@ -1,4 +1,3 @@
-"""Wallet Generation."""
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -17,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Wallet Generation."""
 
 from abc import ABC, abstractmethod
 from collections import UserString

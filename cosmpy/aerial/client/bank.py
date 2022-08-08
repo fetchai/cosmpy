@@ -1,5 +1,3 @@
-"""Bank send message"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Bank send message"""
 
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend

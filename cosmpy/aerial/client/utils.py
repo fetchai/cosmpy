@@ -1,5 +1,3 @@
-"""Helper functions"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Helper functions"""
+
 from typing import Optional
 
 from cosmpy.aerial.tx import SigningCfg

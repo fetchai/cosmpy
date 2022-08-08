@@ -1,5 +1,3 @@
-"""Transaction"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Transaction"""
 
 from dataclasses import dataclass
 from enum import Enum

@@ -1,5 +1,3 @@
-"""Cosmwasm contract store, instantiate, execute messages"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Cosmwasm contract store, instantiate, execute messages"""
+
 import gzip
 from typing import Any, Optional
 

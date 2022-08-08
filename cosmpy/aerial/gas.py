@@ -1,5 +1,3 @@
-"""Transaction gas startegy"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Transaction gas startegy"""
+
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
 

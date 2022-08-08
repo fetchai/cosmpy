@@ -1,5 +1,3 @@
-"""Distribution"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+"""Distribution"""
+
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawDelegatorReward
 
