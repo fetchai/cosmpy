@@ -1,5 +1,3 @@
-"""Client functionlity"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Client functionlity"""
+
 import json
 import time
 from dataclasses import dataclass

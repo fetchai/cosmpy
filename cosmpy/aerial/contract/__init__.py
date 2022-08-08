@@ -1,5 +1,3 @@
-"""cosmeasm contract functionlity"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""cosmeasm contract functionlity"""
 
 import json
 from collections import UserString

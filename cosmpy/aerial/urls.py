@@ -1,5 +1,3 @@
-"""Parsing the URL"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Parsing the URL"""
 
 from dataclasses import dataclass
 from enum import Enum

@@ -1,5 +1,3 @@
-"""Staking functionlity"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Staking functionlity"""
+
 from enum import Enum
 
 from cosmpy.crypto.address import Address

@@ -1,5 +1,3 @@
-"""Transaction helpers"""
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -18,6 +16,8 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Transaction helpers"""
 
 import re
 from dataclasses import dataclass
