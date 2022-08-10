@@ -12,13 +12,16 @@
   <a>
     <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/cosmpy">
   </a>
-  <a href="https://github.com/fetchai/cosmpy/blob/main/LICENSE">
+  <a href="https://github.com/fetchai/cosmpy/blob/master/LICENSE">
     <img alt="License" src="https://img.shields.io/pypi/l/cosmpy">
   </a>
 </p>
 <p align="center">
   <a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
     <img alt="AEA framework sanity checks and tests" src="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg">
+  </a>
+  <a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
+    <img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg">
   </a>
 </p>
 
@@ -54,6 +57,8 @@ for coin in balances:
 
 ## Documentation
 
+Before running this command make sure your development environment is set up. Check [Development setup](https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md#development-setup) for more details.
+
 To see the documentation:
 
 ```bash
@@ -61,7 +66,7 @@ make docs-live
 ```
 
 Then navigate to the following URL in your browser:
-
+<!-- markdown-link-check-disable-next-line -->
 [http://127.0.0.1:8000/cosmpy/](http://127.0.0.1:8000/cosmpy/)
 
 ## Examples
@@ -70,10 +75,11 @@ Under the `examples` directory, you can find examples of basic ledger interactio
 
 ## To contribute
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [DEVELOPING](DEVELOPING.md) guides.
+Please see [CONTRIBUTING](https://github.com/fetchai/cosmpy/blob/master/CONTRIBUTING.md) and [DEVELOPING](https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md) guides.
 
 ## Extra Resources
 
 * [Github Repo](https://github.com/fetchai/cosmpy)
 * [Bug Reports](https://github.com/fetchai/cosmpy/issues)
 * [Discussions](https://github.com/fetchai/cosmpy/discussions)
+* [Getting Started](https://docs.fetch.ai/CosmPy/)

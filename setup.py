@@ -30,7 +30,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="cosmpy",
-    version="0.5.0",
+    version="0.5.1",
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -57,7 +57,7 @@ setup(
         "bech32",
         "requests",
         "google-api-python-client",
-        "protobuf",
+        "protobuf>=3.19.4,<4",
         "python-mbedtls==2.2.0",
         "grpcio",
         "click",
@@ -83,8 +83,8 @@ setup(
             "pylint==2.9.6",
             "liccheck==0.6.2",
             "flake8-copyright==0.2.2",
-            # Using Tensorflow v2.4.0 was causing conflicts because it requires grpcio==1.32.0
-            "grpcio-tools<=1.32.0",
+            "grpcio-tools==1.47.0",
+            "pytest-rerunfailures==10.2",
         ],
         "test": ["coverage", "pytest"],
     },

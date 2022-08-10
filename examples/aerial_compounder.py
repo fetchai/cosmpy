@@ -16,16 +16,47 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+import argparse
 import time
 
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
+
+
+def _parse_commandline():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "initial_stake",
+        type=int,
+        nargs="?",
+        default=9000000000000000000,
+        help="Initial amount of atestfet to delegate to validator",
+    )
+    parser.add_argument(
+        "time_limit",
+        type=int,
+        nargs="?",
+        default=600,
+        help="total time",
+    )
+    parser.add_argument(
+        "period",
+        type=int,
+        nargs="?",
+        default=100,
+        help="compounding period",
+    )
+
+    return parser.parse_args()
 
 
 def main():
+    args = _parse_commandline()
+
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
     # get all the active validators on the network
     validators = ledger.query_validators()
@@ -33,17 +64,23 @@ def main():
     # choose any validator
     validator = validators[0]
 
-    key = PrivateKey("FX5BZQcr+FNl2usnSIQYpXsGWvBxKLRDkieUNIvMOV7=")
-    alice = LocalWallet(key)
+    alice = LocalWallet.generate()
+
+    wallet_balance = ledger.query_bank_balance(alice.address())
+    initial_stake = args.initial_stake
+
+    while wallet_balance < (initial_stake):
+        print("Providing wealth to wallet...")
+        faucet_api.get_wealth(alice.address())
+        wallet_balance = ledger.query_bank_balance(alice.address())
 
     # delegate some tokens to this validator
-    initial_stake = 9000000000000000000
     tx = ledger.delegate_tokens(validator.address, initial_stake, alice)
     tx.wait_to_complete()
 
     # set time limit and compounding period in seconds
-    time_limit = 600
-    period = 100
+    time_limit = args.time_limit
+    period = args.period
 
     time_check = 0
     start_time = time.monotonic()
