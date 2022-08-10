@@ -113,7 +113,7 @@ You require [Docker](https://docs.docker.com/get-docker/) for your platform.
 
   ```bash
   #!/usr/bin/env bash
-  
+
   # variables
   export VALIDATOR_KEY_NAME=validator
   export BOB_KEY_NAME=bob
@@ -123,29 +123,30 @@ You require [Docker](https://docs.docker.com/get-docker/) for your platform.
   export CHAIN_ID=testing
   export DENOM_1=stake
   export DENOM_2=atestfet
-  
+  export MONIKER=some-moniker
+
+
   # Add keys
   ( echo "$VALIDATOR_MNEMONIC"; echo "$PASSWORD"; echo "$PASSWORD"; ) |fetchd keys add $VALIDATOR_KEY_NAME --recover
   ( echo "$BOB_MNEMONIC"; echo "$PASSWORD"; ) |fetchd keys add $BOB_KEY_NAME --recover
-  
+
   # Configure node
-  fetchd init --chain-id=$CHAIN_ID $CHAIN_ID
+  fetchd init --chain-id=$CHAIN_ID $MONIKER
   echo "$PASSWORD" |fetchd add-genesis-account $(fetchd keys show $VALIDATOR_KEY_NAME -a) 100000000000000000000000$DENOM_1
   echo "$PASSWORD" |fetchd add-genesis-account $(fetchd keys show $BOB_KEY_NAME -a) 100000000000000000000000$DENOM_2
   echo "$PASSWORD" |fetchd gentx $VALIDATOR_KEY_NAME 10000000000000000000000$DENOM_1 --chain-id $CHAIN_ID
   fetchd collect-gentxs
-  
+
   # Enable rest-api
   sed -i '/^\[api\]$/,/^\[/ s/^enable = false/enable = true/' ~/.fetchd/config/app.toml
   sed -i '/^\[api\]$/,/^\[/ s/^swagger = false/swagger = true/' ~/.fetchd/config/app.toml
-  
   fetchd start
   ```
 
 - Execute:
 
   ```bash
-  docker run -it --rm --entrypoint /scripts/<ENTRYPOINT-SCRIPT-NAME> -p 9090:9090 -p 1317:1317 -v <PATH-TO-ENTRYPOINT-SCRIPT>:/scripts/ <FETCH-IMAGE-TAG>
+  docker run -it --rm --entrypoint /scripts/<ENTRYPOINT-SCRIPT-NAME> -p 9090:9090 -p 1317:1317 --mount type=bind,source=<FULL-PATH-TO-ENTRYPOINT-SCRIPT>,destination=/scripts/ <FETCH-IMAGE-TAG>
   ```
 
 where

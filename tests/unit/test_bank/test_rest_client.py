@@ -19,10 +19,10 @@
 
 """Tests for REST implementation of Bank."""
 
-import json
 import unittest
 
 from cosmpy.bank.rest_client import BankRestClient
+from cosmpy.common.utils import json_encode
 from cosmpy.protos.cosmos.bank.v1beta1.bank_pb2 import Metadata, Params
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
@@ -55,7 +55,7 @@ class BankRestClientTestCase(unittest.TestCase):
             balance=Coin(denom="stake", amount="1234")
         )
         content = {"balance": {"denom": "stake", "amount": "1234"}}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         bank = BankRestClient(mock_client)
 
@@ -79,7 +79,7 @@ class BankRestClientTestCase(unittest.TestCase):
             "balances": [{"denom": "stake", "amount": "1234"}],
             "pagination": {"next_key": None, "total": 0},
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         bank = BankRestClient(mock_client)
 
@@ -96,7 +96,7 @@ class BankRestClientTestCase(unittest.TestCase):
             supply=[Coin(denom="stake", amount="1234")]
         )
         content = {"supply": [{"denom": "stake", "amount": "1234"}]}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         bank = BankRestClient(mock_client)
 
@@ -110,7 +110,7 @@ class BankRestClientTestCase(unittest.TestCase):
             amount=Coin(denom="stake", amount="1234")
         )
         content = {"amount": {"denom": "stake", "amount": "1234"}}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         bank = BankRestClient(mock_client)
 
@@ -124,7 +124,7 @@ class BankRestClientTestCase(unittest.TestCase):
             params=Params(default_send_enabled=True)
         )
         content = {"params": {"default_send_enabled": True}}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         bank = BankRestClient(mock_client)
 
@@ -138,7 +138,7 @@ class BankRestClientTestCase(unittest.TestCase):
             pagination=PageResponse(next_key=None, total=0)
         )
         content = {"metadatas": [], "pagination": {"next_key": None, "total": 0}}
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         bank = BankRestClient(mock_client)
 
@@ -157,7 +157,7 @@ class BankRestClientTestCase(unittest.TestCase):
                 "display": "",
             }
         }
-        mock_client = MockRestClient(json.dumps(content))
+        mock_client = MockRestClient(json_encode(content))
 
         bank = BankRestClient(mock_client)
 
