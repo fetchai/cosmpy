@@ -33,7 +33,10 @@ from cosmpy.aerial.client.staking import (
     create_redelegate_msg,
     create_undelegate_msg,
 )
-from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
+from cosmpy.aerial.client.utils import (
+    ensure_timedelta,
+    prepare_and_broadcast_basic_transaction,
+)
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
@@ -432,10 +435,18 @@ class LedgerClient:
         self,
         tx_hash: str,
         timeout: Optional[timedelta] = None,
-        internal: Optional[timedelta] = None,
+        poll_period: Optional[timedelta] = None,
     ) -> TxResponse:
-        timeout = timeout or timedelta(seconds=DEFAULT_QUERY_TIMEOUT_SECS)
-        internal = internal or timedelta(seconds=DEFAULT_QUERY_INTERVAL_SECS)
+        timeout = (
+            ensure_timedelta(timeout)
+            if timeout
+            else timedelta(seconds=DEFAULT_QUERY_TIMEOUT_SECS)
+        )
+        poll_period = (
+            ensure_timedelta(poll_period)
+            if poll_period
+            else timedelta(seconds=DEFAULT_QUERY_INTERVAL_SECS)
+        )
 
         start = datetime.now()
         while True:
@@ -448,7 +459,7 @@ class LedgerClient:
             if delta >= timeout:
                 raise QueryTimeoutError()
 
-            time.sleep(internal.total_seconds())
+            time.sleep(poll_period.total_seconds())
 
     def query_tx(self, tx_hash: str) -> TxResponse:
         req = GetTxRequest(hash=tx_hash)
