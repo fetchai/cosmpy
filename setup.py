@@ -88,6 +88,7 @@ setup(
             "flake8-docstrings==1.6.0",
             "pydocstyle==6.1.1",
             "grpcio-tools==1.47.0",
+            "pytest-rerunfailures==10.2",
         ],
         "test": ["coverage", "pytest"],
     },

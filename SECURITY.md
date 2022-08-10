@@ -1,6 +1,6 @@
 # Security Policy
 
-This document outlines security procedures and general policies for the `cosmpy` project.
+Security is very important for Fetch.ai and its community. This document outlines security procedures and general policies for the `cosmpy` project.
 
 ## Supported Versions
 
@@ -43,3 +43,9 @@ Critical bug fixes will be backported to past major releases.
 Please restrain from publicly discussing a potential security vulnerability. 🙊
 
 It's better to discuss privately and try to find a solution first, to limit the potential impact as much as possible.
+
+---
+
+Thanks for your help!
+
+The Fetch.ai community thank you for that. 🙇
