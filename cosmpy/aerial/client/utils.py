@@ -36,8 +36,13 @@ def prepare_and_broadcast_basic_transaction(
     """Prepare and broadcast basic transaction
 
     :param client: Ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param gas_limit: The gas limit
     :param memo: Transaction memo, defaults to None
-    :return: broadcasted transaction
+
+    :return: broadcast transaction
     """
     # query the account information for the sender
     if account is None:
