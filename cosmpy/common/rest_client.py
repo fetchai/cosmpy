@@ -56,22 +56,9 @@ class RestClient:
 
         :return: Content of response
         """
-        if request is None:
-            url = f"{self.rest_address}{url_base_path}"
-        else:
-            json_request = MessageToDict(request)
-
-            # Remove params that are already in url_base_path
-            if used_params is not None:
-                for param in used_params:
-                    json_request.pop(param)
-
-            url_encoded_request = self._url_encode(json_request)
-
-            if len(url_encoded_request) == 0:
-                url = f"{self.rest_address}{url_base_path}"
-            else:
-                url = f"{self.rest_address}{url_base_path}?{url_encoded_request}"
+        url = self._make_url(
+            url_base_path=url_base_path, request=request, used_params=used_params
+        )
 
         response = self._session.get(url=url)
         if response.status_code != 200:
@@ -79,6 +66,36 @@ class RestClient:
                 f"Error when sending a GET request.\n Response: {response.status_code}, {str(response.content)})"
             )
         return response.content
+
+    def _make_url(
+        self,
+        url_base_path: str,
+        request: Optional[Message] = None,
+        used_params: Optional[List[str]] = None,
+    ) -> str:
+        """
+        Construct URL for get request.
+
+        :param url_base_path: URL base path
+        :param request: Protobuf coded request
+        :param used_params: Parameters to be removed from request after converting it to dict
+
+        :return: URL string
+        """
+
+        json_request = MessageToDict(request) if request else {}
+
+        # Remove params that are already in url_base_path
+        for param in used_params or []:
+            json_request.pop(param)
+
+        url_encoded_request = self._url_encode(json_request)
+
+        url = f"{self.rest_address}{url_base_path}"
+        if url_encoded_request:
+            url = f"{url}?{url_encoded_request}"
+
+        return url
 
     def post(self, url_base_path: str, request: Message) -> bytes:
         """
@@ -132,4 +149,5 @@ class RestClient:
         return urlencode(json_request, doseq=True)
 
     def __del__(self):
+        """Destructor method."""
         self._session.close()

@@ -108,6 +108,11 @@ class PrivateKey(Signer, PublicKey):
     HASH_FUNCTION: Callable = hashlib.sha256
 
     def __init__(self, private_key: Optional[bytes] = None):
+        """
+        Initialize.
+
+        :param private_key: the private key. Defaults to None..
+        """
         self._private_key_bytes = private_key or self._generate_bytes()
         self._private_key = base64.b64encode(self._private_key_bytes).decode()
         self._signing_key: BLSPrivateKey = AugSchemeMPL.key_gen(self._private_key_bytes)

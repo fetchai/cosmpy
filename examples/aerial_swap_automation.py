@@ -1,3 +1,5 @@
+"""Example of aerial swap automation."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -27,6 +29,14 @@ from cosmpy.aerial.wallet import LocalWallet
 
 
 def swap_native_for_cw20(swap_amount, pair_contract, wallet):
+    """
+    Swap Native for cw20
+
+    :param swap_amount: swap amount
+    :param pair_contract: pair contract address
+    :param wallet: wallet address
+
+    """
     tx = pair_contract.execute(
         {
             "swap": {
@@ -44,6 +54,15 @@ def swap_native_for_cw20(swap_amount, pair_contract, wallet):
 
 
 def swap_cw20_for_native(swap_amount, pair_contract_address, token_contract, wallet):
+    """
+    Swap cw20 for native
+
+    :param swap_amount: swap amount
+    :param pair_contract_address: pair contract address
+    :param token_contract: token contract
+    :param wallet: wallet address
+
+    """
     tx = token_contract.execute(
         {
             "send": {
@@ -59,6 +78,7 @@ def swap_cw20_for_native(swap_amount, pair_contract_address, token_contract, wal
 
 
 def _parse_commandline():
+    """Commandline parser"""
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -101,7 +121,7 @@ def _parse_commandline():
 
 
 def main():
-
+    """Run main."""
     args = _parse_commandline()
 
     # Define any wallet

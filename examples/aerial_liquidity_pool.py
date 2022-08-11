@@ -1,3 +1,5 @@
+"""Example of aerial liquidity pool."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -52,6 +54,7 @@ def _parse_commandline():
 
 
 def main():
+    """Run main."""
     args = _parse_commandline()
 
     # Define any wallet
