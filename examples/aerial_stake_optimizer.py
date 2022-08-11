@@ -1,3 +1,5 @@
+"""Example of aerial stake optimizer."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -36,12 +38,24 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsReques
 # * D -> Total staking period
 # * x -> Compounding Period
 def M(x, f, S, k, D):
+    """
+    Calculat the total reward
+
+    :param x: Compounding Period
+    :param f: fee
+    :param S: Initial Stake
+    :param k: Reward Rate
+    :param D: Total staking period
+
+    :return: Total reward
+    """
     return (S * (1 + (k * x)) ** (D / x)) + (
         (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
     ) * f
 
 
 def main():
+    """Run main."""
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
@@ -74,7 +88,7 @@ def main():
     # Choose a threshold for a validators minimum percentage of total stake delegated
     stake_threshold = 0.10
 
-    for i in range(len(validators_comission)):
+    for _i in range(len(validators_comission)):
 
         # Choose validator with lower commission
         validator_index = validators_comission.index(min(validators_comission))

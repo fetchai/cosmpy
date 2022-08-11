@@ -16,3 +16,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+"""This package contains implementation of the CosmWasm functionality."""
