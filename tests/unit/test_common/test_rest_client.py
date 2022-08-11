@@ -191,3 +191,34 @@ class QueryRestClientTestCase(TestCase):
 
         del client
         session_mock.return_value.close.assert_called_once_with()
+
+    @patch("cosmpy.common.rest_client.MessageToDict")
+    def test_make_url_helper_method(self, messageToDict_mock):
+        """
+        Test _make_url helper method.
+
+        :param messageToDict_mock: mock
+        """
+        base_url = "base_url"
+        base_address = "https://base.addr/"
+        client = RestClient(base_address)
+        assert client._make_url(base_url) == f"{base_address}{base_url}"
+
+        request_data = {"key3": 12, "key2": 13, "key1": 11}
+        messageToDict_mock.return_value = request_data
+
+        assert (
+            client._make_url(base_url, request=request_data)
+            == "https://base.addr/base_url?key3=12&key2=13&key1=11"
+        )
+        assert (
+            client._make_url(base_url, request=request_data, used_params=["key2"])
+            == "https://base.addr/base_url?key3=12&key1=11"
+        )
+
+        request_data = {"key2": 2, "key1": [1, 2, 3]}
+        messageToDict_mock.return_value = request_data
+        assert (
+            client._make_url(base_url, request=request_data)
+            == "https://base.addr/base_url?key2=2&key1=1&key1=2&key1=3"
+        )
