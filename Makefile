@@ -271,10 +271,10 @@ Pipfile.lock: Pipfile setup.py
 	pipenv lock --dev
 
 requirements.txt: Pipfile.lock
-	pipenv lock -r > $@
+	pipenv requirements > $@
 
 requirements-dev.txt: Pipfile.lock
-	pipenv lock -r --dev > $@
+	pipenv requirements --dev> $@
 
 .PHONY: requirements
 requirements: $(REQUIREMENTS_FILES)
