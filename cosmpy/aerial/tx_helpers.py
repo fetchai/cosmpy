@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Transaction helpers"""
+
 import re
 from dataclasses import dataclass
 from typing import Dict, List, Optional
@@ -31,6 +33,8 @@ from cosmpy.crypto.address import Address
 
 @dataclass
 class MessageLog:
+    """Message Log"""
+
     index: int  # noqa
     log: str  # noqa
     events: Dict[str, Dict[str, str]]
@@ -38,6 +42,13 @@ class MessageLog:
 
 @dataclass
 class TxResponse:
+    """Transaction response
+
+    :raises OutOfGasError: Out of gas error
+    :raises InsufficientFeesError: Insufficient fees
+    :raises BroadcastError: Broadcast Excpetion
+    """
+
     hash: str
     height: int
     code: int
@@ -48,9 +59,19 @@ class TxResponse:
     events: Dict[str, Dict[str, str]]
 
     def is_successful(self) -> bool:
+        """Check transaction is successful
+
+        :return: transaction status
+        """
         return self.code == 0
 
     def ensure_successful(self):
+        """Ensure transaction is successful
+
+        :raises OutOfGasError: Out of gas error
+        :raises InsufficientFeesError: Insufficient fees
+        :raises BroadcastError: Broadcast Excpetion
+        """
         if self.code != 0:
             if "out of gas" in self.raw_log:
                 match = re.search(
@@ -76,23 +97,42 @@ class TxResponse:
 
 
 class SubmittedTx:
+    """Submitted transaction"""
+
     def __init__(
         self, client: "LedgerClient", tx_hash: str  # type: ignore # noqa: F821
     ):
+        """Init the Submitted transaction
+
+        :param client: Ledger client
+        :param tx_hash: transaction hash
+        """
         self._client = client
         self._response: Optional[TxResponse] = None
         self._tx_hash = str(tx_hash)
 
     @property
     def tx_hash(self) -> str:
+        """Get the transaction hash
+
+        :return: transaction hash
+        """
         return self._tx_hash
 
     @property
     def response(self) -> Optional[TxResponse]:
+        """Get the transaction response
+
+        :return: response
+        """
         return self._response
 
     @property
     def contract_code_id(self) -> Optional[int]:
+        """Get the contract code id
+
+        :return: return contract code id if exist else None
+        """
         if self._response is None:
             return None
 
@@ -104,6 +144,10 @@ class SubmittedTx:
 
     @property
     def contract_address(self) -> Optional[Address]:
+        """Get the contract address
+
+        :return: return contract address if exist else None
+        """
         if self._response is None:
             return None
 
@@ -116,6 +160,10 @@ class SubmittedTx:
         return Address(contract_address)
 
     def wait_to_complete(self) -> "SubmittedTx":
+        """Wait to complete the transaction
+
+        :return: Submitted Transaction
+        """
         self._response = self._client.wait_for_query_tx(self.tx_hash)
         assert self._response is not None
         self._response.ensure_successful()

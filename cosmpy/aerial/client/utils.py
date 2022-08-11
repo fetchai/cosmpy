@@ -16,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Helper functions"""
+
 from typing import Optional
 
 from cosmpy.aerial.tx import SigningCfg
@@ -30,6 +33,17 @@ def prepare_and_broadcast_basic_transaction(
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
 ) -> SubmittedTx:
+    """Prepare and broadcast basic transaction
+
+    :param client: Ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param gas_limit: The gas limit
+    :param memo: Transaction memo, defaults to None
+
+    :return: broadcast transaction
+    """
     # query the account information for the sender
     if account is None:
         account = client.query_account(sender.address())

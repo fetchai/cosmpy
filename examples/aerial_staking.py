@@ -1,3 +1,5 @@
+"""Example of aerial staking."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -32,6 +34,7 @@ def _wait_for_tx(operation: str, tx: SubmittedTx):
 
 
 def main():
+    """Run main."""
     alice = LocalWallet.generate()
 
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
