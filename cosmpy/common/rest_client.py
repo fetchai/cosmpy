@@ -149,4 +149,5 @@ class RestClient:
         return urlencode(json_request, doseq=True)
 
     def __del__(self):
+        """Destructor method."""
         self._session.close()

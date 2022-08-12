@@ -33,7 +33,7 @@ import re
 import sys
 from pathlib import Path
 
-SUPPORTED_YEARS = list(map(str, range(2019, datetime.datetime.now().year +1 )))
+SUPPORTED_YEARS = list(map(str, range(2019, datetime.datetime.now().year + 1)))
 
 
 HEADER_REGEX = fr"""(#!/usr/bin/env python3

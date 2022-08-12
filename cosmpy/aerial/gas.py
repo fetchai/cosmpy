@@ -16,6 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Transaction gas startegy"""
+
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
 
@@ -23,12 +26,23 @@ from cosmpy.aerial.tx import Transaction
 
 
 class GasStrategy(ABC):
+    """Transaction gas startegy"""
+
     @abstractmethod
     def estimate_gas(self, tx: Transaction) -> int:
+        """Estimate the transaction gas
+
+        :param tx: Transaction
+        :return: None
+        """
         pass  # pragma: no cover
 
     @abstractmethod
     def block_gas_limit(self) -> int:
+        """Get the block gas limit
+
+        :return: None
+        """
         pass  # pragma: no cover
 
     def _clip_gas(self, value: int) -> int:
@@ -40,18 +54,37 @@ class GasStrategy(ABC):
 
 
 class SimulationGasStrategy(GasStrategy):
+    """Simulation transaction gas startegy
+
+    :param GasStrategy: gas strategy
+    """
+
     DEFAULT_MULTIPLIER = 1.65
 
     def __init__(self, client: "LedgerClient", multiplier: Optional[float] = None):  # type: ignore # noqa: F821
+        """Init the Simulation transaction gas startegy
+
+        :param client: Ledger client
+        :param multiplier: multiplier, defaults to None
+        """
         self._client = client
         self._max_gas: Optional[int] = None
         self._multiplier = multiplier or self.DEFAULT_MULTIPLIER
 
     def estimate_gas(self, tx: Transaction) -> int:
+        """Get estimated transaction gas
+
+        :param tx: transaction
+        :return: Estimated transaction gas
+        """
         gas_estimate = self._client.simulate_tx(tx)
         return self._clip_gas(int(gas_estimate * self._multiplier))
 
     def block_gas_limit(self) -> int:
+        """Get the block gas limit
+
+        :return: block gas limit
+        """
         if self._max_gas is None:
             block_params = self._client.query_params("baseapp", "BlockParams")
             self._max_gas = int(block_params["max_gas"])
@@ -60,11 +93,20 @@ class SimulationGasStrategy(GasStrategy):
 
 
 class OfflineMessageTableStrategy(GasStrategy):
+    """Offline message table strategy
+
+    :param GasStrategy: gas strategy
+    """
+
     DEFAULT_FALLBACK_GAS_LIMIT = 400_000
     DEFAULT_BLOCK_LIMIT = 2_000_000
 
     @staticmethod
     def default_table() -> "OfflineMessageTableStrategy":
+        """offline message strategy default table
+
+        :return: offline message default table strategy
+        """
         strategy = OfflineMessageTableStrategy()
         strategy.update_entry("cosmos.bank.v1beta1.MsgSend", 100_000)
         strategy.update_entry("cosmwasm.wasm.v1.MsgStoreCode", 2_000_000)
@@ -77,14 +119,29 @@ class OfflineMessageTableStrategy(GasStrategy):
         fallback_gas_limit: Optional[int] = None,
         block_limit: Optional[int] = None,
     ):
+        """Init offline message table strategy
+
+        :param fallback_gas_limit: Fallback gas limit, defaults to None
+        :param block_limit: Block limit, defaults to None
+        """
         self._table: Dict[str, int] = {}
         self._block_limit = block_limit or self.DEFAULT_BLOCK_LIMIT
         self._fallback_gas_limit = fallback_gas_limit or self.DEFAULT_FALLBACK_GAS_LIMIT
 
     def update_entry(self, transaction_type: str, gas_limit: int):
+        """Udate the entry of the transaction
+
+        :param transaction_type: transaction type
+        :param gas_limit: gas limit
+        """
         self._table[str(transaction_type)] = int(gas_limit)
 
     def estimate_gas(self, tx: Transaction) -> int:
+        """Get estimated transaction gas
+
+        :param tx: transaction
+        :return: Estimated transaction gas
+        """
         gas_estimate = 0
         for msg in tx.msgs:
             gas_estimate += self._table.get(
@@ -93,4 +150,8 @@ class OfflineMessageTableStrategy(GasStrategy):
         return self._clip_gas(gas_estimate)
 
     def block_gas_limit(self) -> int:
+        """Get the block gas limit
+
+        :return: block gas limit
+        """
         return self._block_limit
