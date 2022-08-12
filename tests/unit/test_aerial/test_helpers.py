@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+"""This module contains the tests for the aerial/tx_helpers module."""
 from unittest.mock import Mock, patch
 
 import pytest

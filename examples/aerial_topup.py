@@ -1,3 +1,5 @@
+"""Example of aerial topup."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -63,6 +65,7 @@ def _parse_commandline():
 
 
 def main():
+    """Run main."""
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     args = _parse_commandline()
 

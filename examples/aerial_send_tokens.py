@@ -1,3 +1,5 @@
+"""Example of aerial send tokens."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -22,6 +24,7 @@ from cosmpy.aerial.wallet import LocalWallet
 
 
 def main():
+    """Run main."""
     alice = LocalWallet.generate()
     bob = LocalWallet.generate()
 
