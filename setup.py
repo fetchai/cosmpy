@@ -89,6 +89,7 @@ setup(
             "pydocstyle==6.1.1",
             "grpcio-tools==1.47.0",
             "pytest-rerunfailures==10.2",
+            "pydoc-markdown==4.6.3",
         ],
         "test": ["coverage", "pytest"],
     },
