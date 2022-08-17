@@ -164,6 +164,18 @@ def install(package: str) -> int:
     )
 
 
+def check_working_tree_is_dirty() -> None:
+    """Check if the current Git working tree is dirty."""
+    print("Checking whether the Git working tree is dirty...")
+    result = subprocess.check_output(["git", "diff", "--stat"])  # nosec
+    if len(result) > 0:
+        print("Git working tree is dirty:")
+        print(result.decode("utf-8"))
+        sys.exit(1)
+    else:
+        print("All good!")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("generate_api_docs")
     parser.add_argument(
@@ -173,10 +185,10 @@ if __name__ == "__main__":
 
     res = shutil.which("pydoc-markdown")
     if res is None:
-        install("pydoc-markdown==3.3.0")
+        install("pydoc-markdown==4.6.3")
         sys.exit(1)
 
     generate_api_docs()
 
-    # if arguments.check_clean:
-    #     check_working_tree_is_dirty()
+    if arguments.check_clean:
+        check_working_tree_is_dirty()
