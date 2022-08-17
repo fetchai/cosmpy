@@ -12,7 +12,7 @@ Exceptions
 class QueryError(RuntimeError)
 ```
 
-Invald Query Error
+Invalid Query Error
 
 <a id="cosmpy.aerial.exceptions.NotFoundError"></a>
 
@@ -42,7 +42,7 @@ Query timeout Error
 class BroadcastError(RuntimeError)
 ```
 
-Brodcast Error
+Broadcast Error
 
 <a id="cosmpy.aerial.exceptions.BroadcastError.__init__"></a>
 
@@ -52,7 +52,7 @@ Brodcast Error
 def __init__(tx_hash: str, message: str)
 ```
 
-Init Brodcast error
+Init Broadcast error
 
 **Arguments**:
 

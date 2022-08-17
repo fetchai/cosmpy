@@ -162,7 +162,7 @@ Init offline message table strategy
 def update_entry(transaction_type: str, gas_limit: int)
 ```
 
-Udate the entry of the transaction
+Update the entry of the transaction
 
 **Arguments**:
 

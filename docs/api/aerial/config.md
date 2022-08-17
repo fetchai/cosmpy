@@ -42,7 +42,7 @@ Network configurations
 def validate()
 ```
 
-Validation the network configurtion
+Validation the network configuration
 
 **Raises**:
 
@@ -121,7 +121,7 @@ Get the fetchai mainnet configuration
 
 **Returns**:
 
-fetch mainnet configuratiion
+fetch mainnet configuration
 
 <a id="cosmpy.aerial.config.NetworkConfig.fetch_mainnet"></a>
 

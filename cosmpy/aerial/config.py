@@ -57,7 +57,7 @@ class NetworkConfig:
     faucet_url: Optional[str] = None
 
     def validate(self):
-        """Validation the network configurtion
+        """Validation the network configuration
 
         :raises NetworkConfigError: Network config error
         """
@@ -114,7 +114,7 @@ class NetworkConfig:
     def fetchai_mainnet(cls) -> "NetworkConfig":
         """Get the fetchai mainnet configuration
 
-        :return: fetch mainnet configuratiion
+        :return: fetch mainnet configuration
         """
         return NetworkConfig(
             chain_id="fetchhub-4",

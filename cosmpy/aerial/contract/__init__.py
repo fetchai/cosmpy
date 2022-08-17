@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""cosmeasm contract functionlity"""
+"""cosmeasm contract functionality"""
 
 import json
 from collections import UserString
@@ -258,7 +258,7 @@ class LedgerContract(UserString):
         :param gas_limit: transaction gas limit, defaults to None
         :param funds: funds, defaults to None
         :raises RuntimeError: Contract appears not to be deployed currently
-        :return: brodcasted transaction details
+        :return: broadcasted transaction details
         """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")

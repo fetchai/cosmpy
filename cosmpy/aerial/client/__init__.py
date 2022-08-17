@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Client functionlity"""
+"""Client functionality"""
 
 import json
 import time

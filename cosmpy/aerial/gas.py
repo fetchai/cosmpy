@@ -129,7 +129,7 @@ class OfflineMessageTableStrategy(GasStrategy):
         self._fallback_gas_limit = fallback_gas_limit or self.DEFAULT_FALLBACK_GAS_LIMIT
 
     def update_entry(self, transaction_type: str, gas_limit: int):
-        """Udate the entry of the transaction
+        """Update the entry of the transaction
 
         :param transaction_type: transaction type
         :param gas_limit: gas limit

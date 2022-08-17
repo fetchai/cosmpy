@@ -30,7 +30,7 @@ Transaction response
 
 - `OutOfGasError`: Out of gas error
 - `InsufficientFeesError`: Insufficient fees
-- `BroadcastError`: Broadcast Excpetion
+- `BroadcastError`: Broadcast Exception
 
 <a id="cosmpy.aerial.tx_helpers.TxResponse.is_successful"></a>
 
@@ -60,7 +60,7 @@ Ensure transaction is successful
 
 - `OutOfGasError`: Out of gas error
 - `InsufficientFeesError`: Insufficient fees
-- `BroadcastError`: Broadcast Excpetion
+- `BroadcastError`: Broadcast Exception
 
 <a id="cosmpy.aerial.tx_helpers.SubmittedTx"></a>
 
