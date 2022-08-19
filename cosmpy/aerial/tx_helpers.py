@@ -21,7 +21,8 @@
 
 import re
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from datetime import timedelta
+from typing import Dict, List, Optional, Union
 
 from cosmpy.aerial.exceptions import (
     BroadcastError,
@@ -159,12 +160,21 @@ class SubmittedTx:
 
         return Address(contract_address)
 
-    def wait_to_complete(self) -> "SubmittedTx":
+    def wait_to_complete(
+        self,
+        timeout: Optional[Union[int, float, timedelta]] = None,
+        poll_period: Optional[Union[int, float, timedelta]] = None,
+    ) -> "SubmittedTx":
         """Wait to complete the transaction
+
+        :param timeout: timeout, defaults to None
+        :param poll_period: poll_period, defaults to None
 
         :return: Submitted Transaction
         """
-        self._response = self._client.wait_for_query_tx(self.tx_hash)
+        self._response = self._client.wait_for_query_tx(
+            self.tx_hash, timeout=timeout, poll_period=poll_period
+        )
         assert self._response is not None
         self._response.ensure_successful()
 

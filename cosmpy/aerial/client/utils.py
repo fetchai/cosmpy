@@ -16,10 +16,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
 """Helper functions"""
-
-from typing import Optional
+from datetime import timedelta
+from typing import Optional, Union
 
 from cosmpy.aerial.tx import SigningCfg
 from cosmpy.aerial.tx_helpers import SubmittedTx
@@ -77,3 +76,14 @@ def prepare_and_broadcast_basic_transaction(
     tx.complete()
 
     return client.broadcast_tx(tx)
+
+
+def ensure_timedelta(interval: Union[int, float, timedelta]) -> timedelta:
+    """
+    Return timedelta for interval.
+
+    :param interval: timedelta or seconds in int or float
+
+    :return: timedelta
+    """
+    return interval if isinstance(interval, timedelta) else timedelta(seconds=interval)
