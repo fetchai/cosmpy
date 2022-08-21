@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.client.staking
 
-Staking functionlity
+Staking functionality
 
 <a id="cosmpy.aerial.client.staking.ValidatorStatus"></a>
 
