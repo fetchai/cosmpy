@@ -56,7 +56,7 @@ tx.wait_to_complete()
 
 While your funds are staked, you are earning rewards on them. Rewards can be collected at any time and unlike delegations, when collected they become immediately available.
 
-To claim rewards from a specific validator: 
+To claim rewards from a specific validator:
 
 ```python
 tx = ledger_client.claim_rewards(validator_address, wallet)

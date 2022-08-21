@@ -24,6 +24,7 @@ First, we need to define the desired amount and the total period that we would l
 initial_stake = 50000000000000000000
 total_period = 60000
 ```
+
 ### Validator Selection and Variables
 
 We will now select a validator to delegate our tokens. We will do this by analyzing which one has the lowest `commission` and a reasonable amount of stake delegated compared to the total stake.
@@ -50,7 +51,6 @@ for validator in resp.validators:
 
 After running the code above, you will observe each validator commission rate and its percentage delegated of the total stake. The most important parameter to observe in each validator is the commission it will take from the rewards. We will always select a validator with the lower commission as long as it has a reasonable stake compared with the total stake. In this case, at the moment the code was run, all validators had the same commission, therefore, we simply selected the validator with the highest stake, which was validator0. Feel free to select the most convenient validator when you run the code above. We will save the variables `commission` and the fraction of our `initial_stake` to the total stake to use them later on.
 
-
 ```python
 # get all the active validators on the network
 validators = ledger.query_validators()
@@ -68,6 +68,7 @@ pct_delegated = initial_stake/total_stake
 ```
 
 ### Estimate Transaction Fees
+
 We need to know an estimate of the transaction fees it will cost every time we claim rewards and delegate tokens. For that, both claim rewards and delegate tokens transactions were combined into a single multi-msg transaction to simulate the total fees.
 
 ```python
@@ -100,6 +101,7 @@ tx.complete()
 # simulate the fee for the transaction
 _, str_tx_fee = ledger.estimate_gas_and_fee_for_tx(tx)
 ```
+
 Since the output of this function is a string, we will convert it to an int and round it up to get a more conservative estimate for the `fee`
 
 ```python
@@ -109,7 +111,9 @@ tx_fee = str_tx_fee[:-len(denom)]
 # Add a 20% to the fee estimation to get a more conservative estimate
 fee = int(tx_fee) * 1.20
 ```
+
 ### Query Network Variables
+
 There are three network variables that we need to query since they will contribute to the staking rewards calculation: `total_supply`, `inflation` and `community_tax`
 
 ```python
@@ -148,7 +152,6 @@ rate = minute_reward/initial_stake
 ## Calculate Optimal Compounding Period
 
 We can calculate the optimal compounding period that maximizes our staking rewards analytically by using the following formula.
-
 
 <img src="../images/reward_equation.png" width="400">
 
@@ -194,6 +197,7 @@ optimal_period = brentq(Mx_prime, 0.1, D)
 
 print("optimal_period: ", analytical_optimal_period, " minutes")
 ```
+
 You can make use of the `optimal_period` value in the [`staking auto-compounder`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_compounder.py) to maximize your rewards
 
 You can also plot the function along with the optimal period to observe the results
@@ -215,7 +219,6 @@ plt.grid()
 ```
 
 <img src="../images/maximizing_rewards.png" width="400">
-
 
 Finally we can compare the compounding staking rewards to a simple non-compounding strategy
 
@@ -260,6 +263,7 @@ plt.legend()
 
 plt.yscale('log')
 ```
-<img src="../images/compounded_vs_simple.png" width="800"> 
+
+<img src="../images/compounded_vs_simple.png" width="800">
 
 You can view an abbreviated version of the code at [`stake optimizer`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_stake_optimizer.py)

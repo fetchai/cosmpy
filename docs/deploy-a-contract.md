@@ -15,7 +15,7 @@ You can now start interacting with the contract. To get the address of where the
 print(f"Contract deployed at: {contract.address}")
 ```
 
-You can query the values of the contract's state variables: 
+You can query the values of the contract's state variables:
 
 ```python
 result = contract.query({"get": {"owner": wallet}})

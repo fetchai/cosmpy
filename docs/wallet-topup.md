@@ -17,6 +17,7 @@ authz_wallet = LocalWallet(
 # Define any task_wallet address
 task_wallet_address = 'fetch1ay6grfwhlm00wydwa3nw0x2u44qz4hg2uku8dc'
 ```
+
 Wallet will need to have enough tokens available to top-up task_wallet, and authz_wallet will need enough tokens to pay for transaction fees. Now you will need to give authorization to authz_wallet to send tokens from wallet. You will define the expiration and the spend limit of the authorization in `total_authz_time` and `spend_amount`. The code below shows how to perform this kind of transaction:
 
 ```python
@@ -76,6 +77,7 @@ interval_time = 5
 ```
 
 Finally, run a continuously running loop that will:
+
 * Check the main wallet's balance to make sure it has enough tokens to top-up the task_wallet_address
 * Check task_wallet's balance, if it is lower than `minimum_balance` then authz_wallet will send `top_up_amount` of tokens from wallet to task_wallet
 * Sleep `interval_time` and repeat
@@ -123,6 +125,3 @@ while True:
 While the code above keeps running, you can make sure that task_wallet is always topped-up as long as authz_wallet has authorization to send the required tokens and the main wallet has enough balance.
 
 You can also check out the authorization and top-up code examples at [`authz`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_authz.py) and [`top-up`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_topup.py) respectively.
-
-
-

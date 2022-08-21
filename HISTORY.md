@@ -15,7 +15,7 @@
 * add address prefix to wallet
 * Add fallback hashlib for Ubuntu 22.04 LTS
 
-* fix: send funds in contract methods 
+* fix: send funds in contract methods
 * fix integration tests
 * fix: improve support for other chains
 

@@ -21,4 +21,3 @@ ledger_client = LedgerClient(cfg)
 ```
 
 A full list of chain identifiers, denominations and end-points can be found at the Cosmos [chain registry](https://github.com/cosmos/chain-registry/).
-
