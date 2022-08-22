@@ -67,7 +67,7 @@ class MockLedger:
     """Test for ledger"""
 
     def __init__(self):
-        """Inits Mock Leder with table"""
+        """Initiates Mock Ledger with table"""
         self._table = OfflineMessageTableStrategy.default_table()
 
     def simulate_tx(self, tx: Transaction) -> int:

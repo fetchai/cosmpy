@@ -106,7 +106,7 @@ class NetworkConfig:
     def fetchai_stable_testnet(cls):
         """Get the fetchai stable testnet
 
-        :return: fetchai stable testnet. For now darado is fetchai stable testnet.
+        :return: fetchai stable testnet. For now dorado is fetchai stable testnet.
         """
         return cls.fetchai_dorado_testnet()
 

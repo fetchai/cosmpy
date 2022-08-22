@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Transaction gas startegy"""
+"""Transaction gas strategy"""
 
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
@@ -26,7 +26,7 @@ from cosmpy.aerial.tx import Transaction
 
 
 class GasStrategy(ABC):
-    """Transaction gas startegy"""
+    """Transaction gas strategy"""
 
     @abstractmethod
     def estimate_gas(self, tx: Transaction) -> int:
@@ -54,7 +54,7 @@ class GasStrategy(ABC):
 
 
 class SimulationGasStrategy(GasStrategy):
-    """Simulation transaction gas startegy
+    """Simulation transaction gas strategy
 
     :param GasStrategy: gas strategy
     """
@@ -62,7 +62,7 @@ class SimulationGasStrategy(GasStrategy):
     DEFAULT_MULTIPLIER = 1.65
 
     def __init__(self, client: "LedgerClient", multiplier: Optional[float] = None):  # type: ignore # noqa: F821
-        """Init the Simulation transaction gas startegy
+        """Init the Simulation transaction gas strategy
 
         :param client: Ledger client
         :param multiplier: multiplier, defaults to None
@@ -80,6 +80,7 @@ class SimulationGasStrategy(GasStrategy):
         gas_estimate = self._client.simulate_tx(tx)
         return self._clip_gas(int(gas_estimate * self._multiplier))
 
+    # noinspection SpellCheckingInspection
     def block_gas_limit(self) -> int:
         """Get the block gas limit
 

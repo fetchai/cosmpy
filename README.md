@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <h1 align="center">
     <b>CosmPy</b>
 </h1>
@@ -79,7 +80,7 @@ Please see [CONTRIBUTING](https://github.com/fetchai/cosmpy/blob/master/CONTRIBU
 
 ## Extra Resources
 
-* [Github Repo](https://github.com/fetchai/cosmpy)
+* [GitHub Repo](https://github.com/fetchai/cosmpy)
 * [Bug Reports](https://github.com/fetchai/cosmpy/issues)
 * [Discussions](https://github.com/fetchai/cosmpy/discussions)
 * [Getting Started](https://docs.fetch.ai/CosmPy/)

@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.gas
 
-Transaction gas startegy
+Transaction gas strategy
 
 <a id="cosmpy.aerial.gas.GasStrategy"></a>
 
@@ -12,7 +12,7 @@ Transaction gas startegy
 class GasStrategy(ABC)
 ```
 
-Transaction gas startegy
+Transaction gas strategy
 
 <a id="cosmpy.aerial.gas.GasStrategy.estimate_gas"></a>
 
@@ -56,7 +56,7 @@ None
 class SimulationGasStrategy(GasStrategy)
 ```
 
-Simulation transaction gas startegy
+Simulation transaction gas strategy
 
 **Arguments**:
 
@@ -70,7 +70,7 @@ Simulation transaction gas startegy
 def __init__(client: "LedgerClient", multiplier: Optional[float] = None)
 ```
 
-Init the Simulation transaction gas startegy
+Init the Simulation transaction gas strategy
 
 **Arguments**:
 

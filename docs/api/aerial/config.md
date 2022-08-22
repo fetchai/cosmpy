@@ -106,7 +106,7 @@ Get the fetchai stable testnet
 
 **Returns**:
 
-fetchai stable testnet. For now darado is fetchai stable testnet.
+fetchai stable testnet. For now dorado is fetchai stable testnet.
 
 <a id="cosmpy.aerial.config.NetworkConfig.fetchai_mainnet"></a>
 

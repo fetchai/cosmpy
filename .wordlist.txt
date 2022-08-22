@@ -85,6 +85,7 @@ cosmwasm
 Github
 protobuf
 linter
+linters
 localhost
 entrypoint
 testnet

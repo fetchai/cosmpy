@@ -24,6 +24,7 @@ import unittest
 from cosmpy.crypto.keypairs import PrivateKey, PublicKey
 
 
+# noinspection SpellCheckingInspection
 class KeyPairTestCase(unittest.TestCase):
     """Test case of KeyPair module."""
 

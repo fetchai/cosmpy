@@ -26,7 +26,7 @@ Init faucet API.
 
 **Arguments**:
 
-- `net_config`: Ledger network confiuguration.
+- `net_config`: Ledger network configuration.
 
 <a id="cosmpy.aerial.faucet.FaucetApi.get_wealth"></a>
 
