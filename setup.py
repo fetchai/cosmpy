@@ -21,12 +21,19 @@
 """The setup script"""
 
 import pathlib
+from typing import List
 
 from setuptools import find_packages, setup
 
 here = pathlib.Path(__file__).parent.resolve()
 
 long_description = (here / "README.md").read_text(encoding="utf-8")
+
+
+def _load_dependencies(filename: str) -> List[str]:
+    with open(filename, "r") as f:
+        return [i for i in f.readlines() if i]
+
 
 setup(
     name="cosmpy",
@@ -52,41 +59,12 @@ setup(
     keywords="cosmos, gaia, fetchhub, fetchai",
     package_dir={"cosmpy": "cosmpy"},
     packages=find_packages(include=["cosmpy*"]),
-    python_requires=">=3.6, <4",
-    install_requires=[
-        "ecdsa",
-        "bech32",
-        "requests",
-        "protobuf>=3.19.4,<4",
-        "grpcio==1.47.0",
-        "bip-utils",
-        "blspy",
-        "google-api-python-client",
-    ],
+    python_requires=">=3.7, <4",
+    install_requires=_load_dependencies("requirements.txt"),
     extras_require={
-        "dev": [
-            "check-manifest",
-            "tox==3.25.1",
-            "flake8==5.0.4",
-            "black==22.6",
-            "mypy==0.971",
-            "mkdocs-material==8.4",
-            "bandit==1.7.4",
-            "safety==2.1.1",
-            "isort==5.10.1",
-            "darglint==1.8.1",
-            "vulture==2.5",
-            "pylint==2.14.5",
-            "liccheck==0.7.2",
-            "flake8-copyright==0.2.3",
-            "grpcio-tools==1.47.0",
-            "flake8-bugbear==22.7.1",
-            "flake8-eradicate==1.3.0",
-            "flake8-docstrings==1.6.0",
-            "pydocstyle==6.1.1",
-            "pydoc-markdown==4.6.3",
-        ],
-        "test": ["coverage", "pytest", "pytest-rerunfailures"],
+        "dev": _load_dependencies("requirements-dev.txt"),
+        "test": _load_dependencies("requirements-test.txt"),
+        "docs": _load_dependencies("requirements-docs.txt"),
     },
     project_urls={
         "Bug Reports": "https://github.com/fetchai/cosmpy/issues",

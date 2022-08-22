@@ -270,15 +270,6 @@ check:
 Pipfile.lock: Pipfile setup.py
 	pipenv lock --dev
 
-requirements.txt: Pipfile.lock
-	pipenv requirements > $@
-
-requirements-dev.txt: Pipfile.lock
-	pipenv requirements --dev> $@
-
-.PHONY: requirements
-requirements: $(REQUIREMENTS_FILES)
-
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
 	$(info  )
