@@ -94,6 +94,7 @@ class Address(UserString):
 
     @property
     def data(self):  # noqa:
+        """Return address details"""
         return str(self)
 
     def __json__(self):  # noqa:

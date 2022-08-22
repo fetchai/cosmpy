@@ -616,14 +616,12 @@ class LedgerClient:
             details = e.details()
             if "not found" in details:
                 raise NotFoundError()
-            else:
-                raise
+            raise
         except RuntimeError as e:
             details = str(e)
             if "tx" in details and "not found" in details:
                 raise NotFoundError()
-            else:
-                raise
+            raise
 
         return self._parse_tx_response(resp.tx_response)
 

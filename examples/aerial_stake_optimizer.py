@@ -101,9 +101,8 @@ def main():
             validator = validators[validator_index]
             break
 
-        else:
-            # We omit this validator by setting his commssion to infinity
-            validators_comission[validator_index] = float("inf")
+        # We omit this validator by setting his commssion to infinity
+        validators_comission[validator_index] = float("inf")
 
     if validator == "not_selected":
         # Restart validators_comission list with oiriginal values
@@ -200,7 +199,7 @@ def main():
     D = total_period
 
     # List of compounding periods
-    X = [i for i in range(1, D)]
+    X = list(range(1, D))
 
     # Evaluate function M on each compounding period
     R = [M(x, f, S, k, D) for x in X]

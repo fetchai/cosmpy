@@ -83,10 +83,10 @@ class FaucetApi:
         if response.status_code == 200:
             try:
                 uid = response.json()["uuid"]
-            except KeyError:  # pragma: nocover
+            except KeyError as error:  # pragma: nocover
                 raise ValueError(
                     f"key `uid` not found in response_json={response.json()}"
-                )
+                ) from error
 
         return uid
 

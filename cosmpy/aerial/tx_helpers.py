@@ -93,8 +93,7 @@ class TxResponse:
                 else:
                     required_fee = f"more than {self.gas_wanted}"
                 raise InsufficientFeesError(self.hash, required_fee)
-            else:
-                raise BroadcastError(self.hash, self.raw_log)
+            raise BroadcastError(self.hash, self.raw_log)
 
 
 class SubmittedTx:

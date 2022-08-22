@@ -22,6 +22,7 @@
 import hashlib
 
 from _hashlib import HASH  # type: ignore  # pylint: disable=no-name-in-module
+from mbedtls import hashlib as alt_hashlib
 
 # Detect if ripemd160 can actually be used in the system. Querying `hashlib.algorithms_available`
 # does not mean much and will fail on 22.04 LTS
@@ -52,8 +53,6 @@ def _ripemd160_stdlib(contents: bytes) -> bytes:
 
 
 def _ripemd160_mbedtls(contents: bytes) -> bytes:
-    from mbedtls import hashlib as alt_hashlib
-
     h: HASH = alt_hashlib.new("ripemd160")
     h.update(contents)
     return h.digest()
