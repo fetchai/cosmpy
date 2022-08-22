@@ -1,0 +1,2 @@
+mkdocs-material==8.4
+pydoc-markdown==4.6.3

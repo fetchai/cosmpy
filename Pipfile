@@ -4,7 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-cosmpy = { editable = true, extras = ["dev", "test"], path = "." }
+cosmpy = { editable = true, extras = ["dev", "test", "docs"], path = "." }
 
 [packages]
 cosmpy = { editable = true, extras = [], path = "." }
