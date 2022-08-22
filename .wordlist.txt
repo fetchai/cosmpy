@@ -299,6 +299,6 @@ MessageLog
 TxResponse
 SubmittedTx
 NetworkConfigError
-Runtime 
 darado
 ValidatorStatus
+Runtime
