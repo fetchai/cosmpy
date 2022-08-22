@@ -258,7 +258,7 @@ class LedgerContract(UserString):
         :param gas_limit: transaction gas limit, defaults to None
         :param funds: funds, defaults to None
         :raises RuntimeError: Contract appears not to be deployed currently
-        :return: broadcasted transaction details
+        :return: transaction details broadcast
         """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
