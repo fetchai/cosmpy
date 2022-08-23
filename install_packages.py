@@ -25,20 +25,19 @@ import sys
 from typing import List
 
 
-def _load_dependencies(filename: str) -> List[str]:
-    with open(filename, "r") as f:
-        return [i for i in f.readlines() if i]
+def _load_dependencies() -> List[str]:
+    text = subprocess.check_output("poetry export --with dev,docs,test", shell=True, text=True)
+    text = text.replace("\\\n", " ")
+    lines = text.splitlines()
+    lines = [i.split(" ")[0] for i in lines]
+    return lines
 
 
 RE = re.compile("(.*)[=><]")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        raise ValueError("not enought arguments")
-
-    filename = sys.argv[1]
-    packages = sys.argv[2:]
-    requirements = _load_dependencies(filename)
+    packages = sys.argv[1:]
+    requirements = _load_dependencies()
 
     to_install = []
     for package in packages:

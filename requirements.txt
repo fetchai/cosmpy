@@ -1,8 +1,0 @@
-ecdsa
-bech32
-requests
-protobuf>=3.19.4,<4
-grpcio==1.47.0
-bip-utils
-blspy
-google-api-python-client
