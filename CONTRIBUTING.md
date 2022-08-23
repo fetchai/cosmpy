@@ -37,7 +37,7 @@ If you have improvements, send us your pull requests!
 
 A team member will be assigned to review your pull requests. All tests are run as part of CI as well as various other checks (linters, static type checkers, security checkers, etc). If there are any problems, feedback is provided via GitHub. Once the pull requests is approved and passes continuous integration checks, you or a team member can merge it.
 
-If you want to contribute, start working through the codebase, navigate to the Github [Issues page](https://github.com/fetchai/cosmpy/issues) tab and start looking through interesting issues. If you decide to start on an issue, leave a comment so that other people know that you're working on it. If you want to help out, but not alone, use the issue comment thread to coordinate.
+If you want to contribute, start working through the codebase, navigate to the GitHub [Issues page](https://github.com/fetchai/cosmpy/issues) tab and start looking through interesting issues. If you decide to start on an issue, leave a comment so that other people know that you're working on it. If you want to help out, but not alone, use the issue comment thread to coordinate.
 
 ## Commits and PRs
 

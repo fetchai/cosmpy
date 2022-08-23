@@ -76,7 +76,7 @@ interval_time = 5
 ```
 
 Finally, run a continuously running loop that will:
-* Check the main wallet's balance to make sure it has enough tokens to top-up the task_wallet_address
+* Check the main wallet's balance to make sure it has enough tokens to top up the task_wallet_address
 * Check task_wallet's balance, if it is lower than `minimum_balance` then authz_wallet will send `top_up_amount` of tokens from wallet to task_wallet
 * Sleep `interval_time` and repeat
 

@@ -85,7 +85,7 @@ class TxRestClient(TxInterface):
         """
         response = self.rest_client.get(f"{self.API_URL}/txs/{request.hash}")
 
-        # JSON in JSON in case of CosmWasm messages workaround
+        # JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
         self._fix_messages(dict_response["tx"]["body"]["messages"])
         self._fix_messages(dict_response["tx_response"]["tx"]["body"]["messages"])
@@ -111,7 +111,7 @@ class TxRestClient(TxInterface):
         """
         response = self.rest_client.get(f"{self.API_URL}/txs", request)
 
-        # JSON in JSON in case of CosmWasm messages workaround
+        # JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
         for tx in dict_response["txs"]:
             self._fix_messages(tx["body"]["messages"])

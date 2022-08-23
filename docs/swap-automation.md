@@ -1,4 +1,4 @@
-A mean-reversion strategy expects the prices to return to “normal” levels or a certain moving average following a temporary price spike. We can construct a similar strategy using the Liquidity Pool, where we will set upper and lower bound prices that will trigger a sell and a buy transaction respectively. If the behavior of the LP prices works as expected always returning to a certain moving average, we could profit by selling high and buying low. We will do this by swapping atestfet and CW20 with the Liquidity Pool, we refer to a sell transaction when we sell atestfet and get CW20 tokens, a buy transaction would be exactly the oposite.
+A mean-reversion strategy expects the prices to return to “normal” levels or a certain moving average following a temporary price spike. We can construct a similar strategy using the Liquidity Pool, where we will set upper and lower bound prices that will trigger a sell and a buy transaction respectively. If the behavior of the LP prices works as expected always returning to a certain moving average, we could profit by selling high and buying low. We will do this by swapping atestfet and CW20 with the Liquidity Pool, we refer to a sell transaction when we sell atestfet and get CW20 tokens, a buy transaction would be exactly the opposite.
 
 The code will require the following imports:
 
@@ -30,7 +30,7 @@ def swap_native_for_cw20(swap_amount, pair_contract, wallet):
     print("swapping native for cw20 tokens")
     tx.wait_to_complete()
 ```
-Now, we will define the *swap_cw20_for_native* function that does exactly the opposite of the function defined above: trades `swap_amount` of CW20 tokens from `wallet` for atestfet. This time the CW20 `token_contract` is executed using the `pair_contract_address`. Finally you need to include the {"swap":{}} message in the "msg" field. However, this swap message has to be encoded into base64. When you encode {"swap":{}} message into base64 you get: eyJzd2FwIjp7fX0=
+Now, we will define the *swap_cw20_for_native* function that does exactly the opposite of the function defined above: trades `swap_amount` of CW20 tokens from `wallet` for atestfet. This time the CW20 `token_contract` is executed using the `pair_contract_address`. Finally, you need to include the {"swap":{}} message in the "msg" field. However, this swap message has to be encoded into base64. When you encode {"swap":{}} message into base64 you get: eyJzd2FwIjp7fX0=
 
 ```python
 def swap_cw20_for_native(swap_amount, pair_contract_address, token_contract, wallet):

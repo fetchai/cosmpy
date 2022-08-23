@@ -84,6 +84,7 @@ setup(
             "flake8-eradicate==1.3.0",
             "flake8-docstrings==1.6.0",
             "pydocstyle==6.1.1",
+            "pydoc-markdown==4.6.3",
         ],
         "test": ["coverage", "pytest", "pytest-rerunfailures"],
     },

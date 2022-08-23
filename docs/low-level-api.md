@@ -4,7 +4,7 @@ tokens](send-tokens.md), [staking](staking.md), [deploying and interacting with 
 [example code](https://github.com/fetchai/cosmpy/tree/master/examples) covering such use cases.
 
 However, cosmpy also provides low-level access to the entire Cosmos-SDK, enabling the
-full gamut of functionality to be accessed, albeit with a little more boiler-plate.
+full gamut of functionality to be accessed, albeit with a little more boilerplate.
 
 Here, we aim to help developers navigate the low-level, protobuf-based API functionality, provided by Cosmpy.
 

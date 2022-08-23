@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Client functionlity"""
+"""Client functionality"""
 
 import json
 import time
@@ -428,7 +428,7 @@ class LedgerClient:
         """Delegate tokens
 
         :param validator: validator address
-        :param amount: amoint
+        :param amount: amount
         :param sender: sender
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
@@ -537,10 +537,10 @@ class LedgerClient:
         )
 
     def estimate_gas_for_tx(self, tx: Transaction) -> int:
-        """Esimate gas for transaction
+        """Estimate gas for transaction
 
         :param tx: transaction
-        :return: Esimated gas for transaction
+        :return: Estimated gas for transaction
         """
         return self._gas_strategy.estimate_gas(tx)
 
@@ -548,7 +548,7 @@ class LedgerClient:
         """Estimate fee from gas
 
         :param gas_limit: gas limit
-        :return: Esimated fee for transaction
+        :return: Estimated fee for transaction
         """
         return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
 

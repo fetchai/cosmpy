@@ -43,7 +43,7 @@ Create the `LedgerContract` object:
 contract = LedgerContract("oracle.wasm", ledger)
 ```
 
-To deploy the oracle contract, add the fee amount to the instantiation message and call the deploy function:
+To deploy the oracle contract, add the fee amount to the instantiation message and call the `deploy` function:
 ```python
 instantiation_message = {"fee": "100"}
 contract.deploy(instantiation_message, wallet, funds="1atestfet")
