@@ -225,6 +225,9 @@ OfflineMessageTableStrategy
 linewidth
 linspace
 MsgGrant
+StakingPosition
+UnbondingPositions
+StakingSummary
 matplotlib
 req
 scipy
@@ -281,7 +284,7 @@ param
 instantiation
 FromSeed
 SeedGenerator
-MacOS
+macOS
 Unbonding
 unbonding
 blockquote

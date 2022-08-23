@@ -261,5 +261,5 @@ Get the contract details in json
 
 **Returns**:
 
-jsonify contract details
+contract details in json
 

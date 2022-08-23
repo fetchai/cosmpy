@@ -328,6 +328,6 @@ class LedgerContract(UserString):
     def __json__(self):
         """Get the contract details in json
 
-        :return: jsonify contract details
+        :return: contract details in json
         """
         return str(self)
