@@ -80,7 +80,6 @@ class SimulationGasStrategy(GasStrategy):
         gas_estimate = self._client.simulate_tx(tx)
         return self._clip_gas(int(gas_estimate * self._multiplier))
 
-    # noinspection SpellCheckingInspection
     def block_gas_limit(self) -> int:
         """Get the block gas limit
 

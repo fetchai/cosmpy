@@ -120,7 +120,6 @@ def _parse_commandline():
     return parser.parse_args()
 
 
-# noinspection SpellCheckingInspection
 def main():
     """Run main."""
     args = _parse_commandline()

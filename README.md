@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <h1 align="center">
     <b>CosmPy</b>
 </h1>

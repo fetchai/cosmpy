@@ -26,7 +26,6 @@ from cosmpy.aerial.contract import (
 from cosmpy.crypto.address import Address
 
 
-# noinspection SpellCheckingInspection
 def test_create_instantiate_msg():
     """Test create instantiate message"""
     sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")
@@ -44,7 +43,6 @@ def test_create_instantiate_msg():
     assert msg.funds[0].amount == "10"
 
 
-# noinspection SpellCheckingInspection
 def test_create_execute_msg():
     """Test create execute message"""
     sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")

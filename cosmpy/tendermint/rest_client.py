@@ -98,7 +98,6 @@ class CosmosBaseTendermintRestClient(CosmosBaseTendermint):
         json_response = self._rest_api.get(f"{self.API_URL}/blocks/{request.height}")
         return Parse(json_response, GetBlockByHeightResponse())
 
-    # noinspection SpellCheckingInspection
     def GetLatestValidatorSet(
         self, request: GetLatestValidatorSetRequest
     ) -> GetLatestValidatorSetResponse:
@@ -113,7 +112,6 @@ class CosmosBaseTendermintRestClient(CosmosBaseTendermint):
         )
         return Parse(json_response, GetLatestValidatorSetResponse())
 
-    # noinspection SpellCheckingInspection
     def GetValidatorSetByHeight(
         self, request: GetValidatorSetByHeightRequest
     ) -> GetValidatorSetByHeightResponse:

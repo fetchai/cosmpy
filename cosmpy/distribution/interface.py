@@ -56,7 +56,7 @@ class Distribution(ABC):
         self, request: QueryDelegationTotalRewardsRequest
     ) -> QueryDelegationTotalRewardsResponse:
         """
-        DelegationTotalRewards queries the total rewards accrued by a each validator.
+        DelegationTotalRewards queries the total rewards accrued by each validator.
         :param request: a QueryDelegationTotalRewardsRequest instance
         :return: a QueryDelegationTotalRewardsResponse instance
         """

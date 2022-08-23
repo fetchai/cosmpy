@@ -27,7 +27,6 @@ from cosmpy.crypto.address import Address
 from cosmpy.crypto.keypairs import PublicKey
 
 
-# noinspection SpellCheckingInspection
 class AddressTestCase(unittest.TestCase):
     """Test case of KeyPair module."""
 

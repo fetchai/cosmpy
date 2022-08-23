@@ -30,8 +30,10 @@ DOCS_DIR = Path("docs/")
 API_DIR = DOCS_DIR / "api/"
 COSMPY_DIR = Path("cosmpy")
 
-IGNORE_NAMES = {r"^__init__\.py$", r"^__version__\.py$", r"^py\.typed$", r"^.*_pb2.py$"}
+IGNORE_NAMES = {r"^__version__\.py$", r"^py\.typed$", r"^.*_pb2.py$"}
 IGNORE_PREFIXES = {
+    Path("cosmpy", "__init__.py"),
+    Path("cosmpy", "aerial", "__init__.py"),
     Path("cosmpy", "auth"),
     Path("cosmpy", "bank"),
     Path("cosmpy", "common"),
@@ -113,15 +115,15 @@ def _generate_apidocs_cosmpy_modules() -> None:
         make_pydoc(dotted_path, doc_file)
 
 
-def make_pydoc(dotted_path: str, dest_file: Path) -> None:
+def make_pydoc(dotted_path: str, destination_file: Path) -> None:
     """Make a PyDoc file."""
     print(
-        f"Running with dotted path={dotted_path} and dest_file={dest_file}... ", end=""
+        f"Running with dotted path={dotted_path} and destination_file={destination_file}... ", end=""
     )
     try:
         api_doc_content = run_pydoc_markdown(dotted_path)
-        dest_file.parent.mkdir(parents=True, exist_ok=True)
-        dest_file.write_text(api_doc_content)
+        destination_file.parent.mkdir(parents=True, exist_ok=True)
+        destination_file.write_text(api_doc_content)
     except Exception as e:  # pylint: disable=broad-except
         print(f"Error: {str(e)}")
         return

@@ -87,7 +87,7 @@ Address
 def __json__()
 ```
 
-stringify the address
+Return the address in string format
 
 **Returns**:
 

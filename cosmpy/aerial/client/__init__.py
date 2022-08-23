@@ -165,7 +165,6 @@ class StakingSummary:
         return sum(map(lambda p: p.amount, self.unbonding_positions))
 
 
-# noinspection GrazieInspection
 class LedgerClient:
     """Ledger client"""
 
