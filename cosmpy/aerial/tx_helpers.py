@@ -47,7 +47,7 @@ class TxResponse:
 
     :raises OutOfGasError: Out of gas error
     :raises InsufficientFeesError: Insufficient fees
-    :raises BroadcastError: Broadcast Excpetion
+    :raises BroadcastError: Broadcast Exception
     """
 
     hash: str
@@ -71,7 +71,7 @@ class TxResponse:
 
         :raises OutOfGasError: Out of gas error
         :raises InsufficientFeesError: Insufficient fees
-        :raises BroadcastError: Broadcast Excpetion
+        :raises BroadcastError: Broadcast Exception
         """
         if self.code != 0:
             if "out of gas" in self.raw_log:

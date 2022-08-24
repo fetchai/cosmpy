@@ -21,16 +21,8 @@
 
 import hashlib
 
-from _hashlib import HASH  # type: ignore  # pylint: disable=no-name-in-module
-from mbedtls import hashlib as alt_hashlib
-
-# Detect if ripemd160 can actually be used in the system. Querying `hashlib.algorithms_available`
-# does not mean much and will fail on 22.04 LTS
-try:
-    hashlib.new("ripemd160")
-    _ripemd160_present = True
-except ValueError:
-    _ripemd160_present = False
+# pycryptodome, a dependency of bip-utils
+from Crypto.Hash import RIPEMD160  # type: ignore # nosec
 
 
 def sha256(contents: bytes) -> bytes:
@@ -41,35 +33,20 @@ def sha256(contents: bytes) -> bytes:
 
     :return: bytes sha256 hash.
     """
-    h: HASH = hashlib.sha256()
-    h.update(contents)
-    return h.digest()
-
-
-def _ripemd160_stdlib(contents: bytes) -> bytes:
-    h: HASH = hashlib.new("ripemd160")
-    h.update(contents)
-    return h.digest()
-
-
-def _ripemd160_mbedtls(contents: bytes) -> bytes:
-    h: HASH = alt_hashlib.new("ripemd160")
+    h = hashlib.sha256()
     h.update(contents)
     return h.digest()
 
 
 def ripemd160(contents: bytes) -> bytes:
     """
-    Get ripemd160 hash.
+    Get ripemd160 hash using PyCryptodome.
 
     :param contents: bytes contents.
 
     :return: bytes ripemd160 hash.
     """
 
-    # Check if we need to use the fallback hashlib
-    if not _ripemd160_present:
-        return _ripemd160_mbedtls(contents)
-
-    # Prefer the stdlib implementation
-    return _ripemd160_stdlib(contents)
+    h = RIPEMD160.new()
+    h.update(contents)
+    return h.digest()

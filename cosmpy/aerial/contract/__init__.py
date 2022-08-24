@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""cosmeasm contract functionlity"""
+"""cosmwasm contract functionality"""
 
 import json
 from collections import UserString
@@ -80,7 +80,7 @@ class LedgerContract(UserString):
         if path is not None:
             self._digest = _compute_digest(str(self._path))
 
-        # attempt to lookup the code id from the network by digest
+        # attempt to look up the code id from the network by digest
         if self._digest is not None:
             self._code_id = self._find_contract_id_by_digest(self._digest)
         else:
@@ -258,7 +258,7 @@ class LedgerContract(UserString):
         :param gas_limit: transaction gas limit, defaults to None
         :param funds: funds, defaults to None
         :raises RuntimeError: Contract appears not to be deployed currently
-        :return: brodcasted transaction details
+        :return: transaction details broadcast
         """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
@@ -321,13 +321,13 @@ class LedgerContract(UserString):
     def data(self):
         """Get the contract address
 
-        :return: conntract address
+        :return: contract address
         """
         return self.address
 
     def __json__(self):
         """Get the contract details in json
 
-        :return: jsonify contract details
+        :return: contract details in json
         """
         return str(self)

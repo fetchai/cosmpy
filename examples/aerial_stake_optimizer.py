@@ -39,7 +39,7 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsReques
 # * x -> Compounding Period
 def M(x, f, S, k, D):
     """
-    Calculat the total reward
+    Calculate the total reward
 
     :param x: Compounding Period
     :param f: fee
@@ -75,7 +75,7 @@ def main():
     ]
     total_stake = sum(validators_stake)
 
-    # Get validators comissions
+    # Get validators commissions
     validators_comission = [
         int(validator.commission.commission_rates.rate)
         for validator in resp.validators
@@ -105,16 +105,16 @@ def main():
         validators_comission[validator_index] = float("inf")
 
     if validator == "not_selected":
-        # Restart validators_comission list with oiriginal values
+        # Restart validators_comission list with original values
         validators_comission = [
             int(validator.commission.commission_rates.rate)
             for validator in resp.validators
             if validator.status == 3
         ]
 
-        print("No validator meets the minium stake threshold requirement")
+        print("No validator meets the minimum stake threshold requirement")
 
-        # Proceed to select the validator with lowest commission
+        # Proceed to select the validator with the lowest commission
         validator_index = validators_comission.index(min(validators_comission))
         validator = validators[validator_index]
 
@@ -124,7 +124,7 @@ def main():
     # Set percentage delegated of total stake
     pct_delegated = initial_stake / total_stake
 
-    # Estmate fees for claiming and delegating rewards
+    # Estimate fees for claiming and delegating rewards
 
     alice = LocalWallet.generate()
     alice_address = str(alice.address())
@@ -180,7 +180,7 @@ def main():
     resp = ledger.params.Params(req)
     community_tax = float(json.loads(resp.param.value))
 
-    # Anual reward calculation
+    # Annual reward calculation
     anual_reward = (
         (inflation * total_supply)
         * pct_delegated
@@ -188,7 +188,7 @@ def main():
         * (1 - commission)
     )
 
-    # Convert from anual reward to minute reward
+    # Convert from annual reward to minute reward
     minute_reward = anual_reward / 360 / 24 / 60
     rate = minute_reward / initial_stake
 
