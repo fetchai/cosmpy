@@ -46,7 +46,7 @@ jobs:
       run: tox -e copyright-check
     - name: Manifest check
       run: tox -e check-manifest
-    - name: Check API Docs updated
+    - name: Check reference API docs is up-to-date
       run: tox -e check_api_docs
 
   spell-check:
