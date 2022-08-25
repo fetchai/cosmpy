@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Staking functionlity"""
+"""Staking functionality"""
 
 from enum import Enum
 

@@ -71,7 +71,8 @@ class Wallet(ABC, UserString):
         return self.address()
 
     def __json__(self):
-        """stringify the address
+        """
+        Return the address in string format
 
         :return: address in string format
         """

@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Docs Ephemerial Build
+    name: Docs Ephemeral Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
           path: site
 
   deploy:
-    name: Docs Ephemerial Deploy
+    name: Docs Ephemeral Deploy
     needs: build
     runs-on: ubuntu-latest
     steps:

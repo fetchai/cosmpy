@@ -72,7 +72,7 @@ def main():
 
     contract = LedgerContract(args.contract_path, client, address=args.contract_address)
 
-    # Step 1. Deploy the contract and setup the initial balances as required
+    # Step 1. Deploy the contract and set up the initial balances as required
     if contract.address is None:
         print("Deploying contract...")
         contract.deploy({}, alice)

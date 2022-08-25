@@ -40,7 +40,7 @@ resp = ledger.staking.Validators(req)
 validators_stake = [int(validator.tokens) for validator in resp.validators if validator.status == 3]
 total_stake = sum(validators_stake)
 
-# For every bonded validator, we print comssion and percentage of total stake
+# For every bonded validator, we print commission and percentage of total stake
 print("MONIKER      COMISSION   % of TOTAL STAKE")
 for validator in resp.validators:
     if validator.status == 3:
@@ -139,10 +139,10 @@ We can now proceed to calculate a theoretical staking rewards rate using the var
 
 ```python
 
-# Calculate anual reward
+# Calculate annual reward
 anual_reward = (inflation * total_supply) *pct_delegated* (1- community_tax)*(1- commission)
 
-# Convert from anual reward to minute reward
+# Convert from annual reward to minute reward
 minute_reward = anual_reward/360/24/60
 
 # Set the rate
@@ -188,7 +188,7 @@ x = Symbol("x")
 M = (S*(1+(k*x))**(D/x))+((1-((1+(k*x))**(D/x)))/(k*x))*f
 Mx = lambdify(x,M)
 
-# Take the first derivatve with repect to x
+# Take the first derivative with respect to x
 M_prime = M.diff(x)
 Mx_prime = lambdify(x,M_prime)
 

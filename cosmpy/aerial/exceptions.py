@@ -21,7 +21,7 @@
 
 
 class QueryError(RuntimeError):
-    """Invald Query Error"""
+    """Invalid Query Error"""
 
     pass
 
@@ -39,10 +39,10 @@ class QueryTimeoutError(QueryError):
 
 
 class BroadcastError(RuntimeError):
-    """Brodcast Error"""
+    """Broadcast Error"""
 
     def __init__(self, tx_hash: str, message: str):
-        """Init Brodcast error
+        """Init Broadcast error
 
         :param tx_hash: transaction hash
         :param message: message

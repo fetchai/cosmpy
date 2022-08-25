@@ -47,7 +47,7 @@ class FaucetApi:
         """
         Init faucet API.
 
-        :param net_config: Ledger network confiuguration.
+        :param net_config: Ledger network configuration.
         """
         if net_config.faucet_url is None:
             raise ValueError("Network config has no faucet url set!")  # pragma: nocover

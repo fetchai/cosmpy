@@ -2,7 +2,6 @@
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2018-2021 Fetch.AI Limited
-#   Modifications copyright (C) 2022 Cros-Nest
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -69,7 +68,7 @@ class DistributionRestClient(Distribution):
         self, request: QueryDelegationTotalRewardsRequest
     ) -> QueryDelegationTotalRewardsResponse:
         """
-        DelegationTotalRewards queries the total rewards accrued by a each validator.
+        DelegationTotalRewards queries the total rewards accrued by each validator.
         :param request: a QueryDelegationTotalRewardsRequest instance
         :return: a QueryDelegationTotalRewardsResponse instance
         """

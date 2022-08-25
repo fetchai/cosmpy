@@ -82,7 +82,7 @@ def test_public_key():
     assert not pub_key.verify_digest(message, signature)
 
 
-def test_pub_key_hardcoded_sgianture_check():
+def test_pub_key_hardcoded_signature_check():
     """Check signature of the pub key provided."""
     pub_key = PublicKey(
         b"\x92\x08eo\xb9\x03\xf1\\\x05\xd4\x8fa\xfd}-\x913\\\x1e~\xe6\xbd\xd3Eu\xf43\x05\x88\xfc\x1f\x18\x08\xf8B\x98\xf6-v\xc0\xcbQvpb\xcf\xe0q"
@@ -94,7 +94,7 @@ def test_pub_key_hardcoded_sgianture_check():
 
 
 def test_aggregated_signature_hardcoded():
-    """Check hardcoded aggragated signature."""
+    """Check hardcoded aggregated signature."""
     msg = b"some"
     pub_key1 = PublicKey(
         b"\x84}\x9d\xa2\x90\xa78%?\xb9\x1c\x86/:4\xa4b\x12\x95\xff1\xde\xc6L'P\xd9\x8e\xd0\x0b \x7f \xcd\xfc\xeeO'\xc8d\xbd\x06\x9d\xbb\xb2\xcd\x16R"

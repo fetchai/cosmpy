@@ -1,4 +1,4 @@
-"""Example of aerial compunder."""
+"""Example of aerial compounder."""
 
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
