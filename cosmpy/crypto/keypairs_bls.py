@@ -27,9 +27,7 @@ from blspy import (  # type: ignore  # pylint: disable=no-name-in-module
     G1Element,
     G2Element,
 )
-from blspy import (
-    PrivateKey as BLSPrivateKey,  # pylint: disable=no-name-in-module; type: ignore
-)
+from blspy import PrivateKey as BLSPrivateKey # pylint: disable=no-name-in-module
 from ecdsa.curves import NIST256p
 from ecdsa.keys import SigningKey
 

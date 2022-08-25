@@ -74,7 +74,7 @@ class MockLedger:
         """Simulation tx"""
         return self._table.estimate_gas(tx)
 
-    def query_params(self, subspace: str, key: str) -> Any:
+    def query_params(self) -> Any:
         """Set query params"""
         return {"max_gas": -1}
 

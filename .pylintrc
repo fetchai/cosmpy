@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=C0103,C0201,C0301,C0302,W0105,W0707,W1202,W1203,R0801,E1101,W0107,R0914
+disable=C0103,C0201,C0301,C0302,W0105,W0707,W1202,W1203,R0801,E1101,W0107,R0914,R0903,W0231
 
 # See here for more options: https://www.codeac.io/documentation/pylint-configuration.html
 ## Eventually resolve these:
@@ -20,9 +20,11 @@ disable=C0103,C0201,C0301,C0302,W0105,W0707,W1202,W1203,R0801,E1101,W0107,R0914
 #        Tx and ANY's member's are not recognised.
 # W0107: Unnecessary pass statement (unnecessary-pass)
 # R0914: Too many local variables (too-many-locals)
+# R0903: Too few public methods
+# W0231: __init__ method from base class is not called (super-init-not-called)
 
 [IMPORTS]
-ignored-modules=.*_pb2.py
+ignored-modules=.*_pb2.py, google
 
 [DESIGN]
 min-public-methods=1

@@ -367,7 +367,7 @@ class LedgerClient:
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
         resp = self.staking.DelegatorDelegations(req)
 
-        # TODO: Need pagination support
+        # TODO: Need pagination support #pylint: disable=fixme
         for item in resp.delegation_responses:
 
             req = QueryDelegationRewardsRequest(
