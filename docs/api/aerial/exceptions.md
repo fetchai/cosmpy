@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.exceptions
 
-Exceptions
+Exceptions.
 
 <a id="cosmpy.aerial.exceptions.QueryError"></a>
 
@@ -12,7 +12,7 @@ Exceptions
 class QueryError(RuntimeError)
 ```
 
-Invalid Query Error
+Invalid Query Error.
 
 <a id="cosmpy.aerial.exceptions.NotFoundError"></a>
 
@@ -22,7 +22,7 @@ Invalid Query Error
 class NotFoundError(QueryError)
 ```
 
-Not found Error
+Not found Error.
 
 <a id="cosmpy.aerial.exceptions.QueryTimeoutError"></a>
 
@@ -32,7 +32,7 @@ Not found Error
 class QueryTimeoutError(QueryError)
 ```
 
-Query timeout Error
+Query timeout Error.
 
 <a id="cosmpy.aerial.exceptions.BroadcastError"></a>
 
@@ -42,7 +42,7 @@ Query timeout Error
 class BroadcastError(RuntimeError)
 ```
 
-Broadcast Error
+Broadcast Error.
 
 <a id="cosmpy.aerial.exceptions.BroadcastError.__init__"></a>
 
@@ -52,7 +52,7 @@ Broadcast Error
 def __init__(tx_hash: str, message: str)
 ```
 
-Init Broadcast error
+Init Broadcast error.
 
 **Arguments**:
 
@@ -67,7 +67,7 @@ Init Broadcast error
 class OutOfGasError(BroadcastError)
 ```
 
-Insufficient Fess Error
+Insufficient Fess Error.
 
 <a id="cosmpy.aerial.exceptions.OutOfGasError.__init__"></a>
 
@@ -77,7 +77,7 @@ Insufficient Fess Error
 def __init__(tx_hash: str, gas_wanted: int, gas_used: int)
 ```
 
-_summary_
+_summary_.
 
 **Arguments**:
 
@@ -93,7 +93,7 @@ _summary_
 class InsufficientFeesError(BroadcastError)
 ```
 
-Insufficient Fess Error
+Insufficient Fess Error.
 
 <a id="cosmpy.aerial.exceptions.InsufficientFeesError.__init__"></a>
 
@@ -103,7 +103,7 @@ Insufficient Fess Error
 def __init__(tx_hash: str, minimum_required_fee: str)
 ```
 
-_summary_
+_summary_.
 
 **Arguments**:
 

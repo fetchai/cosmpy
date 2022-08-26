@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.gas
 
-Transaction gas strategy
+Transaction gas strategy.
 
 <a id="cosmpy.aerial.gas.GasStrategy"></a>
 
@@ -12,7 +12,7 @@ Transaction gas strategy
 class GasStrategy(ABC)
 ```
 
-Transaction gas strategy
+Transaction gas strategy.
 
 <a id="cosmpy.aerial.gas.GasStrategy.estimate_gas"></a>
 
@@ -23,7 +23,7 @@ Transaction gas strategy
 def estimate_gas(tx: Transaction) -> int
 ```
 
-Estimate the transaction gas
+Estimate the transaction gas.
 
 **Arguments**:
 
@@ -42,7 +42,7 @@ None
 def block_gas_limit() -> int
 ```
 
-Get the block gas limit
+Get the block gas limit.
 
 **Returns**:
 
@@ -56,7 +56,7 @@ None
 class SimulationGasStrategy(GasStrategy)
 ```
 
-Simulation transaction gas strategy
+Simulation transaction gas strategy.
 
 **Arguments**:
 
@@ -70,7 +70,7 @@ Simulation transaction gas strategy
 def __init__(client: "LedgerClient", multiplier: Optional[float] = None)
 ```
 
-Init the Simulation transaction gas strategy
+Init the Simulation transaction gas strategy.
 
 **Arguments**:
 
@@ -85,7 +85,7 @@ Init the Simulation transaction gas strategy
 def estimate_gas(tx: Transaction) -> int
 ```
 
-Get estimated transaction gas
+Get estimated transaction gas.
 
 **Arguments**:
 
@@ -103,7 +103,7 @@ Estimated transaction gas
 def block_gas_limit() -> int
 ```
 
-Get the block gas limit
+Get the block gas limit.
 
 **Returns**:
 
@@ -117,7 +117,7 @@ block gas limit
 class OfflineMessageTableStrategy(GasStrategy)
 ```
 
-Offline message table strategy
+Offline message table strategy.
 
 **Arguments**:
 
@@ -132,7 +132,7 @@ Offline message table strategy
 def default_table() -> "OfflineMessageTableStrategy"
 ```
 
-offline message strategy default table
+offline message strategy default table.
 
 **Returns**:
 
@@ -147,7 +147,7 @@ def __init__(fallback_gas_limit: Optional[int] = None,
              block_limit: Optional[int] = None)
 ```
 
-Init offline message table strategy
+Init offline message table strategy.
 
 **Arguments**:
 
@@ -162,7 +162,7 @@ Init offline message table strategy
 def update_entry(transaction_type: str, gas_limit: int)
 ```
 
-Update the entry of the transaction
+Update the entry of the transaction.
 
 **Arguments**:
 
@@ -177,7 +177,7 @@ Update the entry of the transaction
 def estimate_gas(tx: Transaction) -> int
 ```
 
-Get estimated transaction gas
+Get estimated transaction gas.
 
 **Arguments**:
 
@@ -195,7 +195,7 @@ Estimated transaction gas
 def block_gas_limit() -> int
 ```
 
-Get the block gas limit
+Get the block gas limit.
 
 **Returns**:
 

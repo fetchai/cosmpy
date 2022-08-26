@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.client.utils
 
-Helper functions
+Helper functions..
 
 <a id="cosmpy.aerial.client.utils.prepare_and_broadcast_basic_transaction"></a>
 
@@ -18,7 +18,7 @@ def prepare_and_broadcast_basic_transaction(
         memo: Optional[str] = None) -> SubmittedTx
 ```
 
-Prepare and broadcast basic transaction
+Prepare and broadcast basic transaction.
 
 **Arguments**:
 
