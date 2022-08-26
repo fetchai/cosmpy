@@ -31,19 +31,23 @@ RERUNS_DELAY = 10
 
 
 class TestTx:
+    """Test Basic Transaction"""
     COIN = "atestfet"
     GAS_LIMIT: Optional[int] = None
 
     def get_ledger(self):
+        """Get Ledger"""
         return LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
     def get_wallet_1(self):
+        """Get wallet"""
         faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
         wallet1 = LocalWallet.generate()
         faucet_api.get_wealth(wallet1.address())
         return wallet1
 
     def get_wallet_2(self):
+        """Get wallet"""
         wallet2 = LocalWallet.generate()
         return wallet2
 

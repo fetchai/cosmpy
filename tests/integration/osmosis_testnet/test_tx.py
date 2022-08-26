@@ -26,6 +26,11 @@ from tests.integration.test_tx import TestTx as BaseTestTx
 
 
 class TestTx(BaseTestTx, FaucetMixIn):
+    """Osmosis Transaction test
+
+    :param BaseTestTx: Base test transaction
+    :param FaucetMixIn: Osmosis testnet Faucet config
+    """
     COIN = "uosmo"
     GAS_LIMIT = 120000
     PREFIX = "osmo"

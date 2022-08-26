@@ -31,16 +31,20 @@ CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
 
 
 class TestContract:
+    """Test contract"""
     def get_wallet(self):
+        """Get wallet"""
         wallet = LocalWallet.generate()
         faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
         faucet_api.get_wealth(wallet.address())
         return wallet
 
     def get_ledger(self):
+        """Get ledger"""
         return LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
     def get_contract(self):
+        """Get contract"""
         return LedgerContract(CONTRACT_PATH, self.get_ledger())
 
     @pytest.mark.integration
