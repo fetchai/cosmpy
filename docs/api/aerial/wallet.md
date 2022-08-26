@@ -226,3 +226,4 @@ Get  the signer of the wallet.
 **Returns**:
 
 signer
+
