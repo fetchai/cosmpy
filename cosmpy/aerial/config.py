@@ -66,8 +66,13 @@ class NetworkConfig:
         if self.url == "":
             raise NetworkConfigError("URL must be set")
         if not any(
-            map(lambda x: self.url.startswith(x), URL_PREFIXES)
-        ):  # pylint: disable=unnecessary-lambda
+            map(
+                lambda x: self.url.startswith(  # noqa: # pylint: disable=unnecessary-lambda
+                    x
+                ),
+                URL_PREFIXES,
+            )
+        ):
             prefix_list = ", ".join(map(lambda x: f'"{x}"', URL_PREFIXES))
             raise NetworkConfigError(
                 f"URL must start with one of the following prefixes: {prefix_list}"
