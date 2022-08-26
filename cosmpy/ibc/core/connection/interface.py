@@ -44,7 +44,7 @@ class IBCCoreConnection(ABC):
 
         :param request: QueryConnectionRequest
         :return: QueryConnectionResponse
-        """
+        """  # noqa: D401
 
     @abstractmethod
     def Connections(self, request: QueryConnectionsRequest) -> QueryConnectionsResponse:
@@ -53,7 +53,7 @@ class IBCCoreConnection(ABC):
 
         :param request: QueryConnectionsRequest
         :return: QueryConnectionsResponse
-        """
+        """  # noqa: D401
 
     @abstractmethod
     def ClientConnections(

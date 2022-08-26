@@ -42,7 +42,7 @@ Network configurations.
 def validate()
 ```
 
-Validation the network configuration..
+Validate the network configuration.
 
 **Raises**:
 
