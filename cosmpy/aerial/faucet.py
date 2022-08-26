@@ -72,7 +72,7 @@ class FaucetApi:
 
     def _try_create_faucet_claim(self, address: str) -> Optional[str]:
         """
-        Create a token faucet claim request
+        Create a token faucet claim request.
 
         :param address: the address to request funds
         :return: None on failure, otherwise the request uid
@@ -92,7 +92,7 @@ class FaucetApi:
 
     def _try_check_faucet_claim(self, uid: str) -> Optional[CosmosFaucetStatus]:
         """
-        Check the status of a faucet request
+        Check the status of a faucet request.
 
         :param uid: The request uid to be checked
         :return: None on failure otherwise a CosmosFaucetStatus for the specified uid

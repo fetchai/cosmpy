@@ -57,7 +57,7 @@ class TxRestClient(TxInterface):
 
     def __init__(self, rest_client: RestClient) -> None:
         """
-        Create a Tx rest client
+        Create a Tx rest client.
 
         :param rest_client: RestClient api
         """
@@ -124,7 +124,7 @@ class TxRestClient(TxInterface):
     @staticmethod
     def _fix_messages(messages: List[Dict[str, Any]]):
         """
-        Fix for REST api response in case of CosmWasm messages contains dict instead of base64 encoded string
+        Fix for REST api response in case of CosmWasm messages contains dict instead of base64 encoded string.
 
         :param messages: List of message in Tx response
         """

@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""cosmwasm contract functionality"""
+"""cosmwasm contract functionality."""
 
 import json
 from collections import UserString
@@ -54,7 +54,7 @@ def _generate_label(digest: bytes) -> str:
 
 
 class LedgerContract(UserString):
-    """Ledger contract"""
+    """Ledger contract."""
 
     def __init__(
         self,
@@ -63,7 +63,7 @@ class LedgerContract(UserString):
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
     ):
-        """_summary_
+        """_summary_.
 
         :param path: Path
         :param client: Ledger client
@@ -88,7 +88,7 @@ class LedgerContract(UserString):
 
     @property
     def path(self) -> Optional[str]:
-        """Get contract path
+        """Get contract path.
 
         :return: contract path
         """
@@ -96,7 +96,7 @@ class LedgerContract(UserString):
 
     @property
     def digest(self) -> Optional[bytes]:
-        """Get the contract digest
+        """Get the contract digest.
 
         :return: contract digest
         """
@@ -104,7 +104,7 @@ class LedgerContract(UserString):
 
     @property
     def code_id(self) -> Optional[int]:
-        """Get the code id
+        """Get the code id.
 
         :return: code id
         """
@@ -112,7 +112,7 @@ class LedgerContract(UserString):
 
     @property
     def address(self) -> Optional[Address]:
-        """Get the contract address
+        """Get the contract address.
 
         :return: contract address
         """
@@ -124,7 +124,7 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
     ) -> int:
-        """Store the contract
+        """Store the contract.
 
         :param sender: sender wallet address
         :param gas_limit: transaction gas limit, defaults to None
@@ -160,7 +160,7 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
-        """instantiate the contract
+        """instantiate the contract.
 
         :param code_id: code id
         :param args: args
@@ -210,7 +210,7 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
-        """Deploy the contract
+        """Deploy the contract.
 
         :param args: args
         :param sender: sender address
@@ -249,7 +249,7 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         funds: Optional[str] = None,
     ) -> SubmittedTx:
-        """execute the contract
+        """execute the contract.
 
         :param args: args
         :param sender: sender address
@@ -274,7 +274,7 @@ class LedgerContract(UserString):
         )
 
     def query(self, args: Any) -> Any:
-        """Query on contract
+        """Query on contract.
 
         :param args: args
         :raises RuntimeError: Contract appears not to be deployed currently
@@ -317,14 +317,14 @@ class LedgerContract(UserString):
 
     @property
     def data(self):
-        """Get the contract address
+        """Get the contract address.
 
         :return: contract address
         """
         return self.address
 
     def __json__(self):
-        """Get the contract details in json
+        """Get the contract details in json.
 
         :return: contract details in json
         """

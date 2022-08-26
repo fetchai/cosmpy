@@ -46,7 +46,7 @@ class SlashingRestClient(Slashing):
 
     def Params(self) -> QueryParamsResponse:
         """
-        Params queries the parameters of slashing module
+        Params queries the parameters of slashing module.
 
         :return: QueryParamsResponse
         """

@@ -32,7 +32,7 @@ class RestClient:
 
     def __init__(self, rest_address: str):
         """
-        Create REST api client
+        Create REST api client.
 
         :param rest_address: Address of REST node
         """
@@ -46,7 +46,7 @@ class RestClient:
         used_params: Optional[List[str]] = None,
     ) -> bytes:
         """
-        Send a GET request
+        Send a GET request.
 
         :param url_base_path: URL base path
         :param request: Protobuf coded request
@@ -98,7 +98,7 @@ class RestClient:
 
     def post(self, url_base_path: str, request: Message) -> bytes:
         """
-        Send a POST request
+        Send a POST request.
 
         :param url_base_path: URL base path
         :param request: Protobuf coded request
@@ -125,7 +125,7 @@ class RestClient:
     @staticmethod
     def _url_encode(json_request):
         """
-        Custom URL encodes that breaks down nested dictionaries to match REST api format
+        Custom URL encodes that breaks down nested dictionaries to match REST api format.
 
         It converts dicts from:
         {"pagination": {"limit": "1", "something": "2"},}

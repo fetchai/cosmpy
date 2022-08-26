@@ -57,7 +57,7 @@ class AuthRestClient(Auth):
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
-        Queries all parameters
+        Queries all parameters.
 
         :param request: QueryParamsRequest
 

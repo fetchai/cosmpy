@@ -1,4 +1,4 @@
-"""Test for gas"""
+"""Test for gas."""
 
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
     ],
 )
 def test_table_gas_estimation(input_msgs, expected_gas_estimate):
-    """Test estimated gas for transaction"""
+    """Test estimated gas for transaction."""
     # build up the TX
     tx = Transaction()
     for input_msg in input_msgs:
@@ -64,23 +64,23 @@ def test_table_gas_estimation(input_msgs, expected_gas_estimate):
 
 
 class MockLedger:
-    """Test for ledger"""
+    """Test for ledger."""
 
     def __init__(self):
-        """Initiates Mock Ledger with table"""
+        """Initiates Mock Ledger with table."""
         self._table = OfflineMessageTableStrategy.default_table()
 
     def simulate_tx(self, tx: Transaction) -> int:
-        """Simulation tx"""
+        """Simulation tx."""
         return self._table.estimate_gas(tx)
 
     def query_params(self, subspace: str, key: str) -> Any:
-        """Set query params"""
+        """Set query params."""
         return {"max_gas": -1}
 
 
 @pytest.mark.parametrize(
-    "input_msgs,expected_gas_estimate",
+    "input_msgs,expected_gas_estimate.",
     [
         ([MsgSend()], 100_000),
         ([MsgStoreCode()], 2_000_000),
@@ -93,7 +93,7 @@ class MockLedger:
     ],
 )
 def test_simulated_estimation(input_msgs, expected_gas_estimate):
-    """Test simulated estimation of gas for transaction"""
+    """Test simulated estimation of gas for transaction."""
     ledger = MockLedger()
     strategy = SimulationGasStrategy(ledger, 1.0)
 

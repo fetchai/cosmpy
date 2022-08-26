@@ -1,4 +1,4 @@
-"""Test for contract"""
+"""Test for contract."""
 
 from unittest.mock import Mock
 

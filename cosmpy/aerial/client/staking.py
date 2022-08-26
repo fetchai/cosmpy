@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Staking functionality"""
+"""Staking functionality."""
 
 from enum import Enum
 
@@ -31,7 +31,7 @@ from cosmpy.protos.cosmos.staking.v1beta1.tx_pb2 import (
 
 
 class ValidatorStatus(Enum):
-    """Validator status"""
+    """Validator status."""
 
     UNSPECIFIED = "BOND_STATUS_UNSPECIFIED"
     BONDED = "BOND_STATUS_BONDED"
@@ -40,7 +40,7 @@ class ValidatorStatus(Enum):
 
     @classmethod
     def from_proto(cls, value: int) -> "ValidatorStatus":
-        """Get the validator status from proto
+        """Get the validator status from proto.
 
         :param value: value
         :raises RuntimeError: Unable to decode validator status
@@ -61,7 +61,7 @@ class ValidatorStatus(Enum):
 def create_delegate_msg(
     delegator: Address, validator: Address, amount: int, denom: str
 ) -> MsgDelegate:
-    """Create delegate message
+    """Create delegate message.
 
     :param delegator: delegator
     :param validator: validator
@@ -86,7 +86,7 @@ def create_redelegate_msg(
     amount: int,
     denom: str,
 ) -> MsgBeginRedelegate:
-    """Create redelegate message
+    """Create redelegate message.
 
     :param delegator_address: delegator address
     :param validator_src_address: source validation address
@@ -109,7 +109,7 @@ def create_redelegate_msg(
 def create_undelegate_msg(
     delegator_address: Address, validator_address: Address, amount: int, denom: str
 ) -> MsgUndelegate:
-    """Create undelegate message
+    """Create undelegate message.
 
     :param delegator_address: delegator address
     :param validator_address: validator address

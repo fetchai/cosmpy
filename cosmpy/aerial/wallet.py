@@ -32,7 +32,7 @@ from cosmpy.crypto.keypairs import PrivateKey, PublicKey
 
 
 class Wallet(ABC, UserString):
-    """Wallet Generation
+    """Wallet Generation.
 
     :param ABC: ABC abstract method
     :param UserString: user string
@@ -40,7 +40,7 @@ class Wallet(ABC, UserString):
 
     @abstractmethod
     def address(self) -> Address:
-        """get the address of the wallet
+        """get the address of the wallet.
 
         :return: None
         """
@@ -48,7 +48,7 @@ class Wallet(ABC, UserString):
 
     @abstractmethod
     def public_key(self) -> PublicKey:
-        """get the public key of the wallet
+        """get the public key of the wallet.
 
         :return: None
         """
@@ -56,7 +56,7 @@ class Wallet(ABC, UserString):
 
     @abstractmethod
     def signer(self) -> Signer:
-        """get the signer of the wallet
+        """get the signer of the wallet.
 
         :return: None
         """
@@ -64,7 +64,7 @@ class Wallet(ABC, UserString):
 
     @property
     def data(self):
-        """Get the address of the wallet
+        """Get the address of the wallet.
 
         :return: Address
         """
@@ -72,7 +72,7 @@ class Wallet(ABC, UserString):
 
     def __json__(self):
         """
-        Return the address in string format
+        Return the address in string format.
 
         :return: address in string format
         """
@@ -80,14 +80,14 @@ class Wallet(ABC, UserString):
 
 
 class LocalWallet(Wallet):
-    """Generate local wallet
+    """Generate local wallet.
 
     :param Wallet: wallet
     """
 
     @staticmethod
     def generate(prefix: Optional[str] = None) -> "LocalWallet":
-        """generate the local wallet
+        """generate the local wallet.
 
         :param prefix: prefix, defaults to None
         :return: local wallet
@@ -96,7 +96,7 @@ class LocalWallet(Wallet):
 
     @staticmethod
     def from_mnemonic(mnemonic: str, prefix: Optional[str] = None) -> "LocalWallet":
-        """Generate local wallet from mnemonic
+        """Generate local wallet from mnemonic.
 
         :param mnemonic: mnemonic
         :param prefix: prefix, defaults to None
@@ -129,7 +129,7 @@ class LocalWallet(Wallet):
         return LocalWallet(PrivateKey(private_key_bytes), prefix=prefix)
 
     def __init__(self, private_key: PrivateKey, prefix: Optional[str] = None):
-        """Init wallet with
+        """Init wallet with.
 
         :param private_key: private key of the wallet
         :param prefix: prefix, defaults to None
@@ -145,7 +145,7 @@ class LocalWallet(Wallet):
         return Address(self._private_key, self._prefix)
 
     def public_key(self) -> PublicKey:
-        """Get the public key of the wallet
+        """Get the public key of the wallet.
 
         :return: public key
         """

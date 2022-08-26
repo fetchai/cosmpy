@@ -1,4 +1,4 @@
-"""Test urls"""
+"""Test urls."""
 
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ from cosmpy.aerial.urls import ParsedUrl, Protocol, parse_url
 
 
 @pytest.mark.parametrize(
-    "input_url,parse_result",
+    "input_url,parse_result.",
     [
         (
             "grpc+https://foo.bar.baz",
@@ -78,5 +78,5 @@ from cosmpy.aerial.urls import ParsedUrl, Protocol, parse_url
     ],
 )
 def test_parsing_urls(input_url, parse_result):
-    """Test parsing url"""
+    """Test parsing url."""
     assert parse_url(input_url) == parse_result

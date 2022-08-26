@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Transaction gas strategy"""
+"""Transaction gas strategy."""
 
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
@@ -26,11 +26,11 @@ from cosmpy.aerial.tx import Transaction
 
 
 class GasStrategy(ABC):
-    """Transaction gas strategy"""
+    """Transaction gas strategy."""
 
     @abstractmethod
     def estimate_gas(self, tx: Transaction) -> int:
-        """Estimate the transaction gas
+        """Estimate the transaction gas.
 
         :param tx: Transaction
         :return: None
@@ -39,7 +39,7 @@ class GasStrategy(ABC):
 
     @abstractmethod
     def block_gas_limit(self) -> int:
-        """Get the block gas limit
+        """Get the block gas limit.
 
         :return: None
         """
@@ -54,7 +54,7 @@ class GasStrategy(ABC):
 
 
 class SimulationGasStrategy(GasStrategy):
-    """Simulation transaction gas strategy
+    """Simulation transaction gas strategy.
 
     :param GasStrategy: gas strategy
     """
@@ -62,7 +62,7 @@ class SimulationGasStrategy(GasStrategy):
     DEFAULT_MULTIPLIER = 1.65
 
     def __init__(self, client: "LedgerClient", multiplier: Optional[float] = None):  # type: ignore # noqa: F821
-        """Init the Simulation transaction gas strategy
+        """Init the Simulation transaction gas strategy.
 
         :param client: Ledger client
         :param multiplier: multiplier, defaults to None
@@ -72,7 +72,7 @@ class SimulationGasStrategy(GasStrategy):
         self._multiplier = multiplier or self.DEFAULT_MULTIPLIER
 
     def estimate_gas(self, tx: Transaction) -> int:
-        """Get estimated transaction gas
+        """Get estimated transaction gas.
 
         :param tx: transaction
         :return: Estimated transaction gas
@@ -81,7 +81,7 @@ class SimulationGasStrategy(GasStrategy):
         return self._clip_gas(int(gas_estimate * self._multiplier))
 
     def block_gas_limit(self) -> int:
-        """Get the block gas limit
+        """Get the block gas limit.
 
         :return: block gas limit
         """
@@ -93,7 +93,7 @@ class SimulationGasStrategy(GasStrategy):
 
 
 class OfflineMessageTableStrategy(GasStrategy):
-    """Offline message table strategy
+    """Offline message table strategy.
 
     :param GasStrategy: gas strategy
     """
@@ -103,7 +103,7 @@ class OfflineMessageTableStrategy(GasStrategy):
 
     @staticmethod
     def default_table() -> "OfflineMessageTableStrategy":
-        """offline message strategy default table
+        """offline message strategy default table.
 
         :return: offline message default table strategy
         """
@@ -119,7 +119,7 @@ class OfflineMessageTableStrategy(GasStrategy):
         fallback_gas_limit: Optional[int] = None,
         block_limit: Optional[int] = None,
     ):
-        """Init offline message table strategy
+        """Init offline message table strategy.
 
         :param fallback_gas_limit: Fallback gas limit, defaults to None
         :param block_limit: Block limit, defaults to None
@@ -129,7 +129,7 @@ class OfflineMessageTableStrategy(GasStrategy):
         self._fallback_gas_limit = fallback_gas_limit or self.DEFAULT_FALLBACK_GAS_LIMIT
 
     def update_entry(self, transaction_type: str, gas_limit: int):
-        """Update the entry of the transaction
+        """Update the entry of the transaction.
 
         :param transaction_type: transaction type
         :param gas_limit: gas limit
@@ -137,7 +137,7 @@ class OfflineMessageTableStrategy(GasStrategy):
         self._table[str(transaction_type)] = int(gas_limit)
 
     def estimate_gas(self, tx: Transaction) -> int:
-        """Get estimated transaction gas
+        """Get estimated transaction gas.
 
         :param tx: transaction
         :return: Estimated transaction gas
@@ -150,7 +150,7 @@ class OfflineMessageTableStrategy(GasStrategy):
         return self._clip_gas(gas_estimate)
 
     def block_gas_limit(self) -> int:
-        """Get the block gas limit
+        """Get the block gas limit.
 
         :return: block gas limit
         """

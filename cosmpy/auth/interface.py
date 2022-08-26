@@ -45,7 +45,7 @@ class Auth(ABC):
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
-        Queries all parameters
+        Queries all parameters.
 
         :param request: QueryParamsRequest
 

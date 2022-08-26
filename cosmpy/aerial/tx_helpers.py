@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Transaction helpers"""
+"""Transaction helpers."""
 
 import re
 from dataclasses import dataclass
@@ -34,7 +34,7 @@ from cosmpy.crypto.address import Address
 
 @dataclass
 class MessageLog:
-    """Message Log"""
+    """Message Log."""
 
     index: int  # noqa
     log: str  # noqa
@@ -43,7 +43,7 @@ class MessageLog:
 
 @dataclass
 class TxResponse:
-    """Transaction response
+    """Transaction response.
 
     :raises OutOfGasError: Out of gas error
     :raises InsufficientFeesError: Insufficient fees
@@ -60,14 +60,14 @@ class TxResponse:
     events: Dict[str, Dict[str, str]]
 
     def is_successful(self) -> bool:
-        """Check transaction is successful
+        """Check transaction is successful.
 
         :return: transaction status
         """
         return self.code == 0
 
     def ensure_successful(self):
-        """Ensure transaction is successful
+        """Ensure transaction is successful.
 
         :raises OutOfGasError: Out of gas error
         :raises InsufficientFeesError: Insufficient fees
@@ -98,12 +98,12 @@ class TxResponse:
 
 
 class SubmittedTx:
-    """Submitted transaction"""
+    """Submitted transaction."""
 
     def __init__(
         self, client: "LedgerClient", tx_hash: str  # type: ignore # noqa: F821
     ):
-        """Init the Submitted transaction
+        """Init the Submitted transaction.
 
         :param client: Ledger client
         :param tx_hash: transaction hash
@@ -114,7 +114,7 @@ class SubmittedTx:
 
     @property
     def tx_hash(self) -> str:
-        """Get the transaction hash
+        """Get the transaction hash.
 
         :return: transaction hash
         """
@@ -122,7 +122,7 @@ class SubmittedTx:
 
     @property
     def response(self) -> Optional[TxResponse]:
-        """Get the transaction response
+        """Get the transaction response.
 
         :return: response
         """
@@ -130,7 +130,7 @@ class SubmittedTx:
 
     @property
     def contract_code_id(self) -> Optional[int]:
-        """Get the contract code id
+        """Get the contract code id.
 
         :return: return contract code id if exist else None
         """
@@ -145,7 +145,7 @@ class SubmittedTx:
 
     @property
     def contract_address(self) -> Optional[Address]:
-        """Get the contract address
+        """Get the contract address.
 
         :return: return contract address if exist else None
         """
@@ -165,7 +165,7 @@ class SubmittedTx:
         timeout: Optional[Union[int, float, timedelta]] = None,
         poll_period: Optional[Union[int, float, timedelta]] = None,
     ) -> "SubmittedTx":
-        """Wait to complete the transaction
+        """Wait to complete the transaction.
 
         :param timeout: timeout, defaults to None
         :param poll_period: poll_period, defaults to None
