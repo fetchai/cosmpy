@@ -109,4 +109,3 @@ _summary_
 
 - `tx_hash`: transaction hash
 - `minimum_required_fee`: Minimum required fee
-
