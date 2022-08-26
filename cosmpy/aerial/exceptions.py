@@ -55,7 +55,7 @@ class OutOfGasError(BroadcastError):
     """Insufficient Fess Error."""
 
     def __init__(self, tx_hash: str, gas_wanted: int, gas_used: int):
-        """_summary_.
+        """Initialize.
 
         :param tx_hash: transaction hash
         :param gas_wanted: gas required to complete the transaction
@@ -72,7 +72,7 @@ class InsufficientFeesError(BroadcastError):
     """Insufficient Fess Error."""
 
     def __init__(self, tx_hash: str, minimum_required_fee: str):
-        """_summary_.
+        """Initialize.
 
         :param tx_hash: transaction hash
         :param minimum_required_fee: Minimum required fee

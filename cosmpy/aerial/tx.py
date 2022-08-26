@@ -149,7 +149,7 @@ class Transaction:
 
     @property
     def tx(self):
-        """_summary_.
+        """Initialize.
 
         :raises RuntimeError: If the transaction has not been completed.
         :return: transaction
@@ -159,7 +159,7 @@ class Transaction:
         return self._tx
 
     def add_message(self, msg: Any) -> "Transaction":
-        """_summary_.
+        """Initialize.
 
         :param msg: transaction message (memo)
         :raises RuntimeError: If the transaction is not in the draft state.

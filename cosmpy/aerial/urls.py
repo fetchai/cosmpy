@@ -75,7 +75,7 @@ class ParsedUrl:
 
 
 def parse_url(url: str) -> ParsedUrl:
-    """_summary_.
+    """Initialize.
 
     :param url: url
     :raises RuntimeError: If url scheme is unsupported

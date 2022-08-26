@@ -16,7 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""Helper functions.."""
+"""Helper functions."""
 from datetime import timedelta
 from typing import Optional, Union
 
