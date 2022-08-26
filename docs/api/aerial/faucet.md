@@ -45,3 +45,4 @@ Get wealth from the faucet for the provided address.
 **Raises**:
 
 - `None`: RuntimeError of explicit faucet failures
+

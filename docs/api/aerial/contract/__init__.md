@@ -262,3 +262,4 @@ Get the contract details in json
 **Returns**:
 
 contract details in json
+

@@ -50,3 +50,4 @@ Return timedelta for interval.
 **Returns**:
 
 timedelta
+

@@ -22,3 +22,4 @@ Create withdraw delegator reward
 **Returns**:
 
 withdraw delegator reward message
+

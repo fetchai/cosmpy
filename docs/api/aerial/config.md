@@ -152,3 +152,4 @@ Get the latest stable testnet
 **Returns**:
 
 latest stable testnet
+
