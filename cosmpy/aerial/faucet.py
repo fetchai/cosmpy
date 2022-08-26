@@ -48,6 +48,7 @@ class FaucetApi:
         Init faucet API.
 
         :param net_config: Ledger network configuration.
+        :raises ValueError: Network config has no faucet url set
         """
         if net_config.faucet_url is None:
             raise ValueError("Network config has no faucet url set!")  # pragma: nocover
@@ -76,6 +77,7 @@ class FaucetApi:
 
         :param address: the address to request funds
         :return: None on failure, otherwise the request uid
+        :raises ValueError: key `uid` not found in response
         """
         uri = self._claim_url()
         response = requests.post(url=uri, json={"address": address})
@@ -117,7 +119,10 @@ class FaucetApi:
         Get wealth from the faucet for the provided address.
 
         :param address: the address.
-        :raises: RuntimeError of explicit faucet failures
+        :raises RuntimeError: Unable to create faucet claim
+        :raises RuntimeError: Failed to check faucet claim status
+        :raises RuntimeError: Failed to get wealth for address
+        :raises ValueError: Faucet claim check timed out
         """
         address = str(address)
         uid = self._try_create_faucet_claim(address)

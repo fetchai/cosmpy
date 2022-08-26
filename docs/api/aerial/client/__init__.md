@@ -520,6 +520,7 @@ query transaction.
 **Raises**:
 
 - `NotFoundError`: Tx details not found
+- `grpc.RpcError`: RPC connection issue
 
 **Returns**:
 

@@ -45,11 +45,13 @@ class Address(UserString):
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
     ):
-        """
-        Initialize Address instance.
+        """Initialize Address instance.
 
         :param value: str, byte, public key or Address another instance
         :param prefix: optional string
+        :raises RuntimeError: Unable to parse address
+        :raises RuntimeError: Incorrect address length
+        :raises TypeError: Unexpected type of `value` parameter
         """
         if prefix is None:
             prefix = DEFAULT_PREFIX

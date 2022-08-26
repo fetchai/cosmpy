@@ -604,6 +604,7 @@ class LedgerClient:
 
         :param tx_hash: transaction hash
         :raises NotFoundError: Tx details not found
+        :raises grpc.RpcError: RPC connection issue
         :return: query response
         """
         req = GetTxRequest(hash=tx_hash)
