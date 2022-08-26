@@ -32,6 +32,7 @@ RERUNS_DELAY = 10
 
 class TestTx:
     """Test Basic Transaction"""
+
     COIN = "atestfet"
     GAS_LIMIT: Optional[int] = None
 

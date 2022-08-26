@@ -21,6 +21,7 @@ from typing import Dict, Tuple
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
+
 from cosmpy.common.utils import json_encode
 from cosmpy.evidence.rest_client import EvidenceRestClient
 from cosmpy.protos.cosmos.evidence.v1beta1.query_pb2 import (

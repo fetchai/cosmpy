@@ -31,6 +31,7 @@ class TestTx(BaseTestTx, FaucetMixIn):
     :param BaseTestTx: Base test transaction
     :param FaucetMixIn: Osmosis testnet Faucet config
     """
+
     COIN = "uosmo"
     GAS_LIMIT = 120000
     PREFIX = "osmo"

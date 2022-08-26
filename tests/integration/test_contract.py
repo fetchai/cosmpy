@@ -32,6 +32,7 @@ CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
 
 class TestContract:
     """Test contract"""
+
     def get_wallet(self):
         """Get wallet"""
         wallet = LocalWallet.generate()

@@ -35,6 +35,7 @@ NET_CONFIG = NetworkConfig(
 
 class FaucetMixIn:
     """Faucet Transaction"""
+
     def _ask_funds(self, wallet):
         resp = requests.post(
             "https://testnet-faucet.dev-osmosis.zone/request",

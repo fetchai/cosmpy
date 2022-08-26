@@ -30,6 +30,7 @@ class DisabledTestContract(BaseTestContract, FaucetMixIn):
     :param BaseTestContract: Base test contract
     :param FaucetMixIn: Osmosis Faucet config
     """
+
     PREFIX = "osmo"
 
     def get_ledger(self):
