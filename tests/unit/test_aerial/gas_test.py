@@ -74,7 +74,9 @@ class MockLedger:
         """Simulation tx"""
         return self._table.estimate_gas(tx)
 
-    def query_params(self) -> Any:
+    def query_params(
+        self, subspace: str, key: str  # pylint: disable=unused-argument
+    ) -> Any:
         """Set query params"""
         return {"max_gas": -1}
 
