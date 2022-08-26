@@ -49,7 +49,7 @@ class IBCCoreConnection(ABC):
     @abstractmethod
     def Connections(self, request: QueryConnectionsRequest) -> QueryConnectionsResponse:
         """
-        Connections queries all the IBC connections of a chain.
+        Connection queries all the IBC connections of a chain.
 
         :param request: QueryConnectionsRequest
         :return: QueryConnectionsResponse
@@ -60,7 +60,7 @@ class IBCCoreConnection(ABC):
         self, request: QueryClientConnectionsRequest
     ) -> QueryClientConnectionsResponse:
         """
-        ClientConnections queries the connection paths associated with a client state.
+        ClientConnection queries the connection paths associated with a client state.
 
         :param request: QueryClientConnectionsRequest
         :return: QueryClientConnectionsResponse

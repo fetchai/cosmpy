@@ -56,7 +56,7 @@ class BankRestClient(Bank):
 
     def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
         """
-        Queries balance of selected denomination from specific account.
+        Query balance of selected denomination from specific account.
 
         :param request: QueryBalanceRequest with address and denomination
 
@@ -71,7 +71,7 @@ class BankRestClient(Bank):
 
     def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
         """
-        Queries balance of all denominations from specific account.
+        Query balance of all denominations from specific account.
 
         :param request: QueryAllBalancesRequest with account address
 
@@ -84,7 +84,7 @@ class BankRestClient(Bank):
 
     def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
         """
-        Queries total supply of all denominations.
+        Query total supply of all denominations.
 
         :param request: QueryTotalSupplyRequest
 
@@ -95,7 +95,7 @@ class BankRestClient(Bank):
 
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
         """
-        Queries total supply of specific denomination.
+        Query total supply of specific denomination.
 
         :param request: QuerySupplyOfRequest with denomination
 
@@ -106,7 +106,7 @@ class BankRestClient(Bank):
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
-        Queries the parameters of bank module.
+        Query the parameters of bank module.
 
         :param request: QueryParamsRequest
 
@@ -119,7 +119,7 @@ class BankRestClient(Bank):
         self, request: QueryDenomMetadataRequest
     ) -> QueryDenomMetadataResponse:
         """
-        Queries the client metadata for all registered coin denominations.
+        Query the client metadata for all registered coin denominations.
 
         :param request: QueryDenomMetadataRequest with denomination
 
@@ -132,7 +132,7 @@ class BankRestClient(Bank):
         self, request: QueryDenomsMetadataRequest
     ) -> QueryDenomsMetadataResponse:
         """
-        Queries the client metadata of a given coin denomination.
+        Query the client metadata of a given coin denomination.
 
         :param request: QueryDenomsMetadataRequest
 

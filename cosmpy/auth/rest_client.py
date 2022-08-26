@@ -46,7 +46,7 @@ class AuthRestClient(Auth):
 
     def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
         """
-        Queries account data - sequence, account_id, etc.
+        Query account data - sequence, account_id, etc.
 
         :param request: QueryAccountRequest that contains account address
 
@@ -57,7 +57,7 @@ class AuthRestClient(Auth):
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
-        Queries all parameters.
+        Query all parameters.
 
         :param request: QueryParamsRequest
 

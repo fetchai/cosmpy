@@ -63,7 +63,7 @@ class FaucetApi:
 
     def _status_uri(self, uid: str) -> str:
         """
-        Generates the status URI derived .
+        Generate the status URI derived .
 
         :param uid: claim uid.
         :return: url string

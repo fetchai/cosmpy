@@ -57,7 +57,7 @@ class NetworkConfig:
     faucet_url: Optional[str] = None
 
     def validate(self):
-        """Validation the network configuration..
+        """Validate the network configuration.
 
         :raises NetworkConfigError: Network config error
         """

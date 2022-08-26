@@ -70,7 +70,7 @@ class StakingRestClient(Staking):
 
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
         """
-        Validators queries all validators that match the given status.
+        Validate query all validators that match the given status.
 
         :param request: QueryValidatorsRequest
         :return: QueryValidatorsResponse
@@ -80,7 +80,7 @@ class StakingRestClient(Staking):
 
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
         """
-        Validator queries validator info for given validator address.
+        Validate query validator info for given validator address.
 
         :param request: QueryValidatorRequest
         :return: QueryValidatorResponse
@@ -124,7 +124,7 @@ class StakingRestClient(Staking):
 
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
         """
-        Delegation queries delegate info for given validator delegator pair.
+        Delegate query delegate info for given validator delegator pair.
 
         :param request: QueryDelegationRequest
         :return: QueryDelegationResponse

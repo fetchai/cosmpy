@@ -67,11 +67,11 @@ class MockLedger:
     """Test for ledger."""
 
     def __init__(self):
-        """Initiates Mock Ledger with table."""
+        """Initiate Mock Ledger with table."""
         self._table = OfflineMessageTableStrategy.default_table()
 
     def simulate_tx(self, tx: Transaction) -> int:
-        """Simulation tx."""
+        """Simulate tx."""
         return self._table.estimate_gas(tx)
 
     def query_params(self, subspace: str, key: str) -> Any:

@@ -59,7 +59,7 @@ class Staking(ABC):
     @abstractmethod
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
         """
-        Validators queries all validators that match the given status.
+        Validate queries all validators that match the given status.
 
         :param request: QueryValidatorsRequest
         :return: QueryValidatorsResponse
@@ -68,7 +68,7 @@ class Staking(ABC):
     @abstractmethod
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
         """
-        Validator queries validator info for given validator address.
+        Validate queries validator info for given validator address.
 
         :param request: QueryValidatorRequest
         :return: QueryValidatorResponse
@@ -79,7 +79,7 @@ class Staking(ABC):
         self, request: QueryValidatorDelegationsRequest
     ) -> QueryValidatorDelegationsResponse:
         """
-        ValidatorDelegations queries delegate info for given validator.
+        ValidatorDelegation queries delegate info for given validator.
 
         :param request: QueryValidatorDelegationsRequest
         :return: QueryValidatorDelegationsResponse
@@ -90,7 +90,7 @@ class Staking(ABC):
         self, request: QueryValidatorUnbondingDelegationsRequest
     ) -> QueryValidatorUnbondingDelegationsResponse:
         """
-        ValidatorUnbondingDelegations queries unbonding delegations of a validator.
+        ValidatorUnbondingDelegation queries unbonding delegations of a validator.
 
         :param request: ValidatorUnbondingDelegations
         :return: QueryValidatorUnbondingDelegationsResponse
@@ -99,7 +99,7 @@ class Staking(ABC):
     @abstractmethod
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
         """
-        Delegation queries delegate info for given validator delegator pair.
+        Delegate queries delegate info for given validator delegator pair.
 
         :param request: QueryDelegationRequest
         :return: QueryDelegationResponse
