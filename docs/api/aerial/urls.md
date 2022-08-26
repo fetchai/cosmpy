@@ -71,7 +71,7 @@ rest url
 def parse_url(url: str) -> ParsedUrl
 ```
 
-_summary_.
+Initialize.
 
 **Arguments**:
 

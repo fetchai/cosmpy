@@ -77,7 +77,7 @@ Insufficient Fess Error.
 def __init__(tx_hash: str, gas_wanted: int, gas_used: int)
 ```
 
-_summary_.
+Initialize.
 
 **Arguments**:
 
@@ -103,7 +103,7 @@ Insufficient Fess Error.
 def __init__(tx_hash: str, minimum_required_fee: str)
 ```
 
-_summary_.
+Initialize.
 
 **Arguments**:
 

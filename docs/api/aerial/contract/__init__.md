@@ -25,7 +25,7 @@ def __init__(path: Optional[str],
              digest: Optional[bytes] = None)
 ```
 
-_summary_.
+Initilize the Ledger contract.
 
 **Arguments**:
 

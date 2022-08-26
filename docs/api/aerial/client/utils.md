@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.client.utils
 
-Helper functions..
+Helper functions.
 
 <a id="cosmpy.aerial.client.utils.prepare_and_broadcast_basic_transaction"></a>
 

@@ -137,7 +137,7 @@ transaction fee
 def tx()
 ```
 
-_summary_.
+Initialize.
 
 **Raises**:
 
@@ -155,7 +155,7 @@ transaction
 def add_message(msg: Any) -> "Transaction"
 ```
 
-_summary_.
+Initialize.
 
 **Arguments**:
 
