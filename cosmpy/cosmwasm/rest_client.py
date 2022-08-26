@@ -197,6 +197,7 @@ class CosmWasmRestClient(CosmWasm):
     def _fix_state_response(response: bytes) -> JSONLike:
         """
         Fix raw/smart contract state response to be parsable to protobuf object
+
         - Converts dict to base64 encoded string
 
         :param response: raw/smart contract state response
@@ -212,6 +213,7 @@ class CosmWasmRestClient(CosmWasm):
     def _fix_history_response(response: bytes) -> JSONLike:
         """
         Fix contract history response to be parsable to protobuf object
+
         - Converts dict to base64 encoded string
 
         :param response: raw/smart contract state response
