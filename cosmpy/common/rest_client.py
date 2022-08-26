@@ -82,7 +82,6 @@ class RestClient:
 
         :return: URL string
         """
-
         json_request = MessageToDict(request) if request else {}
 
         # Remove params that are already in url_base_path
@@ -139,7 +138,6 @@ class RestClient:
 
         :return: urlencoded json_request
         """
-
         for outer_k, outer_v in json_request.copy().items():
             if isinstance(outer_v, dict):
                 for inner_k, inner_v in outer_v.items():

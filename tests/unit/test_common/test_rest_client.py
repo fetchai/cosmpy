@@ -75,7 +75,6 @@ class QueryRestClientTestCase(TestCase):
         :param messageToDict_mock: mock
         :param session_mock: mock
         """
-
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -108,7 +107,6 @@ class QueryRestClientTestCase(TestCase):
         :param messageToDict_mock: mock
         :param session_mock: mock
         """
-
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -150,7 +148,6 @@ class QueryRestClientTestCase(TestCase):
         :param messageToDict_mock: mock
         :param session_mock: mock
         """
-
         rest_address = "some url"
         client = RestClient(rest_address)
 
@@ -182,7 +179,6 @@ class QueryRestClientTestCase(TestCase):
 
         :param session_mock: mock
         """
-
         rest_address = "some url"
         client = RestClient(rest_address)
 

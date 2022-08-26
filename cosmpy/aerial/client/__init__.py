@@ -292,7 +292,6 @@ class LedgerClient:
         :param address: address
         :return: bank all balances
         """
-
         req = QueryAllBalancesRequest(address=str(address))
         resp = self.bank.AllBalances(req)
 
@@ -317,7 +316,6 @@ class LedgerClient:
         :param gas_limit: gas limit, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
@@ -499,7 +497,6 @@ class LedgerClient:
         :param gas_limit: gas limit, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
-
         tx = Transaction()
         tx.add_message(
             create_undelegate_msg(
@@ -681,7 +678,6 @@ class LedgerClient:
         :param tx: transaction
         :return: Submitted transaction
         """
-
         # create the broadcast request
         broadcast_req = BroadcastTxRequest(
             tx_bytes=tx.tx.SerializeToString(), mode=BroadcastMode.BROADCAST_MODE_SYNC

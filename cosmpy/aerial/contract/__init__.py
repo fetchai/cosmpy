@@ -172,7 +172,6 @@ class LedgerContract(UserString):
         :raises RuntimeError: Unable to extract contract code id
         :return: contract address
         """
-
         assert self._digest is not None
 
         label = label or _generate_label(bytes(self._digest))
@@ -222,7 +221,6 @@ class LedgerContract(UserString):
         :param funds: funds, defaults to None
         :return: instantiate contract details
         """
-
         # in the case where the contract is already deployed
         if self._address is not None and self._code_id is not None:
             return self._address

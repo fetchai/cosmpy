@@ -117,7 +117,6 @@ class Transaction:
 
     def __init__(self):
         """Init the Transactions with transaction message, state, fee and body"""
-
         self._msgs: List[Any] = []
         self._state: TxState = TxState.Draft
         self._tx_body: Optional[TxBody] = None
