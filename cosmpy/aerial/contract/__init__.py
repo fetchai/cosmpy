@@ -63,7 +63,7 @@ class LedgerContract(UserString):
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
     ):
-        """Initilize the Ledger contract.
+        """Initialize the Ledger contract.
 
         :param path: Path
         :param client: Ledger client
