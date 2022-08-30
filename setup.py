@@ -28,9 +28,11 @@ here = pathlib.Path(__file__).parent.resolve()
 
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
+VERSION = "0.5.1"
+
 setup(
     name="cosmpy",
-    version="0.5.1",
+    version=VERSION,
     description="A library for interacting with the cosmos networks",
     long_description=long_description,
     long_description_content_type="text/markdown",
