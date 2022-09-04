@@ -49,6 +49,14 @@ jobs:
     - name: Check reference API docs is up-to-date
       run: tox -e check_api_docs
 
+  wemake-python-styleguide:
+    name: Wemake Python Stylguide
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: wemake-services/wemake-python-styleguide@0.16.1
+      continue-on-error: true
+
   spell-check:
     name: Check Spelling
     runs-on: ubuntu-latest
