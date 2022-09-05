@@ -22,11 +22,22 @@
 import re
 import subprocess
 import sys
+from pathlib import Path
 from typing import List
+
+import toml
+
+
+def _load_groups():
+    data = toml.loads(Path("pyproject.toml").read_text())
+    return list(data["tool"]["poetry"]["group"].keys())
 
 
 def _load_dependencies() -> List[str]:
-    text = subprocess.check_output("poetry export --with dev,docs,test", shell=True, text=True)
+    groups = ",".join(_load_groups())
+    text = subprocess.check_output(
+        f"poetry export --with {groups}", shell=True, text=True
+    )
     text = text.replace("\\\n", " ")
     lines = text.splitlines()
     lines = [i.split(" ")[0] for i in lines]
