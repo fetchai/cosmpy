@@ -25,6 +25,7 @@ from datetime import datetime
 from typing import Any, Optional
 
 from jsonschema import validate
+
 from cosmpy.aerial.client import LedgerClient, prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_execute_msg,
