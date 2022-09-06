@@ -24,6 +24,7 @@ from collections import UserString
 from datetime import datetime
 from typing import Any, Optional
 
+from jsonschema import validate
 from cosmpy.aerial.client import LedgerClient, prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_execute_msg,
@@ -41,6 +42,10 @@ from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QueryCodesRequest,
     QuerySmartContractStateRequest,
 )
+
+INSTANTIATE_MSG = "instantiate_msg"
+EXECUTE_MSG = "execute_msg"
+QUERY_MSG = "query_msg"
 
 
 def _compute_digest(path: str) -> bytes:
@@ -62,6 +67,7 @@ class LedgerContract(UserString):
         client: LedgerClient,
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
+        schema: Optional[dict] = None,
     ):
         """_summary_
 
@@ -69,10 +75,12 @@ class LedgerContract(UserString):
         :param client: Ledger client
         :param address: address, defaults to None
         :param digest: digest, defaults to None
+        :param schema: contract schema, defaults to None
         """
         self._path = path
         self._client = client
         self._address = address
+        self._schema = schema
 
         # select the digest either by computing it from the provided contract or by the value specified by
         # the user
@@ -175,6 +183,9 @@ class LedgerContract(UserString):
 
         assert self._digest is not None
 
+        if self._schema is not None:
+            validate(args, self._schema[INSTANTIATE_MSG])
+
         label = label or _generate_label(bytes(self._digest))
 
         # build up the store transaction
@@ -263,7 +274,10 @@ class LedgerContract(UserString):
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
-        # build up the store transaction
+        if self._schema is not None:
+            validate(args, self._schema[EXECUTE_MSG])
+
+        # build up the execute transaction
         tx = Transaction()
         tx.add_message(
             create_cosmwasm_execute_msg(
@@ -284,6 +298,9 @@ class LedgerContract(UserString):
         """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
+
+        if self._schema is not None:
+            validate(args, self._schema[QUERY_MSG])
 
         req = QuerySmartContractStateRequest(
             address=str(self._address), query_data=json_encode(args).encode("UTF8")
