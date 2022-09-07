@@ -22,7 +22,8 @@ Ledger contract
 def __init__(path: Optional[str],
              client: LedgerClient,
              address: Optional[Address] = None,
-             digest: Optional[bytes] = None)
+             digest: Optional[bytes] = None,
+             schema_path: Optional[str] = None)
 ```
 
 _summary_
@@ -33,6 +34,7 @@ _summary_
 - `client`: Ledger client
 - `address`: address, defaults to None
 - `digest`: digest, defaults to None
+- `schema_path`: path to contract schema, defaults to None
 
 <a id="cosmpy.aerial.contract.__init__.LedgerContract.path"></a>
 
