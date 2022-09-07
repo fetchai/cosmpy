@@ -320,7 +320,6 @@ class LedgerContract(UserString):
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
-        print(self._schema)
         if self._schema is not None:
             validate(args, self._schema[QUERY_MSG])
 
