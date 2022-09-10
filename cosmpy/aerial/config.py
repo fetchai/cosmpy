@@ -30,8 +30,6 @@ class NetworkConfigError(RuntimeError):
     :param RuntimeError: Runtime error
     """
 
-    pass
-
 
 URL_PREFIXES = (
     "grpc+https",

@@ -1,5 +1,7 @@
 """Example of aerial stake optimizer."""
 
+# pylint: disable=too-many-locals
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #

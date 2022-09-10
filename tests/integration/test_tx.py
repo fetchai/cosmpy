@@ -41,14 +41,14 @@ class TestTx:
         return LedgerClient(NetworkConfig.fetchai_stable_testnet())
 
     def get_wallet_1(self):
-        """Get wallet"""
+        """Get wallet 1."""
         faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
         wallet1 = LocalWallet.generate()
         faucet_api.get_wealth(wallet1.address())
         return wallet1
 
     def get_wallet_2(self):
-        """Get wallet"""
+        """Get wallet 2."""
         wallet2 = LocalWallet.generate()
         return wallet2
 

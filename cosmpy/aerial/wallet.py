@@ -44,7 +44,6 @@ class Wallet(ABC, UserString):
 
         :return: None
         """
-        pass
 
     @abstractmethod
     def public_key(self) -> PublicKey:
@@ -52,7 +51,6 @@ class Wallet(ABC, UserString):
 
         :return: None
         """
-        pass
 
     @abstractmethod
     def signer(self) -> Signer:
@@ -60,7 +58,6 @@ class Wallet(ABC, UserString):
 
         :return: None
         """
-        pass
 
     @property
     def data(self):

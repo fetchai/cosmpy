@@ -38,5 +38,5 @@ class DisabledTestContract(BaseTestContract, FaucetMixIn):
 
     def get_wallet(self):
         wallet = LocalWallet.generate(prefix=self.PREFIX)
-        self._ask_funds(wallet)
+        self.ask_funds(wallet)
         return wallet

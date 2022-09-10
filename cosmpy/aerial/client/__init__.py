@@ -367,7 +367,6 @@ class LedgerClient:
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
         resp = self.staking.DelegatorDelegations(req)
 
-        # TODO: Need pagination support #pylint: disable=fixme
         for item in resp.delegation_responses:
 
             req = QueryDelegationRewardsRequest(
@@ -615,12 +614,12 @@ class LedgerClient:
         except grpc.RpcError as e:
             details = e.details()
             if "not found" in details:
-                raise NotFoundError()
+                raise NotFoundError() from e
             raise
         except RuntimeError as e:
             details = str(e)
             if "tx" in details and "not found" in details:
-                raise NotFoundError()
+                raise NotFoundError() from e
             raise
 
         return self._parse_tx_response(resp.tx_response)

@@ -38,7 +38,7 @@ class TestTx(BaseTestTx, FaucetMixIn):
 
     def get_wallet_1(self):
         wallet = LocalWallet.generate(prefix=self.PREFIX)
-        self._ask_funds(wallet)
+        self.ask_funds(wallet)
         return wallet
 
     def get_wallet_2(self):
