@@ -90,7 +90,7 @@ class BankRestClient(Bank):
 
         :return: QueryTotalSupplyResponse
         """
-        response = self._rest_api.get(f"{self.API_URL}/supply")
+        response = self._rest_api.get(f"{self.API_URL}/supply", request)
         return Parse(response, QueryTotalSupplyResponse())
 
     def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
