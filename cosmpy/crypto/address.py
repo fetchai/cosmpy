@@ -51,7 +51,7 @@ class Address(UserString):
         :param value: str, byte, public key or Address another instance
         :param prefix: optional string
         """
-        super().__init__(value)
+        # pylint: disable=super-init-not-called
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
