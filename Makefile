@@ -126,7 +126,7 @@ pylint:
 
 .PHONY: markdownlint
 markdownlint:
-	docker run --rm -v "$(PWD):/workdir" ghcr.io/igorshubovych/markdownlint-cli:latest --fix '**/*.md'
+	docker run --rm -v "${PWD}:/workdir" ghcr.io/igorshubovych/markdownlint-cli:latest --fix '**/*.md'
 
 ####################
 ### Tests
