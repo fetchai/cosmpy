@@ -1,11 +1,19 @@
 {
   "MD024": false,
   "MD013": false,
-  "MD026": false,
-  "MD028": false,
   "MD033": false,
-  "MD046": false,
   "MD041": false,
   "MD001": false,
   "MD036": false
 }
+
+/* 
+    MD024: Multiple headings with the same content.
+    MD013: Lines are longer than the configured line_length (default: 80 characters)
+    MD033: Inline HTML
+    MD041: First line in a file should be a top-level heading
+    MD001: Heading levels should only increment by one level at a time
+    MD036: Emphasis used instead of a heading
+
+    Markdown lint rules: https://github.com/DavidAnson/markdownlint/blob/v0.25.1/doc/Rules.md
+*/
