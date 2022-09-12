@@ -35,7 +35,6 @@ class GasStrategy(ABC):
         :param tx: Transaction
         :return: None
         """
-        pass  # pragma: no cover
 
     @abstractmethod
     def block_gas_limit(self) -> int:
@@ -43,7 +42,6 @@ class GasStrategy(ABC):
 
         :return: None
         """
-        pass  # pragma: no cover
 
     def _clip_gas(self, value: int) -> int:
         block_limit = self.block_gas_limit()

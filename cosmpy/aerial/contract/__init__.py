@@ -70,6 +70,7 @@ class LedgerContract(UserString):
         :param address: address, defaults to None
         :param digest: digest, defaults to None
         """
+        # pylint: disable=super-init-not-called
         self._path = path
         self._client = client
         self._address = address
