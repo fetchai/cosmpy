@@ -58,8 +58,8 @@ jobs:
           config-file: .md-link-check.json
   unit_tests:
     name: Unit Tests
-    needs:
-      - code_quality_check
+    # needs:
+    #  - code_quality_check
     runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
@@ -88,8 +88,8 @@ jobs:
         run: tox -e coverage-report
   integration_tests:
     name: Integration tests
-    needs:
-      - unit_tests
+    # needs:
+    #  - unit_tests
     runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
