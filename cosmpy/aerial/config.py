@@ -93,7 +93,7 @@ class NetworkConfig:
 
     @classmethod
     def fetchai_alpha_testnet(cls):
-        """Get the fetchai alpha testnet..
+        """Get the fetchai alpha testnet.
 
         :raises RuntimeError: No alpha testnet available
         """
