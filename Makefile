@@ -124,10 +124,6 @@ mypy:
 pylint:
 	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 
-.PHONY: markdownlint
-markdownlint:
-	docker run --rm -v "${PWD}:/workdir" ghcr.io/igorshubovych/markdownlint-cli:latest --fix '**/*.md'
-
 ####################
 ### Tests
 ####################
@@ -249,7 +245,6 @@ lint:
 	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
 	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
-	docker run --rm -v "$(PWD):/workdir" ghcr.io/igorshubovych/markdownlint-cli:latest --fix '**/*.md'
 
 .PHONY: security
 security:
