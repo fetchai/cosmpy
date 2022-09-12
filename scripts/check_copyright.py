@@ -18,7 +18,7 @@
 #
 # ------------------------------------------------------------------------------
 """
-This script checks that all the Python files of the repository have:.
+This script checks that all the Python files of the repository have.
 
 - (optional) the Python shebang
 - the encoding header;

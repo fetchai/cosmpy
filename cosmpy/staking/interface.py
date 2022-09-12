@@ -59,7 +59,7 @@ class Staking(ABC):
     @abstractmethod
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
         """
-        Validate queries all validators that match the given status.
+        Query all validators that match the given status.
 
         :param request: QueryValidatorsRequest
         :return: QueryValidatorsResponse
@@ -68,7 +68,7 @@ class Staking(ABC):
     @abstractmethod
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
         """
-        Validate queries validator info for given validator address.
+        Query validator info for given validator address.
 
         :param request: QueryValidatorRequest
         :return: QueryValidatorResponse

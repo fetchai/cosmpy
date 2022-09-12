@@ -70,7 +70,7 @@ class StakingRestClient(Staking):
 
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
         """
-        Validate query all validators that match the given status.
+        Query all validators that match the given status.
 
         :param request: QueryValidatorsRequest
         :return: QueryValidatorsResponse
@@ -80,7 +80,7 @@ class StakingRestClient(Staking):
 
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
         """
-        Validate query validator info for given validator address.
+        Query validator info for given validator address.
 
         :param request: QueryValidatorRequest
         :return: QueryValidatorResponse
