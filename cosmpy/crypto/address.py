@@ -53,6 +53,7 @@ class Address(UserString):
         :raises RuntimeError: Incorrect address length
         :raises TypeError: Unexpected type of `value` parameter
         """
+        # pylint: disable=super-init-not-called
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
@@ -96,6 +97,7 @@ class Address(UserString):
 
     @property
     def data(self):  # noqa:
+        """Return address in string."""
         return str(self)
 
     def __json__(self):  # noqa:

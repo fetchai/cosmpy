@@ -86,15 +86,14 @@ class TxResponse:
                     gas_used = -1
 
                 raise OutOfGasError(self.hash, gas_wanted=gas_wanted, gas_used=gas_used)
-            elif "insufficient fees" in self.raw_log:
+            if "insufficient fees" in self.raw_log:
                 match = re.search(r"required:\s*(\d+\w+)", self.raw_log)
                 if match is not None:
                     required_fee = match.group(1)
                 else:
                     required_fee = f"more than {self.gas_wanted}"
                 raise InsufficientFeesError(self.hash, required_fee)
-            else:
-                raise BroadcastError(self.hash, self.raw_log)
+            raise BroadcastError(self.hash, self.raw_log)
 
 
 class SubmittedTx:

@@ -50,12 +50,11 @@ class ValidatorStatus(Enum):
             return cls.UNSPECIFIED
         if value == 1:
             return cls.UNBONDED
-        elif value == 2:
+        if value == 2:
             return cls.UNBONDING
-        elif value == 3:
+        if value == 3:
             return cls.BONDED
-        else:
-            raise RuntimeError(f"Unable to decode validator status: {value}")
+        raise RuntimeError(f"Unable to decode validator status: {value}")
 
 
 def create_delegate_msg(
