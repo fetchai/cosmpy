@@ -25,7 +25,7 @@ from tests.integration.osmosis_testnet.net_config import NET_CONFIG, FaucetMixIn
 from tests.integration.test_tx import TestTx as BaseTestTx
 
 
-class TestTx(BaseTestTx, FaucetMixIn):
+class DisbledTestTx(BaseTestTx, FaucetMixIn):
     COIN = "uosmo"
     GAS_LIMIT = 120000
     PREFIX = "osmo"
