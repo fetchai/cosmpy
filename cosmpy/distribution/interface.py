@@ -48,6 +48,7 @@ class Distribution(ABC):
     def CommunityPool(self) -> QueryCommunityPoolResponse:
         """
         CommunityPool queries the community pool coins.
+
         :return: a QueryCommunityPoolResponse instance
         """
 
@@ -57,6 +58,7 @@ class Distribution(ABC):
     ) -> QueryDelegationTotalRewardsResponse:
         """
         DelegationTotalRewards queries the total rewards accrued by each validator.
+
         :param request: a QueryDelegationTotalRewardsRequest instance
         :return: a QueryDelegationTotalRewardsResponse instance
         """
@@ -67,6 +69,7 @@ class Distribution(ABC):
     ) -> QueryDelegationRewardsResponse:
         """
         DelegationRewards queries the total rewards accrued by a delegation.
+
         :param request: a QueryDelegationRewardsRequest instance
         :return: a QueryDelegationRewardsResponse instance
         """
@@ -77,6 +80,7 @@ class Distribution(ABC):
     ) -> QueryDelegatorValidatorsResponse:
         """
         DelegatorValidators queries the validators of a delegator.
+
         :param request: a QueryDelegatorValidatorsRequest instance
         :return: a QueryDelegatorValidatorsResponse instance
         """
@@ -87,6 +91,7 @@ class Distribution(ABC):
     ) -> QueryDelegatorWithdrawAddressResponse:
         """
         DelegatorWithdrawAddress queries withdraw address of a delegator.
+
         :param request: a QueryDelegatorWithdrawAddressRequest instance
         :return: a QueryDelegatorWithdrawAddressResponse instance
         """
@@ -95,6 +100,7 @@ class Distribution(ABC):
     def Params(self) -> QueryParamsResponse:
         """
         Params queries params of the distribution module.
+
         :return: a QueryParamsResponse instance
         """
 
@@ -104,6 +110,7 @@ class Distribution(ABC):
     ) -> QueryValidatorCommissionResponse:
         """
         ValidatorCommission queries accumulated commission for a validator.
+
         :param request: QueryValidatorCommissionRequest
         :return: QueryValidatorCommissionResponse
         """
@@ -114,6 +121,7 @@ class Distribution(ABC):
     ) -> QueryValidatorOutstandingRewardsResponse:
         """
         ValidatorOutstandingRewards queries rewards of a validator address.
+
         :param request: QueryValidatorOutstandingRewardsRequest
         :return: QueryValidatorOutstandingRewardsResponse
         """
@@ -124,6 +132,7 @@ class Distribution(ABC):
     ) -> QueryValidatorSlashesResponse:
         """
         ValidatorSlashes queries slash events of a validator.
+
         :param request: QueryValidatorSlashesRequest
         :return: QueryValidatorSlashesResponse
         """

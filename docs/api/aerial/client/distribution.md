@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.client.distribution
 
-Distribution
+Distribution.
 
 <a id="cosmpy.aerial.client.distribution.create_withdraw_delegator_reward"></a>
 
@@ -12,7 +12,7 @@ Distribution
 def create_withdraw_delegator_reward(delegator: Address, validator: Address)
 ```
 
-Create withdraw delegator reward
+Create withdraw delegator reward.
 
 **Arguments**:
 

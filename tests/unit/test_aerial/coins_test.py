@@ -1,4 +1,4 @@
-"""Test coins"""
+"""Test coins."""
 
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
@@ -40,5 +40,5 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
     ],
 )
 def test_parsing_coins(input_coins, expected_result):
-    """Test parsing coins"""
+    """Test parsing coins."""
     assert parse_coins(input_coins) == expected_result

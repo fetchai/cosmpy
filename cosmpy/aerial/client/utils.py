@@ -16,7 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""Helper functions"""
+"""Helper functions."""
 from datetime import timedelta
 from typing import Optional, Union
 
@@ -32,7 +32,7 @@ def prepare_and_broadcast_basic_transaction(
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
 ) -> SubmittedTx:
-    """Prepare and broadcast basic transaction
+    """Prepare and broadcast basic transaction.
 
     :param client: Ledger client
     :param tx: The transaction
