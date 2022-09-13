@@ -90,10 +90,10 @@ class Staking(ABC):
         self, request: QueryValidatorUnbondingDelegationsRequest
     ) -> QueryValidatorUnbondingDelegationsResponse:
         """
-       Query unbonding delegations of a validator.
+        Query unbonding delegations of a validator.
 
-        :param request: ValidatorUnbondingDelegations
-        :return: QueryValidatorUnbondingDelegationsResponse
+         :param request: ValidatorUnbondingDelegations
+         :return: QueryValidatorUnbondingDelegationsResponse
         """
 
     @abstractmethod
