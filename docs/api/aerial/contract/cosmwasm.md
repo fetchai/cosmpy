@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.contract.cosmwasm
 
-Cosmwasm contract store, instantiate, execute messages
+Cosmwasm contract store, instantiate, execute messages.
 
 <a id="cosmpy.aerial.contract.cosmwasm.create_cosmwasm_store_code_msg"></a>
 
@@ -13,7 +13,7 @@ def create_cosmwasm_store_code_msg(contract_path: str,
                                    sender_address: Address) -> MsgStoreCode
 ```
 
-Create cosmwasm store code message
+Create cosmwasm store code message.
 
 **Arguments**:
 
@@ -38,7 +38,7 @@ def create_cosmwasm_instantiate_msg(
         admin_address: Optional[Address] = None) -> MsgInstantiateContract
 ```
 
-Create cosmwasm instantiate message
+Create cosmwasm instantiate message.
 
 **Arguments**:
 
@@ -65,7 +65,7 @@ def create_cosmwasm_execute_msg(
         funds: Optional[str] = None) -> MsgExecuteContract
 ```
 
-Create cosmwasm execute message
+Create cosmwasm execute message.
 
 **Arguments**:
 

@@ -49,7 +49,7 @@ class CosmWasm(ABC):
         self, request: QueryContractInfoRequest
     ) -> QueryContractInfoResponse:
         """
-        Gets the contract meta data
+        Get the contract meta data.
 
         :param request: QueryContractInfoRequest
 
@@ -61,7 +61,7 @@ class CosmWasm(ABC):
         self, request: QueryContractHistoryRequest
     ) -> QueryContractHistoryResponse:
         """
-        Gets the contract code history
+        Get the contract code history.
 
         :param request: QueryContractHistoryRequest
 
@@ -73,7 +73,7 @@ class CosmWasm(ABC):
         self, request: QueryContractsByCodeRequest
     ) -> QueryContractsByCodeResponse:
         """
-        Lists all smart contracts for a code id
+        List all smart contracts for a code id.
 
         :param request: QueryContractsByCodeRequest
 
@@ -85,7 +85,7 @@ class CosmWasm(ABC):
         self, request: QueryAllContractStateRequest
     ) -> QueryAllContractStateResponse:
         """
-        Gets all raw store data for a single contract
+        Get all raw store data for a single contract.
 
         :param request: QueryAllContractStateRequest
 
@@ -97,7 +97,7 @@ class CosmWasm(ABC):
         self, request: QueryRawContractStateRequest
     ) -> QueryRawContractStateResponse:
         """
-        Gets single key from the raw store data of a contract
+        Get single key from the raw store data of a contract.
 
         :param request: QueryRawContractStateRequest
 
@@ -109,7 +109,7 @@ class CosmWasm(ABC):
         self, request: QuerySmartContractStateRequest
     ) -> QuerySmartContractStateResponse:
         """
-        Get smart query result from the contract
+        Get smart query result from the contract.
 
         :param request: QuerySmartContractStateRequest
 
@@ -119,7 +119,7 @@ class CosmWasm(ABC):
     @abstractmethod
     def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
         """
-        Gets the binary code and metadata for a singe wasm code
+        Get the binary code and metadata for a singe wasm code.
 
         :param request: QueryCodeRequest
 
@@ -129,7 +129,7 @@ class CosmWasm(ABC):
     @abstractmethod
     def Codes(self, request: QueryCodesRequest) -> QueryCodesResponse:
         """
-        Gets the metadata for all stored wasm codes
+        Get the metadata for all stored wasm codes.
 
         :param request: QueryCodesRequest
 

@@ -46,7 +46,6 @@ def ripemd160(contents: bytes) -> bytes:
 
     :return: bytes ripemd160 hash.
     """
-
     h = RIPEMD160.new()
     h.update(contents)
     return h.digest()

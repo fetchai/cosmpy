@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Cosmwasm contract store, instantiate, execute messages"""
+"""Cosmwasm contract store, instantiate, execute messages."""
 
 import gzip
 from typing import Any, Optional
@@ -35,7 +35,7 @@ from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
 def create_cosmwasm_store_code_msg(
     contract_path: str, sender_address: Address
 ) -> MsgStoreCode:
-    """Create cosmwasm store code message
+    """Create cosmwasm store code message.
 
     :param contract_path: contract path
     :param sender_address: sender address
@@ -60,7 +60,7 @@ def create_cosmwasm_instantiate_msg(
     funds: Optional[str] = None,
     admin_address: Optional[Address] = None,
 ) -> MsgInstantiateContract:
-    """Create cosmwasm instantiate message
+    """Create cosmwasm instantiate message.
 
     :param code_id: code id
     :param args: args
@@ -91,7 +91,7 @@ def create_cosmwasm_execute_msg(
     args: Any,
     funds: Optional[str] = None,
 ) -> MsgExecuteContract:
-    """Create cosmwasm execute message
+    """Create cosmwasm execute message.
 
     :param sender_address: sender address
     :param contract_address: contract address

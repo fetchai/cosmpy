@@ -59,7 +59,7 @@ class Staking(ABC):
     @abstractmethod
     def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
         """
-        Validators queries all validators that match the given status.
+        Query all validators that match the given status.
 
         :param request: QueryValidatorsRequest
         :return: QueryValidatorsResponse
@@ -68,7 +68,7 @@ class Staking(ABC):
     @abstractmethod
     def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
         """
-        Validator queries validator info for given validator address.
+        Query validator info for given validator address.
 
         :param request: QueryValidatorRequest
         :return: QueryValidatorResponse
@@ -79,7 +79,7 @@ class Staking(ABC):
         self, request: QueryValidatorDelegationsRequest
     ) -> QueryValidatorDelegationsResponse:
         """
-        ValidatorDelegations queries delegate info for given validator.
+        Query delegate info for given validator.
 
         :param request: QueryValidatorDelegationsRequest
         :return: QueryValidatorDelegationsResponse
@@ -90,16 +90,16 @@ class Staking(ABC):
         self, request: QueryValidatorUnbondingDelegationsRequest
     ) -> QueryValidatorUnbondingDelegationsResponse:
         """
-        ValidatorUnbondingDelegations queries unbonding delegations of a validator.
+        Query unbonding delegations of a validator.
 
-        :param request: ValidatorUnbondingDelegations
-        :return: QueryValidatorUnbondingDelegationsResponse
+         :param request: ValidatorUnbondingDelegations
+         :return: QueryValidatorUnbondingDelegationsResponse
         """
 
     @abstractmethod
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
         """
-        Delegation queries delegate info for given validator delegator pair.
+        Query delegate info for given validator delegator pair.
 
         :param request: QueryDelegationRequest
         :return: QueryDelegationResponse

@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.tx`_`helpers
 
-Transaction helpers
+Transaction helpers.
 
 <a id="cosmpy.aerial.tx_helpers.MessageLog"></a>
 
@@ -13,7 +13,7 @@ Transaction helpers
 class MessageLog()
 ```
 
-Message Log
+Message Log.
 
 <a id="cosmpy.aerial.tx_helpers.TxResponse"></a>
 
@@ -24,7 +24,7 @@ Message Log
 class TxResponse()
 ```
 
-Transaction response
+Transaction response.
 
 **Raises**:
 
@@ -40,7 +40,7 @@ Transaction response
 def is_successful() -> bool
 ```
 
-Check transaction is successful
+Check transaction is successful.
 
 **Returns**:
 
@@ -54,7 +54,7 @@ transaction status
 def ensure_successful()
 ```
 
-Ensure transaction is successful
+Ensure transaction is successful.
 
 **Raises**:
 
@@ -70,7 +70,7 @@ Ensure transaction is successful
 class SubmittedTx()
 ```
 
-Submitted transaction
+Submitted transaction.
 
 <a id="cosmpy.aerial.tx_helpers.SubmittedTx.__init__"></a>
 
@@ -80,7 +80,7 @@ Submitted transaction
 def __init__(client: "LedgerClient", tx_hash: str)
 ```
 
-Init the Submitted transaction
+Init the Submitted transaction.
 
 **Arguments**:
 
@@ -96,7 +96,7 @@ Init the Submitted transaction
 def tx_hash() -> str
 ```
 
-Get the transaction hash
+Get the transaction hash.
 
 **Returns**:
 
@@ -111,7 +111,7 @@ transaction hash
 def response() -> Optional[TxResponse]
 ```
 
-Get the transaction response
+Get the transaction response.
 
 **Returns**:
 
@@ -126,7 +126,7 @@ response
 def contract_code_id() -> Optional[int]
 ```
 
-Get the contract code id
+Get the contract code id.
 
 **Returns**:
 
@@ -141,7 +141,7 @@ return contract code id if exist else None
 def contract_address() -> Optional[Address]
 ```
 
-Get the contract address
+Get the contract address.
 
 **Returns**:
 
@@ -158,7 +158,7 @@ def wait_to_complete(
                                 timedelta]] = None) -> "SubmittedTx"
 ```
 
-Wait to complete the transaction
+Wait to complete the transaction.
 
 **Arguments**:
 

@@ -54,7 +54,7 @@ class IBCCoreConnectionRestClient(IBCCoreConnection):
 
         :param request: QueryConnectionRequest
         :return: QueryConnectionResponse
-        """
+        """  # noqa: D401
         json_response = self._rest_api.get(
             f"{self.API_URL}/connections/{request.connection_id}"
         )
@@ -66,7 +66,7 @@ class IBCCoreConnectionRestClient(IBCCoreConnection):
 
         :param request: QueryConnectionsRequest
         :return: QueryConnectionsResponse
-        """
+        """  # noqa: D401
         json_response = self._rest_api.get(f"{self.API_URL}/connections", request)
         return Parse(json_response, QueryConnectionsResponse())
 

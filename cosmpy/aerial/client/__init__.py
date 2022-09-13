@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Client functionality"""
+"""Client functionality."""
 
 import json
 import time
@@ -100,7 +100,7 @@ COSMOS_SDK_DEC_COIN_PRECISION = 10**18
 
 @dataclass
 class Account:
-    """Account"""
+    """Account."""
 
     address: Address
     number: int
@@ -109,7 +109,7 @@ class Account:
 
 @dataclass
 class StakingPosition:
-    """Staking positions"""
+    """Staking positions."""
 
     validator: Address
     amount: int
@@ -118,7 +118,7 @@ class StakingPosition:
 
 @dataclass
 class UnbondingPositions:
-    """Unbonding positions"""
+    """Unbonding positions."""
 
     validator: Address
     amount: int
@@ -126,7 +126,7 @@ class UnbondingPositions:
 
 @dataclass
 class Validator:
-    """Validator"""
+    """Validator."""
 
     address: Address  # the operators address
     tokens: int  # The total amount of tokens for the validator
@@ -136,7 +136,7 @@ class Validator:
 
 @dataclass
 class Coin:
-    """Coins"""
+    """Coins."""
 
     amount: int
     denom: str
@@ -144,32 +144,32 @@ class Coin:
 
 @dataclass
 class StakingSummary:
-    """Get the staking summary"""
+    """Get the staking summary."""
 
     current_positions: List[StakingPosition]
     unbonding_positions: List[UnbondingPositions]
 
     @property
     def total_staked(self) -> int:
-        """Get the total staked amount"""
+        """Get the total staked amount."""
         return sum(map(lambda p: p.amount, self.current_positions))
 
     @property
     def total_rewards(self) -> int:
-        """Get the total rewards"""
+        """Get the total rewards."""
         return sum(map(lambda p: p.reward, self.current_positions))
 
     @property
     def total_unbonding(self) -> int:
-        """total unbonding"""
+        """total unbonding."""
         return sum(map(lambda p: p.amount, self.unbonding_positions))
 
 
 class LedgerClient:
-    """Ledger client"""
+    """Ledger client."""
 
     def __init__(self, cfg: NetworkConfig):
-        """Init ledger client
+        """Init ledger client.
 
         :param cfg: Network configurations
         """
@@ -210,7 +210,7 @@ class LedgerClient:
 
     @property
     def network_config(self) -> NetworkConfig:
-        """Get the network config
+        """Get the network config.
 
         :return: network config
         """
@@ -218,7 +218,7 @@ class LedgerClient:
 
     @property
     def gas_strategy(self) -> GasStrategy:
-        """Get gas strategy
+        """Get gas strategy.
 
         :return: gas strategy
         """
@@ -226,7 +226,7 @@ class LedgerClient:
 
     @gas_strategy.setter
     def gas_strategy(self, strategy: GasStrategy):
-        """Set gas strategy
+        """Set gas strategy.
 
         :param strategy: strategy
         :raises RuntimeError: Invalid strategy must implement GasStrategy interface
@@ -236,7 +236,7 @@ class LedgerClient:
         self._gas_strategy = strategy
 
     def query_account(self, address: Address) -> Account:
-        """Query account
+        """Query account.
 
         :param address: address
         :raises RuntimeError: Unexpected account type returned from query
@@ -257,7 +257,7 @@ class LedgerClient:
         )
 
     def query_params(self, subspace: str, key: str) -> Any:
-        """Query Prams
+        """Query Prams.
 
         :param subspace: subspace
         :param key: key
@@ -268,7 +268,7 @@ class LedgerClient:
         return json.loads(resp.param.value)
 
     def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
-        """Query bank balance
+        """Query bank balance.
 
         :param address: address
         :param denom: denom, defaults to None
@@ -287,12 +287,11 @@ class LedgerClient:
         return int(resp.balance.amount)
 
     def query_bank_all_balances(self, address: Address) -> List[Coin]:
-        """Query bank all balances
+        """Query bank all balances.
 
         :param address: address
         :return: bank all balances
         """
-
         req = QueryAllBalancesRequest(address=str(address))
         resp = self.bank.AllBalances(req)
 
@@ -307,7 +306,7 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
-        """Send tokens
+        """Send tokens.
 
         :param destination: destination address
         :param amount: amount
@@ -317,7 +316,6 @@ class LedgerClient:
         :param gas_limit: gas limit, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
-
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
@@ -331,7 +329,7 @@ class LedgerClient:
     def query_validators(
         self, status: Optional[ValidatorStatus] = None
     ) -> List[Validator]:
-        """Query validators
+        """Query validators.
 
         :param status: validator status, defaults to None
         :return: List of validators
@@ -357,7 +355,7 @@ class LedgerClient:
         return validators
 
     def query_staking_summary(self, address: Address) -> StakingSummary:
-        """Query staking summary
+        """Query staking summary.
 
         :param address: address
         :return: staking summary
@@ -367,7 +365,6 @@ class LedgerClient:
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
         resp = self.staking.DelegatorDelegations(req)
 
-        # TODO: Need pagination support
         for item in resp.delegation_responses:
 
             req = QueryDelegationRewardsRequest(
@@ -425,7 +422,7 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
-        """Delegate tokens
+        """Delegate tokens.
 
         :param validator: validator address
         :param amount: amount
@@ -457,7 +454,7 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
-        """Redelegate tokens
+        """Redelegate tokens.
 
         :param current_validator: current validator address
         :param next_validator: next validator address
@@ -490,7 +487,7 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
-        """Undelegate tokens
+        """Undelegate tokens.
 
         :param validator: validator
         :param amount: amount
@@ -499,7 +496,6 @@ class LedgerClient:
         :param gas_limit: gas limit, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
-
         tx = Transaction()
         tx.add_message(
             create_undelegate_msg(
@@ -521,7 +517,7 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
-        """claim rewards
+        """claim rewards.
 
         :param validator: validator
         :param sender: sender
@@ -537,7 +533,7 @@ class LedgerClient:
         )
 
     def estimate_gas_for_tx(self, tx: Transaction) -> int:
-        """Estimate gas for transaction
+        """Estimate gas for transaction.
 
         :param tx: transaction
         :return: Estimated gas for transaction
@@ -545,7 +541,7 @@ class LedgerClient:
         return self._gas_strategy.estimate_gas(tx)
 
     def estimate_fee_from_gas(self, gas_limit: int) -> str:
-        """Estimate fee from gas
+        """Estimate fee from gas.
 
         :param gas_limit: gas limit
         :return: Estimated fee for transaction
@@ -553,7 +549,7 @@ class LedgerClient:
         return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
 
     def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
-        """Estimate gas and fee for transaction
+        """Estimate gas and fee for transaction.
 
         :param tx: transaction
         :return: estimate gas, fee for transaction
@@ -568,7 +564,7 @@ class LedgerClient:
         timeout: Optional[timedelta] = None,
         poll_period: Optional[timedelta] = None,
     ) -> TxResponse:
-        """Wait for query transaction
+        """Wait for query transaction.
 
         :param tx_hash: transaction hash
         :param timeout: timeout, defaults to None
@@ -603,10 +599,11 @@ class LedgerClient:
             time.sleep(poll_period.total_seconds())
 
     def query_tx(self, tx_hash: str) -> TxResponse:
-        """query transaction
+        """query transaction.
 
         :param tx_hash: transaction hash
         :raises NotFoundError: Tx details not found
+        :raises grpc.RpcError: RPC connection issue
         :return: query response
         """
         req = GetTxRequest(hash=tx_hash)
@@ -615,15 +612,13 @@ class LedgerClient:
         except grpc.RpcError as e:
             details = e.details()
             if "not found" in details:
-                raise NotFoundError()
-            else:
-                raise
+                raise NotFoundError() from e
+            raise
         except RuntimeError as e:
             details = str(e)
             if "tx" in details and "not found" in details:
-                raise NotFoundError()
-            else:
-                raise
+                raise NotFoundError() from e
+            raise
 
         return self._parse_tx_response(resp.tx_response)
 
@@ -661,7 +656,7 @@ class LedgerClient:
         )
 
     def simulate_tx(self, tx: Transaction) -> int:
-        """simulate transaction
+        """simulate transaction.
 
         :param tx: transaction
         :raises RuntimeError: Unable to simulate non final transaction
@@ -676,12 +671,11 @@ class LedgerClient:
         return int(resp.gas_info.gas_used)
 
     def broadcast_tx(self, tx: Transaction) -> SubmittedTx:
-        """Broadcast transaction
+        """Broadcast transaction.
 
         :param tx: transaction
         :return: Submitted transaction
         """
-
         # create the broadcast request
         broadcast_req = BroadcastTxRequest(
             tx_bytes=tx.tx.SerializeToString(), mode=BroadcastMode.BROADCAST_MODE_SYNC

@@ -1,131 +1,114 @@
 name: Checks and Tests
-
-on:
+'on':
   push:
     branches:
       - develop
       - master
-  pull_request:
-
+  pull_request: null
 jobs:
   code_quality_check:
     name: Check Code Quality
-    runs-on: ${{ matrix.os }}
-
+    runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.9"]
-
+        os:
+          - ubuntu-latest
+        python-version:
+          - '3.9'
+        tox-job:
+          - black-check
+          - isort-check
+          - flake8
+          - vulture
+          - bandit
+          - safety
+          - mypy
+          - pylint
+          - liccheck
+          - copyright-check
+          - check-manifest
+          - check_api_docs
     timeout-minutes: 30
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: pip install tox==3.25.1
-    - name: Code style check
-      run: |
-        tox -e black-check
-        tox -e isort-check
-        tox -e flake8
-        tox -e vulture
-    - name: Security check
-      run: tox -e bandit
-    - name: Safety check
-      run: tox -e safety
-    - name: Static type check
-      run: tox -e mypy
-#    - name: Pylint check
-#      run: tox -e pylint
-    - name: License check
-      run: tox -e liccheck
-    - name: Copyright check
-      run: tox -e copyright-check
-    - name: Manifest check
-      run: tox -e check-manifest
-    - name: Check reference API docs is up-to-date
-      run: tox -e check_api_docs
-
-  wemake-python-styleguide:
-    name: Wemake Python Stylguide
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: wemake-services/wemake-python-styleguide@0.16.1
-      continue-on-error: true
-
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '${{ matrix.python-version }}'
+      - name: Install dependencies
+        run: pip install tox==3.25.1 poetry==1.2.0
+      - name: 'Run check ${{ matrix.tox-job }}'
+        run: |
+          tox -e ${{ matrix.tox-job }}
   spell-check:
     name: Check Spelling
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: rojopolis/spellcheck-github-actions@0.25.0
-      with:
-        config_path: .spellcheck.yml
-
+      - uses: actions/checkout@v3
+      - uses: rojopolis/spellcheck-github-actions@0.25.0
+        with:
+          config_path: .spellcheck.yml
   markdown-link-check:
     name: Check Links
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: gaurav-nelson/github-action-markdown-link-check@v1
-      with:
-        use-quiet-mode: 'yes'
-        use-verbose-mode: 'yes'
-        config-file: '.md-link-check.json' 
-
+      - uses: actions/checkout@v3
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'yes'
+          config-file: .md-link-check.json
+  wemake-python-styleguide:
+    name: Wemake Python Stylguide
+    runs-on: ubuntu-latest
+    steps:
+    - uses: wemake-services/wemake-python-styleguide@0.16.1
+      continue-on-error: true
   unit_tests:
     name: Unit Tests
-    needs:
-    - code_quality_check
-    runs-on: ${{ matrix.os }}
-
+    runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
-
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        python-version:
+          - '3.8'
+          - '3.9'
+          - '3.10'
     timeout-minutes: 30
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: pip install tox==3.25.1
-    - name: Unit Tests
-      run: |
-        tox -e test-unit
-      shell: bash
-    - name: Coverage Report
-      run: tox -e coverage-report
-
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '${{ matrix.python-version }}'
+      - name: Install dependencies
+        run: pip install tox==3.25.1 poetry==1.2.0
+      - name: Unit Tests
+        run: |
+          tox -e test-unit
+        shell: bash
+      - name: Coverage Report
+        run: tox -e coverage-report
   integration_tests:
     name: Integration tests
-    needs:
-    - unit_tests
-    runs-on: ${{ matrix.os }}
-
+    runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.9]
-
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        python-version:
+          - 3.9
     timeout-minutes: 30
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: pip install tox==3.25.1
-    - name: Integration Tests
-      run: |
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '${{ matrix.python-version }}'
+      - name: Install dependencies
+        run: pip install tox==3.25.1 poetry==1.2.0
+      - name: Integration Tests
+        run: |
           tox -e test-integration

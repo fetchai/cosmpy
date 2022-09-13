@@ -33,8 +33,8 @@ from cosmpy.crypto.interface import Signer
 def _base64_decode(value: str) -> bytes:
     try:
         return base64.b64decode(value)
-    except Exception:
-        raise RuntimeError("Unable to parse base64 value")
+    except Exception as error:
+        raise RuntimeError("Unable to parse base64 value") from error
 
 
 class PublicKey:
@@ -44,10 +44,10 @@ class PublicKey:
     hash_function: Callable = hashlib.sha256
 
     def __init__(self, public_key: Union[bytes, "PublicKey", ecdsa.VerifyingKey]):
-        """
-        Initialize.
+        """Initialize.
 
         :param public_key: butes, public key or ecdsa verifying key instance
+        :raises RuntimeError: Invalid public key
         """
         if isinstance(public_key, bytes):
             self._verifying_key = ecdsa.VerifyingKey.from_string(
