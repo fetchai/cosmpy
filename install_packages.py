@@ -29,14 +29,14 @@ import toml
 
 
 def _load_groups():
-    data = toml.loads(Path("pyproject.toml").read_text())
+    data = toml.loads(Path("pyproject.toml", encoding="utf-8").read_text())
     return list(data["tool"]["poetry"]["group"].keys())
 
 
 def _load_dependencies() -> List[str]:
     groups = ",".join(_load_groups())
     text = subprocess.check_output(
-        f"poetry export --with {groups}", shell=True, text=True
+        f"poetry export --with {groups}", shell=False, text=True
     )
     text = text.replace("\\\n", " ")
     lines = text.splitlines()
