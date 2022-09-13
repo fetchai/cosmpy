@@ -124,7 +124,7 @@ class StakingRestClient(Staking):
 
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
         """
-        Delegate query delegate info for given validator delegator pair.
+        Query delegate info for given validator delegator pair.
 
         :param request: QueryDelegationRequest
         :return: QueryDelegationResponse

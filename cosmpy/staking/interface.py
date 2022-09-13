@@ -79,7 +79,7 @@ class Staking(ABC):
         self, request: QueryValidatorDelegationsRequest
     ) -> QueryValidatorDelegationsResponse:
         """
-        ValidatorDelegation queries delegate info for given validator.
+        Query delegate info for given validator.
 
         :param request: QueryValidatorDelegationsRequest
         :return: QueryValidatorDelegationsResponse
@@ -90,7 +90,7 @@ class Staking(ABC):
         self, request: QueryValidatorUnbondingDelegationsRequest
     ) -> QueryValidatorUnbondingDelegationsResponse:
         """
-        ValidatorUnbondingDelegation queries unbonding delegations of a validator.
+       Query unbonding delegations of a validator.
 
         :param request: ValidatorUnbondingDelegations
         :return: QueryValidatorUnbondingDelegationsResponse
@@ -99,7 +99,7 @@ class Staking(ABC):
     @abstractmethod
     def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
         """
-        Delegate queries delegate info for given validator delegator pair.
+        Query delegate info for given validator delegator pair.
 
         :param request: QueryDelegationRequest
         :return: QueryDelegationResponse
