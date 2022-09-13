@@ -82,7 +82,7 @@ class MockLedger:
 
 
 @pytest.mark.parametrize(
-    "input_msgs,expected_gas_estimate.",
+    "input_msgs,expected_gas_estimate",
     [
         ([MsgSend()], 100_000),
         ([MsgStoreCode()], 2_000_000),

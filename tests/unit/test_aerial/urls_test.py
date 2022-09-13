@@ -25,7 +25,7 @@ from cosmpy.aerial.urls import ParsedUrl, Protocol, parse_url
 
 
 @pytest.mark.parametrize(
-    "input_url,parse_result.",
+    "input_url,parse_result",
     [
         (
             "grpc+https://foo.bar.baz",
