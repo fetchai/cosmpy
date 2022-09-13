@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Parsing the URL"""
+"""Parsing the URL."""
 
 from dataclasses import dataclass
 from enum import Enum
@@ -25,7 +25,7 @@ from urllib.parse import urlparse
 
 
 class Protocol(Enum):
-    """Protocol Enum
+    """Protocol Enum.
 
     :param Enum: Enum
     """
@@ -36,7 +36,7 @@ class Protocol(Enum):
 
 @dataclass
 class ParsedUrl:
-    """Parse URL
+    """Parse URL.
 
     :return: Parsed URL
     """
@@ -48,7 +48,7 @@ class ParsedUrl:
 
     @property
     def host_and_port(self) -> str:
-        """Get the host and port of the url
+        """Get the host and port of the url.
 
         :return: host and port
         """
@@ -56,7 +56,7 @@ class ParsedUrl:
 
     @property
     def rest_url(self) -> str:
-        """Get the rest url
+        """Get the rest url.
 
         :return: rest url
         """
@@ -75,7 +75,7 @@ class ParsedUrl:
 
 
 def parse_url(url: str) -> ParsedUrl:
-    """_summary_
+    """Initialize.
 
     :param url: url
     :raises RuntimeError: If url scheme is unsupported

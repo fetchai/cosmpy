@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.config
 
-Network configurations
+Network configurations.
 
 <a id="cosmpy.aerial.config.NetworkConfigError"></a>
 
@@ -12,7 +12,7 @@ Network configurations
 class NetworkConfigError(RuntimeError)
 ```
 
-Network config error
+Network config error.
 
 **Arguments**:
 
@@ -27,7 +27,7 @@ Network config error
 class NetworkConfig()
 ```
 
-Network configurations
+Network configurations.
 
 **Raises**:
 
@@ -42,7 +42,7 @@ Network configurations
 def validate()
 ```
 
-Validation the network configuration
+Validate the network configuration.
 
 **Raises**:
 
@@ -57,7 +57,7 @@ Validation the network configuration
 def fetchai_dorado_testnet(cls) -> "NetworkConfig"
 ```
 
-Fetchai dorado testnet
+Fetchai dorado testnet.
 
 **Returns**:
 
@@ -72,7 +72,7 @@ Network configuration
 def fetchai_alpha_testnet(cls)
 ```
 
-Get the fetchai alpha testnet
+Get the fetchai alpha testnet.
 
 **Raises**:
 
@@ -87,7 +87,7 @@ Get the fetchai alpha testnet
 def fetchai_beta_testnet(cls)
 ```
 
-Get the Fetchai beta testnet
+Get the Fetchai beta testnet.
 
 **Raises**:
 
@@ -102,7 +102,7 @@ Get the Fetchai beta testnet
 def fetchai_stable_testnet(cls)
 ```
 
-Get the fetchai stable testnet
+Get the fetchai stable testnet.
 
 **Returns**:
 
@@ -117,7 +117,7 @@ fetchai stable testnet. For now dorado is fetchai stable testnet.
 def fetchai_mainnet(cls) -> "NetworkConfig"
 ```
 
-Get the fetchai mainnet configuration
+Get the fetchai mainnet configuration.
 
 **Returns**:
 
@@ -132,7 +132,7 @@ fetch mainnet configuration
 def fetch_mainnet(cls) -> "NetworkConfig"
 ```
 
-Get the fetch mainnet
+Get the fetch mainnet.
 
 **Returns**:
 
@@ -147,7 +147,7 @@ fetch mainnet configurations
 def latest_stable_testnet(cls) -> "NetworkConfig"
 ```
 
-Get the latest stable testnet
+Get the latest stable testnet.
 
 **Returns**:
 

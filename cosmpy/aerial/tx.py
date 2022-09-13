@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Transaction"""
+"""Transaction."""
 
 from dataclasses import dataclass
 from enum import Enum
@@ -42,7 +42,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
 
 
 class TxState(Enum):
-    """Transaction state
+    """Transaction state.
 
     :param Enum: Draft, Sealed, Final
     """
@@ -81,7 +81,7 @@ def _create_proto_public_key(public_key: PublicKey) -> ProtoAny:
 
 
 class SigningMode(Enum):
-    """Signing mode
+    """Signing mode.
 
     :param Enum: Direct
     """
@@ -91,7 +91,7 @@ class SigningMode(Enum):
 
 @dataclass
 class SigningCfg:
-    """Transaction signing configuration"""
+    """Transaction signing configuration."""
 
     mode: SigningMode
     sequence_num: int
@@ -99,7 +99,7 @@ class SigningCfg:
 
     @staticmethod
     def direct(public_key: PublicKey, sequence_num: int) -> "SigningCfg":
-        """Transaction signing configuration using direct mode
+        """Transaction signing configuration using direct mode.
 
         :param public_key: public key
         :param sequence_num: sequence number
@@ -113,11 +113,10 @@ class SigningCfg:
 
 
 class Transaction:
-    """Transaction"""
+    """Transaction."""
 
     def __init__(self):
-        """Init the Transactions with transaction message, state, fee and body"""
-
+        """Init the Transactions with transaction message, state, fee and body."""
         self._msgs: List[Any] = []
         self._state: TxState = TxState.Draft
         self._tx_body: Optional[TxBody] = None
@@ -126,7 +125,7 @@ class Transaction:
 
     @property  # noqa
     def state(self) -> TxState:
-        """Get the transaction state
+        """Get the transaction state.
 
         :return: current state of the transaction
         """
@@ -134,7 +133,7 @@ class Transaction:
 
     @property  # noqa
     def msgs(self):
-        """Get the transaction messages
+        """Get the transaction messages.
 
         :return: transaction messages
         """
@@ -142,7 +141,7 @@ class Transaction:
 
     @property
     def fee(self) -> Optional[str]:
-        """Get the transaction fee
+        """Get the transaction fee.
 
         :return: transaction fee
         """
@@ -150,7 +149,7 @@ class Transaction:
 
     @property
     def tx(self):
-        """_summary_
+        """Initialize.
 
         :raises RuntimeError: If the transaction has not been completed.
         :return: transaction
@@ -160,7 +159,7 @@ class Transaction:
         return self._tx
 
     def add_message(self, msg: Any) -> "Transaction":
-        """_summary_
+        """Initialize.
 
         :param msg: transaction message (memo)
         :raises RuntimeError: If the transaction is not in the draft state.
@@ -180,7 +179,7 @@ class Transaction:
         gas_limit: int,
         memo: Optional[str] = None,
     ) -> "Transaction":
-        """Seal the transaction
+        """Seal the transaction.
 
         :param signing_cfgs: signing configs
         :param fee: transaction fee
@@ -231,7 +230,7 @@ class Transaction:
         account_number: int,
         deterministic: bool = False,
     ) -> "Transaction":
-        """Sign the transaction
+        """Sign the transaction.
 
         :param signer: Signer
         :param chain_id: chain id
@@ -242,7 +241,7 @@ class Transaction:
         """
         if self.state != TxState.Sealed:
             raise RuntimeError(
-                "Transaction is not sealed. It must be sealed before signing is possible"
+                "Transaction is not sealed. It must be sealed before signing is possible."
             )
 
         sd = SignDoc()
@@ -263,7 +262,7 @@ class Transaction:
         return self
 
     def complete(self) -> "Transaction":
-        """Update transaction state to Final
+        """Update transaction state to Final.
 
         :return: transaction with  updated state
         """

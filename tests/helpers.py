@@ -27,7 +27,7 @@ from cosmpy.common.rest_client import RestClient
 
 
 class MockRestClient(RestClient):
-    """Mock QueryRestClient"""
+    """Mock QueryRestClient."""
 
     def __init__(self, content: bytes):
         """
@@ -65,7 +65,7 @@ class MockRestClient(RestClient):
 
     def post(self, url_base_path: str, request: Descriptor) -> bytes:
         """
-        Send a POST request
+        Send a POST request.
 
         :param url_base_path: url base path
         :param request: request descriptor

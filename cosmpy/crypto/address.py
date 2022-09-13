@@ -45,12 +45,15 @@ class Address(UserString):
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
     ):
-        """
-        Initialize Address instance.
+        """Initialize Address instance.
 
         :param value: str, byte, public key or Address another instance
         :param prefix: optional string
+        :raises RuntimeError: Unable to parse address
+        :raises RuntimeError: Incorrect address length
+        :raises TypeError: Unexpected type of `value` parameter
         """
+        # pylint: disable=super-init-not-called
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
@@ -85,7 +88,7 @@ class Address(UserString):
             raise TypeError("Unexpected type of `value` parameter")  # pragma: no cover
 
     def __str__(self):
-        """string representation of the address."""
+        """String representation of the address."""  # noqa: D401
         return self._display
 
     def __bytes__(self):
@@ -94,6 +97,7 @@ class Address(UserString):
 
     @property
     def data(self):  # noqa:
+        """Return address in string."""
         return str(self)
 
     def __json__(self):  # noqa:

@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.coins
 
-Parse the coins
+Parse the coins.
 
 <a id="cosmpy.aerial.coins.parse_coins"></a>
 
@@ -12,7 +12,7 @@ Parse the coins
 def parse_coins(value: str) -> List[Coin]
 ```
 
-Parse the coins
+Parse the coins.
 
 **Arguments**:
 
