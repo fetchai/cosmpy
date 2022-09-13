@@ -25,6 +25,12 @@ from tests.integration.test_contract import TestContract as BaseTestContract
 
 
 class DisabledTestContract(BaseTestContract, FaucetMixIn):
+    """Disable test contract
+
+    :param BaseTestContract: Base test contract
+    :param FaucetMixIn: Osmosis Faucet config
+    """
+
     PREFIX = "osmo"
 
     def get_ledger(self):
@@ -32,5 +38,5 @@ class DisabledTestContract(BaseTestContract, FaucetMixIn):
 
     def get_wallet(self):
         wallet = LocalWallet.generate(prefix=self.PREFIX)
-        self._ask_funds(wallet)
+        self.ask_funds(wallet)
         return wallet

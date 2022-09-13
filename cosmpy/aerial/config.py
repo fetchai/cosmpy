@@ -30,8 +30,6 @@ class NetworkConfigError(RuntimeError):
     :param RuntimeError: Runtime error
     """
 
-    pass
-
 
 URL_PREFIXES = (
     "grpc+https",
@@ -65,7 +63,14 @@ class NetworkConfig:
             raise NetworkConfigError("Chain id must be set")
         if self.url == "":
             raise NetworkConfigError("URL must be set")
-        if not any(map(lambda x: self.url.startswith(x), URL_PREFIXES)):
+        if not any(
+            map(
+                lambda x: self.url.startswith(  # noqa: # pylint: disable=unnecessary-lambda
+                    x
+                ),
+                URL_PREFIXES,
+            )
+        ):
             prefix_list = ", ".join(map(lambda x: f'"{x}"', URL_PREFIXES))
             raise NetworkConfigError(
                 f"URL must start with one of the following prefixes: {prefix_list}"

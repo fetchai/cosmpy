@@ -51,6 +51,7 @@ class Address(UserString):
         :param value: str, byte, public key or Address another instance
         :param prefix: optional string
         """
+        # pylint: disable=super-init-not-called
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
@@ -94,6 +95,7 @@ class Address(UserString):
 
     @property
     def data(self):  # noqa:
+        """Return address in string."""
         return str(self)
 
     def __json__(self):  # noqa:
