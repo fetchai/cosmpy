@@ -36,7 +36,7 @@ def _load_groups():
 def _load_dependencies() -> List[str]:
     groups = ",".join(_load_groups())
     text = subprocess.check_output(
-        f"poetry export --with {groups}", shell=False, text=True
+        f"poetry export --with {groups}", shell=True, text=True
     )
     text = text.replace("\\\n", " ")
     lines = text.splitlines()
