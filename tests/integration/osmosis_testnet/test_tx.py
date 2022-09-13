@@ -25,14 +25,20 @@ from tests.integration.osmosis_testnet.net_config import NET_CONFIG, FaucetMixIn
 from tests.integration.test_tx import TestTx as BaseTestTx
 
 
-class TestTx(BaseTestTx, FaucetMixIn):
+class DisabledTestTx(BaseTestTx, FaucetMixIn):
+    """Osmosis Transaction test
+
+    :param BaseTestTx: Base test transaction
+    :param FaucetMixIn: Osmosis testnet Faucet config
+    """
+
     COIN = "uosmo"
     GAS_LIMIT = 120000
     PREFIX = "osmo"
 
     def get_wallet_1(self):
         wallet = LocalWallet.generate(prefix=self.PREFIX)
-        self._ask_funds(wallet)
+        self.ask_funds(wallet)
         return wallet
 
     def get_wallet_2(self):

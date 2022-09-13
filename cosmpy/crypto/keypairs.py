@@ -33,8 +33,8 @@ from cosmpy.crypto.interface import Signer
 def _base64_decode(value: str) -> bytes:
     try:
         return base64.b64decode(value)
-    except Exception:
-        raise RuntimeError("Unable to parse base64 value")
+    except Exception as error:
+        raise RuntimeError("Unable to parse base64 value") from error
 
 
 class PublicKey:

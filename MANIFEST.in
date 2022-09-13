@@ -1,18 +1,19 @@
-include *.txt
-include Pipfile
-include strategy.ini
-include tox.ini
-include *.md
-include *.yml
-include *.json
-include .firebaserc
-include mkdocs.yml
-recursive-include contracts *.wasm
-recursive-include contracts *.txt
-recursive-include docs *
-recursive-include examples *.py
-recursive-include scripts *.py
-recursive-include scripts *.sh
-recursive-include cosmpy *.py
-recursive-include tests *.py
-recursive-include tests *.wasm
+recursive-excludecosmpy *.py
+
+exclude *.in
+exclude *.json
+exclude *.lock
+exclude *.md
+exclude *.txt
+exclude *.yml
+exclude strategy.ini
+exclude tox.ini
+exclude .firebaserc
+recursive-exclude contracts *.txt
+recursive-exclude contracts *.wasm
+recursive-exclude docs *.*
+recursive-exclude docs *
+recursive-exclude examples *.py
+recursive-exclude scripts *.py
+recursive-exclude scripts *.sh
+recursive-exclude tests *.py
