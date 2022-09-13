@@ -19,7 +19,6 @@
 # ------------------------------------------------------------------------------
 """Release automation script."""
 
-
 import os
 import re
 import subprocess
@@ -28,6 +27,7 @@ from abc import abstractproperty
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+import tomli
 from packaging.version import Version
 
 ROOT = Path(__file__).parent.parent
@@ -83,8 +83,8 @@ class ReleaseTool:
 
     def get_current_version(self) -> Version:
         """Get current code version."""
-        text = (ROOT / "setup.py").read_text()
-        version = re.search('VERSION = "(.*)"', text, re.MULTILINE).groups()[0]  # type: ignore
+        text = (ROOT / "pyproject.toml").read_text()
+        version = tomli.loads(text)["tool"]["poetry"]["version"]
         return Version(version)
 
     def do_we_need_to_release(self) -> bool:

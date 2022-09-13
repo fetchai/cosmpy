@@ -85,19 +85,19 @@ $(IBCGO_DIR): Makefile
 
 .PHONY: black-check
 black-check:
-	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude $(OUTPUT_FOLDER)
+	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude $(OUTPUT_FOLDER)
 
 .PHONY: isort-check
 isort-check:
-	isort --check-only --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
+	isort --check-only --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: flake
 flake:
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
+	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: vulture
 vulture:
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
 
 ####################
 ### Security & Safety
@@ -118,11 +118,11 @@ safety:
 
 .PHONY: mypy
 mypy:
-	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
+	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
+	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 
 ####################
 ### Tests
@@ -152,7 +152,8 @@ coverage-report:
 
 .PHONY: liccheck
 liccheck:
-	liccheck -s strategy.ini -r requirements.txt -l PARANOID
+	poetry export > tmp-requirements.txt
+	liccheck -s strategy.ini -r tmp-requirements.txt -l PARANOID
 
 .PHONY: copyright-check
 copyright-check:
@@ -217,9 +218,8 @@ v := $(shell pip -V | grep virtualenvs)
 new_env: clean
 	if [ -z "$v" ];\
 	then\
-		pipenv --rm;\
-		pipenv install --python 3.9;\
-		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
+		poetry install --only main  --sync;\
+		echo "Enter virtual environment with all development dependencies now: 'poetry shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
 	fi
@@ -228,9 +228,8 @@ new_env: clean
 new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
-		pipenv --rm;\
-		pipenv install --python 3.9 --dev --skip-lock --clear;\
-		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
+		poetry install --with main, dev, test, docs --sync;\
+		echo "Enter virtual environment with all development dependencies now: 'poetry shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
 	fi
@@ -241,10 +240,10 @@ new_env_dev: clean
 
 .PHONY: lint
 lint:
-	black $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude $(OUTPUT_FOLDER)
-	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) setup.py --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
+	black $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude $(OUTPUT_FOLDER)
+	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
 
 .PHONY: security
 security:
@@ -267,17 +266,8 @@ check:
 	$(MAKE) copyright-check
 	$(MAKE) test
 
-Pipfile.lock: Pipfile setup.py
-	pipenv lock --dev
-
-requirements.txt: Pipfile.lock
-	pipenv requirements > $@
-
-requirements-dev.txt: Pipfile.lock
-	pipenv requirements --dev> $@
-
-.PHONY: requirements
-requirements: $(REQUIREMENTS_FILES)
+poetry.lock: pyproject.toml
+	poetry lock
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))

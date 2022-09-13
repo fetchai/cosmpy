@@ -23,19 +23,13 @@
 class QueryError(RuntimeError):
     """Invalid Query Error"""
 
-    pass
-
 
 class NotFoundError(QueryError):
     """Not found Error"""
 
-    pass
-
 
 class QueryTimeoutError(QueryError):
     """Query timeout Error"""
-
-    pass
 
 
 class BroadcastError(RuntimeError):
