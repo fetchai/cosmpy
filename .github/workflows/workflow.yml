@@ -51,22 +51,12 @@ jobs:
     name: Check Links
     runs-on: ubuntu-latest
     steps:
-<<<<<<< HEAD
-    - uses: actions/checkout@v3
-    - uses: gaurav-nelson/github-action-markdown-link-check@v1
-      with:
-        use-quiet-mode: 'yes'
-        use-verbose-mode: 'yes'
-        config-file: '.md-link-check.json'
-
-=======
       - uses: actions/checkout@v3
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: 'yes'
           use-verbose-mode: 'yes'
           config-file: .md-link-check.json
->>>>>>> develop
   unit_tests:
     name: Unit Tests
     runs-on: '${{ matrix.os }}'
