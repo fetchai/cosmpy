@@ -255,6 +255,7 @@ lint:
 	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
 	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
+	mdformat $(MD_FILES)
 
 .PHONY: security
 security:
@@ -276,6 +277,7 @@ check:
 	$(MAKE) liccheck
 	$(MAKE) copyright-check
 	$(MAKE) test
+	$(MAKE) docs-check
 
 poetry.lock: pyproject.toml
 	poetry lock
