@@ -67,8 +67,6 @@ make docs-live
 
 Then navigate to the following URL in your browser:
 
-<!-- markdown-link-check-disable-next-line -->
-
 [http://127.0.0.1:8000/cosmpy/](http://127.0.0.1:8000/cosmpy/)
 
 ## Examples

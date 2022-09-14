@@ -1,4 +1,9 @@
 {
+    "ignorePatterns": [
+        {
+          "pattern": "^http://127.0.0.1:8000/"
+        }
+    ],
     "retryOn429": true,
     "retryCount": 5,
     "fallbackRetryDelay": "30s",
