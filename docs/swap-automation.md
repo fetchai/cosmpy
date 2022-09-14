@@ -12,7 +12,6 @@ from cosmpy.aerial.wallet import LocalWallet
 
 We will define the *swap_native_for_cw20* function that trades `swap_amount` of atestfet from `wallet` for CW20 tokens by executing a `pair_contract`:
 
-
 ```python
 def swap_native_for_cw20(swap_amount, pair_contract, wallet):
     tx = pair_contract.execute({
@@ -30,6 +29,7 @@ def swap_native_for_cw20(swap_amount, pair_contract, wallet):
     print("swapping native for cw20 tokens")
     tx.wait_to_complete()
 ```
+
 Now, we will define the *swap_cw20_for_native* function that does exactly the opposite of the function defined above: trades `swap_amount` of CW20 tokens from `wallet` for atestfet. This time the CW20 `token_contract` is executed using the `pair_contract_address`. Finally, you need to include the {"swap":{}} message in the "msg" field. However, this swap message has to be encoded into base64. When you encode {"swap":{}} message into base64 you get: eyJzd2FwIjp7fX0=
 
 ```python
@@ -44,6 +44,7 @@ def swap_cw20_for_native(swap_amount, pair_contract_address, token_contract, wal
     print("swapping cw20 for native tokens")
     tx.wait_to_complete()
 ```
+
 Set the network configuration, define a local wallet and add some tokens to it using the FaucetApi
 
 ```python
@@ -63,6 +64,7 @@ while wallet_balance < (10**18):
     wallet_balance = ledger.query_bank_balance(wallet.address())
 
 ```
+
 Define the CW20, pair, and liquidity token contracts with the following addresses:
 
 ```python
@@ -108,14 +110,15 @@ commission = 0.003
 # Interval in seconds
 interval = 5
 ```
+
 Finally, we will initialize a loop, in every step it will:
 
-* Query the Liquidity Pool status
-* Check if current trading wallet's `currency`
-* Calculate the *atestfet/CW20* price using the tokens received `tokens_out` if the whole trading wallet's balance `tokens` was to be swapped with the liquidity pool
-* If atestfet sell/buy price is equal or lower/higher than the lower/upper bound, it will trigger a sell/buy transaction of atestfet to buy/sell CW20 tokens.
-* Update trading wallet `token` balance and `currency`
-* Sleep `interval` and repeat
+- Query the Liquidity Pool status
+- Check if current trading wallet's `currency`
+- Calculate the *atestfet/CW20* price using the tokens received `tokens_out` if the whole trading wallet's balance `tokens` was to be swapped with the liquidity pool
+- If atestfet sell/buy price is equal or lower/higher than the lower/upper bound, it will trigger a sell/buy transaction of atestfet to buy/sell CW20 tokens.
+- Update trading wallet `token` balance and `currency`
+- Sleep `interval` and repeat
 
 ```python
 while True:

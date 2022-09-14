@@ -52,4 +52,3 @@ Get wealth from the faucet for the provided address.
 - `RuntimeError`: Failed to check faucet claim status
 - `RuntimeError`: Failed to get wealth for address
 - `ValueError`: Faucet claim check timed out
-

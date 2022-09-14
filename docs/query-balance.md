@@ -5,14 +5,14 @@ address: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
 balances = ledger_client.query_bank_all_balances(address)
 ```
 
-This will return a `List` of `Coin` objects that contain `amount` and  `denom` variables that correspond to all the funds held at the address and their denominations. This list includes all natively defined coins along with any tokens transferred using the inter-blockchain communication ([IBC](https://ibcprotocol.org/)) protocol.  
+This will return a `List` of `Coin` objects that contain `amount` and  `denom` variables that correspond to all the funds held at the address and their denominations. This list includes all natively defined coins along with any tokens transferred using the inter-blockchain communication ([IBC](https://ibcprotocol.org/)) protocol.
 
 ```python
 >>> balances
 [Coin(amount='29263221445595384075', denom='afet')]
 ```
 
-It's also possible to query the funds associated with a particular denomination by calling  
+It's also possible to query the funds associated with a particular denomination by calling
 
 ```python
 balance = ledger_client.query_bank_balance(address, denom='afet')

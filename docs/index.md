@@ -1,12 +1,12 @@
 Cosmpy is a Python library for interacting with Cosmos-based blockchains.
 
-* A simplified command line tool for querying and sending transactions to Cosmos-SDK blockchains. 
-* Features an easy interface for deploying and interacting with Cosmwasm smart contracts.
-* Provides access to lower-level ledger APIs for advanced use-cases. 
+- A simplified command line tool for querying and sending transactions to Cosmos-SDK blockchains.
+- Features an easy interface for deploying and interacting with Cosmwasm smart contracts.
+- Provides access to lower-level ledger APIs for advanced use-cases.
 
 ## To install
 
-``` bash
+```bash
 pip3 install cosmpy
 ```
 
@@ -24,21 +24,20 @@ https://github.com/fetchai/cosmpy
 
 Clone the repo:
 
-``` bash
+```bash
 git clone https://github.com/fetchai/cosmpy.git --recursive && cd cosmpy
 ```
 
 Set up development environment:
 
-``` bash
+```bash
 make new_env_dev
 ```
 
 This creates a new `pipenv` virtual environment and installs the development dependencies.
 
-Enter the virtual environment: 
+Enter the virtual environment:
 
-``` bash
+```bash
 pipenv shell
 ```
-     

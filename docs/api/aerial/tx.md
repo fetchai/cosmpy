@@ -234,4 +234,3 @@ Update transaction state to Final.
 **Returns**:
 
 transaction with  updated state
-

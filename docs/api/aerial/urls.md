@@ -84,4 +84,3 @@ Initialize.
 **Returns**:
 
 Parsed URL
-

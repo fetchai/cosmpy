@@ -10,6 +10,7 @@ from cosmpy.aerial.contract import LedgerContract
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 ```
+
 Set the network configuration, define a local wallet and add some tokens to it using the FaucetApi
 
 ```python
@@ -23,6 +24,7 @@ wallet = LocalWallet.generate()
 faucet_api = FaucetApi(NetworkConfig.latest_stable_testnet())
 faucet_api.get_wealth(wallet.address())
 ```
+
 Define the CW20, pair, and liquidity token contracts with the following addresses:
 
 ```python
@@ -89,7 +91,8 @@ tx = token_contract.execute({
 
 tx.wait_to_complete()
 ```
-## Add and Remove Liquidity 
+
+## Add and Remove Liquidity
 
 You need to increase your wallet's allowance to provide CW20 tokens to the liquidity pool. You don't need to increase the allowance to provide atestfet
 
@@ -111,6 +114,7 @@ tx = token_contract.execute(
 
 tx.wait_to_complete()
 ```
+
 To set the amount of atestfet to be added to the liquidity pool and not influence the existing token prices, we need to choose an amount that matches the atestfet:CW20 token ratio already existing in the pool. For this reason, we will query the `pair_contract` pool to observe the atestfet:CW20 token ratio
 
 ```python

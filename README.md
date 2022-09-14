@@ -66,7 +66,9 @@ make docs-live
 ```
 
 Then navigate to the following URL in your browser:
+
 <!-- markdown-link-check-disable-next-line -->
+
 [http://127.0.0.1:8000/cosmpy/](http://127.0.0.1:8000/cosmpy/)
 
 ## Examples
@@ -79,7 +81,7 @@ Please see [CONTRIBUTING](https://github.com/fetchai/cosmpy/blob/master/CONTRIBU
 
 ## Extra Resources
 
-* [GitHub Repo](https://github.com/fetchai/cosmpy)
-* [Bug Reports](https://github.com/fetchai/cosmpy/issues)
-* [Discussions](https://github.com/fetchai/cosmpy/discussions)
-* [Getting Started](https://docs.fetch.ai/CosmPy/)
+- [GitHub Repo](https://github.com/fetchai/cosmpy)
+- [Bug Reports](https://github.com/fetchai/cosmpy/issues)
+- [Discussions](https://github.com/fetchai/cosmpy/discussions)
+- [Getting Started](https://docs.fetch.ai/CosmPy/)

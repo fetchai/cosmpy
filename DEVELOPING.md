@@ -1,8 +1,4 @@
-[comment]: <> (  <a href="">)
-[comment]: <> (    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/fetchai/cosmpy">)
-[comment]: <> (  </a>)
-
-  <a href="https://img.shields.io/badge/lint-flake8-blueviolet">
+<a href="https://img.shields.io/badge/lint-flake8-blueviolet">
     <img alt="flake8" src="https://img.shields.io/badge/lint-flake8-yellow" >
   </a>
   <a href="https://github.com/python/mypy">
@@ -46,7 +42,7 @@ There are various makefile commands that help the development. Some of them are:
   ```bash
     make test
   ```
-  
+
 Before committing and opening a PR, use the above commands to run the checks locally. This saves CI hours and ensures you only commit clean code.
 
 ## Generating python types from Cosmos SDK protobuf schemas
@@ -65,7 +61,7 @@ When updating the Cosmos-SDK version that is supported by this library (see the 
   make proto
   ```
 
->Note: For this library to be functional, only the python types generated from protobuf schemas are required, not the schema files themselves.
+> Note: For this library to be functional, only the python types generated from protobuf schemas are required, not the schema files themselves.
 > The schema files are fetched on-demand only to enable the generation of python types.
 > Therefore, the schema files are intentionally stored as **local** files and are **NOT** checked in to this repository to minimise its filesystem footprint.
 

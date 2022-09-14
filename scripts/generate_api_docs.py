@@ -152,6 +152,7 @@ def generate_api_docs() -> None:
     shutil.rmtree(API_DIR, ignore_errors=True)
     API_DIR.mkdir()
     _generate_apidocs_cosmpy_modules()
+    subprocess.run(["make", "docs-format"])
 
 
 def install(package: str) -> int:

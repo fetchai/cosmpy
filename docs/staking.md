@@ -1,15 +1,15 @@
 A big part of the cosmos networks is staking. Staking is the process where you delegate your tokens to the network's validators in order to secure the network. There are three main actions you can take when staking:
 
-* **Delegating**: This is the process where you send your tokens to a chosen validator. They are applied immediately and you start earning rewards as soon as this transaction completes. The more tokens you stake, the more rewards you will earn.
-* **Redelegating**: This is the process where you transfer your staked tokens from one validator to another. This can be for many reasons, such as better returns, more trustworthiness, etc.
-* **Undelegating**: While your tokens are staked, you cannot spend them or send them to other users. To regain access to them, you must undelegate them. When you initiate this process, the funds will be removed from the validator they were delegated to, and must be left to cool down for a period of time (for example 21 days). After this period, the funds are automatically released into the user's wallet.
+- **Delegating**: This is the process where you send your tokens to a chosen validator. They are applied immediately and you start earning rewards as soon as this transaction completes. The more tokens you stake, the more rewards you will earn.
+- **Redelegating**: This is the process where you transfer your staked tokens from one validator to another. This can be for many reasons, such as better returns, more trustworthiness, etc.
+- **Undelegating**: While your tokens are staked, you cannot spend them or send them to other users. To regain access to them, you must undelegate them. When you initiate this process, the funds will be removed from the validator they were delegated to, and must be left to cool down for a period of time (for example 21 days). After this period, the funds are automatically released into the user's wallet.
 
 ## Actions
 
 `LedgerClient` provides useful utilities for interacting with the staking component of the network.
 
 !!! note
-    For simplicity, the staking methods do not have an option for specifying the `denom` field. This is because in almost all networks, there is only one staking denomination. Therefore, the denomination used is the one specified in the [`NetworkConfig`](connect-to-network.md) supplied to the `LedgerClient` object.
+For simplicity, the staking methods do not have an option for specifying the `denom` field. This is because in almost all networks, there is only one staking denomination. Therefore, the denomination used is the one specified in the [`NetworkConfig`](connect-to-network.md) supplied to the `LedgerClient` object.
 
 ### Delegate
 
@@ -50,13 +50,13 @@ tx.wait_to_complete()
 ```
 
 !!! note
-    The cool down is tracked for each invocation of undelegate action. So for example if you trigger 3 undelegate actions on 3 consecutive days. The first batch of tokens will become available 3 days before the final batch.
+The cool down is tracked for each invocation of undelegate action. So for example if you trigger 3 undelegate actions on 3 consecutive days. The first batch of tokens will become available 3 days before the final batch.
 
 ### Claiming Rewards
 
 While your funds are staked, you are earning rewards on them. Rewards can be collected at any time and unlike delegations, when collected they become immediately available.
 
-To claim rewards from a specific validator: 
+To claim rewards from a specific validator:
 
 ```python
 tx = ledger_client.claim_rewards(validator_address, wallet)

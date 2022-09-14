@@ -565,4 +565,3 @@ Broadcast transaction.
 **Returns**:
 
 Submitted transaction
-
