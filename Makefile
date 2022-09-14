@@ -17,6 +17,7 @@ PYCOSM_DOCS_DIR := docs
 PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
 REQUIREMENTS_FILES := requirements.txt requirements-dev.txt
+MD_FILES := ./docs AUTHORS.md  CODE_OF_CONDUCT.md  CONTRIBUTING.md  DEVELOPING.md  HISTORY.md  README.md  SECURITY.md
 
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
@@ -171,6 +172,16 @@ docs:
 .PHONY: docs-live
 docs-live:
 	mkdocs serve
+
+
+.PHONY: docs-format
+docs-format:
+	mdformat $(MD_FILES)
+
+
+.PHONY: docs-check
+docs-check:
+	mdformat --check $(MD_FILES)
 
 ####################
 ### Clean and init commands
