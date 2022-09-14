@@ -18,6 +18,9 @@ PYCOSM_TESTS_DIR := tests
 PYCOSM_EXAMPLES_DIR := examples
 REQUIREMENTS_FILES := requirements.txt requirements-dev.txt
 
+# python code directories
+PYTHON_CODE_DIRS := $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
 else
@@ -80,24 +83,32 @@ $(IBCGO_DIR): Makefile
 	cd $(IBCGO_DIR) && git checkout $(IBCGO_VERSION) -- $(IBCGO_PROTO_RELATIVE_DIRS)
 
 ####################
-### Code style
+### Code style checks
 ####################
 
 .PHONY: black-check
 black-check:
-	black --check --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude $(OUTPUT_FOLDER)
+	black --check --verbose $(PYTHON_CODE_DIRS) --exclude $(OUTPUT_FOLDER)
+
+.PHONY: black
+black:
+	black $(PYTHON_CODE_DIRS) --exclude $(OUTPUT_FOLDER)
 
 .PHONY: isort-check
 isort-check:
-	isort --check-only --verbose $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	isort --check-only --verbose $(PYTHON_CODE_DIRS)
 
-.PHONY: flake
+.PHONY: isort
+isort:
+	isort $(PYTHON_CODE_DIRS)
+
+.PHONY: flake8
 flake:
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	flake8 $(PYTHON_CODE_DIRS)
 
 .PHONY: vulture
 vulture:
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
+	vulture $(PYTHON_CODE_DIRS) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
 
 ####################
 ### Security & Safety
@@ -118,11 +129,11 @@ safety:
 
 .PHONY: mypy
 mypy:
-	mypy $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	mypy $(PYTHON_CODE_DIRS)
 
 .PHONY: pylint
 pylint:
-	pylint $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
+	pylint $(PYTHON_CODE_DIRS)
 
 ####################
 ### Tests
@@ -177,7 +188,7 @@ docs-live:
 ####################
 
 .PHONY: clean
-clean: clean-build clean-pyc clean-test
+clean: clean-build clean-pyc clean-test clean-docs
 
 .PHONY: clean-build
 clean-build:
@@ -215,20 +226,13 @@ clean-test:
 v := $(shell pip -V | grep virtualenvs)
 
 .PHONY: new_env
-new_env: clean
-	if [ -z "$v" ];\
-	then\
-		poetry install --only main  --sync;\
-		echo "Enter virtual environment with all development dependencies now: 'poetry shell'.";\
-	else\
-		echo "In a virtual environment! Exit first: 'exit'.";\
-	fi
+new_env: clean new_env_dev
 
 .PHONY: new_env_dev
 new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
-		poetry install --with main, dev, test, docs --sync;\
+		poetry install --with main,dev,test,docs --sync;\
 		echo "Enter virtual environment with all development dependencies now: 'poetry shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
@@ -239,32 +243,14 @@ new_env_dev: clean
 ####################
 
 .PHONY: lint
-lint:
-	black $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude $(OUTPUT_FOLDER)
-	isort $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	flake8 $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR)
-	vulture $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) $(PYCOSM_EXAMPLES_DIR) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
+lint: black isort flake8 vulture
 
 .PHONY: security
-security:
-	bandit -r $(PYCOSM_SRC_DIR) $(PYCOSM_TESTS_DIR) --skip B101
-	bandit -r $(PYCOSM_EXAMPLES_DIR) --skip B101,B105
-	safety check -i 41002
+security: bandit safety
 
 
 .PHONY: check
-check:
-	$(MAKE) black-check
-	$(MAKE) isort-check
-	$(MAKE) flake
-	$(MAKE) vulture
-	$(MAKE) bandit
-	$(MAKE) safety
-	$(MAKE) mypy
-	$(MAKE) pylint
-	$(MAKE) liccheck
-	$(MAKE) copyright-check
-	$(MAKE) test
+check: black-check isort-check flake8 vulture bandit safety mypy pylint liccheck copyright-check test
 
 poetry.lock: pyproject.toml
 	poetry lock
