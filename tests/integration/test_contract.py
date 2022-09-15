@@ -33,7 +33,8 @@ SCHEMA_PATH = Path(__file__).parent / "../../contracts/simple/schema"
 
 
 class ValidationTestFailure(Exception):
-    pass
+    """Validation test failure exception"""
+
 
 MAX_FLAKY_RERUNS = 3
 RERUNS_DELAY = 10
@@ -108,23 +109,23 @@ class TestContract:
         contract = LedgerContract(
             CONTRACT_PATH, self.get_ledger(), schema_path=SCHEMA_PATH
         )
-        contract._address = "fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel"
+        contract._address = "fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel"  # pylint: disable=protected-access
 
         try:
             bad_query = {"get_count": 0}
             contract.query(bad_query)
         except ValidationError:
             pass
-        except Exception:
-            raise ValidationTestFailure("Query should have failed validation")
+        except Exception as exc:
+            raise ValidationTestFailure("Query should have failed validation") from exc
 
         try:
             bad_msg = {"increment": 1}
             contract.execute(bad_msg, wallet).wait_to_complete()
         except ValidationError:
             pass
-        except Exception:
-            raise ValidationTestFailure("Msg should have failed validation")
+        except Exception as exc:
+            raise ValidationTestFailure("Msg should have failed validation") from exc
 
 
 if __name__ == "__main__":
