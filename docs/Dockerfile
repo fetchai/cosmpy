@@ -1,5 +1,5 @@
 FROM python:3.7
-RUN pip3 install pipenv
+RUN pip3 install --no-cache-dir pipenv
 
 WORKDIR /app
 ADD Pipfile Pipfile.lock /app/

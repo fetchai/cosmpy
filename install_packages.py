@@ -29,7 +29,7 @@ import toml
 
 
 def _load_groups():
-    data = toml.loads(Path("pyproject.toml").read_text())
+    data = toml.loads(Path("pyproject.toml", encoding="utf-8").read_text())
     return list(data["tool"]["poetry"]["group"].keys())
 
 
