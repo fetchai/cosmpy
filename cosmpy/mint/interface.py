@@ -35,6 +35,7 @@ class Mint(ABC):
     def AnnualProvisions(self) -> QueryAnnualProvisionsResponse:
         """
         AnnualProvisions current minting annual provisions value.
+
         :return: a QueryAnnualProvisionsResponse instance
         """
 
@@ -42,6 +43,7 @@ class Mint(ABC):
     def Inflation(self) -> QueryInflationResponse:
         """
         Inflation returns the current minting inflation value.
+
         :return: a QueryInflationResponse instance
         """
 
@@ -49,5 +51,6 @@ class Mint(ABC):
     def Params(self) -> QueryParamsResponse:
         """
         Params returns the total set of minting parameters.
+
         :return: QueryParamsResponse
         """

@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.tx
 
-Transaction
+Transaction.
 
 <a id="cosmpy.aerial.tx.TxState"></a>
 
@@ -12,7 +12,7 @@ Transaction
 class TxState(Enum)
 ```
 
-Transaction state
+Transaction state.
 
 **Arguments**:
 
@@ -26,7 +26,7 @@ Transaction state
 class SigningMode(Enum)
 ```
 
-Signing mode
+Signing mode.
 
 **Arguments**:
 
@@ -41,7 +41,7 @@ Signing mode
 class SigningCfg()
 ```
 
-Transaction signing configuration
+Transaction signing configuration.
 
 <a id="cosmpy.aerial.tx.SigningCfg.direct"></a>
 
@@ -52,7 +52,7 @@ Transaction signing configuration
 def direct(public_key: PublicKey, sequence_num: int) -> "SigningCfg"
 ```
 
-Transaction signing configuration using direct mode
+Transaction signing configuration using direct mode.
 
 **Arguments**:
 
@@ -71,7 +71,7 @@ Transaction signing configuration
 class Transaction()
 ```
 
-Transaction
+Transaction.
 
 <a id="cosmpy.aerial.tx.Transaction.__init__"></a>
 
@@ -81,7 +81,7 @@ Transaction
 def __init__()
 ```
 
-Init the Transactions with transaction message, state, fee and body
+Init the Transactions with transaction message, state, fee and body.
 
 <a id="cosmpy.aerial.tx.Transaction.state"></a>
 
@@ -92,7 +92,7 @@ Init the Transactions with transaction message, state, fee and body
 def state() -> TxState
 ```
 
-Get the transaction state
+Get the transaction state.
 
 **Returns**:
 
@@ -107,7 +107,7 @@ current state of the transaction
 def msgs()
 ```
 
-Get the transaction messages
+Get the transaction messages.
 
 **Returns**:
 
@@ -122,7 +122,7 @@ transaction messages
 def fee() -> Optional[str]
 ```
 
-Get the transaction fee
+Get the transaction fee.
 
 **Returns**:
 
@@ -137,7 +137,7 @@ transaction fee
 def tx()
 ```
 
-_summary_
+Initialize.
 
 **Raises**:
 
@@ -155,7 +155,7 @@ transaction
 def add_message(msg: Any) -> "Transaction"
 ```
 
-_summary_
+Initialize.
 
 **Arguments**:
 
@@ -180,7 +180,7 @@ def seal(signing_cfgs: Union[SigningCfg, List[SigningCfg]],
          memo: Optional[str] = None) -> "Transaction"
 ```
 
-Seal the transaction
+Seal the transaction.
 
 **Arguments**:
 
@@ -204,7 +204,7 @@ def sign(signer: Signer,
          deterministic: bool = False) -> "Transaction"
 ```
 
-Sign the transaction
+Sign the transaction.
 
 **Arguments**:
 
@@ -229,7 +229,7 @@ signed transaction
 def complete() -> "Transaction"
 ```
 
-Update transaction state to Final
+Update transaction state to Final.
 
 **Returns**:
 

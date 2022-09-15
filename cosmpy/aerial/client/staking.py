@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Staking functionality"""
+"""Staking functionality."""
 
 from enum import Enum
 
@@ -31,7 +31,7 @@ from cosmpy.protos.cosmos.staking.v1beta1.tx_pb2 import (
 
 
 class ValidatorStatus(Enum):
-    """Validator status"""
+    """Validator status."""
 
     UNSPECIFIED = "BOND_STATUS_UNSPECIFIED"
     BONDED = "BOND_STATUS_BONDED"
@@ -40,7 +40,7 @@ class ValidatorStatus(Enum):
 
     @classmethod
     def from_proto(cls, value: int) -> "ValidatorStatus":
-        """Get the validator status from proto
+        """Get the validator status from proto.
 
         :param value: value
         :raises RuntimeError: Unable to decode validator status
@@ -50,18 +50,17 @@ class ValidatorStatus(Enum):
             return cls.UNSPECIFIED
         if value == 1:
             return cls.UNBONDED
-        elif value == 2:
+        if value == 2:
             return cls.UNBONDING
-        elif value == 3:
+        if value == 3:
             return cls.BONDED
-        else:
-            raise RuntimeError(f"Unable to decode validator status: {value}")
+        raise RuntimeError(f"Unable to decode validator status: {value}")
 
 
 def create_delegate_msg(
     delegator: Address, validator: Address, amount: int, denom: str
 ) -> MsgDelegate:
-    """Create delegate message
+    """Create delegate message.
 
     :param delegator: delegator
     :param validator: validator
@@ -86,7 +85,7 @@ def create_redelegate_msg(
     amount: int,
     denom: str,
 ) -> MsgBeginRedelegate:
-    """Create redelegate message
+    """Create redelegate message.
 
     :param delegator_address: delegator address
     :param validator_src_address: source validation address
@@ -109,7 +108,7 @@ def create_redelegate_msg(
 def create_undelegate_msg(
     delegator_address: Address, validator_address: Address, amount: int, denom: str
 ) -> MsgUndelegate:
-    """Create undelegate message
+    """Create undelegate message.
 
     :param delegator_address: delegator address
     :param validator_address: validator address

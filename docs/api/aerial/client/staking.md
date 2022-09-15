@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.client.staking
 
-Staking functionality
+Staking functionality.
 
 <a id="cosmpy.aerial.client.staking.ValidatorStatus"></a>
 
@@ -12,7 +12,7 @@ Staking functionality
 class ValidatorStatus(Enum)
 ```
 
-Validator status
+Validator status.
 
 <a id="cosmpy.aerial.client.staking.ValidatorStatus.from_proto"></a>
 
@@ -23,7 +23,7 @@ Validator status
 def from_proto(cls, value: int) -> "ValidatorStatus"
 ```
 
-Get the validator status from proto
+Get the validator status from proto.
 
 **Arguments**:
 
@@ -46,7 +46,7 @@ def create_delegate_msg(delegator: Address, validator: Address, amount: int,
                         denom: str) -> MsgDelegate
 ```
 
-Create delegate message
+Create delegate message.
 
 **Arguments**:
 
@@ -70,7 +70,7 @@ def create_redelegate_msg(delegator_address: Address,
                           denom: str) -> MsgBeginRedelegate
 ```
 
-Create redelegate message
+Create redelegate message.
 
 **Arguments**:
 
@@ -94,7 +94,7 @@ def create_undelegate_msg(delegator_address: Address,
                           denom: str) -> MsgUndelegate
 ```
 
-Create undelegate message
+Create undelegate message.
 
 **Arguments**:
 

@@ -34,7 +34,14 @@ NET_CONFIG = NetworkConfig(
 
 
 class FaucetMixIn:
-    def _ask_funds(self, wallet):
+    """Osmosis faucet config"""
+
+    def ask_funds(self, wallet):
+        """Request fund from faucet.
+
+        :param wallet: Wallet Address
+        :raises Exception: fail to topup
+        """
         resp = requests.post(
             "https://testnet-faucet.dev-osmosis.zone/request",
             json={"address": str(wallet.address())},

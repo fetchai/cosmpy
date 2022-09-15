@@ -228,7 +228,7 @@ new_env: clean
 new_env_dev: clean
 	if [ -z "$v" ];\
 	then\
-		poetry install --with main --with dev --with test --with docs --sync;\
+		poetry install --with main, dev, test, docs --sync;\
 		echo "Enter virtual environment with all development dependencies now: 'poetry shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\

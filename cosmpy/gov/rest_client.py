@@ -76,7 +76,6 @@ class GovRestClient(Gov):
 
         :return: QueryProposalsResponse
         """
-
         json_response = self._rest_api.get(
             f"{self.API_URL}/proposals/",
             request,
@@ -119,7 +118,6 @@ class GovRestClient(Gov):
 
         :return: QueryParamsResponse
         """
-
         json_response = self._rest_api.get(
             f"{self.API_URL}/params/{request.params_type}"
         )

@@ -55,7 +55,7 @@ class CosmWasmRestClient(CosmWasm):
 
     def __init__(self, rest_api: RestClient):
         """
-        Create CosmWasm rest client
+        Create CosmWasm rest client.
 
         :param rest_api: RestClient api
         """
@@ -65,7 +65,7 @@ class CosmWasmRestClient(CosmWasm):
         self, request: QueryContractInfoRequest
     ) -> QueryContractInfoResponse:
         """
-        Gets the contract meta data
+        Get the contract meta data.
 
         :param request: QueryContractInfoRequest
 
@@ -80,7 +80,7 @@ class CosmWasmRestClient(CosmWasm):
         self, request: QueryContractHistoryRequest
     ) -> QueryContractHistoryResponse:
         """
-        Gets the contract code history
+        Get the contract code history.
 
         :param request: QueryContractHistoryRequest
 
@@ -98,7 +98,7 @@ class CosmWasmRestClient(CosmWasm):
         self, request: QueryContractsByCodeRequest
     ) -> QueryContractsByCodeResponse:
         """
-        Lists all smart contracts for a code id
+        List all smart contracts for a code id.
 
         :param request: QueryContractsByCodeRequest
 
@@ -113,7 +113,7 @@ class CosmWasmRestClient(CosmWasm):
         self, request: QueryAllContractStateRequest
     ) -> QueryAllContractStateResponse:
         """
-        Gets all raw store data for a single contract
+        Get all raw store data for a single contract.
 
         :param request: QueryAllContractStateRequest
 
@@ -128,7 +128,7 @@ class CosmWasmRestClient(CosmWasm):
         self, request: QueryRawContractStateRequest
     ) -> QueryRawContractStateResponse:
         """
-        Gets single key from the raw store data of a contract
+        Get single key from the raw store data of a contract.
 
         :param request: QueryRawContractStateRequest
 
@@ -151,7 +151,7 @@ class CosmWasmRestClient(CosmWasm):
         self, request: QuerySmartContractStateRequest
     ) -> QuerySmartContractStateResponse:
         """
-        Get smart query result from the contract
+        Get smart query result from the contract.
 
         :param request: QuerySmartContractStateRequest
 
@@ -170,7 +170,7 @@ class CosmWasmRestClient(CosmWasm):
 
     def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
         """
-        Gets the binary code and metadata for a singe wasm code
+        Get the binary code and metadata for a single wasm code.
 
         :param request: QueryCodeRequest
 
@@ -184,7 +184,7 @@ class CosmWasmRestClient(CosmWasm):
 
     def Codes(self, request: QueryCodesRequest) -> QueryCodesResponse:
         """
-        Gets the metadata for all stored wasm codes
+        Get the metadata for all stored wasm codes.
 
         :param request: QueryCodesRequest
 
@@ -196,7 +196,8 @@ class CosmWasmRestClient(CosmWasm):
     @staticmethod
     def _fix_state_response(response: bytes) -> JSONLike:
         """
-        Fix raw/smart contract state response to be parsable to protobuf object
+        Fix raw/smart contract state response to be parsable to protobuf object.
+
         - Converts dict to base64 encoded string
 
         :param response: raw/smart contract state response
@@ -211,7 +212,8 @@ class CosmWasmRestClient(CosmWasm):
     @staticmethod
     def _fix_history_response(response: bytes) -> JSONLike:
         """
-        Fix contract history response to be parsable to protobuf object
+        Fix contract history response to be parsable to protobuf object.
+
         - Converts dict to base64 encoded string
 
         :param response: raw/smart contract state response

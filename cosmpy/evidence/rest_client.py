@@ -52,7 +52,6 @@ class EvidenceRestClient(Evidence):
 
         :return: QueryEvidenceResponse
         """
-
         json_response = self._rest_api.get(
             f"{self.API_URL}/evidence/{request.evidence_hash}",
         )
@@ -66,6 +65,5 @@ class EvidenceRestClient(Evidence):
 
         :return: QueryAllEvidenceResponse
         """
-
         json_response = self._rest_api.get(f"{self.API_URL}/evidence", request)
         return Parse(json_response, QueryAllEvidenceResponse())

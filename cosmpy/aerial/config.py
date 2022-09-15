@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Network configurations"""
+"""Network configurations."""
 
 import warnings
 from dataclasses import dataclass
@@ -25,12 +25,10 @@ from typing import Optional
 
 
 class NetworkConfigError(RuntimeError):
-    """Network config error
+    """Network config error.
 
     :param RuntimeError: Runtime error
     """
-
-    pass
 
 
 URL_PREFIXES = (
@@ -43,7 +41,7 @@ URL_PREFIXES = (
 
 @dataclass
 class NetworkConfig:
-    """Network configurations
+    """Network configurations.
 
     :raises NetworkConfigError: Network config error
     :raises RuntimeError: Runtime error
@@ -57,7 +55,7 @@ class NetworkConfig:
     faucet_url: Optional[str] = None
 
     def validate(self):
-        """Validation the network configuration
+        """Validate the network configuration.
 
         :raises NetworkConfigError: Network config error
         """
@@ -65,7 +63,14 @@ class NetworkConfig:
             raise NetworkConfigError("Chain id must be set")
         if self.url == "":
             raise NetworkConfigError("URL must be set")
-        if not any(map(lambda x: self.url.startswith(x), URL_PREFIXES)):
+        if not any(
+            map(
+                lambda x: self.url.startswith(  # noqa: # pylint: disable=unnecessary-lambda
+                    x
+                ),
+                URL_PREFIXES,
+            )
+        ):
             prefix_list = ", ".join(map(lambda x: f'"{x}"', URL_PREFIXES))
             raise NetworkConfigError(
                 f"URL must start with one of the following prefixes: {prefix_list}"
@@ -73,7 +78,7 @@ class NetworkConfig:
 
     @classmethod
     def fetchai_dorado_testnet(cls) -> "NetworkConfig":
-        """Fetchai dorado testnet
+        """Fetchai dorado testnet.
 
         :return: Network configuration
         """
@@ -88,7 +93,7 @@ class NetworkConfig:
 
     @classmethod
     def fetchai_alpha_testnet(cls):
-        """Get the fetchai alpha testnet
+        """Get the fetchai alpha testnet.
 
         :raises RuntimeError: No alpha testnet available
         """
@@ -96,7 +101,7 @@ class NetworkConfig:
 
     @classmethod
     def fetchai_beta_testnet(cls):
-        """Get the Fetchai beta testnet
+        """Get the Fetchai beta testnet.
 
         :raises RuntimeError: No beta testnet available
         """
@@ -104,7 +109,7 @@ class NetworkConfig:
 
     @classmethod
     def fetchai_stable_testnet(cls):
-        """Get the fetchai stable testnet
+        """Get the fetchai stable testnet.
 
         :return: fetchai stable testnet. For now dorado is fetchai stable testnet.
         """
@@ -112,7 +117,7 @@ class NetworkConfig:
 
     @classmethod
     def fetchai_mainnet(cls) -> "NetworkConfig":
-        """Get the fetchai mainnet configuration
+        """Get the fetchai mainnet configuration.
 
         :return: fetch mainnet configuration
         """
@@ -127,7 +132,7 @@ class NetworkConfig:
 
     @classmethod
     def fetch_mainnet(cls) -> "NetworkConfig":
-        """Get the fetch mainnet
+        """Get the fetch mainnet.
 
         :return: fetch mainnet configurations
         """
@@ -139,7 +144,7 @@ class NetworkConfig:
 
     @classmethod
     def latest_stable_testnet(cls) -> "NetworkConfig":
-        """Get the latest stable testnet
+        """Get the latest stable testnet.
 
         :return: latest stable testnet
         """
