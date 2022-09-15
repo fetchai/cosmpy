@@ -16,4 +16,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""Testcases for contract"""
+"""Testcases for contract."""

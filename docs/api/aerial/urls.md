@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.urls
 
-Parsing the URL
+Parsing the URL.
 
 <a id="cosmpy.aerial.urls.Protocol"></a>
 
@@ -12,7 +12,7 @@ Parsing the URL
 class Protocol(Enum)
 ```
 
-Protocol Enum
+Protocol Enum.
 
 **Arguments**:
 
@@ -27,7 +27,7 @@ Protocol Enum
 class ParsedUrl()
 ```
 
-Parse URL
+Parse URL.
 
 **Returns**:
 
@@ -42,7 +42,7 @@ Parsed URL
 def host_and_port() -> str
 ```
 
-Get the host and port of the url
+Get the host and port of the url.
 
 **Returns**:
 
@@ -57,7 +57,7 @@ host and port
 def rest_url() -> str
 ```
 
-Get the rest url
+Get the rest url.
 
 **Returns**:
 
@@ -71,7 +71,7 @@ rest url
 def parse_url(url: str) -> ParsedUrl
 ```
 
-_summary_
+Initialize.
 
 **Arguments**:
 

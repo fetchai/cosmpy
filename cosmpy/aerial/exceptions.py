@@ -17,26 +17,26 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Exceptions"""
+"""Exceptions."""
 
 
 class QueryError(RuntimeError):
-    """Invalid Query Error"""
+    """Invalid Query Error."""
 
 
 class NotFoundError(QueryError):
-    """Not found Error"""
+    """Not found Error."""
 
 
 class QueryTimeoutError(QueryError):
-    """Query timeout Error"""
+    """Query timeout Error."""
 
 
 class BroadcastError(RuntimeError):
-    """Broadcast Error"""
+    """Broadcast Error."""
 
     def __init__(self, tx_hash: str, message: str):
-        """Init Broadcast error
+        """Init Broadcast error.
 
         :param tx_hash: transaction hash
         :param message: message
@@ -46,10 +46,10 @@ class BroadcastError(RuntimeError):
 
 
 class OutOfGasError(BroadcastError):
-    """Insufficient Fess Error"""
+    """Insufficient Fess Error."""
 
     def __init__(self, tx_hash: str, gas_wanted: int, gas_used: int):
-        """_summary_
+        """Initialize.
 
         :param tx_hash: transaction hash
         :param gas_wanted: gas required to complete the transaction
@@ -63,10 +63,10 @@ class OutOfGasError(BroadcastError):
 
 
 class InsufficientFeesError(BroadcastError):
-    """Insufficient Fess Error"""
+    """Insufficient Fess Error."""
 
     def __init__(self, tx_hash: str, minimum_required_fee: str):
-        """_summary_
+        """Initialize.
 
         :param tx_hash: transaction hash
         :param minimum_required_fee: Minimum required fee

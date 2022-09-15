@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Parse the coins"""
+"""Parse the coins."""
 
 import re
 from typing import List
@@ -26,7 +26,7 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 def parse_coins(value: str) -> List[Coin]:
-    """Parse the coins
+    """Parse the coins.
 
     :param value: coins
     :raises RuntimeError: If unable to parse the value

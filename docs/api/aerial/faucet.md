@@ -28,6 +28,10 @@ Init faucet API.
 
 - `net_config`: Ledger network configuration.
 
+**Raises**:
+
+- `ValueError`: Network config has no faucet url set
+
 <a id="cosmpy.aerial.faucet.FaucetApi.get_wealth"></a>
 
 #### get`_`wealth
@@ -44,5 +48,8 @@ Get wealth from the faucet for the provided address.
 
 **Raises**:
 
-- `None`: RuntimeError of explicit faucet failures
+- `RuntimeError`: Unable to create faucet claim
+- `RuntimeError`: Failed to check faucet claim status
+- `RuntimeError`: Failed to get wealth for address
+- `ValueError`: Faucet claim check timed out
 

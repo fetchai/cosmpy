@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Common types"""
+"""Common types."""
 
 from typing import Any, Dict, List, Optional, Union
 

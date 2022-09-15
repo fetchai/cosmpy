@@ -106,7 +106,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_Validator():
         """Test Validator method."""
-
         content = {
             "validator": {
                 "operator_address": "string",
@@ -144,7 +143,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_ValidatorDelegations():
         """Test ValidatorDelegations method."""
-
         content = {
             "delegation_responses": [
                 {
@@ -178,7 +176,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_ValidatorUnbondingDelegations():
         """Test ValidatorUnbondingDelegations method."""
-
         content = {
             "unbonding_responses": [
                 {
@@ -220,7 +217,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_Delegation():
         """Test Delegation method."""
-
         content = {
             "delegation_response": {
                 "delegation": {
@@ -253,7 +249,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_UnbondingDelegation():
         """Test UnbondingDelegation method."""
-
         content = {
             "unbond": {
                 "delegator_address": "fetchdelegator",
@@ -290,7 +285,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_DelegatorDelegations():
         """Test DelegatorDelegations method."""
-
         content = {
             "delegation_responses": [
                 {
@@ -324,7 +318,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_DelegatorUnbondingDelegations():
         """Test DelegatorUnbondingDelegations method."""
-
         content = {
             "unbonding_responses": [
                 {
@@ -367,7 +360,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_Redelegations():
         """Test Redelegations method."""
-
         content = {
             "redelegation_responses": [
                 {
@@ -420,7 +412,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_DelegatorValidators():
         """Test DelegatorValidators method."""
-
         content = {
             "validators": [
                 {
@@ -472,7 +463,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_DelegatorValidator():
         """Test DelegatorValidator method."""
-
         content = {
             "validator": {
                 "operator_address": "fetchoperator",
@@ -523,7 +513,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_HistoricalInfo():
         """Test HistoricalInfo method."""
-
         content = {
             "hist": {
                 "header": {
@@ -590,7 +579,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_Pool():
         """Test Pool method."""
-
         content = {"pool": {"not_bonded_tokens": "123", "bonded_tokens": "123"}}
 
         mock_client = MockRestClient(json_encode(content))
@@ -605,7 +593,6 @@ class StakingRestClientTestCase(TestCase):
     @staticmethod
     def test_Params():
         """Test Params method."""
-
         content = {
             "params": {
                 "unbonding_time": "123s",

@@ -41,7 +41,7 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsReques
 # * x -> Compounding Period
 def M(x, f, S, k, D):
     """
-    Calculate the total reward
+    Calculate the total reward.
 
     :param x: Compounding Period
     :param f: fee

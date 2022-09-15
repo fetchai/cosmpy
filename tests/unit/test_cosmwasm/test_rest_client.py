@@ -53,7 +53,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_codes():
         """Test query codes for positive result."""
-
         content = {
             "code_infos": [
                 {"code_id": 3, "creator": "fetchaddress", "data_hash": "hash"},
@@ -71,7 +70,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_code():
         """Test query code for positive result."""
-
         content = {
             "code_info": {"code_id": 3, "creator": "fetchaddress", "data_hash": "hash"},
             "data": "bytecode",
@@ -87,7 +85,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_smart_contract_state():
         """Test query smart contract state for positive result."""
-
         raw_content = b'{\n  "data": {"balance":"1"}\n}'
         expected_response = QuerySmartContractStateResponse(data=b'{"balance": "1"}')
 
@@ -110,7 +107,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_raw_contract_state():
         """Test query raw contract state for positive result."""
-
         raw_content = b'{\n  "data": {"balance":"1"}\n}'
         expected_response = QueryRawContractStateResponse(data=b'{"balance": "1"}')
 
@@ -133,7 +129,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_all_contract_state():
         """Test query all contract state for positive result."""
-
         content = {
             "models": [
                 {
@@ -163,7 +158,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_contract_info():
         """Test query contract info for positive result."""
-
         content = {
             "address": "some_address",
             "contract_info": {
@@ -192,7 +186,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_contract_by_code():
         """Test query contract by code for positive result."""
-
         content = {
             "contracts": ["fetch18vd8fpwxzck93qlwghaj6arh4p7c5n890l3amr"],
             "pagination": {"total": "1"},
@@ -212,7 +205,6 @@ class WasmRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_contract_history():
         """Test query contract history for positive result."""
-
         msg = {}
         base64_msg = base64.b64encode(json_encode(msg).encode("UTF8")).decode()
 
