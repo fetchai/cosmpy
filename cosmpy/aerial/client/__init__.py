@@ -71,6 +71,7 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegatorUnbondingDelegationsRequest,
     QueryValidatorsRequest,
 )
+from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import PubKey
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2_grpc import (
     QueryStub as StakingGrpcClient,
 )
