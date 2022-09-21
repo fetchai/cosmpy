@@ -11,6 +11,7 @@ exclude tox.ini
 exclude .firebaserc
 recursive-exclude contracts *.txt
 recursive-exclude contracts *.wasm
+recursive-exclude contracts *.json
 recursive-exclude docs *.*
 recursive-exclude docs *
 recursive-exclude examples *.py

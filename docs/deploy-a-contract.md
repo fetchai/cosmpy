@@ -3,7 +3,7 @@ You can deploy smart contracts in CosmPy using `LedgerContract`. For this, you w
 ```python
 from cosmpy.aerial.contract import LedgerContract
 
-PATH = "../simple.wasm"
+PATH = "contracts/simple/simple.wasm"
 
 contract = LedgerContract(PATH, ledger_client)
 contract.deploy({}, wallet)
