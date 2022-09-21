@@ -2,6 +2,8 @@
 ### Initialise dev environment
 ########################################
 
+# Create a new poetry virtual environment with all the necessary dependencies installed.
+# Once finished, `poetry shell` to enter the virtual environment
 v := $(shell pip -V | grep virtualenvs)
 
 .PHONY: new_env
@@ -18,6 +20,7 @@ new_env_dev: clean
 ### Useful linting command
 ########################################
 
+# Automatically runs black and isort to format the code, and runs flake8 and vulture checks
 .PHONY: lint
 lint: black isort flake8 vulture
 
@@ -25,19 +28,24 @@ lint: black isort flake8 vulture
 ### Tests
 ########################################
 
+# Run all tests
 .PHONY: test
 test:
 	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules --ignore $(COSMPY_TESTS_DIR)/vulture_whitelist.py
 	$(MAKE) coverage-report
 
+# Run all unit tests
 .PHONY: unit-test
 unit-test:
 	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules --ignore $(COSMPY_TESTS_DIR)/vulture_whitelist.py -m "not integration"
 
+# Run all integration tests
 .PHONY: integration-test
 integration-test:
 	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules --ignore $(COSMPY_TESTS_DIR)/vulture_whitelist.py -m "integration"
 
+# Produce the coverage report. Can see a report summary on the terminal.
+# Detailed report on all modules are placed under /coverage-report
 .PHONY: coverage-report
 coverage-report:
 	coverage report -m
@@ -47,10 +55,12 @@ coverage-report:
 ### Automatic Styling
 ########################################
 
+# Automatically formats the code
 .PHONY: black
 black:
 	black $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
 
+# Automatically sorts the imports
 .PHONY: isort
 isort:
 	isort $(PYTHON_CODE_DIRS)
@@ -59,18 +69,22 @@ isort:
 ### Code style checks
 ########################################
 
+# Runs the black format checker
 .PHONY: black-check
 black-check:
 	black --check --verbose $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
 
+# Runs the isort format checker
 .PHONY: isort-check
 isort-check:
 	isort --check-only --verbose $(PYTHON_CODE_DIRS)
 
+# Runs flake8 checker
 .PHONY: flake8
 flake:
 	flake8 $(PYTHON_CODE_DIRS)
 
+# Runs vulture checker (checks for unused code)
 .PHONY: vulture
 vulture:
 	vulture $(PYTHON_CODE_DIRS) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
@@ -79,14 +93,13 @@ vulture:
 ### Security & safety checks
 ########################################
 
-.PHONY: security
-security: bandit safety
-
+# Checks the security of the code
 .PHONY: bandit
 bandit:
 	bandit -r $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) --skip B101
 	bandit -r $(COSMPY_EXAMPLES_DIR) --skip B101,B105
 
+# Checks the security of the code
 .PHONY: safety
 safety:
 	safety check -i 41002
@@ -95,10 +108,12 @@ safety:
 ### Linters
 ########################################
 
+# Runs the mypy linter
 .PHONY: mypy
 mypy:
 	mypy $(PYTHON_CODE_DIRS)
 
+# Runs the pylint linter
 .PHONY: pylint
 pylint:
 	pylint $(PYTHON_CODE_DIRS)
@@ -107,12 +122,14 @@ pylint:
 ### License and copyright checks
 ########################################
 
+# Check licenses
 .PHONY: liccheck
 liccheck:
 	poetry export > tmp-requirements.txt
 	liccheck -s strategy.ini -r tmp-requirements.txt -l PARANOID
 	rm -frv tmp-requirements.txt
 
+# Check copyrights
 .PHONY: copyright-check
 copyright-check:
 	python scripts/check_copyright.py
@@ -121,18 +138,26 @@ copyright-check:
 ### Docs
 ########################################
 
+# Build documentation
 .PHONY: docs
 docs:
 	mkdocs build --clean
 
+# Live documentation server
 .PHONY: docs-live
 docs-live:
 	mkdocs serve
+
+# Generate API documentation (ensure you add the new pages created into /mkdocs.yml --> nav)
+.PHONY: generate-api-docs
+generate-api-docs:
+	python scripts/generate_api_docs.py
 
 ########################################
 ### Update Poetry Lock
 ########################################
 
+# Updates the poetry lock
 poetry.lock: pyproject.toml
 	poetry lock
 
@@ -140,6 +165,7 @@ poetry.lock: pyproject.toml
 ### Clear the caches and temporary files
 ########################################
 
+# clean the caches and temporary files and directories
 .PHONY: clean
 clean: clean-build clean-pyc clean-test clean-docs
 
@@ -180,6 +206,7 @@ clean-test:
 ### Generate protos and grpc files
 ########################################
 
+# Constants
 COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
 COSMOS_SDK_VERSION := v0.18.0
 COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
@@ -198,7 +225,6 @@ COSMPY_SRC_DIR := cosmpy
 COSMPY_TESTS_DIR := tests
 COSMPY_EXAMPLES_DIR := examples
 
-# python code directories
 PYTHON_CODE_DIRS := $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) $(COSMPY_EXAMPLES_DIR)
 
 ifeq ($(OS),Windows_NT)
