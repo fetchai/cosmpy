@@ -23,6 +23,8 @@ nav:
     - Oracles: 'oracles.md'
     - Wallet Top-up: 'wallet-topup.md'
     - Liquidity Pool: 'liquidity-pool.md'
+    - Swap Automation: 'swap-automation.md'
+
   - API:
     - Client:
       - Client functionality: 'api/aerial/client/__init__.md'
