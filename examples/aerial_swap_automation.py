@@ -30,7 +30,7 @@ from cosmpy.aerial.wallet import LocalWallet
 
 def swap_native_for_cw20(swap_amount, pair_contract, wallet):
     """
-    Swap Native for cw20
+    Swap Native for cw20.
 
     :param swap_amount: swap amount
     :param pair_contract: pair contract address
@@ -55,7 +55,7 @@ def swap_native_for_cw20(swap_amount, pair_contract, wallet):
 
 def swap_cw20_for_native(swap_amount, pair_contract_address, token_contract, wallet):
     """
-    Swap cw20 for native
+    Swap cw20 for native.
 
     :param swap_amount: swap amount
     :param pair_contract_address: pair contract address
@@ -78,7 +78,7 @@ def swap_cw20_for_native(swap_amount, pair_contract_address, token_contract, wal
 
 
 def _parse_commandline():
-    """Commandline parser"""
+    """Commandline parser."""
     parser = argparse.ArgumentParser()
 
     parser.add_argument(

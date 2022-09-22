@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Testcases for create instantiate and execute message"""
+"""Testcases for create instantiate and execute message."""
 
 from cosmpy.aerial.contract import (
     create_cosmwasm_execute_msg,
@@ -27,7 +27,7 @@ from cosmpy.crypto.address import Address
 
 
 def test_create_instantiate_msg():
-    """Test create instantiate message"""
+    """Test create instantiate message."""
     sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")
     msg = create_cosmwasm_instantiate_msg(
         1, {}, "init-label", sender, funds="10atestfet", admin_address=sender
@@ -44,7 +44,7 @@ def test_create_instantiate_msg():
 
 
 def test_create_execute_msg():
-    """Test create execute message"""
+    """Test create execute message."""
     sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")
     contract = Address("fetch1faucet4p2h432pxlh9ez8jfcl9jyr2ndlx2992")
 

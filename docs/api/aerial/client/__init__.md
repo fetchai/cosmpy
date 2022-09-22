@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.client.`__`init`__`
 
-Client functionality
+Client functionality.
 
 <a id="cosmpy.aerial.client.__init__.Account"></a>
 
@@ -13,7 +13,7 @@ Client functionality
 class Account()
 ```
 
-Account
+Account.
 
 <a id="cosmpy.aerial.client.__init__.StakingPosition"></a>
 
@@ -24,7 +24,7 @@ Account
 class StakingPosition()
 ```
 
-Staking positions
+Staking positions.
 
 <a id="cosmpy.aerial.client.__init__.UnbondingPositions"></a>
 
@@ -35,7 +35,7 @@ Staking positions
 class UnbondingPositions()
 ```
 
-Unbonding positions
+Unbonding positions.
 
 <a id="cosmpy.aerial.client.__init__.Validator"></a>
 
@@ -46,7 +46,7 @@ Unbonding positions
 class Validator()
 ```
 
-Validator
+Validator.
 
 <a id="cosmpy.aerial.client.__init__.Coin"></a>
 
@@ -57,7 +57,7 @@ Validator
 class Coin()
 ```
 
-Coins
+Coins.
 
 <a id="cosmpy.aerial.client.__init__.StakingSummary"></a>
 
@@ -68,7 +68,7 @@ Coins
 class StakingSummary()
 ```
 
-Get the staking summary
+Get the staking summary.
 
 <a id="cosmpy.aerial.client.__init__.StakingSummary.total_staked"></a>
 
@@ -79,7 +79,7 @@ Get the staking summary
 def total_staked() -> int
 ```
 
-Get the total staked amount
+Get the total staked amount.
 
 <a id="cosmpy.aerial.client.__init__.StakingSummary.total_rewards"></a>
 
@@ -90,7 +90,7 @@ Get the total staked amount
 def total_rewards() -> int
 ```
 
-Get the total rewards
+Get the total rewards.
 
 <a id="cosmpy.aerial.client.__init__.StakingSummary.total_unbonding"></a>
 
@@ -101,7 +101,7 @@ Get the total rewards
 def total_unbonding() -> int
 ```
 
-total unbonding
+total unbonding.
 
 <a id="cosmpy.aerial.client.__init__.LedgerClient"></a>
 
@@ -111,7 +111,7 @@ total unbonding
 class LedgerClient()
 ```
 
-Ledger client
+Ledger client.
 
 <a id="cosmpy.aerial.client.__init__.LedgerClient.__init__"></a>
 
@@ -121,7 +121,7 @@ Ledger client
 def __init__(cfg: NetworkConfig)
 ```
 
-Init ledger client
+Init ledger client.
 
 **Arguments**:
 
@@ -136,7 +136,7 @@ Init ledger client
 def network_config() -> NetworkConfig
 ```
 
-Get the network config
+Get the network config.
 
 **Returns**:
 
@@ -151,7 +151,7 @@ network config
 def gas_strategy() -> GasStrategy
 ```
 
-Get gas strategy
+Get gas strategy.
 
 **Returns**:
 
@@ -166,7 +166,7 @@ gas strategy
 def gas_strategy(strategy: GasStrategy)
 ```
 
-Set gas strategy
+Set gas strategy.
 
 **Arguments**:
 
@@ -184,7 +184,7 @@ Set gas strategy
 def query_account(address: Address) -> Account
 ```
 
-Query account
+Query account.
 
 **Arguments**:
 
@@ -206,7 +206,7 @@ account details
 def query_params(subspace: str, key: str) -> Any
 ```
 
-Query Prams
+Query Prams.
 
 **Arguments**:
 
@@ -225,7 +225,7 @@ Query params
 def query_bank_balance(address: Address, denom: Optional[str] = None) -> int
 ```
 
-Query bank balance
+Query bank balance.
 
 **Arguments**:
 
@@ -244,7 +244,7 @@ bank balance
 def query_bank_all_balances(address: Address) -> List[Coin]
 ```
 
-Query bank all balances
+Query bank all balances.
 
 **Arguments**:
 
@@ -267,7 +267,7 @@ def send_tokens(destination: Address,
                 gas_limit: Optional[int] = None) -> SubmittedTx
 ```
 
-Send tokens
+Send tokens.
 
 **Arguments**:
 
@@ -291,7 +291,7 @@ def query_validators(
         status: Optional[ValidatorStatus] = None) -> List[Validator]
 ```
 
-Query validators
+Query validators.
 
 **Arguments**:
 
@@ -309,7 +309,7 @@ List of validators
 def query_staking_summary(address: Address) -> StakingSummary
 ```
 
-Query staking summary
+Query staking summary.
 
 **Arguments**:
 
@@ -331,7 +331,7 @@ def delegate_tokens(validator: Address,
                     gas_limit: Optional[int] = None) -> SubmittedTx
 ```
 
-Delegate tokens
+Delegate tokens.
 
 **Arguments**:
 
@@ -358,7 +358,7 @@ def redelegate_tokens(current_validator: Address,
                       gas_limit: Optional[int] = None) -> SubmittedTx
 ```
 
-Redelegate tokens
+Redelegate tokens.
 
 **Arguments**:
 
@@ -385,7 +385,7 @@ def undelegate_tokens(validator: Address,
                       gas_limit: Optional[int] = None) -> SubmittedTx
 ```
 
-Undelegate tokens
+Undelegate tokens.
 
 **Arguments**:
 
@@ -410,7 +410,7 @@ def claim_rewards(validator: Address,
                   gas_limit: Optional[int] = None) -> SubmittedTx
 ```
 
-claim rewards
+claim rewards.
 
 **Arguments**:
 
@@ -431,7 +431,7 @@ prepare and broadcast the transaction and transaction details
 def estimate_gas_for_tx(tx: Transaction) -> int
 ```
 
-Estimate gas for transaction
+Estimate gas for transaction.
 
 **Arguments**:
 
@@ -449,7 +449,7 @@ Estimated gas for transaction
 def estimate_fee_from_gas(gas_limit: int) -> str
 ```
 
-Estimate fee from gas
+Estimate fee from gas.
 
 **Arguments**:
 
@@ -467,7 +467,7 @@ Estimated fee for transaction
 def estimate_gas_and_fee_for_tx(tx: Transaction) -> Tuple[int, str]
 ```
 
-Estimate gas and fee for transaction
+Estimate gas and fee for transaction.
 
 **Arguments**:
 
@@ -487,7 +487,7 @@ def wait_for_query_tx(tx_hash: str,
                       poll_period: Optional[timedelta] = None) -> TxResponse
 ```
 
-Wait for query transaction
+Wait for query transaction.
 
 **Arguments**:
 
@@ -511,7 +511,7 @@ transaction response
 def query_tx(tx_hash: str) -> TxResponse
 ```
 
-query transaction
+query transaction.
 
 **Arguments**:
 
@@ -520,6 +520,7 @@ query transaction
 **Raises**:
 
 - `NotFoundError`: Tx details not found
+- `grpc.RpcError`: RPC connection issue
 
 **Returns**:
 
@@ -533,7 +534,7 @@ query response
 def simulate_tx(tx: Transaction) -> int
 ```
 
-simulate transaction
+simulate transaction.
 
 **Arguments**:
 
@@ -555,7 +556,7 @@ gas used in transaction
 def broadcast_tx(tx: Transaction) -> SubmittedTx
 ```
 
-Broadcast transaction
+Broadcast transaction.
 
 **Arguments**:
 

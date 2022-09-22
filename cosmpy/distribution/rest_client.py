@@ -59,6 +59,7 @@ class DistributionRestClient(Distribution):
     def CommunityPool(self) -> QueryCommunityPoolResponse:
         """
         CommunityPool queries the community pool coins.
+
         :return: a QueryCommunityPoolResponse instance
         """
         json_response = self._rest_api.get(f"{self.API_URL}/community_pool")
@@ -69,6 +70,7 @@ class DistributionRestClient(Distribution):
     ) -> QueryDelegationTotalRewardsResponse:
         """
         DelegationTotalRewards queries the total rewards accrued by each validator.
+
         :param request: a QueryDelegationTotalRewardsRequest instance
         :return: a QueryDelegationTotalRewardsResponse instance
         """
@@ -82,6 +84,7 @@ class DistributionRestClient(Distribution):
     ) -> QueryDelegationRewardsResponse:
         """
         DelegationRewards queries the total rewards accrued by a delegation.
+
         :param request: a QueryDelegationRewardsRequest instance
         :return: a QueryDelegationRewardsResponse instance
         """
@@ -95,6 +98,7 @@ class DistributionRestClient(Distribution):
     ) -> QueryDelegatorValidatorsResponse:
         """
         DelegatorValidators queries the validators of a delegator.
+
         :param request: a QueryDelegatorValidatorsRequest instance
         :return: a QueryDelegatorValidatorsResponse instance
         """
@@ -108,6 +112,7 @@ class DistributionRestClient(Distribution):
     ) -> QueryDelegatorWithdrawAddressResponse:
         """
         DelegatorWithdrawAddress queries withdraw address of a delegator.
+
         :param request: a QueryDelegatorWithdrawAddressRequest instance
         :return: a QueryDelegatorWithdrawAddressResponse instance
         """
@@ -119,6 +124,7 @@ class DistributionRestClient(Distribution):
     def Params(self) -> QueryParamsResponse:
         """
         Params queries params of the distribution module.
+
         :return: a QueryParamsResponse instance
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params")
@@ -129,6 +135,7 @@ class DistributionRestClient(Distribution):
     ) -> QueryValidatorCommissionResponse:
         """
         ValidatorCommission queries accumulated commission for a validator.
+
         :param request: QueryValidatorCommissionRequest
         :return: QueryValidatorCommissionResponse
         """
@@ -142,6 +149,7 @@ class DistributionRestClient(Distribution):
     ) -> QueryValidatorOutstandingRewardsResponse:
         """
         ValidatorOutstandingRewards queries rewards of a validator address.
+
         :param request: QueryValidatorOutstandingRewardsRequest
         :return: QueryValidatorOutstandingRewardsResponse
         """
@@ -155,6 +163,7 @@ class DistributionRestClient(Distribution):
     ) -> QueryValidatorSlashesResponse:
         """
         ValidatorSlashes queries slash events of a validator.
+
         :param request: QueryValidatorSlashesRequest
         :return: QueryValidatorSlashesResponse
         """

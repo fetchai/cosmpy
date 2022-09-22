@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.client.bank
 
-Bank send message
+Bank send message.
 
 <a id="cosmpy.aerial.client.bank.create_bank_send_msg"></a>
 
@@ -13,7 +13,7 @@ def create_bank_send_msg(from_address: Address, to_address: Address,
                          amount: int, denom: str) -> MsgSend
 ```
 
-Create bank send message
+Create bank send message.
 
 **Arguments**:
 

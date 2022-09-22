@@ -131,7 +131,7 @@ class IBCCoreChannel(ABC):
         self, request: QueryPacketReceiptRequest
     ) -> QueryPacketReceiptResponse:
         """
-        PacketReceipt queries if a given packet sequence has been received on the queried chain
+        PacketReceipt queries if a given packet sequence has been received on the queried chain.
 
         :param request: QueryPacketReceiptRequest
         :return: QueryPacketReceiptResponse

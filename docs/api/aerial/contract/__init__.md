@@ -2,7 +2,7 @@
 
 # cosmpy.aerial.contract.`__`init`__`
 
-cosmwasm contract functionality
+cosmwasm contract functionality.
 
 <a id="cosmpy.aerial.contract.__init__.LedgerContract"></a>
 
@@ -12,7 +12,7 @@ cosmwasm contract functionality
 class LedgerContract(UserString)
 ```
 
-Ledger contract
+Ledger contract.
 
 <a id="cosmpy.aerial.contract.__init__.LedgerContract.__init__"></a>
 
@@ -22,10 +22,11 @@ Ledger contract
 def __init__(path: Optional[str],
              client: LedgerClient,
              address: Optional[Address] = None,
-             digest: Optional[bytes] = None)
+             digest: Optional[bytes] = None,
+             schema_path: Optional[str] = None)
 ```
 
-_summary_
+Initialize the Ledger contract.
 
 **Arguments**:
 
@@ -33,6 +34,7 @@ _summary_
 - `client`: Ledger client
 - `address`: address, defaults to None
 - `digest`: digest, defaults to None
+- `schema_path`: path to contract schema, defaults to None
 
 <a id="cosmpy.aerial.contract.__init__.LedgerContract.path"></a>
 
@@ -43,7 +45,7 @@ _summary_
 def path() -> Optional[str]
 ```
 
-Get contract path
+Get contract path.
 
 **Returns**:
 
@@ -58,7 +60,7 @@ contract path
 def digest() -> Optional[bytes]
 ```
 
-Get the contract digest
+Get the contract digest.
 
 **Returns**:
 
@@ -73,7 +75,7 @@ contract digest
 def code_id() -> Optional[int]
 ```
 
-Get the code id
+Get the code id.
 
 **Returns**:
 
@@ -88,7 +90,7 @@ code id
 def address() -> Optional[Address]
 ```
 
-Get the contract address
+Get the contract address.
 
 **Returns**:
 
@@ -104,7 +106,7 @@ def store(sender: Wallet,
           memo: Optional[str] = None) -> int
 ```
 
-Store the contract
+Store the contract.
 
 **Arguments**:
 
@@ -134,7 +136,7 @@ def instantiate(code_id: int,
                 funds: Optional[str] = None) -> Address
 ```
 
-instantiate the contract
+instantiate the contract.
 
 **Arguments**:
 
@@ -168,7 +170,7 @@ def deploy(args: Any,
            funds: Optional[str] = None) -> Address
 ```
 
-Deploy the contract
+Deploy the contract.
 
 **Arguments**:
 
@@ -195,7 +197,7 @@ def execute(args: Any,
             funds: Optional[str] = None) -> SubmittedTx
 ```
 
-execute the contract
+execute the contract.
 
 **Arguments**:
 
@@ -220,7 +222,7 @@ transaction details broadcast
 def query(args: Any) -> Any
 ```
 
-Query on contract
+Query on contract.
 
 **Arguments**:
 
@@ -243,7 +245,7 @@ query result
 def data()
 ```
 
-Get the contract address
+Get the contract address.
 
 **Returns**:
 
@@ -257,7 +259,7 @@ contract address
 def __json__()
 ```
 
-Get the contract details in json
+Get the contract details in json.
 
 **Returns**:
 

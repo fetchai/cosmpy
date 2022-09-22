@@ -12,7 +12,7 @@ Wallet Generation.
 class Wallet(ABC, UserString)
 ```
 
-Wallet Generation
+Wallet Generation.
 
 **Arguments**:
 
@@ -28,7 +28,7 @@ Wallet Generation
 def address() -> Address
 ```
 
-get the address of the wallet
+get the address of the wallet.
 
 **Returns**:
 
@@ -43,7 +43,7 @@ None
 def public_key() -> PublicKey
 ```
 
-get the public key of the wallet
+get the public key of the wallet.
 
 **Returns**:
 
@@ -58,7 +58,7 @@ None
 def signer() -> Signer
 ```
 
-get the signer of the wallet
+get the signer of the wallet.
 
 **Returns**:
 
@@ -73,7 +73,7 @@ None
 def data()
 ```
 
-Get the address of the wallet
+Get the address of the wallet.
 
 **Returns**:
 
@@ -87,7 +87,7 @@ Address
 def __json__()
 ```
 
-Return the address in string format
+Return the address in string format.
 
 **Returns**:
 
@@ -101,7 +101,7 @@ address in string format
 class LocalWallet(Wallet)
 ```
 
-Generate local wallet
+Generate local wallet.
 
 **Arguments**:
 
@@ -116,7 +116,7 @@ Generate local wallet
 def generate(prefix: Optional[str] = None) -> "LocalWallet"
 ```
 
-generate the local wallet
+generate the local wallet.
 
 **Arguments**:
 
@@ -136,7 +136,7 @@ def from_mnemonic(mnemonic: str,
                   prefix: Optional[str] = None) -> "LocalWallet"
 ```
 
-Generate local wallet from mnemonic
+Generate local wallet from mnemonic.
 
 **Arguments**:
 
@@ -178,7 +178,7 @@ Local wallet
 def __init__(private_key: PrivateKey, prefix: Optional[str] = None)
 ```
 
-Init wallet with
+Init wallet with.
 
 **Arguments**:
 
@@ -207,7 +207,7 @@ Wallet address.
 def public_key() -> PublicKey
 ```
 
-Get the public key of the wallet
+Get the public key of the wallet.
 
 **Returns**:
 
