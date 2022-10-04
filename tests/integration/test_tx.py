@@ -36,13 +36,17 @@ class TestTx:
     COIN = "atestfet"
     GAS_LIMIT: Optional[int] = None
 
+    def _get_network_config(self):
+        """Get network config."""
+        return NetworkConfig.fetchai_stable_testnet()
+
     def get_ledger(self):
         """Get Ledger"""
-        return LedgerClient(NetworkConfig.fetchai_stable_testnet())
+        return LedgerClient(self._get_network_config())
 
     def get_wallet_1(self):
         """Get wallet 1."""
-        faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+        faucet_api = FaucetApi(self._get_network_config())
         wallet1 = LocalWallet.generate()
         faucet_api.get_wealth(wallet1.address())
         return wallet1
@@ -76,6 +80,20 @@ class TestTx:
         assert wallet2_balance2 == wallet2_balance1 + tokens_to_send
         wallet1_balance = ledger.query_bank_balance(wallet1.address())
         assert wallet1_balance < wallet1_initial_balance
+
+
+class TestTxRestAPI(TestTx):
+    """Test dorado rest api"""
+
+    def _get_network_config(self):
+        return NetworkConfig(
+            chain_id="dorado-1",
+            url="rest+https://rest-dorado.fetch.ai:443",
+            fee_minimum_gas_price=5000000000,
+            fee_denomination="atestfet",
+            staking_denomination="atestfet",
+            faucet_url="https://faucet-dorado.fetch.ai",
+        )
 
 
 if __name__ == "__main__":
