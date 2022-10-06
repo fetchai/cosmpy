@@ -421,7 +421,8 @@ class LedgerClient:
         return self._gas_strategy.estimate_gas(tx)
 
     def estimate_fee_from_gas(self, gas_limit: int) -> str:
-        return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
+        fee = int(-(-(gas_limit * self.network_config.fee_minimum_gas_price) // 1))
+        return f"{fee}{self.network_config.fee_denomination}"
 
     def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
         gas_estimate = self.estimate_gas_for_tx(tx)
