@@ -62,6 +62,9 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
 )
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # pylint: disable=unused-import
+    PubKey,
+)
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
     QueryDelegationRewardsRequest,
 )
