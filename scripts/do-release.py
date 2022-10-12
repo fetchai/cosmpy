@@ -58,7 +58,6 @@ class EnvCredentials(BaseCredentials):
     @property
     def pypi_password(self) -> str:
         """Get PYPI password."""
-
         return os.environ.get("PYPI_PASSWORD") or ""
 
 
