@@ -112,29 +112,27 @@ class ReleaseTool:
 
     def push_tag(self, current_version) -> None:
         """Push tag to github."""
-        return
         subprocess.check_call(f"git push origin v{current_version}", shell=True)
 
     def make_release(self, current_version: Version, release_history: str) -> None:
         """Make release on Github."""
-        return
         subprocess.check_call(
-            f"""gh release create v{current_version} --title "v{current_version}" --notes "{release_history}"""
+            f"""gh release create v{current_version} --title "v{current_version}" --notes "{release_history}" """,
+            shell=True,
         )
 
     def build_packages(self):
         """Build packages."""
-        subprocess.check_call("python3 setup.py bdist_wheel sdist", shell=True)
+        subprocess.check_call("poetry build", shell=True)
 
     def upload_packages(self):
         """Upload packages to PYPI."""
         result = subprocess.run(
-            f"twine upload --non-interactive --user {self._credentials.pypi_username} --password {self._credentials.pypi_password} dist/* --verbose",
+            f"poetry publish --skip-existing --username {self._credentials.pypi_username} --password {self._credentials.pypi_password} --verbose",
             shell=True,
             stdout=sys.stdout,
             stderr=sys.stderr,
         )
-        return
         if result.returncode != 0:
             raise RuntimeError("Upload pacakges failed!")
 
@@ -173,6 +171,10 @@ class ReleaseTool:
         print("\nMake tag")
         self.make_tag(current_version)
         print("Tag made")
+
+        print("\Push tag")
+        self.push_tag(current_version)
+        print("Tag pushed")
 
         print("\nMake release")
         self.make_release(current_version, release_history=histories[current_version])
