@@ -62,6 +62,9 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
 )
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
+    PubKey,
+)
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
     QueryDelegationRewardsRequest,
 )
@@ -168,11 +171,18 @@ class StakingSummary:
 class LedgerClient:
     """Ledger client."""
 
-    def __init__(self, cfg: NetworkConfig):
+    def __init__(
+        self,
+        cfg: NetworkConfig,
+        query_interval_secs: int = DEFAULT_QUERY_INTERVAL_SECS,
+        query_timeout_secs: int = DEFAULT_QUERY_TIMEOUT_SECS,
+    ):
         """Init ledger client.
 
         :param cfg: Network configurations
         """
+        self._query_interval_secs = query_interval_secs
+        self._query_timeout_secs = query_timeout_secs
         cfg.validate()
         self._network_config = cfg
         self._gas_strategy: GasStrategy = SimulationGasStrategy(self)
@@ -577,12 +587,12 @@ class LedgerClient:
         timeout = (
             ensure_timedelta(timeout)
             if timeout
-            else timedelta(seconds=DEFAULT_QUERY_TIMEOUT_SECS)
+            else timedelta(seconds=self._query_timeout_secs)
         )
         poll_period = (
             ensure_timedelta(poll_period)
             if poll_period
-            else timedelta(seconds=DEFAULT_QUERY_INTERVAL_SECS)
+            else timedelta(seconds=self._query_interval_secs)
         )
 
         start = datetime.now()

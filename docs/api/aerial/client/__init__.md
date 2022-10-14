@@ -118,7 +118,9 @@ Ledger client.
 #### `__`init`__`
 
 ```python
-def __init__(cfg: NetworkConfig)
+def __init__(cfg: NetworkConfig,
+             query_interval_secs: int = DEFAULT_QUERY_INTERVAL_SECS,
+             query_timeout_secs: int = DEFAULT_QUERY_TIMEOUT_SECS)
 ```
 
 Init ledger client.
