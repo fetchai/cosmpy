@@ -1,5 +1,17 @@
 # Release History
 
+## 0.6.0
+
+* python 3.10 support
+* poetry dependency management tool now used
+* documentation and docstrings are updated
+* reference API added to the documentation
+* added contract schema and validate msgs if present
+* Tx.wait_to_complete: timeout and poll_period parameters are added
+* dependencies are updated and cleaned up
+* add pagination to TotalSupply
+* import PubKey type to prevent error on rest query
+
 ## 0.5.1
 
 * dev dependency grpcio-tools updated to 1.47.0
