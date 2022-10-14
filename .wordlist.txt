@@ -292,3 +292,5 @@ sexualized
 socio
 usd
 RPC
+PubKey
+docstrings
