@@ -172,7 +172,7 @@ class ReleaseTool:
         self.make_tag(current_version)
         print("Tag made")
 
-        print("\Push tag")
+        print("\nPush tag")
         self.push_tag(current_version)
         print("Tag pushed")
 

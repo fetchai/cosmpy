@@ -1,0 +1,23 @@
+name: Check and realese cosmpy
+# runs do release on main branch updated
+# script checks for current package version and the latest tag on github
+# if package version is newer it build, upload, tag and make a release page on github
+# secrets PYPI_USERNAME and PYPI_PASSWORD are required!
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+          python-version: '3.9'
+    - name: run release script
+      env:
+        PYPI_USERNAME: ${{secrets.PYPI_USERNAME}}
+        PYPI_PASSWORD: ${{secrets.PYPI_PASSWORD}}
+      run: |
+        python3 ./scripts/do-release.py
