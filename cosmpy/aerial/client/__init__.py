@@ -95,6 +95,10 @@ from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
 )
 from cosmpy.staking.rest_client import StakingRestClient
 from cosmpy.tx.rest_client import TxRestClient
+from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import (
+    PageRequest,
+    PageResponse,
+)
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
 DEFAULT_QUERY_INTERVAL_SECS = 2
@@ -151,6 +155,8 @@ class StakingSummary:
 
     current_positions: List[StakingPosition]
     unbonding_positions: List[UnbondingPositions]
+    current_position_pagination: PageResponse
+    unbound_position_pagination: PageResponse
 
     @property
     def total_staked(self) -> int:
@@ -364,7 +370,8 @@ class LedgerClient:
             )
         return validators
 
-    def query_staking_summary(self, address: Address) -> StakingSummary:
+    def query_staking_summary(self, address: Address, limit: int = None, current_position_next_key: bytes = None,
+        unbound_position_next_key: bytes = None,) -> StakingSummary:
         """Query staking summary.
 
         :param address: address
@@ -372,8 +379,9 @@ class LedgerClient:
         """
         current_positions: List[StakingPosition] = []
 
-        req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
+        req = QueryDelegatorDelegationsRequest(delegator_addr=str(address), pagination=PageRequest(limit=limit, key=current_position_next_key),)
         resp = self.staking.DelegatorDelegations(req)
+        current_position_pagination = resp.pagination
 
         for item in resp.delegation_responses:
 
@@ -397,8 +405,9 @@ class LedgerClient:
                 )
             )
 
-        req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
+        req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address), pagination=PageRequest(limit=limit, key=unbound_position_next_key),)
         resp = self.staking.DelegatorUnbondingDelegations(req)
+        unbound_position_pagination = resp.pagination
 
         unbonding_summary: Dict[str, int] = {}
         for item in resp.unbonding_responses:
@@ -421,7 +430,8 @@ class LedgerClient:
             )
 
         return StakingSummary(
-            current_positions=current_positions, unbonding_positions=unbonding_positions
+            current_positions=current_positions, unbonding_positions=unbonding_positions, current_position_pagination=current_position_pagination,
+            unbound_position_pagination=unbound_position_pagination
         )
 
     def delegate_tokens(
