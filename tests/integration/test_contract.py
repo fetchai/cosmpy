@@ -59,7 +59,7 @@ class TestContract:
         return LedgerContract(CONTRACT_PATH, self.get_ledger())
 
     @pytest.mark.integration
-    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_contract(self):
         """Test simple contract deploy execute and query."""
         wallet = self.get_wallet()
@@ -79,7 +79,7 @@ class TestContract:
         assert result["value"] == value
 
     @pytest.mark.integration
-    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_deployed_contract(self):
         """Test interaction with already deployed contract."""
         wallet = self.get_wallet()

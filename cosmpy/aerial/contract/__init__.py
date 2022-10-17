@@ -212,7 +212,7 @@ class LedgerContract(UserString):
             if self._digest:
                 label = _generate_label(bytes(self._digest))
             elif self._code_id:
-                label = f"{self._code_id}--{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+                label = _generate_label(bytes(f"{self._code_id}", encoding="utf-8"))
             else:
                 raise RuntimeError(
                     "Failed to get label. No code_id or digest provided."
