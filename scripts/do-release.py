@@ -23,7 +23,6 @@ import os
 import re
 import subprocess
 import sys
-from abc import abstractproperty
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -33,21 +32,7 @@ from packaging.version import Version
 ROOT = Path(__file__).parent.parent
 
 
-class BaseCredentials:
-    """Base credential class."""
-
-    @abstractproperty
-    def pypi_username(self) -> str:
-        """Get PYPI username."""
-        pass
-
-    @abstractproperty
-    def pypi_password(self) -> str:
-        """Get PYPI password."""
-        pass
-
-
-class EnvCredentials(BaseCredentials):
+class EnvCredentials:
     """Credentials from env variables."""
 
     @property
@@ -64,7 +49,7 @@ class EnvCredentials(BaseCredentials):
 class ReleaseTool:
     """Release helper tool."""
 
-    def __init__(self, credentials: BaseCredentials) -> None:
+    def __init__(self, credentials: EnvCredentials) -> None:
         """Init release tool instance."""
         self._credentials = credentials
 
