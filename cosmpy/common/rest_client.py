@@ -116,7 +116,9 @@ class RestClient:
                 if "messages" in json_request["tx"]["body"]:
                     for message in json_request["tx"]["body"]["messages"]:
                         if "msg" in message:
-                            message["msg"] = json.loads(base64.b64decode(message["msg"]))
+                            message["msg"] = json.loads(
+                                base64.b64decode(message["msg"])
+                            )
 
         headers = {"Content-type": "application/json", "Accept": "application/json"}
         response = self._session.post(
