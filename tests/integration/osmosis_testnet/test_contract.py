@@ -24,8 +24,8 @@ from tests.integration.osmosis_testnet.net_config import NET_CONFIG, FaucetMixIn
 from tests.integration.test_contract import TestContract as BaseTestContract
 
 
-class DisabledTestContract(BaseTestContract, FaucetMixIn):
-    """Disable test contract
+class TestContract(BaseTestContract, FaucetMixIn):
+    """Test contract
 
     :param BaseTestContract: Base test contract
     :param FaucetMixIn: Osmosis Faucet config
