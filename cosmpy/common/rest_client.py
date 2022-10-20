@@ -18,7 +18,8 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of REST api client."""
-
+import base64
+import json
 from typing import List, Optional
 from urllib.parse import urlencode
 
@@ -108,6 +109,14 @@ class RestClient:
         :return: Content of response
         """
         json_request = MessageToDict(request)
+
+        # Workaround
+        if "tx" in json_request:
+            if "body" in json_request["tx"]:
+                if "messages" in json_request["tx"]["body"]:
+                    for message in json_request["tx"]["body"]["messages"]:
+                        if "msg" in message:
+                            message["msg"] = json.loads(base64.b64decode(message["msg"]))
 
         headers = {"Content-type": "application/json", "Accept": "application/json"}
         response = self._session.post(
