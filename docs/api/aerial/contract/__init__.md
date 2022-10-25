@@ -23,7 +23,8 @@ def __init__(path: Optional[str],
              client: LedgerClient,
              address: Optional[Address] = None,
              digest: Optional[bytes] = None,
-             schema_path: Optional[str] = None)
+             schema_path: Optional[str] = None,
+             code_id: Optional[int] = None)
 ```
 
 Initialize the Ledger contract.
@@ -35,6 +36,7 @@ Initialize the Ledger contract.
 - `address`: address, defaults to None
 - `digest`: digest, defaults to None
 - `schema_path`: path to contract schema, defaults to None
+- `code_id`: optional int. code id of the contract stored
 
 <a id="cosmpy.aerial.contract.__init__.LedgerContract.path"></a>
 
@@ -127,8 +129,7 @@ code id
 #### instantiate
 
 ```python
-def instantiate(code_id: int,
-                args: Any,
+def instantiate(args: Any,
                 sender: Wallet,
                 label: Optional[str] = None,
                 gas_limit: Optional[int] = None,
@@ -136,11 +137,10 @@ def instantiate(code_id: int,
                 funds: Optional[str] = None) -> Address
 ```
 
-instantiate the contract.
+Instantiate the contract.
 
 **Arguments**:
 
-- `code_id`: code id
 - `args`: args
 - `sender`: sender wallet address
 - `label`: label, defaults to None
