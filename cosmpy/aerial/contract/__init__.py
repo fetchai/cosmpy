@@ -220,7 +220,7 @@ class LedgerContract(UserString):
 
         # build up the store transaction
         instatiate_msg = create_cosmwasm_instantiate_msg(
-            code_id,
+            self._code_id,
             args,
             label,
             sender.address(),

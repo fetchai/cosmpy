@@ -180,6 +180,8 @@ class LedgerClient:
         """Init ledger client.
 
         :param cfg: Network configurations
+        :param query_interval_secs: int. optional interval int seconds
+        :param query_timeout_secs: int. optional interval int seconds
         """
         self._query_interval_secs = query_interval_secs
         self._query_timeout_secs = query_timeout_secs
