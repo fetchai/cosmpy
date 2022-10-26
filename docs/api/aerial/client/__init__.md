@@ -128,6 +128,8 @@ Init ledger client.
 **Arguments**:
 
 - `cfg`: Network configurations
+- `query_interval_secs`: int. optional interval int seconds
+- `query_timeout_secs`: int. optional interval int seconds
 
 <a id="cosmpy.aerial.client.__init__.LedgerClient.network_config"></a>
 
