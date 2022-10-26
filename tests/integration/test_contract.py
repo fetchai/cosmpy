@@ -89,9 +89,19 @@ class TestContract:
         wallet = self.get_wallet()
         ledger = self.get_ledger()
         contract = self.get_contract()
-        contract_address = contract.deploy({}, wallet)
+
+        # manual store
+        if not contract._code_id:  # pylint: disable=protected-access
+            contract.store(wallet)
+
+        # instatiate by code_id
+        contract = LedgerContract(
+            None, ledger, code_id=contract._code_id  # pylint: disable=protected-access
+        )
+        contract_address = contract.instantiate({}, wallet)
         assert contract_address
 
+        # use by address
         deployed_contract = LedgerContract(None, ledger, contract_address)
 
         result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
