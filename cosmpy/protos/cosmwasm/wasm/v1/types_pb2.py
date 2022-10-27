@@ -18,7 +18,7 @@ from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1c\x63osmwasm/wasm/v1/types.proto\x12\x10\x63osmwasm.wasm.v1\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x14gogoproto/gogo.proto\x1a\x19google/protobuf/any.proto\"V\n\x0f\x41\x63\x63\x65ssTypeParam\x12=\n\x05value\x18\x01 \x01(\x0e\x32\x1c.cosmwasm.wasm.v1.AccessTypeB\x10\xf2\xde\x1f\x0cyaml:\"value\":\x04\x98\xa0\x1f\x01\"\x82\x01\n\x0c\x41\x63\x63\x65ssConfig\x12G\n\npermission\x18\x01 \x01(\x0e\x32\x1c.cosmwasm.wasm.v1.AccessTypeB\x15\xf2\xde\x1f\x11yaml:\"permission\"\x12#\n\x07\x61\x64\x64ress\x18\x02 \x01(\tB\x12\xf2\xde\x1f\x0eyaml:\"address\":\x04\x98\xa0\x1f\x01\"\x99\x02\n\x06Params\x12]\n\x12\x63ode_upload_access\x18\x01 \x01(\x0b\x32\x1e.cosmwasm.wasm.v1.AccessConfigB!\xc8\xde\x1f\x00\xf2\xde\x1f\x19yaml:\"code_upload_access\"\x12o\n\x1einstantiate_default_permission\x18\x02 \x01(\x0e\x32\x1c.cosmwasm.wasm.v1.AccessTypeB)\xf2\xde\x1f%yaml:\"instantiate_default_permission\"\x12\x39\n\x12max_wasm_code_size\x18\x03 \x01(\x04\x42\x1d\xf2\xde\x1f\x19yaml:\"max_wasm_code_size\":\x04\x98\xa0\x1f\x00\"|\n\x08\x43odeInfo\x12\x11\n\tcode_hash\x18\x01 \x01(\x0c\x12\x0f\n\x07\x63reator\x18\x02 \x01(\t\x12@\n\x12instantiate_config\x18\x05 \x01(\x0b\x32\x1e.cosmwasm.wasm.v1.AccessConfigB\x04\xc8\xde\x1f\x00J\x04\x08\x03\x10\x04J\x04\x08\x04\x10\x05\"\xff\x01\n\x0c\x43ontractInfo\x12\x1b\n\x07\x63ode_id\x18\x01 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12\x0f\n\x07\x63reator\x18\x02 \x01(\t\x12\r\n\x05\x61\x64min\x18\x03 \x01(\t\x12\r\n\x05label\x18\x04 \x01(\t\x12\x35\n\x07\x63reated\x18\x05 \x01(\x0b\x32$.cosmwasm.wasm.v1.AbsoluteTxPosition\x12\"\n\x0bibc_port_id\x18\x06 \x01(\tB\r\xe2\xde\x1f\tIBCPortID\x12\x42\n\textension\x18\x07 \x01(\x0b\x32\x14.google.protobuf.AnyB\x19\xca\xb4-\x15\x43ontractInfoExtension:\x04\xe8\xa0\x1f\x01\"\xda\x01\n\x18\x43ontractCodeHistoryEntry\x12\x45\n\toperation\x18\x01 \x01(\x0e\x32\x32.cosmwasm.wasm.v1.ContractCodeHistoryOperationType\x12\x1b\n\x07\x63ode_id\x18\x02 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12\x35\n\x07updated\x18\x03 \x01(\x0b\x32$.cosmwasm.wasm.v1.AbsoluteTxPosition\x12#\n\x03msg\x18\x04 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\"<\n\x12\x41\x62soluteTxPosition\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x04\x12\x10\n\x08tx_index\x18\x02 \x01(\x04\"]\n\x05Model\x12\x45\n\x03key\x18\x01 \x01(\x0c\x42\x38\xfa\xde\x1f\x34github.com/tendermint/tendermint/libs/bytes.HexBytes\x12\r\n\x05value\x18\x02 \x01(\x0c*\xe9\x01\n\nAccessType\x12\x36\n\x17\x41\x43\x43\x45SS_TYPE_UNSPECIFIED\x10\x00\x1a\x19\x8a\x9d \x15\x41\x63\x63\x65ssTypeUnspecified\x12,\n\x12\x41\x43\x43\x45SS_TYPE_NOBODY\x10\x01\x1a\x14\x8a\x9d \x10\x41\x63\x63\x65ssTypeNobody\x12\x37\n\x18\x41\x43\x43\x45SS_TYPE_ONLY_ADDRESS\x10\x02\x1a\x19\x8a\x9d \x15\x41\x63\x63\x65ssTypeOnlyAddress\x12\x32\n\x15\x41\x43\x43\x45SS_TYPE_EVERYBODY\x10\x03\x1a\x17\x8a\x9d \x13\x41\x63\x63\x65ssTypeEverybody\x1a\x08\x88\xa3\x1e\x00\xa8\xa4\x1e\x00*\xa6\x03\n ContractCodeHistoryOperationType\x12\x65\n0CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED\x10\x00\x1a/\x8a\x9d +ContractCodeHistoryOperationTypeUnspecified\x12W\n)CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT\x10\x01\x1a(\x8a\x9d $ContractCodeHistoryOperationTypeInit\x12]\n,CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE\x10\x02\x1a+\x8a\x9d \'ContractCodeHistoryOperationTypeMigrate\x12]\n,CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS\x10\x03\x1a+\x8a\x9d \'ContractCodeHistoryOperationTypeGenesis\x1a\x04\x88\xa3\x1e\x00\x42\x30Z&github.com/CosmWasm/wasmd/x/wasm/types\xc8\xe1\x1e\x00\xa8\xe2\x1e\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1c\x63osmwasm/wasm/v1/types.proto\x12\x10\x63osmwasm.wasm.v1\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x14gogoproto/gogo.proto\x1a\x19google/protobuf/any.proto\"V\n\x0f\x41\x63\x63\x65ssTypeParam\x12=\n\x05value\x18\x01 \x01(\x0e\x32\x1c.cosmwasm.wasm.v1.AccessTypeB\x10\xf2\xde\x1f\x0cyaml:\"value\":\x04\x98\xa0\x1f\x01\"\x82\x01\n\x0c\x41\x63\x63\x65ssConfig\x12G\n\npermission\x18\x01 \x01(\x0e\x32\x1c.cosmwasm.wasm.v1.AccessTypeB\x15\xf2\xde\x1f\x11yaml:\"permission\"\x12#\n\x07\x61\x64\x64ress\x18\x02 \x01(\tB\x12\xf2\xde\x1f\x0eyaml:\"address\":\x04\x98\xa0\x1f\x01\"\xde\x01\n\x06Params\x12]\n\x12\x63ode_upload_access\x18\x01 \x01(\x0b\x32\x1e.cosmwasm.wasm.v1.AccessConfigB!\xc8\xde\x1f\x00\xf2\xde\x1f\x19yaml:\"code_upload_access\"\x12o\n\x1einstantiate_default_permission\x18\x02 \x01(\x0e\x32\x1c.cosmwasm.wasm.v1.AccessTypeB)\xf2\xde\x1f%yaml:\"instantiate_default_permission\":\x04\x98\xa0\x1f\x00\"|\n\x08\x43odeInfo\x12\x11\n\tcode_hash\x18\x01 \x01(\x0c\x12\x0f\n\x07\x63reator\x18\x02 \x01(\t\x12@\n\x12instantiate_config\x18\x05 \x01(\x0b\x32\x1e.cosmwasm.wasm.v1.AccessConfigB\x04\xc8\xde\x1f\x00J\x04\x08\x03\x10\x04J\x04\x08\x04\x10\x05\"\xff\x01\n\x0c\x43ontractInfo\x12\x1b\n\x07\x63ode_id\x18\x01 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12\x0f\n\x07\x63reator\x18\x02 \x01(\t\x12\r\n\x05\x61\x64min\x18\x03 \x01(\t\x12\r\n\x05label\x18\x04 \x01(\t\x12\x35\n\x07\x63reated\x18\x05 \x01(\x0b\x32$.cosmwasm.wasm.v1.AbsoluteTxPosition\x12\"\n\x0bibc_port_id\x18\x06 \x01(\tB\r\xe2\xde\x1f\tIBCPortID\x12\x42\n\textension\x18\x07 \x01(\x0b\x32\x14.google.protobuf.AnyB\x19\xca\xb4-\x15\x43ontractInfoExtension:\x04\xe8\xa0\x1f\x01\"\xda\x01\n\x18\x43ontractCodeHistoryEntry\x12\x45\n\toperation\x18\x01 \x01(\x0e\x32\x32.cosmwasm.wasm.v1.ContractCodeHistoryOperationType\x12\x1b\n\x07\x63ode_id\x18\x02 \x01(\x04\x42\n\xe2\xde\x1f\x06\x43odeID\x12\x35\n\x07updated\x18\x03 \x01(\x0b\x32$.cosmwasm.wasm.v1.AbsoluteTxPosition\x12#\n\x03msg\x18\x04 \x01(\x0c\x42\x16\xfa\xde\x1f\x12RawContractMessage\"<\n\x12\x41\x62soluteTxPosition\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x04\x12\x10\n\x08tx_index\x18\x02 \x01(\x04\"]\n\x05Model\x12\x45\n\x03key\x18\x01 \x01(\x0c\x42\x38\xfa\xde\x1f\x34github.com/tendermint/tendermint/libs/bytes.HexBytes\x12\r\n\x05value\x18\x02 \x01(\x0c*\xe9\x01\n\nAccessType\x12\x36\n\x17\x41\x43\x43\x45SS_TYPE_UNSPECIFIED\x10\x00\x1a\x19\x8a\x9d \x15\x41\x63\x63\x65ssTypeUnspecified\x12,\n\x12\x41\x43\x43\x45SS_TYPE_NOBODY\x10\x01\x1a\x14\x8a\x9d \x10\x41\x63\x63\x65ssTypeNobody\x12\x37\n\x18\x41\x43\x43\x45SS_TYPE_ONLY_ADDRESS\x10\x02\x1a\x19\x8a\x9d \x15\x41\x63\x63\x65ssTypeOnlyAddress\x12\x32\n\x15\x41\x43\x43\x45SS_TYPE_EVERYBODY\x10\x03\x1a\x17\x8a\x9d \x13\x41\x63\x63\x65ssTypeEverybody\x1a\x08\x88\xa3\x1e\x00\xa8\xa4\x1e\x00*\xa6\x03\n ContractCodeHistoryOperationType\x12\x65\n0CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED\x10\x00\x1a/\x8a\x9d +ContractCodeHistoryOperationTypeUnspecified\x12W\n)CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT\x10\x01\x1a(\x8a\x9d $ContractCodeHistoryOperationTypeInit\x12]\n,CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE\x10\x02\x1a+\x8a\x9d \'ContractCodeHistoryOperationTypeMigrate\x12]\n,CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS\x10\x03\x1a+\x8a\x9d \'ContractCodeHistoryOperationTypeGenesis\x1a\x04\x88\xa3\x1e\x00\x42\x30Z&github.com/CosmWasm/wasmd/x/wasm/types\xc8\xe1\x1e\x00\xa8\xe2\x1e\x01\x62\x06proto3')
 
 _ACCESSTYPE = DESCRIPTOR.enum_types_by_name['AccessType']
 AccessType = enum_type_wrapper.EnumTypeWrapper(_ACCESSTYPE)
@@ -136,8 +136,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _PARAMS.fields_by_name['code_upload_access']._serialized_options = b'\310\336\037\000\362\336\037\031yaml:\"code_upload_access\"'
   _PARAMS.fields_by_name['instantiate_default_permission']._options = None
   _PARAMS.fields_by_name['instantiate_default_permission']._serialized_options = b'\362\336\037%yaml:\"instantiate_default_permission\"'
-  _PARAMS.fields_by_name['max_wasm_code_size']._options = None
-  _PARAMS.fields_by_name['max_wasm_code_size']._serialized_options = b'\362\336\037\031yaml:\"max_wasm_code_size\"'
   _PARAMS._options = None
   _PARAMS._serialized_options = b'\230\240\037\000'
   _CODEINFO.fields_by_name['instantiate_config']._options = None
@@ -156,24 +154,24 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _CONTRACTCODEHISTORYENTRY.fields_by_name['msg']._serialized_options = b'\372\336\037\022RawContractMessage'
   _MODEL.fields_by_name['key']._options = None
   _MODEL.fields_by_name['key']._serialized_options = b'\372\336\0374github.com/tendermint/tendermint/libs/bytes.HexBytes'
-  _ACCESSTYPE._serialized_start=1394
-  _ACCESSTYPE._serialized_end=1627
-  _CONTRACTCODEHISTORYOPERATIONTYPE._serialized_start=1630
-  _CONTRACTCODEHISTORYOPERATIONTYPE._serialized_end=2052
+  _ACCESSTYPE._serialized_start=1335
+  _ACCESSTYPE._serialized_end=1568
+  _CONTRACTCODEHISTORYOPERATIONTYPE._serialized_start=1571
+  _CONTRACTCODEHISTORYOPERATIONTYPE._serialized_end=1993
   _ACCESSTYPEPARAM._serialized_start=126
   _ACCESSTYPEPARAM._serialized_end=212
   _ACCESSCONFIG._serialized_start=215
   _ACCESSCONFIG._serialized_end=345
   _PARAMS._serialized_start=348
-  _PARAMS._serialized_end=629
-  _CODEINFO._serialized_start=631
-  _CODEINFO._serialized_end=755
-  _CONTRACTINFO._serialized_start=758
-  _CONTRACTINFO._serialized_end=1013
-  _CONTRACTCODEHISTORYENTRY._serialized_start=1016
-  _CONTRACTCODEHISTORYENTRY._serialized_end=1234
-  _ABSOLUTETXPOSITION._serialized_start=1236
-  _ABSOLUTETXPOSITION._serialized_end=1296
-  _MODEL._serialized_start=1298
-  _MODEL._serialized_end=1391
+  _PARAMS._serialized_end=570
+  _CODEINFO._serialized_start=572
+  _CODEINFO._serialized_end=696
+  _CONTRACTINFO._serialized_start=699
+  _CONTRACTINFO._serialized_end=954
+  _CONTRACTCODEHISTORYENTRY._serialized_start=957
+  _CONTRACTCODEHISTORYENTRY._serialized_end=1175
+  _ABSOLUTETXPOSITION._serialized_start=1177
+  _ABSOLUTETXPOSITION._serialized_end=1237
+  _MODEL._serialized_start=1239
+  _MODEL._serialized_end=1332
 # @@protoc_insertion_point(module_scope)
