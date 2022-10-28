@@ -17,7 +17,7 @@ jobs:
           python-version: '3.9'
     - name: run release script
       env:
-        PYPI_USERNAME: ${{secrets.PYPI_USERNAME}}
-        PYPI_PASSWORD: ${{secrets.PYPI_PASSWORD}}
+        PYPI_USERNAME: __token__
+        PYPI_PASSWORD: ${{secrets.FETCHBOT_PYPI_TOKEN}}
       run: |
         python3 ./scripts/do-release.py
