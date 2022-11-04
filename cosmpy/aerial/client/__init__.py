@@ -38,6 +38,7 @@ from cosmpy.aerial.client.staking import (
 )
 from cosmpy.aerial.client.utils import (
     ensure_timedelta,
+    get_paginated,
     prepare_and_broadcast_basic_transaction,
 )
 from cosmpy.aerial.config import NetworkConfig
@@ -373,42 +374,46 @@ class LedgerClient:
         current_positions: List[StakingPosition] = []
 
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
-        resp = self.staking.DelegatorDelegations(req)
 
-        for item in resp.delegation_responses:
+        for resp in get_paginated(
+            req, self.staking.DelegatorDelegations, per_page_limit=1
+        ):
+            for item in resp.delegation_responses:
 
-            req = QueryDelegationRewardsRequest(
-                delegator_address=str(address),
-                validator_address=str(item.delegation.validator_address),
-            )
-            rewards_resp = self.distribution.DelegationRewards(req)
-
-            stake_reward = 0
-            for reward in rewards_resp.rewards:
-                if reward.denom == self.network_config.staking_denomination:
-                    stake_reward = int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
-                    break
-
-            current_positions.append(
-                StakingPosition(
-                    validator=Address(item.delegation.validator_address),
-                    amount=int(item.balance.amount),
-                    reward=stake_reward,
+                req = QueryDelegationRewardsRequest(
+                    delegator_address=str(address),
+                    validator_address=str(item.delegation.validator_address),
                 )
-            )
+                rewards_resp = self.distribution.DelegationRewards(req)
 
-        req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
-        resp = self.staking.DelegatorUnbondingDelegations(req)
+                stake_reward = 0
+                for reward in rewards_resp.rewards:
+                    if reward.denom == self.network_config.staking_denomination:
+                        stake_reward = (
+                            int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
+                        )
+                        break
+
+                current_positions.append(
+                    StakingPosition(
+                        validator=Address(item.delegation.validator_address),
+                        amount=int(item.balance.amount),
+                        reward=stake_reward,
+                    )
+                )
 
         unbonding_summary: Dict[str, int] = {}
-        for item in resp.unbonding_responses:
-            validator = str(item.validator_address)
-            total_unbonding = unbonding_summary.get(validator, 0)
+        req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
 
-            for entry in item.entries:
-                total_unbonding += int(entry.balance)
+        for resp in get_paginated(req, self.staking.DelegatorUnbondingDelegations):
+            for item in resp.unbonding_responses:
+                validator = str(item.validator_address)
+                total_unbonding = unbonding_summary.get(validator, 0)
 
-            unbonding_summary[validator] = total_unbonding
+                for entry in item.entries:
+                    total_unbonding += int(entry.balance)
+
+                unbonding_summary[validator] = total_unbonding
 
         # build the final list of unbonding positions
         unbonding_positions: List[UnbondingPositions] = []
