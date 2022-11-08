@@ -43,23 +43,27 @@ RERUNS_DELAY = 10
 class TestContract:
     """Test contract"""
 
+    def _get_network_config(self):
+        """Get network config."""
+        return NetworkConfig.fetchai_stable_testnet()
+
     def get_wallet(self):
         """Get wallet"""
         wallet = LocalWallet.generate()
-        faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+        faucet_api = FaucetApi(self._get_network_config())
         faucet_api.get_wealth(wallet.address())
         return wallet
 
     def get_ledger(self):
         """Get ledger"""
-        return LedgerClient(NetworkConfig.fetchai_stable_testnet())
+        return LedgerClient(self._get_network_config())
 
     def get_contract(self):
         """Get contract"""
         return LedgerContract(CONTRACT_PATH, self.get_ledger())
 
     @pytest.mark.integration
-    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_contract(self):
         """Test simple contract deploy execute and query."""
         wallet = self.get_wallet()
@@ -79,15 +83,25 @@ class TestContract:
         assert result["value"] == value
 
     @pytest.mark.integration
-    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_deployed_contract(self):
         """Test interaction with already deployed contract."""
         wallet = self.get_wallet()
         ledger = self.get_ledger()
         contract = self.get_contract()
-        contract_address = contract.deploy({}, wallet)
+
+        # manual store
+        if not contract._code_id:  # pylint: disable=protected-access
+            contract.store(wallet)
+
+        # instatiate by code_id
+        contract = LedgerContract(
+            None, ledger, code_id=contract._code_id  # pylint: disable=protected-access
+        )
+        contract_address = contract.instantiate({}, wallet)
         assert contract_address
 
+        # use by address
         deployed_contract = LedgerContract(None, ledger, contract_address)
 
         result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
@@ -126,6 +140,20 @@ class TestContract:
             pass
         except Exception as exc:
             raise ValidationTestFailure("Msg should have failed validation") from exc
+
+
+class TestContractRestAPI(TestContract):
+    """Test dorado rest api"""
+
+    def _get_network_config(self):
+        return NetworkConfig(
+            chain_id="dorado-1",
+            url="rest+https://rest-dorado.fetch.ai:443",
+            fee_minimum_gas_price=5000000000,
+            fee_denomination="atestfet",
+            staking_denomination="atestfet",
+            faucet_url="https://faucet-dorado.fetch.ai",
+        )
 
 
 if __name__ == "__main__":

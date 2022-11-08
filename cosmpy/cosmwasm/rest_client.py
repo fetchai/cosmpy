@@ -46,6 +46,7 @@ from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
+from cosmpy.protos.cosmwasm.wasm.v1.types_pb2 import AccessType
 
 
 class CosmWasmRestClient(CosmWasm):
@@ -191,7 +192,26 @@ class CosmWasmRestClient(CosmWasm):
         :return: QueryCodesResponse
         """
         response = self._rest_api.get(f"{self.API_URL}/code", request)
+        responses_json = json.loads(response)
+        for code_info in responses_json["code_infos"]:
+            if "instantiate_permission" not in code_info:
+                continue
+            code_info["instantiate_permission"]["permission"] = self._fix_permission(
+                code_info["instantiate_permission"]["permission"]
+            )
+        response = json.dumps(responses_json).encode("utf-8")
         return Parse(response, QueryCodesResponse())
+
+    def _fix_permission(self, permission_name):
+        permission_map = {
+            "Nobody": AccessType.Value("ACCESS_TYPE_NOBODY"),
+            "OnlyAddress": AccessType.Value("ACCESS_TYPE_ONLY_ADDRESS"),
+            "Everybody": AccessType.Value("ACCESS_TYPE_EVERYBODY"),
+            "Unspecified": AccessType.Value("ACCESS_TYPE_UNSPECIFIED"),
+        }
+        return permission_map.get(
+            permission_name, AccessType.Value("ACCESS_TYPE_UNSPECIFIED")
+        )
 
     @staticmethod
     def _fix_state_response(response: bytes) -> JSONLike:
