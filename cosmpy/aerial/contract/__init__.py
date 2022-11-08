@@ -81,6 +81,7 @@ class LedgerContract(UserString):
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
         schema_path: Optional[str] = None,
+        code_id: Optional[int] = None,
     ):
         """Initialize the Ledger contract.
 
@@ -89,6 +90,7 @@ class LedgerContract(UserString):
         :param address: address, defaults to None
         :param digest: digest, defaults to None
         :param schema_path: path to contract schema, defaults to None
+        :param code_id: optional int. code id of the contract stored
         """
         # pylint: disable=super-init-not-called
         self._path = path
@@ -105,10 +107,10 @@ class LedgerContract(UserString):
             self._digest = _compute_digest(str(self._path))
 
         # attempt to look up the code id from the network by digest
-        if self._digest is not None:
+        if not code_id and self._digest is not None:
             self._code_id = self._find_contract_id_by_digest(self._digest)
         else:
-            self._code_id = None
+            self._code_id = code_id
 
     @property
     def path(self) -> Optional[str]:
@@ -176,7 +178,6 @@ class LedgerContract(UserString):
 
     def instantiate(
         self,
-        code_id: int,
         args: Any,
         sender: Wallet,
         label: Optional[str] = None,
@@ -184,9 +185,8 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
-        """instantiate the contract.
+        """Instantiate the contract.
 
-        :param code_id: code id
         :param args: args
         :param sender: sender wallet address
         :param label: label, defaults to None
@@ -194,20 +194,29 @@ class LedgerContract(UserString):
         :param admin_address: admin address, defaults to None
         :param funds: funds, defaults to None
         :raises RuntimeError: Unable to extract contract code id
+
         :return: contract address
         """
-        assert self._digest is not None
+        assert self._code_id, RuntimeError("Code id was not set.")
 
         if self._instantiate_schema is not None:
             validate(args, self._instantiate_schema)
 
-        label = label or _generate_label(bytes(self._digest))
+        if label is None:
+            if self._digest:
+                label = _generate_label(bytes(self._digest))
+            elif self._code_id:
+                label = _generate_label(bytes(f"{self._code_id}", encoding="utf-8"))
+            else:
+                raise RuntimeError(
+                    "Failed to get label. No code_id or digest provided."
+                )
 
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
             create_cosmwasm_instantiate_msg(
-                code_id,
+                self._code_id,
                 args,
                 label,
                 sender.address(),
@@ -260,7 +269,6 @@ class LedgerContract(UserString):
         assert self._code_id is not None
 
         return self.instantiate(
-            self._code_id,
             args,
             sender,
             label=label,
@@ -329,7 +337,6 @@ class LedgerContract(UserString):
         while True:
             req = QueryCodesRequest(pagination=pagination)
             resp = self._client.wasm.Codes(req)
-
             for code_info in resp.code_infos:
                 if code_info.data_hash == digest:
                     code_id = int(code_info.code_id)

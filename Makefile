@@ -212,7 +212,7 @@ COSMOS_SDK_VERSION := v0.18.0
 COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
 
 WASMD_URL := https://github.com/CosmWasm/wasmd
-WASMD_VERSION := v0.24.0
+WASMD_VERSION := v0.27.0
 WASMD_DIR := build/wasm-proto-shema
 
 IBCGO_URL := https://github.com/cosmos/ibc-go
