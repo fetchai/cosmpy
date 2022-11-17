@@ -45,10 +45,6 @@ from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QuerySmartContractStateRequest,
 )
 
-INSTANTIATE_MSG = "instantiate_msg"
-EXECUTE_MSG = "execute_msg"
-QUERY_MSG = "query_msg"
-
 
 def _compute_digest(path: str) -> bytes:
     with open(path, "rb") as input_file:
@@ -101,10 +97,8 @@ class LedgerContract(UserString):
         self._client = client
         self._address = address
 
-        if schema_path is not None:
-            self._schema = _load_contract_schema(schema_path)
-        else:
-            self._schema = None
+        # load contract schema if path is provided
+        self._load_schema(schema_path)
 
         # select the digest either by computing it from the provided contract or by the value specified by
         # the user
@@ -205,8 +199,8 @@ class LedgerContract(UserString):
         """
         assert self._code_id, RuntimeError("Code id was not set.")
 
-        if self._schema is not None:
-            validate(args, self._schema[INSTANTIATE_MSG])
+        if self._instantiate_schema is not None:
+            validate(args, self._instantiate_schema)
 
         if label is None:
             if self._digest:
@@ -302,8 +296,8 @@ class LedgerContract(UserString):
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
-        if self._schema is not None:
-            validate(args, self._schema[EXECUTE_MSG])
+        if self._execute_schema is not None:
+            validate(args, self._execute_schema)
 
         # build up the execute transaction
         tx = Transaction()
@@ -327,8 +321,8 @@ class LedgerContract(UserString):
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
-        if self._schema is not None:
-            validate(args, self._schema[QUERY_MSG])
+        if self._query_schema is not None:
+            validate(args, self._query_schema)
 
         req = QuerySmartContractStateRequest(
             address=str(self._address), query_data=json_encode(args).encode("UTF8")
@@ -360,6 +354,27 @@ class LedgerContract(UserString):
             pagination = PageRequest(key=resp.pagination.next_key)
 
         return code_id
+
+    def _load_schema(self, schema_path: Optional[str]):
+        self._schema: Optional[Dict[str, Any]] = None
+        self._instantiate_schema: Optional[Dict[str, Any]] = None
+        self._query_schema: Optional[Dict[str, Any]] = None
+        self._execute_schema: Optional[Dict[str, Any]] = None
+
+        if schema_path is None:
+            return
+
+        self._schema = _load_contract_schema(schema_path)
+        if self._schema is None:
+            return
+
+        for (msg_type, schema) in self._schema.items():
+            if "instantiate" in msg_type:
+                self._instantiate_schema = schema
+            elif "query" in msg_type:
+                self._query_schema = schema
+            elif "execute" in msg_type:
+                self._execute_schema = schema
 
     @property
     def data(self):
