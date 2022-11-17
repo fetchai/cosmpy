@@ -213,17 +213,16 @@ class LedgerContract(UserString):
                 )
 
         # build up the store transaction
-        tx = Transaction()
-        tx.add_message(
-            create_cosmwasm_instantiate_msg(
-                self._code_id,
-                args,
-                label,
-                sender.address(),
-                admin_address=admin_address,
-                funds=funds,
-            )
+        instatiate_msg = create_cosmwasm_instantiate_msg(
+            self._code_id,
+            args,
+            label,
+            sender.address(),
+            admin_address=admin_address,
+            funds=funds,
         )
+        tx = Transaction()
+        tx.add_message(instatiate_msg)
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
             self._client, tx, sender, gas_limit=gas_limit

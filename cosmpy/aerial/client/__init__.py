@@ -20,6 +20,7 @@
 """Client functionality."""
 
 import json
+import math
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -181,6 +182,8 @@ class LedgerClient:
         """Init ledger client.
 
         :param cfg: Network configurations
+        :param query_interval_secs: int. optional interval int seconds
+        :param query_timeout_secs: int. optional interval int seconds
         """
         self._query_interval_secs = query_interval_secs
         self._query_timeout_secs = query_timeout_secs
@@ -561,7 +564,8 @@ class LedgerClient:
         :param gas_limit: gas limit
         :return: Estimated fee for transaction
         """
-        return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
+        fee = math.ceil(gas_limit * self.network_config.fee_minimum_gas_price)
+        return f"{fee}{self.network_config.fee_denomination}"
 
     def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
         """Estimate gas and fee for transaction.

@@ -21,7 +21,7 @@
 
 import warnings
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Union
 
 
 class NetworkConfigError(RuntimeError):
@@ -48,7 +48,7 @@ class NetworkConfig:
     """
 
     chain_id: str
-    fee_minimum_gas_price: int
+    fee_minimum_gas_price: Union[int, float]
     fee_denomination: str
     staking_denomination: str
     url: str
