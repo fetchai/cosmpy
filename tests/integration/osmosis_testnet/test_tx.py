@@ -25,7 +25,7 @@ from tests.integration.osmosis_testnet.net_config import NET_CONFIG, FaucetMixIn
 from tests.integration.test_tx import TestTx as BaseTestTx
 
 
-class DisabledTestTx(BaseTestTx, FaucetMixIn):
+class TestTx(BaseTestTx, FaucetMixIn):
     """Osmosis Transaction test
 
     :param BaseTestTx: Base test transaction
