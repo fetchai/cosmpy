@@ -34,8 +34,8 @@ CosmosFaucetStatus = namedtuple("CosmosFaucetStatus", ["tx_digest", "status"])
 class FaucetApi:
     """Faucet API."""
 
-    MAX_RETRY_ATTEMPTS = 10
-    POLL_INTERVAL = 3
+    MAX_RETRY_ATTEMPTS = 30
+    POLL_INTERVAL = 2
     FINAL_WAIT_INTERVAL = 5
 
     FAUCET_STATUS_PENDING = "pending"  # noqa: F841
