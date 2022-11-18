@@ -17,18 +17,30 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Parsing the URL."""
+
 from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urlparse
 
 
 class Protocol(Enum):
+    """Protocol Enum.
+
+    :param Enum: Enum
+    """
+
     GRPC = 1
     REST = 2
 
 
 @dataclass
 class ParsedUrl:
+    """Parse URL.
+
+    :return: Parsed URL
+    """
+
     protocol: Protocol
     secure: bool
     hostname: str
@@ -36,10 +48,18 @@ class ParsedUrl:
 
     @property
     def host_and_port(self) -> str:
+        """Get the host and port of the url.
+
+        :return: host and port
+        """
         return f"{self.hostname}:{self.port}"
 
     @property
     def rest_url(self) -> str:
+        """Get the rest url.
+
+        :return: rest url
+        """
         assert self.protocol == Protocol.REST
         if self.secure:
             prefix = "https"
@@ -55,6 +75,12 @@ class ParsedUrl:
 
 
 def parse_url(url: str) -> ParsedUrl:
+    """Initialize.
+
+    :param url: url
+    :raises RuntimeError: If url scheme is unsupported
+    :return: Parsed URL
+    """
     result = urlparse(url)
     if result.scheme == "grpc+https":
         protocol = Protocol.GRPC

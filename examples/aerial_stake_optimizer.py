@@ -1,3 +1,7 @@
+"""Example of aerial stake optimizer."""
+
+# pylint: disable=too-many-locals
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -36,12 +40,24 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsReques
 # * D -> Total staking period
 # * x -> Compounding Period
 def M(x, f, S, k, D):
+    """
+    Calculate the total reward.
+
+    :param x: Compounding Period
+    :param f: fee
+    :param S: Initial Stake
+    :param k: Reward Rate
+    :param D: Total staking period
+
+    :return: Total reward
+    """
     return (S * (1 + (k * x)) ** (D / x)) + (
         (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
     ) * f
 
 
 def main():
+    """Run main."""
     ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
     faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
 
@@ -61,7 +77,7 @@ def main():
     ]
     total_stake = sum(validators_stake)
 
-    # Get validators comissions
+    # Get validators commissions
     validators_comission = [
         int(validator.commission.commission_rates.rate)
         for validator in resp.validators
@@ -74,7 +90,7 @@ def main():
     # Choose a threshold for a validators minimum percentage of total stake delegated
     stake_threshold = 0.10
 
-    for i in range(len(validators_comission)):
+    for _i in range(len(validators_comission)):
 
         # Choose validator with lower commission
         validator_index = validators_comission.index(min(validators_comission))
@@ -87,21 +103,20 @@ def main():
             validator = validators[validator_index]
             break
 
-        else:
-            # We omit this validator by setting his commssion to infinity
-            validators_comission[validator_index] = float("inf")
+        # We omit this validator by setting his commssion to infinity
+        validators_comission[validator_index] = float("inf")
 
     if validator == "not_selected":
-        # Restart validators_comission list with oiriginal values
+        # Restart validators_comission list with original values
         validators_comission = [
             int(validator.commission.commission_rates.rate)
             for validator in resp.validators
             if validator.status == 3
         ]
 
-        print("No validator meets the minium stake threshold requirement")
+        print("No validator meets the minimum stake threshold requirement")
 
-        # Proceed to select the validator with lowest commission
+        # Proceed to select the validator with the lowest commission
         validator_index = validators_comission.index(min(validators_comission))
         validator = validators[validator_index]
 
@@ -111,7 +126,7 @@ def main():
     # Set percentage delegated of total stake
     pct_delegated = initial_stake / total_stake
 
-    # Estmate fees for claiming and delegating rewards
+    # Estimate fees for claiming and delegating rewards
 
     alice = LocalWallet.generate()
     alice_address = str(alice.address())
@@ -167,7 +182,7 @@ def main():
     resp = ledger.params.Params(req)
     community_tax = float(json.loads(resp.param.value))
 
-    # Anual reward calculation
+    # Annual reward calculation
     anual_reward = (
         (inflation * total_supply)
         * pct_delegated
@@ -175,7 +190,7 @@ def main():
         * (1 - commission)
     )
 
-    # Convert from anual reward to minute reward
+    # Convert from annual reward to minute reward
     minute_reward = anual_reward / 360 / 24 / 60
     rate = minute_reward / initial_stake
 
@@ -186,7 +201,7 @@ def main():
     D = total_period
 
     # List of compounding periods
-    X = [i for i in range(1, D)]
+    X = list(range(1, D))
 
     # Evaluate function M on each compounding period
     R = [M(x, f, S, k, D) for x in X]

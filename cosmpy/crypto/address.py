@@ -45,12 +45,15 @@ class Address(UserString):
         value: Union[str, bytes, PublicKey, "Address"],
         prefix: Optional[str] = None,
     ):
-        """
-        Initialize Address instance.
+        """Initialize Address instance.
 
         :param value: str, byte, public key or Address another instance
         :param prefix: optional string
+        :raises RuntimeError: Unable to parse address
+        :raises RuntimeError: Incorrect address length
+        :raises TypeError: Unexpected type of `value` parameter
         """
+        # pylint: disable=super-init-not-called
         if prefix is None:
             prefix = DEFAULT_PREFIX
 
@@ -79,20 +82,23 @@ class Address(UserString):
 
         elif isinstance(value, Address):
             self._address = value._address
-            # prefix might be different from the original Address so we need to reencode it here.
+            # prefix might be different from the original Address, so we need to reencode it here.
             self._display = _to_bech32(prefix, self._address)
         else:
             raise TypeError("Unexpected type of `value` parameter")  # pragma: no cover
 
     def __str__(self):
+        """String representation of the address."""  # noqa: D401
         return self._display
 
     def __bytes__(self):
+        """bytes representation of the address."""
         return self._address
 
     @property
-    def data(self):
+    def data(self):  # noqa:
+        """Return address in string."""
         return str(self)
 
-    def __json__(self):
+    def __json__(self):  # noqa:
         return str(self)

@@ -17,10 +17,15 @@
 #
 # ------------------------------------------------------------------------------
 
+"""cosmwasm contract functionality."""
+
 import json
+import os
 from collections import UserString
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Dict, Optional
+
+from jsonschema import validate
 
 from cosmpy.aerial.client import LedgerClient, prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.contract.cosmwasm import (
@@ -51,17 +56,49 @@ def _generate_label(digest: bytes) -> str:
     return f"{digest.hex()[:14]}-{now.strftime('%Y%m%d%H%M%S')}"
 
 
+def _load_contract_schema(schema_path: str) -> Optional[Dict[Any, Any]]:
+    if not os.path.isdir(schema_path):
+        return None
+
+    schema = {}
+    for filename in os.listdir(schema_path):
+        if filename.endswith(".json"):
+            msg_name = os.path.splitext(os.path.basename(filename))[0]
+            full_path = os.path.join(schema_path, filename)
+            with open(full_path, "r", encoding="utf-8") as msg_schema_file:
+                msg_schema = json.load(msg_schema_file)
+            schema[msg_name] = msg_schema
+    return schema
+
+
 class LedgerContract(UserString):
+    """Ledger contract."""
+
     def __init__(
         self,
         path: Optional[str],
         client: LedgerClient,
         address: Optional[Address] = None,
         digest: Optional[bytes] = None,
+        schema_path: Optional[str] = None,
+        code_id: Optional[int] = None,
     ):
+        """Initialize the Ledger contract.
+
+        :param path: Path
+        :param client: Ledger client
+        :param address: address, defaults to None
+        :param digest: digest, defaults to None
+        :param schema_path: path to contract schema, defaults to None
+        :param code_id: optional int. code id of the contract stored
+        """
+        # pylint: disable=super-init-not-called
         self._path = path
         self._client = client
         self._address = address
+
+        # load contract schema if path is provided
+        self._load_schema(schema_path)
 
         # select the digest either by computing it from the provided contract or by the value specified by
         # the user
@@ -69,26 +106,42 @@ class LedgerContract(UserString):
         if path is not None:
             self._digest = _compute_digest(str(self._path))
 
-        # attempt to lookup the code id from the network by digest
-        if self._digest is not None:
+        # attempt to look up the code id from the network by digest
+        if not code_id and self._digest is not None:
             self._code_id = self._find_contract_id_by_digest(self._digest)
         else:
-            self._code_id = None
+            self._code_id = code_id
 
     @property
     def path(self) -> Optional[str]:
+        """Get contract path.
+
+        :return: contract path
+        """
         return self._path
 
     @property
     def digest(self) -> Optional[bytes]:
+        """Get the contract digest.
+
+        :return: contract digest
+        """
         return self._digest
 
     @property
     def code_id(self) -> Optional[int]:
+        """Get the code id.
+
+        :return: code id
+        """
         return self._code_id
 
     @property
     def address(self) -> Optional[Address]:
+        """Get the contract address.
+
+        :return: contract address
+        """
         return self._address
 
     def store(
@@ -97,6 +150,14 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
     ) -> int:
+        """Store the contract.
+
+        :param sender: sender wallet address
+        :param gas_limit: transaction gas limit, defaults to None
+        :param memo: transaction memo, defaults to None
+        :raises RuntimeError: Runtime error
+        :return: code id
+        """
         if self._path is None:
             raise RuntimeError("Unable to upload code, no contract provided")
 
@@ -117,7 +178,6 @@ class LedgerContract(UserString):
 
     def instantiate(
         self,
-        code_id: int,
         args: Any,
         sender: Wallet,
         label: Optional[str] = None,
@@ -125,23 +185,44 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
+        """Instantiate the contract.
 
-        assert self._digest is not None
+        :param args: args
+        :param sender: sender wallet address
+        :param label: label, defaults to None
+        :param gas_limit: transaction gas limit, defaults to None
+        :param admin_address: admin address, defaults to None
+        :param funds: funds, defaults to None
+        :raises RuntimeError: Unable to extract contract code id
 
-        label = label or _generate_label(bytes(self._digest))
+        :return: contract address
+        """
+        assert self._code_id, RuntimeError("Code id was not set.")
+
+        if self._instantiate_schema is not None:
+            validate(args, self._instantiate_schema)
+
+        if label is None:
+            if self._digest:
+                label = _generate_label(bytes(self._digest))
+            elif self._code_id:
+                label = _generate_label(bytes(f"{self._code_id}", encoding="utf-8"))
+            else:
+                raise RuntimeError(
+                    "Failed to get label. No code_id or digest provided."
+                )
 
         # build up the store transaction
-        tx = Transaction()
-        tx.add_message(
-            create_cosmwasm_instantiate_msg(
-                code_id,
-                args,
-                label,
-                sender.address(),
-                admin_address=admin_address,
-                funds=funds,
-            )
+        instatiate_msg = create_cosmwasm_instantiate_msg(
+            self._code_id,
+            args,
+            label,
+            sender.address(),
+            admin_address=admin_address,
+            funds=funds,
         )
+        tx = Transaction()
+        tx.add_message(instatiate_msg)
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
             self._client, tx, sender, gas_limit=gas_limit
@@ -164,7 +245,17 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
     ) -> Address:
+        """Deploy the contract.
 
+        :param args: args
+        :param sender: sender address
+        :param label: label, defaults to None
+        :param store_gas_limit: store gas limit, defaults to None
+        :param instantiate_gas_limit: instantiate gas limit, defaults to None
+        :param admin_address: admin address, defaults to None
+        :param funds: funds, defaults to None
+        :return: instantiate contract details
+        """
         # in the case where the contract is already deployed
         if self._address is not None and self._code_id is not None:
             return self._address
@@ -177,7 +268,6 @@ class LedgerContract(UserString):
         assert self._code_id is not None
 
         return self.instantiate(
-            self._code_id,
             args,
             sender,
             label=label,
@@ -193,10 +283,22 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         funds: Optional[str] = None,
     ) -> SubmittedTx:
+        """execute the contract.
+
+        :param args: args
+        :param sender: sender address
+        :param gas_limit: transaction gas limit, defaults to None
+        :param funds: funds, defaults to None
+        :raises RuntimeError: Contract appears not to be deployed currently
+        :return: transaction details broadcast
+        """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
 
-        # build up the store transaction
+        if self._execute_schema is not None:
+            validate(args, self._execute_schema)
+
+        # build up the execute transaction
         tx = Transaction()
         tx.add_message(
             create_cosmwasm_execute_msg(
@@ -209,8 +311,17 @@ class LedgerContract(UserString):
         )
 
     def query(self, args: Any) -> Any:
+        """Query on contract.
+
+        :param args: args
+        :raises RuntimeError: Contract appears not to be deployed currently
+        :return: query result
+        """
         if self._address is None:
             raise RuntimeError("Contract appears not to be deployed currently")
+
+        if self._query_schema is not None:
+            validate(args, self._query_schema)
 
         req = QuerySmartContractStateRequest(
             address=str(self._address), query_data=json_encode(args).encode("UTF8")
@@ -225,7 +336,6 @@ class LedgerContract(UserString):
         while True:
             req = QueryCodesRequest(pagination=pagination)
             resp = self._client.wasm.Codes(req)
-
             for code_info in resp.code_infos:
                 if code_info.data_hash == digest:
                     code_id = int(code_info.code_id)
@@ -244,9 +354,38 @@ class LedgerContract(UserString):
 
         return code_id
 
+    def _load_schema(self, schema_path: Optional[str]):
+        self._schema: Optional[Dict[str, Any]] = None
+        self._instantiate_schema: Optional[Dict[str, Any]] = None
+        self._query_schema: Optional[Dict[str, Any]] = None
+        self._execute_schema: Optional[Dict[str, Any]] = None
+
+        if schema_path is None:
+            return
+
+        self._schema = _load_contract_schema(schema_path)
+        if self._schema is None:
+            return
+
+        for (msg_type, schema) in self._schema.items():
+            if "instantiate" in msg_type:
+                self._instantiate_schema = schema
+            elif "query" in msg_type:
+                self._query_schema = schema
+            elif "execute" in msg_type:
+                self._execute_schema = schema
+
     @property
     def data(self):
+        """Get the contract address.
+
+        :return: contract address
+        """
         return self.address
 
     def __json__(self):
+        """Get the contract details in json.
+
+        :return: contract details in json
+        """
         return str(self)

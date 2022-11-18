@@ -1,39 +1,23 @@
-name: Pre-release checks and tests
-
+name: Check and realese cosmpy
+# runs do release on main branch updated
+# script checks for current package version and the latest tag on github
+# if package version is newer it build, upload, tag and make a release page on github
+# secrets PYPI_USERNAME and PYPI_PASSWORD are required!
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+    branches: [ main ]
 
 jobs:
-  run:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [macos-latest]
-        python-version: [3.7, 3.8, 3.9]
-
-    timeout-minutes: 30
-
+  build:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-python@master
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
-    - uses: docker-practice/actions-setup-docker@master
-    - name: Install dependencies
-      run: pip install tox==3.24.1
-    - name: Integration tests for macOS
-      # Currently ordinary workflow runs full set of tests (with integration) for Linux
-      # and unit tests for other platforms
-      # In pre-release check we run also integration tests for macOS
-      # Windows integration tests are currently disabled
+          python-version: '3.9'
+    - name: run release script
+      env:
+        PYPI_USERNAME: __token__
+        PYPI_PASSWORD: ${{secrets.FETCHBOT_PYPI_TOKEN}}
       run: |
-        if [ "$RUNNER_OS" == "macOS" ]; then
-          tox -e test-integration
-        fi
-      shell: bash
+        python3 ./scripts/do-release.py

@@ -46,11 +46,10 @@ class SlashingRestClient(Slashing):
 
     def Params(self) -> QueryParamsResponse:
         """
-        Params queries the parameters of slashing module
+        Params queries the parameters of slashing module.
 
         :return: QueryParamsResponse
         """
-
         json_response = self._rest_api.get(
             f"{self.API_URL}/params",
         )
@@ -64,7 +63,6 @@ class SlashingRestClient(Slashing):
 
         :return: QuerySigningInfoResponse
         """
-
         json_response = self._rest_api.get(
             f"{self.API_URL}/signing_infos/{request.cons_address}",
         )

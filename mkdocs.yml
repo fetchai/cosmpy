@@ -25,6 +25,26 @@ nav:
     - Liquidity Pool: 'liquidity-pool.md'
     - Swap Automation: 'swap-automation.md'
 
+  - API:
+    - Client:
+      - Client functionality: 'api/aerial/client/__init__.md'
+      - Bank send message: 'api/aerial/client/bank.md'
+      - Distribution: 'api/aerial/client/distribution.md'
+      - Staking functionality: 'api/aerial/client/staking.md'
+      - Helper functions: 'api/aerial/client/utils.md'
+    - Contract:
+      - Cosmwasm contract functionality: 'api/aerial/contract/__init__.md'
+      - Cosmwasm contract store, instantiate, execute messages: 'api/aerial/contract/cosmwasm.md'
+    - Parse the coins: 'api/aerial/coins.md'
+    - Network configurations: 'api/aerial/config.md'
+    - Exceptions: 'api/aerial/exceptions.md'
+    - Ledger faucet API interface: 'api/aerial/faucet.md'
+    - Transaction gas strategy: 'api/aerial/gas.md'
+    - Transaction helpers: 'api/aerial/tx_helpers.md'
+    - Transaction: 'api/aerial/tx.md'
+    - Parsing the URL: 'api/aerial/urls.md'
+    - Wallet Generation: 'api/aerial/wallet.md'
+
 theme:
   name: material
   language: en
@@ -90,7 +110,7 @@ extra:
       name: fetch.ai on discord
     - icon: fontawesome/brands/github
       link: https://bit.ly/3AFCWxl
-      name: fetch.ai on githubs
+      name: fetch.ai on github
     - icon: fontawesome/brands/reddit
       link: https://bit.ly/30zS1Tg
       name: fetch.ai on reddit

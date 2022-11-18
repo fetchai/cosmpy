@@ -20,6 +20,7 @@
 from pathlib import Path
 
 import pytest
+from jsonschema import ValidationError
 
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
@@ -27,57 +28,133 @@ from cosmpy.aerial.contract import LedgerContract
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
-CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple.wasm"
+CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple/simple.wasm"
+SCHEMA_PATH = Path(__file__).parent / "../../contracts/simple/schema"
 
 
-@pytest.mark.integration
-def test_contract():
-    """Test simple contract deploy execute and query."""
-    wallet = LocalWallet.generate()
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(wallet.address())
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    contract = LedgerContract(CONTRACT_PATH, ledger)
-    contract_address = contract.deploy({}, wallet)
-    assert contract_address
-    assert contract == contract_address
-    result = contract.query({"get": {"owner": wallet}})
-
-    assert not result["exists"]
-    assert not result["value"]
-
-    value = "foobar"
-    contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
-    result = contract.query({"get": {"owner": wallet}})
-
-    assert result["exists"]
-    assert result["value"] == value
+class ValidationTestFailure(Exception):
+    """Validation test failure exception"""
 
 
-@pytest.mark.integration
-def test_deployed_contract():
-    """Test interaction with already deployed contract."""
-    wallet = LocalWallet.generate()
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
-    faucet_api.get_wealth(wallet.address())
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    contract = LedgerContract(CONTRACT_PATH, ledger)
-    contract_address = contract.deploy({}, wallet)
-    assert contract_address
+MAX_FLAKY_RERUNS = 3
+RERUNS_DELAY = 10
 
-    deployed_contract = LedgerContract(None, ledger, contract_address)
 
-    result = deployed_contract.query({"get": {"owner": wallet}})
+class TestContract:
+    """Test contract"""
 
-    assert not result["exists"]
-    assert not result["value"]
+    def _get_network_config(self):
+        """Get network config."""
+        return NetworkConfig.fetchai_stable_testnet()
 
-    value = "foobar"
-    deployed_contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
-    result = deployed_contract.query({"get": {"owner": wallet}})
+    def get_wallet(self):
+        """Get wallet"""
+        wallet = LocalWallet.generate()
+        faucet_api = FaucetApi(self._get_network_config())
+        faucet_api.get_wealth(wallet.address())
+        return wallet
 
-    assert result["exists"]
-    assert result["value"] == value
+    def get_ledger(self):
+        """Get ledger"""
+        return LedgerClient(self._get_network_config())
+
+    def get_contract(self):
+        """Get contract"""
+        return LedgerContract(CONTRACT_PATH, self.get_ledger())
+
+    @pytest.mark.integration
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    def test_contract(self):
+        """Test simple contract deploy execute and query."""
+        wallet = self.get_wallet()
+        contract = self.get_contract()
+        contract_address = contract.deploy({}, wallet)
+        assert contract_address
+        result = contract.query({"get": {"owner": str(wallet.address())}})
+
+        assert not result["exists"]
+        assert not result["value"]
+
+        value = "foobar"
+        contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
+        result = contract.query({"get": {"owner": str(wallet.address())}})
+
+        assert result["exists"]
+        assert result["value"] == value
+
+    @pytest.mark.integration
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    def test_deployed_contract(self):
+        """Test interaction with already deployed contract."""
+        wallet = self.get_wallet()
+        ledger = self.get_ledger()
+        contract = self.get_contract()
+
+        # manual store
+        if not contract._code_id:  # pylint: disable=protected-access
+            contract.store(wallet)
+
+        # instatiate by code_id
+        contract = LedgerContract(
+            None, ledger, code_id=contract._code_id  # pylint: disable=protected-access
+        )
+        contract_address = contract.instantiate({}, wallet)
+        assert contract_address
+
+        # use by address
+        deployed_contract = LedgerContract(None, ledger, contract_address)
+
+        result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
+
+        assert not result["exists"]
+        assert not result["value"]
+
+        value = "foobar"
+        deployed_contract.execute({"set": {"value": value}}, wallet).wait_to_complete()
+        result = deployed_contract.query({"get": {"owner": str(wallet.address())}})
+
+        assert result["exists"]
+        assert result["value"] == value
+
+    @pytest.mark.integration
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    def test_contract_schema_validation(self):
+        """Test simple contract schema validation."""
+        wallet = self.get_wallet()
+        contract = LedgerContract(
+            CONTRACT_PATH, self.get_ledger(), schema_path=SCHEMA_PATH
+        )
+        contract._address = "fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel"  # pylint: disable=protected-access
+
+        try:
+            bad_query = {"get_count": 0}
+            contract.query(bad_query)
+        except ValidationError:
+            pass
+        except Exception as exc:
+            raise ValidationTestFailure("Query should have failed validation") from exc
+
+        try:
+            bad_msg = {"increment": 1}
+            contract.execute(bad_msg, wallet).wait_to_complete()
+        except ValidationError:
+            pass
+        except Exception as exc:
+            raise ValidationTestFailure("Msg should have failed validation") from exc
+
+
+class TestContractRestAPI(TestContract):
+    """Test dorado rest api"""
+
+    def _get_network_config(self):
+        return NetworkConfig(
+            chain_id="dorado-1",
+            url="rest+https://rest-dorado.fetch.ai:443",
+            fee_minimum_gas_price=5000000000,
+            fee_denomination="atestfet",
+            staking_denomination="atestfet",
+            faucet_url="https://faucet-dorado.fetch.ai",
+        )
 
 
 if __name__ == "__main__":

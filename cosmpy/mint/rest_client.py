@@ -2,7 +2,6 @@
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2018-2021 Fetch.AI Limited
-#   Modifications copyright (C) 2022 Cros-Nest
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -65,6 +64,7 @@ class MintRestClient(Mint):
     def AnnualProvisions(self) -> QueryAnnualProvisionsResponse:
         """
         AnnualProvisions current minting annual provisions value.
+
         :return: a QueryAnnualProvisionsResponse instance
         """
         json_response = self._rest_api.get(f"{self.API_URL}/annual_provisions")
@@ -82,6 +82,7 @@ class MintRestClient(Mint):
     def Inflation(self) -> QueryInflationResponse:
         """
         Inflation returns the current minting inflation value.
+
         :return: a QueryInflationResponse instance
         """
         json_response = self._rest_api.get(f"{self.API_URL}/inflation")
@@ -97,6 +98,7 @@ class MintRestClient(Mint):
     def Params(self) -> QueryParamsResponse:
         """
         Params queries params of the Mint module.
+
         :return: a QueryParamsResponse instance
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params")

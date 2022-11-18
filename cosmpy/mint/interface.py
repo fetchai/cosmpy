@@ -2,7 +2,6 @@
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2018-2021 Fetch.AI Limited
-#   Modifications copyright (C) 2022 Cros-Nest
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -36,6 +35,7 @@ class Mint(ABC):
     def AnnualProvisions(self) -> QueryAnnualProvisionsResponse:
         """
         AnnualProvisions current minting annual provisions value.
+
         :return: a QueryAnnualProvisionsResponse instance
         """
 
@@ -43,6 +43,7 @@ class Mint(ABC):
     def Inflation(self) -> QueryInflationResponse:
         """
         Inflation returns the current minting inflation value.
+
         :return: a QueryInflationResponse instance
         """
 
@@ -50,5 +51,6 @@ class Mint(ABC):
     def Params(self) -> QueryParamsResponse:
         """
         Params returns the total set of minting parameters.
+
         :return: QueryParamsResponse
         """

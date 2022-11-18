@@ -1,3 +1,5 @@
+"""Test for contract."""
+
 from unittest.mock import Mock
 
 from cosmpy.aerial.contract import LedgerContract

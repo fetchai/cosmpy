@@ -57,7 +57,7 @@ class TxRestClient(TxInterface):
 
     def __init__(self, rest_client: RestClient) -> None:
         """
-        Create a Tx rest client
+        Create a Tx rest client.
 
         :param rest_client: RestClient api
         """
@@ -85,7 +85,7 @@ class TxRestClient(TxInterface):
         """
         response = self.rest_client.get(f"{self.API_URL}/txs/{request.hash}")
 
-        # JSON in JSON in case of CosmWasm messages workaround
+        # JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
         self._fix_messages(dict_response["tx"]["body"]["messages"])
         self._fix_messages(dict_response["tx_response"]["tx"]["body"]["messages"])
@@ -111,7 +111,7 @@ class TxRestClient(TxInterface):
         """
         response = self.rest_client.get(f"{self.API_URL}/txs", request)
 
-        # JSON in JSON in case of CosmWasm messages workaround
+        # JSON in case of CosmWasm messages workaround
         dict_response = json.loads(response)
         for tx in dict_response["txs"]:
             self._fix_messages(tx["body"]["messages"])
@@ -124,7 +124,7 @@ class TxRestClient(TxInterface):
     @staticmethod
     def _fix_messages(messages: List[Dict[str, Any]]):
         """
-        Fix for REST api response in case of CosmWasm messages contains dict instead of base64 encoded string
+        Fix for REST api response in case of CosmWasm messages contains dict instead of base64 encoded string.
 
         :param messages: List of message in Tx response
         """

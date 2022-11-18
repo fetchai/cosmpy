@@ -29,7 +29,7 @@ It is important to note that each time an account performs a claim or a delegate
 time_limit = 600
 period = 100
 ```
-Finally, we start a timer that claims rewards and delegates them in each time period. Notice that in the code below we constructed a while loop that will be running until the timer exceeds the `time limit`. Each loop will last the time specified in `period`. We query the balance before and after claiming rewards to get the value of the reward after any fees. If the true reward value is positive, we delegate those tokens to the validator, if it is negative, it means that the fees from claiming and delegating transactions exceeded the rewards and therefore we won't delegate.
+Finally, we start a timer that claims rewards and delegates them in each time period. Notice that in the code below we constructed a while loop that will be running until the timer exceeds the `time limit`. Each loop will last the time specified in `period`. We query the balance before and after claiming rewards to get the value of the reward after any fees. If the true reward value is positive, we delegate those tokens to the validator, if it is negative, it means that the fees from claiming and delegating transactions exceeded the rewards, and therefore we won't delegate.
 
 
 ```python

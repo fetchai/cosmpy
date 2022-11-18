@@ -16,7 +16,11 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Client functionality."""
+
 import json
+import math
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -33,7 +37,11 @@ from cosmpy.aerial.client.staking import (
     create_redelegate_msg,
     create_undelegate_msg,
 )
-from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
+from cosmpy.aerial.client.utils import (
+    ensure_timedelta,
+    get_paginated,
+    prepare_and_broadcast_basic_transaction,
+)
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
@@ -56,6 +64,9 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
 )
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
+    PubKey,
+)
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
     QueryDelegationRewardsRequest,
 )
@@ -94,6 +105,8 @@ COSMOS_SDK_DEC_COIN_PRECISION = 10**18
 
 @dataclass
 class Account:
+    """Account."""
+
     address: Address
     number: int
     sequence: int
@@ -101,6 +114,8 @@ class Account:
 
 @dataclass
 class StakingPosition:
+    """Staking positions."""
+
     validator: Address
     amount: int
     reward: int
@@ -108,12 +123,16 @@ class StakingPosition:
 
 @dataclass
 class UnbondingPositions:
+    """Unbonding positions."""
+
     validator: Address
     amount: int
 
 
 @dataclass
 class Validator:
+    """Validator."""
+
     address: Address  # the operators address
     tokens: int  # The total amount of tokens for the validator
     moniker: str
@@ -122,30 +141,52 @@ class Validator:
 
 @dataclass
 class Coin:
+    """Coins."""
+
     amount: int
     denom: str
 
 
 @dataclass
 class StakingSummary:
+    """Get the staking summary."""
+
     current_positions: List[StakingPosition]
     unbonding_positions: List[UnbondingPositions]
 
     @property
     def total_staked(self) -> int:
+        """Get the total staked amount."""
         return sum(map(lambda p: p.amount, self.current_positions))
 
     @property
     def total_rewards(self) -> int:
+        """Get the total rewards."""
         return sum(map(lambda p: p.reward, self.current_positions))
 
     @property
     def total_unbonding(self) -> int:
+        """total unbonding."""
         return sum(map(lambda p: p.amount, self.unbonding_positions))
 
 
 class LedgerClient:
-    def __init__(self, cfg: NetworkConfig):
+    """Ledger client."""
+
+    def __init__(
+        self,
+        cfg: NetworkConfig,
+        query_interval_secs: int = DEFAULT_QUERY_INTERVAL_SECS,
+        query_timeout_secs: int = DEFAULT_QUERY_TIMEOUT_SECS,
+    ):
+        """Init ledger client.
+
+        :param cfg: Network configurations
+        :param query_interval_secs: int. optional interval int seconds
+        :param query_timeout_secs: int. optional interval int seconds
+        """
+        self._query_interval_secs = query_interval_secs
+        self._query_timeout_secs = query_timeout_secs
         cfg.validate()
         self._network_config = cfg
         self._gas_strategy: GasStrategy = SimulationGasStrategy(self)
@@ -183,19 +224,38 @@ class LedgerClient:
 
     @property
     def network_config(self) -> NetworkConfig:
+        """Get the network config.
+
+        :return: network config
+        """
         return self._network_config
 
     @property
     def gas_strategy(self) -> GasStrategy:
+        """Get gas strategy.
+
+        :return: gas strategy
+        """
         return self._gas_strategy
 
     @gas_strategy.setter
     def gas_strategy(self, strategy: GasStrategy):
+        """Set gas strategy.
+
+        :param strategy: strategy
+        :raises RuntimeError: Invalid strategy must implement GasStrategy interface
+        """
         if not isinstance(strategy, GasStrategy):
             raise RuntimeError("Invalid strategy must implement GasStrategy interface")
         self._gas_strategy = strategy
 
     def query_account(self, address: Address) -> Account:
+        """Query account.
+
+        :param address: address
+        :raises RuntimeError: Unexpected account type returned from query
+        :return: account details
+        """
         request = QueryAccountRequest(address=str(address))
         response = self.auth.Account(request)
 
@@ -211,11 +271,23 @@ class LedgerClient:
         )
 
     def query_params(self, subspace: str, key: str) -> Any:
+        """Query Prams.
+
+        :param subspace: subspace
+        :param key: key
+        :return: Query params
+        """
         req = QueryParamsRequest(subspace=subspace, key=key)
         resp = self.params.Params(req)
         return json.loads(resp.param.value)
 
     def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
+        """Query bank balance.
+
+        :param address: address
+        :param denom: denom, defaults to None
+        :return: bank balance
+        """
         denom = denom or self.network_config.fee_denomination
 
         req = QueryBalanceRequest(
@@ -229,7 +301,11 @@ class LedgerClient:
         return int(resp.balance.amount)
 
     def query_bank_all_balances(self, address: Address) -> List[Coin]:
+        """Query bank all balances.
 
+        :param address: address
+        :return: bank all balances
+        """
         req = QueryAllBalancesRequest(address=str(address))
         resp = self.bank.AllBalances(req)
 
@@ -244,7 +320,16 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
+        """Send tokens.
 
+        :param destination: destination address
+        :param amount: amount
+        :param denom: denom
+        :param sender: sender
+        :param memo: memo, defaults to None
+        :param gas_limit: gas limit, defaults to None
+        :return: prepare and broadcast the transaction and transaction details
+        """
         # build up the store transaction
         tx = Transaction()
         tx.add_message(
@@ -258,6 +343,11 @@ class LedgerClient:
     def query_validators(
         self, status: Optional[ValidatorStatus] = None
     ) -> List[Validator]:
+        """Query validators.
+
+        :param status: validator status, defaults to None
+        :return: List of validators
+        """
         filtered_status = status or ValidatorStatus.BONDED
 
         req = QueryValidatorsRequest()
@@ -279,46 +369,54 @@ class LedgerClient:
         return validators
 
     def query_staking_summary(self, address: Address) -> StakingSummary:
+        """Query staking summary.
+
+        :param address: address
+        :return: staking summary
+        """
         current_positions: List[StakingPosition] = []
 
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
-        resp = self.staking.DelegatorDelegations(req)
 
-        # TODO: Need pagination support
-        for item in resp.delegation_responses:
+        for resp in get_paginated(
+            req, self.staking.DelegatorDelegations, per_page_limit=1
+        ):
+            for item in resp.delegation_responses:
 
-            req = QueryDelegationRewardsRequest(
-                delegator_address=str(address),
-                validator_address=str(item.delegation.validator_address),
-            )
-            rewards_resp = self.distribution.DelegationRewards(req)
-
-            stake_reward = 0
-            for reward in rewards_resp.rewards:
-                if reward.denom == self.network_config.staking_denomination:
-                    stake_reward = int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
-                    break
-
-            current_positions.append(
-                StakingPosition(
-                    validator=Address(item.delegation.validator_address),
-                    amount=int(item.balance.amount),
-                    reward=stake_reward,
+                req = QueryDelegationRewardsRequest(
+                    delegator_address=str(address),
+                    validator_address=str(item.delegation.validator_address),
                 )
-            )
+                rewards_resp = self.distribution.DelegationRewards(req)
 
-        req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
-        resp = self.staking.DelegatorUnbondingDelegations(req)
+                stake_reward = 0
+                for reward in rewards_resp.rewards:
+                    if reward.denom == self.network_config.staking_denomination:
+                        stake_reward = (
+                            int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
+                        )
+                        break
+
+                current_positions.append(
+                    StakingPosition(
+                        validator=Address(item.delegation.validator_address),
+                        amount=int(item.balance.amount),
+                        reward=stake_reward,
+                    )
+                )
 
         unbonding_summary: Dict[str, int] = {}
-        for item in resp.unbonding_responses:
-            validator = str(item.validator_address)
-            total_unbonding = unbonding_summary.get(validator, 0)
+        req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
 
-            for entry in item.entries:
-                total_unbonding += int(entry.balance)
+        for resp in get_paginated(req, self.staking.DelegatorUnbondingDelegations):
+            for item in resp.unbonding_responses:
+                validator = str(item.validator_address)
+                total_unbonding = unbonding_summary.get(validator, 0)
 
-            unbonding_summary[validator] = total_unbonding
+                for entry in item.entries:
+                    total_unbonding += int(entry.balance)
+
+                unbonding_summary[validator] = total_unbonding
 
         # build the final list of unbonding positions
         unbonding_positions: List[UnbondingPositions] = []
@@ -342,6 +440,15 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
+        """Delegate tokens.
+
+        :param validator: validator address
+        :param amount: amount
+        :param sender: sender
+        :param memo: memo, defaults to None
+        :param gas_limit: gas limit, defaults to None
+        :return: prepare and broadcast the transaction and transaction details
+        """
         tx = Transaction()
         tx.add_message(
             create_delegate_msg(
@@ -365,6 +472,16 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
+        """Redelegate tokens.
+
+        :param current_validator: current validator address
+        :param next_validator: next validator address
+        :param amount: amount
+        :param sender: sender
+        :param memo: memo, defaults to None
+        :param gas_limit: gas limit, defaults to None
+        :return: prepare and broadcast the transaction and transaction details
+        """
         tx = Transaction()
         tx.add_message(
             create_redelegate_msg(
@@ -388,7 +505,15 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
+        """Undelegate tokens.
 
+        :param validator: validator
+        :param amount: amount
+        :param sender: sender
+        :param memo: memo, defaults to None
+        :param gas_limit: gas limit, defaults to None
+        :return: prepare and broadcast the transaction and transaction details
+        """
         tx = Transaction()
         tx.add_message(
             create_undelegate_msg(
@@ -410,6 +535,14 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
+        """claim rewards.
+
+        :param validator: validator
+        :param sender: sender
+        :param memo: memo, defaults to None
+        :param gas_limit: gas limit, defaults to None
+        :return: prepare and broadcast the transaction and transaction details
+        """
         tx = Transaction()
         tx.add_message(create_withdraw_delegator_reward(sender.address(), validator))
 
@@ -418,12 +551,28 @@ class LedgerClient:
         )
 
     def estimate_gas_for_tx(self, tx: Transaction) -> int:
+        """Estimate gas for transaction.
+
+        :param tx: transaction
+        :return: Estimated gas for transaction
+        """
         return self._gas_strategy.estimate_gas(tx)
 
     def estimate_fee_from_gas(self, gas_limit: int) -> str:
-        return f"{gas_limit * self.network_config.fee_minimum_gas_price}{self.network_config.fee_denomination}"
+        """Estimate fee from gas.
+
+        :param gas_limit: gas limit
+        :return: Estimated fee for transaction
+        """
+        fee = math.ceil(gas_limit * self.network_config.fee_minimum_gas_price)
+        return f"{fee}{self.network_config.fee_denomination}"
 
     def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
+        """Estimate gas and fee for transaction.
+
+        :param tx: transaction
+        :return: estimate gas, fee for transaction
+        """
         gas_estimate = self.estimate_gas_for_tx(tx)
         fee = self.estimate_fee_from_gas(gas_estimate)
         return gas_estimate, fee
@@ -432,10 +581,28 @@ class LedgerClient:
         self,
         tx_hash: str,
         timeout: Optional[timedelta] = None,
-        internal: Optional[timedelta] = None,
+        poll_period: Optional[timedelta] = None,
     ) -> TxResponse:
-        timeout = timeout or timedelta(seconds=DEFAULT_QUERY_TIMEOUT_SECS)
-        internal = internal or timedelta(seconds=DEFAULT_QUERY_INTERVAL_SECS)
+        """Wait for query transaction.
+
+        :param tx_hash: transaction hash
+        :param timeout: timeout, defaults to None
+        :param poll_period: poll_period, defaults to None
+
+        :raises QueryTimeoutError: timeout
+
+        :return: transaction response
+        """
+        timeout = (
+            ensure_timedelta(timeout)
+            if timeout
+            else timedelta(seconds=self._query_timeout_secs)
+        )
+        poll_period = (
+            ensure_timedelta(poll_period)
+            if poll_period
+            else timedelta(seconds=self._query_interval_secs)
+        )
 
         start = datetime.now()
         while True:
@@ -448,24 +615,29 @@ class LedgerClient:
             if delta >= timeout:
                 raise QueryTimeoutError()
 
-            time.sleep(internal.total_seconds())
+            time.sleep(poll_period.total_seconds())
 
     def query_tx(self, tx_hash: str) -> TxResponse:
+        """query transaction.
+
+        :param tx_hash: transaction hash
+        :raises NotFoundError: Tx details not found
+        :raises grpc.RpcError: RPC connection issue
+        :return: query response
+        """
         req = GetTxRequest(hash=tx_hash)
         try:
             resp = self.txs.GetTx(req)
         except grpc.RpcError as e:
             details = e.details()
             if "not found" in details:
-                raise NotFoundError()
-            else:
-                raise
+                raise NotFoundError() from e
+            raise
         except RuntimeError as e:
             details = str(e)
             if "tx" in details and "not found" in details:
-                raise NotFoundError()
-            else:
-                raise
+                raise NotFoundError() from e
+            raise
 
         return self._parse_tx_response(resp.tx_response)
 
@@ -503,6 +675,12 @@ class LedgerClient:
         )
 
     def simulate_tx(self, tx: Transaction) -> int:
+        """simulate transaction.
+
+        :param tx: transaction
+        :raises RuntimeError: Unable to simulate non final transaction
+        :return: gas used in transaction
+        """
         if tx.state != TxState.Final:
             raise RuntimeError("Unable to simulate non final transaction")
 
@@ -512,7 +690,11 @@ class LedgerClient:
         return int(resp.gas_info.gas_used)
 
     def broadcast_tx(self, tx: Transaction) -> SubmittedTx:
+        """Broadcast transaction.
 
+        :param tx: transaction
+        :return: Submitted transaction
+        """
         # create the broadcast request
         broadcast_req = BroadcastTxRequest(
             tx_bytes=tx.tx.SerializeToString(), mode=BroadcastMode.BROADCAST_MODE_SYNC

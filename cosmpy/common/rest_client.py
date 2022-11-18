@@ -18,7 +18,8 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of REST api client."""
-
+import base64
+import json
 from typing import List, Optional
 from urllib.parse import urlencode
 
@@ -32,7 +33,7 @@ class RestClient:
 
     def __init__(self, rest_address: str):
         """
-        Create REST api client
+        Create REST api client.
 
         :param rest_address: Address of REST node
         """
@@ -46,7 +47,7 @@ class RestClient:
         used_params: Optional[List[str]] = None,
     ) -> bytes:
         """
-        Send a GET request
+        Send a GET request.
 
         :param url_base_path: URL base path
         :param request: Protobuf coded request
@@ -56,22 +57,9 @@ class RestClient:
 
         :return: Content of response
         """
-        if request is None:
-            url = f"{self.rest_address}{url_base_path}"
-        else:
-            json_request = MessageToDict(request)
-
-            # Remove params that are already in url_base_path
-            if used_params is not None:
-                for param in used_params:
-                    json_request.pop(param)
-
-            url_encoded_request = self._url_encode(json_request)
-
-            if len(url_encoded_request) == 0:
-                url = f"{self.rest_address}{url_base_path}"
-            else:
-                url = f"{self.rest_address}{url_base_path}?{url_encoded_request}"
+        url = self._make_url(
+            url_base_path=url_base_path, request=request, used_params=used_params
+        )
 
         response = self._session.get(url=url)
         if response.status_code != 200:
@@ -80,9 +68,38 @@ class RestClient:
             )
         return response.content
 
+    def _make_url(
+        self,
+        url_base_path: str,
+        request: Optional[Message] = None,
+        used_params: Optional[List[str]] = None,
+    ) -> str:
+        """
+        Construct URL for get request.
+
+        :param url_base_path: URL base path
+        :param request: Protobuf coded request
+        :param used_params: Parameters to be removed from request after converting it to dict
+
+        :return: URL string
+        """
+        json_request = MessageToDict(request) if request else {}
+
+        # Remove params that are already in url_base_path
+        for param in used_params or []:
+            json_request.pop(param)
+
+        url_encoded_request = self._url_encode(json_request)
+
+        url = f"{self.rest_address}{url_base_path}"
+        if url_encoded_request:
+            url = f"{url}?{url_encoded_request}"
+
+        return url
+
     def post(self, url_base_path: str, request: Message) -> bytes:
         """
-        Send a POST request
+        Send a POST request.
 
         :param url_base_path: URL base path
         :param request: Protobuf coded request
@@ -92,6 +109,16 @@ class RestClient:
         :return: Content of response
         """
         json_request = MessageToDict(request)
+
+        # Workaround
+        if "tx" in json_request:
+            if "body" in json_request["tx"]:
+                if "messages" in json_request["tx"]["body"]:
+                    for message in json_request["tx"]["body"]["messages"]:
+                        if "msg" in message:
+                            message["msg"] = json.loads(
+                                base64.b64decode(message["msg"])
+                            )
 
         headers = {"Content-type": "application/json", "Accept": "application/json"}
         response = self._session.post(
@@ -108,8 +135,7 @@ class RestClient:
 
     @staticmethod
     def _url_encode(json_request):
-        """
-        Custom URL encode that breaks down nested dictionaries to match REST api format
+        """A Custom URL encodes that breaks down nested dictionaries to match REST api format.
 
         It converts dicts from:
         {"pagination": {"limit": "1", "something": "2"},}
@@ -121,8 +147,7 @@ class RestClient:
         :param json_request: JSON request
 
         :return: urlencoded json_request
-        """
-
+        """  # noqa: D401
         for outer_k, outer_v in json_request.copy().items():
             if isinstance(outer_v, dict):
                 for inner_k, inner_v in outer_v.items():
@@ -132,4 +157,5 @@ class RestClient:
         return urlencode(json_request, doseq=True)
 
     def __del__(self):
+        """Destructor method."""
         self._session.close()

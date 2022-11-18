@@ -16,10 +16,13 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-from typing import Optional
+"""Helper functions."""
+from datetime import timedelta
+from typing import Any, Callable, List, Optional, Union
 
 from cosmpy.aerial.tx import SigningCfg
 from cosmpy.aerial.tx_helpers import SubmittedTx
+from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 
 
 def prepare_and_broadcast_basic_transaction(
@@ -30,6 +33,17 @@ def prepare_and_broadcast_basic_transaction(
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
 ) -> SubmittedTx:
+    """Prepare and broadcast basic transaction.
+
+    :param client: Ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param gas_limit: The gas limit
+    :param memo: Transaction memo, defaults to None
+
+    :return: broadcast transaction
+    """
     # query the account information for the sender
     if account is None:
         account = client.query_account(sender.address())
@@ -63,3 +77,52 @@ def prepare_and_broadcast_basic_transaction(
     tx.complete()
 
     return client.broadcast_tx(tx)
+
+
+def ensure_timedelta(interval: Union[int, float, timedelta]) -> timedelta:
+    """
+    Return timedelta for interval.
+
+    :param interval: timedelta or seconds in int or float
+
+    :return: timedelta
+    """
+    return interval if isinstance(interval, timedelta) else timedelta(seconds=interval)
+
+
+DEFAULT_PER_PAGE_LIMIT = None
+
+
+def get_paginated(
+    initial_request: Any,
+    request_method: Callable,
+    pages_limit: int = 0,
+    per_page_limit: Optional[int] = DEFAULT_PER_PAGE_LIMIT,
+) -> List[Any]:
+    """
+    Get pages for specific request.
+
+    :param initial_request: request supports pagination
+    :param request_method: function to perform request
+    :param pages_limit: max number of pages to return. default - 0 unlimited
+    :param per_page_limit: Optional int: amount of records per one page. default is None, determined by server
+
+    :return: List of responses
+    """
+    pages: List[Any] = []
+    pagination = PageRequest(limit=per_page_limit)
+
+    while pagination and (len(pages) < pages_limit or pages_limit == 0):
+        request = initial_request.__class__()
+        request.CopyFrom(initial_request)
+        request.pagination.CopyFrom(pagination)
+
+        resp = request_method(request)
+
+        pages.append(resp)
+
+        pagination = None
+
+        if resp.pagination.next_key:
+            pagination = PageRequest(limit=per_page_limit, key=resp.pagination.next_key)
+    return pages

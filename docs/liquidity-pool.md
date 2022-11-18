@@ -91,7 +91,7 @@ tx.wait_to_complete()
 ```
 ## Add and Remove Liquidity 
 
-You need to increase your wallet's allowance to provide CW20 tokens to the liquidity pool. You dont need to increase the allowance to provide atestfet
+You need to increase your wallet's allowance to provide CW20 tokens to the liquidity pool. You don't need to increase the allowance to provide atestfet
 
 ```python
 # Set the amount of CW20 tokens to be added to liquidity pool
@@ -156,7 +156,7 @@ When providing liquidity, you are rewarded with newly minted LP tokens. LP token
 # Query your LP token balance to burn it all
 LP_token_balance = liq_token_contract.query({"balance": {"address": str(wallet.address())}})["balance"]
 
-# Convert the withdraw msg to base64
+# Convert the withdrawal msg to base64
 withdraw_msg = '{"withdraw_liquidity": {}}'
 withdraw_msg_bytes = withdraw_msg.encode("ascii")
 withdraw_msg_base64 = base64.b64encode(withdraw_msg_bytes)
