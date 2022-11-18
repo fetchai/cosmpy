@@ -21,4 +21,6 @@ jobs:
         PYPI_PASSWORD: ${{secrets.FETCHBOT_PYPI_TOKEN}}
       run: |
         pip install tomli packaging poetry
+        git config --global user.email "ci-bot@fetch.ai"
+        git config --global user.name "CI BOT"
         python3 ./scripts/do-release.py
