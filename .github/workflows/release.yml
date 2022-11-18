@@ -20,4 +20,5 @@ jobs:
         PYPI_USERNAME: __token__
         PYPI_PASSWORD: ${{secrets.FETCHBOT_PYPI_TOKEN}}
       run: |
+        pip install tomli packaging
         python3 ./scripts/do-release.py
