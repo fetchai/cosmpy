@@ -255,9 +255,8 @@ class LedgerContract(UserString):
         """
         assert self._address, RuntimeError("Address was not set.")
 
-        # Add migrate schema
-        # if self._migrate_schema is not None:
-        #    validate(args, self._migrate_schema)
+        if self._migrate_schema is not None:
+            validate(args, self._migrate_schema)
 
         self._path = new_path
         new_code_id = self.store(sender, gas_limit)
@@ -400,6 +399,7 @@ class LedgerContract(UserString):
         self._instantiate_schema: Optional[Dict[str, Any]] = None
         self._query_schema: Optional[Dict[str, Any]] = None
         self._execute_schema: Optional[Dict[str, Any]] = None
+        self._migrate_schema: Optional[Dict[str, Any]] = None
 
         if schema_path is None:
             return
@@ -415,6 +415,8 @@ class LedgerContract(UserString):
                 self._query_schema = schema
             elif "execute" in msg_type:
                 self._execute_schema = schema
+            elif "migrate" in msg_type:
+                self._migrate_schema = schema
 
     @property
     def data(self):
