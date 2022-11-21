@@ -1,5 +1,14 @@
 # Release History
 
+
+## 0.6.1
+
+* dependencies rearranged
+* better support for stacking queries
+* integration tests fixes
+* query timeouts options added
+* fixes for gas prices
+
 ## 0.6.0
 
 * python 3.10 support
