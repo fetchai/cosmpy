@@ -28,8 +28,8 @@ from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
     MsgExecuteContract,
     MsgInstantiateContract,
+    MsgMigrateContract,
     MsgStoreCode,
-    MsgMigrateContract
 )
 
 
