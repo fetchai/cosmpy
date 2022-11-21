@@ -29,6 +29,7 @@ from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
     MsgExecuteContract,
     MsgInstantiateContract,
     MsgStoreCode,
+    MsgMigrateContract
 )
 
 
@@ -81,6 +82,30 @@ def create_cosmwasm_instantiate_msg(
         msg.funds.extend(parse_coins(funds))
     if admin_address is not None:
         msg.admin = str(admin_address)  # noqa
+
+    return msg
+
+
+def create_cosmwasm_migrate_msg(
+    code_id: int,
+    args: Any,
+    contract_address: Address,
+    sender_address: Address,
+) -> MsgMigrateContract:
+    """Create cosmwasm migrate message.
+
+    :param code_id: code id
+    :param args: args
+    :param contract_address: sender address
+    :param sender_address: sender address
+    :return: cosmwasm migrate message
+    """
+    msg = MsgMigrateContract(
+        sender=str(sender_address),
+        code_id=code_id,
+        msg=json_encode(args).encode("UTF8"),
+        contract=str(contract_address),
+    )
 
     return msg
 

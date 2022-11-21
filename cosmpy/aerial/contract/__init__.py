@@ -32,6 +32,7 @@ from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_execute_msg,
     create_cosmwasm_instantiate_msg,
     create_cosmwasm_store_code_msg,
+    create_cosmwasm_migrate_msg,
 )
 from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.tx_helpers import SubmittedTx
@@ -75,13 +76,13 @@ class LedgerContract(UserString):
     """Ledger contract."""
 
     def __init__(
-        self,
-        path: Optional[str],
-        client: LedgerClient,
-        address: Optional[Address] = None,
-        digest: Optional[bytes] = None,
-        schema_path: Optional[str] = None,
-        code_id: Optional[int] = None,
+            self,
+            path: Optional[str],
+            client: LedgerClient,
+            address: Optional[Address] = None,
+            digest: Optional[bytes] = None,
+            schema_path: Optional[str] = None,
+            code_id: Optional[int] = None,
     ):
         """Initialize the Ledger contract.
 
@@ -145,10 +146,10 @@ class LedgerContract(UserString):
         return self._address
 
     def store(
-        self,
-        sender: Wallet,
-        gas_limit: Optional[int] = None,
-        memo: Optional[str] = None,
+            self,
+            sender: Wallet,
+            gas_limit: Optional[int] = None,
+            memo: Optional[str] = None,
     ) -> int:
         """Store the contract.
 
@@ -177,13 +178,13 @@ class LedgerContract(UserString):
         return self._code_id
 
     def instantiate(
-        self,
-        args: Any,
-        sender: Wallet,
-        label: Optional[str] = None,
-        gas_limit: Optional[int] = None,
-        admin_address: Optional[Address] = None,
-        funds: Optional[str] = None,
+            self,
+            args: Any,
+            sender: Wallet,
+            label: Optional[str] = None,
+            gas_limit: Optional[int] = None,
+            admin_address: Optional[Address] = None,
+            funds: Optional[str] = None,
     ) -> Address:
         """Instantiate the contract.
 
@@ -235,15 +236,55 @@ class LedgerContract(UserString):
 
         return self._address
 
+    def migrate(
+            self,
+            args: Any,
+            sender: Wallet,
+            new_path: Optional[str] = None,
+            gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        """Instantiate the contract.
+
+        :param args: args
+        :param sender: sender wallet address
+        :param new_path: path to new contract, defaults to None
+        :param gas_limit: transaction gas limit, defaults to None
+        :raises RuntimeError: Unable to extract contract code id
+
+        :return: contract address
+        """
+        assert self._address, RuntimeError("Address was not set.")
+
+        # Add migrate schema
+        # if self._migrate_schema is not None:
+        #    validate(args, self._migrate_schema)
+
+        self._path = new_path
+        new_code_id = self.store(sender, gas_limit)
+
+        # build up the store transaction
+        instatiate_msg = create_cosmwasm_migrate_msg(
+            new_code_id,
+            args,
+            self._address,
+            sender.address(),
+        )
+        tx = Transaction()
+        tx.add_message(instatiate_msg)
+
+        return prepare_and_broadcast_basic_transaction(
+            self._client, tx, sender, gas_limit=gas_limit
+        ).wait_to_complete()
+
     def deploy(
-        self,
-        args: Any,
-        sender: Wallet,
-        label: Optional[str] = None,
-        store_gas_limit: Optional[int] = None,
-        instantiate_gas_limit: Optional[int] = None,
-        admin_address: Optional[Address] = None,
-        funds: Optional[str] = None,
+            self,
+            args: Any,
+            sender: Wallet,
+            label: Optional[str] = None,
+            store_gas_limit: Optional[int] = None,
+            instantiate_gas_limit: Optional[int] = None,
+            admin_address: Optional[Address] = None,
+            funds: Optional[str] = None,
     ) -> Address:
         """Deploy the contract.
 
@@ -277,11 +318,11 @@ class LedgerContract(UserString):
         )
 
     def execute(
-        self,
-        args: Any,
-        sender: Wallet,
-        gas_limit: Optional[int] = None,
-        funds: Optional[str] = None,
+            self,
+            args: Any,
+            sender: Wallet,
+            gas_limit: Optional[int] = None,
+            funds: Optional[str] = None,
     ) -> SubmittedTx:
         """execute the contract.
 
