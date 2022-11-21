@@ -236,18 +236,18 @@ class LedgerContract(UserString):
 
         return self._address
 
-    def migrate(
+    def upgrade(
         self,
         args: Any,
         sender: Wallet,
-        new_path: Optional[str] = None,
+        new_path: str,
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
-        """Instantiate the contract.
+        """Store new contract code and migrate the current contract address.
 
         :param args: args
         :param sender: sender wallet address
-        :param new_path: path to new contract, defaults to None
+        :param new_path: path to new contract
         :param gas_limit: transaction gas limit, defaults to None
         :raises RuntimeError: Unable to extract contract code id
 
@@ -261,7 +261,31 @@ class LedgerContract(UserString):
         self._path = new_path
         new_code_id = self.store(sender, gas_limit)
 
-        # build up the store transaction
+        return self.migrate(args, sender, new_code_id, gas_limit)
+
+    def migrate(
+        self,
+        args: Any,
+        sender: Wallet,
+        new_code_id: int,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        """Migrate the current contract address to new code id.
+
+        :param args: args
+        :param sender: sender wallet address
+        :param new_code_id: Code id of the newly deployed contract
+        :param gas_limit: transaction gas limit, defaults to None
+        :raises RuntimeError: Unable to extract contract code id
+
+        :return: contract address
+        """
+        assert self._address, RuntimeError("Address was not set.")
+
+        if self._migrate_schema is not None:
+            validate(args, self._migrate_schema)
+
+        # build up the migrate transaction
         instatiate_msg = create_cosmwasm_migrate_msg(
             new_code_id,
             args,
