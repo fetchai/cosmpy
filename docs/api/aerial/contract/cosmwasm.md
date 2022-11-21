@@ -53,6 +53,29 @@ Create cosmwasm instantiate message.
 
 cosmwasm instantiate message
 
+<a id="cosmpy.aerial.contract.cosmwasm.create_cosmwasm_migrate_msg"></a>
+
+#### create`_`cosmwasm`_`migrate`_`msg
+
+```python
+def create_cosmwasm_migrate_msg(code_id: int, args: Any,
+                                contract_address: Address,
+                                sender_address: Address) -> MsgMigrateContract
+```
+
+Create cosmwasm migrate message.
+
+**Arguments**:
+
+- `code_id`: code id
+- `args`: args
+- `contract_address`: sender address
+- `sender_address`: sender address
+
+**Returns**:
+
+cosmwasm migrate message
+
 <a id="cosmpy.aerial.contract.cosmwasm.create_cosmwasm_execute_msg"></a>
 
 #### create`_`cosmwasm`_`execute`_`msg
