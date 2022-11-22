@@ -137,3 +137,7 @@ class TxRestClient(TxInterface):
                 message["msg"] = base64.b64encode(
                     json_encode(message["msg"]).encode("UTF8")
                 ).decode()
+            if message["@type"] == "/cosmwasm.wasm.v1.MsgMigrateContract":
+                message["msg"] = base64.b64encode(
+                    json_encode(message["msg"]).encode("UTF8")
+                ).decode()

@@ -22,6 +22,7 @@
 from cosmpy.aerial.contract import (
     create_cosmwasm_execute_msg,
     create_cosmwasm_instantiate_msg,
+    create_cosmwasm_migrate_msg,
 )
 from cosmpy.crypto.address import Address
 
@@ -60,3 +61,18 @@ def test_create_execute_msg():
     assert msg.funds[0].amount == "15"
     assert msg.funds[1].denom == "another"
     assert msg.funds[1].amount == "42"
+
+
+def test_create_migrate_msg():
+    """Test create migrate message."""
+    sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")
+    contract_address = Address(
+        "fetch1j4t8vtg8dus7tpy6xrk9xnz5z4644qljeqtee2yw73ksvj3tqaeqp4pcec"
+    )
+
+    msg = create_cosmwasm_migrate_msg(1, {}, contract_address, sender)
+
+    assert msg.sender == str(sender)
+    assert msg.code_id == 1
+    assert msg.contract_address == contract_address
+    assert msg.cz == str(sender)
