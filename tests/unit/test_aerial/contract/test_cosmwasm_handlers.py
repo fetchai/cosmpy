@@ -74,5 +74,5 @@ def test_create_migrate_msg():
 
     assert msg.sender == str(sender)
     assert msg.code_id == 1
-    assert msg.contract_address == contract_address
-    assert msg.cz == str(sender)
+    assert msg.contract == contract_address
+    assert msg.sender == str(sender)
