@@ -286,14 +286,14 @@ class LedgerContract(UserString):
             validate(args, self._migrate_schema)
 
         # build up the migrate transaction
-        instatiate_msg = create_cosmwasm_migrate_msg(
+        migrate_msg = create_cosmwasm_migrate_msg(
             new_code_id,
             args,
             self._address,
             sender.address(),
         )
         tx = Transaction()
-        tx.add_message(instatiate_msg)
+        tx.add_message(migrate_msg)
 
         return prepare_and_broadcast_basic_transaction(
             self._client, tx, sender, gas_limit=gas_limit

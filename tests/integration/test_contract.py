@@ -119,8 +119,13 @@ class TestContract:
         assert result["value"] == value
 
         # Upgrade contract
+        original_contract_address = contract.address
+        original_code_id = contract.code_id
+
         tx_res = deployed_contract.upgrade({}, wallet, CONTRACT_PATH)
         assert tx_res.response
+        assert deployed_contract.address == original_contract_address
+        assert deployed_contract.code_id != original_code_id
 
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
