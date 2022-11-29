@@ -170,7 +170,7 @@ def create_cosmwasm_clear_admin_msg(
     :param sender_address: sender address
     :return: cosmwasm clear admin message
     """
-    msg = MsgUpdateAdmin(
+    msg = MsgClearAdmin(
         sender=str(sender_address),
         contract=str(contract_address),
     )
