@@ -156,6 +156,62 @@ Instantiate the contract.
 
 contract address
 
+<a id="cosmpy.aerial.contract.__init__.LedgerContract.upgrade"></a>
+
+#### upgrade
+
+```python
+def upgrade(args: Any,
+            sender: Wallet,
+            new_path: str,
+            gas_limit: Optional[int] = None) -> SubmittedTx
+```
+
+Store new contract code and migrate the current contract address.
+
+**Arguments**:
+
+- `args`: args
+- `sender`: sender wallet address
+- `new_path`: path to new contract
+- `gas_limit`: transaction gas limit, defaults to None
+
+**Raises**:
+
+- `RuntimeError`: Unable to extract contract code id
+
+**Returns**:
+
+contract address
+
+<a id="cosmpy.aerial.contract.__init__.LedgerContract.migrate"></a>
+
+#### migrate
+
+```python
+def migrate(args: Any,
+            sender: Wallet,
+            new_code_id: int,
+            gas_limit: Optional[int] = None) -> SubmittedTx
+```
+
+Migrate the current contract address to new code id.
+
+**Arguments**:
+
+- `args`: args
+- `sender`: sender wallet address
+- `new_code_id`: Code id of the newly deployed contract
+- `gas_limit`: transaction gas limit, defaults to None
+
+**Raises**:
+
+- `RuntimeError`: Unable to extract contract code id
+
+**Returns**:
+
+contract address
+
 <a id="cosmpy.aerial.contract.__init__.LedgerContract.deploy"></a>
 
 #### deploy

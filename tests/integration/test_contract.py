@@ -98,7 +98,9 @@ class TestContract:
         contract = LedgerContract(
             None, ledger, code_id=contract._code_id  # pylint: disable=protected-access
         )
-        contract_address = contract.instantiate({}, wallet)
+        contract_address = contract.instantiate(
+            {}, wallet, admin_address=wallet.address()
+        )
         assert contract_address
 
         # use by address
@@ -115,6 +117,15 @@ class TestContract:
 
         assert result["exists"]
         assert result["value"] == value
+
+        # Upgrade contract
+        original_contract_address = contract.address
+        original_code_id = contract.code_id
+
+        tx_res = deployed_contract.upgrade({}, wallet, CONTRACT_PATH)
+        assert tx_res.response
+        assert deployed_contract.address == original_contract_address
+        assert deployed_contract.code_id != original_code_id
 
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
@@ -137,6 +148,14 @@ class TestContract:
         try:
             bad_msg = {"increment": 1}
             contract.execute(bad_msg, wallet).wait_to_complete()
+        except ValidationError:
+            pass
+        except Exception as exc:
+            raise ValidationTestFailure("Msg should have failed validation") from exc
+
+        try:
+            bad_msg = {"bad": 1}
+            contract.migrate(bad_msg, wallet, 1).wait_to_complete()
         except ValidationError:
             pass
         except Exception as exc:
