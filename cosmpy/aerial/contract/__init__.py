@@ -31,6 +31,7 @@ from cosmpy.aerial.client import LedgerClient, prepare_and_broadcast_basic_trans
 from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_execute_msg,
     create_cosmwasm_instantiate_msg,
+    create_cosmwasm_migrate_msg,
     create_cosmwasm_store_code_msg,
 )
 from cosmpy.aerial.tx import Transaction
@@ -235,6 +236,69 @@ class LedgerContract(UserString):
 
         return self._address
 
+    def upgrade(
+        self,
+        args: Any,
+        sender: Wallet,
+        new_path: str,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        """Store new contract code and migrate the current contract address.
+
+        :param args: args
+        :param sender: sender wallet address
+        :param new_path: path to new contract
+        :param gas_limit: transaction gas limit, defaults to None
+        :raises RuntimeError: Unable to extract contract code id
+
+        :return: contract address
+        """
+        assert self._address, RuntimeError("Address was not set.")
+
+        if self._migrate_schema is not None:
+            validate(args, self._migrate_schema)
+
+        self._path = new_path
+        new_code_id = self.store(sender, gas_limit)
+
+        return self.migrate(args, sender, new_code_id, gas_limit)
+
+    def migrate(
+        self,
+        args: Any,
+        sender: Wallet,
+        new_code_id: int,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        """Migrate the current contract address to new code id.
+
+        :param args: args
+        :param sender: sender wallet address
+        :param new_code_id: Code id of the newly deployed contract
+        :param gas_limit: transaction gas limit, defaults to None
+        :raises RuntimeError: Unable to extract contract code id
+
+        :return: contract address
+        """
+        assert self._address, RuntimeError("Address was not set.")
+
+        if self._migrate_schema is not None:
+            validate(args, self._migrate_schema)
+
+        # build up the migrate transaction
+        migrate_msg = create_cosmwasm_migrate_msg(
+            new_code_id,
+            args,
+            self._address,
+            sender.address(),
+        )
+        tx = Transaction()
+        tx.add_message(migrate_msg)
+
+        return prepare_and_broadcast_basic_transaction(
+            self._client, tx, sender, gas_limit=gas_limit
+        ).wait_to_complete()
+
     def deploy(
         self,
         args: Any,
@@ -359,6 +423,7 @@ class LedgerContract(UserString):
         self._instantiate_schema: Optional[Dict[str, Any]] = None
         self._query_schema: Optional[Dict[str, Any]] = None
         self._execute_schema: Optional[Dict[str, Any]] = None
+        self._migrate_schema: Optional[Dict[str, Any]] = None
 
         if schema_path is None:
             return
@@ -374,6 +439,8 @@ class LedgerContract(UserString):
                 self._query_schema = schema
             elif "execute" in msg_type:
                 self._execute_schema = schema
+            elif "migrate" in msg_type:
+                self._migrate_schema = schema
 
     @property
     def data(self):
