@@ -1,5 +1,9 @@
 # Release History
 
+## 0.6.2
+
+* feat: add migration for wasm contracts in aerial
+* CI: fix release automation
 
 ## 0.6.1
 
