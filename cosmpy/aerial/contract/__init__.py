@@ -29,10 +29,12 @@ from jsonschema import validate
 
 from cosmpy.aerial.client import LedgerClient, prepare_and_broadcast_basic_transaction
 from cosmpy.aerial.contract.cosmwasm import (
+    create_cosmwasm_clear_admin_msg,
     create_cosmwasm_execute_msg,
     create_cosmwasm_instantiate_msg,
     create_cosmwasm_migrate_msg,
     create_cosmwasm_store_code_msg,
+    create_cosmwasm_update_admin_msg,
 )
 from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.tx_helpers import SubmittedTx
@@ -249,9 +251,8 @@ class LedgerContract(UserString):
         :param sender: sender wallet address
         :param new_path: path to new contract
         :param gas_limit: transaction gas limit, defaults to None
-        :raises RuntimeError: Unable to extract contract code id
 
-        :return: contract address
+        :return: transaction details broadcast
         """
         assert self._address, RuntimeError("Address was not set.")
 
@@ -276,9 +277,8 @@ class LedgerContract(UserString):
         :param sender: sender wallet address
         :param new_code_id: Code id of the newly deployed contract
         :param gas_limit: transaction gas limit, defaults to None
-        :raises RuntimeError: Unable to extract contract code id
 
-        :return: contract address
+        :return: transaction details broadcast
         """
         assert self._address, RuntimeError("Address was not set.")
 
@@ -294,6 +294,41 @@ class LedgerContract(UserString):
         )
         tx = Transaction()
         tx.add_message(migrate_msg)
+
+        return prepare_and_broadcast_basic_transaction(
+            self._client, tx, sender, gas_limit=gas_limit
+        ).wait_to_complete()
+
+    def update_admin(
+        self,
+        sender: Wallet,
+        new_admin: Optional[Address],
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        """Migrate the current contract address to new code id.
+
+        :param args: args
+        :param sender: sender wallet address
+        :param new_admin: New admin address, None for clear admin
+        :param gas_limit: transaction gas limit, defaults to None
+
+        :return: transaction details broadcast
+        """
+        assert self._address, RuntimeError("Address was not set.")
+
+        # build up the update/clear admin transaction
+        if new_admin is None:
+            msg = create_cosmwasm_clear_admin_msg(
+                sender.address(),
+                self._address,
+            )
+        else:
+            msg = create_cosmwasm_update_admin_msg(
+                sender.address(), self._address, new_admin
+            )
+
+        tx = Transaction()
+        tx.add_message(msg)
 
         return prepare_and_broadcast_basic_transaction(
             self._client, tx, sender, gas_limit=gas_limit
