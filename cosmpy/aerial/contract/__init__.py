@@ -305,7 +305,7 @@ class LedgerContract(UserString):
         new_admin: Optional[Address],
         gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
-        """Migrate the current contract address to new code id.
+        """Update/clear the admin of the contract.
 
         :param sender: sender wallet address
         :param new_admin: New admin address, None for clear admin
