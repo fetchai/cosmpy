@@ -176,13 +176,9 @@ Store new contract code and migrate the current contract address.
 - `new_path`: path to new contract
 - `gas_limit`: transaction gas limit, defaults to None
 
-**Raises**:
-
-- `RuntimeError`: Unable to extract contract code id
-
 **Returns**:
 
-contract address
+transaction details broadcast
 
 <a id="cosmpy.aerial.contract.__init__.LedgerContract.migrate"></a>
 
@@ -204,13 +200,31 @@ Migrate the current contract address to new code id.
 - `new_code_id`: Code id of the newly deployed contract
 - `gas_limit`: transaction gas limit, defaults to None
 
-**Raises**:
+**Returns**:
 
-- `RuntimeError`: Unable to extract contract code id
+transaction details broadcast
+
+<a id="cosmpy.aerial.contract.__init__.LedgerContract.update_admin"></a>
+
+#### update`_`admin
+
+```python
+def update_admin(sender: Wallet,
+                 new_admin: Optional[Address],
+                 gas_limit: Optional[int] = None) -> SubmittedTx
+```
+
+Update/clear the admin of the contract.
+
+**Arguments**:
+
+- `sender`: sender wallet address
+- `new_admin`: New admin address, None for clear admin
+- `gas_limit`: transaction gas limit, defaults to None
 
 **Returns**:
 
-contract address
+transaction details broadcast
 
 <a id="cosmpy.aerial.contract.__init__.LedgerContract.deploy"></a>
 
