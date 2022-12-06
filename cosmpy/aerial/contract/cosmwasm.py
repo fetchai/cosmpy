@@ -26,10 +26,12 @@ from cosmpy.aerial.coins import parse_coins
 from cosmpy.common.utils import json_encode
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
+    MsgClearAdmin,
     MsgExecuteContract,
     MsgInstantiateContract,
     MsgMigrateContract,
     MsgStoreCode,
+    MsgUpdateAdmin,
 )
 
 
@@ -131,5 +133,46 @@ def create_cosmwasm_execute_msg(
     )
     if funds is not None:
         msg.funds.extend(parse_coins(funds))
+
+    return msg
+
+
+def create_cosmwasm_update_admin_msg(
+    sender_address: Address,
+    contract_address: Address,
+    new_admin: Address,
+) -> MsgExecuteContract:
+    """Create cosmwasm update admin message.
+
+    :param sender_address: sender address
+    :param contract_address: contract address
+    :param sender_address: sender address
+    :param new_admin: new admin address
+    :return: cosmwasm update admin message
+    """
+    msg = MsgUpdateAdmin(
+        sender=str(sender_address),
+        contract=str(contract_address),
+        new_admin=str(new_admin),
+    )
+
+    return msg
+
+
+def create_cosmwasm_clear_admin_msg(
+    sender_address: Address,
+    contract_address: Address,
+) -> MsgExecuteContract:
+    """Create cosmwasm clear admin message.
+
+    :param sender_address: sender address
+    :param contract_address: contract address
+    :param sender_address: sender address
+    :return: cosmwasm clear admin message
+    """
+    msg = MsgClearAdmin(
+        sender=str(sender_address),
+        contract=str(contract_address),
+    )
 
     return msg
