@@ -214,7 +214,7 @@ def update_admin(sender: Wallet,
                  gas_limit: Optional[int] = None) -> SubmittedTx
 ```
 
-Migrate the current contract address to new code id.
+Update/clear the admin of the contract.
 
 **Arguments**:
 
