@@ -282,7 +282,8 @@ class LedgerClient:
         return seq
 
     def set_last_sequence_number(self, address: Address, sequence: int):
-        self._last_sequence_numbers[str(address)] = (datetime.utcnow(), sequence)
+        expiry = datetime.utcnow() + timedelta(seconds=120)
+        self._last_sequence_numbers[str(address)] = (expiry, sequence)
 
     def query_params(self, subspace: str, key: str) -> Any:
         """Query Prams.
