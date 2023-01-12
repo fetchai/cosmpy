@@ -48,6 +48,13 @@ def prepare_and_broadcast_basic_transaction(
     if account is None:
         account = client.query_account(sender.address())
 
+        # in cases where the RPC node is slow to update the statement above can return out of date information.
+        cached_seq = client.get_last_sequence_number(sender.address())
+        if cached_seq is not None:
+            if account.sequence < cached_seq:
+                print(f'RPC Endpoint appears out of sync {account.sequence} vs {cached_seq}')
+                account.sequence = cached_seq
+
     if gas_limit is not None:
         # simply build the fee from the provided gas limit
         fee = client.estimate_fee_from_gas(gas_limit)
@@ -76,7 +83,12 @@ def prepare_and_broadcast_basic_transaction(
     tx.sign(sender.signer(), client.network_config.chain_id, account.number)
     tx.complete()
 
-    return client.broadcast_tx(tx)
+    resp =  client.broadcast_tx(tx)
+
+    # store the next sequence number
+    client.set_last_sequence_number(sender.address(), account.sequence + 1)
+
+    return resp
 
 
 def ensure_timedelta(interval: Union[int, float, timedelta]) -> timedelta:
