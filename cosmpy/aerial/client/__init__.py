@@ -100,7 +100,7 @@ from cosmpy.tx.rest_client import TxRestClient
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
 DEFAULT_QUERY_INTERVAL_SECS = 2
-COSMOS_SDK_DEC_COIN_PRECISION = 10 ** 18
+COSMOS_SDK_DEC_COIN_PRECISION = 10**18
 
 
 @dataclass
@@ -174,10 +174,10 @@ class LedgerClient:
     """Ledger client."""
 
     def __init__(
-            self,
-            cfg: NetworkConfig,
-            query_interval_secs: int = DEFAULT_QUERY_INTERVAL_SECS,
-            query_timeout_secs: int = DEFAULT_QUERY_TIMEOUT_SECS,
+        self,
+        cfg: NetworkConfig,
+        query_interval_secs: int = DEFAULT_QUERY_INTERVAL_SECS,
+        query_timeout_secs: int = DEFAULT_QUERY_TIMEOUT_SECS,
     ):
         """Init ledger client.
 
@@ -326,13 +326,13 @@ class LedgerClient:
         return [Coin(amount=coin.amount, denom=coin.denom) for coin in resp.balances]
 
     def send_tokens(
-            self,
-            destination: Address,
-            amount: int,
-            denom: str,
-            sender: Wallet,
-            memo: Optional[str] = None,
-            gas_limit: Optional[int] = None,
+        self,
+        destination: Address,
+        amount: int,
+        denom: str,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
         """Send tokens.
 
@@ -355,7 +355,7 @@ class LedgerClient:
         )
 
     def query_validators(
-            self, status: Optional[ValidatorStatus] = None
+        self, status: Optional[ValidatorStatus] = None
     ) -> List[Validator]:
         """Query validators.
 
@@ -393,7 +393,7 @@ class LedgerClient:
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
 
         for resp in get_paginated(
-                req, self.staking.DelegatorDelegations, per_page_limit=1
+            req, self.staking.DelegatorDelegations, per_page_limit=1
         ):
             for item in resp.delegation_responses:
 
@@ -407,7 +407,7 @@ class LedgerClient:
                 for reward in rewards_resp.rewards:
                     if reward.denom == self.network_config.staking_denomination:
                         stake_reward = (
-                                int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
+                            int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
                         )
                         break
 
@@ -447,12 +447,12 @@ class LedgerClient:
         )
 
     def delegate_tokens(
-            self,
-            validator: Address,
-            amount: int,
-            sender: Wallet,
-            memo: Optional[str] = None,
-            gas_limit: Optional[int] = None,
+        self,
+        validator: Address,
+        amount: int,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
         """Delegate tokens.
 
@@ -478,13 +478,13 @@ class LedgerClient:
         )
 
     def redelegate_tokens(
-            self,
-            current_validator: Address,
-            next_validator: Address,
-            amount: int,
-            sender: Wallet,
-            memo: Optional[str] = None,
-            gas_limit: Optional[int] = None,
+        self,
+        current_validator: Address,
+        next_validator: Address,
+        amount: int,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
         """Redelegate tokens.
 
@@ -512,12 +512,12 @@ class LedgerClient:
         )
 
     def undelegate_tokens(
-            self,
-            validator: Address,
-            amount: int,
-            sender: Wallet,
-            memo: Optional[str] = None,
-            gas_limit: Optional[int] = None,
+        self,
+        validator: Address,
+        amount: int,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
         """Undelegate tokens.
 
@@ -543,11 +543,11 @@ class LedgerClient:
         )
 
     def claim_rewards(
-            self,
-            validator: Address,
-            sender: Wallet,
-            memo: Optional[str] = None,
-            gas_limit: Optional[int] = None,
+        self,
+        validator: Address,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
     ) -> SubmittedTx:
         """claim rewards.
 
@@ -592,10 +592,10 @@ class LedgerClient:
         return gas_estimate, fee
 
     def wait_for_query_tx(
-            self,
-            tx_hash: str,
-            timeout: Optional[timedelta] = None,
-            poll_period: Optional[timedelta] = None,
+        self,
+        tx_hash: str,
+        timeout: Optional[timedelta] = None,
+        poll_period: Optional[timedelta] = None,
     ) -> TxResponse:
         """Wait for query transaction.
 
@@ -709,7 +709,6 @@ class LedgerClient:
         :param tx: transaction
         :return: Submitted transaction
         """
-
         # create the broadcast request
         broadcast_req = BroadcastTxRequest(
             tx_bytes=tx.tx.SerializeToString(), mode=BroadcastMode.BROADCAST_MODE_SYNC
