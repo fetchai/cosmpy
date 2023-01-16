@@ -274,6 +274,9 @@ class LedgerClient:
     def get_last_sequence_number(self, address: Address) -> Optional[int]:
         raw_address = str(address)
 
+        if raw_address not in self._last_sequence_numbers:
+            return  None
+
         expiry, seq = self._last_sequence_numbers.get(raw_address)
         if datetime.utcnow() > expiry:
             del self._last_sequence_numbers[raw_address]
