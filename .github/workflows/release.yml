@@ -5,7 +5,7 @@ name: Check and realese cosmpy
 # secrets PYPI_USERNAME and PYPI_PASSWORD are required!
 on:
   push:
-    branches: [ master ]
+    branches: [ 'releases/**' ]
 
 jobs:
   build:
