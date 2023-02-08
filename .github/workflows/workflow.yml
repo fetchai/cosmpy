@@ -2,7 +2,7 @@ name: Checks and Tests
 'on':
   push:
     branches:
-      - 'releases/**'
+      - 'release/**'
       - master
   pull_request: null
 jobs:
