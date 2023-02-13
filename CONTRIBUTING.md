@@ -13,7 +13,7 @@ Before reading on, please have a look at the [code of conduct](CODE_OF_CONDUCT.m
 
 ## A few simple rules
 
-- All Pull Requests should be opened against the `master` branch.
+- All Pull Requests should be opened against the `develop` branch. Do **not** open a Pull Request against `master`!
 
 - Before working on a feature, reach out to one of the core developers or discuss the feature in an issue. The framework caters a diverse audience and new features require upfront coordination.
 

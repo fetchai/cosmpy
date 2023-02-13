@@ -21,7 +21,7 @@ The easiest way to get set up for development is to install Python `>=3.7` and `
 
 ```bash
   make new_env_dev
-  poetry shell
+  pipenv shell
 ```
 
 ## Development commands
