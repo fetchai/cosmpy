@@ -4,8 +4,11 @@ name: Check and realese cosmpy
 # if package version is newer it build, upload, tag and make a release page on github
 # secrets PYPI_USERNAME and PYPI_PASSWORD are required!
 on:
-  push:
-    branches: [ 'release/**' ]
+  pull_request:
+    branches:
+      - 'release/**'
+    types:
+      - opened
 
 jobs:
   build:
