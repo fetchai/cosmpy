@@ -1,16 +1,16 @@
-The Cosmpy library provides a high-level API which greatly simplifies the
+The CosmPy library provides a high-level API which greatly simplifies the
 most common use cases when interacting with Cosmos-based chains (e.g. [sending
 tokens](send-tokens.md), [staking](staking.md), [deploying and interacting with contracts](deploy-a-contract.md)). There are [documentation](connect-to-network.md) and
 [example code](https://github.com/fetchai/cosmpy/tree/master/examples) covering such use cases.
 
-However, cosmpy also provides low-level access to the entire Cosmos-SDK, enabling the
+However, CosmPy also provides low-level access to the entire Cosmos-SDK, enabling the
 full gamut of functionality to be accessed, albeit with a little more boilerplate.
 
-Here, we aim to help developers navigate the low-level, protobuf-based API functionality, provided by Cosmpy.
+Here, we aim to help developers navigate the low-level, protobuf-based API functionality, provided by CosmPy.
 
 ## Recap: High Level API - Aerial
 
-As a reminder, here is a quick example of using the high level functionality provided by Cosmpy. In this case, we connect to a testnet, create a wallet, stake some tokens with a validator, then claim our rewards:
+As a reminder, here is a quick example of using the high level functionality provided by CosmPy. In this case, we connect to a testnet, create a wallet, stake some tokens with a validator, then claim our rewards:
 
 ```python
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
@@ -25,7 +25,7 @@ tx = client.claim_rewards("fetchvaloper1rsane988vksrgp2mlqzclmt8wucxv0ej4hrn2k",
 tx.wait_to_complete()
 ```
 
-The available high-level helper functions provided by cosmpy can be found by browsing for instance
+The available high-level helper functions provided by CosmPy can be found by browsing for instance
 [the aerial client package](https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/client/__init__.py).
 
 ## Low Level API
