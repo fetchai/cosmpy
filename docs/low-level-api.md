@@ -3,7 +3,7 @@ most common use cases when interacting with Cosmos-based chains (e.g. [sending
 tokens](send-tokens.md), [staking](staking.md), [deploying and interacting with contracts](deploy-a-contract.md)). There are [documentation](connect-to-network.md) and
 [example code](https://github.com/fetchai/cosmpy/tree/master/examples) covering such use cases.
 
-However, cosmPy also provides low-level access to the entire Cosmos-SDK, enabling the
+However, CosmPy also provides low-level access to the entire Cosmos-SDK, enabling the
 full gamut of functionality to be accessed, albeit with a little more boilerplate.
 
 Here, we aim to help developers navigate the low-level, protobuf-based API functionality, provided by CosmPy.
