@@ -2,9 +2,6 @@ name: Documentation Preview
 
 on:
   pull_request:
-    branches:
-      - master
-      - 'release/**'
     paths:
       - 'docs/**'
 
