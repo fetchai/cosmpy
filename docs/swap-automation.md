@@ -95,7 +95,7 @@ tokens = 1000000
 currency = "atestfet"
 ```
 
-Now we will define the upper and lower price bounds (atestfet/CW20) that will trigger a buy and a sell transaction of atestfet. We also define the commission rate (0.3% in `Terraswap`) and the `interval` time step to query the pool's price.
+Now we will define the upper and lower price bounds (atestfet/CW20) that will trigger a buy and a sell transaction of atestfet. We also define the commission rate (0.3% in [`Terraswap`](https://docs.terraswap.io/docs/introduction/trading-fees/)) and the `interval` time step to query the pool's price.
 
 ```python
 upper_bound = 26
