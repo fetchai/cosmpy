@@ -5,20 +5,19 @@ name: Check and realese cosmpy
 # secrets PYPI_USERNAME and PYPI_PASSWORD are required!
 on:
   pull_request:
-    branches:
-      - 'release/**'
     types:
       - opened
 
 jobs:
   build:
+    if: startsWith(github.base_ref, 'release/')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
           python-version: '3.9'
-    - name: run release script
+    - name: Run release script
       env:
         PYPI_USERNAME: __token__
         PYPI_PASSWORD: ${{secrets.FETCHBOT_PYPI_TOKEN}}
