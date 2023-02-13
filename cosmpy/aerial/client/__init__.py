@@ -393,7 +393,7 @@ class LedgerClient:
                 for reward in rewards_resp.rewards:
                     if reward.denom == self.network_config.staking_denomination:
                         stake_reward = (
-                            int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
+                            int(float(reward.amount)) // COSMOS_SDK_DEC_COIN_PRECISION
                         )
                         break
 
