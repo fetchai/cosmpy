@@ -26,7 +26,7 @@ from cosmpy.aerial.config import NetworkConfig
 
 NET_CONFIG = NetworkConfig(
     chain_id="osmo-test-4",
-    url="rest+https://lcd-test.osmosis.zone/",
+    url="grpc+http://grpc-test.osmosis.zone:443/",
     fee_minimum_gas_price=1,
     fee_denomination="uosmo",
     staking_denomination="uosmo",

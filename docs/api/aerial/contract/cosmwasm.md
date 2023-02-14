@@ -101,3 +101,48 @@ Create cosmwasm execute message.
 
 cosmwasm execute message
 
+<a id="cosmpy.aerial.contract.cosmwasm.create_cosmwasm_update_admin_msg"></a>
+
+#### create`_`cosmwasm`_`update`_`admin`_`msg
+
+```python
+def create_cosmwasm_update_admin_msg(sender_address: Address,
+                                     contract_address: Address,
+                                     new_admin: Address) -> MsgExecuteContract
+```
+
+Create cosmwasm update admin message.
+
+**Arguments**:
+
+- `sender_address`: sender address
+- `contract_address`: contract address
+- `sender_address`: sender address
+- `new_admin`: new admin address
+
+**Returns**:
+
+cosmwasm update admin message
+
+<a id="cosmpy.aerial.contract.cosmwasm.create_cosmwasm_clear_admin_msg"></a>
+
+#### create`_`cosmwasm`_`clear`_`admin`_`msg
+
+```python
+def create_cosmwasm_clear_admin_msg(
+        sender_address: Address,
+        contract_address: Address) -> MsgExecuteContract
+```
+
+Create cosmwasm clear admin message.
+
+**Arguments**:
+
+- `sender_address`: sender address
+- `contract_address`: contract address
+- `sender_address`: sender address
+
+**Returns**:
+
+cosmwasm clear admin message
+
