@@ -1,6 +1,5 @@
 name: Checks and Tests
-'on':
-  pull_request:
+on: pull_request
 
 jobs:
   code_quality_check:
