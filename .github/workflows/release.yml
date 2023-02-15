@@ -6,10 +6,11 @@ name: Check and realese cosmpy
 on:
   pull_request:
     branches: [master]
+    types: [closed]
 
 jobs:
   build:
-    if: startsWith(github.base_ref, 'release/')
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
