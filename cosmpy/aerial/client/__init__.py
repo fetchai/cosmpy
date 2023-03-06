@@ -298,7 +298,7 @@ class LedgerClient:
         resp = self.bank.Balance(req)
         assert resp.balance.denom == denom  # sanity check
 
-        return int(resp.balance.amount)
+        return int(float(resp.balance.amount))
 
     def query_bank_all_balances(self, address: Address) -> List[Coin]:
         """Query bank all balances.
@@ -361,7 +361,7 @@ class LedgerClient:
             validators.append(
                 Validator(
                     address=Address(validator.operator_address),
-                    tokens=int(validator.tokens),
+                    tokens=int(float(validator.tokens)),
                     moniker=str(validator.description.moniker),
                     status=ValidatorStatus.from_proto(validator.status),
                 )
@@ -393,14 +393,14 @@ class LedgerClient:
                 for reward in rewards_resp.rewards:
                     if reward.denom == self.network_config.staking_denomination:
                         stake_reward = (
-                            int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
+                            int(float(reward.amount)) // COSMOS_SDK_DEC_COIN_PRECISION
                         )
                         break
 
                 current_positions.append(
                     StakingPosition(
                         validator=Address(item.delegation.validator_address),
-                        amount=int(item.balance.amount),
+                        amount=int(float(item.balance.amount)),
                         reward=stake_reward,
                     )
                 )
@@ -414,7 +414,7 @@ class LedgerClient:
                 total_unbonding = unbonding_summary.get(validator, 0)
 
                 for entry in item.entries:
-                    total_unbonding += int(entry.balance)
+                    total_unbonding += int(float(entry.balance))
 
                 unbonding_summary[validator] = total_unbonding
 
