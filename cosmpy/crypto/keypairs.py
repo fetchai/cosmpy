@@ -68,7 +68,7 @@ class PublicKey:
         """
         Get public key.
 
-        :return: str public key
+        :return: str public key.
         """
         return self._public_key
 
