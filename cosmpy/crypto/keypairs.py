@@ -68,7 +68,7 @@ class PublicKey:
         """
         Get public key.
 
-        :return: str public key.
+        :return: str public key
         """
         return self._public_key
 
@@ -195,9 +195,7 @@ class PrivateKey(Signer):
 
         :return: public key.
         """
-        return PublicKey(
-            self._signing_key.get_verifying_key().to_string(encoding="compressed")
-        )
+        return PublicKey(self._signing_key.get_verifying_key())
 
     def sign(
         self, message: bytes, deterministic: bool = True, canonicalise: bool = True
