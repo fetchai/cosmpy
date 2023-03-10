@@ -159,6 +159,7 @@ aea
 coingecko
 CLI
 CosmPy's
+CosmPy
 isort
 liccheck
 MakeFile

@@ -123,6 +123,3 @@ while True:
 While the code above keeps running, you can make sure that task_wallet is always topped-up as long as authz_wallet has authorization to send the required tokens and the main wallet has enough balance.
 
 You can also check out the authorization and top-up code examples at [`authz`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_authz.py) and [`top-up`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_topup.py) respectively.
-
-
-

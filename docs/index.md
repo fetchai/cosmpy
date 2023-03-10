@@ -1,8 +1,8 @@
-Cosmpy is a Python library for interacting with Cosmos-based blockchains.
+CosmPy is a Python library for interacting with Cosmos-based blockchains.
 
 * A simplified command line tool for querying and sending transactions to Cosmos-SDK blockchains. 
 * Features an easy interface for deploying and interacting with Cosmwasm smart contracts.
-* Provides access to lower-level ledger APIs for advanced use-cases. 
+* Provides access to lower-level ledger APIs for advanced use-cases.
 
 ## To install
 
@@ -41,4 +41,3 @@ Enter the virtual environment:
 ``` bash
 pipenv shell
 ```
-     
