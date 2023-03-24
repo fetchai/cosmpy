@@ -7,7 +7,7 @@
 v := $(shell pip -V | grep virtualenvs)
 
 .PHONY: new_env
-new_env_dev: clean
+new_env: clean
 	if [ -z "$v" ];\
 	then\
 		poetry install --with main,dev,test,docs --sync;\
