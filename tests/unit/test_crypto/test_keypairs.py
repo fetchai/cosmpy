@@ -30,23 +30,25 @@ class KeyPairTestCase(unittest.TestCase):
     def test_basic_signing(self):
         """Test basic signing with positive result."""
         pk = PrivateKey()
+        vk = pk.public_key
         msg = b"The name of the wind"
 
         sig = pk.sign(msg)
-        self.assertTrue(pk.verify(msg, sig))
+        self.assertTrue(vk.verify(msg, sig))
 
     def test_restore_private_key(self):
         """Test restoring private key with positive result."""
         raw_pk = b"\xabneC\xee\xf2.\xe4\xc5}\x9a\xc0\x93\xe1\xc4\xbf\xc8\xc67\x05;\x10\xd1\x14\xacf\xad\xcd>\x90lS"
         pk = PrivateKey(raw_pk)
+        vk = pk.public_key
 
-        self.assertEqual(pk.public_key, "Ale+4gjcgCjS0EO+4HsCgab5WRkO0YoqmYTWZQeZjZZo")
+        self.assertEqual(vk.public_key, "Ale+4gjcgCjS0EO+4HsCgab5WRkO0YoqmYTWZQeZjZZo")
         self.assertEqual(
-            pk.public_key_hex,
+            vk.public_key_hex,
             "0257bee208dc8028d2d043bee07b0281a6f959190ed18a2a9984d66507998d9668",
         )
         self.assertEqual(
-            pk.public_key_bytes,
+            vk.public_key_bytes,
             b"\x02W\xbe\xe2\x08\xdc\x80(\xd2\xd0C\xbe\xe0{\x02\x81\xa6\xf9Y\x19\x0e\xd1\x8a*\x99\x84\xd6e\x07\x99\x8d\x96h",
         )
         self.assertEqual(pk.private_key, "q25lQ+7yLuTFfZrAk+HEv8jGNwU7ENEUrGatzT6QbFM=")
@@ -64,6 +66,7 @@ class KeyPairTestCase(unittest.TestCase):
     def test_bad_signature(self):
         """Test versifying private key with a corrupted signature."""
         pk = PrivateKey()
+        vk = pk.public_key
         msg = b"The wise mans fear"
 
         sig = pk.sign(msg)
@@ -72,7 +75,7 @@ class KeyPairTestCase(unittest.TestCase):
         corrupted_sig = bytearray(sig)
         corrupted_sig[4] = 0x47 ^ corrupted_sig[4]
 
-        self.assertFalse(pk.verify(msg, corrupted_sig))
+        self.assertFalse(vk.verify(msg, corrupted_sig))
 
     def test_create_public_key_from_bytes(self):
         """Test creating public key from bytes with positive result."""
