@@ -29,6 +29,7 @@ from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 
+
 COIN_PRICE_URL = (
     "https://api.coingecko.com/api/v3/simple/price?ids=fetch-ai&vs_currencies=usd"
 )

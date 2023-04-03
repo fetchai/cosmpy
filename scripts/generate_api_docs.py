@@ -26,6 +26,7 @@ import subprocess  # nosec
 import sys
 from pathlib import Path
 
+
 DOCS_DIR = Path("docs/")
 API_DIR = DOCS_DIR / "api/"
 COSMPY_DIR = Path("cosmpy")
@@ -51,7 +52,7 @@ IGNORE_PREFIXES = {
     Path("cosmpy", "tendermint"),
     Path("cosmpy", "tx"),
     Path("cosmpy", "upgrade"),
-    Path("cosmpy", "vulture_whitelist.py"),
+    Path("cosmpy", "whitelist.py"),
 }
 
 
@@ -118,7 +119,8 @@ def _generate_apidocs_cosmpy_modules() -> None:
 def make_pydoc(dotted_path: str, destination_file: Path) -> None:
     """Make a PyDoc file."""
     print(
-        f"Running with dotted path={dotted_path} and destination_file={destination_file}... ", end=""
+        f"Running with dotted path={dotted_path} and destination_file={destination_file}... ",
+        end="",
     )
     try:
         api_doc_content = run_pydoc_markdown(dotted_path)
@@ -137,7 +139,9 @@ def run_pydoc_markdown(module: str) -> str:
     :param module: the dotted path.
     :return: the PyDoc content (pre-processed).
     """
-    with subprocess.Popen(["pydoc-markdown", "-m", module, "-I", "."], stdout=subprocess.PIPE) as pydoc:
+    with subprocess.Popen(
+        ["pydoc-markdown", "-m", module, "-I", "."], stdout=subprocess.PIPE
+    ) as pydoc:
         stdout, _ = pydoc.communicate()
         pydoc.wait()
         stdout_text = stdout.decode("utf-8")

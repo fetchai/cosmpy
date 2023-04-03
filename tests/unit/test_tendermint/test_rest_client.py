@@ -38,7 +38,9 @@ from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetValidatorSetByHeightResponse,
 )
 from cosmpy.tendermint.rest_client import CosmosBaseTendermintRestClient
+
 from tests.helpers import MockRestClient
+
 
 TYPE = {
     "@type": "type.googleapis.com/google.protobuf.Int32Value",

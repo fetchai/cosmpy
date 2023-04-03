@@ -1,11 +1,3 @@
-"""Test for contract."""
-
-from unittest.mock import Mock
-
-from cosmpy.aerial.contract import LedgerContract
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.common.utils import json_encode
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -24,6 +16,13 @@ from cosmpy.common.utils import json_encode
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+"""Test for contract."""
+
+from unittest.mock import Mock
+
+from cosmpy.aerial.contract import LedgerContract
+from cosmpy.aerial.wallet import LocalWallet
+from cosmpy.common.utils import json_encode
 
 
 def test_contract_behaves_like_address_string():

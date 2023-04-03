@@ -46,10 +46,10 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorDelegationsResponse,
     QueryValidatorRequest,
     QueryValidatorResponse,
-    QueryValidatorsRequest,
-    QueryValidatorsResponse,
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
+    QueryValidatorsRequest,
+    QueryValidatorsResponse,
 )
 
 

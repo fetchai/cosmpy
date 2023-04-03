@@ -24,6 +24,7 @@ import requests
 
 from cosmpy.aerial.config import NetworkConfig
 
+
 NET_CONFIG = NetworkConfig(
     chain_id="osmo-test-4",
     url="grpc+http://grpc-test.osmosis.zone:443/",

@@ -28,6 +28,7 @@ import requests
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.crypto.address import Address
 
+
 CosmosFaucetStatus = namedtuple("CosmosFaucetStatus", ["tx_digest", "status"])
 
 

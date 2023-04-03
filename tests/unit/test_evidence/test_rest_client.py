@@ -30,6 +30,7 @@ from cosmpy.protos.cosmos.evidence.v1beta1.query_pb2 import (
     QueryEvidenceRequest,
     QueryEvidenceResponse,
 )
+
 from tests.helpers import MockRestClient
 
 

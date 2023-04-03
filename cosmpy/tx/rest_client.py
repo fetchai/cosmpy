@@ -47,6 +47,7 @@ from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (  # noqa: F401  # pylint: dis
 )
 from cosmpy.tx.interface import TxInterface
 
+
 # Unused imports are required to make sure that related types get generated - Parse and ParseDict fail without them
 
 

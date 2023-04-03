@@ -28,6 +28,7 @@ from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 
+
 TOKEN_ID_1 = "680564733841876926926749214863536422912"
 TOKEN_ID_2 = "680564733841876926926749214863536422913"
 
