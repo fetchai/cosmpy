@@ -95,9 +95,9 @@ We use [`mkdocs`][mkdocs] and [`material-for-mkdocs`][material] for static docum
 - ``` shell
    make docs-live
   ```
-
+  <!-- markdown-link-check-disable -->
   This starts a live-reloading docs server on localhost which you can access by going to <http://127.0.0.1:8000/> in your browser. Making changes to the documentation automatically reloads this page, showing you the latest changes.
-
+  <!-- markdown-link-check-enable -->
   To create a new documentation page, add a markdown file under `/docs/` and add a reference to this page in `mkdocs.yml` under `nav`.
 
 ### <a name="api"></a>Updating API documentation
@@ -241,10 +241,6 @@ You require [Docker](https://docs.docker.com/get-docker/) for your platform.
 ## <a name="contributing"></a>Contributing
 
 For instructions on how to contribute to the project (e.g. creating Pull Requests, commit message convention, etc), see the [contributing guide][contributing guide].
-
-## <a name="release"></a>Making Releases
-
-For instructions on how to make a release, see the [release process][release process] guide.
 
 [protobuf]: https://developers.google.com/protocol-buffers/
 [ipfs]: https://docs.ipfs.tech/install/

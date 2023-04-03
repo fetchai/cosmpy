@@ -30,6 +30,7 @@ from cosmpy.crypto.address import Address
 
 
 CosmosFaucetStatus = namedtuple("CosmosFaucetStatus", ["tx_digest", "status"])
+DEFAULT_TIMEOUT = 60.0
 
 
 class FaucetApi:
@@ -81,7 +82,9 @@ class FaucetApi:
         :raises ValueError: key `uid` not found in response
         """
         uri = self._claim_url()
-        response = requests.post(url=uri, json={"address": address})
+        response = requests.post(
+            url=uri, json={"address": address}, timeout=DEFAULT_TIMEOUT
+        )
         uid = None
         if response.status_code == 200:
             try:
@@ -100,7 +103,7 @@ class FaucetApi:
         :param uid: The request uid to be checked
         :return: None on failure otherwise a CosmosFaucetStatus for the specified uid
         """
-        response = requests.get(self._status_uri(uid))
+        response = requests.get(self._status_uri(uid), timeout=DEFAULT_TIMEOUT)
         if response.status_code != 200:  # pragma: nocover
             return None
 
