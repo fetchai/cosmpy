@@ -4,7 +4,7 @@
 
 - feat: update/clear contract admin
 - fix: ValueError exceptions when using query_staking_summary
-- fix: keypair logic
+- fix: key pair logic
 - update protobuf and grpcio dependencies
 
 ## 0.6.2
