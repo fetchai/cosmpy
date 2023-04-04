@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cosmpy"
-version = "0.6.2"
+version = "0.7.0"
 description = "A library for interacting with the cosmos networks"
 authors = ["Fetch.AI Limited"]
 readme = "README.md"

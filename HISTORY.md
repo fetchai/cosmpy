@@ -1,5 +1,12 @@
 # Release History
 
+## 0.7.0
+
+- feat: update/clear contract admin
+- fix: ValueError exceptions when using query_staking_summary
+- fix: keypair logic
+- update protobuf and grpcio dependencies
+
 ## 0.6.2
 
 - feat: add migration for wasm contracts in aerial
