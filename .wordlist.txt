@@ -215,6 +215,7 @@ QueryTimeoutError
 BroadcastError
 OutOfGasError
 InsufficientFeesError
+ValueError
 MessageLog
 TxResponse
 SubmittedTx
