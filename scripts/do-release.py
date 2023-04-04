@@ -29,6 +29,7 @@ from typing import Dict, List, Tuple
 import tomli
 from packaging.version import Version
 
+
 ROOT = Path(__file__).parent.parent
 
 
@@ -114,6 +115,7 @@ class ReleaseTool:
         """Upload packages to PYPI."""
         result = subprocess.run(
             f"poetry publish --skip-existing --username {self._credentials.pypi_username} --password {self._credentials.pypi_password} --verbose",
+            check=True,
             shell=True,
             stdout=sys.stdout,
             stderr=sys.stderr,
@@ -139,11 +141,11 @@ class ReleaseTool:
         if current_version not in histories:
             print("No history provided for release. exit")
             return
-        else:
-            print("\nRelease history:")
-            print("-------------------")
-            print(histories[current_version])
-            print("-------------------")
+
+        print("\nRelease history:")
+        print("-------------------")
+        print(histories[current_version])
+        print("-------------------")
 
         print("\nBuilding packages")
         self.build_packages()

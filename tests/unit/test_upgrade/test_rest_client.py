@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 """Tests for REST implementation of Cosmos Upgrade."""
+
 from typing import Dict, Tuple
 from unittest import TestCase
 
@@ -30,6 +31,7 @@ from cosmpy.protos.cosmos.upgrade.v1beta1.query_pb2 import (
     QueryCurrentPlanResponse,
 )
 from cosmpy.upgrade.rest_client import CosmosUpgradeRestClient
+
 from tests.helpers import MockRestClient
 
 

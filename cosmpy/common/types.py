@@ -21,6 +21,7 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+
 Primitive = Union[str, int, bool, float]
 _JSONDict = Dict[Any, Any]  # temporary placeholder
 _JSONList = List[Any]  # temporary placeholder

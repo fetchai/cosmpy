@@ -1,10 +1,6 @@
 name: Checks and Tests
-'on':
-  push:
-    branches:
-      - develop
-      - master
-  pull_request: null
+on: pull_request
+
 jobs:
   code_quality_check:
     name: Check Code Quality

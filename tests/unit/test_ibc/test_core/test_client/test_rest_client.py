@@ -37,7 +37,9 @@ from cosmpy.protos.ibc.core.client.v1.query_pb2 import (
     QueryConsensusStatesRequest,
     QueryConsensusStatesResponse,
 )
+
 from tests.helpers import MockRestClient
+
 
 TYPE = {
     "@type": "type.googleapis.com/google.protobuf.Int32Value",

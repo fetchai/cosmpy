@@ -29,11 +29,13 @@ from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 
+
 COIN_PRICE_URL = (
     "https://api.coingecko.com/api/v3/simple/price?ids=fetch-ai&vs_currencies=usd"
 )
 UPDATE_INTERVAL_SECONDS = 10
 ORACLE_VALUE_DECIMALS = 5
+DEFAULT_TIMEOUT = 60.0
 
 
 def _parse_commandline():
@@ -80,7 +82,7 @@ def main():
     print(f"Oracle role granted to address: {wallet}")
 
     while True:
-        resp = requests.get(COIN_PRICE_URL).json()
+        resp = requests.get(COIN_PRICE_URL, timeout=DEFAULT_TIMEOUT).json()
         price = resp["fetch-ai"]["usd"]
         value = int(price * 10**ORACLE_VALUE_DECIMALS)
 

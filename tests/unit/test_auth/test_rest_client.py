@@ -32,6 +32,7 @@ from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
 )
+
 from tests.helpers import MockRestClient
 
 

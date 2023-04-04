@@ -31,6 +31,7 @@ from cosmpy.protos.cosmos.slashing.v1beta1.query_pb2 import (
     QuerySigningInfosResponse,
 )
 from cosmpy.slashing.rest_client import SlashingRestClient
+
 from tests.helpers import MockRestClient
 
 

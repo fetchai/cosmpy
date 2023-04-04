@@ -3,6 +3,11 @@ Fetch.ai
 fetchai
 ai's
 Hosseini
+Riehl
+james
+jrriehl
+riehl
+alejandro
 ejfitzgerald
 Jiri
 Vestfal
@@ -295,3 +300,6 @@ usd
 RPC
 PubKey
 docstrings
+formatters
+ci
+nfunc

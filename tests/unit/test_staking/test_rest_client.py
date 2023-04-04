@@ -49,12 +49,13 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryValidatorDelegationsResponse,
     QueryValidatorRequest,
     QueryValidatorResponse,
-    QueryValidatorsRequest,
-    QueryValidatorsResponse,
     QueryValidatorUnbondingDelegationsRequest,
     QueryValidatorUnbondingDelegationsResponse,
+    QueryValidatorsRequest,
+    QueryValidatorsResponse,
 )
 from cosmpy.staking.rest_client import StakingRestClient
+
 from tests.helpers import MockRestClient
 
 

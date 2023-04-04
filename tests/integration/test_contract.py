@@ -28,6 +28,7 @@ from cosmpy.aerial.contract import LedgerContract
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
+
 CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple/simple.wasm"
 SCHEMA_PATH = Path(__file__).parent / "../../contracts/simple/schema"
 

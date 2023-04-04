@@ -43,6 +43,7 @@ from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
     QueryValidatorSlashesRequest,
     QueryValidatorSlashesResponse,
 )
+
 from tests.helpers import MockRestClient
 
 

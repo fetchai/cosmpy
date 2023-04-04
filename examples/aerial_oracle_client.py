@@ -27,6 +27,7 @@ from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.address import Address
 
+
 REQUEST_INTERVAL_SECONDS = 10
 
 

@@ -26,6 +26,7 @@ from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
+
 MAX_FLAKY_RERUNS = 3
 RERUNS_DELAY = 10
 

@@ -34,6 +34,7 @@ from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
 )
+
 from tests.helpers import MockRestClient
 
 

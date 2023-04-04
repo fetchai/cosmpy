@@ -1,3 +1,23 @@
+COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
+COSMOS_SDK_VERSION := v0.18.0
+COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
+
+WASMD_URL := https://github.com/CosmWasm/wasmd
+WASMD_VERSION := v0.27.0
+WASMD_DIR := build/wasm-proto-shema
+
+IBCGO_URL := https://github.com/cosmos/ibc-go
+IBCGO_VERSION := v2.2.0
+IBCGO_DIR := build/ibcgo-proto-schema
+
+COSMPY_PROTOS_DIR := cosmpy/protos
+COSMPY_SRC_DIR := cosmpy
+COSMPY_TESTS_DIR := tests
+COSMPY_EXAMPLES_DIR := examples
+COSMPY_SCRIPTS_DIR := scripts
+
+PYTHON_CODE_DIRS := $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) $(COSMPY_EXAMPLES_DIR) $(COSMPY_SCRIPTS_DIR)
+
 ########################################
 ### Initialise dev environment
 ########################################
@@ -6,23 +26,15 @@
 # Once finished, `poetry shell` to enter the virtual environment
 v := $(shell pip -V | grep virtualenvs)
 
-.PHONY: new_env
-new_env: clean
+.PHONY: new-env
+new-env: clean
 	if [ -z "$v" ];\
 	then\
-		poetry install --with main,dev,test,docs --sync;\
+		poetry install --with main,dev,test,docs;\
 		echo "Enter virtual environment with all development dependencies now: 'poetry shell'.";\
 	else\
 		echo "In a virtual environment! Exit first: 'exit'.";\
 	fi
-
-########################################
-### Useful linting command
-########################################
-
-# Automatically runs black and isort to format the code, and runs flake8 and vulture checks
-.PHONY: lint
-lint: black isort flake8 vulture
 
 ########################################
 ### Tests
@@ -31,18 +43,18 @@ lint: black isort flake8 vulture
 # Run all tests
 .PHONY: test
 test:
-	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules --ignore $(COSMPY_TESTS_DIR)/vulture_whitelist.py
+	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules
 	$(MAKE) coverage-report
 
 # Run all unit tests
 .PHONY: unit-test
 unit-test:
-	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules --ignore $(COSMPY_TESTS_DIR)/vulture_whitelist.py -m "not integration"
+	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "not integration"
 
 # Run all integration tests
 .PHONY: integration-test
 integration-test:
-	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules --ignore $(COSMPY_TESTS_DIR)/vulture_whitelist.py -m "integration"
+	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "integration"
 
 # Produce the coverage report. Can see a report summary on the terminal.
 # Detailed report on all modules are placed under /coverage-report
@@ -52,54 +64,58 @@ coverage-report:
 	coverage html
 
 ########################################
-### Automatic Styling
+### Code Styling
 ########################################
 
-# Automatically formats the code
+# Automatically run black and isort to format the code, and run flake8 and vulture checks
+.PHONY: lint
+lint: black isort flake8 vulture
+
+# Automatically format the code using black
 .PHONY: black
 black:
 	black $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
 
-# Automatically sorts the imports
+# Automatically sort the imports
 .PHONY: isort
 isort:
 	isort $(PYTHON_CODE_DIRS)
 
-########################################
-### Code style checks
-########################################
-
-# Runs the black format checker
+# Check the code format
 .PHONY: black-check
 black-check:
 	black --check --verbose $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
 
-# Runs the isort format checker
+# Check the imports are sorted
 .PHONY: isort-check
 isort-check:
 	isort --check-only --verbose $(PYTHON_CODE_DIRS)
 
-# Runs flake8 checker
+# Run flake8 linter
 .PHONY: flake8
-flake:
+flake8:
 	flake8 $(PYTHON_CODE_DIRS)
 
-# Runs vulture checker (checks for unused code)
+# Check for unused code
 .PHONY: vulture
 vulture:
-	vulture $(PYTHON_CODE_DIRS) --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
+	vulture $(PYTHON_CODE_DIRS) scripts/whitelist.py --exclude '*_pb2.py,*_pb2_grpc.py' --min-confidence 100
 
 ########################################
 ### Security & safety checks
 ########################################
 
-# Checks the security of the code
+# Run bandit and safety
+.PHONY: security
+security: bandit safety
+
+# Check the security of the code
 .PHONY: bandit
 bandit:
-	bandit -r $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) --skip B101
-	bandit -r $(COSMPY_EXAMPLES_DIR) --skip B101,B105
+	bandit -r $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) -s B101
+	bandit -r $(COSMPY_EXAMPLES_DIR) -s B101,B105
 
-# Checks the security of the code
+# Check the security of the code for known vulnerabilities
 .PHONY: safety
 safety:
 	safety check -i 41002
@@ -108,31 +124,31 @@ safety:
 ### Linters
 ########################################
 
-# Runs the mypy linter
+# Check types (statically) using mypy
 .PHONY: mypy
 mypy:
-	mypy $(PYTHON_CODE_DIRS)
+	mypy $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
 
-# Runs the pylint linter
+# Lint the code using pylint
 .PHONY: pylint
 pylint:
-	pylint $(PYTHON_CODE_DIRS)
+	pylint -j 0 $(PYTHON_CODE_DIRS)
 
 ########################################
 ### License and copyright checks
 ########################################
 
-# Check licenses
+# Check dependency licenses
 .PHONY: liccheck
 liccheck:
 	poetry export > tmp-requirements.txt
 	liccheck -s strategy.ini -r tmp-requirements.txt -l PARANOID
 	rm -frv tmp-requirements.txt
 
-# Check copyrights
+# Check that the relevant files have appropriate Copyright header
 .PHONY: copyright-check
 copyright-check:
-	python scripts/check_copyright.py
+	python scripts/check_copyright.py --directory .
 
 ########################################
 ### Docs
@@ -154,7 +170,7 @@ generate-api-docs:
 	python scripts/generate_api_docs.py
 
 ########################################
-### Update Poetry Lock
+### Poetry Lock
 ########################################
 
 # Updates the poetry lock
@@ -171,61 +187,50 @@ clean: clean-build clean-pyc clean-test clean-docs
 
 .PHONY: clean-build
 clean-build:
-	rm -frv build/
-	rm -frv dist/
-	rm -frv .eggs/
-	rm -frv pip-wheel-metadata
-	find . -name '*.egg-info' -exec rm -frv {} +
-	find . -name '*.egg' -exec rm -frv {} +
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	rm -fr pip-wheel-metadata
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -fr {} +
 
 .PHONY: clean-docs
 clean-docs:
-	rm -frv site/
+	rm -fr site/
 
 .PHONY: clean-pyc
 clean-pyc:
-	find . -name '*.pyc' -exec rm -fv {} +
-	find . -name '*.pyo' -exec rm -fv {} +
-	find . -name '*~' -exec rm -fv {} +
-	find . -name '__pycache__' -exec rm -frv {} +
-	find . -name '.DS_Store' -exec rm -frv {} +
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '.DS_Store' -exec rm -fr {} +
 
 .PHONY: clean-test
 clean-test:
-	rm -frv .tox/
-	rm -frv .coverage
-	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -frv "{}" \;
-	rm -frv coverage_report/
-	rm -frv .hypothesis
-	rm -frv .pytest_cache
-	rm -frv .mypy_cache/
-	find . -name 'log.txt' -exec rm -frv {} +
-	find . -name 'log.*.txt' -exec rm -frv {} +
+	rm -fr .tox/
+	rm -f .coverage
+	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
+	rm -fr coverage.xml
+	rm -fr htmlcov/
+	rm -fr .hypothesis
+	rm -fr .pytest_cache
+	rm -fr .mypy_cache/
+	find . -name 'log.txt' -exec rm -fr {} +
+	find . -name 'log.*.txt' -exec rm -fr {} +
+
+########################################
+### Build
+########################################
+
+# Build the project
+.PHONY: dist
+dist: clean
+	poetry build
 
 ########################################
 ### Generate protos and grpc files
 ########################################
-
-# Constants
-COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
-COSMOS_SDK_VERSION := v0.18.0
-COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
-
-WASMD_URL := https://github.com/CosmWasm/wasmd
-WASMD_VERSION := v0.27.0
-WASMD_DIR := build/wasm-proto-shema
-
-IBCGO_URL := https://github.com/cosmos/ibc-go
-IBCGO_VERSION := v2.2.0
-IBCGO_DIR := build/ibcgo-proto-schema
-
-COSMPY_PROTOS_DIR := cosmpy/protos
-COSMPY_SRC_DIR := cosmpy
-
-COSMPY_TESTS_DIR := tests
-COSMPY_EXAMPLES_DIR := examples
-
-PYTHON_CODE_DIRS := $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) $(COSMPY_EXAMPLES_DIR)
 
 ifeq ($(OS),Windows_NT)
 	$(error "Please use the WSL (Windows Subsystem for Linux) on Windows platform.")
@@ -308,3 +313,27 @@ debug:
 	$(info FIND_CMD: $(FIND_CMD))
 	$(info  )
 	$(info COMPILE_PROTOBUFS_COMMAND: $(COMPILE_PROTOBUFS_COMMAND))
+
+########################################
+### Commands used by CI workflows
+########################################
+
+# Live documentation server
+.PHONY: docs-live-ci
+docs-live-ci:
+	mkdocs serve -a localhost:8080
+
+# Produce the coverage report
+.PHONY: coverage-report-ci
+coverage-report-ci:
+	coverage report -m -i
+
+# Check MANIFEST.in file for completeness
+.PHONY: check-manifest-ci
+check-manifest-ci:
+	check-manifest
+
+# Check API documentation is up-to-date
+.PHONY: check-api-docs-ci
+check-api-docs-ci:
+	python scripts/generate_api_docs.py --check-clean

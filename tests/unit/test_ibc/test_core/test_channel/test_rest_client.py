@@ -53,7 +53,9 @@ from cosmpy.protos.ibc.core.channel.v1.query_pb2 import (
     QueryUnreceivedPacketsRequest,
     QueryUnreceivedPacketsResponse,
 )
+
 from tests.helpers import MockRestClient
+
 
 TYPE = {
     "@type": "type.googleapis.com/google.protobuf.Int32Value",
