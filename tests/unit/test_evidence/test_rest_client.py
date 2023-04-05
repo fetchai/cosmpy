@@ -21,6 +21,7 @@ from typing import Dict, Tuple
 from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
+from google.protobuf.wrappers_pb2 import Int32Value  # noqa # needed for protobuf decode
 
 from cosmpy.common.utils import json_encode
 from cosmpy.evidence.rest_client import EvidenceRestClient
