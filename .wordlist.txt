@@ -3,6 +3,11 @@ Fetch.ai
 fetchai
 ai's
 Hosseini
+Riehl
+james
+jrriehl
+riehl
+alejandro
 ejfitzgerald
 Jiri
 Vestfal
@@ -159,6 +164,7 @@ aea
 coingecko
 CLI
 CosmPy's
+CosmPy
 isort
 liccheck
 MakeFile
@@ -209,6 +215,7 @@ QueryTimeoutError
 BroadcastError
 OutOfGasError
 InsufficientFeesError
+ValueError
 MessageLog
 TxResponse
 SubmittedTx
@@ -294,3 +301,6 @@ usd
 RPC
 PubKey
 docstrings
+formatters
+ci
+nfunc

@@ -3,35 +3,32 @@
 </h1>
 
 <p align="center">
+A python library for interacting with cosmos based blockchain networks
+</p>
+
+<p align="center">
   <a href="https://pypi.org/project/cosmpy/">
     <img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy">
   </a>
   <a href="https://pypi.org/project/cosmpy/">
     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/cosmpy">
   </a>
-  <a>
-    <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/cosmpy">
-  </a>
   <a href="https://github.com/fetchai/cosmpy/blob/master/LICENSE">
     <img alt="License" src="https://img.shields.io/pypi/l/cosmpy">
   </a>
-</p>
-<p align="center">
-  <a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
-    <img alt="AEA framework sanity checks and tests" src="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg">
+  <br />
+  <a>
+    <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/cosmpy">
   </a>
   <a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
-    <img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg">
+    <img alt="CosmPy sanity checks and tests" src="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg">
+  </a>
+  <a href="https://pypi.org/project/cosmpy/">
+    <img alt="Download per Month" src="https://img.shields.io/pypi/dm/cosmpy">
   </a>
 </p>
 
-<p align="center">
-A python library for interacting with cosmos based blockchain networks
-</p>
-
-## Installing
-
-To install the library use:
+## To Install
 
 ```bash
 pip3 install cosmpy
@@ -57,29 +54,41 @@ for coin in balances:
 
 ## Documentation
 
-Before running this command make sure your development environment is set up. Check [Development setup](https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md#development-setup) for more details.
-
-To see the documentation:
-
-```bash
-make docs-live
-```
-
-Then navigate to the following URL in your browser:
-<!-- markdown-link-check-disable-next-line -->
-[http://127.0.0.1:8000/cosmpy/](http://127.0.0.1:8000/cosmpy/)
+The full documentation can be found [here](https://docs.fetch.ai/CosmPy/).
 
 ## Examples
 
-Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy` e.g. transferring tokens, staking, deploying and interacting with a smart contract, and performing atomic swaps.
+Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy`, such as transferring tokens, staking, deploying and interacting with a smart contract, and performing atomic swaps.
 
-## To contribute
+## Contributing
 
-Please see [CONTRIBUTING](https://github.com/fetchai/cosmpy/blob/master/CONTRIBUTING.md) and [DEVELOPING](https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md) guides.
+All contributions are very welcome! Remember, contribution is not only PRs and code, but any help with docs or helping other developers solve their issues are very appreciated!
 
-## Extra Resources
+Read below to learn how you can take part in the CosmPy project.
 
-* [GitHub Repo](https://github.com/fetchai/cosmpy)
-* [Bug Reports](https://github.com/fetchai/cosmpy/issues)
-* [Discussions](https://github.com/fetchai/cosmpy/discussions)
-* [Getting Started](https://docs.fetch.ai/CosmPy/)
+### Code of Conduct
+
+Please be sure to read and follow our [Code of Conduct][coc]. By participating, you are expected to uphold this code.
+
+### Contribution Guidelines
+
+Read our [contribution guidelines][contributing] to learn about our issue and PR submission processes, coding rules, and more.
+
+### Development Guidelines
+
+Read our [development guidelines][developing] to learn about the development processes and workflows when contributing to different parts of the CosmPy project.
+
+### Issues, Questions and Discussions
+
+We use [GitHub Issues][issues] for tracking requests and bugs, and [GitHub Discussions][discussion] for general questions and discussion.
+
+## License
+
+The CosmPy project is licensed under [Apache License 2.0][license].
+
+[contributing]: https://github.com/fetchai/cosmpy/blob/master/CONTRIBUTING.md
+[developing]: https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md
+[coc]: https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md
+[discussion]: https://github.com/fetchai/cosmpy/discussions
+[issues]: https://github.com/fetchai/cosmpy/issues
+[license]: https://github.com/fetchai/cosmpy/blob/master/LICENSE

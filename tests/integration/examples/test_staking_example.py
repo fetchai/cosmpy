@@ -26,6 +26,7 @@ import pytest
 
 from tests.integration.test_contract import MAX_FLAKY_RERUNS, RERUNS_DELAY
 
+
 ROOT_DIR = Path(__file__).parent.parent.parent.parent
 
 

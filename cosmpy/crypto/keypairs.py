@@ -127,8 +127,11 @@ class PublicKey:
         return success
 
 
-class PrivateKey(PublicKey, Signer):
+class PrivateKey(Signer):
     """Private key class."""
+
+    curve: Curve = ecdsa.SECP256k1
+    hash_function: Callable = hashlib.sha256
 
     def __init__(self, private_key: Optional[Union[bytes, str]] = None):
         """
@@ -158,9 +161,6 @@ class PrivateKey(PublicKey, Signer):
         self._private_key_bytes = self._signing_key.to_string()
         self._private_key = base64.b64encode(self._private_key_bytes).decode()
 
-        # construct the base class
-        super().__init__(self._signing_key.get_verifying_key())
-
     @property
     def private_key(self) -> str:
         """
@@ -187,6 +187,15 @@ class PrivateKey(PublicKey, Signer):
         :return: bytes private key.
         """
         return self._private_key_bytes
+
+    @property
+    def public_key(self) -> PublicKey:
+        """
+        Get public key.
+
+        :return: public key.
+        """
+        return PublicKey(self._signing_key.get_verifying_key())
 
     def sign(
         self, message: bytes, deterministic: bool = True, canonicalise: bool = True

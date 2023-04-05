@@ -30,6 +30,7 @@ from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
     QueryInflationResponse,
     QueryParamsResponse,
 )
+
 from tests.helpers import MockRestClient
 
 

@@ -28,6 +28,7 @@ from cosmpy.aerial.contract import LedgerContract
 from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
+
 CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple/simple.wasm"
 SCHEMA_PATH = Path(__file__).parent / "../../contracts/simple/schema"
 
@@ -126,6 +127,15 @@ class TestContract:
         assert tx_res.response
         assert deployed_contract.address == original_contract_address
         assert deployed_contract.code_id != original_code_id
+
+        # Change admin from wallet to wallet2
+        wallet2 = self.get_wallet()
+        tx_res = deployed_contract.update_admin(wallet, wallet2.address())
+        assert tx_res.response
+
+        # New admin calls clear admin
+        tx_res = deployed_contract.update_admin(wallet2, None)
+        assert tx_res.response
 
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)

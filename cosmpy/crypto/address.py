@@ -27,6 +27,7 @@ import bech32
 from cosmpy.crypto.hashfuncs import ripemd160, sha256
 from cosmpy.crypto.keypairs import PublicKey
 
+
 DEFAULT_PREFIX = "fetch"
 
 

@@ -24,13 +24,15 @@ import requests
 
 from cosmpy.aerial.config import NetworkConfig
 
+
 NET_CONFIG = NetworkConfig(
     chain_id="osmo-test-4",
-    url="rest+https://lcd-test.osmosis.zone/",
+    url="grpc+http://grpc-test.osmosis.zone:443/",
     fee_minimum_gas_price=1,
     fee_denomination="uosmo",
     staking_denomination="uosmo",
 )
+DEFAULT_TIMEOUT = 60.0
 
 
 class FaucetMixIn:
@@ -45,6 +47,7 @@ class FaucetMixIn:
         resp = requests.post(
             "https://testnet-faucet.dev-osmosis.zone/request",
             json={"address": str(wallet.address())},
+            timeout=DEFAULT_TIMEOUT,
         )
         assert resp.status_code == 200
         ledger = self.get_ledger()

@@ -44,6 +44,7 @@ from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
     QuerySmartContractStateRequest,
     QuerySmartContractStateResponse,
 )
+
 from tests.helpers import MockRestClient
 
 

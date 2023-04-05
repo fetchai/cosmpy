@@ -42,6 +42,7 @@ from cosmpy.protos.cosmos.gov.v1beta1.query_pb2 import (
     QueryVotesRequest,
     QueryVotesResponse,
 )
+
 from tests.helpers import MockRestClient
 
 
