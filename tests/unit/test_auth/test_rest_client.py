@@ -46,15 +46,17 @@ class AuthRestClientTestCase(unittest.TestCase):
         content = {
             "account": {
                 "@type": "/cosmos.auth.v1beta1.BaseAccount",
-                "address": "fetch1h6974x4dspft29r9gyegtajyzaht2cdh0rt93w",
+                "address": "c4e1t62t32vvkr78zdws3jvu9rxjkz3fy0ex4v7e7l",
                 "pub_key": {
                     "@type": "/cosmos.crypto.secp256k1.PubKey",
-                    "key": "A2BjpEo54gBpulf9CrA+6tGBASFC8okaO1DYTimk/Jwp",
+                    "key": "AkFO92OOwGUK+88iMsPrOgh8tqkIbiJMRpPz4ezzyd2q"
                 },
                 "account_number": "0",
-                "sequence": "1",
+                "sequence": "1"
             }
         }
+        # necessary import
+        from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey
         expected_response = ParseDict(content, QueryAccountResponse())
 
         mock_client = MockRestClient(json_encode(content))
