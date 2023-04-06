@@ -23,8 +23,8 @@ from unittest import TestCase
 from google.protobuf.json_format import ParseDict
 from google.protobuf.wrappers_pb2 import Int32Value  # noqa # needed for protobuf decode
 
-from cosmpy.common.utils import json_encode
-from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
+from c4epy.common.utils import json_encode
+from c4epy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetBlockByHeightRequest,
     GetBlockByHeightResponse,
     GetLatestBlockRequest,
@@ -38,7 +38,7 @@ from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetValidatorSetByHeightRequest,
     GetValidatorSetByHeightResponse,
 )
-from cosmpy.tendermint.rest_client import CosmosBaseTendermintRestClient
+from c4epy.tendermint.rest_client import CosmosBaseTendermintRestClient
 
 from tests.helpers import MockRestClient
 

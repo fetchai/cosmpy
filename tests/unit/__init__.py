@@ -16,4 +16,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""Test for cosmpy aerial."""
+"""Test for c4epy aerial."""

@@ -22,15 +22,15 @@ from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
-from cosmpy.common.utils import json_encode
-from cosmpy.protos.cosmos.slashing.v1beta1.query_pb2 import (
+from c4epy.common.utils import json_encode
+from c4epy.protos.cosmos.slashing.v1beta1.query_pb2 import (
     QueryParamsResponse,
     QuerySigningInfoRequest,
     QuerySigningInfoResponse,
     QuerySigningInfosRequest,
     QuerySigningInfosResponse,
 )
-from cosmpy.slashing.rest_client import SlashingRestClient
+from c4epy.slashing.rest_client import SlashingRestClient
 
 from tests.helpers import MockRestClient
 

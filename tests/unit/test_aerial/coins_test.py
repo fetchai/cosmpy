@@ -20,8 +20,8 @@
 # ------------------------------------------------------------------------------
 import pytest
 
-from cosmpy.aerial.coins import parse_coins
-from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from c4epy.aerial.coins import parse_coins
+from c4epy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 @pytest.mark.parametrize(

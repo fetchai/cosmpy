@@ -23,11 +23,11 @@ from unittest import TestCase
 from google.protobuf.json_format import ParseDict
 from google.protobuf.wrappers_pb2 import Int32Value  # noqa # needed for protobuf decode
 
-from cosmpy.common.utils import json_encode
-from cosmpy.ibc.core.connection.rest_client import (  # type: ignore
+from c4epy.common.utils import json_encode
+from c4epy.ibc.core.connection.rest_client import (  # type: ignore
     IBCCoreConnectionRestClient,
 )
-from cosmpy.protos.ibc.core.connection.v1.query_pb2 import (
+from c4epy.protos.ibc.core.connection.v1.query_pb2 import (
     QueryClientConnectionsRequest,
     QueryClientConnectionsResponse,
     QueryConnectionClientStateRequest,

@@ -41,7 +41,7 @@ HEADER_REGEX = rf"""(#!/usr/bin/env python3
 )?# -\*- coding: utf-8 -\*-
 # ------------------------------------------------------------------------------
 #
-#   (Copyright 2018-({"|".join(SUPPORTED_YEARS)}) Fetch.AI Limited|Copyright [0-9]{{4}}(-[0-9]{{4}})? [a-zA-Z_]+)
+#   (Copyright 2018-({"|".join(SUPPORTED_YEARS)}) Fetch.AI Limited|Copyright [0-9]{{4}}(-[0-9]{{4}})? [a-zA-Z_]+|Copyright 2022-2023 Cros Nest B.V. Limited)
 (#   Modifications copyright \(C\) [0-9]{{4}} [a-zA-Z_-]+
 )*#
 #   Licensed under the Apache License, Version 2\.0 \(the \"License\"\);
@@ -77,13 +77,13 @@ def check_copyright(file: Path) -> bool:
 
 if __name__ == "__main__":
     python_files = itertools.chain(
-        Path("cosmpy").glob("**/*.py"),
+        Path("c4epy").glob("**/*.py"),
     )
 
-    # filter out protobuf files (*_pb2.py) and all files under cosmpy/protos
+    # filter out protobuf files (*_pb2.py) and all files under c4epy/protos
     python_files_filtered = filter(
         lambda x: not str(x).endswith("_pb2.py")
-        and str(x).find(os.path.join("cosmpy", "protos")) == -1,
+        and str(x).find(os.path.join("c4epy", "protos")) == -1,
         python_files,
     )
 

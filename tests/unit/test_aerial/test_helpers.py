@@ -21,10 +21,10 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from cosmpy.aerial.client import LedgerClient
-from cosmpy.aerial.config import NetworkConfig
-from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
-from cosmpy.aerial.tx_helpers import SubmittedTx
+from c4epy.aerial.client import LedgerClient
+from c4epy.aerial.config import NetworkConfig
+from c4epy.aerial.exceptions import NotFoundError, QueryTimeoutError
+from c4epy.aerial.tx_helpers import SubmittedTx
 
 
 def test_broadcast_tx_timeouts():

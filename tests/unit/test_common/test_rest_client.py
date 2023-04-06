@@ -24,7 +24,7 @@ from unittest.mock import Mock, patch
 
 from requests import Response, Session
 
-from cosmpy.common.rest_client import RestClient
+from c4epy.common.rest_client import RestClient
 
 
 class QueryRestClientTestCase(TestCase):
@@ -32,7 +32,7 @@ class QueryRestClientTestCase(TestCase):
 
     @staticmethod
     @patch("requests.session", spec=Session)
-    @patch("cosmpy.common.rest_client.MessageToDict")
+    @patch("c4epy.common.rest_client.MessageToDict")
     def test_get_pass(messageToDict_mock, session_mock):
         """
         Test get method for the positive result.
@@ -67,7 +67,7 @@ class QueryRestClientTestCase(TestCase):
         session_mock.return_value.get.assert_called_once_with(url=expected_url)
 
     @patch("requests.session", spec=Session)
-    @patch("cosmpy.common.rest_client.MessageToDict")
+    @patch("c4epy.common.rest_client.MessageToDict")
     def test_get_error(self, messageToDict_mock, session_mock):
         """
         Test get method for the negative result.
@@ -99,7 +99,7 @@ class QueryRestClientTestCase(TestCase):
 
     @staticmethod
     @patch("requests.session", spec=Session)
-    @patch("cosmpy.common.rest_client.MessageToDict")
+    @patch("c4epy.common.rest_client.MessageToDict")
     def test_post_pass(messageToDict_mock, session_mock):
         """
         Test post method for the positive result.
@@ -140,7 +140,7 @@ class QueryRestClientTestCase(TestCase):
         assert kwargs["json"] == request_json
 
     @patch("requests.session", spec=Session)
-    @patch("cosmpy.common.rest_client.MessageToDict")
+    @patch("c4epy.common.rest_client.MessageToDict")
     def test_post_error(self, messageToDict_mock, session_mock):
         """
         Test post method for the negative result.
@@ -188,7 +188,7 @@ class QueryRestClientTestCase(TestCase):
         del client
         session_mock.return_value.close.assert_called_once_with()
 
-    @patch("cosmpy.common.rest_client.MessageToDict")
+    @patch("c4epy.common.rest_client.MessageToDict")
     def test_make_url_helper_method(self, messageToDict_mock):
         """
         Test _make_url helper method.

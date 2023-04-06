@@ -29,30 +29,32 @@ from pathlib import Path
 
 DOCS_DIR = Path("docs/")
 API_DIR = DOCS_DIR / "api/"
-COSMPY_DIR = Path("cosmpy")
+COSMPY_DIR = Path("c4epy")
 
 IGNORE_NAMES = {r"^__version__\.py$", r"^py\.typed$", r"^.*_pb2.py$"}
 IGNORE_PREFIXES = {
-    Path("cosmpy", "__init__.py"),
-    Path("cosmpy", "aerial", "__init__.py"),
-    Path("cosmpy", "auth"),
-    Path("cosmpy", "bank"),
-    Path("cosmpy", "common"),
-    Path("cosmpy", "cosmwasm"),
-    Path("cosmpy", "crypto"),
-    Path("cosmpy", "distribution"),
-    Path("cosmpy", "evidence"),
-    Path("cosmpy", "gov"),
-    Path("cosmpy", "ibc"),
-    Path("cosmpy", "mint"),
-    Path("cosmpy", "params"),
-    Path("cosmpy", "protos"),
-    Path("cosmpy", "slashing"),
-    Path("cosmpy", "staking"),
-    Path("cosmpy", "tendermint"),
-    Path("cosmpy", "tx"),
-    Path("cosmpy", "upgrade"),
-    Path("cosmpy", "whitelist.py"),
+    Path("c4epy", "__init__.py"),
+    Path("c4epy", "aerial", "__init__.py"),
+    Path("c4epy", "auth"),
+    Path("c4epy", "bank"),
+    Path("c4epy", "cfedistributor"),
+    Path("c4epy", "cfeminter"),
+    Path("c4epy", "cfesignature"),
+    Path("c4epy", "cfevesting"),
+    Path("c4epy", "common"),
+    Path("c4epy", "crypto"),
+    Path("c4epy", "distribution"),
+    Path("c4epy", "evidence"),
+    Path("c4epy", "gov"),
+    Path("c4epy", "ibc"),
+    Path("c4epy", "params"),
+    Path("c4epy", "protos"),
+    Path("c4epy", "slashing"),
+    Path("c4epy", "staking"),
+    Path("c4epy", "tendermint"),
+    Path("c4epy", "tx"),
+    Path("c4epy", "upgrade"),
+    Path("c4epy", "whitelist.py"),
 }
 
 
@@ -103,7 +105,7 @@ def should_skip(module_path: Path) -> bool:
 
 
 def _generate_apidocs_cosmpy_modules() -> None:
-    """Generate API docs for cosmpy.* modules."""
+    """Generate API docs for c4epy.* modules."""
     for module_path in filter(is_not_dir, Path(COSMPY_DIR).rglob("*")):
         print(f"Processing {module_path}... ", end="")
         if should_skip(module_path):

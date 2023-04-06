@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2018-2021 Fetch.AI Limited
+#   Copyright 2022-2023 Cros Nest B.V. Limited
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -24,9 +24,9 @@ import unittest
 import pytest
 from google.protobuf.json_format import ParseDict
 
-from cosmpy.cfedistributor.rest_client import CfeDistributorRestClient
-from cosmpy.common.utils import json_encode
-from cosmpy.protos.c4echain.cfedistributor.query_pb2 import (
+from c4epy.cfedistributor.rest_client import CfeDistributorRestClient
+from c4epy.common.utils import json_encode
+from c4epy.protos.c4echain.cfedistributor.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
     QueryStatesRequest,

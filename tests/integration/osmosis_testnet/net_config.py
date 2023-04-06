@@ -22,7 +22,7 @@ from time import sleep
 
 import requests
 
-from cosmpy.aerial.config import NetworkConfig
+from c4epy.aerial.config import NetworkConfig
 
 
 NET_CONFIG = NetworkConfig(

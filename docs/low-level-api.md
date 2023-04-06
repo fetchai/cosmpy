@@ -13,9 +13,9 @@ Here, we aim to help developers navigate the low-level, protobuf-based API funct
 As a reminder, here is a quick example of using the high level functionality provided by CosmPy. In this case, we connect to a testnet, create a wallet, stake some tokens with a validator, then claim our rewards:
 
 ```python
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
+from c4epy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.wallet import LocalWallet
+from c4epy.crypto.keypairs import PrivateKey
 
 client = LedgerClient(NetworkConfig.fetchai_dorado_testnet())
 wallet = LocalWallet(PrivateKey("rBDA3Q0vK5T+JVQmXSoooqUY/mSO4mmhMHQJI31+h1o="))
@@ -42,12 +42,12 @@ message, which is what we need. It takes a single `validator_address` parameter 
 To send a transaction containing such a message:
 
 ```python
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.aerial.tx import Transaction
-from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
-from cosmpy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawValidatorCommission
-from cosmpy.crypto.keypairs import PrivateKey
+from c4epy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.wallet import LocalWallet
+from c4epy.aerial.tx import Transaction
+from c4epy.aerial.client.utils import prepare_and_broadcast_basic_transaction
+from c4epy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawValidatorCommission
+from c4epy.crypto.keypairs import PrivateKey
 
 client = LedgerClient(NetworkConfig.fetchai_dorado_testnet())
 wallet = LocalWallet(PrivateKey("<redacted>private key of dorado validator0"))
@@ -76,13 +76,13 @@ Protobuf is strongly typed, so to facilitate this flexibility, it is necessary t
 Therefore, we arrive at the code looking like:
 
 ```python
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.aerial.tx import Transaction
-from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
-from cosmpy.crypto.keypairs import PrivateKey
-from cosmpy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawValidatorCommission
-from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgExec
+from c4epy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.wallet import LocalWallet
+from c4epy.aerial.tx import Transaction
+from c4epy.aerial.client.utils import prepare_and_broadcast_basic_transaction
+from c4epy.crypto.keypairs import PrivateKey
+from c4epy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawValidatorCommission
+from c4epy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgExec
 from google.protobuf import any_pb2
 
 client = LedgerClient(NetworkConfig.fetchai_dorado_testnet())
@@ -116,14 +116,14 @@ By default, the above provides one year's worth of authorization to withdraw val
 For those with access to their keys in python:
 
 ```python
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.aerial.tx import Transaction
-from cosmpy.aerial.client.utils import prepare_and_broadcast_basic_transaction
-from cosmpy.crypto.keypairs import PrivateKey
-from cosmpy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawValidatorCommission
-from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgGrant
-from cosmpy.protos.cosmos.authz.v1beta1.authz_pb2 import GenericAuthorization, Grant
+from c4epy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.wallet import LocalWallet
+from c4epy.aerial.tx import Transaction
+from c4epy.aerial.client.utils import prepare_and_broadcast_basic_transaction
+from c4epy.crypto.keypairs import PrivateKey
+from c4epy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawValidatorCommission
+from c4epy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgGrant
+from c4epy.protos.cosmos.authz.v1beta1.authz_pb2 import GenericAuthorization, Grant
 
 from google.protobuf import any_pb2, timestamp_pb2
 from datetime import datetime, timedelta

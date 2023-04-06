@@ -23,9 +23,9 @@ from unittest import TestCase
 from google.protobuf.json_format import ParseDict
 from google.protobuf.wrappers_pb2 import Int32Value  # noqa # needed for protobuf decode
 
-from cosmpy.common.utils import json_encode
-from cosmpy.evidence.rest_client import EvidenceRestClient
-from cosmpy.protos.cosmos.evidence.v1beta1.query_pb2 import (
+from c4epy.common.utils import json_encode
+from c4epy.evidence.rest_client import EvidenceRestClient
+from c4epy.protos.cosmos.evidence.v1beta1.query_pb2 import (
     QueryAllEvidenceRequest,
     QueryAllEvidenceResponse,
     QueryEvidenceRequest,

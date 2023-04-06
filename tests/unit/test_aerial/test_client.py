@@ -21,12 +21,12 @@
 """Test aerial ledger client."""
 
 
-from cosmpy.aerial.client import (
+from c4epy.aerial.client import (
     DEFAULT_QUERY_INTERVAL_SECS,
     DEFAULT_QUERY_TIMEOUT_SECS,
     LedgerClient,
 )
-from cosmpy.aerial.config import NetworkConfig
+from c4epy.aerial.config import NetworkConfig
 
 
 def test_ledger_client_timeouts():

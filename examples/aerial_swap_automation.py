@@ -22,10 +22,10 @@
 import argparse
 from time import sleep
 
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
-from cosmpy.aerial.contract import LedgerContract
-from cosmpy.aerial.faucet import FaucetApi
-from cosmpy.aerial.wallet import LocalWallet
+from c4epy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.contract import LedgerContract
+from c4epy.aerial.faucet import FaucetApi
+from c4epy.aerial.wallet import LocalWallet
 
 
 def swap_native_for_cw20(swap_amount, pair_contract, wallet):

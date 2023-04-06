@@ -31,7 +31,7 @@ A python library for interacting with cosmos based blockchain networks
 ## To Install
 
 ```bash
-pip3 install cosmpy
+pip3 install c4epy
 ```
 
 ## Getting Started
@@ -39,7 +39,7 @@ pip3 install cosmpy
 Below is a simple example for querying an account's balances:
 
 ```python
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.client import LedgerClient, NetworkConfig
 
 # connect to Fetch.ai network using default parameters
 ledger_client = LedgerClient(NetworkConfig.fetchai_mainnet())
@@ -49,7 +49,7 @@ balances = ledger_client.query_bank_all_balances(alice)
 
 # show all coin balances
 for coin in balances:
-  print(f'{coin.amount}{coin.denom}')
+    print(f'{coin.amount}{coin.denom}')
 ```
 
 ## Documentation

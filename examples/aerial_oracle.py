@@ -23,11 +23,11 @@ from time import sleep
 
 import requests
 
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
-from cosmpy.aerial.contract import LedgerContract
-from cosmpy.aerial.faucet import FaucetApi
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.address import Address
+from c4epy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.contract import LedgerContract
+from c4epy.aerial.faucet import FaucetApi
+from c4epy.aerial.wallet import LocalWallet
+from c4epy.crypto.address import Address
 
 
 COIN_PRICE_URL = (

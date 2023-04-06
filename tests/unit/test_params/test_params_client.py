@@ -23,9 +23,9 @@ from unittest import TestCase
 
 from google.protobuf.json_format import ParseDict
 
-from cosmpy.common.utils import json_encode
-from cosmpy.params.rest_client import ParamsRestClient
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import (
+from c4epy.common.utils import json_encode
+from c4epy.params.rest_client import ParamsRestClient
+from c4epy.protos.cosmos.params.v1beta1.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
 )

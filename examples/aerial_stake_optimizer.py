@@ -22,15 +22,15 @@
 # ------------------------------------------------------------------------------
 import json
 
-from cosmpy.aerial.client import LedgerClient, NetworkConfig
-from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
-from cosmpy.aerial.client.staking import create_delegate_msg
-from cosmpy.aerial.faucet import FaucetApi
-from cosmpy.aerial.tx import SigningCfg, Transaction
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryTotalSupplyRequest
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
-from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsRequest
+from c4epy.aerial.client import LedgerClient, NetworkConfig
+from c4epy.aerial.client.distribution import create_withdraw_delegator_reward
+from c4epy.aerial.client.staking import create_delegate_msg
+from c4epy.aerial.faucet import FaucetApi
+from c4epy.aerial.tx import SigningCfg, Transaction
+from c4epy.aerial.wallet import LocalWallet
+from c4epy.protos.cosmos.bank.v1beta1.query_pb2 import QueryTotalSupplyRequest
+from c4epy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
+from c4epy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsRequest
 
 
 # This function returns the total reward for given:

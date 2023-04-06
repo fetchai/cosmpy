@@ -20,8 +20,8 @@
 # ------------------------------------------------------------------------------
 
 
-from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.common.utils import json_encode
+from c4epy.aerial.wallet import LocalWallet
+from c4epy.common.utils import json_encode
 
 
 def test_wallet_behaves_like_address_string():
