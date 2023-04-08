@@ -27,13 +27,14 @@ from google.protobuf.json_format import ParseDict
 from c4epy.cfeminter.rest_client import CfeMinterRestClient
 from c4epy.common.utils import json_encode
 from c4epy.protos.c4echain.cfeminter.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
     QueryInflationRequest,
     QueryInflationResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
     QueryStateRequest,
-    QueryStateResponse
+    QueryStateResponse,
 )
+
 from tests.helpers import MockRestClient
 
 
@@ -44,9 +45,7 @@ class CfeMinterRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_query_inflation():
         """Test query minter for positive value."""
-        content = {
-            "inflation": "0.019935838916075397"
-        }
+        content = {"inflation": "0.019935838916075397"}
         expected_response = ParseDict(content, QueryInflationResponse())
 
         mock_client = MockRestClient(json_encode(content))
@@ -66,9 +65,9 @@ class CfeMinterRestClientTestCase(unittest.TestCase):
                 "amount_minted": "1038506205638",
                 "remainder_to_mint": "0.174259132506908003",
                 "last_mint_block_time": "2023-04-05T21:56:35.429380906Z",
-                "remainder_from_previous_minter": "0.000000000000000000"
+                "remainder_from_previous_minter": "0.000000000000000000",
             },
-            "state_history": []
+            "state_history": [],
         }
         content = {
             "minter_state": {
@@ -76,9 +75,9 @@ class CfeMinterRestClientTestCase(unittest.TestCase):
                 "amount_minted": "1038506205638",
                 "remainder_to_mint": "0.174259132506908003",
                 "last_mint_block_time": "2023-04-05T21:56:35.429380906Z",
-                "remainder_from_previous_period": "0.000000000000000000"
+                "remainder_from_previous_period": "0.000000000000000000",
             },
-            "state_history": []
+            "state_history": [],
         }
         expected_response = ParseDict(expected_content, QueryStateResponse())
 
@@ -106,11 +105,11 @@ class CfeMinterRestClientTestCase(unittest.TestCase):
                             "exponential_step_minting": {
                                 "amount": "32000000000000",
                                 "step_duration": "126230400s",
-                                "amount_multiplier": "0.500000000000000000"
-                            }
+                                "amount_multiplier": "0.500000000000000000",
+                            },
                         }
-                    ]
-                }
+                    ],
+                },
             }
         }
         expected_response = ParseDict(content, QueryParamsResponse())

@@ -14,13 +14,13 @@ C4E_URL := https://github.com/chain4energy/c4e-chain
 C4E_VERSION := v1.2.0
 C4E_DIR := build/c4e-proto-schema
 
-COSMPY_PROTOS_DIR := cosmpy/protos
-COSMPY_SRC_DIR := cosmpy
-COSMPY_TESTS_DIR := tests
-COSMPY_EXAMPLES_DIR := examples
-COSMPY_SCRIPTS_DIR := scripts
+C4EPY_PROTOS_DIR := c4epy/protos
+C4EPY_SRC_DIR := c4epy
+C4EPY_TESTS_DIR := tests
+C4EPY_EXAMPLES_DIR := examples
+C4EPY_SCRIPTS_DIR := scripts
 
-PYTHON_CODE_DIRS := $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) $(COSMPY_EXAMPLES_DIR) $(COSMPY_SCRIPTS_DIR)
+PYTHON_CODE_DIRS := $(C4EPY_SRC_DIR) $(C4EPY_TESTS_DIR) $(C4EPY_EXAMPLES_DIR) $(C4EPY_SCRIPTS_DIR)
 
 ########################################
 ### Initialise dev environment
@@ -47,18 +47,18 @@ new-env: clean
 # Run all tests
 .PHONY: test
 test:
-	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules
+	coverage run -m pytest $(C4EPY_TESTS_DIR) --doctest-modules
 	$(MAKE) coverage-report
 
 # Run all unit tests
 .PHONY: unit-test
 unit-test:
-	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "not integration"
+	coverage run -m pytest $(C4EPY_TESTS_DIR) --doctest-modules -m "not integration"
 
 # Run all integration tests
 .PHONY: integration-test
 integration-test:
-	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "integration"
+	coverage run -m pytest $(C4EPY_TESTS_DIR) --doctest-modules -m "integration"
 
 # Produce the coverage report. Can see a report summary on the terminal.
 # Detailed report on all modules are placed under /coverage-report
@@ -78,7 +78,7 @@ lint: black isort flake8 vulture
 # Automatically format the code using black
 .PHONY: black
 black:
-	black $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
+	black $(PYTHON_CODE_DIRS) --exclude $(C4EPY_PROTOS_DIR)
 
 # Automatically sort the imports
 .PHONY: isort
@@ -88,7 +88,7 @@ isort:
 # Check the code format
 .PHONY: black-check
 black-check:
-	black --check --verbose $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
+	black --check --verbose $(PYTHON_CODE_DIRS) --exclude $(C4EPY_PROTOS_DIR)
 
 # Check the imports are sorted
 .PHONY: isort-check
@@ -116,8 +116,8 @@ security: bandit safety
 # Check the security of the code
 .PHONY: bandit
 bandit:
-	bandit -r $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) -s B101
-	bandit -r $(COSMPY_EXAMPLES_DIR) -s B101,B105
+	bandit -r $(C4EPY_SRC_DIR) $(C4EPY_TESTS_DIR) -s B101
+	bandit -r $(C4EPY_EXAMPLES_DIR) -s B101,B105
 
 # Check the security of the code for known vulnerabilities
 .PHONY: safety
@@ -131,7 +131,7 @@ safety:
 # Check types (statically) using mypy
 .PHONY: mypy
 mypy:
-	mypy $(PYTHON_CODE_DIRS) --exclude $(COSMPY_PROTOS_DIR)
+	mypy $(PYTHON_CODE_DIRS) --exclude $(C4EPY_PROTOS_DIR)
 
 # Lint the code using pylint
 .PHONY: pylint
@@ -258,21 +258,21 @@ unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1))
 proto: fetch_proto_schema_source generate_proto_types generate_init_py_files
 
 generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(C4E_DIR)
-	rm -frv $(COSMPY_PROTOS_DIR)/*
-	# python3 -m grpc_tools.protoc --proto_path=$(WASMD_DIR)/proto --proto_path=$(WASMD_DIR)/third_party/proto  --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(WASMD_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
-	python3 -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(IBCGO_DIR)/third_party/proto  --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	rm -frv $(C4EPY_PROTOS_DIR)/*
+	# python3 -m grpc_tools.protoc --proto_path=$(WASMD_DIR)/proto --proto_path=$(WASMD_DIR)/third_party/proto  --python_out=$(C4EPY_PROTOS_DIR) --grpc_python_out=$(C4EPY_PROTOS_DIR) $(shell find $(WASMD_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python3 -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(IBCGO_DIR)/third_party/proto  --python_out=$(C4EPY_PROTOS_DIR) --grpc_python_out=$(C4EPY_PROTOS_DIR) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 # ensure cosmos-sdk is last as previous modules may have duplicated proto models which are now outdated
-	python3 -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(COSMOS_SDK_DIR)/third_party/proto  --proto_path=$(IBCGO_DIR)/third_party/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOS_SDK_DIR) $(IBCGO_DIR)/third_party/proto/gogoproto \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python3 -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(COSMOS_SDK_DIR)/third_party/proto  --proto_path=$(IBCGO_DIR)/third_party/proto --python_out=$(C4EPY_PROTOS_DIR) --grpc_python_out=$(C4EPY_PROTOS_DIR) $(shell find $(COSMOS_SDK_DIR) $(IBCGO_DIR)/third_party/proto/gogoproto \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 	# other chains modules
-	python3 -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(IBCGO_DIR)/third_party/proto --proto_path=$(C4E_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(C4E_DIR) $(IBCGO_DIR)/third_party/proto/gogoproto  \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python3 -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(IBCGO_DIR)/third_party/proto --proto_path=$(C4E_DIR)/proto --python_out=$(C4EPY_PROTOS_DIR) --grpc_python_out=$(C4EPY_PROTOS_DIR) $(shell find $(C4E_DIR) $(IBCGO_DIR)/third_party/proto/gogoproto  \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 
 fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(C4E_DIR)
 
 .PHONY: generate_init_py_files
 generate_init_py_files: generate_proto_types
-	find $(COSMPY_PROTOS_DIR)/ -type d -exec touch {}/__init__.py \;
+	find $(C4EPY_PROTOS_DIR)/ -type d -exec touch {}/__init__.py \;
 # restore root __init__.py as it contains code to have the proto files module available
-	git restore $(COSMPY_PROTOS_DIR)/__init__.py
+	git restore $(C4EPY_PROTOS_DIR)/__init__.py
 
 $(SOURCE): $(COSMOS_SDK_DIR)
 

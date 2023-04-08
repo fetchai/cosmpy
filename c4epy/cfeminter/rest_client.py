@@ -26,12 +26,12 @@ from c4epy.cfeminter.interface import CfeMinter
 from c4epy.common.rest_client import RestClient
 from c4epy.common.utils import json_encode
 from c4epy.protos.c4echain.cfeminter.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
     QueryInflationRequest,
     QueryInflationResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
     QueryStateRequest,
-    QueryStateResponse
+    QueryStateResponse,
 )
 
 
@@ -50,7 +50,7 @@ class CfeMinterRestClient(CfeMinter):
 
     def Inflation(self, request: QueryInflationRequest) -> QueryInflationResponse:
         """
-        Queries a list of Inflation items.
+        Query a list of Inflation items.
 
         :param request: QueryInflationRequest
 
@@ -72,7 +72,7 @@ class CfeMinterRestClient(CfeMinter):
 
     def State(self, request: QueryStateRequest) -> QueryStateResponse:
         """
-        Queries a list of States items.
+        Query a list of States items.
 
         :param request: QueryStateRequest
 
@@ -81,8 +81,12 @@ class CfeMinterRestClient(CfeMinter):
         json_response = self._rest_api.get(f"{self.API_URL}/state")
         # todo: to remove when v1.2.0 come to production
         j = json.loads(json_response)
-        remainder_from_previous_period = j['minter_state']['remainder_from_previous_period']
-        del j['minter_state']['remainder_from_previous_period']
-        j['minter_state']['remainder_from_previous_minter'] = remainder_from_previous_period
+        remainder_from_previous_period = j["minter_state"][
+            "remainder_from_previous_period"
+        ]
+        del j["minter_state"]["remainder_from_previous_period"]
+        j["minter_state"][
+            "remainder_from_previous_minter"
+        ] = remainder_from_previous_period
         json_response = json_encode(j).encode("utf-8")
         return Parse(json_response, QueryStateResponse())

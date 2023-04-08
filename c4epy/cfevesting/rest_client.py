@@ -18,24 +18,24 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of cfedistributor interface using REST."""
-import json
 
 from google.protobuf.json_format import Parse
 
 from c4epy.cfevesting.interface import CfeVesting
 from c4epy.common.rest_client import RestClient
 from c4epy.protos.c4echain.cfevesting.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
-    QueryVestingTypeRequest,
-    QueryVestingTypeResponse,
-    QueryVestingPoolsRequest,
-    QueryVestingPoolsResponse,
     QueryGenesisVestingsSummaryRequest,
     QueryGenesisVestingsSummaryResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QueryVestingPoolsRequest,
+    QueryVestingPoolsResponse,
+    QueryVestingTypeRequest,
+    QueryVestingTypeResponse,
     QueryVestingsSummaryRequest,
-    QueryVestingsSummaryResponse
+    QueryVestingsSummaryResponse,
 )
+
 
 class CfeVestingRestClient(CfeVesting):
     """cfevesting REST client."""
@@ -63,7 +63,7 @@ class CfeVestingRestClient(CfeVesting):
 
     def VestingType(self, request: QueryVestingTypeRequest) -> QueryVestingTypeResponse:
         """
-        Queries a list of VestingType items.
+        Query a list of VestingType items.
 
         :param request: QueryStatesRequest
 
@@ -72,20 +72,26 @@ class CfeVestingRestClient(CfeVesting):
         json_response = self._rest_api.get(f"{self.API_URL}/vesting_type")
         return Parse(json_response, QueryVestingTypeResponse())
 
-    def VestingPools(self, request: QueryVestingPoolsRequest) -> QueryVestingPoolsResponse:
+    def VestingPools(
+        self, request: QueryVestingPoolsRequest
+    ) -> QueryVestingPoolsResponse:
         """
-        Queries a list of Vesting items.
+        Query a list of Vesting items.
 
         :param request: QueryParamsRequest
 
         :return: QueryParamsResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/vesting_pools/{request.owner}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/vesting_pools/{request.owner}"
+        )
         return Parse(json_response, QueryVestingPoolsResponse())
 
-    def VestingsSummary(self, request: QueryVestingsSummaryRequest) -> QueryVestingsSummaryResponse:
+    def VestingsSummary(
+        self, request: QueryVestingsSummaryRequest
+    ) -> QueryVestingsSummaryResponse:
         """
-        Queries a summary of the entire vesting.
+        Query a summary of the entire vesting.
 
         :param request: QueryParamsRequest
 
@@ -94,10 +100,11 @@ class CfeVestingRestClient(CfeVesting):
         json_response = self._rest_api.get(f"{self.API_URL}/summary")
         return Parse(json_response, QueryVestingsSummaryResponse())
 
-    def GenesisVestingsSummary(self,
-                               request: QueryGenesisVestingsSummaryRequest) -> QueryGenesisVestingsSummaryResponse:
+    def GenesisVestingsSummary(
+        self, request: QueryGenesisVestingsSummaryRequest
+    ) -> QueryGenesisVestingsSummaryResponse:
         """
-        Queries a list of GenesisVestingsSummary items.
+        Query a list of GenesisVestingsSummary items.
 
         :param request: QueryParamsRequest
 

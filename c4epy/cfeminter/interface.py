@@ -22,26 +22,28 @@
 from abc import ABC, abstractmethod
 
 from c4epy.protos.c4echain.cfeminter.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
     QueryInflationRequest,
     QueryInflationResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
     QueryStateRequest,
-    QueryStateResponse
+    QueryStateResponse,
 )
 
 
 class CfeMinter(ABC):
     """cfedistributor abstract class."""
+
     @abstractmethod
     def Inflation(self, request: QueryInflationRequest) -> QueryInflationResponse:
         """
-        Queries a list of Inflation items.
+        Query a list of Inflation items.
 
         :param request: QueryInflationRequest
 
         :return: QueryInflationResponse
         """
+
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
@@ -51,10 +53,11 @@ class CfeMinter(ABC):
 
         :return: QueryParamsResponse
         """
+
     @abstractmethod
     def State(self, request: QueryStateRequest) -> QueryStateResponse:
         """
-        Queries a list of State items.
+        Query a list of State items.
 
         :param request: QueryStatesRequest
 

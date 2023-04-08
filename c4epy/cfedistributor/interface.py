@@ -25,12 +25,13 @@ from c4epy.protos.c4echain.cfedistributor.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
     QueryStatesRequest,
-    QueryStatesResponse
+    QueryStatesResponse,
 )
 
 
 class CfeDistributor(ABC):
     """cfedistributor abstract class."""
+
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
@@ -44,7 +45,7 @@ class CfeDistributor(ABC):
     @abstractmethod
     def States(self, request: QueryStatesRequest) -> QueryStatesResponse:
         """
-        Queries a list of States items.
+        Query a list of States items.
 
         :param request: QueryStatesRequest
 

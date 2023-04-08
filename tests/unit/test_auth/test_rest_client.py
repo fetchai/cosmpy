@@ -32,6 +32,9 @@ from c4epy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
 )
+from c4epy.protos.cosmos.crypto.secp256k1.keys_pb2 import (  # noqa # needed for protobuf decode
+    PubKey,
+)
 
 from tests.helpers import MockRestClient
 
@@ -49,14 +52,13 @@ class AuthRestClientTestCase(unittest.TestCase):
                 "address": "c4e1t62t32vvkr78zdws3jvu9rxjkz3fy0ex4v7e7l",
                 "pub_key": {
                     "@type": "/cosmos.crypto.secp256k1.PubKey",
-                    "key": "AkFO92OOwGUK+88iMsPrOgh8tqkIbiJMRpPz4ezzyd2q"
+                    "key": "AkFO92OOwGUK+88iMsPrOgh8tqkIbiJMRpPz4ezzyd2q",
                 },
                 "account_number": "0",
-                "sequence": "1"
+                "sequence": "1",
             }
         }
-        # necessary import
-        from c4epy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey
+
         expected_response = ParseDict(content, QueryAccountResponse())
 
         mock_client = MockRestClient(json_encode(content))

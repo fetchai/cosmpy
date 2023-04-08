@@ -92,9 +92,7 @@ from c4epy.protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
 )
 from c4epy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
-from c4epy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
-    QueryStub as CosmWasmGrpcClient,
-)
+from c4epy.protos.cosmwasm.wasm.v1.query_pb2_grpc import QueryStub as CosmWasmGrpcClient
 from c4epy.staking.rest_client import StakingRestClient
 from c4epy.tx.rest_client import TxRestClient
 

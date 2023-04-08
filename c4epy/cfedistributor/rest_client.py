@@ -27,7 +27,7 @@ from c4epy.protos.c4echain.cfedistributor.query_pb2 import (
     QueryParamsRequest,
     QueryParamsResponse,
     QueryStatesRequest,
-    QueryStatesResponse
+    QueryStatesResponse,
 )
 
 
@@ -57,7 +57,7 @@ class CfeDistributorRestClient(CfeDistributor):
 
     def States(self, request: QueryStatesRequest) -> QueryStatesResponse:
         """
-        Queries a list of States items.
+        Query a list of States items.
 
         :param request: QueryStatesRequest
 

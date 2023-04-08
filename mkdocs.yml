@@ -1,6 +1,6 @@
-site_name: CosmPy
+site_name: C4EPy
 site_url: https://docs.fetch.ai/cosmpy
-site_description: Everything you need to know about CosmPy.
+site_description: Everything you need to know about C4EPy.
 repo_url: https://github.com/fetchai/cosmpy
 repo_name: fetchai/cosmpy
 edit_uri: ""

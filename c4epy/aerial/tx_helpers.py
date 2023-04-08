@@ -24,11 +24,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from typing import Dict, List, Optional, Union
 
-from c4epy.aerial.exceptions import (
-    BroadcastError,
-    InsufficientFeesError,
-    OutOfGasError,
-)
+from c4epy.aerial.exceptions import BroadcastError, InsufficientFeesError, OutOfGasError
 from c4epy.crypto.address import Address
 
 

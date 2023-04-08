@@ -24,22 +24,22 @@ from google.protobuf.json_format import Parse
 from c4epy.cfesignature.interface import CfeSignature
 from c4epy.common.rest_client import RestClient
 from c4epy.protos.c4echain.cfesignature.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
     QueryCreateReferenceIdRequest,
     QueryCreateReferenceIdResponse,
-    QueryCreateStorageKeyRequest,
-    QueryCreateStorageKeyResponse,
     QueryCreateReferencePayloadLinkRequest,
     QueryCreateReferencePayloadLinkResponse,
-    QueryVerifySignatureRequest,
-    QueryVerifySignatureResponse,
+    QueryCreateStorageKeyRequest,
+    QueryCreateStorageKeyResponse,
     QueryGetAccountInfoRequest,
     QueryGetAccountInfoResponse,
+    QueryGetReferencePayloadLinkRequest,
+    QueryGetReferencePayloadLinkResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
     QueryVerifyReferencePayloadLinkRequest,
     QueryVerifyReferencePayloadLinkResponse,
-    QueryGetReferencePayloadLinkRequest,
-    QueryGetReferencePayloadLinkResponse
+    QueryVerifySignatureRequest,
+    QueryVerifySignatureResponse,
 )
 
 
@@ -67,82 +67,107 @@ class CfeSignatureRestClient(CfeSignature):
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())
 
-    def CreateReferenceId(self, request: QueryCreateReferenceIdRequest) -> QueryCreateReferenceIdResponse:
+    def CreateReferenceId(
+        self, request: QueryCreateReferenceIdRequest
+    ) -> QueryCreateReferenceIdResponse:
         """
-        Queries a list of CreateReferenceId items.
+        Query a list of CreateReferenceId items.
 
         :param request: QueryCreateReferenceIdRequest
 
         :return: QueryCreateReferenceIdResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/create_reference_id/{request.creator}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/create_reference_id/{request.creator}"
+        )
         return Parse(json_response, QueryCreateReferenceIdResponse())
 
-    def CreateStorageKey(self, request: QueryCreateStorageKeyRequest) -> QueryCreateStorageKeyResponse:
+    def CreateStorageKey(
+        self, request: QueryCreateStorageKeyRequest
+    ) -> QueryCreateStorageKeyResponse:
         """
-        Queries a list of CreateStorageKey items.
+        Query a list of CreateStorageKey items.
 
         :param request: QueryCreateStorageKeyRequest
 
         :return: QueryCreateStorageKeyResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/create_storage_key/{request.targetAccAddress}/{request.referenceId}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/create_storage_key/{request.targetAccAddress}/{request.referenceId}"
+        )
         return Parse(json_response, QueryCreateStorageKeyResponse())
 
-    def CreateReferencePayloadLink(self,
-                                   request: QueryCreateReferencePayloadLinkRequest) -> QueryCreateReferencePayloadLinkResponse:
+    def CreateReferencePayloadLink(
+        self, request: QueryCreateReferencePayloadLinkRequest
+    ) -> QueryCreateReferencePayloadLinkResponse:
         """
-        Queries a list of CreateReferencePayloadLink items.
+        Query a list of CreateReferencePayloadLink items.
 
         :param request: QueryCreateReferencePayloadLinkRequest
 
         :return: QueryCreateReferencePayloadLinkResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/create_reference_payload_link/{request.referenceId}/{request.payloadHash}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/create_reference_payload_link/{request.referenceId}/{request.payloadHash}"
+        )
         return Parse(json_response, QueryCreateReferencePayloadLinkResponse())
 
-    def VerifySignature(self, request: QueryVerifySignatureRequest) -> QueryVerifySignatureResponse:
+    def VerifySignature(
+        self, request: QueryVerifySignatureRequest
+    ) -> QueryVerifySignatureResponse:
         """
-        Queries a list of State items.
+        Query a list of State items.
 
         :param request: QueryVerifySignatureRequest
 
         :return: QueryVerifySignatureResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/verify_signature/{request.referenceId}/{request.targetAccAddress}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/verify_signature/{request.referenceId}/{request.targetAccAddress}"
+        )
         return Parse(json_response, QueryVerifySignatureResponse())
 
-    def GetAccountInfo(self, request: QueryGetAccountInfoRequest) -> QueryGetAccountInfoResponse:
+    def GetAccountInfo(
+        self, request: QueryGetAccountInfoRequest
+    ) -> QueryGetAccountInfoResponse:
         """
-        Queries a list of GetAccountInfo items.
+        Query a list of GetAccountInfo items.
 
         :param request: QueryGetAccountInfoRequest
 
         :return: QueryGetAccountInfoResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/get_account_info/{request.accAddressString}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/get_account_info/{request.accAddressString}"
+        )
         return Parse(json_response, QueryGetAccountInfoResponse())
 
-    def VerifyReferencePayloadLink(self,
-                                   request: QueryVerifyReferencePayloadLinkRequest) -> QueryVerifyReferencePayloadLinkResponse:
+    def VerifyReferencePayloadLink(
+        self, request: QueryVerifyReferencePayloadLinkRequest
+    ) -> QueryVerifyReferencePayloadLinkResponse:
         """
-        Queries a list of VerifyReferencePayloadLink items.
+        Query a list of VerifyReferencePayloadLink items.
 
         :param request: QueryVerifyReferencePayloadLinkRequest
 
         :return: QueryVerifyReferencePayloadLinkResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/verify_reference_payload_link/{request.referenceId}/{request.payloadHash}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/verify_reference_payload_link/{request.referenceId}/{request.payloadHash}"
+        )
         return Parse(json_response, QueryVerifyReferencePayloadLinkResponse())
 
-    def GetReferencePayloadLink(self,
-                                request: QueryGetReferencePayloadLinkRequest) -> QueryGetReferencePayloadLinkResponse:
+    def GetReferencePayloadLink(
+        self, request: QueryGetReferencePayloadLinkRequest
+    ) -> QueryGetReferencePayloadLinkResponse:
         """
-        Queries a list of GetReferencePayloadLink items.
+        Query a list of GetReferencePayloadLink items.
 
         :param request: QueryGetReferencePayloadLinkRequest
 
         :return: QueryGetReferencePayloadLinkResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/get_reference_payload_link/{request.referenceId}")
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/get_reference_payload_link/{request.referenceId}"
+        )
         return Parse(json_response, QueryGetReferencePayloadLinkResponse())

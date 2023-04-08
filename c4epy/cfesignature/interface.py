@@ -22,22 +22,22 @@
 from abc import ABC, abstractmethod
 
 from c4epy.protos.c4echain.cfesignature.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
     QueryCreateReferenceIdRequest,
     QueryCreateReferenceIdResponse,
-    QueryCreateStorageKeyRequest,
-    QueryCreateStorageKeyResponse,
     QueryCreateReferencePayloadLinkRequest,
     QueryCreateReferencePayloadLinkResponse,
-    QueryVerifySignatureRequest,
-    QueryVerifySignatureResponse,
+    QueryCreateStorageKeyRequest,
+    QueryCreateStorageKeyResponse,
     QueryGetAccountInfoRequest,
     QueryGetAccountInfoResponse,
+    QueryGetReferencePayloadLinkRequest,
+    QueryGetReferencePayloadLinkResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
     QueryVerifyReferencePayloadLinkRequest,
     QueryVerifyReferencePayloadLinkResponse,
-    QueryGetReferencePayloadLinkRequest,
-    QueryGetReferencePayloadLinkResponse
+    QueryVerifySignatureRequest,
+    QueryVerifySignatureResponse,
 )
 
 
@@ -55,9 +55,11 @@ class CfeSignature(ABC):
         """
 
     @abstractmethod
-    def CreateReferenceId(self, request: QueryCreateReferenceIdRequest) -> QueryCreateReferenceIdResponse:
+    def CreateReferenceId(
+        self, request: QueryCreateReferenceIdRequest
+    ) -> QueryCreateReferenceIdResponse:
         """
-        Queries a list of CreateReferenceId items.
+        Query a list of CreateReferenceId items.
 
         :param request: QueryCreateReferenceIdRequest
 
@@ -65,9 +67,11 @@ class CfeSignature(ABC):
         """
 
     @abstractmethod
-    def CreateStorageKey(self, request: QueryCreateStorageKeyRequest) -> QueryCreateStorageKeyResponse:
+    def CreateStorageKey(
+        self, request: QueryCreateStorageKeyRequest
+    ) -> QueryCreateStorageKeyResponse:
         """
-        Queries a list of CreateStorageKey items.
+        Query a list of CreateStorageKey items.
 
         :param request: QueryCreateStorageKeyRequest
 
@@ -75,10 +79,11 @@ class CfeSignature(ABC):
         """
 
     @abstractmethod
-    def CreateReferencePayloadLink(self,
-                                   request: QueryCreateReferencePayloadLinkRequest) -> QueryCreateReferencePayloadLinkResponse:
+    def CreateReferencePayloadLink(
+        self, request: QueryCreateReferencePayloadLinkRequest
+    ) -> QueryCreateReferencePayloadLinkResponse:
         """
-        Queries a list of CreateReferencePayloadLink items.
+        Query a list of CreateReferencePayloadLink items.
 
         :param request: QueryCreateReferencePayloadLinkRequest
 
@@ -86,9 +91,11 @@ class CfeSignature(ABC):
         """
 
     @abstractmethod
-    def VerifySignature(self, request: QueryVerifySignatureRequest) -> QueryVerifySignatureResponse:
+    def VerifySignature(
+        self, request: QueryVerifySignatureRequest
+    ) -> QueryVerifySignatureResponse:
         """
-        Queries a list of State items.
+        Query a list of State items.
 
         :param request: QueryVerifySignatureRequest
 
@@ -96,9 +103,11 @@ class CfeSignature(ABC):
         """
 
     @abstractmethod
-    def GetAccountInfo(self, request: QueryGetAccountInfoRequest) -> QueryGetAccountInfoResponse:
+    def GetAccountInfo(
+        self, request: QueryGetAccountInfoRequest
+    ) -> QueryGetAccountInfoResponse:
         """
-        Queries a list of GetAccountInfo items.
+        Query a list of GetAccountInfo items.
 
         :param request: QueryGetAccountInfoRequest
 
@@ -106,10 +115,11 @@ class CfeSignature(ABC):
         """
 
     @abstractmethod
-    def VerifyReferencePayloadLink(self,
-                                   request: QueryVerifyReferencePayloadLinkRequest) -> QueryVerifyReferencePayloadLinkResponse:
+    def VerifyReferencePayloadLink(
+        self, request: QueryVerifyReferencePayloadLinkRequest
+    ) -> QueryVerifyReferencePayloadLinkResponse:
         """
-        Queries a list of VerifyReferencePayloadLink items.
+        Query a list of VerifyReferencePayloadLink items.
 
         :param request: QueryVerifyReferencePayloadLinkRequest
 
@@ -117,10 +127,11 @@ class CfeSignature(ABC):
         """
 
     @abstractmethod
-    def GetReferencePayloadLink(self,
-                                request: QueryGetReferencePayloadLinkRequest) -> QueryGetReferencePayloadLinkResponse:
+    def GetReferencePayloadLink(
+        self, request: QueryGetReferencePayloadLinkRequest
+    ) -> QueryGetReferencePayloadLinkResponse:
         """
-        Queries a list of GetReferencePayloadLink items.
+        Query a list of GetReferencePayloadLink items.
 
         :param request: QueryGetReferencePayloadLinkRequest
 

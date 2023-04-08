@@ -22,21 +22,22 @@
 from abc import ABC, abstractmethod
 
 from c4epy.protos.c4echain.cfevesting.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
-    QueryVestingTypeRequest,
-    QueryVestingTypeResponse,
-    QueryVestingPoolsRequest,
-    QueryVestingPoolsResponse,
     QueryGenesisVestingsSummaryRequest,
     QueryGenesisVestingsSummaryResponse,
+    QueryParamsRequest,
+    QueryParamsResponse,
+    QueryVestingPoolsRequest,
+    QueryVestingPoolsResponse,
+    QueryVestingTypeRequest,
+    QueryVestingTypeResponse,
     QueryVestingsSummaryRequest,
-    QueryVestingsSummaryResponse
+    QueryVestingsSummaryResponse,
 )
 
 
 class CfeVesting(ABC):
     """cfevesting abstract class."""
+
     @abstractmethod
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
@@ -46,37 +47,47 @@ class CfeVesting(ABC):
 
         :return: QueryParamsResponse
         """
+
     @abstractmethod
     def VestingType(self, request: QueryVestingTypeRequest) -> QueryVestingTypeResponse:
         """
-        Queries a list of VestingType items.
+        Query a list of VestingType items.
 
         :param request: QueryStatesRequest
 
         :return: QueryStatesResponse
         """
+
     @abstractmethod
-    def VestingPools(self, request: QueryVestingPoolsRequest) -> QueryVestingPoolsResponse:
+    def VestingPools(
+        self, request: QueryVestingPoolsRequest
+    ) -> QueryVestingPoolsResponse:
         """
-        Queries a list of Vesting items.
+        Query a list of Vesting items.
 
         :param request: QueryParamsRequest
 
         :return: QueryParamsResponse
         """
+
     @abstractmethod
-    def VestingsSummary(self, request: QueryVestingsSummaryRequest) -> QueryVestingsSummaryResponse:
+    def VestingsSummary(
+        self, request: QueryVestingsSummaryRequest
+    ) -> QueryVestingsSummaryResponse:
         """
-        Queries a summary of the entire vesting.
+        Query a summary of the entire vesting.
 
         :param request: QueryParamsRequest
 
         :return: QueryParamsResponse
         """
+
     @abstractmethod
-    def GenesisVestingsSummary(self, request: QueryGenesisVestingsSummaryRequest) -> QueryGenesisVestingsSummaryResponse:
+    def GenesisVestingsSummary(
+        self, request: QueryGenesisVestingsSummaryRequest
+    ) -> QueryGenesisVestingsSummaryResponse:
         """
-        Queries a list of GenesisVestingsSummary items.
+        Query a list of GenesisVestingsSummary items.
 
         :param request: QueryParamsRequest
 
