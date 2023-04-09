@@ -20,11 +20,11 @@ jobs:
     - name: Run release script
       env:
         PYPI_USERNAME: __token__
-        PYPI_PASSWORD: ${{secrets.FETCHBOT_PYPI_TOKEN}}
+        PYPI_PASSWORD: ${{secrets.CROSNESTBOT_PYPI_TOKEN}}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # required to make a release page
         GH_TOKEN: ${{ github.token }}
       run: |
         pip install tomli packaging poetry
-        git config --global user.email "ci-bot@fetch.ai"
+        git config --global user.email "dapie@cros-nest.com"
         git config --global user.name "CI BOT"
         python3 ./scripts/do-release.py

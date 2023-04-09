@@ -24,8 +24,8 @@ based on the CosmPy library
   <a href="https://github.com/crosnest/c4epy/actions/workflows/workflow.yml">
     <img alt="CosmPy sanity checks and tests" src="https://github.com/crosnest/c4epy/actions/workflows/workflow.yml/badge.svg">
   </a>
-  <a href="https://pypi.org/project/cosmpy/">
-    <img alt="Download per Month" src="https://img.shields.io/pypi/dm/cosmpy">
+  <a href="https://pypi.org/project/c4epy/">
+    <img alt="Download per Month" src="https://img.shields.io/pypi/dm/c4epy">
   </a>
 </p>
 

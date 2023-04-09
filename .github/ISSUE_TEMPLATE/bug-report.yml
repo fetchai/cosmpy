@@ -17,9 +17,11 @@ body:
           required: true
         - label: I checked the [documentation](http://docs.fetch.ai/CosmPy/) and found no answer to my problem.
           required: true
-        - label: I checked the [existing issues](https://github.com/fetchai/cosmpy/issues) to make sure my problem has not already been reported.
+        - label: I checked the C4ePy [existing issues](https://github.com/crosnest/c4epy/issues) to make sure my problem has not already been reported.
           required: true
-        - label: I have read the [code of conduct](https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md) before creating this issue.
+        - label: I checked the CosmPy [existing issues](https://github.com/fetchai/cosmpy/issues) to make sure my problem has not already been reported.
+          required: true
+        - label: I have read the [code of conduct](https://github.com/crosnest/c4epy/blob/master/CODE_OF_CONDUCT.md) before creating this issue.
           required: true
   - type: textarea
     id: expected
@@ -48,7 +50,7 @@ body:
       label: Context
       description: Any relevant information about your setup (this is important in case the issue is not reproducible except for under certain conditions)
       placeholder: |
-        Operating system, Python version, CosmPy version, ...
+        Operating system, Python version, C4ePy version, ...
     validations:
       required: true
   - type: textarea

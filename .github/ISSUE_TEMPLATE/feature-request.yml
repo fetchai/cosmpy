@@ -15,7 +15,9 @@ body:
       options:
         - label: I checked the [documentation](http://docs.fetch.ai/CosmPy/) and made sure this feature does not already exist.
           required: true
-        - label: I checked the [existing issues](https://github.com/fetchai/cosmpy/issues) to make sure this feature has not already been requested.
+        - label: I checked the C4ePy [existing issues](https://github.com/crosnest/c4epy/issues) to make sure this feature has not already been requested.
+          required: true
+        - label: I checked the CosmPy [existing issues](https://github.com/fetchai/cosmpy/issues) to make sure this feature has not already been requested.
           required: true
         - label: I have read the [code of conduct](https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md) before creating this issue.
           required: true
