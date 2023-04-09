@@ -89,11 +89,11 @@ class TestTxRestAPI(TestTx):
     def _get_network_config(self):
         return NetworkConfig(
             chain_id="dorado-1",
-            url="rest+https://rest-dorado.fetch.ai:443",
-            fee_minimum_gas_price=5000000000,
+            url="rest+https://lcd-testnet.c4e.io:443",
+            fee_minimum_gas_price=0.025,
             fee_denomination="uc4e",
             staking_denomination="uc4e",
-            faucet_url="https://faucet-dorado.fetch.ai",
+            faucet_url=None,
         )
 
 

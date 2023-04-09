@@ -25,7 +25,6 @@ from datetime import timedelta
 from typing import Dict, List, Optional, Union
 
 from c4epy.aerial.exceptions import BroadcastError, InsufficientFeesError, OutOfGasError
-from c4epy.crypto.address import Address
 
 
 @dataclass
@@ -122,38 +121,6 @@ class SubmittedTx:
         :return: response
         """
         return self._response
-
-    @property
-    def contract_code_id(self) -> Optional[int]:
-        """Get the contract code id.
-
-        :return: return contract code id if exist else None
-        """
-        if self._response is None:
-            return None
-
-        code_id = self._response.events.get("store_code", {}).get("code_id")
-        if code_id is None:
-            return None
-
-        return int(code_id)
-
-    @property
-    def contract_address(self) -> Optional[Address]:
-        """Get the contract address.
-
-        :return: return contract address if exist else None
-        """
-        if self._response is None:
-            return None
-
-        contract_address = self._response.events.get("instantiate", {}).get(
-            "_contract_address"
-        )
-        if contract_address is None:
-            return None
-
-        return Address(contract_address)
 
     def wait_to_complete(
         self,

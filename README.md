@@ -1,27 +1,28 @@
 <h1 align="center">
-    <b>CosmPy</b>
+    <b>c4epy</b>
 </h1>
 
 <p align="center">
-A python library for interacting with cosmos based blockchain networks
+A python library for interacting with Chain4energy blockchain<br>
+based on the CosmPy library
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/cosmpy/">
-    <img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy">
+  <a href="https://pypi.org/project/c4epy/">
+    <img alt="PyPI" src="https://img.shields.io/pypi/v/c4epy">
   </a>
-  <a href="https://pypi.org/project/cosmpy/">
-    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/cosmpy">
+  <a href="https://pypi.org/project/c4epy/">
+    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/c4epy">
   </a>
-  <a href="https://github.com/fetchai/cosmpy/blob/master/LICENSE">
-    <img alt="License" src="https://img.shields.io/pypi/l/cosmpy">
+  <a href="https://github.com/crosnest/c4epy/blob/master/LICENSE">
+    <img alt="License" src="https://img.shields.io/pypi/l/c4epy">
   </a>
   <br />
   <a>
-    <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/cosmpy">
+    <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/c4epy">
   </a>
-  <a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
-    <img alt="CosmPy sanity checks and tests" src="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg">
+  <a href="https://github.com/crosnest/c4epy/actions/workflows/workflow.yml">
+    <img alt="CosmPy sanity checks and tests" src="https://github.com/crosnest/c4epy/actions/workflows/workflow.yml/badge.svg">
   </a>
   <a href="https://pypi.org/project/cosmpy/">
     <img alt="Download per Month" src="https://img.shields.io/pypi/dm/cosmpy">
@@ -42,9 +43,9 @@ Below is a simple example for querying an account's balances:
 from c4epy.aerial.client import LedgerClient, NetworkConfig
 
 # connect to Fetch.ai network using default parameters
-ledger_client = LedgerClient(NetworkConfig.fetchai_mainnet())
+ledger_client = LedgerClient(NetworkConfig.chain4energy_mainnet())
 
-alice: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
+alice: str = 'c4e1t62t32vvkr78zdws3jvu9rxjkz3fy0ex4v7e7l'
 balances = ledger_client.query_bank_all_balances(alice)
 
 # show all coin balances
@@ -54,17 +55,17 @@ for coin in balances:
 
 ## Documentation
 
-The full documentation can be found [here](https://docs.fetch.ai/CosmPy/).
+The Cosmpy documentation can be found [here](https://docs.fetch.ai/CosmPy/).
 
 ## Examples
 
-Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy`, such as transferring tokens, staking, deploying and interacting with a smart contract, and performing atomic swaps.
+Under the `examples` directory, you can find examples of basic ledger interactions using `c4epy`, such as transferring tokens, staking.
 
 ## Contributing
 
 All contributions are very welcome! Remember, contribution is not only PRs and code, but any help with docs or helping other developers solve their issues are very appreciated!
 
-Read below to learn how you can take part in the CosmPy project.
+Read below to learn how you can take part in the CosmPy or derivative projects like c4epy.
 
 ### Code of Conduct
 
@@ -84,11 +85,11 @@ We use [GitHub Issues][issues] for tracking requests and bugs, and [GitHub Discu
 
 ## License
 
-The CosmPy project is licensed under [Apache License 2.0][license].
+The C4ePy and CosmPy projects are licensed under [Apache License 2.0][license].
 
-[contributing]: https://github.com/fetchai/cosmpy/blob/master/CONTRIBUTING.md
-[developing]: https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md
-[coc]: https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md
-[discussion]: https://github.com/fetchai/cosmpy/discussions
-[issues]: https://github.com/fetchai/cosmpy/issues
-[license]: https://github.com/fetchai/cosmpy/blob/master/LICENSE
+[contributing]: https://github.com/crosnest/c4epy/blob/master/CONTRIBUTING.md
+[developing]: https://github.com/crosnest/c4epy/blob/master/DEVELOPING.md
+[coc]: https://github.com/crosnest/c4epy/blob/master/CODE_OF_CONDUCT.md
+[discussion]: https://github.com/crosnest/c4epy/discussions
+[issues]: https://github.com/crosnest/c4epy/issues
+[license]: https://github.com/crosnest/c4epy/blob/master/LICENSE

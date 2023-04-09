@@ -77,70 +77,58 @@ class NetworkConfig:
             )
 
     @classmethod
-    def fetchai_dorado_testnet(cls) -> "NetworkConfig":
-        """Fetchai dorado testnet.
+    def chain4energy_veles_testnet(cls) -> "NetworkConfig":
+        """Chain4energy veles testnet.
 
         :return: Network configuration
         """
         return NetworkConfig(
             chain_id="dorado-1",
-            url="grpc+https://grpc-dorado.fetch.ai",
-            fee_minimum_gas_price=5000000000,
-            fee_denomination="atestfet",
-            staking_denomination="atestfet",
-            faucet_url="https://faucet-dorado.fetch.ai",
+            url="rest+https://lcd-testnet.c4e.io/",
+            fee_minimum_gas_price=0.025,
+            fee_denomination="uc4e",
+            staking_denomination="uc4e",
+            faucet_url=None,
         )
 
     @classmethod
-    def fetchai_alpha_testnet(cls):
-        """Get the fetchai alpha testnet.
+    def chain4energy_alpha_testnet(cls):
+        """Get the Chain4energy alpha testnet.
 
         :raises RuntimeError: No alpha testnet available
         """
         raise RuntimeError("No alpha testnet available")
 
     @classmethod
-    def fetchai_beta_testnet(cls):
-        """Get the Fetchai beta testnet.
+    def chain4energy_beta_testnet(cls):
+        """Get the Chain4energy beta testnet.
 
         :raises RuntimeError: No beta testnet available
         """
         raise RuntimeError("No beta testnet available")
 
     @classmethod
-    def fetchai_stable_testnet(cls):
-        """Get the fetchai stable testnet.
+    def chain4energy_stable_testnet(cls):
+        """Get the Chain4energy stable testnet.
 
-        :return: fetchai stable testnet. For now dorado is fetchai stable testnet.
+        :return: Chain4energy stable testnet. For now veles is Chain4energy stable testnet.
         """
-        return cls.fetchai_dorado_testnet()
+        return cls.chain4energy_veles_testnet()
 
     @classmethod
-    def fetchai_mainnet(cls) -> "NetworkConfig":
-        """Get the fetchai mainnet configuration.
+    def chain4energy_mainnet(cls) -> "NetworkConfig":
+        """Get the chain4energy mainnet configuration.
 
-        :return: fetch mainnet configuration
+        :return: C4E mainnet configuration
         """
         return NetworkConfig(
-            chain_id="fetchhub-4",
-            url="grpc+https://grpc-fetchhub.fetch.ai",
-            fee_minimum_gas_price=0,
-            fee_denomination="afet",
-            staking_denomination="afet",
+            chain_id="perun-1",
+            url="grpc+https://grpc.c4e.io",
+            fee_minimum_gas_price=0.025,
+            fee_denomination="uc4e",
+            staking_denomination="uc4e",
             faucet_url=None,
         )
-
-    @classmethod
-    def fetch_mainnet(cls) -> "NetworkConfig":
-        """Get the fetch mainnet.
-
-        :return: fetch mainnet configurations
-        """
-        warnings.warn(
-            "fetch_mainnet is deprecated, use fetchai_mainnet instead",
-            DeprecationWarning,
-        )
-        return cls.fetchai_mainnet()
 
     @classmethod
     def latest_stable_testnet(cls) -> "NetworkConfig":
@@ -149,7 +137,7 @@ class NetworkConfig:
         :return: latest stable testnet
         """
         warnings.warn(
-            "latest_stable_testnet is deprecated, use fetchai_stable_testnet instead",
+            "latest_stable_testnet is deprecated, use chain4energy_stable_testnet instead",
             DeprecationWarning,
         )
-        return cls.fetchai_stable_testnet()
+        return cls.chain4energy_stable_testnet()
