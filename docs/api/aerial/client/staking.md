@@ -1,10 +1,10 @@
-<a id="cosmpy.aerial.client.staking"></a>
+<a id="c4epy.aerial.client.staking"></a>
 
-# cosmpy.aerial.client.staking
+# c4epy.aerial.client.staking
 
 Staking functionality.
 
-<a id="cosmpy.aerial.client.staking.ValidatorStatus"></a>
+<a id="c4epy.aerial.client.staking.ValidatorStatus"></a>
 
 ## ValidatorStatus Objects
 
@@ -14,7 +14,7 @@ class ValidatorStatus(Enum)
 
 Validator status.
 
-<a id="cosmpy.aerial.client.staking.ValidatorStatus.from_proto"></a>
+<a id="c4epy.aerial.client.staking.ValidatorStatus.from_proto"></a>
 
 #### from`_`proto
 
@@ -37,7 +37,7 @@ Get the validator status from proto.
 
 Validator status
 
-<a id="cosmpy.aerial.client.staking.create_delegate_msg"></a>
+<a id="c4epy.aerial.client.staking.create_delegate_msg"></a>
 
 #### create`_`delegate`_`msg
 
@@ -59,7 +59,7 @@ Create delegate message.
 
 Delegate message
 
-<a id="cosmpy.aerial.client.staking.create_redelegate_msg"></a>
+<a id="c4epy.aerial.client.staking.create_redelegate_msg"></a>
 
 #### create`_`redelegate`_`msg
 
@@ -84,7 +84,7 @@ Create redelegate message.
 
 Redelegate message
 
-<a id="cosmpy.aerial.client.staking.create_undelegate_msg"></a>
+<a id="c4epy.aerial.client.staking.create_undelegate_msg"></a>
 
 #### create`_`undelegate`_`msg
 

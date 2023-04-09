@@ -34,12 +34,12 @@ RERUNS_DELAY = 10
 class TestTx:
     """Test Basic Transaction"""
 
-    COIN = "atestfet"
+    COIN = "uc4e"
     GAS_LIMIT: Optional[int] = None
 
     def _get_network_config(self):
         """Get network config."""
-        return NetworkConfig.fetchai_stable_testnet()
+        return NetworkConfig.chain4energy_stable_testnet()
 
     def get_ledger(self):
         """Get Ledger"""
@@ -91,8 +91,8 @@ class TestTxRestAPI(TestTx):
             chain_id="dorado-1",
             url="rest+https://rest-dorado.fetch.ai:443",
             fee_minimum_gas_price=5000000000,
-            fee_denomination="atestfet",
-            staking_denomination="atestfet",
+            fee_denomination="uc4e",
+            staking_denomination="uc4e",
             faucet_url="https://faucet-dorado.fetch.ai",
         )
 

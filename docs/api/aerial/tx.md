@@ -1,10 +1,10 @@
-<a id="cosmpy.aerial.tx"></a>
+<a id="c4epy.aerial.tx"></a>
 
-# cosmpy.aerial.tx
+# c4epy.aerial.tx
 
 Transaction.
 
-<a id="cosmpy.aerial.tx.TxState"></a>
+<a id="c4epy.aerial.tx.TxState"></a>
 
 ## TxState Objects
 
@@ -18,7 +18,7 @@ Transaction state.
 
 - `Enum`: Draft, Sealed, Final
 
-<a id="cosmpy.aerial.tx.SigningMode"></a>
+<a id="c4epy.aerial.tx.SigningMode"></a>
 
 ## SigningMode Objects
 
@@ -32,7 +32,7 @@ Signing mode.
 
 - `Enum`: Direct
 
-<a id="cosmpy.aerial.tx.SigningCfg"></a>
+<a id="c4epy.aerial.tx.SigningCfg"></a>
 
 ## SigningCfg Objects
 
@@ -43,7 +43,7 @@ class SigningCfg()
 
 Transaction signing configuration.
 
-<a id="cosmpy.aerial.tx.SigningCfg.direct"></a>
+<a id="c4epy.aerial.tx.SigningCfg.direct"></a>
 
 #### direct
 
@@ -63,7 +63,7 @@ Transaction signing configuration using direct mode.
 
 Transaction signing configuration
 
-<a id="cosmpy.aerial.tx.Transaction"></a>
+<a id="c4epy.aerial.tx.Transaction"></a>
 
 ## Transaction Objects
 
@@ -73,7 +73,7 @@ class Transaction()
 
 Transaction.
 
-<a id="cosmpy.aerial.tx.Transaction.__init__"></a>
+<a id="c4epy.aerial.tx.Transaction.__init__"></a>
 
 #### `__`init`__`
 
@@ -83,7 +83,7 @@ def __init__()
 
 Init the Transactions with transaction message, state, fee and body.
 
-<a id="cosmpy.aerial.tx.Transaction.state"></a>
+<a id="c4epy.aerial.tx.Transaction.state"></a>
 
 #### state
 
@@ -98,7 +98,7 @@ Get the transaction state.
 
 current state of the transaction
 
-<a id="cosmpy.aerial.tx.Transaction.msgs"></a>
+<a id="c4epy.aerial.tx.Transaction.msgs"></a>
 
 #### msgs
 
@@ -113,7 +113,7 @@ Get the transaction messages.
 
 transaction messages
 
-<a id="cosmpy.aerial.tx.Transaction.fee"></a>
+<a id="c4epy.aerial.tx.Transaction.fee"></a>
 
 #### fee
 
@@ -128,7 +128,7 @@ Get the transaction fee.
 
 transaction fee
 
-<a id="cosmpy.aerial.tx.Transaction.tx"></a>
+<a id="c4epy.aerial.tx.Transaction.tx"></a>
 
 #### tx
 
@@ -147,7 +147,7 @@ Initialize.
 
 transaction
 
-<a id="cosmpy.aerial.tx.Transaction.add_message"></a>
+<a id="c4epy.aerial.tx.Transaction.add_message"></a>
 
 #### add`_`message
 
@@ -169,7 +169,7 @@ Initialize.
 
 transaction with message added
 
-<a id="cosmpy.aerial.tx.Transaction.seal"></a>
+<a id="c4epy.aerial.tx.Transaction.seal"></a>
 
 #### seal
 
@@ -193,7 +193,7 @@ Seal the transaction.
 
 sealed transaction.
 
-<a id="cosmpy.aerial.tx.Transaction.sign"></a>
+<a id="c4epy.aerial.tx.Transaction.sign"></a>
 
 #### sign
 
@@ -221,7 +221,7 @@ Sign the transaction.
 
 signed transaction
 
-<a id="cosmpy.aerial.tx.Transaction.complete"></a>
+<a id="c4epy.aerial.tx.Transaction.complete"></a>
 
 #### complete
 

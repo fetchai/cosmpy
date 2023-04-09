@@ -1,10 +1,10 @@
-<a id="cosmpy.aerial.client.utils"></a>
+<a id="c4epy.aerial.client.utils"></a>
 
-# cosmpy.aerial.client.utils
+# c4epy.aerial.client.utils
 
 Helper functions.
 
-<a id="cosmpy.aerial.client.utils.prepare_and_broadcast_basic_transaction"></a>
+<a id="c4epy.aerial.client.utils.prepare_and_broadcast_basic_transaction"></a>
 
 #### prepare`_`and`_`broadcast`_`basic`_`transaction
 
@@ -33,7 +33,7 @@ Prepare and broadcast basic transaction.
 
 broadcast transaction
 
-<a id="cosmpy.aerial.client.utils.ensure_timedelta"></a>
+<a id="c4epy.aerial.client.utils.ensure_timedelta"></a>
 
 #### ensure`_`timedelta
 
@@ -51,7 +51,7 @@ Return timedelta for interval.
 
 timedelta
 
-<a id="cosmpy.aerial.client.utils.get_paginated"></a>
+<a id="c4epy.aerial.client.utils.get_paginated"></a>
 
 #### get`_`paginated
 

@@ -56,8 +56,8 @@ def main():
 
     wallet = LocalWallet.generate()
 
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.chain4energy_stable_testnet())
 
     wallet_balance = ledger.query_bank_balance(wallet.address())
 
@@ -78,9 +78,7 @@ def main():
 
     while True:
         request_message = {"query_oracle_value": {}}
-        contract.execute(
-            request_message, wallet, funds="100atestfet"
-        ).wait_to_complete()
+        contract.execute(request_message, wallet, funds="100uc4e").wait_to_complete()
 
         result = contract.query({"oracle_value": {}})
         print(f"Oracle value successfully retrieved: {result}")

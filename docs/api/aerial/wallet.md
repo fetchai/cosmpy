@@ -1,10 +1,10 @@
-<a id="cosmpy.aerial.wallet"></a>
+<a id="c4epy.aerial.wallet"></a>
 
-# cosmpy.aerial.wallet
+# c4epy.aerial.wallet
 
 Wallet Generation.
 
-<a id="cosmpy.aerial.wallet.Wallet"></a>
+<a id="c4epy.aerial.wallet.Wallet"></a>
 
 ## Wallet Objects
 
@@ -19,7 +19,7 @@ Wallet Generation.
 - `ABC`: ABC abstract method
 - `UserString`: user string
 
-<a id="cosmpy.aerial.wallet.Wallet.address"></a>
+<a id="c4epy.aerial.wallet.Wallet.address"></a>
 
 #### address
 
@@ -34,7 +34,7 @@ get the address of the wallet.
 
 None
 
-<a id="cosmpy.aerial.wallet.Wallet.public_key"></a>
+<a id="c4epy.aerial.wallet.Wallet.public_key"></a>
 
 #### public`_`key
 
@@ -49,7 +49,7 @@ get the public key of the wallet.
 
 None
 
-<a id="cosmpy.aerial.wallet.Wallet.signer"></a>
+<a id="c4epy.aerial.wallet.Wallet.signer"></a>
 
 #### signer
 
@@ -64,7 +64,7 @@ get the signer of the wallet.
 
 None
 
-<a id="cosmpy.aerial.wallet.Wallet.data"></a>
+<a id="c4epy.aerial.wallet.Wallet.data"></a>
 
 #### data
 
@@ -79,7 +79,7 @@ Get the address of the wallet.
 
 Address
 
-<a id="cosmpy.aerial.wallet.Wallet.__json__"></a>
+<a id="c4epy.aerial.wallet.Wallet.__json__"></a>
 
 #### `__`json`__`
 
@@ -93,7 +93,7 @@ Return the address in string format.
 
 address in string format
 
-<a id="cosmpy.aerial.wallet.LocalWallet"></a>
+<a id="c4epy.aerial.wallet.LocalWallet"></a>
 
 ## LocalWallet Objects
 
@@ -107,7 +107,7 @@ Generate local wallet.
 
 - `Wallet`: wallet
 
-<a id="cosmpy.aerial.wallet.LocalWallet.generate"></a>
+<a id="c4epy.aerial.wallet.LocalWallet.generate"></a>
 
 #### generate
 
@@ -126,7 +126,7 @@ generate the local wallet.
 
 local wallet
 
-<a id="cosmpy.aerial.wallet.LocalWallet.from_mnemonic"></a>
+<a id="c4epy.aerial.wallet.LocalWallet.from_mnemonic"></a>
 
 #### from`_`mnemonic
 
@@ -147,7 +147,7 @@ Generate local wallet from mnemonic.
 
 local wallet
 
-<a id="cosmpy.aerial.wallet.LocalWallet.from_unsafe_seed"></a>
+<a id="c4epy.aerial.wallet.LocalWallet.from_unsafe_seed"></a>
 
 #### from`_`unsafe`_`seed
 
@@ -170,7 +170,7 @@ Generate local wallet from unsafe seed.
 
 Local wallet
 
-<a id="cosmpy.aerial.wallet.LocalWallet.__init__"></a>
+<a id="c4epy.aerial.wallet.LocalWallet.__init__"></a>
 
 #### `__`init`__`
 
@@ -185,7 +185,7 @@ Init wallet with.
 - `private_key`: private key of the wallet
 - `prefix`: prefix, defaults to None
 
-<a id="cosmpy.aerial.wallet.LocalWallet.address"></a>
+<a id="c4epy.aerial.wallet.LocalWallet.address"></a>
 
 #### address
 
@@ -199,7 +199,7 @@ Get the wallet address.
 
 Wallet address.
 
-<a id="cosmpy.aerial.wallet.LocalWallet.public_key"></a>
+<a id="c4epy.aerial.wallet.LocalWallet.public_key"></a>
 
 #### public`_`key
 
@@ -213,7 +213,7 @@ Get the public key of the wallet.
 
 public key
 
-<a id="cosmpy.aerial.wallet.LocalWallet.signer"></a>
+<a id="c4epy.aerial.wallet.LocalWallet.signer"></a>
 
 #### signer
 

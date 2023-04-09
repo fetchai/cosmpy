@@ -37,8 +37,8 @@ def main():
     """Run main."""
     alice = LocalWallet.generate()
 
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.chain4energy_stable_testnet())
 
     alice_balance = ledger.query_bank_balance(alice.address())
 

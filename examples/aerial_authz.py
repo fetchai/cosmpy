@@ -66,8 +66,8 @@ def main():
 
     authz_address = args.authz_address
 
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.chain4energy_stable_testnet())
 
     total_authz_time = args.total_authz_time
     wallet_balance = ledger.query_bank_balance(wallet.address())
@@ -79,7 +79,7 @@ def main():
         faucet_api.get_wealth(wallet.address())
         wallet_balance = ledger.query_bank_balance(wallet.address())
 
-    spend_amount = Coin(amount=str(amount), denom="atestfet")
+    spend_amount = Coin(amount=str(amount), denom="uc4e")
 
     # Authorize authz_wallet to send tokens from wallet
     authz_any = any_pb2.Any()

@@ -1,11 +1,11 @@
 site_name: C4EPy
 site_url: https://docs.fetch.ai/cosmpy
 site_description: Everything you need to know about C4EPy.
-repo_url: https://github.com/fetchai/cosmpy
-repo_name: fetchai/cosmpy
+repo_url: https://github.com/crosnest/c4epy
+repo_name: crosnest/c4epy
 edit_uri: ""
-site_author: developer@fetch.ai
-copyright: Copyright &copy; 2018 - 2023 Fetch.ai # Copyright notice in footer
+site_author: chainmaster@cros-nest.com
+copyright: Copyright &copy; 2018 - 2023 Fetch.ai | 2023 Cros-Nest # Copyright notice in footer
 
 strict: true
 
@@ -36,9 +36,6 @@ nav:
       - Distribution: 'api/aerial/client/distribution.md'
       - Staking functionality: 'api/aerial/client/staking.md'
       - Helper functions: 'api/aerial/client/utils.md'
-    - Contract:
-      - Cosmwasm contract functionality: 'api/aerial/contract/__init__.md'
-      - Cosmwasm contract store, instantiate, execute messages: 'api/aerial/contract/cosmwasm.md'
     - Parse the coins: 'api/aerial/coins.md'
     - Network configurations: 'api/aerial/config.md'
     - Exceptions: 'api/aerial/exceptions.md'

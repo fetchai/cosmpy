@@ -1,10 +1,10 @@
-<a id="cosmpy.aerial.gas"></a>
+<a id="c4epy.aerial.gas"></a>
 
-# cosmpy.aerial.gas
+# c4epy.aerial.gas
 
 Transaction gas strategy.
 
-<a id="cosmpy.aerial.gas.GasStrategy"></a>
+<a id="c4epy.aerial.gas.GasStrategy"></a>
 
 ## GasStrategy Objects
 
@@ -14,7 +14,7 @@ class GasStrategy(ABC)
 
 Transaction gas strategy.
 
-<a id="cosmpy.aerial.gas.GasStrategy.estimate_gas"></a>
+<a id="c4epy.aerial.gas.GasStrategy.estimate_gas"></a>
 
 #### estimate`_`gas
 
@@ -33,7 +33,7 @@ Estimate the transaction gas.
 
 None
 
-<a id="cosmpy.aerial.gas.GasStrategy.block_gas_limit"></a>
+<a id="c4epy.aerial.gas.GasStrategy.block_gas_limit"></a>
 
 #### block`_`gas`_`limit
 
@@ -48,7 +48,7 @@ Get the block gas limit.
 
 None
 
-<a id="cosmpy.aerial.gas.SimulationGasStrategy"></a>
+<a id="c4epy.aerial.gas.SimulationGasStrategy"></a>
 
 ## SimulationGasStrategy Objects
 
@@ -62,7 +62,7 @@ Simulation transaction gas strategy.
 
 - `GasStrategy`: gas strategy
 
-<a id="cosmpy.aerial.gas.SimulationGasStrategy.__init__"></a>
+<a id="c4epy.aerial.gas.SimulationGasStrategy.__init__"></a>
 
 #### `__`init`__`
 
@@ -77,7 +77,7 @@ Init the Simulation transaction gas strategy.
 - `client`: Ledger client
 - `multiplier`: multiplier, defaults to None
 
-<a id="cosmpy.aerial.gas.SimulationGasStrategy.estimate_gas"></a>
+<a id="c4epy.aerial.gas.SimulationGasStrategy.estimate_gas"></a>
 
 #### estimate`_`gas
 
@@ -95,7 +95,7 @@ Get estimated transaction gas.
 
 Estimated transaction gas
 
-<a id="cosmpy.aerial.gas.SimulationGasStrategy.block_gas_limit"></a>
+<a id="c4epy.aerial.gas.SimulationGasStrategy.block_gas_limit"></a>
 
 #### block`_`gas`_`limit
 
@@ -109,7 +109,7 @@ Get the block gas limit.
 
 block gas limit
 
-<a id="cosmpy.aerial.gas.OfflineMessageTableStrategy"></a>
+<a id="c4epy.aerial.gas.OfflineMessageTableStrategy"></a>
 
 ## OfflineMessageTableStrategy Objects
 
@@ -123,7 +123,7 @@ Offline message table strategy.
 
 - `GasStrategy`: gas strategy
 
-<a id="cosmpy.aerial.gas.OfflineMessageTableStrategy.default_table"></a>
+<a id="c4epy.aerial.gas.OfflineMessageTableStrategy.default_table"></a>
 
 #### default`_`table
 
@@ -138,7 +138,7 @@ offline message strategy default table.
 
 offline message default table strategy
 
-<a id="cosmpy.aerial.gas.OfflineMessageTableStrategy.__init__"></a>
+<a id="c4epy.aerial.gas.OfflineMessageTableStrategy.__init__"></a>
 
 #### `__`init`__`
 
@@ -154,7 +154,7 @@ Init offline message table strategy.
 - `fallback_gas_limit`: Fallback gas limit, defaults to None
 - `block_limit`: Block limit, defaults to None
 
-<a id="cosmpy.aerial.gas.OfflineMessageTableStrategy.update_entry"></a>
+<a id="c4epy.aerial.gas.OfflineMessageTableStrategy.update_entry"></a>
 
 #### update`_`entry
 
@@ -169,7 +169,7 @@ Update the entry of the transaction.
 - `transaction_type`: transaction type
 - `gas_limit`: gas limit
 
-<a id="cosmpy.aerial.gas.OfflineMessageTableStrategy.estimate_gas"></a>
+<a id="c4epy.aerial.gas.OfflineMessageTableStrategy.estimate_gas"></a>
 
 #### estimate`_`gas
 
@@ -187,7 +187,7 @@ Get estimated transaction gas.
 
 Estimated transaction gas
 
-<a id="cosmpy.aerial.gas.OfflineMessageTableStrategy.block_gas_limit"></a>
+<a id="c4epy.aerial.gas.OfflineMessageTableStrategy.block_gas_limit"></a>
 
 #### block`_`gas`_`limit
 

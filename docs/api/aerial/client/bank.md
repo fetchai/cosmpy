@@ -1,10 +1,10 @@
-<a id="cosmpy.aerial.client.bank"></a>
+<a id="c4epy.aerial.client.bank"></a>
 
-# cosmpy.aerial.client.bank
+# c4epy.aerial.client.bank
 
 Bank send message.
 
-<a id="cosmpy.aerial.client.bank.create_bank_send_msg"></a>
+<a id="c4epy.aerial.client.bank.create_bank_send_msg"></a>
 
 #### create`_`bank`_`send`_`msg
 

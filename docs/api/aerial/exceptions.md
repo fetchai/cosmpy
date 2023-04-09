@@ -1,10 +1,10 @@
-<a id="cosmpy.aerial.exceptions"></a>
+<a id="c4epy.aerial.exceptions"></a>
 
-# cosmpy.aerial.exceptions
+# c4epy.aerial.exceptions
 
 Exceptions.
 
-<a id="cosmpy.aerial.exceptions.QueryError"></a>
+<a id="c4epy.aerial.exceptions.QueryError"></a>
 
 ## QueryError Objects
 
@@ -14,7 +14,7 @@ class QueryError(RuntimeError)
 
 Invalid Query Error.
 
-<a id="cosmpy.aerial.exceptions.NotFoundError"></a>
+<a id="c4epy.aerial.exceptions.NotFoundError"></a>
 
 ## NotFoundError Objects
 
@@ -24,7 +24,7 @@ class NotFoundError(QueryError)
 
 Not found Error.
 
-<a id="cosmpy.aerial.exceptions.QueryTimeoutError"></a>
+<a id="c4epy.aerial.exceptions.QueryTimeoutError"></a>
 
 ## QueryTimeoutError Objects
 
@@ -34,7 +34,7 @@ class QueryTimeoutError(QueryError)
 
 Query timeout Error.
 
-<a id="cosmpy.aerial.exceptions.BroadcastError"></a>
+<a id="c4epy.aerial.exceptions.BroadcastError"></a>
 
 ## BroadcastError Objects
 
@@ -44,7 +44,7 @@ class BroadcastError(RuntimeError)
 
 Broadcast Error.
 
-<a id="cosmpy.aerial.exceptions.BroadcastError.__init__"></a>
+<a id="c4epy.aerial.exceptions.BroadcastError.__init__"></a>
 
 #### `__`init`__`
 
@@ -59,7 +59,7 @@ Init Broadcast error.
 - `tx_hash`: transaction hash
 - `message`: message
 
-<a id="cosmpy.aerial.exceptions.OutOfGasError"></a>
+<a id="c4epy.aerial.exceptions.OutOfGasError"></a>
 
 ## OutOfGasError Objects
 
@@ -69,7 +69,7 @@ class OutOfGasError(BroadcastError)
 
 Insufficient Fess Error.
 
-<a id="cosmpy.aerial.exceptions.OutOfGasError.__init__"></a>
+<a id="c4epy.aerial.exceptions.OutOfGasError.__init__"></a>
 
 #### `__`init`__`
 
@@ -85,7 +85,7 @@ Initialize.
 - `gas_wanted`: gas required to complete the transaction
 - `gas_used`: gas used
 
-<a id="cosmpy.aerial.exceptions.InsufficientFeesError"></a>
+<a id="c4epy.aerial.exceptions.InsufficientFeesError"></a>
 
 ## InsufficientFeesError Objects
 
@@ -95,7 +95,7 @@ class InsufficientFeesError(BroadcastError)
 
 Insufficient Fess Error.
 
-<a id="cosmpy.aerial.exceptions.InsufficientFeesError.__init__"></a>
+<a id="c4epy.aerial.exceptions.InsufficientFeesError.__init__"></a>
 
 #### `__`init`__`
 

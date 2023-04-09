@@ -29,7 +29,7 @@ from c4epy.aerial.tx_helpers import SubmittedTx
 
 def test_broadcast_tx_timeouts():
     """Test for SubmittedTx.wait_to_complete."""
-    client = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    client = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
     tx = SubmittedTx(client, Mock())
     poll_period = 0.1
 

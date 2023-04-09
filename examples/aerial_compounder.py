@@ -34,7 +34,7 @@ def _parse_commandline():
         type=int,
         nargs="?",
         default=9000000000000000000,
-        help="Initial amount of atestfet to delegate to validator",
+        help="Initial amount of uc4e to delegate to validator",
     )
     parser.add_argument(
         "time_limit",
@@ -58,8 +58,8 @@ def main():
     """Run main."""
     args = _parse_commandline()
 
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.chain4energy_stable_testnet())
 
     # get all the active validators on the network
     validators = ledger.query_validators()
