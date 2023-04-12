@@ -250,6 +250,6 @@ For instructions on how to contribute to the project (e.g. creating Pull Request
 [mkdocs]: https://www.mkdocs.org
 [material]: https://squidfunk.github.io/mkdocs-material/
 [poetry]: https://python-poetry.org
-[contributing guide]: https://github.com/fetchai/cosmpy/blob/master/CONTRIBUTING.md
-[release process]: https://github.com/fetchai/cosmpy/blob/master/scripts/RELEASE_PROCESS.md
+[contributing guide]: https://github.com/fetchai/cosmpy/blob/main/CONTRIBUTING.md
+[release process]: https://github.com/fetchai/cosmpy/blob/main/scripts/RELEASE_PROCESS.md
 [repo]: https://github.com/fetchai/cosmpy

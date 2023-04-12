@@ -48,7 +48,7 @@ You can file new issues by selecting from our [new issue templates][new-issue] a
 
 Before you submit your Pull Request (PR) consider the following guidelines:
 
-1. All Pull Requests should be based off of and opened against the `master` branch. **Note that we have recently stopped using the _develop_ branch for feature consolidation.**
+1. All Pull Requests should be based off of and opened against the `main` branch. **Note that we have recently stopped using the _develop_ branch for feature consolidation.**
 
 2. Search [Existing PRs][prs] for an open or closed PR that relates to your submission.
    You don't want to duplicate existing efforts.
@@ -57,7 +57,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 4. [Fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) the [repository][github].
 
-5. In your forked repository, make your changes in a new git branch created off of the `master` branch.
+5. In your forked repository, make your changes in a new git branch created off of the `main` branch.
 
 6. Make your changes, **including test cases and documentation updates where appropriate**.
 
@@ -69,7 +69,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 10. Push your branch to GitHub.
 
-11. In GitHub, send a pull request to `fetchai:master`.
+11. In GitHub, send a pull request to `fetchai:main`.
 
 #### Reviewing a Pull Request
 
@@ -118,8 +118,8 @@ Please follow the [Conventional Commits v1.0.0][convcommit]. The commit types mu
 - **refactor**: A code change that neither fixes a bug nor adds a feature
 - **test**: Adding missing tests or correcting existing tests
 
-[coc]: https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md
-[developing]: https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md
+[coc]: https://github.com/fetchai/cosmpy/blob/main/CODE_OF_CONDUCT.md
+[developing]: https://github.com/fetchai/cosmpy/blob/main/DEVELOPING.md
 [ghdiscussion]: https://github.com/fetchai/cosmpy/discussions
 [issues]: https://github.com/fetchai/cosmpy/issues
 [new-issue]: https://github.com/fetchai/cosmpy/issues/new/choose

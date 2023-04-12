@@ -31,13 +31,13 @@ git clone https://github.com/fetchai/cosmpy.git --recursive && cd cosmpy
 Set up development environment:
 
 ``` bash
-make new_env_dev
+make new-env
 ```
 
-This creates a new `pipenv` virtual environment and installs the development dependencies.
+This creates a new `poetry` virtual environment and installs the development dependencies.
 
 Enter the virtual environment: 
 
 ``` bash
-pipenv shell
+poetry shell
 ```
