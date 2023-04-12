@@ -14,7 +14,7 @@ _Put an `x` in the boxes that apply_
 - [ ] Bugfix (non-breaking change that fixes an issue)
 - [ ] New feature (non-breaking change that adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to stop working as expected)
-- [ ] Something else (e.g. test, package, script, example, deployment, infrastructure, ...)
+- [ ] Something else (e.g. tests, scripts, example, deployment, infrastructure, ...)
 
 ## Checklist
 
@@ -22,7 +22,7 @@ _Put an `x` in the boxes that apply._
 
 - [ ] I have read the [CONTRIBUTING](https://github.com/fetchai/cosmpy/blob/main/CONTRIBUTING.md) document.
 - [ ] I have based my branch, and I am making a pull request against, the `main` branch.
-- [ ] Checks and Tests pass locally.
+- [ ] Checks and tests pass locally.
 
 ### If applicable
 
