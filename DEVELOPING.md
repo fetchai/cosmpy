@@ -13,7 +13,6 @@
 - [Setting up a local Fetchai node](#localnode)
 - [Running a local Fetchai node in docker](#dockernode)
 - [Contributing](#contributing)
-- [Making Releases](#release)
 
 ## <a name="get"></a> Getting the Source
 
