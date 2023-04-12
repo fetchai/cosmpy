@@ -71,4 +71,4 @@ while time_check < time_limit:
     time_check = time.monotonic() - start_time
 ```
 
-You can view the full python example at [staking auto-compounder](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_compounder.py)
+You can view the full python example at [staking auto-compounder](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_compounder.py)

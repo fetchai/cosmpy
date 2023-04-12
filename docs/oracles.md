@@ -6,8 +6,8 @@ This guide shows how to write a CosmPy script that deploys and updates an oracle
 
 We will need the binaries for both contracts, which can be downloaded as follows:
 ```bash
-wget https://raw.githubusercontent.com/fetchai/agents-aea/develop/packages/fetchai/contracts/oracle/build/oracle.wasm
-wget https://raw.githubusercontent.com/fetchai/agents-aea/develop/packages/fetchai/contracts/oracle_client/build/oracle_client.wasm
+wget https://raw.githubusercontent.com/fetchai/agents-aea/main/packages/fetchai/contracts/oracle/build/oracle.wasm
+wget https://raw.githubusercontent.com/fetchai/agents-aea/main/packages/fetchai/contracts/oracle_client/build/oracle_client.wasm
 ```
 
 The scripts also require the following imports:
@@ -77,7 +77,7 @@ while True:
     sleep(UPDATE_INTERVAL_SECONDS)
 ```
 
-For the complete example script, see [aerial_oracle.py](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_oracle.py).
+For the complete example script, see [aerial_oracle.py](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_oracle.py).
 
 ## Oracle client
 
@@ -114,4 +114,4 @@ while True:
     sleep(REQUEST_INTERVAL_SECONDS)
 ```
 
-For the complete example script, see [aerial_oracle_client.py](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_oracle_client.py).
+For the complete example script, see [aerial_oracle_client.py](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_oracle_client.py).

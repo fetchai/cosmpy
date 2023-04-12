@@ -1,10 +1,12 @@
 CosmPy is a Python library for interacting with Cosmos-based blockchains.
 
-* A simplified command line tool for querying and sending transactions to Cosmos-SDK blockchains. 
-* Features an easy interface for deploying and interacting with Cosmwasm smart contracts.
-* Provides access to lower-level ledger APIs for advanced use-cases.
+* A simplified API interacting with Cosmos-SDK blockchains. 
+* Easy interface for deploying and interacting with Cosmwasm smart contracts.
+* Access to low-level ledger APIs for advanced use-cases.
 
 ## To install
+
+Ensure you have Python (version `3.8`, `3.9` or `3.10`):
 
 ``` bash
 pip3 install cosmpy
@@ -12,32 +14,45 @@ pip3 install cosmpy
 
 ## Version
 
-<a href="https://img.shields.io/pypi/v/cosmpy" target="_blank"><img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy" /></a>.
+CosmPy's latest version:
 
-## Repository
+<a href="https://img.shields.io/pypi/v/cosmpy" target="_blank"><img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy" /></a>
+
+## Contributing
+
+All contributions are very welcome! Remember, contribution is not only PRs and code, but any help with docs or helping other developers solve their issues are very appreciated!
+
+Read below to learn how you can take part in the CosmPy project.
+
+### Repository
 
 ```
 https://github.com/fetchai/cosmpy
 ```
 
-## To contribute
+### Code of Conduct
 
-Clone the repo:
+Please be sure to read and follow our [Code of Conduct][coc]. By participating, you are expected to uphold this code.
 
-``` bash
-git clone https://github.com/fetchai/cosmpy.git --recursive && cd cosmpy
-```
+### Contribution Guidelines
 
-Set up development environment:
+Read our [contribution guidelines][contributing] to learn about our issue and PR submission processes, coding rules, and more.
 
-``` bash
-make new-env
-```
+### Development Guidelines
 
-This creates a new `poetry` virtual environment and installs the development dependencies.
+Read our [development guidelines][developing] to learn about the development processes and workflows when contributing to different parts of the CosmPy project.
 
-Enter the virtual environment: 
+### Issues, Questions and Discussions
 
-``` bash
-poetry shell
-```
+We use [GitHub Issues][issues] for tracking requests and bugs, and [GitHub Discussions][discussion] for general questions and discussion.
+
+## License
+
+The CosmPy project is licensed under [Apache License 2.0][license].
+
+[contributing]: https://github.com/fetchai/cosmpy/blob/main/CONTRIBUTING.md
+[developing]: https://github.com/fetchai/cosmpy/blob/main/DEVELOPING.md
+[coc]: https://github.com/fetchai/cosmpy/blob/main/CODE_OF_CONDUCT.md
+[discussion]: https://github.com/fetchai/cosmpy/discussions
+[issues]: https://github.com/fetchai/cosmpy/issues
+[license]: https://github.com/fetchai/cosmpy/blob/main/LICENSE

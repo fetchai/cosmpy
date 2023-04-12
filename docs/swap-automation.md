@@ -152,4 +152,4 @@ while True:
 ```
 
 This code assumes other traders performing transactions with the Liquidity Pool that will generate price movements.
-You can check out the full example at [`swap-automation`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_swap_automation.py)
+You can check out the full example at [`swap-automation`](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_swap_automation.py)

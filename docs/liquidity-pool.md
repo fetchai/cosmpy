@@ -183,4 +183,4 @@ You can now query you LP token balance to observe that it has gone down to zero
 liq_token_contract.query({"balance": {"address": str(wallet.address())}})
 ```
 
-You can also check the full code example at [`liquidity-pool`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_liquidity_pool.py)
+You can also check the full code example at [`liquidity-pool`](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_liquidity_pool.py)
