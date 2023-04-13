@@ -28,6 +28,8 @@ A python library for interacting with cosmos based blockchain networks
   </a>
 </p>
 
+> We recently stopped using the `develop` branch for feature consolidation and renamed `master` to `main`. Please see the [Contribution Guides][contributing] for up-to-date instructions.
+
 ## To Install
 
 ```bash
