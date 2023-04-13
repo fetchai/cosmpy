@@ -1,8 +1,12 @@
+# CosmPy
+
 CosmPy is a Python library for interacting with Cosmos-based blockchain networks.
 
 * A simplified API for querying, sending transactions, etc., to Cosmos-SDK based blockchains. 
 * Easy interface for deploying and interacting with Cosmwasm smart contracts.
 * Access to low-level ledger APIs for advanced use-cases.
+
+> We recently stopped using the `develop` branch for feature consolidation and renamed `master` to `main`. Please see the [Contribution Guides][contributing] for up-to-date instructions. 
 
 ## To install
 
