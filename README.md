@@ -13,7 +13,7 @@ A python library for interacting with cosmos based blockchain networks
   <a href="https://pypi.org/project/cosmpy/">
     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/cosmpy">
   </a>
-  <a href="https://github.com/fetchai/cosmpy/blob/master/LICENSE">
+  <a href="https://github.com/fetchai/cosmpy/blob/main/LICENSE">
     <img alt="License" src="https://img.shields.io/pypi/l/cosmpy">
   </a>
   <br />
@@ -72,11 +72,11 @@ Please be sure to read and follow our [Code of Conduct][coc]. By participating, 
 
 ### Contribution Guidelines
 
-Read our [contribution guidelines][contributing] to learn about our issue and PR submission processes, coding rules, and more.
+Read our [contribution guidelines][contributing] to learn about our issue and pull request submission processes, coding rules, and more.
 
 ### Development Guidelines
 
-Read our [development guidelines][developing] to learn about the development processes and workflows when contributing to different parts of the CosmPy project.
+Read our [development guidelines][developing] to learn about the development processes and workflows.
 
 ### Issues, Questions and Discussions
 
@@ -86,9 +86,9 @@ We use [GitHub Issues][issues] for tracking requests and bugs, and [GitHub Discu
 
 The CosmPy project is licensed under [Apache License 2.0][license].
 
-[contributing]: https://github.com/fetchai/cosmpy/blob/master/CONTRIBUTING.md
-[developing]: https://github.com/fetchai/cosmpy/blob/master/DEVELOPING.md
-[coc]: https://github.com/fetchai/cosmpy/blob/master/CODE_OF_CONDUCT.md
+[contributing]: https://github.com/fetchai/cosmpy/blob/main/CONTRIBUTING.md
+[developing]: https://github.com/fetchai/cosmpy/blob/main/DEVELOPING.md
+[coc]: https://github.com/fetchai/cosmpy/blob/main/CODE_OF_CONDUCT.md
 [discussion]: https://github.com/fetchai/cosmpy/discussions
 [issues]: https://github.com/fetchai/cosmpy/issues
-[license]: https://github.com/fetchai/cosmpy/blob/master/LICENSE
+[license]: https://github.com/fetchai/cosmpy/blob/main/LICENSE

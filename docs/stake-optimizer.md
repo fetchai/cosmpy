@@ -1,4 +1,4 @@
-When you delegate tokens to a validator for a determined period, you can use the [`auto-compounder`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_compounder.py) to get increasing rewards. You can maximize your rewards for a given staking period by selecting an optimal compounding period. To do this, you will need to follow these steps:
+When you delegate tokens to a validator for a determined period, you can use the [`auto-compounder`](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_compounder.py) to get increasing rewards. You can maximize your rewards for a given staking period by selecting an optimal compounding period. To do this, you will need to follow these steps:
 
 * **Set and Query Variables**: When calculating staking rewards, you need to set and query variables such as staking parameters, transaction fees, and network parameters
 * **Calculate Reward Rate**: After you select and query all the variables needed, you will calculate the reward rate
@@ -194,7 +194,7 @@ optimal_period = brentq(Mx_prime, 0.1, D)
 
 print("optimal_period: ", analytical_optimal_period, " minutes")
 ```
-You can make use of the `optimal_period` value in the [`staking auto-compounder`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_compounder.py) to maximize your rewards
+You can make use of the `optimal_period` value in the [`staking auto-compounder`](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_compounder.py) to maximize your rewards
 
 You can also plot the function along with the optimal period to observe the results
 
@@ -262,4 +262,4 @@ plt.yscale('log')
 ```
 <img src="../images/compounded_vs_simple.png" width="800"> 
 
-You can view an abbreviated version of the code at [`stake optimizer`](https://github.com/fetchai/cosmpy/blob/develop/examples/aerial_stake_optimizer.py)
+You can view an abbreviated version of the code at [`stake optimizer`](https://github.com/fetchai/cosmpy/blob/main/examples/aerial_stake_optimizer.py)

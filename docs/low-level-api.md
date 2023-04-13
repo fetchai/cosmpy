@@ -1,7 +1,7 @@
 The CosmPy library provides a high-level API which greatly simplifies the
 most common use cases when interacting with Cosmos-based chains (e.g. [sending
 tokens](send-tokens.md), [staking](staking.md), [deploying and interacting with contracts](deploy-a-contract.md)). There are [documentation](connect-to-network.md) and
-[example code](https://github.com/fetchai/cosmpy/tree/master/examples) covering such use cases.
+[example code](https://github.com/fetchai/cosmpy/tree/main/examples) covering such use cases.
 
 However, CosmPy also provides low-level access to the entire Cosmos-SDK, enabling the
 full gamut of functionality to be accessed, albeit with a little more boilerplate.
@@ -26,7 +26,7 @@ tx.wait_to_complete()
 ```
 
 The available high-level helper functions provided by CosmPy can be found by browsing for instance
-[the aerial client package](https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/client/__init__.py).
+[the aerial client package](https://github.com/fetchai/cosmpy/blob/main/cosmpy/aerial/client/__init__.py).
 
 ## Low Level API
 
@@ -36,7 +36,7 @@ Not all Cosmos-SDK functionality is encapsulated in the high level aerial packag
 
 Analogous to the rewards claim example above, what if a validator operator wanted to claim their commission? At the time of writing, there is no high-level API to achieve this, so the low level API must be used.
 
-In the [protos](https://github.com/fetchai/cosmpy/tree/master/cosmpy/protos) directory, there is a [MsgWithdrawValidatorCommission](https://github.com/fetchai/cosmpy/blob/6d7b5f49722b67c803145d55aa291fe426c19994/cosmpy/protos/cosmos/distribution/v1beta1/tx_pb2.py#L160)
+In the [protos](https://github.com/fetchai/cosmpy/tree/main/cosmpy/protos) directory, there is a [MsgWithdrawValidatorCommission](https://github.com/fetchai/cosmpy/blob/6d7b5f49722b67c803145d55aa291fe426c19994/cosmpy/protos/cosmos/distribution/v1beta1/tx_pb2.py#L160)
 message, which is what we need. It takes a single `validator_address` parameter which is a `utf-8` string.
 
 To send a transaction containing such a message:
