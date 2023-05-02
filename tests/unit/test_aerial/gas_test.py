@@ -29,24 +29,13 @@ from cosmpy.aerial.gas import (
 )
 from cosmpy.aerial.tx import Transaction
 from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
-from cosmpy.protos.cosmwasm.wasm.v1.tx_pb2 import (
-    MsgExecuteContract,
-    MsgInstantiateContract,
-    MsgStoreCode,
-)
 
 
 @pytest.mark.parametrize(
     "input_msgs,expected_gas_estimate",
     [
         ([MsgSend()], 100_000),
-        ([MsgStoreCode()], 2_000_000),
-        ([MsgInstantiateContract()], 250_000),
-        ([MsgExecuteContract()], 400_000),
         ([MsgSend(), MsgSend()], 200_000),
-        ([MsgSend(), MsgStoreCode()], 2_000_000),  # hits block limit
-        ([MsgSend(), MsgInstantiateContract()], 350_000),
-        ([MsgInstantiateContract(), MsgExecuteContract()], 650_000),
     ],
 )
 def test_table_gas_estimation(input_msgs, expected_gas_estimate):
@@ -85,13 +74,7 @@ class MockLedger:
     "input_msgs,expected_gas_estimate",
     [
         ([MsgSend()], 100_000),
-        ([MsgStoreCode()], 2_000_000),
-        ([MsgInstantiateContract()], 250_000),
-        ([MsgExecuteContract()], 400_000),
         ([MsgSend(), MsgSend()], 200_000),
-        ([MsgSend(), MsgStoreCode()], 2_000_000),  # hits block limit
-        ([MsgSend(), MsgInstantiateContract()], 350_000),
-        ([MsgInstantiateContract(), MsgExecuteContract()], 650_000),
     ],
 )
 def test_simulated_estimation(input_msgs, expected_gas_estimate):

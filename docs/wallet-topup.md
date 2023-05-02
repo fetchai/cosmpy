@@ -98,7 +98,6 @@ while True:
     task_wallet_balance = ledger.query_bank_balance(task_wallet_address)
 
     if task_wallet_balance < minimum_balance:
-
         print("topping up task wallet")
         # Top-up task_wallet
         msg = any_pb2.Any()

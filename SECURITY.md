@@ -1,20 +1,21 @@
 # Security Policy
 
-Security is very important for Fetch.ai and its community. This document outlines security procedures and general policies for the `cosmpy` project.
+Security is very important for Fetch.ai, Cros Nest and its community. This document outlines security procedures and general policies for the `cosmpy` project.
 
 ## Supported Versions
 
 The following table shows which versions of `cosmpy` are currently being supported with security updates.
 
-| Version   | Supported          |
-| --------- | ------------------ |
-| `< 1.0.0` | :white_check_mark: |
+| Version  | Supported          |
+|----------| ------------------ |
+| `1.2.0` | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
 The `cosmpy` team and community take all security bugs in `cosmpy` seriously. We appreciate your efforts and responsible disclosure and will make every effort to acknowledge your contributions.
+In case of the bug can be found in the `CosmPy` project, please report to `CosmPy` team first.
 
-Report security bugs by emailing `developer@fetch.ai`.
+Report security bugs by emailing `developer@cros-nest.com`.
 
 The lead maintainer will acknowledge your email within 48 hours, and will send a more detailed response within 48 hours indicating the next steps in handling your report. After the initial reply to your report, the security team will endeavour to keep you informed of the progress towards a fix and full announcement, and may ask for additional information or guidance.
 
@@ -34,9 +35,7 @@ If you have suggestions on how this process could be improved please submit a pu
 
 ## Bug Bounty
 
-We have a [**bug bounty program**](https://docs.fetch.ai/bug_bounty/). Please report any security issues you find, or reach out to `developer@fetch.ai`. Please try to be as explicit as possible, describing all the steps and example code to reproduce the security issue.
-
-Critical bug fixes will be backported to past major releases.
+Cros-Nest will not support any bug bounty.
 
 ## Public Discussions
 
@@ -48,4 +47,4 @@ It's better to discuss privately and try to find a solution first, to limit the 
 
 Thanks for your help!
 
-The Fetch.ai community thank you for that. 🙇
+The Cros Nest community thank you for that. 🙇

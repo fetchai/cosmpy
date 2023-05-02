@@ -117,36 +117,6 @@ Get the transaction response.
 
 response
 
-<a id="cosmpy.aerial.tx_helpers.SubmittedTx.contract_code_id"></a>
-
-#### contract`_`code`_`id
-
-```python
-@property
-def contract_code_id() -> Optional[int]
-```
-
-Get the contract code id.
-
-**Returns**:
-
-return contract code id if exist else None
-
-<a id="cosmpy.aerial.tx_helpers.SubmittedTx.contract_address"></a>
-
-#### contract`_`address
-
-```python
-@property
-def contract_address() -> Optional[Address]
-```
-
-Get the contract address.
-
-**Returns**:
-
-return contract address if exist else None
-
 <a id="cosmpy.aerial.tx_helpers.SubmittedTx.wait_to_complete"></a>
 
 #### wait`_`to`_`complete

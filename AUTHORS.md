@@ -1,4 +1,12 @@
-# Authors
+# Cosmpy Authors
+
+This is the official list of Cosmpy authors (the lists are in the alphabetical order:):
+
+### Leads
+
+- David Pierret <dapie@cros-nest.com> [Galadrin](https://github.com/Galadrin)
+
+# CosmPy Authors
 
 This is the official list of CosmPy authors (the lists are in the alphabetical order:):
 

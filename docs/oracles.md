@@ -11,6 +11,7 @@ wget https://raw.githubusercontent.com/fetchai/agents-aea/main/packages/fetchai/
 ```
 
 The scripts also require the following imports:
+
 ```python
 from time import sleep
 import requests

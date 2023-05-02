@@ -1,1 +1,0 @@
-simple.wasm source  - https://github.com/fetchai/contract-simple

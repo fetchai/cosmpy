@@ -41,7 +41,7 @@ HEADER_REGEX = rf"""(#!/usr/bin/env python3
 )?# -\*- coding: utf-8 -\*-
 # ------------------------------------------------------------------------------
 #
-#   (Copyright 2018-({"|".join(SUPPORTED_YEARS)}) Fetch.AI Limited|Copyright [0-9]{{4}}(-[0-9]{{4}})? [a-zA-Z_]+)
+#   (Copyright 2018-({"|".join(SUPPORTED_YEARS)}) Fetch.AI Limited|Copyright [0-9]{{4}}(-[0-9]{{4}})? [a-zA-Z_]+|Copyright 2022-2023 Cros Nest B.V. Limited)
 (#   Modifications copyright \(C\) [0-9]{{4}} [a-zA-Z_-]+
 )*#
 #   Licensed under the Apache License, Version 2\.0 \(the \"License\"\);

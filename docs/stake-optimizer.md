@@ -44,8 +44,8 @@ print("MONIKER      COMISSION   % of TOTAL STAKE")
 for validator in resp.validators:
     if validator.status == 3:
         moniker = validator.description.moniker
-        comission = int(validator.commission.commission_rates.rate)/1e18*100
-        print(moniker[:10]," ", comission,"%     ", round(int(validator.tokens)/total_stake*100,3),"%")
+        comission = int(validator.commission.commission_rates.rate) / 1e18 * 100
+        print(moniker[:10], " ", comission, "%     ", round(int(validator.tokens) / total_stake * 100, 3), "%")
 ```
 
 After running the code above, you will observe each validator commission rate and its percentage delegated of the total stake. The most important parameter to observe in each validator is the commission it will take from the rewards. We will always select a validator with the lower commission as long as it has a reasonable stake compared with the total stake. In this case, at the moment the code was run, all validators had the same commission, therefore, we simply selected the validator with the highest stake, which was validator0. Feel free to select the most convenient validator when you run the code above. We will save the variables `commission` and the fraction of our `initial_stake` to the total stake to use them later on.
@@ -87,13 +87,13 @@ alice_address = Address(key)._display
 tx = Transaction()
 
 # Add delegate msg
-tx.add_message(create_delegate_msg(alice_address,validator.address,initial_stake,"atestfet"))
+tx.add_message(create_delegate_msg(alice_address, validator.address, initial_stake, "atestfet"))
 
 # Add claim reward msg
 tx.add_message(create_withdraw_delegator_reward(alice_address, validator.address))
 
 account = ledger.query_account(alice.address())
-tx.seal(SigningCfg.direct(alice.public_key(), account.sequence),fee="",gas_limit=0)
+tx.seal(SigningCfg.direct(alice.public_key(), account.sequence), fee="", gas_limit=0)
 tx.sign(alice.signer(), ledger.network_config.chain_id, account.number)
 tx.complete()
 

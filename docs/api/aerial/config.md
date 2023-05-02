@@ -48,95 +48,80 @@ Validate the network configuration.
 
 - `NetworkConfigError`: Network config error
 
-<a id="cosmpy.aerial.config.NetworkConfig.fetchai_dorado_testnet"></a>
+<a id="cosmpy.aerial.config.NetworkConfig.chain4energy_veles_testnet"></a>
 
-#### fetchai`_`dorado`_`testnet
+#### chain4energy`_`veles`_`testnet
 
 ```python
 @classmethod
-def fetchai_dorado_testnet(cls) -> "NetworkConfig"
+def chain4energy_veles_testnet(cls) -> "NetworkConfig"
 ```
 
-Fetchai dorado testnet.
+Chain4energy veles testnet.
 
 **Returns**:
 
 Network configuration
 
-<a id="cosmpy.aerial.config.NetworkConfig.fetchai_alpha_testnet"></a>
+<a id="cosmpy.aerial.config.NetworkConfig.chain4energy_alpha_testnet"></a>
 
-#### fetchai`_`alpha`_`testnet
+#### chain4energy`_`alpha`_`testnet
 
 ```python
 @classmethod
-def fetchai_alpha_testnet(cls)
+def chain4energy_alpha_testnet(cls)
 ```
 
-Get the fetchai alpha testnet.
+Get the Chain4energy alpha testnet.
 
 **Raises**:
 
 - `RuntimeError`: No alpha testnet available
 
-<a id="cosmpy.aerial.config.NetworkConfig.fetchai_beta_testnet"></a>
+<a id="cosmpy.aerial.config.NetworkConfig.chain4energy_beta_testnet"></a>
 
-#### fetchai`_`beta`_`testnet
+#### chain4energy`_`beta`_`testnet
 
 ```python
 @classmethod
-def fetchai_beta_testnet(cls)
+def chain4energy_beta_testnet(cls)
 ```
 
-Get the Fetchai beta testnet.
+Get the Chain4energy beta testnet.
 
 **Raises**:
 
 - `RuntimeError`: No beta testnet available
 
-<a id="cosmpy.aerial.config.NetworkConfig.fetchai_stable_testnet"></a>
+<a id="cosmpy.aerial.config.NetworkConfig.chain4energy_stable_testnet"></a>
 
-#### fetchai`_`stable`_`testnet
-
-```python
-@classmethod
-def fetchai_stable_testnet(cls)
-```
-
-Get the fetchai stable testnet.
-
-**Returns**:
-
-fetchai stable testnet. For now dorado is fetchai stable testnet.
-
-<a id="cosmpy.aerial.config.NetworkConfig.fetchai_mainnet"></a>
-
-#### fetchai`_`mainnet
+#### chain4energy`_`stable`_`testnet
 
 ```python
 @classmethod
-def fetchai_mainnet(cls) -> "NetworkConfig"
+def chain4energy_stable_testnet(cls)
 ```
 
-Get the fetchai mainnet configuration.
+Get the Chain4energy stable testnet.
 
 **Returns**:
 
-fetch mainnet configuration
+Chain4energy stable testnet. For now veles is Chain4energy stable testnet.
 
-<a id="cosmpy.aerial.config.NetworkConfig.fetch_mainnet"></a>
+<a id="cosmpy.aerial.config.NetworkConfig.chain4energy_mainnet"></a>
 
-#### fetch`_`mainnet
+#### chain4energy`_`mainnet
 
 ```python
 @classmethod
-def fetch_mainnet(cls) -> "NetworkConfig"
+def chain4energy_mainnet(cls) -> "NetworkConfig"
 ```
 
-Get the fetch mainnet.
+Get the chain4energy mainnet configuration.
 
 **Returns**:
 
-fetch mainnet configurations
+C4E mainnet configuration
 
 <a id="cosmpy.aerial.config.NetworkConfig.latest_stable_testnet"></a>
 

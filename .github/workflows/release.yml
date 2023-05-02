@@ -25,6 +25,6 @@ jobs:
         GH_TOKEN: ${{ github.token }}
       run: |
         pip install tomli packaging poetry
-        git config --global user.email "ci-bot@fetch.ai"
+        git config --global user.email "dapie@cros-nest.com"
         git config --global user.name "CI BOT"
         python3 ./scripts/do-release.py

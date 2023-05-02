@@ -52,7 +52,6 @@ from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.common.rest_client import RestClient
-from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
 from cosmpy.distribution.rest_client import DistributionRestClient
 from cosmpy.params.rest_client import ParamsRestClient
@@ -92,9 +91,6 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     SimulateRequest,
 )
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
-from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
-    QueryStub as CosmWasmGrpcClient,
-)
 from cosmpy.staking.rest_client import StakingRestClient
 from cosmpy.tx.rest_client import TxRestClient
 
@@ -205,7 +201,6 @@ class LedgerClient:
             else:
                 grpc_client = grpc.insecure_channel(parsed_url.host_and_port)
 
-            self.wasm = CosmWasmGrpcClient(grpc_client)
             self.auth = AuthGrpcClient(grpc_client)
             self.txs = TxGrpcClient(grpc_client)
             self.bank = BankGrpcClient(grpc_client)
@@ -215,7 +210,6 @@ class LedgerClient:
         else:
             rest_client = RestClient(parsed_url.rest_url)
 
-            self.wasm = CosmWasmRestClient(rest_client)  # type: ignore
             self.auth = AuthRestClient(rest_client)  # type: ignore
             self.txs = TxRestClient(rest_client)  # type: ignore
             self.bank = BankRestClient(rest_client)  # type: ignore

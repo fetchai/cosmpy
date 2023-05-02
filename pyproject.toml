@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "cosmpy"
-version = "0.7.0"
-description = "A library for interacting with the cosmos networks"
-authors = ["Fetch.AI Limited"]
+version = "1.2.0"
+description = "A library for interacting with the chain4energy network"
+authors = ["Fetch.AI Limited", "Cros Nest B.V."]
 readme = "README.md"
 license = "Apache-2.0"
 homepage = "https://github.com/fetchai/cosmpy"
 repository = "https://github.com/fetchai/cosmpy"
 documentation = "https://docs.fetch.ai/CosmPy/"
-keywords = ["CosmPy", "Cosmos-SDK"]
+keywords = ["cosmpy", "Cosmos-SDK", "Chain4Energy"]
 classifiers=[
     "Environment :: Console",
     "Development Status :: 3 - Alpha",

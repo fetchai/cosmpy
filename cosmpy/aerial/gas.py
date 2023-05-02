@@ -107,9 +107,6 @@ class OfflineMessageTableStrategy(GasStrategy):
         """
         strategy = OfflineMessageTableStrategy()
         strategy.update_entry("cosmos.bank.v1beta1.MsgSend", 100_000)
-        strategy.update_entry("cosmwasm.wasm.v1.MsgStoreCode", 2_000_000)
-        strategy.update_entry("cosmwasm.wasm.v1.MsgInstantiateContract", 250_000)
-        strategy.update_entry("cosmwasm.wasm.v1.MsgExecuteContract", 400_000)
         return strategy
 
     def __init__(

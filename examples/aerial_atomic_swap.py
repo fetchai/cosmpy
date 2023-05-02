@@ -52,8 +52,8 @@ def main():
     alice = LocalWallet.generate()
     bob = LocalWallet.generate()
 
-    client = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    client = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.chain4energy_stable_testnet())
 
     # check to see if all the clients have enough funds
     alice_balance = client.query_bank_balance(alice.address())

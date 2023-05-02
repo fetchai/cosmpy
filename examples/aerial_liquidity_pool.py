@@ -34,7 +34,7 @@ def _parse_commandline():
         type=int,
         nargs="?",
         default=10000,
-        help="atestfet swap amount to get some cw20 tokens on wallet's address",
+        help="uc4e swap amount to get some cw20 tokens on wallet's address",
     )
     parser.add_argument(
         "cw20_liquidity_amount",
@@ -48,7 +48,7 @@ def _parse_commandline():
         type=int,
         nargs="?",
         default=2470,
-        help="amount of atestfet tokens that will be provided to LP",
+        help="amount of uc4e tokens that will be provided to LP",
     )
     return parser.parse_args()
 
@@ -91,9 +91,9 @@ def main():
     print("Pool (initial state): ")
     print(pair_contract.query({"pool": {}}), "\n")
 
-    # Swap atestfet for CW20 tokens
+    # Swap uc4e for CW20 tokens
     swap_amount = str(args.swap_amount)
-    native_denom = "atestfet"
+    native_denom = "uc4e"
 
     tx = pair_contract.execute(
         {

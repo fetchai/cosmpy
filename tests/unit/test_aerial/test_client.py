@@ -31,7 +31,7 @@ from cosmpy.aerial.config import NetworkConfig
 
 def test_ledger_client_timeouts():
     """Test ledger client query_interval_secs and query_timeout_secs options."""
-    client = LedgerClient(NetworkConfig.fetchai_stable_testnet())
+    client = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
     assert (
         client._query_interval_secs  # pylint: disable=protected-access
         == DEFAULT_QUERY_INTERVAL_SECS
@@ -44,7 +44,7 @@ def test_ledger_client_timeouts():
     timeout = 100
     interval = 5000
     client = LedgerClient(
-        NetworkConfig.fetchai_stable_testnet(),
+        NetworkConfig.chain4energy_stable_testnet(),
         query_interval_secs=interval,
         query_timeout_secs=timeout,
     )

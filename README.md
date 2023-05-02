@@ -1,9 +1,10 @@
 <h1 align="center">
-    <b>CosmPy</b>
+    <b>cosmpy</b>
 </h1>
 
 <p align="center">
-A python library for interacting with cosmos based blockchain networks
+A python library for interacting with Chain4energy blockchain<br>
+based on the CosmPy library
 </p>
 
 <p align="center">
@@ -44,29 +45,29 @@ Below is a simple example for querying an account's balances:
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
 
 # connect to Fetch.ai network using default parameters
-ledger_client = LedgerClient(NetworkConfig.fetchai_mainnet())
+ledger_client = LedgerClient(NetworkConfig.chain4energy_mainnet())
 
-alice: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
+alice: str = 'c4e1t62t32vvkr78zdws3jvu9rxjkz3fy0ex4v7e7l'
 balances = ledger_client.query_bank_all_balances(alice)
 
 # show all coin balances
 for coin in balances:
-  print(f'{coin.amount}{coin.denom}')
+    print(f'{coin.amount}{coin.denom}')
 ```
 
 ## Documentation
 
-The full documentation can be found [here](https://docs.fetch.ai/CosmPy/).
+The Cosmpy documentation can be found [here](https://docs.fetch.ai/CosmPy/).
 
 ## Examples
 
-Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy`, such as transferring tokens, staking, deploying and interacting with a smart contract, and performing atomic swaps.
+Under the `examples` directory, you can find examples of basic ledger interactions using `cosmpy`, such as transferring tokens, staking.
 
 ## Contributing
 
 All contributions are very welcome! Remember, contribution is not only PRs and code, but any help with docs or helping other developers solve their issues are very appreciated!
 
-Read below to learn how you can take part in the CosmPy project.
+Read below to learn how you can take part in the CosmPy or derivative projects like cosmpy.
 
 ### Code of Conduct
 
@@ -86,7 +87,7 @@ We use [GitHub Issues][issues] for tracking requests and bugs, and [GitHub Discu
 
 ## License
 
-The CosmPy project is licensed under [Apache License 2.0][license].
+The Cosmpy and CosmPy projects are licensed under [Apache License 2.0][license].
 
 [contributing]: https://github.com/fetchai/cosmpy/blob/main/CONTRIBUTING.md
 [developing]: https://github.com/fetchai/cosmpy/blob/main/DEVELOPING.md

@@ -58,8 +58,8 @@ def main():
 
     wallet = LocalWallet.generate()
 
-    ledger = LedgerClient(NetworkConfig.fetchai_stable_testnet())
-    faucet_api = FaucetApi(NetworkConfig.fetchai_stable_testnet())
+    ledger = LedgerClient(NetworkConfig.chain4energy_stable_testnet())
+    faucet_api = FaucetApi(NetworkConfig.chain4energy_stable_testnet())
 
     wallet_balance = ledger.query_bank_balance(wallet.address())
 
@@ -72,7 +72,7 @@ def main():
 
     if not args.contract_address:
         instantiation_message = {"fee": "100"}
-        contract.deploy(instantiation_message, wallet, funds="1atestfet")
+        contract.deploy(instantiation_message, wallet, funds="1uc4e")
 
     print(f"Oracle contract deployed at: {contract.address}")
 
