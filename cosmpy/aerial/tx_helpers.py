@@ -58,6 +58,7 @@ class TxResponse:
     raw_log: str
     logs: List[MessageLog]
     events: Dict[str, Dict[str, str]]
+    timestamp: str
 
     def is_successful(self) -> bool:
         """Check transaction is successful.

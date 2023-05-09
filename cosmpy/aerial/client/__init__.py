@@ -673,6 +673,7 @@ class LedgerClient:
             raw_log=str(tx_response.raw_log),
             logs=logs,
             events=events,
+            timestamp=tx_response.timestamp,
         )
 
     def simulate_tx(self, tx: Transaction) -> int:
