@@ -28,6 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
 import grpc
+from dateutil.parser import isoparse
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
@@ -673,7 +674,7 @@ class LedgerClient:
             raw_log=str(tx_response.raw_log),
             logs=logs,
             events=events,
-            timestamp=tx_response.timestamp,
+            timestamp=isoparse(tx_response.timestamp),
         )
 
     def simulate_tx(self, tx: Transaction) -> int:

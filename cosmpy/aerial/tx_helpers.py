@@ -21,7 +21,7 @@
 
 import re
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Union
 
 from cosmpy.aerial.exceptions import (
@@ -58,7 +58,7 @@ class TxResponse:
     raw_log: str
     logs: List[MessageLog]
     events: Dict[str, Dict[str, str]]
-    timestamp: str
+    timestamp: datetime
 
     def is_successful(self) -> bool:
         """Check transaction is successful.

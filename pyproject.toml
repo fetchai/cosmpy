@@ -42,6 +42,7 @@ bip-utils = "*"
 blspy = "*"
 google-api-python-client = "*"
 jsonschema = ">=3.2.0,<5"
+dateutil = "*"
 
 [tool.poetry.group.dev]
 optional = true
