@@ -1,4 +1,5 @@
 """Test parsing tx response."""
+
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -25,7 +26,6 @@ from cosmpy.protos.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse as PbTxRe
 
 def test_parsing_tx_response():
     """Test parsing tx response."""
-
     txhash = "hash"
     height = 123
     code = 456
