@@ -48,7 +48,7 @@ def test_parsing_tx_response():
         timestamp=timestamp,
     )
 
-    tx = LedgerClient._parse_tx_response(tx_response)
+    tx = LedgerClient._parse_tx_response(tx_response)  # pylint: disable=W0212
 
     assert tx.hash == txhash
     assert tx.height == height
