@@ -2222,7 +2222,7 @@ pytest = ">=5.3"
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 files = [
@@ -2887,4 +2887,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "7c36341d6256c2ee5b7993ac45dba0ae3dc50e90a8ed07e245194c3592fbb619"
+content-hash = "f387b734860cac9a836c64dbb888fa3466fcb5e2d6479cd0f60349cda7ae7591"

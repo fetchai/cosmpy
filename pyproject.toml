@@ -43,6 +43,8 @@ bip-utils = "*"
 blspy = "*"
 google-api-python-client = "*"
 jsonschema = ">=3.2.0,<5"
+python-dateutil = "*"
+
 
 [tool.poetry.group.dev]
 optional = true
@@ -107,6 +109,7 @@ module = [
     "certifi.*",
     "mbedtls.*",
     "jsonschema.*",
+    "dateutil.*"
 ]
 ignore_missing_imports = true
 
