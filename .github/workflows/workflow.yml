@@ -66,12 +66,17 @@ jobs:
           - '3.8'
           - '3.9'
           - '3.10'
+          - '3.11'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '${{ matrix.python-version }}'
+      - if: matrix.os == 'macos-latest' && matrix.python-version == '3.11'
+        name: Install build tools
+        run: |
+          brew install automake
       - name: Install dependencies
         run: pip install tox==3.25.1
       - name: Unit Tests
