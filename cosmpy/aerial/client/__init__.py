@@ -665,6 +665,10 @@ class LedgerClient:
                 event_data[attribute.key.decode()] = attribute.value.decode()
             events[event.type] = event_data
 
+        timestamp = None
+        if tx_response.timestamp:
+            timestamp = isoparse(tx_response.timestamp)
+
         return TxResponse(
             hash=str(tx_response.txhash),
             height=int(tx_response.height),
@@ -674,7 +678,7 @@ class LedgerClient:
             raw_log=str(tx_response.raw_log),
             logs=logs,
             events=events,
-            timestamp=isoparse(tx_response.timestamp),
+            timestamp=timestamp,
         )
 
     def simulate_tx(self, tx: Transaction) -> int:
