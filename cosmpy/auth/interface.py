@@ -58,7 +58,7 @@ class Auth(ABC):
         Query all parameters.
 
         :param request: QueryParamsRequest
-        :param metadata: The metadata for the call or None. metadata are additional headers        :param metadata: The metadata for the call or None. metadata are additional headers
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryParamsResponse
         """

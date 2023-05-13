@@ -55,7 +55,6 @@ class AuthRestClient(Auth):
 
         :param request: QueryAccountRequest that contains account address
         :param metadata: The metadata for the call or None. metadata are additional headers
-        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryAccountResponse
         """

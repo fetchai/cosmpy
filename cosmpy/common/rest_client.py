@@ -52,7 +52,6 @@ class RestClient:
 
         :param url_base_path: URL base path
         :param request: Protobuf coded request
-        :param metadata: The metadata for the call or None. metadata are additional headers
         :param used_params: Parameters to be removed from request after converting it to dict
         :param metadata: The metadata for the call or None. metadata are additional headers
 

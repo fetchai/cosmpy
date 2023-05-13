@@ -111,7 +111,9 @@ class Staking(ABC):
         Query unbonding delegations of a validator.
 
          :param request: ValidatorUnbondingDelegations
-         :param metadata: The metadata for the call or None. metadata are additional headers         :return: QueryValidatorUnbondingDelegationsResponse
+         :param metadata: The metadata for the call or None. metadata are additional headers
+
+         :return: QueryValidatorUnbondingDelegationsResponse
         """
 
     @abstractmethod
