@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of Bank interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -54,11 +55,16 @@ class BankRestClient(Bank):
         """
         self._rest_api = rest_api
 
-    def Balance(self, request: QueryBalanceRequest) -> QueryBalanceResponse:
+    def Balance(
+        self,
+        request: QueryBalanceRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryBalanceResponse:
         """
         Query balance of selected denomination from specific account.
 
         :param request: QueryBalanceRequest with address and denomination
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryBalanceResponse
         """
@@ -69,11 +75,16 @@ class BankRestClient(Bank):
         )
         return Parse(response, QueryBalanceResponse())
 
-    def AllBalances(self, request: QueryAllBalancesRequest) -> QueryAllBalancesResponse:
+    def AllBalances(
+        self,
+        request: QueryAllBalancesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryAllBalancesResponse:
         """
         Query balance of all denominations from specific account.
 
         :param request: QueryAllBalancesRequest with account address
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryAllBalancesResponse
         """
@@ -82,33 +93,48 @@ class BankRestClient(Bank):
         )
         return Parse(response, QueryAllBalancesResponse())
 
-    def TotalSupply(self, request: QueryTotalSupplyRequest) -> QueryTotalSupplyResponse:
+    def TotalSupply(
+        self,
+        request: QueryTotalSupplyRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryTotalSupplyResponse:
         """
         Query total supply of all denominations.
 
         :param request: QueryTotalSupplyRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryTotalSupplyResponse
         """
         response = self._rest_api.get(f"{self.API_URL}/supply", request)
         return Parse(response, QueryTotalSupplyResponse())
 
-    def SupplyOf(self, request: QuerySupplyOfRequest) -> QuerySupplyOfResponse:
+    def SupplyOf(
+        self,
+        request: QuerySupplyOfRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QuerySupplyOfResponse:
         """
         Query total supply of specific denomination.
 
         :param request: QuerySupplyOfRequest with denomination
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QuerySupplyOfResponse
         """
         response = self._rest_api.get(f"{self.API_URL}/supply/{request.denom}")
         return Parse(response, QuerySupplyOfResponse())
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Query the parameters of bank module.
 
         :param request: QueryParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryParamsResponse
         """
@@ -116,12 +142,15 @@ class BankRestClient(Bank):
         return Parse(response, QueryParamsResponse())
 
     def DenomMetadata(
-        self, request: QueryDenomMetadataRequest
+        self,
+        request: QueryDenomMetadataRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDenomMetadataResponse:
         """
         Query the client metadata for all registered coin denominations.
 
         :param request: QueryDenomMetadataRequest with denomination
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryDenomMetadataResponse
         """
@@ -129,12 +158,15 @@ class BankRestClient(Bank):
         return Parse(response, QueryDenomMetadataResponse())
 
     def DenomsMetadata(
-        self, request: QueryDenomsMetadataRequest
+        self,
+        request: QueryDenomsMetadataRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDenomsMetadataResponse:
         """
         Query the client metadata of a given coin denomination.
 
         :param request: QueryDenomsMetadataRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryDenomsMetadataResponse
         """

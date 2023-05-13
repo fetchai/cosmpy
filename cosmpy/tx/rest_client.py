@@ -21,7 +21,7 @@
 
 import base64
 import json
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Tuple
 
 from google.protobuf.json_format import Parse, ParseDict
 
@@ -64,11 +64,16 @@ class TxRestClient(TxInterface):
         """
         self.rest_client = rest_client
 
-    def Simulate(self, request: SimulateRequest) -> SimulateResponse:
+    def Simulate(
+        self,
+        request: SimulateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> SimulateResponse:
         """
         Simulate executing a transaction to estimate gas usage.
 
         :param request: SimulateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: SimulateResponse
         """
         response = self.rest_client.post(
@@ -77,11 +82,14 @@ class TxRestClient(TxInterface):
         )
         return Parse(response, SimulateResponse())
 
-    def GetTx(self, request: GetTxRequest) -> GetTxResponse:
+    def GetTx(
+        self, request: GetTxRequest, metadata: Optional[Tuple[Tuple[str, str]]] = None
+    ) -> GetTxResponse:
         """
         GetTx fetches a tx by hash.
 
         :param request: GetTxRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: GetTxResponse
         """
         response = self.rest_client.get(f"{self.API_URL}/txs/{request.hash}")
@@ -93,21 +101,31 @@ class TxRestClient(TxInterface):
 
         return ParseDict(dict_response, GetTxResponse())
 
-    def BroadcastTx(self, request: BroadcastTxRequest) -> BroadcastTxResponse:
+    def BroadcastTx(
+        self,
+        request: BroadcastTxRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> BroadcastTxResponse:
         """
         BroadcastTx broadcast transaction.
 
         :param request: BroadcastTxRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: BroadcastTxResponse
         """
         response = self.rest_client.post(f"{self.API_URL}/txs", request)
         return Parse(response, BroadcastTxResponse())
 
-    def GetTxsEvent(self, request: GetTxsEventRequest) -> GetTxsEventResponse:
+    def GetTxsEvent(
+        self,
+        request: GetTxsEventRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> GetTxsEventResponse:
         """
         GetTxsEvent fetches txs by event.
 
         :param request: GetTxsEventRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: GetTxsEventResponse
         """
         response = self.rest_client.get(f"{self.API_URL}/txs", request)

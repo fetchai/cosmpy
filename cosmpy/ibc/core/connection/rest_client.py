@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 """Implementation of IBC Applications Transfer  interface using REST."""
+from typing import Optional, Tuple
+
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
@@ -48,11 +50,16 @@ class IBCCoreConnectionRestClient(IBCCoreConnection):
         """
         self._rest_api = rest_api
 
-    def Connection(self, request: QueryConnectionRequest) -> QueryConnectionResponse:
+    def Connection(
+        self,
+        request: QueryConnectionRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryConnectionResponse:
         """
         Connection queries an IBC connection end.
 
         :param request: QueryConnectionRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionResponse
         """  # noqa: D401
         json_response = self._rest_api.get(
@@ -60,23 +67,31 @@ class IBCCoreConnectionRestClient(IBCCoreConnection):
         )
         return Parse(json_response, QueryConnectionResponse())
 
-    def Connections(self, request: QueryConnectionsRequest) -> QueryConnectionsResponse:
+    def Connections(
+        self,
+        request: QueryConnectionsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryConnectionsResponse:
         """
         Connections queries all the IBC connections of a chain.
 
         :param request: QueryConnectionsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionsResponse
         """  # noqa: D401
         json_response = self._rest_api.get(f"{self.API_URL}/connections", request)
         return Parse(json_response, QueryConnectionsResponse())
 
     def ClientConnections(
-        self, request: QueryClientConnectionsRequest
+        self,
+        request: QueryClientConnectionsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryClientConnectionsResponse:
         """
         ClientConnections queries the connection paths associated with a client state.
 
         :param request: QueryClientConnectionsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryClientConnectionsResponse
         """
         json_response = self._rest_api.get(
@@ -85,12 +100,15 @@ class IBCCoreConnectionRestClient(IBCCoreConnection):
         return Parse(json_response, QueryClientConnectionsResponse())
 
     def ConnectionClientState(
-        self, request: QueryConnectionClientStateRequest
+        self,
+        request: QueryConnectionClientStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryConnectionClientStateResponse:
         """
         ConnectionClientState queries the client state associated with the connection.
 
         :param request: QueryConnectionClientStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionClientStateResponse
         """
         json_response = self._rest_api.get(
@@ -99,12 +117,15 @@ class IBCCoreConnectionRestClient(IBCCoreConnection):
         return Parse(json_response, QueryConnectionClientStateResponse())
 
     def ConnectionConsensusState(
-        self, request: QueryConnectionConsensusStateRequest
+        self,
+        request: QueryConnectionConsensusStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryConnectionConsensusStateResponse:
         """
         ConnectionConsensusState queries the consensus state associated with the connection.
 
         :param request: QueryConnectionConsensusStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionConsensusStateResponse
         """
         json_response = self._rest_api.get(
