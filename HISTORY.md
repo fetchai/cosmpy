@@ -1,5 +1,10 @@
 # Release History
 
+## 0.8.0
+
+- feat: Python 3.11 support
+- feat: add timestamp to LedgerClient TxResponse
+
 ## 0.7.0
 
 - feat: update/clear contract admin
