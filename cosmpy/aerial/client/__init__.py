@@ -56,7 +56,7 @@ from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.common.rest_client import RestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.hashfuncs import sha256_hex
+from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.distribution.rest_client import DistributionRestClient
 from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
@@ -778,7 +778,7 @@ class LedgerClient:
         return Block(
             height=int(block.block.header.height),
             time=self._parse_timestamp(block.block.header.time),
-            tx_hashes=[sha256_hex(tx) for tx in block.block.data.txs],
+            tx_hashes=[sha256(tx).hex().upper() for tx in block.block.data.txs],
             chain_id=block.block.header.chain_id,
         )
 

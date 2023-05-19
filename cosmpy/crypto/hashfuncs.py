@@ -38,19 +38,6 @@ def sha256(contents: bytes) -> bytes:
     return h.digest()
 
 
-def sha256_hex(contents: bytes) -> str:
-    """
-    Get sha256 hash as a capitalised hex string.
-
-    :param contents: bytes contents.
-
-    :return: str sha256 hash.
-    """
-    h = hashlib.sha256()
-    h.update(contents)
-    return h.hexdigest().upper()
-
-
 def ripemd160(contents: bytes) -> bytes:
     """
     Get ripemd160 hash using PyCryptodome.
