@@ -107,7 +107,9 @@ from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )
 from cosmpy.staking.rest_client import StakingRestClient
-from cosmpy.tendermint.rest_client import CosmosBaseTendermintRestClient as TendermintRestClient
+from cosmpy.tendermint.rest_client import (
+    CosmosBaseTendermintRestClient as TendermintRestClient,
+)
 from cosmpy.tx.rest_client import TxRestClient
 
 
