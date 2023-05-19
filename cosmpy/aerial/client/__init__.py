@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Client functionality."""
-
+import hashlib
 import json
 import math
 import time
@@ -66,7 +66,6 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
 )
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
-from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetBlockByHeightRequest,
     GetBlockByHeightResponse,
@@ -100,7 +99,6 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
     GetTxRequest,
-    GetTxResponse,
     SimulateRequest,
 )
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
@@ -190,6 +188,8 @@ class Block:
 
     height: int
     time: datetime
+    chain_id: str
+    tx_hashes: List[str]
 
 
 class LedgerClient:
@@ -739,25 +739,25 @@ class LedgerClient:
 
         return SubmittedTx(self, tx_digest)
 
-    def get_latest_block(self) -> Block:
-        """Get the latest block.
+    def query_latest_block(self) -> Block:
+        """Query the latest block.
 
         :return: latest block
         """
 
         req = GetLatestBlockRequest()
         resp = self.tendermint.GetLatestBlock(req)
-        return self.parse_block(resp)
+        return self._parse_block(resp)
 
-    def get_block(self, height: int) -> Block:
-        """Get the block.
+    def query_block(self, height: int) -> Block:
+        """Query the block.
 
         :param height: block height
         :return: block
         """
         req = GetBlockByHeightRequest(height=height)
         resp = self.tendermint.GetBlockByHeight(req)
-        return self.parse_block(resp)
+        return self._parse_block(resp)
 
     def _parse_timestamp(self, timestamp: Timestamp) -> datetime:
         """Parse the timestamp.
@@ -768,28 +768,40 @@ class LedgerClient:
 
         return datetime.fromtimestamp(timestamp.seconds)
 
-    def parse_block(self, block: GetBlockByHeightResponse) -> Block:
+    def _get_tx_hash(self, tx: bytes) -> str:
+        """Get the transaction hash.
+
+        :param tx: transaction
+        :return: transaction hash
+        """
+
+        hash_object = hashlib.sha256(tx)
+        return hash_object.hexdigest().upper()
+
+    def _parse_block(self, block: GetBlockByHeightResponse) -> Block:
         """Parse the block.
 
-        :param block: block
-        :return: parsed block
+        :param block: block as GetBlockByHeightResponse
+        :return: parsed block as Block
         """
 
         return Block(
             height=int(block.block.header.height),
             time=self._parse_timestamp(block.block.header.time),
+            tx_hashes=[self._get_tx_hash(tx) for tx in block.block.data.txs],
+            chain_id=block.block.header.chain_id,
         )
 
-    def query_last_height(self) -> int:
+    def query_height(self) -> int:
         """Query the latest block height.
 
         :return: latest block height
         """
-        return self._get_latest_block().height
+        return self.query_latest_block().height
 
     def query_chain_id(self) -> str:
         """Query the chain id.
 
         :return: chain id
         """
-        return self._get_latest_block().chain_id
+        return self.query_latest_block().chain_id
