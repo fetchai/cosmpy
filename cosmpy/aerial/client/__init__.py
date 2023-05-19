@@ -744,7 +744,6 @@ class LedgerClient:
 
         :return: latest block
         """
-
         req = GetLatestBlockRequest()
         resp = self.tendermint.GetLatestBlock(req)
         return self._parse_block(resp)
@@ -765,7 +764,6 @@ class LedgerClient:
         :param timestamp: timestamp
         :return: parsed timestamp
         """
-
         return datetime.fromtimestamp(timestamp.seconds)
 
     def _get_tx_hash(self, tx: bytes) -> str:
@@ -774,7 +772,6 @@ class LedgerClient:
         :param tx: transaction
         :return: transaction hash
         """
-
         hash_object = hashlib.sha256(tx)
         return hash_object.hexdigest().upper()
 
@@ -784,7 +781,6 @@ class LedgerClient:
         :param block: block as GetBlockByHeightResponse
         :return: parsed block as Block
         """
-
         return Block(
             height=int(block.block.header.height),
             time=self._parse_timestamp(block.block.header.time),
