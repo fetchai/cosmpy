@@ -103,6 +103,17 @@ def total_unbonding() -> int
 
 total unbonding.
 
+<a id="cosmpy.aerial.client.__init__.Block"></a>
+
+## Block Objects
+
+```python
+@dataclass
+class Block()
+```
+
+Block.
+
 <a id="cosmpy.aerial.client.__init__.LedgerClient"></a>
 
 ## LedgerClient Objects
@@ -569,4 +580,64 @@ Broadcast transaction.
 **Returns**:
 
 Submitted transaction
+
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_latest_block"></a>
+
+#### query`_`latest`_`block
+
+```python
+def query_latest_block() -> Block
+```
+
+Query the latest block.
+
+**Returns**:
+
+latest block
+
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_block"></a>
+
+#### query`_`block
+
+```python
+def query_block(height: int) -> Block
+```
+
+Query the block.
+
+**Arguments**:
+
+- `height`: block height
+
+**Returns**:
+
+block
+
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_height"></a>
+
+#### query`_`height
+
+```python
+def query_height() -> int
+```
+
+Query the latest block height.
+
+**Returns**:
+
+latest block height
+
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_chain_id"></a>
+
+#### query`_`chain`_`id
+
+```python
+def query_chain_id() -> str
+```
+
+Query the chain id.
+
+**Returns**:
+
+chain id
 
