@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import certifi
 import grpc
 from dateutil.parser import isoparse
+from google.protobuf.timestamp_pb2 import Timestamp
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
@@ -65,6 +66,15 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryBalanceRequest,
 )
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
+from cosmpy.protos.cosmos.bank.v1beta1.tx_pb2 import MsgSend
+from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
+    GetBlockByHeightRequest,
+    GetBlockByHeightResponse,
+    GetLatestBlockRequest,
+)
+from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
+    ServiceStub as TendermintQueryGrpcClient,
+)
 from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
     PubKey,
 )
@@ -90,6 +100,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     BroadcastMode,
     BroadcastTxRequest,
     GetTxRequest,
+    GetTxResponse,
     SimulateRequest,
 )
 from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGrpcClient
@@ -97,6 +108,7 @@ from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )
 from cosmpy.staking.rest_client import StakingRestClient
+from cosmpy.tendermint.rest_client import RestClient as TendermintRestClient
 from cosmpy.tx.rest_client import TxRestClient
 
 
@@ -172,6 +184,14 @@ class StakingSummary:
         return sum(map(lambda p: p.amount, self.unbonding_positions))
 
 
+@dataclass
+class Block:
+    """Block."""
+
+    height: int
+    time: datetime
+
+
 class LedgerClient:
     """Ledger client."""
 
@@ -213,6 +233,7 @@ class LedgerClient:
             self.staking = StakingGrpcClient(grpc_client)
             self.distribution = DistributionGrpcClient(grpc_client)
             self.params = QueryParamsGrpcClient(grpc_client)
+            self.tendermint = TendermintQueryGrpcClient(grpc_client)
         else:
             rest_client = RestClient(parsed_url.rest_url)
 
@@ -223,6 +244,7 @@ class LedgerClient:
             self.staking = StakingRestClient(rest_client)  # type: ignore
             self.distribution = DistributionRestClient(rest_client)  # type: ignore
             self.params = ParamsRestClient(rest_client)  # type: ignore
+            self.tendermint = TendermintRestClient(rest_client)  # type: ignore
 
     @property
     def network_config(self) -> NetworkConfig:
@@ -716,3 +738,58 @@ class LedgerClient:
         initial_tx_response.ensure_successful()
 
         return SubmittedTx(self, tx_digest)
+
+    def get_latest_block(self) -> Block:
+        """Get the latest block.
+
+        :return: latest block
+        """
+
+        req = GetLatestBlockRequest()
+        resp = self.tendermint.GetLatestBlock(req)
+        return self.parse_block(resp)
+
+    def get_block(self, height: int) -> Block:
+        """Get the block.
+
+        :param height: block height
+        :return: block
+        """
+        req = GetBlockByHeightRequest(height=height)
+        resp = self.tendermint.GetBlockByHeight(req)
+        return self.parse_block(resp)
+
+    def _parse_timestamp(self, timestamp: Timestamp) -> datetime:
+        """Parse the timestamp.
+
+        :param timestamp: timestamp
+        :return: parsed timestamp
+        """
+
+        return datetime.fromtimestamp(timestamp.seconds)
+
+    def parse_block(self, block: GetBlockByHeightResponse) -> Block:
+        """Parse the block.
+
+        :param block: block
+        :return: parsed block
+        """
+
+        return Block(
+            height=int(block.block.header.height),
+            time=self._parse_timestamp(block.block.header.time),
+        )
+
+    def query_last_height(self) -> int:
+        """Query the latest block height.
+
+        :return: latest block height
+        """
+        return self._get_latest_block().height
+
+    def query_chain_id(self) -> str:
+        """Query the chain id.
+
+        :return: chain id
+        """
+        return self._get_latest_block().chain_id
