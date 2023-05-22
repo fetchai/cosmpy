@@ -26,6 +26,7 @@ import datetime
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from cosmpy.aerial.client import (
+    Block,
     DEFAULT_QUERY_INTERVAL_SECS,
     DEFAULT_QUERY_TIMEOUT_SECS,
     LedgerClient,
@@ -110,7 +111,7 @@ def test_parse_block():
     pb_block = PbBlock(header=block_header, data=block_data)
 
     # Parse block by height response
-    block = LedgerClient._parse_block(pb_block)  # pylint: disable=W0212
+    block = Block.from_proto(pb_block)
 
     # Check results
     assert block.height == height

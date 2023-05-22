@@ -105,6 +105,7 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGr
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )
+from cosmpy.protos.tendermint.types.block_pb2 import Block as PbBlock
 from cosmpy.staking.rest_client import StakingRestClient
 from cosmpy.tendermint.rest_client import (
     CosmosBaseTendermintRestClient as TendermintRestClient,
@@ -192,6 +193,31 @@ class Block:
     time: datetime
     chain_id: str
     tx_hashes: List[str]
+
+    @staticmethod
+    def from_proto(block: PbBlock) -> "Block":
+        """Parse the block.
+
+        :param block: block as GetBlockByHeightResponse
+        :return: parsed block as Block
+        """
+        return Block(
+            height=int(block.header.height),
+            time=Block._parse_timestamp(block.header.time),
+            tx_hashes=[sha256(tx).hex().upper() for tx in block.data.txs],
+            chain_id=block.header.chain_id,
+        )
+
+    @staticmethod
+    def _parse_timestamp(timestamp: Timestamp):
+        """Parse the timestamp.
+
+        :param timestamp: timestamp
+        :return: parsed timestamp
+        """
+        return datetime.fromtimestamp(timestamp.seconds, tz=timezone.utc) + timedelta(
+            microseconds=timestamp.nanos // 1000
+        )
 
 
 class LedgerClient:
@@ -748,7 +774,7 @@ class LedgerClient:
         """
         req = GetLatestBlockRequest()
         resp = self.tendermint.GetLatestBlock(req)
-        return self._parse_block(resp.block)
+        return Block.from_proto(resp.block)
 
     def query_block(self, height: int) -> Block:
         """Query the block.
@@ -758,32 +784,7 @@ class LedgerClient:
         """
         req = GetBlockByHeightRequest(height=height)
         resp = self.tendermint.GetBlockByHeight(req)
-        return self._parse_block(resp.block)
-
-    @staticmethod
-    def _parse_timestamp(timestamp: Timestamp) -> datetime:
-        """Parse the timestamp.
-
-        :param timestamp: timestamp
-        :return: parsed timestamp
-        """
-        return datetime.fromtimestamp(timestamp.seconds, tz=timezone.utc) + timedelta(
-            microseconds=timestamp.nanos // 1000
-        )
-
-    @staticmethod
-    def _parse_block(block: Block) -> Block:
-        """Parse the block.
-
-        :param block: block as GetBlockByHeightResponse
-        :return: parsed block as Block
-        """
-        return Block(
-            height=int(block.header.height),
-            time=LedgerClient._parse_timestamp(block.header.time),
-            tx_hashes=[sha256(tx).hex().upper() for tx in block.data.txs],
-            chain_id=block.header.chain_id,
-        )
+        return Block.from_proto(resp.block)
 
     def query_height(self) -> int:
         """Query the latest block height.
