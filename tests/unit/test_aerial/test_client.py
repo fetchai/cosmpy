@@ -115,9 +115,9 @@ def test_parse_block():
 
     # Parse block by height response
     block_by_height_response = GetBlockByHeightResponse(block=pb_block)
-    block_by_height = LedgerClient._parse_block(
+    block_by_height = LedgerClient._parse_block(  # pylint: disable=W0212
         block_by_height_response
-    )  # pylint: disable=W0212
+    )
 
     # Check results
     assert block_by_height.height == height
@@ -132,9 +132,9 @@ def test_parse_block():
 
     # Parse latest block response
     latest_block_response = GetLatestBlockResponse(block=pb_block)
-    latest_block = LedgerClient._parse_block(
+    latest_block = LedgerClient._parse_block(  # pylint: disable=W0212
         latest_block_response
-    )  # pylint: disable=W0212
+    )
 
     # Check if results are the same
     assert latest_block == block_by_height
