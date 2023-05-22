@@ -44,6 +44,7 @@ def test_ledger_client_timeouts():
         client._query_interval_secs  # pylint: disable=protected-access
         == DEFAULT_QUERY_INTERVAL_SECS
     )
+
     assert (
         client._query_timeout_secs  # pylint: disable=protected-access
         == DEFAULT_QUERY_TIMEOUT_SECS
@@ -102,7 +103,7 @@ def test_parse_block():
     # Test data
     chain_id = "something"
     height = 123
-    timestamp = Timestamp(seconds=1234567890)
+    timestamp = Timestamp(seconds=1234567890, nanos=5678910)
     txs = [b"tx1", b"tx2"]
 
     # Create block response
@@ -116,7 +117,7 @@ def test_parse_block():
     # Check results
     assert block.height == height
     assert block.time == datetime.datetime(
-        2009, 2, 13, 23, 31, 30, tzinfo=datetime.timezone.utc
+        2009, 2, 13, 23, 31, 30, tzinfo=datetime.timezone.utc, microsecond=5678
     )
     assert block.tx_hashes == [
         "709B55BD3DA0F5A838125BD0EE20C5BFDD7CABA173912D4281CAE816B79A201B",
