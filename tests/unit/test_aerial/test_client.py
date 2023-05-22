@@ -102,7 +102,6 @@ def test_parsing_tx_response():
 
 def test_parse_block():
     """Test parsing block response."""
-
     # Test data
     chain_id = "something"
     height = 123
