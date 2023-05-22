@@ -23,7 +23,7 @@ import json
 import math
 import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
@@ -69,7 +69,6 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGrpcClient
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetBlockByHeightRequest,
-    GetBlockByHeightResponse,
     GetLatestBlockRequest,
 )
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
@@ -761,15 +760,17 @@ class LedgerClient:
         resp = self.tendermint.GetBlockByHeight(req)
         return self._parse_block(resp)
 
-    def _parse_timestamp(self, timestamp: Timestamp) -> datetime:
+    def _parse_timestamp(timestamp: Timestamp) -> datetime:
         """Parse the timestamp.
 
         :param timestamp: timestamp
         :return: parsed timestamp
         """
-        return datetime.fromtimestamp(timestamp.seconds)
+        return datetime.utcfromtimestamp(timestamp.seconds).replace(
+            tzinfo=timezone.utc
+        ) + timedelta(microseconds=timestamp.nanos / 1000)
 
-    def _parse_block(self, block: GetBlockByHeightResponse) -> Block:
+    def _parse_block(block: Any) -> Block:
         """Parse the block.
 
         :param block: block as GetBlockByHeightResponse
@@ -777,7 +778,7 @@ class LedgerClient:
         """
         return Block(
             height=int(block.block.header.height),
-            time=self._parse_timestamp(block.block.header.time),
+            time=LedgerClient._parse_timestamp(block.block.header.time),
             tx_hashes=[sha256(tx).hex().upper() for tx in block.block.data.txs],
             chain_id=block.block.header.chain_id,
         )
