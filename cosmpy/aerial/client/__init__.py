@@ -760,6 +760,7 @@ class LedgerClient:
         resp = self.tendermint.GetBlockByHeight(req)
         return self._parse_block(resp)
 
+    @staticmethod
     def _parse_timestamp(timestamp: Timestamp) -> datetime:
         """Parse the timestamp.
 
@@ -770,6 +771,7 @@ class LedgerClient:
             tzinfo=timezone.utc
         ) + timedelta(microseconds=timestamp.nanos / 1000)
 
+    @staticmethod
     def _parse_block(block: Any) -> Block:
         """Parse the block.
 
