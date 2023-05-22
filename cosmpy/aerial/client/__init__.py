@@ -748,7 +748,7 @@ class LedgerClient:
         """
         req = GetLatestBlockRequest()
         resp = self.tendermint.GetLatestBlock(req)
-        return self._parse_block(resp)
+        return self._parse_block(resp.block)
 
     def query_block(self, height: int) -> Block:
         """Query the block.
@@ -758,7 +758,7 @@ class LedgerClient:
         """
         req = GetBlockByHeightRequest(height=height)
         resp = self.tendermint.GetBlockByHeight(req)
-        return self._parse_block(resp)
+        return self._parse_block(resp.block)
 
     @staticmethod
     def _parse_timestamp(timestamp: Timestamp) -> datetime:
@@ -767,22 +767,22 @@ class LedgerClient:
         :param timestamp: timestamp
         :return: parsed timestamp
         """
-        return datetime.utcfromtimestamp(timestamp.seconds).replace(
-            tzinfo=timezone.utc
-        ) + timedelta(microseconds=timestamp.nanos / 1000)
+        return datetime.fromtimestamp(timestamp.seconds, tz=timezone.utc) + timedelta(
+            microseconds=timestamp.nanos // 1000
+        )
 
     @staticmethod
-    def _parse_block(block: Any) -> Block:
+    def _parse_block(block: Block) -> Block:
         """Parse the block.
 
         :param block: block as GetBlockByHeightResponse
         :return: parsed block as Block
         """
         return Block(
-            height=int(block.block.header.height),
-            time=LedgerClient._parse_timestamp(block.block.header.time),
-            tx_hashes=[sha256(tx).hex().upper() for tx in block.block.data.txs],
-            chain_id=block.block.header.chain_id,
+            height=int(block.header.height),
+            time=LedgerClient._parse_timestamp(block.header.time),
+            tx_hashes=[sha256(tx).hex().upper() for tx in block.data.txs],
+            chain_id=block.header.chain_id,
         )
 
     def query_height(self) -> int:

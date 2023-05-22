@@ -32,10 +32,6 @@ from cosmpy.aerial.client import (
 )
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.protos.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse as PbTxResponse
-from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
-    GetBlockByHeightResponse,
-    GetLatestBlockResponse,
-)
 from cosmpy.protos.tendermint.types.block_pb2 import Block as PbBlock
 from cosmpy.protos.tendermint.types.types_pb2 import Data, Header
 
@@ -114,27 +110,15 @@ def test_parse_block():
     pb_block = PbBlock(header=block_header, data=block_data)
 
     # Parse block by height response
-    block_by_height_response = GetBlockByHeightResponse(block=pb_block)
-    block_by_height = LedgerClient._parse_block(  # pylint: disable=W0212
-        block_by_height_response
-    )
+    block = LedgerClient._parse_block(pb_block)  # pylint: disable=W0212
 
     # Check results
-    assert block_by_height.height == height
-    assert block_by_height.time == datetime.datetime(
+    assert block.height == height
+    assert block.time == datetime.datetime(
         2009, 2, 13, 23, 31, 30, tzinfo=datetime.timezone.utc
     )
-    assert block_by_height.tx_hashes == [
+    assert block.tx_hashes == [
         "709B55BD3DA0F5A838125BD0EE20C5BFDD7CABA173912D4281CAE816B79A201B",
         "27CA64C092A959C7EDC525ED45E845B1DE6A7590D173FD2FAD9133C8A779A1E3",
     ]
-    assert block_by_height.chain_id == chain_id
-
-    # Parse latest block response
-    latest_block_response = GetLatestBlockResponse(block=pb_block)
-    latest_block = LedgerClient._parse_block(  # pylint: disable=W0212
-        latest_block_response
-    )
-
-    # Check if results are the same
-    assert latest_block == block_by_height
+    assert block.chain_id == chain_id
