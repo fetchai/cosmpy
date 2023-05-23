@@ -105,7 +105,6 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc import ServiceStub as TxGr
 from cosmpy.protos.cosmwasm.wasm.v1.query_pb2_grpc import (
     QueryStub as CosmWasmGrpcClient,
 )
-from cosmpy.protos.tendermint.types.block_pb2 import Block as PbBlock
 from cosmpy.staking.rest_client import StakingRestClient
 from cosmpy.tendermint.rest_client import (
     CosmosBaseTendermintRestClient as TendermintRestClient,
