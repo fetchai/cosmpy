@@ -198,7 +198,7 @@ class Block:
     def from_proto(block: PbBlock) -> "Block":
         """Parse the block.
 
-        :param block: block as GetBlockByHeightResponse
+        :param block: block as PbBlock
         :return: parsed block as Block
         """
         return Block(
