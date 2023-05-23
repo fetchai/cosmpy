@@ -195,10 +195,10 @@ class Block:
     tx_hashes: List[str]
 
     @staticmethod
-    def from_proto(block: PbBlock) -> "Block":
+    def from_proto(block: Any) -> "Block":
         """Parse the block.
 
-        :param block: block as PbBlock
+        :param block: block as Any
         :return: parsed block as Block
         """
         return Block(

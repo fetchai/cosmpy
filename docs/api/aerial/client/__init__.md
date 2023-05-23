@@ -120,14 +120,14 @@ Block.
 
 ```python
 @staticmethod
-def from_proto(block: PbBlock) -> "Block"
+def from_proto(block: Any) -> "Block"
 ```
 
 Parse the block.
 
 **Arguments**:
 
-- `block`: block as PbBlock
+- `block`: block as Any
 
 **Returns**:
 
