@@ -114,6 +114,25 @@ class Block()
 
 Block.
 
+<a id="cosmpy.aerial.client.__init__.Block.from_proto"></a>
+
+#### from`_`proto
+
+```python
+@staticmethod
+def from_proto(block: PbBlock) -> "Block"
+```
+
+Parse the block.
+
+**Arguments**:
+
+- `block`: block as GetBlockByHeightResponse
+
+**Returns**:
+
+parsed block as Block
+
 <a id="cosmpy.aerial.client.__init__.LedgerClient"></a>
 
 ## LedgerClient Objects
