@@ -127,7 +127,7 @@ Parse the block.
 
 **Arguments**:
 
-- `block`: block as GetBlockByHeightResponse
+- `block`: block as PbBlock
 
 **Returns**:
 
