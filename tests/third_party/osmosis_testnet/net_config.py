@@ -56,4 +56,6 @@ class FaucetMixIn:
         """
 
         funded_wallet = LocalWallet.from_unsafe_seed(FUNDED_PK, prefix=PREFIX)
-        ledger.send_tokens(wallet, 100, DENOM, funded_wallet).wait_to_complete()
+        ledger.send_tokens(
+            wallet.address(), 100, DENOM, funded_wallet
+        ).wait_to_complete()

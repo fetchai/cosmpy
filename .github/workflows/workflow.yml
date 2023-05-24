@@ -127,5 +127,5 @@ jobs:
       - name: Install dependencies
         run: pip install tox==3.25.1
       - name: Third Party Tests
-        run: |
-          tox -e test-third-party
+        run: tox -e test-third-party
+        continue-on-error: true
