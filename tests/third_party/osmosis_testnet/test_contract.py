@@ -21,8 +21,8 @@
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.wallet import LocalWallet
 
-from tests.integration.osmosis_testnet.net_config import FaucetMixIn, NET_CONFIG
 from tests.integration.test_contract import TestContract as BaseTestContract
+from tests.third_party.osmosis_testnet.net_config import FaucetMixIn, NET_CONFIG
 
 
 class TestContract(BaseTestContract, FaucetMixIn):
