@@ -18,10 +18,6 @@
 # ------------------------------------------------------------------------------
 
 """Osmosis network config."""
-from time import sleep
-
-import requests
-
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.wallet import LocalWallet
