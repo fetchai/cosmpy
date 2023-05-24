@@ -24,7 +24,7 @@ from typing import List
 import pytest
 
 
-def pytest_collection_modifyitems(_, items: List[pytest.Item]):
+def pytest_collection_modifyitems(items: List[pytest.Item]):
     """
     Modify items collection for pytest.
 
