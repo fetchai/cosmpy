@@ -31,7 +31,6 @@ def pytest_collection_modifyitems(config: pytest.Config, items: List[pytest.Item
     :param config: pytest config
     :param items: list of items
     """
-
     # Remove third party tests from integration tests
     for item in items:
         if "third_party" in item.nodeid:
