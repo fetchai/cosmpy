@@ -128,4 +128,12 @@ jobs:
         run: pip install tox==3.25.1
       - name: Third Party Tests
         run: tox -e test-third-party
-
+        continue-on-error: true
+      - name: Set test status
+        run: |
+          if [[ ${{ job.status }} == 'success' ]]; then
+            echo "##[set-output name=test_failed;]false"
+          else
+            echo "##[set-output name=test_failed;]true"
+          fi
+        id: set_test_status
