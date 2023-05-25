@@ -84,9 +84,9 @@
 # LABEL = "label"
 #
 # # Coins
-# COIN = "stake"
+# DENOM = "stake"
 # AMOUNT = "1234"
-# COINS = [Coin(amount=AMOUNT, denom=COIN)]
+# COINS = [Coin(amount=AMOUNT, denom=DENOM)]
 #
 # # CosmWasm
 # WASM_MSG = {"key": "value"}
@@ -214,7 +214,7 @@
 #             "@type": "/cosmos.bank.v1beta1.MsgSend",
 #             "fromAddress": str(ADDRESS_PK),
 #             "toAddress": str(ADDRESS_OTHER),
-#             "amount": [{"denom": COIN, "amount": AMOUNT}],
+#             "amount": [{"denom": DENOM, "amount": AMOUNT}],
 #         }
 #
 #         msg = self.ledger.get_packed_send_msg(ADDRESS_PK, ADDRESS_OTHER, COINS)
@@ -228,7 +228,7 @@
 #             "codeId": str(CODE_ID),
 #             "label": LABEL,
 #             "msg": WASM_MSG_BASE64,
-#             "funds": [{"denom": COIN, "amount": AMOUNT}],
+#             "funds": [{"denom": DENOM, "amount": AMOUNT}],
 #         }
 #
 #         msg = self.ledger.get_packed_init_msg(
@@ -243,7 +243,7 @@
 #             "sender": str(ADDRESS_PK),
 #             "contract": str(CONTRACT_ADDRESS),
 #             "msg": WASM_MSG_BASE64,
-#             "funds": [{"denom": COIN, "amount": AMOUNT}],
+#             "funds": [{"denom": DENOM, "amount": AMOUNT}],
 #         }
 #
 #         msg = self.ledger.get_packed_exec_msg(
@@ -276,7 +276,7 @@
 #                         "@type": "/cosmos.bank.v1beta1.MsgSend",
 #                         "fromAddress": str(ADDRESS_PK),
 #                         "toAddress": str(ADDRESS_OTHER),
-#                         "amount": [{"denom": COIN, "amount": AMOUNT}],
+#                         "amount": [{"denom": DENOM, "amount": AMOUNT}],
 #                     }
 #                 ],
 #                 "memo": LABEL,
@@ -293,7 +293,7 @@
 #                     }
 #                 ],
 #                 "fee": {
-#                     "amount": [{"denom": COIN, "amount": AMOUNT}],
+#                     "amount": [{"denom": DENOM, "amount": AMOUNT}],
 #                     "gasLimit": str(GAS_LIMIT),
 #                 },
 #             },
@@ -315,7 +315,7 @@
 #                         "@type": "/cosmos.bank.v1beta1.MsgSend",
 #                         "fromAddress": str(ADDRESS_PK),
 #                         "toAddress": str(ADDRESS_OTHER),
-#                         "amount": [{"denom": COIN, "amount": AMOUNT}],
+#                         "amount": [{"denom": DENOM, "amount": AMOUNT}],
 #                     }
 #                 ],
 #                 "memo": LABEL,
@@ -332,7 +332,7 @@
 #                     }
 #                 ],
 #                 "fee": {
-#                     "amount": [{"denom": COIN, "amount": AMOUNT}],
+#                     "amount": [{"denom": DENOM, "amount": AMOUNT}],
 #                     "gasLimit": str(GAS_LIMIT),
 #                 },
 #             },
