@@ -25,33 +25,37 @@ from cosmpy.aerial.wallet import LocalWallet
 
 # Network config
 PREFIX = "osmo"
-DENOM = "uosmo"
+COIN = "uosmo"
 GAS_LIMIT = 120000
 
 NET_CONFIG = NetworkConfig(
-    chain_id="osmo-test-4",
-    url="grpc+http://grpc-test.osmosis.zone:443/",
+    chain_id="osmo-test-5",
+    url="grpc+https://grpc.osmotest5.osmosis.zone:443",
     fee_minimum_gas_price=1,
-    fee_denomination=DENOM,
-    staking_denomination=DENOM,
+    fee_denomination=COIN,
+    staking_denomination=COIN,
 )
 
 DEFAULT_TIMEOUT = 60.0
+# PK for funded wallet osmo1ya7ymmhq3xq94parz46w5jhf2v83hqd83aac8e
 FUNDED_PK = "974c467d48351204b8481736079edfefa98eba16f4b80d74b279e103e8ee9246"
 
 
 class FaucetMixIn:
     """Osmosis faucet config"""
 
-    def ask_funds(self, wallet: LocalWallet, ledger: LedgerClient):
+    def ask_funds(
+        self, wallet: LocalWallet, ledger: LedgerClient, amount: int = 1000000
+    ):
         """Request fund from faucet.
 
         :param wallet: Wallet Address
         :param ledger: LedgerClient
+        :param amount: amount to topup
         :raises Exception: fail to topup
         """
 
         funded_wallet = LocalWallet.from_unsafe_seed(FUNDED_PK, prefix=PREFIX)
         ledger.send_tokens(
-            wallet.address(), 100, DENOM, funded_wallet
+            wallet.address(), amount, COIN, funded_wallet
         ).wait_to_complete()

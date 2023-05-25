@@ -22,7 +22,13 @@ from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.wallet import LocalWallet
 
 from tests.integration.test_contract import TestContract as BaseTestContract
-from tests.third_party.osmosis_testnet.net_config import FaucetMixIn, NET_CONFIG, PREFIX
+from tests.third_party.osmosis_testnet.net_config import (
+    COIN,
+    FaucetMixIn,
+    GAS_LIMIT,
+    NET_CONFIG,
+    PREFIX,
+)
 
 
 class TestContract(BaseTestContract, FaucetMixIn):
@@ -32,10 +38,14 @@ class TestContract(BaseTestContract, FaucetMixIn):
     :param FaucetMixIn: Osmosis Faucet config
     """
 
+    COIN = COIN
+    GAS_LIMIT = GAS_LIMIT
+    PREFIX = PREFIX
+
     def get_ledger(self):
         return LedgerClient(NET_CONFIG)
 
     def get_wallet(self):
         wallet = LocalWallet.generate(prefix=PREFIX)
-        self.ask_funds(wallet, self.get_ledger())
+        self.ask_funds(wallet, self.get_ledger(), 10000000)
         return wallet
