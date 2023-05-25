@@ -128,9 +128,11 @@ jobs:
         run: pip install tox==3.25.1
       - name: Third Party Tests
         id: tests
+        shell: bash
         run: |
           tox -e test-third-party || echo "::set-output name=status::$(echo $?)"
       - name: Create check run
+        shell: bash
         uses: github-actions-up-and-running/create-check-run@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
