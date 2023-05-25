@@ -24,10 +24,11 @@ from typing import List
 import pytest
 
 
-def pytest_collection_modifyitems(config, items: List[pytest.Item]):
+def pytest_collection_modifyitems(config: pytest.Config, items: List[pytest.Item]):
     """
     Modify items collection for pytest.
 
+    :param config: pytest config
     :param items: list of items
     """
 
