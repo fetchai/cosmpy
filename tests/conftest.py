@@ -35,5 +35,5 @@ def pytest_collection_modifyitems(config: pytest.Config, items: List[pytest.Item
     for item in items:
         if "third_party" in item.nodeid:
             item.add_marker(pytest.mark.thirdparty(reason="Third party tests"))
-        if config.option.markexpr != "thirdparty":
-            item.add_marker(pytest.mark.skip(reason="Skipped in integration tests"))
+            if config.option.markexpr != "thirdparty":
+                item.add_marker(pytest.mark.skip(reason="Skipped in integration tests"))
