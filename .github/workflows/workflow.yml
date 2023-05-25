@@ -127,13 +127,14 @@ jobs:
       - name: Install dependencies
         run: pip install tox==3.25.1
       - name: Third Party Tests
-        run: tox -e test-third-party
-        continue-on-error: true
-      - name: Set test status
+        id: tests
         run: |
-          if [[ ${{ job.status }} == 'success' ]]; then
-            echo "::set-output name=test_result::success"
-          else
-            echo "::set-output name=test_result::skipped"
-          fi
-        id: set_test_status
+          tox -e test-third-party || echo "::set-output name=status::$(echo $?)"
+      - name: Create check run
+        uses: github-actions-up-and-running/create-check-run@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Third Party Tests
+          status: 'completed'
+          conclusion: ${{ steps.tests.outputs.status == '0' && 'success' || 'neutral' }}
+          output: '{"title":"Third Party Tests","summary":"Test results"}'
