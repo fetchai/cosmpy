@@ -47,5 +47,5 @@ class TestContract(BaseTestContract, FaucetMixIn):
 
     def get_wallet(self):
         wallet = LocalWallet.generate(prefix=PREFIX)
-        self.ask_funds(wallet, self.get_ledger(), 10000000)
+        self.ask_funds(wallet, self.get_ledger(), 100000000)
         return wallet
