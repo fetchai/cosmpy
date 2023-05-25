@@ -107,3 +107,25 @@ jobs:
       - name: Integration Tests
         run: |
           tox -e test-integration
+  third_party_tests:
+    name: Third Party Tests
+    runs-on: '${{ matrix.os }}'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        python-version:
+          - 3.9
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '${{ matrix.python-version }}'
+      - name: Install dependencies
+        run: pip install tox==3.25.1
+      - name: Third Party Tests
+        run: tox -e test-third-party
+        continue-on-error: true

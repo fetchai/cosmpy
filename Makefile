@@ -56,6 +56,11 @@ unit-test:
 integration-test:
 	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "integration"
 
+# Run all third party tests
+.PHONY: third-party-test
+third-party-test:
+	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "thirdparty"
+
 # Produce the coverage report. Can see a report summary on the terminal.
 # Detailed report on all modules are placed under /coverage-report
 .PHONY: coverage-report
