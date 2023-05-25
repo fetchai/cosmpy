@@ -24,14 +24,16 @@ from typing import List
 import pytest
 
 
-def pytest_collection_modifyitems(items: List[pytest.Item]):
+def pytest_collection_modifyitems(config, items: List[pytest.Item]):
     """
     Modify items collection for pytest.
 
     :param items: list of items
     """
+
     # Remove third party tests from integration tests
     for item in items:
         if "third_party" in item.nodeid:
-            if "integration" in item.keywords:
-                item.add_marker(pytest.mark.skip(reason="Skipped in integration tests"))
+            item.add_marker(pytest.mark.thirdparty(reason="Third party tests"))
+        if config.option.markexpr != "thirdparty":
+            item.add_marker(pytest.mark.skip(reason="Skipped in integration tests"))
