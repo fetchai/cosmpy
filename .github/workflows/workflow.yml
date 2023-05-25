@@ -132,8 +132,8 @@ jobs:
       - name: Set test status
         run: |
           if [[ ${{ job.status }} == 'success' ]]; then
-            echo "##[set-output name=test_failed;]false"
+            echo "::set-output name=test_result::success"
           else
-            echo "##[set-output name=test_failed;]true"
+            echo "::set-output name=test_result::skipped"
           fi
         id: set_test_status
