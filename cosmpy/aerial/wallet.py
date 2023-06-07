@@ -23,12 +23,11 @@ from abc import ABC, abstractmethod
 from collections import UserString
 from typing import Optional
 
-from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # type: ignore
-
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PrivateKey, PublicKey
+from cosmpy.mnemonic import derive_child_key_from_mnemonic
 
 
 class Wallet(ABC, UserString):
@@ -99,12 +98,10 @@ class LocalWallet(Wallet):
         :param prefix: prefix, defaults to None
         :return: local wallet
         """
-        seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
-        bip44_def_ctx = Bip44.FromSeed(
-            seed_bytes, Bip44Coins.COSMOS
-        ).DeriveDefaultPath()
+        child_key = derive_child_key_from_mnemonic(mnemonic, "m/44'/118'/0'/0/0")
+
         return LocalWallet(
-            PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()), prefix=prefix
+            PrivateKey(child_key), prefix=prefix
         )
 
     @staticmethod
