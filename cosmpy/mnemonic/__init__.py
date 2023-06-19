@@ -1,16 +1,19 @@
 import hashlib
 import hmac
+import os
 import re
 from typing import Tuple, List, Optional
 
+from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.crypto.keypairs import PrivateKey
-from cosmpy.mnemonic.words import ENGLISH_MNEMONIC_WORDS
+from cosmpy.mnemonic.words import ENGLISH_MNEMONIC_WORDS, ENGLISH_MNEMONIC_WORDS_LIST
 
 SEED_MIN_BYTE_LEN = 16
 HMAC_LEN = hashlib.sha512().digest_size
 HMAC_HALF_LEN = HMAC_LEN // 2
 MNEMONIC_SALT = "mnemonic"
 MNEMONIC_ROUNDS = 2048
+COSMOS_HD_PATH = "m/44'/118'/0'/0/0"
 
 
 def split_hmac(data: bytes) -> Tuple[bytes, bytes]:
@@ -148,3 +151,40 @@ def derive_child_key_from_mnemonic(mnemonic: str, path: str, passphrase: Optiona
 
     # derive the child key from the master key, given the specified path
     return derive_child_key(master_private_key, master_chain_code, path)
+
+
+def entropy_to_mnemonic(entropy: bytes) -> str:
+    # Get the english mnemonic words list - later we can add support for other languages
+    mnemonic = ENGLISH_MNEMONIC_WORDS_LIST
+
+    if len(entropy) not in [16, 20, 24, 28, 32]:
+        raise ValueError(
+            "Data length should be one of the following: [16, 20, 24, 28, 32], but it is not (%d)."
+            % len(entropy)
+        )
+
+    # b is the binary representation of the entropy joined with the first bits of the hash
+    h = sha256(entropy).hex()
+    b = (
+            bin(int.from_bytes(entropy, byteorder="big"))[2:].zfill(len(entropy) * 8)
+            + bin(int(h, 16))[2:].zfill(256)[: len(entropy) * 8 // 32]
+    )
+
+    # Iterate over the binary string taking 11 bits for each word
+    result = []
+    for i in range(len(b) // 11):
+        idx = int(b[i * 11: (i + 1) * 11], 2)
+        result.append(mnemonic[idx])
+
+    return " ".join(result)
+
+
+def generate_entropy(num_bits) -> bytes:
+    byte_length = (num_bits + 7) // 8
+    entropy = os.urandom(byte_length)
+    return entropy
+
+
+def generate_mnemonic(num_bits=256):
+    entropy = generate_entropy(num_bits)
+    return entropy_to_mnemonic(entropy)

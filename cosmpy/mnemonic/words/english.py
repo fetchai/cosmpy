@@ -1,4 +1,4 @@
-ENGLISH_MNEMONIC_WORDS = {
+ENGLISH_MNEMONIC_WORDS_LIST = [
     'abandon',
     'ability',
     'able',
@@ -2046,4 +2046,7 @@ ENGLISH_MNEMONIC_WORDS = {
     'zebra',
     'zero',
     'zone',
-    'zoo'}
+    'zoo']
+
+ENGLISH_MNEMONIC_WORDS = set(ENGLISH_MNEMONIC_WORDS_LIST)
+
