@@ -23,7 +23,9 @@ import string
 import unittest
 
 from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
-from cosmpy.mnemonic import generate_mnemonic, derive_child_key_from_mnemonic
+
+from cosmpy.mnemonic import derive_child_key_from_mnemonic, generate_mnemonic
+
 
 COSMOS_HD_PATH = "m/44'/118'/0'/0/0"
 
@@ -32,6 +34,7 @@ def generate_random_string(length: int) -> str:
     """Generate random string.
 
     :param length: length of string
+    :return: random string
     """
     letters = string.ascii_letters + string.digits + string.punctuation
     return "".join(random.choice(letters) for _ in range(length))
@@ -43,7 +46,7 @@ def from_biputils_mnemonic(mnemonic: str, passphrase: str) -> bytes:
 
     :param mnemonic: mnemonic
     :param passphrase: passphrase
-    :return: private key bytes
+    :return: private key
     """
     seed_bytes = Bip39SeedGenerator(mnemonic).Generate(passphrase)
     bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath()
@@ -56,7 +59,6 @@ class MintRestClientTestCase(unittest.TestCase):
     @staticmethod
     def test_AnnualProvisionsBase64():
         """Tests for mnemonic."""
-
         for _ in 0, 10000:
             mnemonic = generate_mnemonic()
             passphrase = generate_random_string(10)

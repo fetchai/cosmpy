@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Mnemonic words."""
+
 ENGLISH_MNEMONIC_WORDS_LIST = [
     "abandon",
     "ability",

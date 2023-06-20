@@ -27,7 +27,7 @@ from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PrivateKey, PublicKey
-from cosmpy.mnemonic import derive_child_key_from_mnemonic, COSMOS_HD_PATH
+from cosmpy.mnemonic import COSMOS_HD_PATH, derive_child_key_from_mnemonic
 
 
 class Wallet(ABC, UserString):
