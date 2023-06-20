@@ -47,7 +47,7 @@ class MintRestClientTestCase(unittest.TestCase):
     def test_AnnualProvisionsBase64():
         """Tests for mnemonic."""
 
-        for _ in 0, 1000000:
+        for _ in 0, 10000:
             mnemonic = generate_mnemonic()
             passphrase = ""  # Optional passphrase
             key = derive_child_key_from_mnemonic(mnemonic, COSMOS_HD_PATH, passphrase)
