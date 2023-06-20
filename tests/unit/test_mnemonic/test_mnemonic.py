@@ -22,7 +22,7 @@ import random
 import string
 import unittest
 
-from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
+from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # type: ignore
 
 from cosmpy.mnemonic import derive_child_key_from_mnemonic, generate_mnemonic
 
@@ -40,7 +40,6 @@ def generate_random_string(length: int) -> str:
     return "".join(random.choice(letters) for _ in range(length))
 
 
-@staticmethod
 def from_biputils_mnemonic(mnemonic: str, passphrase: str) -> bytes:
     """Generate local wallet from mnemonic.
 
