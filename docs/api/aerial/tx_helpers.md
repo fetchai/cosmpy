@@ -15,6 +15,18 @@ class MessageLog()
 
 Message Log.
 
+<a id="cosmpy.aerial.tx_helpers.MessageLog.index"></a>
+
+#### index
+
+noqa
+
+<a id="cosmpy.aerial.tx_helpers.MessageLog.log"></a>
+
+#### log
+
+noqa
+
 <a id="cosmpy.aerial.tx_helpers.TxResponse"></a>
 
 ## TxResponse Objects
