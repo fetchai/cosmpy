@@ -18,9 +18,10 @@
 # ------------------------------------------------------------------------------
 
 """Tests for mnemonic."""
-import random
+import os
 import string
 import unittest
+from typing import List
 
 from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # type: ignore
 
@@ -30,6 +31,16 @@ from cosmpy.mnemonic import derive_child_key_from_mnemonic, generate_mnemonic
 COSMOS_HD_PATH = "m/44'/118'/0'/0/0"
 
 
+def random_choice_os_random(seq: List[any]) -> any:
+    """Return a random element from the non-empty sequence seq.
+
+    :param seq: sequence
+    :return: random element
+    """
+    index = int.from_bytes(os.urandom(4), byteorder="big") % len(seq)
+    return seq[index]
+
+
 def generate_random_string(length: int) -> str:
     """Generate random string.
 
@@ -37,7 +48,7 @@ def generate_random_string(length: int) -> str:
     :return: random string
     """
     letters = string.ascii_letters + string.digits + string.punctuation
-    return "".join(random.choice(letters) for _ in range(length))
+    return "".join(random_choice_os_random(letters) for _ in range(length))
 
 
 def from_biputils_mnemonic(mnemonic: str, passphrase: str) -> bytes:
