@@ -61,6 +61,6 @@ class MintRestClientTestCase(unittest.TestCase):
             mnemonic = generate_mnemonic()
             passphrase = generate_random_string(10)
 
-            key = derive_child_key_from_mnemonic(mnemonic, COSMOS_HD_PATH, passphrase)
+            key = derive_child_key_from_mnemonic(mnemonic, passphrase, COSMOS_HD_PATH)
             biputils_key_bytes = from_biputils_mnemonic(mnemonic, passphrase)
             assert biputils_key_bytes == key

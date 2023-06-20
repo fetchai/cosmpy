@@ -98,7 +98,7 @@ class LocalWallet(Wallet):
         :param prefix: prefix, defaults to None
         :return: local wallet
         """
-        child_key = derive_child_key_from_mnemonic(mnemonic, COSMOS_HD_PATH)
+        child_key = derive_child_key_from_mnemonic(mnemonic, path=COSMOS_HD_PATH)
 
         return LocalWallet(PrivateKey(child_key), prefix=prefix)
 

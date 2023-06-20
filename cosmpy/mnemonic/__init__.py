@@ -166,7 +166,9 @@ def derive_seed_from_mnemonic(mnemonic: str, passphrase: Optional[str] = None) -
 
 
 def derive_child_key_from_mnemonic(
-    mnemonic: str, path: str, passphrase: Optional[str] = None
+    mnemonic: str,
+    passphrase: Optional[str] = None,
+    path: str = COSMOS_HD_PATH,
 ) -> bytes:
     """
     Derive a child key from a mnemonic phrase and a derivation path.
