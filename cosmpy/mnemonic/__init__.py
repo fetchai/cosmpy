@@ -42,7 +42,7 @@ def derive_master_key(seed_bytes: bytes) -> Tuple[bytes, bytes]:
     success = False
 
     while not success:
-        hmac_out = hmac.digest(b'Bitcoin seed', hmac_data, "sha512")
+        hmac_out = hmac.digest(b"Bitcoin seed", hmac_data, "sha512")
 
         if validate_private_key(hmac_out[:HMAC_HALF_LEN]):
             break
@@ -56,9 +56,11 @@ def parse_derivation_path(path: str) -> List[int]:
     """
     Parse the derivation path in the form of m/44'/118'/0'/0/0 and return a list of indexes.
     """
-    match = re.match(r"^m/(\d{1,3}'?)/(\d{1,3}'?)/(\d{1,3}'?)/(\d{1,3}'?)/(\d{1,3}'?)", path)
+    match = re.match(
+        r"^m/(\d{1,3}'?)/(\d{1,3}'?)/(\d{1,3}'?)/(\d{1,3}'?)/(\d{1,3}'?)", path
+    )
     if match is None:
-        raise RuntimeError('Invalid derivation path')
+        raise RuntimeError("Invalid derivation path")
 
     indexes: List[int] = []
     for i in range(1, 6):
@@ -72,7 +74,9 @@ def parse_derivation_path(path: str) -> List[int]:
     return indexes
 
 
-def derive_child_key_from_index(private_key: bytes, chain_code: bytes, index: int) -> Tuple[bytes, bytes]:
+def derive_child_key_from_index(
+    private_key: bytes, chain_code: bytes, index: int
+) -> Tuple[bytes, bytes]:
     """
     Derive a child key from the specified private key, chain code and index.
     """
@@ -90,7 +94,7 @@ def derive_child_key_from_index(private_key: bytes, chain_code: bytes, index: in
 
     # Construct new key secret from iL and current private key
     il_int = int.from_bytes(il_bytes, byteorder="big", signed=False)
-    private_key_int = int.from_bytes(private_key, byteorder='big', signed=False)
+    private_key_int = int.from_bytes(private_key, byteorder="big", signed=False)
 
     new_private_key_int = (il_int + private_key_int) % parsed_private_key.curve.order
     new_private_key_bytes = new_private_key_int.to_bytes(32, "big")
@@ -106,7 +110,9 @@ def derive_child_key(master_private_key: bytes, chain_code: bytes, path: str) ->
 
     child_private_key = master_private_key
     for index in indexes:
-        child_private_key, chain_code = derive_child_key_from_index(child_private_key, chain_code, index)
+        child_private_key, chain_code = derive_child_key_from_index(
+            child_private_key, chain_code, index
+        )
 
     return child_private_key
 
@@ -123,7 +129,7 @@ def validate_mnemonic_and_normalise(mnemonic: str) -> str:
         if word not in ENGLISH_MNEMONIC_WORDS:
             raise ValueError(f"Invalid mnemonic word: {word}")
 
-    return ' '.join(words)
+    return " ".join(words)
 
 
 def derive_seed_from_mnemonic(mnemonic: str, passphrase: Optional[str] = None) -> bytes:
@@ -135,10 +141,14 @@ def derive_seed_from_mnemonic(mnemonic: str, passphrase: Optional[str] = None) -
     mnemonic = validate_mnemonic_and_normalise(mnemonic)
 
     salt = MNEMONIC_SALT + (passphrase or "")
-    return hashlib.pbkdf2_hmac("sha512", mnemonic.encode(), salt.encode(), MNEMONIC_ROUNDS)
+    return hashlib.pbkdf2_hmac(
+        "sha512", mnemonic.encode(), salt.encode(), MNEMONIC_ROUNDS
+    )
 
 
-def derive_child_key_from_mnemonic(mnemonic: str, path: str, passphrase: Optional[str] = None) -> bytes:
+def derive_child_key_from_mnemonic(
+    mnemonic: str, path: str, passphrase: Optional[str] = None
+) -> bytes:
     """
     Derive a child key from a mnemonic phrase and a derivation path.
     """
@@ -166,14 +176,14 @@ def entropy_to_mnemonic(entropy: bytes) -> str:
     # b is the binary representation of the entropy joined with the first bits of the hash
     h = sha256(entropy).hex()
     b = (
-            bin(int.from_bytes(entropy, byteorder="big"))[2:].zfill(len(entropy) * 8)
-            + bin(int(h, 16))[2:].zfill(256)[: len(entropy) * 8 // 32]
+        bin(int.from_bytes(entropy, byteorder="big"))[2:].zfill(len(entropy) * 8)
+        + bin(int(h, 16))[2:].zfill(256)[: len(entropy) * 8 // 32]
     )
 
     # Iterate over the binary string taking 11 bits for each word
     result = []
     for i in range(len(b) // 11):
-        idx = int(b[i * 11: (i + 1) * 11], 2)
+        idx = int(b[i * 11 : (i + 1) * 11], 2)
         result.append(mnemonic[idx])
 
     return " ".join(result)

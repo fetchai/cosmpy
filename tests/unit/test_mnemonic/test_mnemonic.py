@@ -34,9 +34,7 @@ def from_biputils_mnemonic(mnemonic: str) -> bytes:
     :return: local wallet
     """
     seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
-    bip44_def_ctx = Bip44.FromSeed(
-        seed_bytes, Bip44Coins.COSMOS
-    ).DeriveDefaultPath()
+    bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath()
     return bip44_def_ctx.PrivateKey().Raw().ToBytes()
 
 
@@ -50,8 +48,7 @@ class MintRestClientTestCase(unittest.TestCase):
         for _ in 0, 10000:
             mnemonic = generate_mnemonic()
             passphrase = ""  # Optional passphrase
+
             key = derive_child_key_from_mnemonic(mnemonic, COSMOS_HD_PATH, passphrase)
-
             biputils_key_bytes = from_biputils_mnemonic(mnemonic)
-
             assert biputils_key_bytes == key
