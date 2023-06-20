@@ -18,6 +18,8 @@
 # ------------------------------------------------------------------------------
 
 """Tests for mnemonic."""
+import random
+import string
 import unittest
 
 from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
@@ -26,14 +28,24 @@ from cosmpy.mnemonic import generate_mnemonic, derive_child_key_from_mnemonic
 COSMOS_HD_PATH = "m/44'/118'/0'/0/0"
 
 
+def generate_random_string(length: int) -> str:
+    """Generate random string.
+
+    :param length: length of string
+    """
+    letters = string.ascii_letters + string.digits + string.punctuation
+    return "".join(random.choice(letters) for _ in range(length))
+
+
 @staticmethod
-def from_biputils_mnemonic(mnemonic: str) -> bytes:
+def from_biputils_mnemonic(mnemonic: str, passphrase: str) -> bytes:
     """Generate local wallet from mnemonic.
 
     :param mnemonic: mnemonic
-    :return: local wallet
+    :param passphrase: passphrase
+    :return: private key bytes
     """
-    seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
+    seed_bytes = Bip39SeedGenerator(mnemonic).Generate(passphrase)
     bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath()
     return bip44_def_ctx.PrivateKey().Raw().ToBytes()
 
@@ -47,8 +59,8 @@ class MintRestClientTestCase(unittest.TestCase):
 
         for _ in 0, 10000:
             mnemonic = generate_mnemonic()
-            passphrase = ""  # Optional passphrase
+            passphrase = generate_random_string(10)
 
             key = derive_child_key_from_mnemonic(mnemonic, COSMOS_HD_PATH, passphrase)
-            biputils_key_bytes = from_biputils_mnemonic(mnemonic)
+            biputils_key_bytes = from_biputils_mnemonic(mnemonic, passphrase)
             assert biputils_key_bytes == key
