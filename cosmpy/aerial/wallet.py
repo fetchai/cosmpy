@@ -100,9 +100,7 @@ class LocalWallet(Wallet):
         """
         child_key = derive_child_key_from_mnemonic(mnemonic, COSMOS_HD_PATH)
 
-        return LocalWallet(
-            PrivateKey(child_key), prefix=prefix
-        )
+        return LocalWallet(PrivateKey(child_key), prefix=prefix)
 
     @staticmethod
     def from_unsafe_seed(
