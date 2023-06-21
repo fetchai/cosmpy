@@ -31,7 +31,7 @@ jobs:
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
-        run: pip install tox==3.25.1 bip-utils gcloud google-api-python-client googleapis-common-protos protobuf google-api-core
+        run: pip install tox==3.25.1
       - name: 'Run check ${{ matrix.tox-job }}'
         run: |
           tox -e ${{ matrix.tox-job }}
