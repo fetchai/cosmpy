@@ -305,6 +305,7 @@ formatters
 ci
 nfunc
 HMAC
+hmac
 english
 bool
 noqa
