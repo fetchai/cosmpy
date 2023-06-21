@@ -13,8 +13,6 @@ IBCGO_DIR := build/ibcgo-proto-schema
 COSMPY_PROTOS_DIR := cosmpy/protos
 COSMPY_SRC_DIR := cosmpy
 COSMPY_TESTS_DIR := tests
-INTEGRATION_TESTS_SUBDIR := $(COSMPY_TESTS_DIR)/integration
-THIRD_PARTY_TESTS_SUBDIR := $(COSMPY_TESTS_DIR)/thirdparty
 COSMPY_EXAMPLES_DIR := examples
 COSMPY_SCRIPTS_DIR := scripts
 
@@ -56,12 +54,12 @@ unit-test:
 # Run all integration tests
 .PHONY: integration-test
 integration-test:
-	coverage run -m pytest $(INTEGRATION_TESTS_SUBDIR) --doctest-modules -m "integration"
+	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "integration"
 
 # Run all third party tests
 .PHONY: third-party-test
 third-party-test:
-	coverage run -m pytest $(THIRD_PARTY_TESTS_SUBDIR) --doctest-modules -m "thirdparty"
+	coverage run -m pytest $(COSMPY_TESTS_DIR) --doctest-modules -m "thirdparty"
 
 # Produce the coverage report. Can see a report summary on the terminal.
 # Detailed report on all modules are placed under /coverage-report
