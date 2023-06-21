@@ -79,8 +79,6 @@ jobs:
           brew install automake
       - name: Install dependencies
         run: pip install tox==3.25.1 google-api-python-client bip-utils pycryptodome==3.18.0
-      - name: Install additional dependencies
-        run: pip install google-api-python-client
       - name: Unit Tests
         run: |
           tox -e test-unit

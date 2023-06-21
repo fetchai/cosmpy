@@ -245,8 +245,7 @@ def entropy_to_mnemonic(entropy: bytes) -> str:
 
     if len(entropy) not in [16, 20, 24, 28, 32]:
         raise ValueError(
-            "Data length should be one of the following: [16, 20, 24, 28, 32], but it is not (%d)."
-            % len(entropy)
+            f"Data length should be one of the following: [16, 20, 24, 28, 32], but it is not ({len(entropy)})."
         )
 
     # b is the binary representation of the entropy joined with the first bits of the hash
