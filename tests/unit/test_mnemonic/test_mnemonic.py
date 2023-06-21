@@ -21,7 +21,7 @@
 import os
 import string
 import unittest
-from typing import List
+from typing import Any, List
 
 from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # type: ignore
 
@@ -31,7 +31,7 @@ from cosmpy.mnemonic import derive_child_key_from_mnemonic, generate_mnemonic
 COSMOS_HD_PATH = "m/44'/118'/0'/0/0"
 
 
-def random_choice_os_random(seq: List[any]) -> any:
+def random_choice_os_random(seq: List[Any]) -> Any:
     """Return a random element from the non-empty sequence seq.
 
     :param seq: sequence
