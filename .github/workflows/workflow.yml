@@ -31,7 +31,7 @@ jobs:
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
-        run: pip install tox==3.25.1
+        run: pip install tox==3.25.1 google-api-python-client  bip-utils
       - name: 'Run check ${{ matrix.tox-job }}'
         run: |
           tox -e ${{ matrix.tox-job }}
@@ -78,7 +78,7 @@ jobs:
         run: |
           brew install automake
       - name: Install dependencies
-        run: pip install tox==3.25.1 google-api-python-client  bip-utils
+        run: pip install tox==3.25.1 google-api-python-client bip-utils
       - name: Unit Tests
         run: |
           tox -e test-unit
@@ -125,7 +125,7 @@ jobs:
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
-        run: pip install tox==3.25.1
+        run: pip install tox==3.25.1 google-api-python-client  bip-utils
       - name: Third Party Tests
         run: tox -e test-third-party
         continue-on-error: true

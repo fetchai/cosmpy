@@ -304,3 +304,7 @@ docstrings
 formatters
 ci
 nfunc
+HMAC
+english
+bool
+noqa

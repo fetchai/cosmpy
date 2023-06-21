@@ -23,7 +23,7 @@ import string
 import unittest
 from typing import Any
 
-from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # type: ignore
+from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins  # noqa: F401 # type: ignore
 
 from cosmpy.mnemonic import derive_child_key_from_mnemonic, generate_mnemonic
 
