@@ -61,6 +61,7 @@ safety = "==2.3.5"
 isort = "==5.10.1"
 darglint = "==1.8.1"
 vulture = "==2.6"
+pycryptodome = "^3.18.0"
 pylint = "==2.15.5"
 liccheck = "==0.7.2"
 flake8-copyright = "==0.2.3"
@@ -110,7 +111,8 @@ module = [
     "certifi.*",
     "mbedtls.*",
     "jsonschema.*",
-    "dateutil.*"
+    "dateutil.*",
+    "bip_utils.*",
 ]
 ignore_missing_imports = true
 
