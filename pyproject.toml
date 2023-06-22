@@ -109,7 +109,7 @@ module = [
     "certifi.*",
     "mbedtls.*",
     "jsonschema.*",
-    "dateutil.*",
+    "dateutil.*"
 ]
 ignore_missing_imports = true
 
