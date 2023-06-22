@@ -21,7 +21,6 @@
 
 import hashlib
 
-# pycryptodome, a dependency of bip-utils
 from Crypto.Hash import RIPEMD160  # type: ignore # nosec
 
 

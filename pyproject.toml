@@ -42,7 +42,6 @@ grpcio = "==1.51.1"
 blspy = "*"
 jsonschema = ">=3.2.0,<5"
 python-dateutil = "*"
-pycryptodome = "^3.18.0"
 
 
 [tool.poetry.group.dev]
