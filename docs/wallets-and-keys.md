@@ -40,13 +40,13 @@ fetchd keys export mykeyname --unsafe --unarmored-hex | xxd -r -p | base64
 If you have the mnemonic phrase to an account, you can get the associated private key as follows:
 
 ```python
-from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
+from cosmpy.mnemonic import derive_child_key_from_mnemonic
+from cosmpy.aerial.wallet import LocalWallet, PrivateKey
 
 mnemonic = "person knife december tail tortoise jewel warm when worry limit reward memory piece cool sphere kitchen knee embody soft own victory sauce silly page"
-seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
-bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath()
+private_key = derive_child_key_from_mnemonic(mnemonic)
 
-wallet = LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
+wallet = LocalWallet(PrivateKey(private_key))
 ```
 
 !!! danger
