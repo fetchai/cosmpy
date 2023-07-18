@@ -178,6 +178,7 @@ class Transaction:
         fee: str,
         gas_limit: int,
         memo: Optional[str] = None,
+        fee_payer: Optional[str] = None,
     ) -> "Transaction":
         """Seal the transaction.
 
@@ -207,12 +208,19 @@ class Transaction:
                 )
             )
 
-        auth_info = AuthInfo(
-            signer_infos=signer_infos,
-            fee=Fee(amount=parse_coins(fee), gas_limit=gas_limit),
-        )
+        if fee_payer:
+            auth_info = AuthInfo(
+                signer_infos=signer_infos,
+                fee=Fee(amount=parse_coins(fee), gas_limit=gas_limit, payer=str(fee_payer)),
+            )
+        else:
+            auth_info = AuthInfo(
+                signer_infos=signer_infos,
+                fee=Fee(amount=parse_coins(fee), gas_limit=gas_limit),
+            )
 
         self._fee = fee
+
 
         self._tx_body = TxBody()
         self._tx_body.memo = memo or ""
@@ -227,7 +235,7 @@ class Transaction:
         self,
         signer: Signer,
         chain_id: str,
-        account_number: int,
+        account_number: Optional[int] = None,
         deterministic: bool = False,
     ) -> "Transaction":
         """Sign the transaction.
@@ -248,7 +256,8 @@ class Transaction:
         sd.body_bytes = self._tx.body.SerializeToString()
         sd.auth_info_bytes = self._tx.auth_info.SerializeToString()
         sd.chain_id = chain_id
-        sd.account_number = account_number
+        if account_number is not None:
+            sd.account_number = account_number
 
         data_for_signing = sd.SerializeToString()
 
