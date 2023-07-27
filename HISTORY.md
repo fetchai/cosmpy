@@ -1,5 +1,11 @@
 # Release History
 
+## 0.9.0
+
+- feat: General LedgerClient features (query blocks, chain id, current height)
+- refactor: Remove biputils google-api-python-client dependencies
+- drop BLS support
+
 ## 0.8.0
 
 - feat: Python 3.11 support

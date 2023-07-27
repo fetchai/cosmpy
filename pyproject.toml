@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cosmpy"
-version = "0.8.0"
+version = "0.9.0"
 description = "A library for interacting with the cosmos networks"
 authors = ["Fetch.AI Limited"]
 readme = "README.md"
@@ -33,7 +33,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = "^3.8"
 ecdsa = "*"
 bech32 = "*"
 requests = "*"
@@ -67,6 +67,7 @@ flake8-bugbear = "==22.10.25"
 flake8-eradicate = "==1.4.0"
 flake8-docstrings = "==1.6.0"
 flake8-isort = "==5.0"
+pyyaml = "==5.3.1"
 
 [tool.poetry.group.docs]
 optional = true
