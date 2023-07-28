@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2018-2022 Fetch.AI Limited
+#   Copyright 2018-2021 Fetch.AI Limited
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,27 +17,23 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Osmosis contract test."""
-from cosmpy.aerial.client import LedgerClient
-from cosmpy.aerial.wallet import LocalWallet
+"""Conftest module."""
 
-from tests.integration.osmosis_testnet.net_config import FaucetMixIn, NET_CONFIG
-from tests.integration.test_contract import TestContract as BaseTestContract
+from typing import List
+
+import pytest
 
 
-class TestContract(BaseTestContract, FaucetMixIn):
-    """Test contract
-
-    :param BaseTestContract: Base test contract
-    :param FaucetMixIn: Osmosis Faucet config
+def pytest_collection_modifyitems(config: pytest.Config, items: List[pytest.Item]):
     """
+    Modify items collection for pytest.
 
-    PREFIX = "osmo"
-
-    def get_ledger(self):
-        return LedgerClient(NET_CONFIG)
-
-    def get_wallet(self):
-        wallet = LocalWallet.generate(prefix=self.PREFIX)
-        self.ask_funds(wallet)
-        return wallet
+    :param config: pytest config
+    :param items: list of items
+    """
+    # Remove third party tests from integration tests
+    for item in items:
+        if "third_party" in item.nodeid:
+            item.add_marker(pytest.mark.thirdparty(reason="Third party tests"))
+            if config.option.markexpr != "thirdparty":
+                item.add_marker(pytest.mark.skip(reason="Skipped in integration tests"))
