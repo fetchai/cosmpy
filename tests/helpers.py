@@ -47,6 +47,7 @@ class MockRestClient(RestClient):
         url_base_path: str,
         request: Optional[Descriptor] = None,
         used_params: Optional[List[str]] = None,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None
     ) -> bytes:
         """
         Handle GET request.
