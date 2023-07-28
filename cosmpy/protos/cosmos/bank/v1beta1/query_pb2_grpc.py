@@ -25,6 +25,11 @@ class QueryStub(object):
                 request_serializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QueryAllBalancesRequest.SerializeToString,
                 response_deserializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QueryAllBalancesResponse.FromString,
                 )
+        self.SpendableBalances = channel.unary_unary(
+                '/cosmos.bank.v1beta1.Query/SpendableBalances',
+                request_serializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QuerySpendableBalancesRequest.SerializeToString,
+                response_deserializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QuerySpendableBalancesResponse.FromString,
+                )
         self.TotalSupply = channel.unary_unary(
                 '/cosmos.bank.v1beta1.Query/TotalSupply',
                 request_serializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QueryTotalSupplyRequest.SerializeToString,
@@ -65,6 +70,14 @@ class QueryServicer(object):
 
     def AllBalances(self, request, context):
         """AllBalances queries the balance of all coins for a single account.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SpendableBalances(self, request, context):
+        """SpendableBalances queries the spenable balance of all coins for a single
+        account.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -117,6 +130,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.AllBalances,
                     request_deserializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QueryAllBalancesRequest.FromString,
                     response_serializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QueryAllBalancesResponse.SerializeToString,
+            ),
+            'SpendableBalances': grpc.unary_unary_rpc_method_handler(
+                    servicer.SpendableBalances,
+                    request_deserializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QuerySpendableBalancesRequest.FromString,
+                    response_serializer=cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QuerySpendableBalancesResponse.SerializeToString,
             ),
             'TotalSupply': grpc.unary_unary_rpc_method_handler(
                     servicer.TotalSupply,
@@ -185,6 +203,23 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.bank.v1beta1.Query/AllBalances',
             cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QueryAllBalancesRequest.SerializeToString,
             cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QueryAllBalancesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SpendableBalances(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.bank.v1beta1.Query/SpendableBalances',
+            cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QuerySpendableBalancesRequest.SerializeToString,
+            cosmos_dot_bank_dot_v1beta1_dot_query__pb2.QuerySpendableBalancesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

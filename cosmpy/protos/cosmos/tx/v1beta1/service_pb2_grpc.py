@@ -35,6 +35,11 @@ class ServiceStub(object):
                 request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventRequest.SerializeToString,
                 response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventResponse.FromString,
                 )
+        self.GetBlockWithTxs = channel.unary_unary(
+                '/cosmos.tx.v1beta1.Service/GetBlockWithTxs',
+                request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsRequest.SerializeToString,
+                response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsResponse.FromString,
+                )
 
 
 class ServiceServicer(object):
@@ -69,6 +74,15 @@ class ServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetBlockWithTxs(self, request, context):
+        """GetBlockWithTxs fetches a block with decoded txs.
+
+        Since: cosmos-sdk 0.45.2
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -91,6 +105,11 @@ def add_ServiceServicer_to_server(servicer, server):
                     servicer.GetTxsEvent,
                     request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventRequest.FromString,
                     response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventResponse.SerializeToString,
+            ),
+            'GetBlockWithTxs': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetBlockWithTxs,
+                    request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsRequest.FromString,
+                    response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -168,5 +187,22 @@ class Service(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/GetTxsEvent',
             cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventRequest.SerializeToString,
             cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetBlockWithTxs(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/GetBlockWithTxs',
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsRequest.SerializeToString,
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

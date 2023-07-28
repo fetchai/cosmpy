@@ -25,6 +25,11 @@ class QueryStub(object):
                 request_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesRequest.SerializeToString,
                 response_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesResponse.FromString,
                 )
+        self.AllowancesByGranter = channel.unary_unary(
+                '/cosmos.feegrant.v1beta1.Query/AllowancesByGranter',
+                request_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesByGranterRequest.SerializeToString,
+                response_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesByGranterResponse.FromString,
+                )
 
 
 class QueryServicer(object):
@@ -45,6 +50,14 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AllowancesByGranter(self, request, context):
+        """AllowancesByGranter returns all the grants given by an address
+        Since v0.46
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_QueryServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -57,6 +70,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.Allowances,
                     request_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesRequest.FromString,
                     response_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesResponse.SerializeToString,
+            ),
+            'AllowancesByGranter': grpc.unary_unary_rpc_method_handler(
+                    servicer.AllowancesByGranter,
+                    request_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesByGranterRequest.FromString,
+                    response_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesByGranterResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -100,5 +118,22 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.feegrant.v1beta1.Query/Allowances',
             cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesRequest.SerializeToString,
             cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AllowancesByGranter(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.feegrant.v1beta1.Query/AllowancesByGranter',
+            cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesByGranterRequest.SerializeToString,
+            cosmos_dot_feegrant_dot_v1beta1_dot_query__pb2.QueryAllowancesByGranterResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
