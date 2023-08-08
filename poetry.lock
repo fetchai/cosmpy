@@ -757,7 +757,7 @@ gitdb = ">=4.0.1,<5"
 name = "googleapis-common-protos"
 version = "1.59.1"
 description = "Common protobufs used in Google APIs"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2352,4 +2352,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "63eec6a5cf852049846e4ff36c71672192a85d57a0a0a2d4e30269490db51b79"
+content-hash = "0eb3b4e6004fd31a9db865539728a2053632edd2f8ea39b0b820401cc545e783"

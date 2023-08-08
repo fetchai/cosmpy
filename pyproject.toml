@@ -42,6 +42,7 @@ grpcio = "==1.51.1"
 jsonschema = ">=3.2.0,<5"
 python-dateutil = "*"
 pycryptodome = "^3.18.0"
+googleapis-common-protos = "*"
 
 
 [tool.poetry.group.dev]
@@ -52,7 +53,6 @@ check-manifest = "*"
 tox = "^3.26"
 flake8 = "==5.0.4"
 black = "^22.10"
-googleapis-common-protos = "*"
 mypy = "==0.982"
 bandit = "==1.7.4"
 safety = "==2.3.5"
