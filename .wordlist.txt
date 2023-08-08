@@ -310,5 +310,4 @@ english
 bool
 noqa
 biputils
-google
-apis
+googleapis
