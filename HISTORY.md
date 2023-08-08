@@ -1,5 +1,9 @@
 # Release History
 
+## 0.9.1
+
+- fix: move googleapis-common-protos to main dependency group to resolve installation issues
+
 ## 0.9.0
 
 - feat: General LedgerClient features (query blocks, chain id, current height)
