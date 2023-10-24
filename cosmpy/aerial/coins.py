@@ -40,7 +40,7 @@ def parse_coins(value: str) -> List[Coin]:
         if part == "":
             continue
 
-        match = re.match(r"(\d+)(\w+)", part)
+        match = re.match(r"^(\d+)(.+)$", part)
         if match is None:
             raise RuntimeError(f"Unable to parse value {part}")
 
