@@ -20,6 +20,7 @@
 
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawDelegatorReward
+from cosmpy.protos.cosmos.distribution.v1beta1.tx_pb2 import MsgWithdrawValidatorCommission
 
 
 def create_withdraw_delegator_reward(delegator: Address, validator: Address):
@@ -32,4 +33,15 @@ def create_withdraw_delegator_reward(delegator: Address, validator: Address):
     return MsgWithdrawDelegatorReward(
         delegator_address=str(delegator),
         validator_address=str(validator),
+    )
+
+
+def create_withdraw_validator_commission(validator: Address):
+    """Create withdraw validator commission.
+
+    :param validator: validator account address "cosmos1..."
+    :return: withdraw validator commission message
+    """
+    return MsgWithdrawValidatorCommission(
+        validator_address=validator
     )
