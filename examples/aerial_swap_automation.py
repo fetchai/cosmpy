@@ -170,7 +170,6 @@ def main():
     interval = args.interval_time
 
     while True:
-
         # Query LP status
         pool = pair_contract.query({"pool": {}})
         native_amount = int(pool["assets"][1]["amount"])
