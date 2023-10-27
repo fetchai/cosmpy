@@ -466,7 +466,7 @@ class LedgerContract(UserString):
         if self._schema is None:
             return
 
-        for (msg_type, schema) in self._schema.items():
+        for msg_type, schema in self._schema.items():
             if "instantiate" in msg_type:
                 self._instantiate_schema = schema
             elif "query" in msg_type:
