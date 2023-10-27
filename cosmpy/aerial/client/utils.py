@@ -52,7 +52,6 @@ def prepare_and_broadcast_basic_transaction(
         # simply build the fee from the provided gas limit
         fee = client.estimate_fee_from_gas(gas_limit)
     else:
-
         # we need to build up a representative transaction so that we can accurately simulate it
         tx.seal(
             SigningCfg.direct(sender.public_key(), account.sequence),

@@ -37,6 +37,25 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
                 Coin(amount="200", denom="foobar"),
             ],
         ),
+        (
+            "500ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
+            [
+                Coin(
+                    amount="500",
+                    denom="ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
+                )
+            ],
+        ),
+        (
+            "500ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B, 50000atestfet",
+            [
+                Coin(
+                    amount="500",
+                    denom="ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
+                ),
+                Coin(amount="50000", denom="atestfet"),
+            ],
+        ),
     ],
 )
 def test_parsing_coins(input_coins, expected_result):
