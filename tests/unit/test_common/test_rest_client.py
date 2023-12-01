@@ -64,7 +64,9 @@ class QueryRestClientTestCase(TestCase):
         messageToDict_mock.assert_called_once_with(request)
 
         expected_url = f"{rest_address}{request_url_path}?a=1&b=something&b=else&some_dict.x=1&some_dict.y=2"
-        session_mock.return_value.get.assert_called_once_with(url=expected_url)
+        session_mock.return_value.get.assert_called_once_with(
+            url=expected_url, headers={}
+        )
 
     @patch("requests.session", spec=Session)
     @patch("cosmpy.common.rest_client.MessageToDict")

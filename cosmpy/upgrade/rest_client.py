@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 """Implementation of IBC Applications Transfer  interface using REST."""
+from typing import Optional, Tuple
+
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
@@ -42,11 +44,17 @@ class CosmosUpgradeRestClient(CosmosUpgrade):
         """
         self._rest_api = rest_api
 
-    def CurrentPlan(self, request: QueryCurrentPlanRequest) -> QueryCurrentPlanResponse:
+    def CurrentPlan(
+        self,
+        request: QueryCurrentPlanRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryCurrentPlanResponse:
         """
         CurrentPlan queries the current upgrade plan.
 
         :param request: QueryCurrentPlanRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryCurrentPlanResponse
         """
         json_response = self._rest_api.get(
@@ -54,11 +62,17 @@ class CosmosUpgradeRestClient(CosmosUpgrade):
         )
         return Parse(json_response, QueryCurrentPlanResponse())
 
-    def AppliedPlan(self, request: QueryAppliedPlanRequest) -> QueryAppliedPlanResponse:
+    def AppliedPlan(
+        self,
+        request: QueryAppliedPlanRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryAppliedPlanResponse:
         """
         AppliedPlan queries a previously applied upgrade plan by its name.
 
         :param request: QueryAppliedPlanRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryAppliedPlanResponse
         """
         json_response = self._rest_api.get(

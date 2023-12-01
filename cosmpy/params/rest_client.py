@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of Params interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -42,11 +43,16 @@ class ParamsRestClient(Params):
         """
         self._rest_api = rest_api
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Params queries a specific Cosmos SDK parameter.
 
         :param request: QueryParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryParamsResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params", request)
