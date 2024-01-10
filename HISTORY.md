@@ -1,5 +1,10 @@
 # Release History
 
+## 0.9.2
+
+- fix: coin parsing to support ibc denoms
+- chore: bump grpcio to support Apple M1 architectures and Python 3.12
+
 ## 0.9.1
 
 - fix: move googleapis-common-protos to main dependency group to resolve installation issues
