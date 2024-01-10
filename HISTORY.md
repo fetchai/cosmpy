@@ -2,7 +2,7 @@
 
 ## 0.9.2
 
-- fix: coin parsing to support ibc denoms
+- fix: coin parsing to support ibc denominations
 - chore: bump grpcio to support Apple M1 architectures and Python 3.12
 
 ## 0.9.1
