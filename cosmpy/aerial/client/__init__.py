@@ -32,7 +32,10 @@ from dateutil.parser import isoparse
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
-from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
+from cosmpy.aerial.client.distribution import (
+    create_withdraw_delegator_reward,
+    create_withdraw_validator_commission,
+)
 from cosmpy.aerial.client.staking import (
     ValidatorStatus,
     create_delegate_msg,
@@ -595,6 +598,26 @@ class LedgerClient:
         """
         tx = Transaction()
         tx.add_message(create_withdraw_delegator_reward(sender.address(), validator))
+
+        return prepare_and_broadcast_basic_transaction(
+            self, tx, sender, gas_limit=gas_limit, memo=memo
+        )
+
+    def claim_validator_commission(
+        self,
+        sender: Wallet,
+        memo: Optional[str] = None,
+        gas_limit: Optional[int] = None,
+    ) -> SubmittedTx:
+        """claim validator commission.
+
+        :param sender: sender
+        :param memo: memo, defaults to None
+        :param gas_limit: gas limit, defaults to None
+        :return: prepare and broadcast the transaction and transaction details
+        """
+        tx = Transaction()
+        tx.add_message(create_withdraw_validator_commission(sender.address()))
 
         return prepare_and_broadcast_basic_transaction(
             self, tx, sender, gas_limit=gas_limit, memo=memo

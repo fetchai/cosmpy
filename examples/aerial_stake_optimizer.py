@@ -91,14 +91,12 @@ def main():
     stake_threshold = 0.10
 
     for _i in range(len(validators_comission)):
-
         # Choose validator with lower commission
         validator_index = validators_comission.index(min(validators_comission))
 
         # Verify that it meets the minimum % threshold
         validator_stake_pct = validators_stake[validator_index] / total_stake
         if validator_stake_pct >= stake_threshold:
-
             # Set the selected validator
             validator = validators[validator_index]
             break

@@ -457,6 +457,28 @@ claim rewards.
 
 prepare and broadcast the transaction and transaction details
 
+<a id="cosmpy.aerial.client.__init__.LedgerClient.claim_validator_commission"></a>
+
+#### claim`_`validator`_`commission
+
+```python
+def claim_validator_commission(sender: Wallet,
+                               memo: Optional[str] = None,
+                               gas_limit: Optional[int] = None) -> SubmittedTx
+```
+
+claim rewards.
+
+**Arguments**:
+
+- `sender`: sender
+- `memo`: memo, defaults to None
+- `gas_limit`: gas limit, defaults to None
+
+**Returns**:
+
+prepare and broadcast the transaction and transaction details
+
 <a id="cosmpy.aerial.client.__init__.LedgerClient.estimate_gas_for_tx"></a>
 
 #### estimate`_`gas`_`for`_`tx

@@ -1,5 +1,10 @@
 # Release History
 
+## Unreleased
+
+- fix: coins parsing fix to support ibc denoms
+- feat: add support for claiming validator commission
+
 ## 0.9.1
 
 - fix: move googleapis-common-protos to main dependency group to resolve installation issues

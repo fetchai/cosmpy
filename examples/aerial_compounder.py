@@ -91,7 +91,6 @@ def main():
 
     # query, claim and stake rewards after time period
     while time_check < time_limit:
-
         begin = time.monotonic()
 
         summary = ledger.query_staking_summary(alice.address())
@@ -108,7 +107,6 @@ def main():
         true_reward = balance_after - balance_before
 
         if true_reward > 0:
-
             print(f"Staking {true_reward} (reward after fees)")
 
             tx = ledger.delegate_tokens(validator.address, true_reward, alice)
