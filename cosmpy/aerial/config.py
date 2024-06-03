@@ -92,6 +92,21 @@ class NetworkConfig:
         )
 
     @classmethod
+    def asi_eridanus_testnet(cls) -> "NetworkConfig":
+        """ASI Eridanus testnet.
+
+        :return: Network configuration
+        """
+        return NetworkConfig(
+            chain_id="eridanus-1",
+            url="grpc+https://grpc-eridanus-1.fetch.ai",
+            fee_minimum_gas_price=5000000000,
+            fee_denomination="atestasi",
+            staking_denomination="atestasi",
+            faucet_url="https://faucet-eridanus-1.fetch.ai",
+        )
+
+    @classmethod
     def fetchai_alpha_testnet(cls):
         """Get the fetchai alpha testnet.
 
