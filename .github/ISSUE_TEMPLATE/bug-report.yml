@@ -13,13 +13,13 @@ body:
       label: Prerequisites
       description: Please confirm before submitting a new issue
       options:
-        - label: I am running the [latest CosmPy version](https://docs.fetch.ai/CosmPy/#version).
+        - label: I am running the [latest CosmPy version](https://fetch.ai/docs/guides/fetch-network/cosmpy/install#version).
           required: true
-        - label: I checked the [documentation](http://docs.fetch.ai/CosmPy/) and found no answer to my problem.
+        - label: I checked the [documentation](https://fetch.ai/docs/guides/fetch-network/cosmpy/install) and found no answer to my problem.
           required: true
         - label: I checked the [existing issues](https://github.com/fetchai/cosmpy/issues) to make sure my problem has not already been reported.
           required: true
-        - label: I have read the [code of conduct](https://github.com/fetchai/cosmpy/blob/main/CODE_OF_CONDUCT.md) before creating this issue.
+        - label: I have read the [code of conduct](CODE_OF_CONDUCT.md) before creating this issue.
           required: true
   - type: textarea
     id: expected
