@@ -34,7 +34,7 @@ RERUNS_DELAY = 10
 class TestTx:
     """Test Basic Transaction"""
 
-    COIN = "atestfet"
+    COIN = "atestasi"
     GAS_LIMIT: Optional[int] = None
 
     def _get_network_config(self):
@@ -88,12 +88,12 @@ class TestTxRestAPI(TestTx):
 
     def _get_network_config(self):
         return NetworkConfig(
-            chain_id="dorado-1",
-            url="rest+https://rest-dorado.fetch.ai:443",
+            chain_id="eridanus-1",
+            url="rest+https://rest-eridanus-1.fetch.ai:443",
             fee_minimum_gas_price=5000000000,
-            fee_denomination="atestfet",
-            staking_denomination="atestfet",
-            faucet_url="https://faucet-dorado.fetch.ai",
+            fee_denomination="atestasi",
+            staking_denomination="atestasi",
+            faucet_url="https://faucet-eridanus-1.fetch.ai",
         )
 
 

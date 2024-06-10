@@ -64,6 +64,7 @@ pb
 cosmoshub
 validator
 atestfet
+aasi
 denom
 wasm
 blockapsis

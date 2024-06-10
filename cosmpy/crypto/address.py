@@ -28,7 +28,7 @@ from cosmpy.crypto.hashfuncs import ripemd160, sha256
 from cosmpy.crypto.keypairs import PublicKey
 
 
-DEFAULT_PREFIX = "fetch"
+DEFAULT_PREFIX = "asi"
 
 
 def _to_bech32(prefix: str, data: bytes) -> str:

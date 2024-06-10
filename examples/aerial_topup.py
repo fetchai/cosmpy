@@ -88,7 +88,7 @@ def main():
 
     # Top-up amount
     amount = args.top_up_amount
-    top_up_amount = Coin(amount=str(amount), denom="atestfet")
+    top_up_amount = Coin(amount=str(amount), denom="atestasi")
 
     # Minimum balance for task_wallet
     minimum_balance = args.minimum_balance

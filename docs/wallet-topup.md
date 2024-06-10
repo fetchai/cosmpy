@@ -34,7 +34,7 @@ from cosmpy.protos.cosmos.bank.v1beta1.authz_pb2 import SendAuthorization
 # Set total authorization time and spend amount
 total_authz_time = 10000
 amount = 1000000000000000000
-spend_amount = Coin(amount=str(amount), denom="atestfet")
+spend_amount = Coin(amount=str(amount), denom="atestasi")
 
 # Authorize authz_wallet to send tokens from wallet
 authz_any = any_pb2.Any()
@@ -66,7 +66,7 @@ Next, you will need to define the amount to top-up, the threshold that will trig
 
 # Top-up amount
 amount = 10000000000000000
-top_up_amount = Coin(amount=str(amount), denom="atestfet")
+top_up_amount = Coin(amount=str(amount), denom="atestasi")
 
 # Minimum balance for task_wallet
 minimum_balance = 1000000000000000

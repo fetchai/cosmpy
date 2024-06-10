@@ -128,7 +128,7 @@ class NetworkConfig:
 
         :return: fetchai stable testnet. For now dorado is fetchai stable testnet.
         """
-        return cls.fetchai_dorado_testnet()
+        return cls.asi_eridanus_testnet()
 
     @classmethod
     def fetchai_mainnet(cls) -> "NetworkConfig":
@@ -167,4 +167,4 @@ class NetworkConfig:
             "latest_stable_testnet is deprecated, use fetchai_stable_testnet instead",
             DeprecationWarning,
         )
-        return cls.fetchai_stable_testnet()
+        return cls.asi_eridanus_testnet()
