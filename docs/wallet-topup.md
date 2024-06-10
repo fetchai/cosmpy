@@ -15,7 +15,7 @@ authz_wallet = LocalWallet(
 )
 
 # Define any task_wallet address
-task_wallet_address = 'fetch1ay6grfwhlm00wydwa3nw0x2u44qz4hg2uku8dc'
+task_wallet_address = 'asi1ay6grfwhlm00wydwa3nw0x2u44qz4hg2858n0m'
 ```
 Wallet will need to have enough tokens available to top-up task_wallet, and authz_wallet will need enough tokens to pay for transaction fees. Now you will need to give authorization to authz_wallet to send tokens from wallet. You will define the expiration and the spend limit of the authorization in `total_authz_time` and `spend_amount`. The code below shows how to perform this kind of transaction:
 

@@ -142,10 +142,10 @@ def main():
 
     # Define cw20, pair and liquidity token contracts
     token_contract_address = (
-        "fetch1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjsxtljxl"
+        "asi1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjshnau6q"
     )
     pair_contract_address = (
-        "fetch1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0s6ulf2a"
+        "asi1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0stya8kz"
     )
 
     token_contract = LedgerContract(

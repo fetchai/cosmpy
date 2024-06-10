@@ -64,7 +64,7 @@ pb
 cosmoshub
 validator
 atestfet
-aasi
+atestasi
 denom
 wasm
 blockapsis
@@ -82,6 +82,7 @@ Validators
 delegator
 validators
 afet
+aasi
 ibcprotocol
 natively
 CosmWasm

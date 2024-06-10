@@ -72,7 +72,7 @@ tx.wait_to_complete()
 At any point you can query the stake information of any particular address. This can be done using the `LedgerClient` as shown in the example below:
 
 ```python
-address = 'fetch1h2l3cnu7e23whmd5yrfeunacez9tv0plv5rxqy'
+address = 'asi1h2l3cnu7e23whmd5yrfeunacez9tv0plhkcjz8'
 
 s = ledger_client.query_staking_summary(address)
 print(f"Summary: Staked: {s.total_staked} Unbonding: {s.total_unbonding} Rewards: {s.total_rewards}")

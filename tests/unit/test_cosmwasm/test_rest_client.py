@@ -188,7 +188,7 @@ class WasmRestClientTestCase(unittest.TestCase):
     def test_query_contract_by_code():
         """Test query contract by code for positive result."""
         content = {
-            "contracts": ["fetch18vd8fpwxzck93qlwghaj6arh4p7c5n890l3amr"],
+            "contracts": ["asi18vd8fpwxzck93qlwghaj6arh4p7c5n895a2feq"],
             "pagination": {"total": "1"},
         }
 
