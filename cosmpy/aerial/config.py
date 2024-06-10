@@ -140,8 +140,8 @@ class NetworkConfig:
             chain_id="fetchhub-4",
             url="grpc+https://grpc-fetchhub.fetch.ai",
             fee_minimum_gas_price=0,
-            fee_denomination="afet",
-            staking_denomination="afet",
+            fee_denomination="aasi",
+            staking_denomination="aasi",
             faucet_url=None,
         )
 
