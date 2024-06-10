@@ -55,6 +55,7 @@ hashlib
 mainnet
 chain_id
 dorado
+eridanus
 ibc
 tendermint
 tx
@@ -258,6 +259,8 @@ december
 mykeyname
 xxd
 fetchvaloper
+asivaloper
+asi
 PyCQA
 blueviolet
 lightgrey
