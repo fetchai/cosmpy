@@ -1,14 +1,6 @@
 # Security Policy
 
-Security is very important for Fetch.ai and its community. This document outlines security procedures and general policies for the `cosmpy` library.
-
-## Supported Versions
-
-The following table shows which versions of `cosmpy` are currently being supported with security updates.
-
-| Version   | Supported          |
-| --------- | ------------------ |
-| `< 1.0.0` | :white_check_mark: |
+Security is very important for Fetch.ai and its community. This document outlines security procedures and general policies for this repository.
 
 ## How to Report
 

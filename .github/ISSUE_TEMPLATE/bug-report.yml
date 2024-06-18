@@ -1,60 +1,82 @@
 name: 🐛 Bug Report
-description: Report a reproducible bug.
-title: "Bug report: <short description>"
+description: Report a bug.
 labels: ["bug", "unconfirmed"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for reporting the issue you are facing. Please complete the following so we can have the details necessary to assist you.
+        Thanks for taking the time to report a bug! We appreciate your contribution to improving the library.
   - type: checkboxes
     id: prerequisites
     attributes:
       label: Prerequisites
-      description: Please confirm before submitting a new issue
+      description: Please confirm before submitting any new bug report.
       options:
-        - label: I am running the [latest CosmPy version](https://fetch.ai/docs/guides/fetch-network/cosmpy/install#version).
+        - label: I checked the [documentation](https://fetch.ai/docs) and found no answer to my problem
           required: true
-        - label: I checked the [documentation](https://fetch.ai/docs/guides/fetch-network/cosmpy/install) and found no answer to my problem.
+        - label: I checked the [existing issues](https://github.com/fetchai/cosmpy/issues) and made sure there are no similar bug reports
           required: true
-        - label: I checked the [existing issues](https://github.com/fetchai/cosmpy/issues) to make sure my problem has not already been reported.
-          required: true
-        - label: I have read the [code of conduct](CODE_OF_CONDUCT.md) before creating this issue.
-          required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Select the category that best describes the bug.
+      options:
+        - Bug (unexpected behavior)
+        - Documentation Issue (error or unclear information in docs)
+        - Other
+    validations:
+      required: true
   - type: textarea
     id: expected
     attributes:
       label: Expected Behavior
-      description: Describe the behavior you are expecting
+      description: Describe the behavior you are expecting.
     validations:
-      required: true
+      required: false
   - type: textarea
     id: actual
     attributes:
-      label: Current Behavior
-      description: Describe the current behavior
+      label: Observed Behavior
+      description: Describe the behavior you are observing.
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
       label: To Reproduce
-      description: Detailed steps for reproducing the issue
+      description: Provide steps to reproduce the issue.
     validations:
       required: false
-  - type: textarea
-    id: context
+  - type: input
+    id: version
     attributes:
-      label: Context
-      description: Any relevant information about your setup (this is important in case the issue is not reproducible except for under certain conditions)
-      placeholder: |
-        Operating system, Python version, CosmPy version, ...
+      label: Version
+      description: Which version were you using? Please enter the version number here.
+      placeholder: ex. v0.5.0
     validations:
       required: true
   - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details (Optional)
+      description: Provide any relevant information about your environment, such as operating system, Python version, and any other libraries used.
+      render: markdown
+    validations:
+      required: false
+  - type: textarea
     id: logs
     attributes:
-      label: Failure Logs
-      description: Include any relevant log snippets or files here
+      label: Failure Logs (Optional)
+      description: Include any relevant log snippets or files here. You can paste directly or drag and drop files into this area.
+      render: shell
+    validations:
+        required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information (Optional)
+      description: Include any screenshots, code snippets, or other relevant details that might help us understand the bug.
+      render: markdown
     validations:
       required: false

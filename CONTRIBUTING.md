@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-Contributions to the μAgents library are welcome. As a contributor, here are the guidelines we would like you to follow:
+Contributions to this repository are welcome. As a contributor, here are the guidelines we would like you to follow:
 
 - [Code of Conduct](#coc)
 - [Question or Problem?](#question)
@@ -8,8 +8,8 @@ Contributions to the μAgents library are welcome. As a contributor, here are th
 - [Feature Requests](#feature)
 - [Submission Guidelines](#submit)
 - [Coding Rules](#rules)
-- [Commit Message Guidelines](#commit)
-- [Merge Pull Requests](#merge)
+- [Commit Message Convention](#commit)
+- [Merging Pull Requests](#merge)
 
 ## <a name="coc"></a> Code of Conduct
 
@@ -58,7 +58,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 1. All Pull Requests should be based off of and opened against the `main` branch.
 
     <!-- markdown-link-check-disable -->
-2. Search [Existing PRs](https://github.com/fetchai/uAgents/pulls) for an open or closed PR that relates to your submission.
+2. Search [Existing PRs](https://github.com/fetchai/cosmpy/pulls) for an open or closed PR that relates to your submission.
    You don't want to duplicate existing efforts.
     <!-- markdown-link-check-enable -->
 
@@ -87,7 +87,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 #### Reviewing a Pull Request
 
 <!-- markdown-link-check-disable -->
-The μAgents team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following our [code of conduct](CODE_OF_CONDUCT.md) and applies within or outside the managed channels.
+The repository maintainers reserve the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following our [code of conduct](CODE_OF_CONDUCT.md) and applies within or outside the managed channels.
 <!-- markdown-link-check-enable -->
 
 When you contribute a new feature, the maintenance burden is transferred to the core team. This means that the benefit of the contribution must be compared against the cost of maintaining the feature.
@@ -114,29 +114,28 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 - All code must pass our code quality checks (linters, formatters, etc). See the [development guide](DEVELOPING.md) section for more detail.
 <!-- markdown-link-check-enable -->
 
-- All features **must be tested** via unit-tests and if applicable integration-tests. Bug fixes also require tests, because the presence of bugs usually indicates insufficient test coverage. Tests help to: 
+- All features **must be tested** via unit-tests and if applicable integration-tests. Bug fixes also require tests, because the presence of bugs usually indicates insufficient test coverage. Tests help to:
 
     1. Prove that your code works correctly, and
-    2. Guard against future breaking changes and lower the maintenance cost. 
+    2. Guard against future breaking changes and lower the maintenance cost.
 
 - All public features **must be documented**.
-- All files must include a license header. 
-- Keep API compatibility in mind when you change any code under `cosmpy`. Above version `1.0.0`, breaking changes can happen across versions with different left digit. Below version `1.0.0`, they can happen across versions with different middle digit. Reviewers of your pull request will comment on any API compatibility issues.
+- Keep API compatibility in mind when you change any code. Above version `1.0.0`, breaking changes can happen across versions with different left digit. Below version `1.0.0`, they can happen across versions with different middle digit. Reviewers of your pull request will comment on any API compatibility issues.
 
 ## <a name="commit"></a> Commit Message Convention
 
 This project uses Conventional Commits to generate release notes and to determine versioning. Please follow the [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/). The commit types must be one of the following:
 
-  - **chore**: Commits that don't directly add features, fix bugs, or refactor code, but rather maintain the project or its surrounding processes.
-  - **ci**: Changes to our CI configuration files and scripts
-  - **docs**: Changes to the documentation
-  - **feat**: A new feature
-  - **fix**: A bug fix
-  - **refactor**: A code change that neither fixes a bug nor adds a feature
-  - **test**: Adding missing tests or correcting existing tests
-  - **revert**: Reverts a previous commit that introduced an issue or unintended change. This essentially undoes a previous commit.
-  - **style**: Changes that only affect code formatting or style, without affecting functionality. This ensures consistency and readability of the codebase.
-  - **perf**: Changes that improve the performance of the project.
+- **chore**: Commits that don't directly add features, fix bugs, or refactor code, but rather maintain the project or its surrounding processes.
+- **ci**: Changes to our CI configuration files and scripts
+- **docs**: Changes to the documentation
+- **feat**: A new feature
+- **fix**: A bug fix
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **test**: Adding missing tests or correcting existing tests
+- **revert**: Reverts a previous commit that introduced an issue or unintended change. This essentially undoes a previous commit.
+- **style**: Changes that only affect code formatting or style, without affecting functionality. This ensures consistency and readability of the codebase.
+- **perf**: Changes that improve the performance of the project.
 
 Commit messages should adhere to this standard and be of the form:
 

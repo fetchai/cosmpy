@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use CosmPy in your research or project, please cite it as follows:"
+title: CosmPy Library
+authors:
+  - family-names: Fetch.ai
+date-released: "2022-09-28"
+url: "https://github.com/fetchai/cosmpy"
+license: "Apache-2.0"
