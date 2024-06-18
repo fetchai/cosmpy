@@ -137,8 +137,8 @@ class NetworkConfig:
         :return: fetch mainnet configuration
         """
         return NetworkConfig(
-            chain_id="fetchhub-4",
-            url="grpc+https://grpc-fetchhub.fetch.ai",
+            chain_id="asi-1",
+            url="grpc+https://grpc-asi.fetch.ai",
             fee_minimum_gas_price=0,
             fee_denomination="aasi",
             staking_denomination="aasi",
