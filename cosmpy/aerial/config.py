@@ -92,6 +92,21 @@ class NetworkConfig:
         )
 
     @classmethod
+    def asi_eridanus_testnet(cls) -> "NetworkConfig":
+        """ASI Eridanus testnet.
+
+        :return: Network configuration
+        """
+        return NetworkConfig(
+            chain_id="eridanus-1",
+            url="grpc+https://grpc-eridanus-1.fetch.ai",
+            fee_minimum_gas_price=5000000000,
+            fee_denomination="atestasi",
+            staking_denomination="atestasi",
+            faucet_url="https://faucet-eridanus-1.fetch.ai",
+        )
+
+    @classmethod
     def fetchai_alpha_testnet(cls):
         """Get the fetchai alpha testnet.
 
@@ -113,7 +128,7 @@ class NetworkConfig:
 
         :return: fetchai stable testnet. For now dorado is fetchai stable testnet.
         """
-        return cls.fetchai_dorado_testnet()
+        return cls.asi_eridanus_testnet()
 
     @classmethod
     def fetchai_mainnet(cls) -> "NetworkConfig":
@@ -122,11 +137,11 @@ class NetworkConfig:
         :return: fetch mainnet configuration
         """
         return NetworkConfig(
-            chain_id="fetchhub-4",
-            url="grpc+https://grpc-fetchhub.fetch.ai",
+            chain_id="asi-1",
+            url="grpc+https://grpc-asi.fetch.ai",
             fee_minimum_gas_price=0,
-            fee_denomination="afet",
-            staking_denomination="afet",
+            fee_denomination="aasi",
+            staking_denomination="aasi",
             faucet_url=None,
         )
 
@@ -152,4 +167,4 @@ class NetworkConfig:
             "latest_stable_testnet is deprecated, use fetchai_stable_testnet instead",
             DeprecationWarning,
         )
-        return cls.fetchai_stable_testnet()
+        return cls.asi_eridanus_testnet()

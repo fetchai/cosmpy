@@ -63,6 +63,21 @@ Fetchai dorado testnet.
 
 Network configuration
 
+<a id="cosmpy.aerial.config.NetworkConfig.asi_eridanus_testnet"></a>
+
+#### asi`_`eridanus`_`testnet
+
+```python
+@classmethod
+def asi_eridanus_testnet(cls) -> "NetworkConfig"
+```
+
+ASI Eridanus testnet.
+
+**Returns**:
+
+Network configuration
+
 <a id="cosmpy.aerial.config.NetworkConfig.fetchai_alpha_testnet"></a>
 
 #### fetchai`_`alpha`_`testnet

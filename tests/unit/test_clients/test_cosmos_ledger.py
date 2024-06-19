@@ -536,7 +536,7 @@
 #         content = {
 #             "account": {
 #                 "@type": "/cosmos.auth.v1beta1.BaseAccount",
-#                 "address": "fetch1h6974x4dspft29r9gyegtajyzaht2cdh0rt93w",
+#                 "address": "asi1h6974x4dspft29r9gyegtajyzaht2cdh5ps3nd",
 #                 "pub_key": {
 #                     "@type": "/cosmos.crypto.secp256k1.PubKey",
 #                     "key": "A2BjpEo54gBpulf9CrA+6tGBASFC8okaO1DYTimk/Jwp",

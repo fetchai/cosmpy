@@ -29,9 +29,9 @@ from cosmpy.crypto.address import Address
 
 def test_create_instantiate_msg():
     """Test create instantiate message."""
-    sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")
+    sender = Address("asi1r3d4azhlak4w00c5n02t9l35a3n6462vc388mu")
     msg = create_cosmwasm_instantiate_msg(
-        1, {}, "init-label", sender, funds="10atestfet", admin_address=sender
+        1, {}, "init-label", sender, funds="10atestasi", admin_address=sender
     )
 
     assert msg.sender == str(sender)
@@ -40,24 +40,24 @@ def test_create_instantiate_msg():
     assert msg.label == "init-label"
     assert msg.admin == str(sender)
     assert len(msg.funds) == 1
-    assert msg.funds[0].denom == "atestfet"
+    assert msg.funds[0].denom == "atestasi"
     assert msg.funds[0].amount == "10"
 
 
 def test_create_execute_msg():
     """Test create execute message."""
-    sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")
-    contract = Address("fetch1faucet4p2h432pxlh9ez8jfcl9jyr2ndlx2992")
+    sender = Address("asi1r3d4azhlak4w00c5n02t9l35a3n6462vc388mu")
+    contract = Address("asi1faucet4p2h432pxlh9ez8jfcl9jyr2ndyy338f")
 
     msg = create_cosmwasm_execute_msg(
-        sender, contract, {}, funds="15atestfet,42another"
+        sender, contract, {}, funds="15atestasi,42another"
     )
 
     assert msg.sender == str(sender)
     assert msg.contract == str(contract)
     assert msg.msg == b"{}"
     assert len(msg.funds) == 2
-    assert msg.funds[0].denom == "atestfet"
+    assert msg.funds[0].denom == "atestasi"
     assert msg.funds[0].amount == "15"
     assert msg.funds[1].denom == "another"
     assert msg.funds[1].amount == "42"
@@ -65,9 +65,9 @@ def test_create_execute_msg():
 
 def test_create_migrate_msg():
     """Test create migrate message."""
-    sender = Address("fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel")
+    sender = Address("asi1r3d4azhlak4w00c5n02t9l35a3n6462vc388mu")
     contract_address = Address(
-        "fetch1j4t8vtg8dus7tpy6xrk9xnz5z4644qljeqtee2yw73ksvj3tqaeqp4pcec"
+        "asi1j4t8vtg8dus7tpy6xrk9xnz5z4644qljeqtee2yw73ksvj3tqaeqsdrk98"
     )
 
     msg = create_cosmwasm_migrate_msg(1, {}, contract_address, sender)

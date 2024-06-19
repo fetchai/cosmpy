@@ -72,7 +72,7 @@ def main():
 
     if not args.contract_address:
         instantiation_message = {"fee": "100"}
-        contract.deploy(instantiation_message, wallet, funds="1atestfet")
+        contract.deploy(instantiation_message, wallet, funds="1atestasi")
 
     print(f"Oracle contract deployed at: {contract.address}")
 

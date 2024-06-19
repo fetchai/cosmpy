@@ -87,7 +87,7 @@ alice_address = Address(key)._display
 tx = Transaction()
 
 # Add delegate msg
-tx.add_message(create_delegate_msg(alice_address,validator.address,initial_stake,"atestfet"))
+tx.add_message(create_delegate_msg(alice_address,validator.address,initial_stake,"atestasi"))
 
 # Add claim reward msg
 tx.add_message(create_withdraw_delegator_reward(alice_address, validator.address))
@@ -103,7 +103,7 @@ _, str_tx_fee = ledger.estimate_gas_and_fee_for_tx(tx)
 Since the output of this function is a string, we will convert it to an int and round it up to get a more conservative estimate for the `fee`
 
 ```python
-denom = "atestfet"
+denom = "atestasi"
 tx_fee = str_tx_fee[:-len(denom)]
 
 # Add a 20% to the fee estimation to get a more conservative estimate

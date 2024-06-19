@@ -79,7 +79,7 @@ def main():
     while True:
         request_message = {"query_oracle_value": {}}
         contract.execute(
-            request_message, wallet, funds="100atestfet"
+            request_message, wallet, funds="100atestasi"
         ).wait_to_complete()
 
         result = contract.query({"oracle_value": {}})

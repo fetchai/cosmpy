@@ -204,7 +204,7 @@ You require [Docker](https://docs.docker.com/get-docker/) for your platform.
     export PASSWORD="12345678"
     export CHAIN_ID=testing
     export DENOM_1=stake
-    export DENOM_2=atestfet
+    export DENOM_2=atestasi
     export MONIKER=some-moniker
 
 
