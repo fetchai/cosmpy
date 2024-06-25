@@ -8,6 +8,7 @@ exclude *.txt
 exclude *.yml
 exclude strategy.ini
 exclude tox.ini
+exclude *.cff
 exclude .firebaserc
 recursive-exclude contracts *.txt
 recursive-exclude contracts *.wasm
@@ -18,4 +19,3 @@ recursive-exclude examples *.py
 recursive-exclude scripts *.py
 recursive-exclude scripts *.sh
 recursive-exclude tests *.py
-include *.cff
