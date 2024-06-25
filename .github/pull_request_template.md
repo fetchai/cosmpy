@@ -20,8 +20,10 @@ _What type of change does this pull request make (put an `x` in the boxes that a
 
 _Put an `x` in the boxes that apply:_
 
+<!-- markdown-link-check-disable -->
 - [ ] I have read the [CONTRIBUTING](/CONTRIBUTING.md) guide
 - [ ] Checks and tests pass locally
+<!-- markdown-link-check-enable-->
 
 ### If applicable
 

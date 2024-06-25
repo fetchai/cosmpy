@@ -18,3 +18,4 @@ recursive-exclude examples *.py
 recursive-exclude scripts *.py
 recursive-exclude scripts *.sh
 recursive-exclude tests *.py
+include *.cff
