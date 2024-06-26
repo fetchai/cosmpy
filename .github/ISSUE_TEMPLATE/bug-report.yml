@@ -27,7 +27,6 @@ body:
       description: Select the category that best describes the bug.
       options:
         - Bug (unexpected behavior)
-        - Documentation Issue (error or unclear information in docs)
         - Other
     validations:
       required: true
