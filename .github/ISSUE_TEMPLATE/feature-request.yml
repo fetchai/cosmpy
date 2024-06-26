@@ -1,6 +1,10 @@
 name: ☝️Feature request
 description: Suggest an idea.
 labels: ["enhancement", "unconfirmed"]
+assignees:
+  - MissingNO57
+  - pbukva
+  - jrriehl
 body:
   - type: markdown
     attributes:
