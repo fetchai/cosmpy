@@ -1,6 +1,10 @@
 name: 🐛 Bug Report
 description: Report a bug.
 labels: ["bug", "unconfirmed"]
+assignees:
+  - MissingNO57
+  - pbukva
+  - jrriehl
 body:
   - type: markdown
     attributes:
