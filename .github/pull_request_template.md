@@ -1,35 +1,36 @@
-## Proposed changes
+## Proposed Changes
 
-Describe the changes here.
+_[describe the changes here...]_
 
-## Issues
+## Linked Issues
 
-Links to any issues resolved.
+_[if applicable, add links to issues resolved by this PR]_
 
 ## Types of changes
 
-What types of changes does your code introduce?
-_Put an `x` in the boxes that apply_
+_What type of change does this pull request make (put an `x` in the boxes that apply)?_
 
-- [ ] Bugfix (non-breaking change that fixes an issue)
-- [ ] New feature (non-breaking change that adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to stop working as expected)
-- [ ] Something else (e.g. tests, scripts, example, deployment, infrastructure, ...)
+- [ ] Bug fix (non-breaking change that fixes an issue).
+- [ ] New feature added (non-breaking change that adds functionality).
+- [ ] Breaking change (fix or feature that would cause existing functionality to stop working as expected).
+- [ ] Documentation update.
+- [ ] Something else (e.g., tests, scripts, example, deployment, infrastructure).
 
 ## Checklist
 
-_Put an `x` in the boxes that apply._
+_Put an `x` in the boxes that apply:_
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/fetchai/cosmpy/blob/main/CONTRIBUTING.md) document.
-- [ ] I have based my branch, and I am making a pull request against, the `main` branch.
-- [ ] Checks and tests pass locally.
+<!-- markdown-link-check-disable -->
+- [ ] I have read the [CONTRIBUTING](/CONTRIBUTING.md) guide
+- [ ] Checks and tests pass locally
+<!-- markdown-link-check-enable-->
 
 ### If applicable
 
-- [ ] I have added tests that prove my fix is effective or that my feature works.
-- [ ] I have checked that code coverage does not decrease.
-- [ ] I have added/updated the documentations.
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] I have checked that code coverage does not decrease
+- [ ] I have added/updated the documentation
 
 ## Further comments
 
-If this is a relatively large or complex change, kick off the discussion by explaining why you chose the solution you did, what alternatives you considered, etc.
+_[if this is a relatively large or complex change, kick off a discussion by explaining why you chose the solution you did, what alternatives you considered, etc...]_
