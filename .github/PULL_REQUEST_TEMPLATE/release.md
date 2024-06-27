@@ -10,6 +10,7 @@ _[briefly describe the main changes with this release]_
 
 _Put an `x` in the boxes that apply._
 
+- [ ] I am making a pull request against the `main` branch from `release/v...`.
 - [ ] Checks and tests pass locally
 - [ ] I have updated the version in `pyproject.toml`
 - [ ] I have regenerated and updated the API docs
