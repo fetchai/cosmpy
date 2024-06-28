@@ -1,34 +1,18 @@
-<h1 align="center">
-    <b>CosmPy</b>
-</h1>
+# CosmPy
 
-<p align="center">
+[![Official Website](https://img.shields.io/badge/Official%20Website-fetch.ai-blue?style=flat&logo=world&logoColor=white)](https://fetch.ai) 
+<a href="https://pypi.org/project/cosmpy/">
+<img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy">
+</a>
+<a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
+<img alt="CosmPy sanity checks and tests" src="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg">
+</a>
+<a href="https://pypi.org/project/cosmpy/">
+<img alt="Download per Month" src="https://img.shields.io/pypi/dm/cosmpy">
+</a>
+[![Twitter Follow](https://img.shields.io/twitter/follow/fetch_ai?style=social)](https://twitter.com/fetch_ai)
+
 A python library for interacting with cosmos based blockchain networks
-</p>
-
-<p align="center">
-  <a href="https://pypi.org/project/cosmpy/">
-    <img alt="PyPI" src="https://img.shields.io/pypi/v/cosmpy">
-  </a>
-  <a href="https://pypi.org/project/cosmpy/">
-    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/cosmpy">
-  </a>
-  <a href="https://github.com/fetchai/cosmpy/blob/main/LICENSE">
-    <img alt="License" src="https://img.shields.io/pypi/l/cosmpy">
-  </a>
-  <br />
-  <a>
-    <img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/cosmpy">
-  </a>
-  <a href="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml">
-    <img alt="CosmPy sanity checks and tests" src="https://github.com/fetchai/cosmpy/actions/workflows/workflow.yml/badge.svg">
-  </a>
-  <a href="https://pypi.org/project/cosmpy/">
-    <img alt="Download per Month" src="https://img.shields.io/pypi/dm/cosmpy">
-  </a>
-</p>
-
-> We recently stopped using the `develop` branch for feature consolidation and renamed `master` to `main`. Please see the [Contribution Guides][contributing] for up-to-date instructions.
 
 ## To Install
 
@@ -56,7 +40,7 @@ for coin in balances:
 
 ## Documentation
 
-The full documentation can be found [here](https://docs.fetch.ai/CosmPy/).
+The full documentation can be found [here](https://fetch.ai/docs/guides/fetch-network/cosmpy/install).
 
 ## Examples
 
@@ -83,10 +67,6 @@ Read our [development guidelines][developing] to learn about the development pro
 ### Issues, Questions and Discussions
 
 We use [GitHub Issues][issues] for tracking requests and bugs, and [GitHub Discussions][discussion] for general questions and discussion.
-
-## License
-
-The CosmPy project is licensed under [Apache License 2.0][license].
 
 [contributing]: https://github.com/fetchai/cosmpy/blob/main/CONTRIBUTING.md
 [developing]: https://github.com/fetchai/cosmpy/blob/main/DEVELOPING.md
