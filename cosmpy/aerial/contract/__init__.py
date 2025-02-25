@@ -232,7 +232,6 @@ class LedgerContract(UserString):
             sender.address(),
             admin_address=admin_address,
             funds=funds,
-            timeout_height=timeout_height,
         )
         tx = Transaction()
         tx.add_message(instatiate_msg)
@@ -427,12 +426,11 @@ class LedgerContract(UserString):
                 self._address,
                 args,
                 funds=funds,
-                timeout_height=timeout_height,
             )
         )
 
         return prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit
+            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
         )
 
     def query(self, args: Any) -> Any:
