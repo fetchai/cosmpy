@@ -152,12 +152,14 @@ class LedgerContract(UserString):
         sender: Wallet,
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
+        timeout_height: Optional[int] = None,
     ) -> int:
         """Store the contract.
 
         :param sender: sender wallet address
         :param gas_limit: transaction gas limit, defaults to None
         :param memo: transaction memo, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :raises RuntimeError: Runtime error
         :return: code id
         """
@@ -169,7 +171,12 @@ class LedgerContract(UserString):
         tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit, memo=memo
+            self._client,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            memo=memo,
+            timeout_height=timeout_height,
         ).wait_to_complete()
 
         # extract the code id
@@ -187,6 +194,7 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
+        timeout_height: Optional[int] = None,
     ) -> Address:
         """Instantiate the contract.
 
@@ -196,6 +204,7 @@ class LedgerContract(UserString):
         :param gas_limit: transaction gas limit, defaults to None
         :param admin_address: admin address, defaults to None
         :param funds: funds, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :raises RuntimeError: Unable to extract contract code id
 
         :return: contract address
@@ -223,12 +232,13 @@ class LedgerContract(UserString):
             sender.address(),
             admin_address=admin_address,
             funds=funds,
+            timeout_height=timeout_height,
         )
         tx = Transaction()
         tx.add_message(instatiate_msg)
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit
+            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
         ).wait_to_complete()
 
         # store the contract address
@@ -244,6 +254,7 @@ class LedgerContract(UserString):
         sender: Wallet,
         new_path: str,
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Store new contract code and migrate the current contract address.
 
@@ -251,6 +262,7 @@ class LedgerContract(UserString):
         :param sender: sender wallet address
         :param new_path: path to new contract
         :param gas_limit: transaction gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
 
         :return: transaction details broadcast
         """
@@ -262,7 +274,9 @@ class LedgerContract(UserString):
         self._path = new_path
         new_code_id = self.store(sender, gas_limit)
 
-        return self.migrate(args, sender, new_code_id, gas_limit)
+        return self.migrate(
+            args, sender, new_code_id, gas_limit, timeout_height=timeout_height
+        )
 
     def migrate(
         self,
@@ -270,6 +284,7 @@ class LedgerContract(UserString):
         sender: Wallet,
         new_code_id: int,
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Migrate the current contract address to new code id.
 
@@ -277,6 +292,7 @@ class LedgerContract(UserString):
         :param sender: sender wallet address
         :param new_code_id: Code id of the newly deployed contract
         :param gas_limit: transaction gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
 
         :return: transaction details broadcast
         """
@@ -296,7 +312,7 @@ class LedgerContract(UserString):
         tx.add_message(migrate_msg)
 
         return prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit
+            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
         ).wait_to_complete()
 
     def update_admin(
@@ -304,12 +320,14 @@ class LedgerContract(UserString):
         sender: Wallet,
         new_admin: Optional[Address],
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Update/clear the admin of the contract.
 
         :param sender: sender wallet address
         :param new_admin: New admin address, None for clear admin
         :param gas_limit: transaction gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
 
         :return: transaction details broadcast
         """
@@ -330,7 +348,7 @@ class LedgerContract(UserString):
         tx.add_message(msg)
 
         return prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit
+            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
         ).wait_to_complete()
 
     def deploy(
@@ -342,6 +360,7 @@ class LedgerContract(UserString):
         instantiate_gas_limit: Optional[int] = None,
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
+        timeout_height: Optional[int] = None,
     ) -> Address:
         """Deploy the contract.
 
@@ -352,6 +371,7 @@ class LedgerContract(UserString):
         :param instantiate_gas_limit: instantiate gas limit, defaults to None
         :param admin_address: admin address, defaults to None
         :param funds: funds, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :return: instantiate contract details
         """
         # in the case where the contract is already deployed
@@ -372,6 +392,7 @@ class LedgerContract(UserString):
             gas_limit=instantiate_gas_limit,
             admin_address=admin_address,
             funds=funds,
+            timeout_height=timeout_height,
         )
 
     def execute(
@@ -380,6 +401,7 @@ class LedgerContract(UserString):
         sender: Wallet,
         gas_limit: Optional[int] = None,
         funds: Optional[str] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """execute the contract.
 
@@ -387,6 +409,7 @@ class LedgerContract(UserString):
         :param sender: sender address
         :param gas_limit: transaction gas limit, defaults to None
         :param funds: funds, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :raises RuntimeError: Contract appears not to be deployed currently
         :return: transaction details broadcast
         """
@@ -400,7 +423,11 @@ class LedgerContract(UserString):
         tx = Transaction()
         tx.add_message(
             create_cosmwasm_execute_msg(
-                sender.address(), self._address, args, funds=funds
+                sender.address(),
+                self._address,
+                args,
+                funds=funds,
+                timeout_height=timeout_height,
             )
         )
 

@@ -178,6 +178,7 @@ class Transaction:
         fee: str,
         gas_limit: int,
         memo: Optional[str] = None,
+        timeout_height: Optional[int] = None,
     ) -> "Transaction":
         """Seal the transaction.
 
@@ -185,6 +186,7 @@ class Transaction:
         :param fee: transaction fee
         :param gas_limit: transaction gas limit
         :param memo: transaction memo, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :return: sealed transaction.
         """
         self._state = TxState.Sealed
@@ -216,6 +218,8 @@ class Transaction:
 
         self._tx_body = TxBody()
         self._tx_body.memo = memo or ""
+        if timeout_height:
+            self._tx_body.timeout_height = timeout_height
         self._tx_body.messages.extend(
             _wrap_in_proto_any(self._msgs)
         )  # pylint: disable=E1101

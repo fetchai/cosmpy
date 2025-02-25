@@ -32,6 +32,7 @@ def prepare_and_broadcast_basic_transaction(
     account: Optional["Account"] = None,  # type: ignore # noqa: F821
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
+    timeout_height: Optional[int] = None,
 ) -> SubmittedTx:
     """Prepare and broadcast basic transaction.
 
@@ -41,6 +42,7 @@ def prepare_and_broadcast_basic_transaction(
     :param account: The account
     :param gas_limit: The gas limit
     :param memo: Transaction memo, defaults to None
+    :param timeout_height: timeout height, defaults to None
 
     :return: broadcast transaction
     """
@@ -71,6 +73,7 @@ def prepare_and_broadcast_basic_transaction(
         fee=fee,
         gas_limit=gas_limit,
         memo=memo,
+        timeout_height=timeout_height,
     )
     tx.sign(sender.signer(), client.network_config.chain_id, account.number)
     tx.complete()
