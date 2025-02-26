@@ -67,6 +67,7 @@ class TestTx:
 
         wallet1_initial_balance = ledger.query_bank_balance(wallet1.address())
         wallet2_balance1 = ledger.query_bank_balance(wallet2.address())
+        block_height = ledger.query_latest_block().height
         tokens_to_send = int(10)
         assert wallet1_initial_balance >= tokens_to_send
         tx = ledger.send_tokens(
@@ -75,6 +76,7 @@ class TestTx:
             self.COIN,
             wallet1,
             gas_limit=self.GAS_LIMIT,
+            timeout_height=block_height + 10,
         )
         tx.wait_to_complete()
         wallet2_balance2 = ledger.query_bank_balance(wallet2.address())
