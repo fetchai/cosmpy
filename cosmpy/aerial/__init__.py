@@ -19,7 +19,7 @@
 
 """Cosmpy aerial module."""
 
-def cast_to_int(value: str, base: int = 10, verify_decimal_part: bool = True) -> int:
+def cast_to_int(value: str, verify_decimal_part: bool = True, base: int = 10) -> int:
     parts = value.split('.')
     len_parts = len(parts)
 
