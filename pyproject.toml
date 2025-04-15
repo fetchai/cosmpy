@@ -43,7 +43,7 @@ jsonschema = ">=3.2.0,<5"
 python-dateutil = "*"
 pycryptodome = "^3.18.0"
 googleapis-common-protos = "*"
-
+virtualenv = ">=20.26.6"
 
 [tool.poetry.group.dev]
 optional = true
