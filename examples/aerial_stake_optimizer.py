@@ -35,24 +35,24 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsReques
 
 # This function returns the total reward for given:
 # * f -> fee
-# * S -> Initial Stake
+# * s -> Initial Stake
 # * k -> Reward Rate
-# * D -> Total staking period
+# * d -> Total staking period
 # * x -> Compounding Period
-def M(x, f, S, k, D):
+def calculate_total_rewards_for_period(x, f, s, k, d):
     """
     Calculate the total reward.
 
     :param x: Compounding Period
     :param f: fee
-    :param S: Initial Stake
+    :param s: Initial Stake
     :param k: Reward Rate
-    :param D: Total staking period
+    :param d: Total staking period
 
     :return: Total reward
     """
-    return (S * (1 + (k * x)) ** (D / x)) + (
-        (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
+    return (s * (1 + (k * x)) ** (d / x)) + (
+            (1 - ((1 + (k * x)) ** (d / x))) / (k * x)
     ) * f
 
 
@@ -129,7 +129,7 @@ def main():
     # Estimate fees for claiming and delegating rewards
 
     alice = LocalWallet.generate()
-    alice_address = str(alice.address())
+    alice_address = alice.address()
 
     alice_balance = ledger.query_bank_balance(alice.address())
 
@@ -183,7 +183,7 @@ def main():
     community_tax = float(json.loads(resp.param.value))
 
     # Annual reward calculation
-    anual_reward = (
+    annual_reward = (
         (inflation * total_supply)
         * pct_delegated
         * (1 - community_tax)
@@ -191,23 +191,23 @@ def main():
     )
 
     # Convert from annual reward to minute reward
-    minute_reward = anual_reward / 360 / 24 / 60
+    minute_reward = annual_reward / 360 / 24 / 60
     rate = minute_reward / initial_stake
 
     # Compute optimal period
     f = fee
-    S = initial_stake
+    s = initial_stake
     k = rate
-    D = total_period
+    d = total_period
 
     # List of compounding periods
-    X = list(range(1, D))
+    compounding_periods = list(range(1, d))
 
     # Evaluate function M on each compounding period
-    R = [M(x, f, S, k, D) for x in X]
+    total_rewards = [calculate_total_rewards_for_period(x, f, s, k, d) for x in compounding_periods]
 
     # Fnd the period that maximizes rewards
-    optimal_period = R.index(max(R)) + 1
+    optimal_period = total_rewards.index(max(total_rewards)) + 1
 
     # These values can be used in aerial_compounder.py to maximize rewards
     print("total period: ", total_period, "minutes")
