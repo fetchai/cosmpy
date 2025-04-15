@@ -24,6 +24,7 @@ import math
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal
 from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
@@ -134,6 +135,7 @@ class StakingPosition:
     validator: Address
     amount: int
     reward: int
+    reward_dec: Decimal
 
 
 @dataclass
@@ -440,12 +442,12 @@ class LedgerClient:
                 )
                 rewards_resp = self.distribution.DelegationRewards(req)
 
+                stake_reward_dec = Decimal(0)
                 stake_reward = 0
                 for reward in rewards_resp.rewards:
                     if reward.denom == self.network_config.staking_denomination:
-                        stake_reward = (
-                            cast_to_int(reward.amount, False) // COSMOS_SDK_DEC_COIN_PRECISION
-                        )
+                        stake_reward_dec = Decimal(reward.amount)
+                        stake_reward = cast_to_int(reward.amount, False)
                         break
 
                 current_positions.append(
@@ -453,6 +455,7 @@ class LedgerClient:
                         validator=Address(item.delegation.validator_address),
                         amount=cast_to_int(item.balance.amount, False),
                         reward=stake_reward,
+                        reward_dec=stake_reward_dec,
                     )
                 )
 
