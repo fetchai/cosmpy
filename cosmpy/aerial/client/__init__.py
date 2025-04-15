@@ -350,7 +350,7 @@ class LedgerClient:
         resp = self.bank.Balance(req)
         assert resp.balance.denom == denom  # sanity check
 
-        return int(Decimal(resp.balance.amount))
+        return int(resp.balance.amount)
 
     def query_bank_all_balances(self, address: Address) -> List[Coin]:
         """Query bank all balances.
