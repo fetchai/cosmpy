@@ -115,7 +115,7 @@ from cosmpy.tx.rest_client import TxRestClient
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
 DEFAULT_QUERY_INTERVAL_SECS = 2
-COSMOS_SDK_DEC_COIN_PRECISION = 10**18
+COSMOS_SDK_DEC_COIN_PRECISION = Decimal(10**18)
 
 
 @dataclass
@@ -132,8 +132,8 @@ class StakingPosition:
     """Staking positions."""
 
     validator: Address
-    amount: int
-    reward: int
+    amount: Decimal
+    reward: Decimal
 
 
 @dataclass
@@ -141,7 +141,7 @@ class UnbondingPositions:
     """Unbonding positions."""
 
     validator: Address
-    amount: int
+    amount: Decimal
 
 
 @dataclass
@@ -149,7 +149,7 @@ class Validator:
     """Validator."""
 
     address: Address  # the operators address
-    tokens: int  # The total amount of tokens for the validator
+    tokens: Decimal  # The total amount of tokens for the validator
     moniker: str
     status: ValidatorStatus
 
@@ -163,6 +163,14 @@ class Coin:
 
 
 @dataclass
+class DecCoin:
+    """Decimal Coins."""
+
+    amount: Decimal
+    denom: str
+
+
+@dataclass
 class StakingSummary:
     """Get the staking summary."""
 
@@ -170,17 +178,17 @@ class StakingSummary:
     unbonding_positions: List[UnbondingPositions]
 
     @property
-    def total_staked(self) -> int:
+    def total_staked(self) -> Decimal:
         """Get the total staked amount."""
         return sum(map(lambda p: p.amount, self.current_positions))
 
     @property
-    def total_rewards(self) -> int:
+    def total_rewards(self) -> Decimal:
         """Get the total rewards."""
         return sum(map(lambda p: p.reward, self.current_positions))
 
     @property
-    def total_unbonding(self) -> int:
+    def total_unbonding(self) -> Decimal:
         """total unbonding."""
         return sum(map(lambda p: p.amount, self.unbonding_positions))
 
@@ -413,7 +421,7 @@ class LedgerClient:
             validators.append(
                 Validator(
                     address=Address(validator.operator_address),
-                    tokens=int(Decimal(validator.tokens)),
+                    tokens=Decimal(validator.tokens),
                     moniker=str(validator.description.moniker),
                     status=ValidatorStatus.from_proto(validator.status),
                 )
@@ -440,23 +448,23 @@ class LedgerClient:
                 )
                 rewards_resp = self.distribution.DelegationRewards(req)
 
-                stake_reward = 0
+                stake_reward = Decimal(0)
                 for reward in rewards_resp.rewards:
                     if reward.denom == self.network_config.staking_denomination:
                         stake_reward = (
-                            int(Decimal(reward.amount)) // COSMOS_SDK_DEC_COIN_PRECISION
+                            Decimal(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
                         )
                         break
 
                 current_positions.append(
                     StakingPosition(
                         validator=Address(item.delegation.validator_address),
-                        amount=int(Decimal(item.balance.amount)),
+                        amount=Decimal(item.balance.amount),
                         reward=stake_reward,
                     )
                 )
 
-        unbonding_summary: Dict[str, int] = {}
+        unbonding_summary: Dict[str, Decimal] = {}
         req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
 
         for resp in get_paginated(req, self.staking.DelegatorUnbondingDelegations):
@@ -465,7 +473,7 @@ class LedgerClient:
                 total_unbonding = unbonding_summary.get(validator, 0)
 
                 for entry in item.entries:
-                    total_unbonding += int(Decimal(entry.balance))
+                    total_unbonding += Decimal(entry.balance)
 
                 unbonding_summary[validator] = total_unbonding
 
