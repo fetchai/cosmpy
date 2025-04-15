@@ -55,7 +55,7 @@ flake8 = "==5.0.4"
 black = "^22.10"
 mypy = "==0.982"
 bandit = "==1.7.4"
-safety = "==2.3.5"
+safety = "==3.3.1"
 isort = "==5.10.1"
 darglint = "==1.8.1"
 vulture = "==2.6"
@@ -68,6 +68,7 @@ flake8-eradicate = "==1.4.0"
 flake8-docstrings = "==1.6.0"
 flake8-isort = "==5.0"
 pyyaml = "==5.3.1"
+packaging = ">=23.0"
 
 [tool.poetry.group.docs]
 optional = true
