@@ -24,7 +24,6 @@ import math
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from decimal import Decimal
 from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
@@ -111,6 +110,7 @@ from cosmpy.tendermint.rest_client import (
     CosmosBaseTendermintRestClient as TendermintRestClient,
 )
 from cosmpy.tx.rest_client import TxRestClient
+from cosmpy.aerial import cast_to_int
 
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
@@ -413,7 +413,7 @@ class LedgerClient:
             validators.append(
                 Validator(
                     address=Address(validator.operator_address),
-                    tokens=int(Decimal(validator.tokens)),
+                    tokens=cast_to_int(validator.tokens),
                     moniker=str(validator.description.moniker),
                     status=ValidatorStatus.from_proto(validator.status),
                 )
@@ -444,14 +444,14 @@ class LedgerClient:
                 for reward in rewards_resp.rewards:
                     if reward.denom == self.network_config.staking_denomination:
                         stake_reward = (
-                            int(Decimal(reward.amount)) // COSMOS_SDK_DEC_COIN_PRECISION
+                            cast_to_int(reward.amount) // COSMOS_SDK_DEC_COIN_PRECISION
                         )
                         break
 
                 current_positions.append(
                     StakingPosition(
                         validator=Address(item.delegation.validator_address),
-                        amount=int(Decimal(item.balance.amount)),
+                        amount=cast_to_int(item.balance.amount),
                         reward=stake_reward,
                     )
                 )
@@ -465,7 +465,7 @@ class LedgerClient:
                 total_unbonding = unbonding_summary.get(validator, 0)
 
                 for entry in item.entries:
-                    total_unbonding += int(Decimal(entry.balance))
+                    total_unbonding += cast_to_int(entry.balance)
 
                 unbonding_summary[validator] = total_unbonding
 

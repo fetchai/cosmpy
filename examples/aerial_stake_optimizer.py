@@ -78,8 +78,8 @@ def main():
     total_stake = sum(validators_stake)
 
     # Get validators commissions
-    validators_comission = [
-        int(validator.commission.commission_rates.rate)
+    validators_commission = [
+        float(validator.commission.commission_rates.rate)
         for validator in resp.validators
         if validator.status == 3
     ]
@@ -90,10 +90,10 @@ def main():
     # Choose a threshold for a validators minimum percentage of total stake delegated
     stake_threshold = 0.10
 
-    for _i in range(len(validators_comission)):
+    for _i in range(len(validators_commission)):
 
         # Choose validator with lower commission
-        validator_index = validators_comission.index(min(validators_comission))
+        validator_index = validators_commission.index(min(validators_commission))
 
         # Verify that it meets the minimum % threshold
         validator_stake_pct = validators_stake[validator_index] / total_stake
@@ -103,13 +103,13 @@ def main():
             validator = validators[validator_index]
             break
 
-        # We omit this validator by setting his commssion to infinity
-        validators_comission[validator_index] = float("inf")
+        # We omit this validator by setting his commission to the maximum
+        validators_commission[validator_index] = float('inf')
 
     if validator == "not_selected":
-        # Restart validators_comission list with original values
-        validators_comission = [
-            int(validator.commission.commission_rates.rate)
+        # Restart validators_commission list with original values
+        validators_commission = [
+            float(validator.commission.commission_rates.rate)
             for validator in resp.validators
             if validator.status == 3
         ]
@@ -117,7 +117,7 @@ def main():
         print("No validator meets the minimum stake threshold requirement")
 
         # Proceed to select the validator with the lowest commission
-        validator_index = validators_comission.index(min(validators_comission))
+        validator_index = validators_commission.index(min(validators_commission))
         validator = validators[validator_index]
 
     # Query validator commission

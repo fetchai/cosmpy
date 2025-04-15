@@ -36,13 +36,13 @@ from cosmpy.protos.cosmos.mint.v1beta1.query_pb2 import (
 
 def isNumber(value: Union[str, bytes]) -> bool:
     """
-    Check is string ob bytes is number.
+    Check is string or bytes represents a number.
 
     :param value: str, bytes
     :return: bool
     """
     try:
-        float(str(value))
+        _ = float(str(value))
         return True
     except ValueError:
         return False
