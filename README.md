@@ -10,7 +10,7 @@
 <a href="https://pypi.org/project/cosmpy/">
 <img alt="Download per Month" src="https://img.shields.io/pypi/dm/cosmpy">
 </a>
-[![Twitter Follow](https://img.shields.io/twitter/follow/fetch_ai?style=social)](https://twitter.com/fetch_ai)
+[![Twitter Follow](https://img.shields.io/twitter/follow/fetch_ai?style=social)](https://x.com/fetch_ai)
 
 A python library for interacting with cosmos based blockchain networks
 
