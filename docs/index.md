@@ -8,7 +8,7 @@ CosmPy is a Python library for interacting with Cosmos-based blockchain networks
 
 ## To install
 
-Ensure you have Python (version `3.9`, `3.10`, or `3.11`):
+Ensure you have Python (version between `3.9`, `3.10`, `3.11`, or `3.12`):
 
 ``` bash
 pip3 install cosmpy
