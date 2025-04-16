@@ -27,13 +27,13 @@ def cast_to_int(value: str, verify_decimal_part: bool = True, base: int = 10) ->
     if not (0 < len_parts < 3):
         raise ValueError(f'invalid string literal for casting to int with base {base}: "{value}"')
 
+    if verify_decimal_part and len_parts > 1:
+        # Verify convertibility of the number *behind* the decimal point
+        _ = int(parts[1], base)
+
     integral_part_str = parts[0]
 
     if integral_part_str == '':
         return 0
-
-    if verify_decimal_part and len_parts > 1:
-        # Verify convertibility of the number *behind* the decimal point
-        _ = int(parts[1], base)
 
     return int(integral_part_str, base)
