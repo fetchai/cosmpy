@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
@@ -68,11 +68,10 @@ jobs:
           - '3.11'
           - '3.12'
           - '3.13'
-          - '3.14'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
@@ -97,7 +96,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
@@ -119,7 +118,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
