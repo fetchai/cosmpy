@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: rojopolis/spellcheck-github-actions@0.25.0
+      - uses: rojopolis/spellcheck-github-actions@0.47.0
         with:
           config_path: .spellcheck.yml
   markdown-link-check:
@@ -63,7 +63,6 @@ jobs:
           - macos-latest
           - windows-latest
         python-version:
-          - '3.8'
           - '3.9'
           - '3.10'
           - '3.11'
