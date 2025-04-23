@@ -52,7 +52,7 @@ def calculate_total_rewards_for_period(x, f, s, k, d):
     :return: Total reward
     """
     return (s * (1 + (k * x)) ** (d / x)) + (
-            (1 - ((1 + (k * x)) ** (d / x))) / (k * x)
+        (1 - ((1 + (k * x)) ** (d / x))) / (k * x)
     ) * f
 
 
@@ -104,7 +104,7 @@ def main():
             break
 
         # We omit this validator by setting his commission to the maximum
-        validators_commission[validator_index] = float('inf')
+        validators_commission[validator_index] = float("inf")
 
     if validator == "not_selected":
         # Restart validators_commission list with original values
@@ -204,7 +204,9 @@ def main():
     compounding_periods = list(range(1, d))
 
     # Evaluate function M on each compounding period
-    total_rewards = [calculate_total_rewards_for_period(x, f, s, k, d) for x in compounding_periods]
+    total_rewards = [
+        calculate_total_rewards_for_period(x, f, s, k, d) for x in compounding_periods
+    ]
 
     # Fnd the period that maximizes rewards
     optimal_period = total_rewards.index(max(total_rewards)) + 1
