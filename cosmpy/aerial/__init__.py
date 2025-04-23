@@ -21,7 +21,8 @@
 
 
 def cast_to_int(value: str, verify_decimal_part: bool = True, base: int = 10) -> int:
-    """Casts string representing a number to python native integer type
+    """Casts string representing a number to python native integer type.
+
     :param value: The string representation of a number. The string value can represent
         a number in fixed point format (e.g. "1.234" or "0.000456", however, the scientific
         floating point format with "e" or "E" (e.g. "1.234e2" or "7.841E-10") is **NOT** supported.
@@ -31,12 +32,13 @@ def cast_to_int(value: str, verify_decimal_part: bool = True, base: int = 10) ->
         For example, if the `value` is "123.456789" and `base` is 10, then the
         function will verify whether the "456789" string is convertible to
         integer using in base 10 numeric system.
-    :param base: The number representing the base of the numeric system.
+    :param base: The number represents the base of the `value` numeric system.
         For example, the binary system will have base=2, the decimal system will have base=10,
         the hexadecimal system will have base=16.
     :return: The integer representation of the value number.
-    """
 
+    :raises ValueError: If `value` is not a valid number.
+    """
     parts = value.split(".")
     len_parts = len(parts)
 
