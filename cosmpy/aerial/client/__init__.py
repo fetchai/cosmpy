@@ -32,6 +32,7 @@ import grpc
 from dateutil.parser import isoparse
 from google.protobuf.timestamp_pb2 import Timestamp
 
+from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import (
@@ -111,7 +112,6 @@ from cosmpy.tendermint.rest_client import (
     CosmosBaseTendermintRestClient as TendermintRestClient,
 )
 from cosmpy.tx.rest_client import TxRestClient
-from cosmpy.aerial import cast_to_int
 
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
