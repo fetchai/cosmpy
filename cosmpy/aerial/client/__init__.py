@@ -24,6 +24,7 @@ import math
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal
 from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
@@ -31,6 +32,7 @@ import grpc
 from dateutil.parser import isoparse
 from google.protobuf.timestamp_pb2 import Timestamp
 
+from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import (
@@ -133,6 +135,7 @@ class StakingPosition:
     validator: Address
     amount: int
     reward: int
+    reward_dec: Decimal
 
 
 @dataclass
@@ -349,7 +352,7 @@ class LedgerClient:
         resp = self.bank.Balance(req)
         assert resp.balance.denom == denom  # sanity check
 
-        return int(float(resp.balance.amount))
+        return int(resp.balance.amount)
 
     def query_bank_all_balances(self, address: Address) -> List[Coin]:
         """Query bank all balances.
@@ -412,7 +415,7 @@ class LedgerClient:
             validators.append(
                 Validator(
                     address=Address(validator.operator_address),
-                    tokens=int(float(validator.tokens)),
+                    tokens=cast_to_int(validator.tokens, False),
                     moniker=str(validator.description.moniker),
                     status=ValidatorStatus.from_proto(validator.status),
                 )
@@ -439,19 +442,20 @@ class LedgerClient:
                 )
                 rewards_resp = self.distribution.DelegationRewards(req)
 
+                stake_reward_dec = Decimal(0)
                 stake_reward = 0
                 for reward in rewards_resp.rewards:
                     if reward.denom == self.network_config.staking_denomination:
-                        stake_reward = (
-                            int(float(reward.amount)) // COSMOS_SDK_DEC_COIN_PRECISION
-                        )
+                        stake_reward_dec = Decimal(reward.amount)
+                        stake_reward = cast_to_int(reward.amount, False)
                         break
 
                 current_positions.append(
                     StakingPosition(
                         validator=Address(item.delegation.validator_address),
-                        amount=int(float(item.balance.amount)),
+                        amount=cast_to_int(item.balance.amount, False),
                         reward=stake_reward,
+                        reward_dec=stake_reward_dec,
                     )
                 )
 
@@ -464,7 +468,7 @@ class LedgerClient:
                 total_unbonding = unbonding_summary.get(validator, 0)
 
                 for entry in item.entries:
-                    total_unbonding += int(float(entry.balance))
+                    total_unbonding += cast_to_int(entry.balance, False)
 
                 unbonding_summary[validator] = total_unbonding
 

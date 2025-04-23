@@ -35,24 +35,24 @@ from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import QueryValidatorsReques
 
 # This function returns the total reward for given:
 # * f -> fee
-# * S -> Initial Stake
+# * s -> Initial Stake
 # * k -> Reward Rate
-# * D -> Total staking period
+# * d -> Total staking period
 # * x -> Compounding Period
-def M(x, f, S, k, D):
+def calculate_total_rewards_for_period(x, f, s, k, d):
     """
     Calculate the total reward.
 
     :param x: Compounding Period
     :param f: fee
-    :param S: Initial Stake
+    :param s: Initial Stake
     :param k: Reward Rate
-    :param D: Total staking period
+    :param d: Total staking period
 
     :return: Total reward
     """
-    return (S * (1 + (k * x)) ** (D / x)) + (
-        (1 - ((1 + (k * x)) ** (D / x))) / (k * x)
+    return (s * (1 + (k * x)) ** (d / x)) + (
+        (1 - ((1 + (k * x)) ** (d / x))) / (k * x)
     ) * f
 
 
@@ -78,8 +78,8 @@ def main():
     total_stake = sum(validators_stake)
 
     # Get validators commissions
-    validators_comission = [
-        int(validator.commission.commission_rates.rate)
+    validators_commission = [
+        float(validator.commission.commission_rates.rate)
         for validator in resp.validators
         if validator.status == 3
     ]
@@ -90,10 +90,10 @@ def main():
     # Choose a threshold for a validators minimum percentage of total stake delegated
     stake_threshold = 0.10
 
-    for _i in range(len(validators_comission)):
+    for _i in range(len(validators_commission)):
 
         # Choose validator with lower commission
-        validator_index = validators_comission.index(min(validators_comission))
+        validator_index = validators_commission.index(min(validators_commission))
 
         # Verify that it meets the minimum % threshold
         validator_stake_pct = validators_stake[validator_index] / total_stake
@@ -103,13 +103,13 @@ def main():
             validator = validators[validator_index]
             break
 
-        # We omit this validator by setting his commssion to infinity
-        validators_comission[validator_index] = float("inf")
+        # We omit this validator by setting his commission to the maximum
+        validators_commission[validator_index] = float("inf")
 
     if validator == "not_selected":
-        # Restart validators_comission list with original values
-        validators_comission = [
-            int(validator.commission.commission_rates.rate)
+        # Restart validators_commission list with original values
+        validators_commission = [
+            float(validator.commission.commission_rates.rate)
             for validator in resp.validators
             if validator.status == 3
         ]
@@ -117,7 +117,7 @@ def main():
         print("No validator meets the minimum stake threshold requirement")
 
         # Proceed to select the validator with the lowest commission
-        validator_index = validators_comission.index(min(validators_comission))
+        validator_index = validators_commission.index(min(validators_commission))
         validator = validators[validator_index]
 
     # Query validator commission
@@ -129,7 +129,7 @@ def main():
     # Estimate fees for claiming and delegating rewards
 
     alice = LocalWallet.generate()
-    alice_address = str(alice.address())
+    alice_address = alice.address()
 
     alice_balance = ledger.query_bank_balance(alice.address())
 
@@ -183,7 +183,7 @@ def main():
     community_tax = float(json.loads(resp.param.value))
 
     # Annual reward calculation
-    anual_reward = (
+    annual_reward = (
         (inflation * total_supply)
         * pct_delegated
         * (1 - community_tax)
@@ -191,23 +191,25 @@ def main():
     )
 
     # Convert from annual reward to minute reward
-    minute_reward = anual_reward / 360 / 24 / 60
+    minute_reward = annual_reward / 360 / 24 / 60
     rate = minute_reward / initial_stake
 
     # Compute optimal period
     f = fee
-    S = initial_stake
+    s = initial_stake
     k = rate
-    D = total_period
+    d = total_period
 
     # List of compounding periods
-    X = list(range(1, D))
+    compounding_periods = list(range(1, d))
 
     # Evaluate function M on each compounding period
-    R = [M(x, f, S, k, D) for x in X]
+    total_rewards = [
+        calculate_total_rewards_for_period(x, f, s, k, d) for x in compounding_periods
+    ]
 
     # Fnd the period that maximizes rewards
-    optimal_period = R.index(max(R)) + 1
+    optimal_period = total_rewards.index(max(total_rewards)) + 1
 
     # These values can be used in aerial_compounder.py to maximize rewards
     print("total period: ", total_period, "minutes")
