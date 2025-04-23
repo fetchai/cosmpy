@@ -40,7 +40,7 @@ def cast_to_int(value: str, verify_decimal_part: bool = True, base: int = 10) ->
     parts = value.split(".")
     len_parts = len(parts)
 
-    if not (0 < len_parts < 3):
+    if not 0 < len_parts < 3:
         raise ValueError(
             f'invalid string literal for casting to int with base {base}: "{value}"'
         )
