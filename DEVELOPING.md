@@ -31,7 +31,7 @@
 
 ## <a name="setup"></a> Setting up a New Development Environment
 
-1. Ensure you have Python (version `3.9`, `3.10`, `3.11` or `3.12`) and [`poetry`][poetry].
+1. Ensure you have Python (version `3.9`, `3.10`, `3.11`, `3.12` or `3.13`) and [`poetry`][poetry].
 
 2. ``` shell
    make new-env

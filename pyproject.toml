@@ -23,6 +23,7 @@ classifiers=[
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: System",
@@ -37,7 +38,7 @@ python = "^3.9"
 ecdsa = "*"
 bech32 = "*"
 requests = "*"
-protobuf = ">=4.21.6,<5.0dev"
+protobuf = ">=4.21.6,<6.0dev"
 grpcio = "*"
 jsonschema = ">=3.2.0,<5"
 python-dateutil = "*"
@@ -62,7 +63,7 @@ vulture = "==2.6"
 pylint = "==2.15.5"
 liccheck = "==0.7.2"
 flake8-copyright = "==0.2.3"
-grpcio-tools = "*"
+grpcio-tools = ">=1.66.2"
 flake8-bugbear = "==22.10.25"
 flake8-eradicate = "==1.4.0"
 flake8-docstrings = "==1.6.0"
@@ -70,6 +71,7 @@ flake8-isort = "==5.0"
 pyyaml = "==5.3.1"
 packaging = ">=23.0"
 virtualenv = ">=20.26.6"
+marshmallow = "<4.0.0"
 
 [tool.poetry.group.docs]
 optional = true
