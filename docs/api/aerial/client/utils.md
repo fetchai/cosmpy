@@ -15,7 +15,8 @@ def prepare_and_broadcast_basic_transaction(
         sender: "Wallet",
         account: Optional["Account"] = None,
         gas_limit: Optional[int] = None,
-        memo: Optional[str] = None) -> SubmittedTx
+        memo: Optional[str] = None,
+        timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
 Prepare and broadcast basic transaction.
@@ -28,6 +29,7 @@ Prepare and broadcast basic transaction.
 - `account`: The account
 - `gas_limit`: The gas limit
 - `memo`: Transaction memo, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Returns**:
 

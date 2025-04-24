@@ -177,7 +177,8 @@ transaction with message added
 def seal(signing_cfgs: Union[SigningCfg, List[SigningCfg]],
          fee: str,
          gas_limit: int,
-         memo: Optional[str] = None) -> "Transaction"
+         memo: Optional[str] = None,
+         timeout_height: Optional[int] = None) -> "Transaction"
 ```
 
 Seal the transaction.
@@ -188,6 +189,7 @@ Seal the transaction.
 - `fee`: transaction fee
 - `gas_limit`: transaction gas limit
 - `memo`: transaction memo, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Returns**:
 

@@ -373,6 +373,7 @@ class LedgerClient:
         sender: Wallet,
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Send tokens.
 
@@ -382,6 +383,7 @@ class LedgerClient:
         :param sender: sender
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         # build up the store transaction
@@ -391,7 +393,12 @@ class LedgerClient:
         )
 
         return prepare_and_broadcast_basic_transaction(
-            self, tx, sender, gas_limit=gas_limit, memo=memo
+            self,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            memo=memo,
+            timeout_height=timeout_height,
         )
 
     def query_validators(
@@ -493,6 +500,7 @@ class LedgerClient:
         sender: Wallet,
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Delegate tokens.
 
@@ -501,6 +509,7 @@ class LedgerClient:
         :param sender: sender
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
@@ -514,7 +523,12 @@ class LedgerClient:
         )
 
         return prepare_and_broadcast_basic_transaction(
-            self, tx, sender, gas_limit=gas_limit, memo=memo
+            self,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            memo=memo,
+            timeout_height=timeout_height,
         )
 
     def redelegate_tokens(
@@ -525,6 +539,7 @@ class LedgerClient:
         sender: Wallet,
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Redelegate tokens.
 
@@ -534,6 +549,7 @@ class LedgerClient:
         :param sender: sender
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
@@ -548,7 +564,12 @@ class LedgerClient:
         )
 
         return prepare_and_broadcast_basic_transaction(
-            self, tx, sender, gas_limit=gas_limit, memo=memo
+            self,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            memo=memo,
+            timeout_height=timeout_height,
         )
 
     def undelegate_tokens(
@@ -558,6 +579,7 @@ class LedgerClient:
         sender: Wallet,
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Undelegate tokens.
 
@@ -566,6 +588,7 @@ class LedgerClient:
         :param sender: sender
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
@@ -579,7 +602,12 @@ class LedgerClient:
         )
 
         return prepare_and_broadcast_basic_transaction(
-            self, tx, sender, gas_limit=gas_limit, memo=memo
+            self,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            memo=memo,
+            timeout_height=timeout_height,
         )
 
     def claim_rewards(
@@ -588,6 +616,7 @@ class LedgerClient:
         sender: Wallet,
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
+        timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """claim rewards.
 
@@ -595,13 +624,19 @@ class LedgerClient:
         :param sender: sender
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
+        :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
         tx.add_message(create_withdraw_delegator_reward(sender.address(), validator))
 
         return prepare_and_broadcast_basic_transaction(
-            self, tx, sender, gas_limit=gas_limit, memo=memo
+            self,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            memo=memo,
+            timeout_height=timeout_height,
         )
 
     def estimate_gas_for_tx(self, tx: Transaction) -> int:
