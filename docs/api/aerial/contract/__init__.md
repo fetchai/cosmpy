@@ -105,7 +105,8 @@ contract address
 ```python
 def store(sender: Wallet,
           gas_limit: Optional[int] = None,
-          memo: Optional[str] = None) -> int
+          memo: Optional[str] = None,
+          timeout_height: Optional[int] = None) -> int
 ```
 
 Store the contract.
@@ -115,6 +116,7 @@ Store the contract.
 - `sender`: sender wallet address
 - `gas_limit`: transaction gas limit, defaults to None
 - `memo`: transaction memo, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Raises**:
 
@@ -134,7 +136,8 @@ def instantiate(args: Any,
                 label: Optional[str] = None,
                 gas_limit: Optional[int] = None,
                 admin_address: Optional[Address] = None,
-                funds: Optional[str] = None) -> Address
+                funds: Optional[str] = None,
+                timeout_height: Optional[int] = None) -> Address
 ```
 
 Instantiate the contract.
@@ -147,6 +150,7 @@ Instantiate the contract.
 - `gas_limit`: transaction gas limit, defaults to None
 - `admin_address`: admin address, defaults to None
 - `funds`: funds, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Raises**:
 
@@ -164,7 +168,8 @@ contract address
 def upgrade(args: Any,
             sender: Wallet,
             new_path: str,
-            gas_limit: Optional[int] = None) -> SubmittedTx
+            gas_limit: Optional[int] = None,
+            timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
 Store new contract code and migrate the current contract address.
@@ -175,6 +180,7 @@ Store new contract code and migrate the current contract address.
 - `sender`: sender wallet address
 - `new_path`: path to new contract
 - `gas_limit`: transaction gas limit, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Returns**:
 
@@ -188,7 +194,8 @@ transaction details broadcast
 def migrate(args: Any,
             sender: Wallet,
             new_code_id: int,
-            gas_limit: Optional[int] = None) -> SubmittedTx
+            gas_limit: Optional[int] = None,
+            timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
 Migrate the current contract address to new code id.
@@ -199,6 +206,7 @@ Migrate the current contract address to new code id.
 - `sender`: sender wallet address
 - `new_code_id`: Code id of the newly deployed contract
 - `gas_limit`: transaction gas limit, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Returns**:
 
@@ -211,7 +219,8 @@ transaction details broadcast
 ```python
 def update_admin(sender: Wallet,
                  new_admin: Optional[Address],
-                 gas_limit: Optional[int] = None) -> SubmittedTx
+                 gas_limit: Optional[int] = None,
+                 timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
 Update/clear the admin of the contract.
@@ -221,6 +230,7 @@ Update/clear the admin of the contract.
 - `sender`: sender wallet address
 - `new_admin`: New admin address, None for clear admin
 - `gas_limit`: transaction gas limit, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Returns**:
 
@@ -237,7 +247,8 @@ def deploy(args: Any,
            store_gas_limit: Optional[int] = None,
            instantiate_gas_limit: Optional[int] = None,
            admin_address: Optional[Address] = None,
-           funds: Optional[str] = None) -> Address
+           funds: Optional[str] = None,
+           timeout_height: Optional[int] = None) -> Address
 ```
 
 Deploy the contract.
@@ -251,6 +262,7 @@ Deploy the contract.
 - `instantiate_gas_limit`: instantiate gas limit, defaults to None
 - `admin_address`: admin address, defaults to None
 - `funds`: funds, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Returns**:
 
@@ -264,7 +276,8 @@ instantiate contract details
 def execute(args: Any,
             sender: Wallet,
             gas_limit: Optional[int] = None,
-            funds: Optional[str] = None) -> SubmittedTx
+            funds: Optional[str] = None,
+            timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
 execute the contract.
@@ -275,6 +288,7 @@ execute the contract.
 - `sender`: sender address
 - `gas_limit`: transaction gas limit, defaults to None
 - `funds`: funds, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Raises**:
 
