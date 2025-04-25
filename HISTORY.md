@@ -6,7 +6,7 @@
 - fix: readme
 - fix: CI
 - feat: support Python 3.13
-- fix: Non-deterministic conversion of string repr. of numbers with radix point 
+- fix: Non-deterministic conversion of string representation of numbers with radix point 
 - feat: TX timeout height 
 
 ## 0.9.2
