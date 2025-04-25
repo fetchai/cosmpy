@@ -1,5 +1,14 @@
 # Release History
 
+## 0.9.3
+
+- chore: add/update repo health files
+- fix: readme
+- fix: CI
+- feat: support Python 3.13
+- fix: Non-deterministic conversion of string representation of numbers with radix point 
+- feat: TX timeout height 
+
 ## 0.9.2
 
 - fix: coin parsing to support ibc denominations
