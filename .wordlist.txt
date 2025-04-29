@@ -55,6 +55,7 @@ hashlib
 mainnet
 chain_id
 dorado
+eridanus
 ibc
 tendermint
 tx
@@ -64,6 +65,7 @@ pb
 cosmoshub
 validator
 atestfet
+atestasi
 denom
 wasm
 blockapsis
@@ -81,6 +83,7 @@ Validators
 delegator
 validators
 afet
+aasi
 ibcprotocol
 natively
 CosmWasm
@@ -256,6 +259,8 @@ december
 mykeyname
 xxd
 fetchvaloper
+asivaloper
+asi
 PyCQA
 blueviolet
 lightgrey

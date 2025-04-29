@@ -15,7 +15,7 @@ authz_wallet = LocalWallet(
 )
 
 # Define any task_wallet address
-task_wallet_address = 'fetch1ay6grfwhlm00wydwa3nw0x2u44qz4hg2uku8dc'
+task_wallet_address = 'asi1ay6grfwhlm00wydwa3nw0x2u44qz4hg2858n0m'
 ```
 Wallet will need to have enough tokens available to top-up task_wallet, and authz_wallet will need enough tokens to pay for transaction fees. Now you will need to give authorization to authz_wallet to send tokens from wallet. You will define the expiration and the spend limit of the authorization in `total_authz_time` and `spend_amount`. The code below shows how to perform this kind of transaction:
 
@@ -34,7 +34,7 @@ from cosmpy.protos.cosmos.bank.v1beta1.authz_pb2 import SendAuthorization
 # Set total authorization time and spend amount
 total_authz_time = 10000
 amount = 1000000000000000000
-spend_amount = Coin(amount=str(amount), denom="atestfet")
+spend_amount = Coin(amount=str(amount), denom="atestasi")
 
 # Authorize authz_wallet to send tokens from wallet
 authz_any = any_pb2.Any()
@@ -66,7 +66,7 @@ Next, you will need to define the amount to top-up, the threshold that will trig
 
 # Top-up amount
 amount = 10000000000000000
-top_up_amount = Coin(amount=str(amount), denom="atestfet")
+top_up_amount = Coin(amount=str(amount), denom="atestasi")
 
 # Minimum balance for task_wallet
 minimum_balance = 1000000000000000

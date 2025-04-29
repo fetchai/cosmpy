@@ -108,7 +108,7 @@ tx.wait_to_complete()
 Before running the above, the necessary `authz` grant must first be put in place. For Ledger Nano users (other hardware wallets are also available) that might mean an excursion to the command line. For the Fetchai network using [FetchD](https://docs.fetch.ai/ledger_v2/):
 
 ```bash
-fetchd tx authz grant $(fetchd keys show grantee --output json | jq -r .address) generic --msg-type "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission" --from=$(fetchd keys show grantor --output json | jq -r .address) --gas auto --gas-adjustment 1.5 --gas-prices 5000000000atestfet
+fetchd tx authz grant $(fetchd keys show grantee --output json | jq -r .address) generic --msg-type "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission" --from=$(fetchd keys show grantor --output json | jq -r .address) --gas auto --gas-adjustment 1.5 --gas-prices 5000000000atestasi
 ```
 
 By default, the above provides one year's worth of authorization to withdraw validator commission using accounts already present in the keyring.

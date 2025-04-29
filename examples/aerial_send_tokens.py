@@ -45,7 +45,7 @@ def main():
         f"Bob   Address: {bob.address()} Balance: {ledger.query_bank_balance(bob.address())}"
     )
 
-    tx = ledger.send_tokens(bob.address(), 10, "atestfet", alice)
+    tx = ledger.send_tokens(bob.address(), 10, "atestasi", alice)
 
     print(f"TX {tx.tx_hash} waiting to complete...")
     tx.wait_to_complete()

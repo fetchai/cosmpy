@@ -1,6 +1,6 @@
 ## Swap Tokens
 
-You can interact with a liquidity pool by swapping atestfet for CW20 tokens or vice versa.
+You can interact with a liquidity pool by swapping atestasi for CW20 tokens or vice versa.
 First, perform all the necessary imports:
 
 ```python
@@ -28,13 +28,13 @@ Define the CW20, pair, and liquidity token contracts with the following addresse
 ```python
 # Define cw20, pair and liquidity token contracts
 token_contract_address = (
-    "fetch1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjsxtljxl"
+    "asi1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjshnau6q"
 )
 pair_contract_address = (
-    "fetch1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0s6ulf2a"
+    "asi1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0stya8kz"
 )
 liq_token_contract_address = (
-    "fetch1alzhf9yhghud3qhucdjs895f3aek2egfq44qm0mfvahkv4jukx4qd0ltxx"
+    "asi1alzhf9yhghud3qhucdjs895f3aek2egfq44qm0mfvahkv4jukx4quha96e"
 )
 
 token_contract = LedgerContract(
@@ -48,12 +48,12 @@ liq_token_contract = LedgerContract(
 )
 ```
 
-Swap the defined `swap_amount`of atestfet for CW20 tokens
+Swap the defined `swap_amount`of atestasi for CW20 tokens
 
 ```python
-# Swap atestfet for CW20 tokens
+# Swap atestasi for CW20 tokens
 swap_amount = "10000"
-native_denom = "atestfet"
+native_denom = "atestasi"
 
 tx = pair_contract.execute(
     {
@@ -76,7 +76,7 @@ You can query your CW20 balance using the following code:
 token_contract.query({"balance": {"address": str(wallet.address())}})
 ```
 
-To trade 10 CW20 tokens for atestfet you can use the following:
+To trade 10 CW20 tokens for atestasi you can use the following:
 
 ```python
 tx = token_contract.execute({
@@ -91,7 +91,7 @@ tx.wait_to_complete()
 ```
 ## Add and Remove Liquidity 
 
-You need to increase your wallet's allowance to provide CW20 tokens to the liquidity pool. You don't need to increase the allowance to provide atestfet
+You need to increase your wallet's allowance to provide CW20 tokens to the liquidity pool. You don't need to increase the allowance to provide atestasi
 
 ```python
 # Set the amount of CW20 tokens to be added to liquidity pool
@@ -111,17 +111,17 @@ tx = token_contract.execute(
 
 tx.wait_to_complete()
 ```
-To set the amount of atestfet to be added to the liquidity pool and not influence the existing token prices, we need to choose an amount that matches the atestfet:CW20 token ratio already existing in the pool. For this reason, we will query the `pair_contract` pool to observe the atestfet:CW20 token ratio
+To set the amount of atestasi to be added to the liquidity pool and not influence the existing token prices, we need to choose an amount that matches the atestasi:CW20 token ratio already existing in the pool. For this reason, we will query the `pair_contract` pool to observe the atestasi:CW20 token ratio
 
 ```python
 # Query Liquidity Pool
 pair_contract.query({"pool": {}})
 ```
 
-At the moment the code was run, the ratio was close to 247:10 atestfet:CW20, and since we defined above the amount of CW20 tokens to provide to the liquidity pool as 100, we will match the LP pool ratio by setting the atestfet amount as 2470. It will be difficult to exactly match the current ratio of the pool, but when adding liquidity to the pool, there is a slippage_tolerance parameter that allows a certain percentage change in the price.
+At the moment the code was run, the ratio was close to 247:10 atestasi:CW20, and since we defined above the amount of CW20 tokens to provide to the liquidity pool as 100, we will match the LP pool ratio by setting the atestasi amount as 2470. It will be difficult to exactly match the current ratio of the pool, but when adding liquidity to the pool, there is a slippage_tolerance parameter that allows a certain percentage change in the price.
 
 ```python
-# Set the amount of atestfet tokens to be added to liquidity pool
+# Set the amount of atestasi tokens to be added to liquidity pool
 native_liquidity_amount = "2470"
 
 # Provide Liquidity
