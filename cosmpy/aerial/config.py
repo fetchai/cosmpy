@@ -153,3 +153,49 @@ class NetworkConfig:
             DeprecationWarning,
         )
         return cls.fetchai_stable_testnet()
+
+        
+    @classmethod
+    def rddl_mainnet(cls) -> "NetworkConfig":
+        """Get the rddl mainnet configuration.
+
+        :return: fetrddlh mainnet configuration
+        """
+        return NetworkConfig(
+            chain_id="planetmint-mainnet-1",
+            url="rest+https://api.rddl.io",
+            fee_minimum_gas_price=1,
+            fee_denomination="plmnt",
+            staking_denomination="stake",
+            faucet_url=None,
+        )
+
+    @classmethod
+    def rddl_testnet(cls) -> "NetworkConfig":
+        """Get the rddl testnet configuration.
+
+        :return: fetrddlh testnet configuration
+        """
+        return NetworkConfig(
+            chain_id="planetmint-testnet-1",
+            url="rest+https://testnet-api.rddl.io",
+            fee_minimum_gas_price=1,
+            fee_denomination="plmnt",
+            staking_denomination="stake",
+            faucet_url=None,
+        )
+
+    @classmethod
+    def rddl_localhost(cls) -> "NetworkConfig":
+        """Get the rddl localhost configuration.
+
+        :return: rddl localhost configuration
+        """
+        return NetworkConfig(
+            chain_id="planetmintgo",
+            url="grpc+http://localhost:9090",
+            fee_minimum_gas_price=1,
+            fee_denomination="rddl",
+            staking_denomination="stake",
+            faucet_url=None,
+        )
