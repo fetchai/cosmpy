@@ -374,6 +374,7 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Send tokens.
 

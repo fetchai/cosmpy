@@ -140,7 +140,7 @@ class Transaction:
         return self._msgs
 
     @property
-    def fee(self) -> Optional[str]:
+    def fee(self) -> Optional[Fee]:
         """Get the transaction fee.
 
         :return: transaction fee
@@ -175,8 +175,8 @@ class Transaction:
     def seal(
         self,
         signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-        fee: str,
-        gas_limit: int,
+        fee: Union[Fee, str],
+        gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ) -> "Transaction":
@@ -209,12 +209,16 @@ class Transaction:
                 )
             )
 
+        if not isinstance(fee, Fee):
+            fee = Fee(amount=parse_coins(fee), gas_limit=gas_limit)
+        if gas_limit:
+            fee.gas_limit = gas_limit
+        self._fee = fee
+
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=Fee(amount=parse_coins(fee), gas_limit=gas_limit),
+            fee=fee,
         )
-
-        self._fee = fee
 
         self._tx_body = TxBody()
         self._tx_body.memo = memo or ""

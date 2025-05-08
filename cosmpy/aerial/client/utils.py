@@ -20,39 +20,58 @@
 from datetime import timedelta
 from typing import Any, Callable, List, Optional, Union
 
+from cosmpy.aerial.coins import parse_coins
 from cosmpy.aerial.tx import SigningCfg
 from cosmpy.aerial.tx_helpers import SubmittedTx
+from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
+from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import Fee
 
 
-def prepare_and_broadcast_basic_transaction(
-    client: "LedgerClient",  # type: ignore # noqa: F821
-    tx: "Transaction",  # type: ignore # noqa: F821
-    sender: "Wallet",  # type: ignore # noqa: F821
-    account: Optional["Account"] = None,  # type: ignore # noqa: F821
+def estimate_tx_fees(
+    client: "LedgerClient",
+    tx: "Transaction",
+    sender: "Wallet",
+    amount: Optional[str] = None,
     gas_limit: Optional[int] = None,
+    granter: Optional[Address] = None,
+    account: Optional["Account"] = None,
     memo: Optional[str] = None,
-    timeout_height: Optional[int] = None,
-) -> SubmittedTx:
-    """Prepare and broadcast basic transaction.
+) -> (Fee, "Account"):
+    """Estimate tx fees
 
     :param client: Ledger client
     :param tx: The transaction
     :param sender: The transaction sender
-    :param account: The account
+    :param amount: Transaction fee amount, defaults to None
     :param gas_limit: The gas limit
+    :param granter: Transaction fee granter, defaults to None
+    :param account: The account
     :param memo: Transaction memo, defaults to None
-    :param timeout_height: timeout height, defaults to None
 
-    :return: broadcast transaction
+    :return: Fee object and queried account
     """
+
+    if amount:
+        return (
+            Fee(
+                amount=parse_coins(amount),
+                gas_limit=gas_limit,
+                granter=granter,
+                payer=sender.address(),
+            ),
+            account,
+        )
+
+    # Amount will be always None after this line
+
     # query the account information for the sender
     if account is None:
         account = client.query_account(sender.address())
 
     if gas_limit is not None:
         # simply build the fee from the provided gas limit
-        fee = client.estimate_fee_from_gas(gas_limit)
+        amount = client.estimate_fee_from_gas(gas_limit)
     else:
         # we need to build up a representative transaction so that we can accurately simulate it
         tx.seal(
@@ -67,11 +86,54 @@ def prepare_and_broadcast_basic_transaction(
         # simulate the gas and fee for the transaction
         gas_limit, fee = client.estimate_gas_and_fee_for_tx(tx)
 
-    # finally, build the final transaction that will be executed with the correct gas and fee values
+    return (
+        Fee(
+            amount=parse_coins(amount),
+            gas_limit=gas_limit,
+            granter=granter,
+            payer=sender.address(),
+        ),
+        account,
+    )
+
+
+def prepare_and_broadcast_basic_transaction(
+    client: "LedgerClient",  # type: ignore # noqa: F821
+    tx: "Transaction",  # type: ignore # noqa: F821
+    sender: "Wallet",  # type: ignore # noqa: F821
+    account: Optional["Account"] = None,  # type: ignore # noqa: F821
+    gas_limit: Optional[int] = None,
+    memo: Optional[str] = None,
+    timeout_height: Optional[int] = None,
+    fee_amount: Optional[str] = None,
+    fee_granter: Optional[Address] = None,
+) -> SubmittedTx:
+    """Prepare and broadcast basic transaction.
+
+    :param client: Ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param gas_limit: The gas limit
+    :param memo: Transaction memo, defaults to None
+    :param timeout_height: timeout height, defaults to None
+    :param fee_amount: Transaction fee amount, defaults to None
+    :param fee_granter: Transaction fee granter, defaults to None
+
+    :return: broadcast transaction
+    """
+
+    fee, account = estimate_tx_fees(
+        client, tx, sender, fee_amount, gas_limit, fee_granter, account, memo
+    )
+    # query the account information for the sender
+    if account is None:
+        account = client.query_account(sender.address())
+
+    # Build the final transaction
     tx.seal(
         SigningCfg.direct(sender.public_key(), account.sequence),
         fee=fee,
-        gas_limit=gas_limit,
         memo=memo,
         timeout_height=timeout_height,
     )
