@@ -153,6 +153,8 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> int:
         """Store the contract.
 
@@ -160,6 +162,8 @@ class LedgerContract(UserString):
         :param gas_limit: transaction gas limit, defaults to None
         :param memo: transaction memo, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :raises RuntimeError: Runtime error
         :return: code id
         """
@@ -177,6 +181,8 @@ class LedgerContract(UserString):
             gas_limit=gas_limit,
             memo=memo,
             timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         ).wait_to_complete()
 
         # extract the code id
@@ -195,6 +201,8 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> Address:
         """Instantiate the contract.
 
@@ -205,6 +213,8 @@ class LedgerContract(UserString):
         :param admin_address: admin address, defaults to None
         :param funds: funds, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :raises RuntimeError: Unable to extract contract code id
 
         :return: contract address
@@ -237,7 +247,13 @@ class LedgerContract(UserString):
         tx.add_message(instatiate_msg)
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
+            self._client,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         ).wait_to_complete()
 
         # store the contract address
@@ -254,6 +270,8 @@ class LedgerContract(UserString):
         new_path: str,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Store new contract code and migrate the current contract address.
 
@@ -262,6 +280,8 @@ class LedgerContract(UserString):
         :param new_path: path to new contract
         :param gas_limit: transaction gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
 
         :return: transaction details broadcast
         """
@@ -274,7 +294,13 @@ class LedgerContract(UserString):
         new_code_id = self.store(sender, gas_limit)
 
         return self.migrate(
-            args, sender, new_code_id, gas_limit, timeout_height=timeout_height
+            args,
+            sender,
+            new_code_id,
+            gas_limit,
+            timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def migrate(
@@ -284,6 +310,8 @@ class LedgerContract(UserString):
         new_code_id: int,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Migrate the current contract address to new code id.
 
@@ -292,6 +320,8 @@ class LedgerContract(UserString):
         :param new_code_id: Code id of the newly deployed contract
         :param gas_limit: transaction gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
 
         :return: transaction details broadcast
         """
@@ -311,7 +341,13 @@ class LedgerContract(UserString):
         tx.add_message(migrate_msg)
 
         return prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
+            self._client,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         ).wait_to_complete()
 
     def update_admin(
@@ -320,6 +356,8 @@ class LedgerContract(UserString):
         new_admin: Optional[Address],
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Update/clear the admin of the contract.
 
@@ -327,6 +365,8 @@ class LedgerContract(UserString):
         :param new_admin: New admin address, None for clear admin
         :param gas_limit: transaction gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
 
         :return: transaction details broadcast
         """
@@ -347,7 +387,13 @@ class LedgerContract(UserString):
         tx.add_message(msg)
 
         return prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
+            self._client,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         ).wait_to_complete()
 
     def deploy(
@@ -360,6 +406,8 @@ class LedgerContract(UserString):
         admin_address: Optional[Address] = None,
         funds: Optional[str] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> Address:
         """Deploy the contract.
 
@@ -371,6 +419,8 @@ class LedgerContract(UserString):
         :param admin_address: admin address, defaults to None
         :param funds: funds, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :return: instantiate contract details
         """
         # in the case where the contract is already deployed
@@ -392,6 +442,8 @@ class LedgerContract(UserString):
             admin_address=admin_address,
             funds=funds,
             timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def execute(
@@ -401,6 +453,8 @@ class LedgerContract(UserString):
         gas_limit: Optional[int] = None,
         funds: Optional[str] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """execute the contract.
 
@@ -409,6 +463,8 @@ class LedgerContract(UserString):
         :param gas_limit: transaction gas limit, defaults to None
         :param funds: funds, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :raises RuntimeError: Contract appears not to be deployed currently
         :return: transaction details broadcast
         """
@@ -430,7 +486,13 @@ class LedgerContract(UserString):
         )
 
         return prepare_and_broadcast_basic_transaction(
-            self._client, tx, sender, gas_limit=gas_limit, timeout_height=timeout_height
+            self._client,
+            tx,
+            sender,
+            gas_limit=gas_limit,
+            timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def query(self, args: Any) -> Any:

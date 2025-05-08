@@ -374,6 +374,7 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
         fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Send tokens.
@@ -385,6 +386,8 @@ class LedgerClient:
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         # build up the store transaction
@@ -400,6 +403,8 @@ class LedgerClient:
             gas_limit=gas_limit,
             memo=memo,
             timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def query_validators(
@@ -502,6 +507,8 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Delegate tokens.
 
@@ -511,6 +518,8 @@ class LedgerClient:
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
@@ -530,6 +539,8 @@ class LedgerClient:
             gas_limit=gas_limit,
             memo=memo,
             timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def redelegate_tokens(
@@ -541,6 +552,8 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Redelegate tokens.
 
@@ -551,6 +564,8 @@ class LedgerClient:
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
@@ -571,6 +586,8 @@ class LedgerClient:
             gas_limit=gas_limit,
             memo=memo,
             timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def undelegate_tokens(
@@ -581,6 +598,8 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """Undelegate tokens.
 
@@ -590,6 +609,8 @@ class LedgerClient:
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
@@ -609,6 +630,8 @@ class LedgerClient:
             gas_limit=gas_limit,
             memo=memo,
             timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def claim_rewards(
@@ -618,6 +641,8 @@ class LedgerClient:
         memo: Optional[str] = None,
         gas_limit: Optional[int] = None,
         timeout_height: Optional[int] = None,
+        fee_amount: Optional[str] = None,
+        fee_granter: Optional[Address] = None,
     ) -> SubmittedTx:
         """claim rewards.
 
@@ -626,6 +651,8 @@ class LedgerClient:
         :param memo: memo, defaults to None
         :param gas_limit: gas limit, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :param fee_amount: Transaction fee amount, defaults to None
+        :param fee_granter: Transaction fee granter, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
         tx = Transaction()
@@ -638,6 +665,8 @@ class LedgerClient:
             gas_limit=gas_limit,
             memo=memo,
             timeout_height=timeout_height,
+            fee_amount=fee_amount,
+            fee_granter=fee_granter,
         )
 
     def estimate_gas_for_tx(self, tx: Transaction) -> int:
