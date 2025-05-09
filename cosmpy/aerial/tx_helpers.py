@@ -24,7 +24,6 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Union
 
-from cosmpy.aerial.client import Coin
 from cosmpy.aerial.client.utils import simulate_tx
 from cosmpy.aerial.coins import parse_coins
 from cosmpy.aerial.exceptions import (
@@ -41,7 +40,7 @@ class TxFee:
 
     def __init__(
         self,
-        amount: List[Coin],
+        amount: List["Coin"],  # type: ignore
         gas_limit: int,
         granter: Optional[Address] = None,
         payer: Optional[Address] = None,
