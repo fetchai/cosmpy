@@ -299,7 +299,9 @@ def send_tokens(destination: Address,
                 sender: Wallet,
                 memo: Optional[str] = None,
                 gas_limit: Optional[int] = None,
-                timeout_height: Optional[int] = None) -> SubmittedTx
+                timeout_height: Optional[int] = None,
+                fee_amount: Optional[str] = None,
+                fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 Send tokens.
@@ -313,6 +315,8 @@ Send tokens.
 - `memo`: memo, defaults to None
 - `gas_limit`: gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -365,7 +369,9 @@ def delegate_tokens(validator: Address,
                     sender: Wallet,
                     memo: Optional[str] = None,
                     gas_limit: Optional[int] = None,
-                    timeout_height: Optional[int] = None) -> SubmittedTx
+                    timeout_height: Optional[int] = None,
+                    fee_amount: Optional[str] = None,
+                    fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 Delegate tokens.
@@ -378,6 +384,8 @@ Delegate tokens.
 - `memo`: memo, defaults to None
 - `gas_limit`: gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -394,7 +402,9 @@ def redelegate_tokens(current_validator: Address,
                       sender: Wallet,
                       memo: Optional[str] = None,
                       gas_limit: Optional[int] = None,
-                      timeout_height: Optional[int] = None) -> SubmittedTx
+                      timeout_height: Optional[int] = None,
+                      fee_amount: Optional[str] = None,
+                      fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 Redelegate tokens.
@@ -408,6 +418,8 @@ Redelegate tokens.
 - `memo`: memo, defaults to None
 - `gas_limit`: gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -423,7 +435,9 @@ def undelegate_tokens(validator: Address,
                       sender: Wallet,
                       memo: Optional[str] = None,
                       gas_limit: Optional[int] = None,
-                      timeout_height: Optional[int] = None) -> SubmittedTx
+                      timeout_height: Optional[int] = None,
+                      fee_amount: Optional[str] = None,
+                      fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 Undelegate tokens.
@@ -436,6 +450,8 @@ Undelegate tokens.
 - `memo`: memo, defaults to None
 - `gas_limit`: gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -450,7 +466,9 @@ def claim_rewards(validator: Address,
                   sender: Wallet,
                   memo: Optional[str] = None,
                   gas_limit: Optional[int] = None,
-                  timeout_height: Optional[int] = None) -> SubmittedTx
+                  timeout_height: Optional[int] = None,
+                  fee_amount: Optional[str] = None,
+                  fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 claim rewards.
@@ -462,6 +480,8 @@ claim rewards.
 - `memo`: memo, defaults to None
 - `gas_limit`: gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
