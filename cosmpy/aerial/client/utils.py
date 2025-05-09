@@ -124,7 +124,7 @@ def prepare_and_broadcast_basic_transaction(
     client: "LedgerClient",  # type: ignore # noqa: F821
     tx: "Transaction",  # type: ignore # noqa: F821
     sender: "Wallet",  # type: ignore # noqa: F821
-    account: Optional[Account] = None,  # type: ignore # noqa: F821
+    account: Optional["Account"] = None,  # type: ignore # noqa: F821
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
     timeout_height: Optional[int] = None,
