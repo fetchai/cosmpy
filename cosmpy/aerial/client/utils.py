@@ -72,7 +72,7 @@ def estimate_tx_fees(
     granter: Optional[Address] = None,
     account: Optional[Account] = None,
     memo: Optional[str] = None,
-) -> Tuple[Fee, Account]:
+) -> Tuple[Fee, Optional[Account]]:
     """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
 
     :param client: Ledger client
@@ -108,7 +108,7 @@ def estimate_tx_fees(
 
     # CASE 3: Simulate the transaction to get gas and fee
     else:
-        gas_limit, fee = simulate_tx(tx, sender, account, memo)
+        gas_limit, amount = simulate_tx(client, tx, sender, account, memo)
 
     # Final fee construction
     fee = Fee(
