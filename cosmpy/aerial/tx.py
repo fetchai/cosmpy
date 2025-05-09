@@ -26,6 +26,7 @@ from typing import Any, List, Optional, Union
 from google.protobuf.any_pb2 import Any as ProtoAny
 
 from cosmpy.aerial.coins import parse_coins
+from cosmpy.aerial.tx_helpers import TxFee
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
@@ -175,16 +176,14 @@ class Transaction:
     def seal(
         self,
         signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-        fee: Union[Fee, str],
-        gas_limit: Optional[int] = None,
+        fee: TxFee,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ) -> "Transaction":
         """Seal the transaction.
 
         :param signing_cfgs: signing configs
-        :param fee: transaction fee
-        :param gas_limit: transaction gas limit
+        :param fee: transaction fee class
         :param memo: transaction memo, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: sealed transaction.
@@ -209,15 +208,11 @@ class Transaction:
                 )
             )
 
-        if not isinstance(fee, Fee):
-            fee = Fee(amount=parse_coins(fee), gas_limit=gas_limit)
-        if gas_limit:
-            fee.gas_limit = gas_limit
         self._fee = fee
 
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=fee,
+            fee=fee.to_pb_fee(),
         )
 
         self._tx_body = TxBody()
