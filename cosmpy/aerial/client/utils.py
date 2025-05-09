@@ -84,37 +84,24 @@ def estimate_tx_fees(
 
     :return: Fee object and queried account tuple
     """
-    # CASE 1: Fee amount is already provided
-    if amount:
-        return (
-            Fee(
-                amount=parse_coins(amount),
-                gas_limit=gas_limit,
-                granter=granter,
-                payer=sender.address(),
-            ),
-            account,
-        )
+    if gas_limit is None:
+        # Ensure we have the account info
+        account = account or client.query_account(sender.address())
 
-    # query the account information for the sender if needed
-    if account is None:
-        account = client.query_account(sender.address())
+        # Simulate transaction to get gas and amount
+        gas_limit, estimated_amount = simulate_tx(client, tx, sender, account, memo)
 
-    # CASE 2: Gas limit is provided, estimate fee directly
-    if gas_limit is not None:
-        amount = client.estimate_fee_from_gas(gas_limit)
+        # Use estimated amount if not provided
+        amount = amount or estimated_amount
 
-    # CASE 3: Simulate the transaction to get gas and fee
     else:
-        gas_limit, amount = simulate_tx(client, tx, sender, account, memo)
+        # Estimate amount based on provided gas if not already set
+        amount = amount or client.estimate_fee_from_gas(gas_limit)
 
-    assert amount, RuntimeError("Address was not set.")
-    # Final fee construction
     fee = Fee(
         amount=parse_coins(amount),
         gas_limit=gas_limit,
         granter=granter,
-        payer=sender.address(),
     )
 
     return fee, account
