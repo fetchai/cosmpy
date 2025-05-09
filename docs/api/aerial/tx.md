@@ -119,7 +119,7 @@ transaction messages
 
 ```python
 @property
-def fee() -> Optional[str]
+def fee() -> Optional[Fee]
 ```
 
 Get the transaction fee.
@@ -175,8 +175,8 @@ transaction with message added
 
 ```python
 def seal(signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-         fee: str,
-         gas_limit: int,
+         fee: Union[Fee, str],
+         gas_limit: Optional[int] = None,
          memo: Optional[str] = None,
          timeout_height: Optional[int] = None) -> "Transaction"
 ```

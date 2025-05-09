@@ -106,7 +106,9 @@ contract address
 def store(sender: Wallet,
           gas_limit: Optional[int] = None,
           memo: Optional[str] = None,
-          timeout_height: Optional[int] = None) -> int
+          timeout_height: Optional[int] = None,
+          fee_amount: Optional[str] = None,
+          fee_granter: Optional[Address] = None) -> int
 ```
 
 Store the contract.
@@ -117,6 +119,8 @@ Store the contract.
 - `gas_limit`: transaction gas limit, defaults to None
 - `memo`: transaction memo, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Raises**:
 
@@ -137,7 +141,9 @@ def instantiate(args: Any,
                 gas_limit: Optional[int] = None,
                 admin_address: Optional[Address] = None,
                 funds: Optional[str] = None,
-                timeout_height: Optional[int] = None) -> Address
+                timeout_height: Optional[int] = None,
+                fee_amount: Optional[str] = None,
+                fee_granter: Optional[Address] = None) -> Address
 ```
 
 Instantiate the contract.
@@ -151,6 +157,8 @@ Instantiate the contract.
 - `admin_address`: admin address, defaults to None
 - `funds`: funds, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Raises**:
 
@@ -169,7 +177,9 @@ def upgrade(args: Any,
             sender: Wallet,
             new_path: str,
             gas_limit: Optional[int] = None,
-            timeout_height: Optional[int] = None) -> SubmittedTx
+            timeout_height: Optional[int] = None,
+            fee_amount: Optional[str] = None,
+            fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 Store new contract code and migrate the current contract address.
@@ -181,6 +191,8 @@ Store new contract code and migrate the current contract address.
 - `new_path`: path to new contract
 - `gas_limit`: transaction gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -195,7 +207,9 @@ def migrate(args: Any,
             sender: Wallet,
             new_code_id: int,
             gas_limit: Optional[int] = None,
-            timeout_height: Optional[int] = None) -> SubmittedTx
+            timeout_height: Optional[int] = None,
+            fee_amount: Optional[str] = None,
+            fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 Migrate the current contract address to new code id.
@@ -207,6 +221,8 @@ Migrate the current contract address to new code id.
 - `new_code_id`: Code id of the newly deployed contract
 - `gas_limit`: transaction gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -220,7 +236,9 @@ transaction details broadcast
 def update_admin(sender: Wallet,
                  new_admin: Optional[Address],
                  gas_limit: Optional[int] = None,
-                 timeout_height: Optional[int] = None) -> SubmittedTx
+                 timeout_height: Optional[int] = None,
+                 fee_amount: Optional[str] = None,
+                 fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 Update/clear the admin of the contract.
@@ -231,6 +249,8 @@ Update/clear the admin of the contract.
 - `new_admin`: New admin address, None for clear admin
 - `gas_limit`: transaction gas limit, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -248,7 +268,9 @@ def deploy(args: Any,
            instantiate_gas_limit: Optional[int] = None,
            admin_address: Optional[Address] = None,
            funds: Optional[str] = None,
-           timeout_height: Optional[int] = None) -> Address
+           timeout_height: Optional[int] = None,
+           fee_amount: Optional[str] = None,
+           fee_granter: Optional[Address] = None) -> Address
 ```
 
 Deploy the contract.
@@ -263,6 +285,8 @@ Deploy the contract.
 - `admin_address`: admin address, defaults to None
 - `funds`: funds, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 
@@ -277,7 +301,9 @@ def execute(args: Any,
             sender: Wallet,
             gas_limit: Optional[int] = None,
             funds: Optional[str] = None,
-            timeout_height: Optional[int] = None) -> SubmittedTx
+            timeout_height: Optional[int] = None,
+            fee_amount: Optional[str] = None,
+            fee_granter: Optional[Address] = None) -> SubmittedTx
 ```
 
 execute the contract.
@@ -289,6 +315,8 @@ execute the contract.
 - `gas_limit`: transaction gas limit, defaults to None
 - `funds`: funds, defaults to None
 - `timeout_height`: timeout height, defaults to None
+- `fee_amount`: Transaction fee amount, defaults to None
+- `fee_granter`: Transaction fee granter, defaults to None
 
 **Raises**:
 

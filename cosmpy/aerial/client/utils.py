@@ -20,21 +20,19 @@
 from datetime import timedelta
 from typing import Any, Callable, List, Optional, Tuple, Union
 
-from cosmpy.aerial.client import Account, LedgerClient
 from cosmpy.aerial.coins import parse_coins
 from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.tx_helpers import SubmittedTx
-from cosmpy.aerial.wallet import Wallet
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import Fee
 
 
 def simulate_tx(
-    client: LedgerClient,
+    client: "LedgerClient",  # type: ignore # noqa: F821
     tx: Transaction,
-    sender: Wallet,
-    account: Account,
+    sender: "Wallet",  # type: ignore # noqa: F821
+    account: "Account",  # type: ignore # noqa: F821
     memo: Optional[str] = None,
 ) -> Tuple[int, str]:
     """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
@@ -64,15 +62,15 @@ def simulate_tx(
 
 
 def estimate_tx_fees(
-    client: LedgerClient,
+    client: "LedgerClient",  # type: ignore # noqa: F821
     tx: Transaction,
-    sender: Wallet,
+    sender: "Wallet",  # type: ignore # noqa: F821
     amount: Optional[str] = None,
     gas_limit: Optional[int] = None,
     granter: Optional[Address] = None,
-    account: Optional[Account] = None,
+    account: Optional["Account"] = None,  # type: ignore # noqa: F821
     memo: Optional[str] = None,
-) -> Tuple[Fee, Optional[Account]]:
+) -> Tuple[Fee, Optional["Account"]]:  # type: ignore # noqa: F821
     """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
 
     :param client: Ledger client
@@ -110,6 +108,7 @@ def estimate_tx_fees(
     else:
         gas_limit, amount = simulate_tx(client, tx, sender, account, memo)
 
+    assert amount, RuntimeError("Address was not set.")
     # Final fee construction
     fee = Fee(
         amount=parse_coins(amount),
@@ -122,9 +121,9 @@ def estimate_tx_fees(
 
 
 def prepare_and_broadcast_basic_transaction(
-    client: LedgerClient,  # type: ignore # noqa: F821
-    tx: Transaction,  # type: ignore # noqa: F821
-    sender: Wallet,  # type: ignore # noqa: F821
+    client: "LedgerClient",  # type: ignore # noqa: F821
+    tx: "Transaction",  # type: ignore # noqa: F821
+    sender: "Wallet",  # type: ignore # noqa: F821
     account: Optional[Account] = None,  # type: ignore # noqa: F821
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
