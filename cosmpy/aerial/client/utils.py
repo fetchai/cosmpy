@@ -80,7 +80,9 @@ def prepare_and_broadcast_basic_transaction(
     """
 
     if fee is None:
-        fee, account = TxFee.from_simulation(client, tx, sender, account, memo)
+        fee, account = TxFee.from_simulation(
+            client, tx, sender, account=account, memo=memo
+        )
 
     # query the account information for the sender
     if account is None:

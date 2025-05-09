@@ -25,7 +25,6 @@ from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from cosmpy.aerial.coins import parse_coins
 from cosmpy.aerial.tx_helpers import TxFee
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey

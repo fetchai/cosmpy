@@ -85,25 +85,50 @@ class TxFee:
     @classmethod
     def from_simulation(
         cls,
-        client: "LedgerClient",  # type: ignore
+        client: "LedgerClient",  # type: ignore # noqa: F821
         tx: "Transaction",  # type: ignore
-        sender: "Wallet",  # type: ignore
-        account: Optional["Account"] = None,  # type: ignore
-        memo: Optional[str] = None,
+        sender: "Wallet",  # type: ignore # noqa: F821
+        amount: Optional[str] = None,
+        gas_limit: Optional[int] = None,
         granter: Optional[Address] = None,
         payer: Optional[Address] = None,
-    ) -> Tuple["TxFee", "Account"]:  # type: ignore
-        account = account or client.query_account(sender.address())
-        gas_limit, estimated_amount = simulate_tx(client, tx, sender, account, memo)
-        return (
-            cls(
-                amount=parse_coins(estimated_amount),
-                gas_limit=gas_limit,
-                granter=granter,
-                payer=payer,
-            ),
-            account,
+        account: Optional["Account"] = None,  # type: ignore # noqa: F821
+        memo: Optional[str] = None,
+    ) -> Tuple[Fee, Optional["Account"]]:  # type: ignore # noqa: F821
+        """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
+        :param client: Ledger client
+        :param tx: The transaction
+        :param sender: The transaction sender
+        :param amount: Transaction fee amount, defaults to None
+        :param gas_limit: The gas limit
+        :param granter: Transaction fee granter, defaults to None
+        :param payer: Transaction fee payer, defaults to None
+        :param account: The account
+        :param memo: Transaction memo, defaults to None
+        :return: Fee object and queried account tuple
+        """
+        if gas_limit is None:
+            # Ensure we have the account info
+            account = account or client.query_account(sender.address())
+
+            # Simulate transaction to get gas and amount
+            gas_limit, estimated_amount = simulate_tx(client, tx, sender, account, memo)
+
+            # Use estimated amount if not provided
+            amount = amount or estimated_amount
+
+        else:
+            # Estimate amount based on provided gas if not already set
+            amount = amount or client.estimate_fee_from_gas(gas_limit)
+
+        fee = Fee(
+            amount=parse_coins(amount),
+            gas_limit=gas_limit,
+            granter=granter,
+            payer=payer,
         )
+
+        return fee, account
 
     def to_pb_fee(self) -> Fee:
         return Fee(
