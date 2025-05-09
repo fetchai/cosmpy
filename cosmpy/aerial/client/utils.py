@@ -18,25 +18,28 @@
 # ------------------------------------------------------------------------------
 """Helper functions."""
 from datetime import timedelta
-from typing import Any, Callable, List, Optional, Union, Tuple
+from typing import Any, Callable, List, Optional, Tuple, Union
 
+from cosmpy.aerial.client import Account, LedgerClient
 from cosmpy.aerial.coins import parse_coins
-from cosmpy.aerial.tx import SigningCfg
+from cosmpy.aerial.tx import SigningCfg, Transaction
 from cosmpy.aerial.tx_helpers import SubmittedTx
+from cosmpy.aerial.wallet import Wallet
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import Fee
 
 
 def simulate_tx(
-    client: "LedgerClient",
-    tx: "Transaction",
-    sender: "Wallet",
-    account: "Account",
+    client: LedgerClient,
+    tx: Transaction,
+    sender: Wallet,
+    account: Account,
     memo: Optional[str] = None,
 ) -> Tuple[int, str]:
     """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
 
+    :param client: Ledger client
     :param tx: The transaction
     :param sender: The transaction sender
     :param account: The account
@@ -44,7 +47,6 @@ def simulate_tx(
 
     :return: Estimated gas_limit and fee amount tuple
     """
-
     # we need to build up a representative transaction so that we can accurately simulate it
     tx.seal(
         SigningCfg.direct(sender.public_key(), account.sequence),
@@ -62,15 +64,15 @@ def simulate_tx(
 
 
 def estimate_tx_fees(
-    client: "LedgerClient",
-    tx: "Transaction",
-    sender: "Wallet",
+    client: LedgerClient,
+    tx: Transaction,
+    sender: Wallet,
     amount: Optional[str] = None,
     gas_limit: Optional[int] = None,
     granter: Optional[Address] = None,
-    account: Optional["Account"] = None,
+    account: Optional[Account] = None,
     memo: Optional[str] = None,
-) -> Tuple[Fee, "Account"]:
+) -> Tuple[Fee, Account]:
     """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
 
     :param client: Ledger client
@@ -84,7 +86,6 @@ def estimate_tx_fees(
 
     :return: Fee object and queried account tuple
     """
-
     # CASE 1: Fee amount is already provided
     if amount:
         return (
@@ -121,10 +122,10 @@ def estimate_tx_fees(
 
 
 def prepare_and_broadcast_basic_transaction(
-    client: "LedgerClient",  # type: ignore # noqa: F821
-    tx: "Transaction",  # type: ignore # noqa: F821
-    sender: "Wallet",  # type: ignore # noqa: F821
-    account: Optional["Account"] = None,  # type: ignore # noqa: F821
+    client: LedgerClient,  # type: ignore # noqa: F821
+    tx: Transaction,  # type: ignore # noqa: F821
+    sender: Wallet,  # type: ignore # noqa: F821
+    account: Optional[Account] = None,  # type: ignore # noqa: F821
     gas_limit: Optional[int] = None,
     memo: Optional[str] = None,
     timeout_height: Optional[int] = None,
@@ -145,7 +146,6 @@ def prepare_and_broadcast_basic_transaction(
 
     :return: broadcast transaction
     """
-
     fee, account = estimate_tx_fees(
         client, tx, sender, fee_amount, gas_limit, fee_granter, account, memo
     )
