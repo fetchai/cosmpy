@@ -9,10 +9,10 @@ Helper functions.
 #### simulate`_`tx
 
 ```python
-def simulate_tx(client: LedgerClient,
+def simulate_tx(client: "LedgerClient",
                 tx: Transaction,
-                sender: Wallet,
-                account: Account,
+                sender: "Wallet",
+                account: "Account",
                 memo: Optional[str] = None) -> Tuple[int, str]
 ```
 
@@ -36,14 +36,14 @@ Estimated gas_limit and fee amount tuple
 
 ```python
 def estimate_tx_fees(
-        client: LedgerClient,
+        client: "LedgerClient",
         tx: Transaction,
-        sender: Wallet,
+        sender: "Wallet",
         amount: Optional[str] = None,
         gas_limit: Optional[int] = None,
         granter: Optional[Address] = None,
-        account: Optional[Account] = None,
-        memo: Optional[str] = None) -> Tuple[Fee, Optional[Account]]
+        account: Optional["Account"] = None,
+        memo: Optional[str] = None) -> Tuple[Fee, Optional["Account"]]
 ```
 
 Estimate transaction fees based on either a provided amount, gas limit, or simulation.
@@ -69,10 +69,10 @@ Fee object and queried account tuple
 
 ```python
 def prepare_and_broadcast_basic_transaction(
-        client: LedgerClient,
-        tx: Transaction,
-        sender: Wallet,
-        account: Optional[Account] = None,
+        client: "LedgerClient",
+        tx: "Transaction",
+        sender: "Wallet",
+        account: Optional["Account"] = None,
         gas_limit: Optional[int] = None,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
