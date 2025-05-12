@@ -382,7 +382,7 @@ class LedgerClient:
         :param denom: denom
         :param sender: sender
         :param memo: memo, defaults to None
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -508,7 +508,7 @@ class LedgerClient:
         :param amount: amount
         :param sender: sender
         :param memo: memo, defaults to None
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -548,7 +548,7 @@ class LedgerClient:
         :param amount: amount
         :param sender: sender
         :param memo: memo, defaults to None
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -587,7 +587,7 @@ class LedgerClient:
         :param amount: amount
         :param sender: sender
         :param memo: memo, defaults to None
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -623,7 +623,7 @@ class LedgerClient:
         :param validator: validator
         :param sender: sender
         :param memo: memo, defaults to None
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """

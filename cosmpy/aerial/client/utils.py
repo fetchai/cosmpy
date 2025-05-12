@@ -78,7 +78,6 @@ def prepare_and_broadcast_basic_transaction(
 
     :return: broadcast transaction
     """
-
     if fee is None:
         fee, account = TxFee.from_simulation(
             client, tx, sender, account=account, memo=memo

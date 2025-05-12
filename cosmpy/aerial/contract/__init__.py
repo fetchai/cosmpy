@@ -157,7 +157,7 @@ class LedgerContract(UserString):
         """Store the contract.
 
         :param sender: sender wallet address
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param memo: transaction memo, defaults to None
         :param timeout_height: timeout height, defaults to None
         :raises RuntimeError: Runtime error
@@ -201,7 +201,7 @@ class LedgerContract(UserString):
         :param args: args
         :param sender: sender wallet address
         :param label: label, defaults to None
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param admin_address: admin address, defaults to None
         :param funds: funds, defaults to None
         :param timeout_height: timeout height, defaults to None
@@ -264,7 +264,7 @@ class LedgerContract(UserString):
         :param args: args
         :param sender: sender wallet address
         :param new_path: path to new contract
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
 
         :return: transaction details broadcast
@@ -298,7 +298,7 @@ class LedgerContract(UserString):
         :param args: args
         :param sender: sender wallet address
         :param new_code_id: Code id of the newly deployed contract
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
 
         :return: transaction details broadcast
@@ -337,7 +337,7 @@ class LedgerContract(UserString):
 
         :param sender: sender wallet address
         :param new_admin: New admin address, None for clear admin
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
 
         :return: transaction details broadcast
@@ -422,7 +422,7 @@ class LedgerContract(UserString):
 
         :param args: args
         :param sender: sender address
-        :param fee: Transaction fee, defaults to None
+        :param fee: transaction fee, defaults to None
         :param funds: funds, defaults to None
         :param timeout_height: timeout height, defaults to None
         :raises RuntimeError: Contract appears not to be deployed currently
