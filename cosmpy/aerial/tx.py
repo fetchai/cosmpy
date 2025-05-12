@@ -155,7 +155,7 @@ class TxFee:
         payer: Optional[Address] = None,
         account: Optional["Account"] = None,  # type: ignore # noqa: F821
         memo: Optional[str] = None,
-    ) -> Tuple[Fee, Optional["Account"]]:  # type: ignore # noqa: F821
+    ) -> Tuple["TxFee", Optional["Account"]]:  # type: ignore # noqa: F821
         """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
 
         :param client: Ledger client
@@ -166,7 +166,7 @@ class TxFee:
         :param payer: Transaction fee payer, defaults to None
         :param account: The account
         :param memo: Transaction memo, defaults to None
-        :return: TxFee
+        :return: Tuple[TxFee, Optional[Account]]
         """
         # Ensure we have the account info
         account = account or client.query_account(sender.address())
@@ -177,7 +177,7 @@ class TxFee:
         # Use estimated amount if not provided
         amount = amount or estimated_amount
 
-        fee = Fee(
+        fee = cls(
             amount=parse_coins(amount),
             gas_limit=gas_limit,
             granter=granter,
