@@ -17,14 +17,11 @@
 #
 # ------------------------------------------------------------------------------
 """Integration tests for basic transactions."""
-from typing import Optional
-
 import pytest
 
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.faucet import FaucetApi
-from cosmpy.aerial.tx import TxFee
 from cosmpy.aerial.wallet import LocalWallet
 
 
