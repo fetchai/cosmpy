@@ -27,7 +27,11 @@ from typing import Any, Dict, Optional
 
 from jsonschema import validate
 
-from cosmpy.aerial.client import LedgerClient, prepare_and_broadcast_basic_transaction
+from cosmpy.aerial.client import (
+    LedgerClient,
+    TxFee,
+    prepare_and_broadcast_basic_transaction,
+)
 from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_clear_admin_msg,
     create_cosmwasm_execute_msg,
@@ -37,7 +41,7 @@ from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_update_admin_msg,
 )
 from cosmpy.aerial.tx import Transaction
-from cosmpy.aerial.tx_helpers import SubmittedTx, TxFee
+from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.common.utils import json_encode
 from cosmpy.crypto.address import Address

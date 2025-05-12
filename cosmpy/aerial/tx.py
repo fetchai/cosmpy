@@ -25,7 +25,6 @@ from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from cosmpy.aerial.tx_helpers import TxFee
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
@@ -175,7 +174,7 @@ class Transaction:
     def seal(
         self,
         signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-        fee: TxFee,
+        fee: "TxFee",  # type: ignore # noqa: F821
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ) -> "Transaction":
