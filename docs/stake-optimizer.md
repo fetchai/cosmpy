@@ -73,7 +73,7 @@ We need to know an estimate of the transaction fees it will cost every time we c
 ```python
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import create_delegate_msg
-from cosmpy.aerial.tx import SigningCfg
+from cosmpy.aerial.tx import SigningCfg, TxFee
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.crypto.address import Address
@@ -93,7 +93,7 @@ tx.add_message(create_delegate_msg(alice_address,validator.address,initial_stake
 tx.add_message(create_withdraw_delegator_reward(alice_address, validator.address))
 
 account = ledger.query_account(alice.address())
-tx.seal(SigningCfg.direct(alice.public_key(), account.sequence),fee="",gas_limit=0)
+tx.seal(SigningCfg.direct(alice.public_key(), account.sequence),TxFee([], 0))
 tx.sign(alice.signer(), ledger.network_config.chain_id, account.number)
 tx.complete()
 
