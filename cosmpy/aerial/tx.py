@@ -21,10 +21,12 @@
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Tuple, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
+from cosmpy.aerial.coins import parse_coins
+from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
@@ -38,6 +40,163 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
+
+
+def simulate_tx(
+    client: "LedgerClient",  # type: ignore # noqa: F821
+    tx: "Transaction",  # type: ignore  # noqa: F821
+    sender: "Wallet",  # type: ignore # noqa: F821
+    account: "Account",  # type: ignore # noqa: F821
+    memo: Optional[str] = None,
+) -> Tuple[int, str]:
+    """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
+
+    :param client: Ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param memo: Transaction memo, defaults to None
+
+    :return: Estimated gas_limit and fee amount tuple
+    """
+    # we need to build up a representative transaction so that we can accurately simulate it
+    tx.seal(
+        SigningCfg.direct(sender.public_key(), account.sequence),
+        fee=TxFee([], 0),
+        memo=memo,
+    )
+    tx.sign(sender.signer(), client.network_config.chain_id, account.number)
+    tx.complete()
+
+    # simulate the gas and fee for the transaction
+    gas_limit, fee = client.estimate_gas_and_fee_for_tx(tx)
+
+    return gas_limit, fee
+
+
+class TxFee:
+    """Cosmos SDK TxFee abstraction."""
+
+    def __init__(
+        self,
+        amount: List["Coin"],  # type: ignore # noqa: F821
+        gas_limit: int,
+        granter: Optional[Address] = None,
+        payer: Optional[Address] = None,
+    ):
+        """Init the Transaction fee class.
+
+        :param amount: tx fee amount
+        :param gas_limit: gas limit
+        :param granter: transaction fee granter, defaults to None
+        :param payer: transaction fee payer, defaults to None
+        :returns initialised TxFee
+        """
+        self.amount = amount
+        self.gas_limit = gas_limit
+        self.granter = granter
+        self.payer = payer
+
+    @classmethod
+    def from_fixed_amount(
+        cls,
+        amount: str,
+        gas_limit: int = 0,
+        granter: Optional[Address] = None,
+        payer: Optional[Address] = None,
+    ) -> "TxFee":
+        """Init the Transaction fee class from string amount.
+
+        :param amount: tx fee amount string
+        :param gas_limit: gas limit
+        :param granter: transaction fee granter, defaults to None
+        :param payer: transaction fee payer, defaults to None
+        :return: TxFee
+        """
+        return cls(
+            amount=parse_coins(amount),
+            gas_limit=gas_limit,
+            granter=granter,
+            payer=payer,
+        )
+
+    @classmethod
+    def from_gas_only(
+        cls,
+        client: "LedgerClient",  # type: ignore # noqa: F821
+        gas_limit: int,
+        granter: Optional[Address] = None,
+        payer: Optional[Address] = None,
+    ) -> "TxFee":
+        """Init the Transaction fee class from gas limit.
+
+        :param client: Ledger client
+        :param gas_limit: gas limit
+        :param granter: transaction fee granter, defaults to None
+        :param payer: transaction fee payer, defaults to None
+        :return: TxFee
+        """
+        estimated_amount = client.estimate_fee_from_gas(gas_limit)
+        return cls(
+            amount=parse_coins(estimated_amount),
+            gas_limit=gas_limit,
+            granter=granter,
+            payer=payer,
+        )
+
+    @classmethod
+    def from_simulation(
+        cls,
+        client: "LedgerClient",  # type: ignore # noqa: F821
+        tx: "Transaction",  # type: ignore  # noqa: F821
+        sender: "Wallet",  # type: ignore # noqa: F821
+        amount: Optional[str] = None,
+        granter: Optional[Address] = None,
+        payer: Optional[Address] = None,
+        account: Optional["Account"] = None,  # type: ignore # noqa: F821
+        memo: Optional[str] = None,
+    ) -> Tuple[Fee, Optional["Account"]]:  # type: ignore # noqa: F821
+        """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
+
+        :param client: Ledger client
+        :param tx: The transaction
+        :param sender: The transaction sender
+        :param amount: Transaction fee amount, defaults to None
+        :param granter: Transaction fee granter, defaults to None
+        :param payer: Transaction fee payer, defaults to None
+        :param account: The account
+        :param memo: Transaction memo, defaults to None
+        :return: TxFee
+        """
+        # Ensure we have the account info
+        account = account or client.query_account(sender.address())
+
+        # Simulate transaction to get gas and amount
+        gas_limit, estimated_amount = simulate_tx(client, tx, sender, account, memo)
+
+        # Use estimated amount if not provided
+        amount = amount or estimated_amount
+
+        fee = Fee(
+            amount=parse_coins(amount),
+            gas_limit=gas_limit,
+            granter=granter,
+            payer=payer,
+        )
+
+        return fee, account
+
+    def to_pb_fee(self) -> Fee:
+        """Return protobuf representation of TxFee.
+
+        :return: Fee
+        """
+        return Fee(
+            amount=self.amount,
+            gas_limit=self.gas_limit,
+            granter=self.granter,
+            payer=self.payer,
+        )
 
 
 class TxState(Enum):
@@ -174,7 +333,7 @@ class Transaction:
     def seal(
         self,
         signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-        fee: "TxFee",  # type: ignore # noqa: F821
+        fee: TxFee,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ) -> "Transaction":
