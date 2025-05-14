@@ -238,7 +238,7 @@ class Transaction:
         client: "LedgerClient",  # type: ignore # noqa: F821
         sender: "Wallet",  # type: ignore # noqa: F821
         fee: TxFee,
-        account: "Account",  # type: ignore # noqa: F821
+        account: Option["Account"] = None,  # type: ignore # noqa: F821
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ):
@@ -253,6 +253,10 @@ class Transaction:
 
         :return: sealed transaction.
         """
+        # query the account information for the sender
+        if account is None:
+            account = client.query_account(sender.address())
+
         if fee.gas_limit is None:
             # Simulate transaction to get gas and amount
             fee.gas_limit, estimated_amount = simulate_tx(
