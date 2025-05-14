@@ -20,7 +20,7 @@
 from datetime import timedelta
 from typing import Any, Callable, List, Optional, Union
 
-from cosmpy.aerial.tx import SigningCfg, Transaction, TxFee
+from cosmpy.aerial.tx import Transaction, TxFee
 from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 
@@ -47,18 +47,18 @@ def prepare_and_broadcast_basic_transaction(
     :return: broadcast transaction
     """
     if fee is None:
-        fee, account = TxFee.from_simulation(
-            client, tx, sender, account=account, memo=memo
-        )
+        fee = TxFee()
 
     # query the account information for the sender
     if account is None:
         account = client.query_account(sender.address())
 
     # Build the final transaction
-    tx.seal(
-        SigningCfg.direct(sender.public_key(), account.sequence),
+    tx.online_seal(
+        client,
+        sender,
         fee=fee,
+        account=account,
         memo=memo,
         timeout_height=timeout_height,
     )
