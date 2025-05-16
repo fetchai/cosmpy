@@ -10,8 +10,8 @@ Helper functions.
 
 ```python
 def simulate_tx(client: "LedgerClient",
-                tx: "Transaction",
-                sender: "Wallet",
+                tx: Transaction,
+                sender: Wallet,
                 account: "Account",
                 memo: Optional[str] = None) -> Tuple[int, str]
 ```
@@ -38,7 +38,7 @@ Estimated gas_limit and fee amount tuple
 def prepare_basic_transaction(
         client: "LedgerClient",
         tx: Transaction,
-        sender: "Wallet",
+        sender: Wallet,
         account: Optional["Account"] = None,
         fee: Optional[TxFee] = None,
         memo: Optional[str] = None,
@@ -69,7 +69,7 @@ transaction
 def prepare_and_broadcast_basic_transaction(
         client: "LedgerClient",
         tx: Transaction,
-        sender: "Wallet",
+        sender: Wallet,
         account: Optional["Account"] = None,
         fee: Optional[TxFee] = None,
         memo: Optional[str] = None,
