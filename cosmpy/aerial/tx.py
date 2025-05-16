@@ -25,7 +25,7 @@ from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from cosmpy.aerial.coins import parse_coins
+from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
@@ -39,6 +39,34 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
+
+
+@dataclass
+class TxFee:
+    """Cosmos SDK TxFee abstraction."""
+
+    amount: Optional[List["Coin"]] = None  # type: ignore # noqa: F821
+    gas_limit: Optional[int] = None
+    granter: Optional[Address] = None
+    payer: Optional[Address] = None
+
+    def to_pb_fee(self) -> Fee:
+        """Return protobuf representation of TxFee.
+
+        :raises RuntimeError: Gas limit must be set
+        :return: Fee
+        """
+        if self.gas_limit is None:
+            raise RuntimeError("Gas limit must be set")
+        if self.amount is None:
+            self.amount = []
+
+        return Fee(
+            amount=self.amount,
+            gas_limit=self.gas_limit,
+            granter=self.granter,
+            payer=self.payer,
+        )
 
 
 class TxState(Enum):
@@ -175,16 +203,14 @@ class Transaction:
     def seal(
         self,
         signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-        fee: Union[Fee, str],
-        gas_limit: Optional[int] = None,
+        fee: TxFee,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ) -> "Transaction":
         """Seal the transaction.
 
         :param signing_cfgs: signing configs
-        :param fee: transaction fee
-        :param gas_limit: transaction gas limit
+        :param fee: transaction fee class
         :param memo: transaction memo, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: sealed transaction.
@@ -209,15 +235,11 @@ class Transaction:
                 )
             )
 
-        if not isinstance(fee, Fee):
-            fee = Fee(amount=parse_coins(fee), gas_limit=gas_limit)
-        if gas_limit:
-            fee.gas_limit = gas_limit
         self._fee = fee
 
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=fee,
+            fee=fee.to_pb_fee(),
         )
 
         self._tx_body = TxBody()

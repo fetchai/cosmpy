@@ -4,6 +4,35 @@
 
 Transaction.
 
+<a id="cosmpy.aerial.tx.TxFee"></a>
+
+## TxFee Objects
+
+```python
+@dataclass
+class TxFee()
+```
+
+Cosmos SDK TxFee abstraction.
+
+<a id="cosmpy.aerial.tx.TxFee.to_pb_fee"></a>
+
+#### to`_`pb`_`fee
+
+```python
+def to_pb_fee() -> Fee
+```
+
+Return protobuf representation of TxFee.
+
+**Raises**:
+
+- `RuntimeError`: Gas limit must be set
+
+**Returns**:
+
+Fee
+
 <a id="cosmpy.aerial.tx.TxState"></a>
 
 ## TxState Objects
@@ -175,8 +204,7 @@ transaction with message added
 
 ```python
 def seal(signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-         fee: Union[Fee, str],
-         gas_limit: Optional[int] = None,
+         fee: TxFee,
          memo: Optional[str] = None,
          timeout_height: Optional[int] = None) -> "Transaction"
 ```
@@ -186,8 +214,7 @@ Seal the transaction.
 **Arguments**:
 
 - `signing_cfgs`: signing configs
-- `fee`: transaction fee
-- `gas_limit`: transaction gas limit
+- `fee`: transaction fee class
 - `memo`: transaction memo, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
