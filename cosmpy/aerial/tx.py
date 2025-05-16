@@ -78,7 +78,7 @@ def simulate_tx(
 class TxFee:
     """Cosmos SDK TxFee abstraction."""
 
-    amount: Option[List["Coin"]] = None  # type: ignore # noqa: F821
+    amount: Optional[List["Coin"]] = None  # type: ignore # noqa: F821
     gas_limit: Optional[int] = None
     granter: Optional[Address] = None
     payer: Optional[Address] = None
@@ -238,7 +238,7 @@ class Transaction:
         client: "LedgerClient",  # type: ignore # noqa: F821
         sender: "Wallet",  # type: ignore # noqa: F821
         fee: TxFee,
-        account: Option["Account"] = None,  # type: ignore # noqa: F821
+        account: Optional["Account"] = None,  # type: ignore # noqa: F821
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ):
