@@ -4,6 +4,63 @@
 
 Helper functions.
 
+<a id="cosmpy.aerial.client.utils.simulate_tx"></a>
+
+#### simulate`_`tx
+
+```python
+def simulate_tx(client: "LedgerClient",
+                tx: "Transaction",
+                sender: "Wallet",
+                account: "Account",
+                memo: Optional[str] = None) -> Tuple[int, str]
+```
+
+Estimate transaction fees based on either a provided amount, gas limit, or simulation.
+
+**Arguments**:
+
+- `client`: Ledger client
+- `tx`: The transaction
+- `sender`: The transaction sender
+- `account`: The account
+- `memo`: Transaction memo, defaults to None
+
+**Returns**:
+
+Estimated gas_limit and fee amount tuple
+
+<a id="cosmpy.aerial.client.utils.prepare_basic_transaction"></a>
+
+#### prepare`_`basic`_`transaction
+
+```python
+def prepare_basic_transaction(
+        client: "LedgerClient",
+        tx: Transaction,
+        sender: "Wallet",
+        account: Optional["Account"] = None,
+        fee: Optional[TxFee] = None,
+        memo: Optional[str] = None,
+        timeout_height: Optional[int] = None) -> Transaction
+```
+
+Prepare basic transaction.
+
+**Arguments**:
+
+- `client`: Ledger client
+- `tx`: The transaction
+- `sender`: The transaction sender
+- `account`: The account
+- `fee`: The tx fee
+- `memo`: Transaction memo, defaults to None
+- `timeout_height`: timeout height, defaults to None
+
+**Returns**:
+
+transaction
+
 <a id="cosmpy.aerial.client.utils.prepare_and_broadcast_basic_transaction"></a>
 
 #### prepare`_`and`_`broadcast`_`basic`_`transaction
