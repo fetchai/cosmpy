@@ -21,11 +21,10 @@
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from cosmpy.aerial.coins import parse_coins
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
@@ -40,38 +39,6 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
-
-
-def simulate_tx(
-    client: "LedgerClient",  # type: ignore # noqa: F821
-    tx: "Transaction",  # type: ignore  # noqa: F821
-    sender: "Wallet",  # type: ignore # noqa: F821
-    account: "Account",  # type: ignore # noqa: F821
-    memo: Optional[str] = None,
-) -> Tuple[int, str]:
-    """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
-
-    :param client: Ledger client
-    :param tx: The transaction
-    :param sender: The transaction sender
-    :param account: The account
-    :param memo: Transaction memo, defaults to None
-
-    :return: Estimated gas_limit and fee amount tuple
-    """
-    # we need to build up a representative transaction so that we can accurately simulate it
-    tx.seal(
-        SigningCfg.direct(sender.public_key(), account.sequence),
-        fee=TxFee([], 0),
-        memo=memo,
-    )
-    tx.sign(sender.signer(), client.network_config.chain_id, account.number)
-    tx.complete()
-
-    # simulate the gas and fee for the transaction
-    gas_limit, fee = client.estimate_gas_and_fee_for_tx(tx)
-
-    return gas_limit, fee
 
 
 @dataclass
@@ -231,50 +198,6 @@ class Transaction:
                 "The transaction is not in the draft state. No further messages may be appended"
             )
         self._msgs.append(msg)
-        return self
-
-    def online_seal(
-        self,
-        client: "LedgerClient",  # type: ignore # noqa: F821
-        sender: "Wallet",  # type: ignore # noqa: F821
-        fee: TxFee,
-        account: Optional["Account"] = None,  # type: ignore # noqa: F821
-        memo: Optional[str] = None,
-        timeout_height: Optional[int] = None,
-    ):
-        """Query and estimate missing parameters and seal the transaction.
-
-        :param client: Ledger client
-        :param sender: The transaction sender
-        :param fee: The tx fee
-        :param account: Optional account, queried when None
-        :param memo: Transaction memo, defaults to None
-        :param timeout_height: timeout height, defaults to None
-
-        :return: sealed transaction.
-        """
-        # query the account information for the sender
-        if account is None:
-            account = client.query_account(sender.address())
-
-        if fee.gas_limit is None:
-            # Simulate transaction to get gas and amount
-            fee.gas_limit, estimated_amount = simulate_tx(
-                client, self, sender, account, memo
-            )
-            # Use estimated amount if not provided
-            fee.amount = fee.amount or parse_coins(estimated_amount)
-
-        if fee.amount is None:
-            fee.amount = parse_coins(client.estimate_fee_from_gas(fee.gas_limit))
-
-        # Build the final transaction
-        self.seal(
-            SigningCfg.direct(sender.public_key(), account.sequence),
-            fee=fee,
-            memo=memo,
-            timeout_height=timeout_height,
-        )
         return self
 
     def seal(
