@@ -62,7 +62,7 @@ def simulate_tx(
 def prepare_basic_transaction(
     client: "LedgerClient",  # type: ignore # noqa: F821
     tx: Transaction,
-    sender: Wallet,  # type: ignore # noqa: F821
+    sender: Wallet,
     account: Optional["Account"] = None,  # type: ignore # noqa: F821
     fee: Optional[TxFee] = None,
     memo: Optional[str] = None,
