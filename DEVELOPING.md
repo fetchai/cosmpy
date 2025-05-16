@@ -185,7 +185,7 @@ When updating the Cosmos-SDK version that is supported by this library (see the 
 
 ## <a name="localnode"></a> To set up a local Fetchai node
 
-To set up a local Fetchai node refer to [this guide](https://docs.fetch.ai/ledger_v2/single-node-network/).
+To set up a local Fetchai node refer to [this guide](https://network.fetch.ai/docs/guides/ledger/single-node-testnet/).
 
 ## <a name="dockernode"></a> To run a local Fetchai node in docker
 
