@@ -29,7 +29,7 @@ print(wallet.address()) # will print the address for the wallet
 
 To use CosmPy with an existing account, extract the private key and convert it into a base64 encoded string.
 
-For example, to do this on macOS or Linux for the Fetch.ai network using its [FetchD](https://docs.fetch.ai/ledger_v2/) CLI:
+For example, to do this on macOS or Linux for the Fetch.ai network using its [FetchD](https://network.fetch.ai/docs/guides/cosmpy/creating-wallet/) CLI:
 
 ```bash
 fetchd keys export mykeyname --unsafe --unarmored-hex | xxd -r -p | base64

@@ -40,7 +40,7 @@ for coin in balances:
 
 ## Documentation
 
-The full documentation can be found [here](https://fetch.ai/docs/guides/fetch-network/cosmpy/install).
+The full documentation can be found [here](https://network.fetch.ai/docs/guides/cosmpy/installation).
 
 ## Examples
 
