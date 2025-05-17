@@ -37,6 +37,83 @@ Get the validator status from proto.
 
 Validator status
 
+<a id="cosmpy.aerial.client.staking.StakingPosition"></a>
+
+## StakingPosition Objects
+
+```python
+@dataclass
+class StakingPosition()
+```
+
+Staking positions.
+
+<a id="cosmpy.aerial.client.staking.UnbondingPositions"></a>
+
+## UnbondingPositions Objects
+
+```python
+@dataclass
+class UnbondingPositions()
+```
+
+Unbonding positions.
+
+<a id="cosmpy.aerial.client.staking.Validator"></a>
+
+## Validator Objects
+
+```python
+@dataclass
+class Validator()
+```
+
+Validator.
+
+<a id="cosmpy.aerial.client.staking.StakingSummary"></a>
+
+## StakingSummary Objects
+
+```python
+@dataclass
+class StakingSummary()
+```
+
+Get the staking summary.
+
+<a id="cosmpy.aerial.client.staking.StakingSummary.total_staked"></a>
+
+#### total`_`staked
+
+```python
+@property
+def total_staked() -> int
+```
+
+Get the total staked amount.
+
+<a id="cosmpy.aerial.client.staking.StakingSummary.total_rewards"></a>
+
+#### total`_`rewards
+
+```python
+@property
+def total_rewards() -> int
+```
+
+Get the total rewards.
+
+<a id="cosmpy.aerial.client.staking.StakingSummary.total_unbonding"></a>
+
+#### total`_`unbonding
+
+```python
+@property
+def total_unbonding() -> int
+```
+
+total unbonding.
+
 <a id="cosmpy.aerial.client.staking.create_delegate_msg"></a>
 
 #### create`_`delegate`_`msg
