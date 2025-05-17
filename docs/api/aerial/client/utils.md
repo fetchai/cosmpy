@@ -12,8 +12,8 @@ Helper functions.
 def simulate_tx(client: "LedgerClient",
                 tx: Transaction,
                 sender: Wallet,
-                account: "Account",
-                memo: Optional[str] = None) -> Tuple[int, str]
+                account: Optional[Account],
+                memo: Optional[str] = None) -> Tuple[int, str, Account]
 ```
 
 Estimate transaction fees based on either a provided amount, gas limit, or simulation.
@@ -39,7 +39,7 @@ def prepare_basic_transaction(
         client: "LedgerClient",
         tx: Transaction,
         sender: Wallet,
-        account: Optional["Account"] = None,
+        account: Optional[Account] = None,
         fee: Optional[TxFee] = None,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None) -> Transaction
@@ -70,7 +70,7 @@ def prepare_and_broadcast_basic_transaction(
         client: "LedgerClient",
         tx: Transaction,
         sender: Wallet,
-        account: Optional["Account"] = None,
+        account: Optional[Account] = None,
         fee: Optional[TxFee] = None,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None) -> SubmittedTx

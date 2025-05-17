@@ -19,7 +19,10 @@
 
 """Staking functionality."""
 
+from dataclasses import dataclass
+from decimal import Decimal
 from enum import Enum
+from typing import List
 
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
@@ -57,6 +60,57 @@ class ValidatorStatus(Enum):
         raise RuntimeError(f"Unable to decode validator status: {value}")
 
 
+@dataclass
+class StakingPosition:
+    """Staking positions."""
+
+    validator: Address
+    amount: int
+    reward: int
+    reward_dec: Decimal
+
+
+@dataclass
+class UnbondingPositions:
+    """Unbonding positions."""
+
+    validator: Address
+    amount: int
+
+
+@dataclass
+class Validator:
+    """Validator."""
+
+    address: Address  # the operators address
+    tokens: int  # The total amount of tokens for the validator
+    moniker: str
+    status: ValidatorStatus
+
+
+@dataclass
+class StakingSummary:
+    """Get the staking summary."""
+
+    current_positions: List[StakingPosition]
+    unbonding_positions: List[UnbondingPositions]
+
+    @property
+    def total_staked(self) -> int:
+        """Get the total staked amount."""
+        return sum(map(lambda p: p.amount, self.current_positions))
+
+    @property
+    def total_rewards(self) -> int:
+        """Get the total rewards."""
+        return sum(map(lambda p: p.reward, self.current_positions))
+
+    @property
+    def total_unbonding(self) -> int:
+        """total unbonding."""
+        return sum(map(lambda p: p.amount, self.unbonding_positions))
+
+
 def create_delegate_msg(
     delegator: Address, validator: Address, amount: int, denom: str
 ) -> MsgDelegate:
@@ -72,7 +126,7 @@ def create_delegate_msg(
         delegator_address=str(delegator),
         validator_address=str(validator),
         amount=Coin(
-            amount=str(amount),
+            amount=amount,
             denom=denom,
         ),
     )
@@ -100,7 +154,7 @@ def create_redelegate_msg(
         validator_dst_address=str(validator_dst_address),
         amount=Coin(
             amount=str(amount),
-            denom=str(denom),
+            denom=denom,
         ),
     )
 
@@ -121,6 +175,6 @@ def create_undelegate_msg(
         validator_address=str(validator_address),
         amount=Coin(
             amount=str(amount),
-            denom=str(denom),
+            denom=denom,
         ),
     )
