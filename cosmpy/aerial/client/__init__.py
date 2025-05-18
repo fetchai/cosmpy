@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import certifi
 import grpc
 from dateutil.parser import isoparse
+from google.protobuf.timestamp_pb2 import Timestamp  # noqa: F401
 
 from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
