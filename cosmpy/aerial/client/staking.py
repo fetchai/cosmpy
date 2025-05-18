@@ -126,7 +126,7 @@ def create_delegate_msg(
         delegator_address=str(delegator),
         validator_address=str(validator),
         amount=Coin(
-            amount=amount,
+            amount=str(amount),
             denom=denom,
         ),
     )
