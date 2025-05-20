@@ -31,9 +31,9 @@ def simulate_tx(
     client: "LedgerClient",  # type: ignore # noqa: F821
     tx: Transaction,
     sender: Wallet,
-    account: "Account",  # type: ignore # noqa: F821
+    account: Optional["Account"] = None,  # type: ignore # noqa: F821
     memo: Optional[str] = None,
-) -> Tuple[int, str]:
+) -> Tuple[int, str, "Account"]:  # type: ignore # noqa: F821
     """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
 
     :param client: Ledger client
@@ -44,6 +44,10 @@ def simulate_tx(
 
     :return: Estimated gas_limit and fee amount tuple
     """
+    # query the account information for the sender
+    if account is None:
+        account = client.query_account(sender.address())
+
     # we need to build up a representative transaction so that we can accurately simulate it
     tx.seal(
         SigningCfg.direct(sender.public_key(), account.sequence),
@@ -56,7 +60,7 @@ def simulate_tx(
     # simulate the gas and fee for the transaction
     gas_limit, fee = client.estimate_gas_and_fee_for_tx(tx)
 
-    return gas_limit, fee
+    return gas_limit, fee, account
 
 
 def prepare_basic_transaction(
@@ -89,7 +93,9 @@ def prepare_basic_transaction(
 
     if fee.gas_limit is None:
         # Simulate transaction to get gas and amount
-        fee.gas_limit, estimated_amount = simulate_tx(client, tx, sender, account, memo)
+        fee.gas_limit, estimated_amount, _ = simulate_tx(
+            client, tx, sender, account, memo
+        )
         # Use estimated amount if not provided
         fee.amount = fee.amount or parse_coins(estimated_amount)
 

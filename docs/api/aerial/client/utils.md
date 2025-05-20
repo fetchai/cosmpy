@@ -12,8 +12,8 @@ Helper functions.
 def simulate_tx(client: "LedgerClient",
                 tx: Transaction,
                 sender: Wallet,
-                account: "Account",
-                memo: Optional[str] = None) -> Tuple[int, str]
+                account: Optional["Account"] = None,
+                memo: Optional[str] = None) -> Tuple[int, str, "Account"]
 ```
 
 Estimate transaction fees based on either a provided amount, gas limit, or simulation.
