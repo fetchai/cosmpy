@@ -19,6 +19,7 @@
 """Interface for the IBC Applications Transfer functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
     QueryDenomTraceRequest,
@@ -34,28 +35,43 @@ class IBCApplicationsTransfer(ABC):
     """IBC Applications Transfer abstract class."""
 
     @abstractmethod
-    def DenomTrace(self, request: QueryDenomTraceRequest) -> QueryDenomTraceResponse:
+    def DenomTrace(
+        self,
+        request: QueryDenomTraceRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryDenomTraceResponse:
         """
         DenomTrace queries a denomination trace information.
 
         :param request: QueryDenomTraceRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryDenomTraceResponse
         """
 
     @abstractmethod
-    def DenomTraces(self, request: QueryDenomTracesRequest) -> QueryDenomTracesResponse:
+    def DenomTraces(
+        self,
+        request: QueryDenomTracesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryDenomTracesResponse:
         """
         DenomTraces queries all denomination traces.
 
         :param request: QueryDenomTracesRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryDenomTracesResponse
         """
 
     @abstractmethod
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Params queries all parameters of the ibc-transfer module.
 
         :param request: QueryParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryParamsResponse
         """

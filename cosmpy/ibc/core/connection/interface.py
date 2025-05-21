@@ -19,6 +19,7 @@
 """Interface for the IBC Core Connection functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from cosmpy.protos.ibc.core.connection.v1.query_pb2 import (
     QueryClientConnectionsRequest,
@@ -38,52 +39,71 @@ class IBCCoreConnection(ABC):
     """IBC Core Connection abstract class."""
 
     @abstractmethod
-    def Connection(self, request: QueryConnectionRequest) -> QueryConnectionResponse:
+    def Connection(
+        self,
+        request: QueryConnectionRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryConnectionResponse:
         """
         Connection queries an IBC connection end.
 
         :param request: QueryConnectionRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionResponse
         """  # noqa: D401
 
     @abstractmethod
-    def Connections(self, request: QueryConnectionsRequest) -> QueryConnectionsResponse:
+    def Connections(
+        self,
+        request: QueryConnectionsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryConnectionsResponse:
         """
         Connection queries all the IBC connections of a chain.
 
         :param request: QueryConnectionsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionsResponse
         """  # noqa: D401
 
     @abstractmethod
     def ClientConnections(
-        self, request: QueryClientConnectionsRequest
+        self,
+        request: QueryClientConnectionsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryClientConnectionsResponse:
         """
         ClientConnection queries the connection paths associated with a client state.
 
         :param request: QueryClientConnectionsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryClientConnectionsResponse
         """
 
     @abstractmethod
     def ConnectionClientState(
-        self, request: QueryConnectionClientStateRequest
+        self,
+        request: QueryConnectionClientStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryConnectionClientStateResponse:
         """
         ConnectionClientState queries the client state associated with the connection.
 
         :param request: QueryConnectionClientStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionClientStateResponse
         """
 
     @abstractmethod
     def ConnectionConsensusState(
-        self, request: QueryConnectionConsensusStateRequest
+        self,
+        request: QueryConnectionConsensusStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryConnectionConsensusStateResponse:
         """
         ConnectionConsensusState queries the consensus state associated with the connection.
 
         :param request: QueryConnectionConsensusStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConnectionConsensusStateResponse
         """
