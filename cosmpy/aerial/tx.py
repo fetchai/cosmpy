@@ -19,12 +19,13 @@
 
 """Transaction."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, InitVar
 from enum import Enum
 from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
+from cosmpy.aerial.coins import to_coins, CoinsParamType
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
@@ -39,18 +40,51 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 @dataclass
 class TxFee:
-    """Cosmos SDK TxFee abstraction."""
+    """Cosmos SDK TxFee abstraction.
 
-    amount: Optional[List["Coin"]] = None  # type: ignore # noqa: F821
+    Example::
+    from cosmpy.aerial.tx import TxFee
+    fee = TxFee(amount=100)
+    """
+
+    amount: Optional[List[Coin]] = None
+    #_amount: Optional[List[Coin]] = field(init=False, repr=False, default=None)
     gas_limit: Optional[int] = None
     granter: Optional[Address] = None
     payer: Optional[Address] = None
 
-    def to_pb_fee(self) -> Fee:
+    def __init__(self, amount: Optional[CoinsParamType] = None, gas_limit: Optional[int]=None, granter: Optional[Address]=None, payer: Optional[Address]=None):
+        self.amount=amount
+        self.gas_limit=gas_limit
+        self.granter=granter
+        self.payer=payer
+
+    #@classmethod
+    #def from_coins(cls, amount: CoinsParamType, gas_limit: Optional[int]=None, granter: Optional[Address]=None, payer: Optional[Address]=None):
+    #    return TxFee(amount=to_coins(amount),
+    #                 gas_limit=gas_limit,
+    #                 granter=granter,
+    #                 payer=payer
+    #                 )
+
+    @property
+    def amount(self) -> List[Coin]:
+        return self._amount
+
+    @amount.setter
+    def amount(self, value: CoinsParamType):
+        """Setting the amount.
+
+        :param value: The amount value to set using str or Coin or List[Coin] representation of the amount value
+        """
+        self._amount = None if isinstance(value, property) else to_coins(value)
+
+    def to_protobuf(self) -> Fee:
         """Return protobuf representation of TxFee.
 
         :raises RuntimeError: Gas limit must be set
@@ -239,7 +273,7 @@ class Transaction:
 
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=fee.to_pb_fee(),
+            fee=fee.to_proto(),
         )
 
         self._tx_body = TxBody()
