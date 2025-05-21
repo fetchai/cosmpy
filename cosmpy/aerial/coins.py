@@ -55,6 +55,16 @@ CoinsParamType = Union[str, Coin, List[Coin]]
 
 
 def to_coins(amount: CoinsParamType) -> List[Coin]:
+    """
+    Convert various fee amount formats into a standardized list of Coin objects.
+
+    Accepts a single Coin, a list of Coins, or a string in standard Cosmos coin notation
+    (e.g., "100uatom,200afet") and returns a corresponding list of Coin instances.
+
+    :param amount: A Coin, list of Coin objects, or a string representing one or more coins.
+    :return: A list of Coin objects.
+    :raises TypeError: If the input is not a supported type.
+    """
     if isinstance(amount, Coin):
         coins = [amount]
     elif isinstance(amount, list):

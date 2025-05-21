@@ -19,16 +19,17 @@
 
 """Transaction."""
 
-from dataclasses import dataclass, field, InitVar
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from cosmpy.aerial.coins import to_coins, CoinsParamType
+from cosmpy.aerial.coins import CoinsParamType, to_coins
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
@@ -40,7 +41,6 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
-from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
 
 @dataclass
@@ -52,39 +52,53 @@ class TxFee:
     fee = TxFee(amount=100)
     """
 
-    amount: Optional[List[Coin]] = None
-    #_amount: Optional[List[Coin]] = field(init=False, repr=False, default=None)
+    _amount: Optional[List[Coin]] = field(init=False, repr=False, default=None)
     gas_limit: Optional[int] = None
     granter: Optional[Address] = None
     payer: Optional[Address] = None
 
-    def __init__(self, amount: Optional[CoinsParamType] = None, gas_limit: Optional[int]=None, granter: Optional[Address]=None, payer: Optional[Address]=None):
-        self.amount=amount
-        self.gas_limit=gas_limit
-        self.granter=granter
-        self.payer=payer
+    def __init__(
+        self,
+        amount: Optional[CoinsParamType] = None,
+        gas_limit: Optional[int] = None,
+        granter: Optional[Address] = None,
+        payer: Optional[Address] = None,
+    ):
+        """Initialize a TxFee object.
 
-    #@classmethod
-    #def from_coins(cls, amount: CoinsParamType, gas_limit: Optional[int]=None, granter: Optional[Address]=None, payer: Optional[Address]=None):
-    #    return TxFee(amount=to_coins(amount),
-    #                 gas_limit=gas_limit,
-    #                 granter=granter,
-    #                 payer=payer
-    #                 )
+        :param amount: The transaction fee amount, as a Coin, list of Coins, or string (e.g., "100uatom").
+        :param gas_limit: Optional gas limit for the transaction.
+        :param granter: Optional address of the fee granter.
+        :param payer: Optional address of the fee payer.
+        """
+        self.amount = amount  # type: ignore
+        self.gas_limit = gas_limit
+        self.granter = granter
+        self.payer = payer
 
     @property
-    def amount(self) -> List[Coin]:
+    def amount(self) -> Optional[List[Coin]]:
+        """Set the transaction fee amount.
+
+        Accepts a string, Coin, or list of Coins and converts to a canonical list of Coin objects.
+
+        :return: amount as Optional[List[Coin]]
+        """
         return self._amount
 
     @amount.setter
-    def amount(self, value: CoinsParamType):
-        """Setting the amount.
+    def amount(self, value: Optional[CoinsParamType]):
+        """Set amount.
 
+        Enures conversion to Optional[List[Coin]]
         :param value: The amount value to set using str or Coin or List[Coin] representation of the amount value
         """
-        self._amount = None if isinstance(value, property) else to_coins(value)
+        if value is None:
+            self._amount = None
+        else:
+            self._amount = to_coins(value)
 
-    def to_protobuf(self) -> Fee:
+    def to_proto(self) -> Fee:
         """Return protobuf representation of TxFee.
 
         :raises RuntimeError: Gas limit must be set
