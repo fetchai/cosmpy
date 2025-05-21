@@ -46,7 +46,7 @@ contract = LedgerContract("oracle.wasm", ledger)
 To deploy the oracle contract, add the fee amount to the instantiation message and call the `deploy` function:
 ```python
 instantiation_message = {"fee": "100"}
-contract.deploy(instantiation_message, wallet, funds="1atestfet")
+contract.deploy(instantiation_message, wallet, funds="1atestasi")
 print(f"Oracle contract deployed at: {contract.address}")
 ```
 
@@ -107,7 +107,7 @@ REQUEST_INTERVAL_SECONDS = 10
 while True:
     request_message = {"query_oracle_value": {}}
     contract.execute(
-        request_message, wallet, funds="100atestfet"
+        request_message, wallet, funds="100atestasi"
     ).wait_to_complete()
     result = contract.query({"oracle_value": {}})
     print(f"Oracle value successfully retrieved: {result}")

@@ -145,7 +145,7 @@ class TestContract:
         contract = LedgerContract(
             CONTRACT_PATH, self.get_ledger(), schema_path=SCHEMA_PATH
         )
-        contract._address = "fetch1r3d4azhlak4w00c5n02t9l35a3n6462vrnunel"  # pylint: disable=protected-access
+        contract._address = "asi1r3d4azhlak4w00c5n02t9l35a3n6462vc388mu"  # pylint: disable=protected-access
 
         try:
             bad_query = {"get_count": 0}
@@ -177,12 +177,12 @@ class TestContractRestAPI(TestContract):
 
     def _get_network_config(self):
         return NetworkConfig(
-            chain_id="dorado-1",
-            url="rest+https://rest-dorado.fetch.ai:443",
+            chain_id="eridanus-1",
+            url="rest+https://rest-eridanus-1.fetch.ai:443",
             fee_minimum_gas_price=5000000000,
-            fee_denomination="atestfet",
-            staking_denomination="atestfet",
-            faucet_url="https://faucet-dorado.fetch.ai",
+            fee_denomination="atestasi",
+            staking_denomination="atestasi",
+            faucet_url="https://faucet-eridanus-1.fetch.ai",
         )
 
 

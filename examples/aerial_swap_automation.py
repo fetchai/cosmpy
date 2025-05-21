@@ -41,13 +41,13 @@ def swap_native_for_cw20(swap_amount, pair_contract, wallet):
         {
             "swap": {
                 "offer_asset": {
-                    "info": {"native_token": {"denom": "atestfet"}},
+                    "info": {"native_token": {"denom": "atestasi"}},
                     "amount": str(swap_amount),
                 }
             }
         },
         sender=wallet,
-        funds=str(swap_amount) + "atestfet",
+        funds=str(swap_amount) + "atestasi",
     )
     print("swapping native for cw20 tokens")
     tx.wait_to_complete()
@@ -86,7 +86,7 @@ def _parse_commandline():
         type=int,
         nargs="?",
         default=1000000,
-        help="initial atestfet balance to perform swaps using the liquidity pool",
+        help="initial atestasi balance to perform swaps using the liquidity pool",
     )
     parser.add_argument(
         "upper_bound",
@@ -142,10 +142,10 @@ def main():
 
     # Define cw20, pair and liquidity token contracts
     token_contract_address = (
-        "fetch1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjsxtljxl"
+        "asi1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjshnau6q"
     )
     pair_contract_address = (
-        "fetch1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0s6ulf2a"
+        "asi1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0stya8kz"
     )
 
     token_contract = LedgerContract(
@@ -155,8 +155,8 @@ def main():
         path=None, client=ledger, address=pair_contract_address
     )
 
-    # tokens in trading wallet (currency will vary [atestfet,cw20] )
-    currency = "atestfet"
+    # tokens in trading wallet (currency will vary [atestasi,cw20] )
+    currency = "atestasi"
     tokens = args.trading_wallet
 
     # Swap thresholds
@@ -176,15 +176,15 @@ def main():
         native_amount = int(pool["assets"][1]["amount"])
         cw20_amount = int(pool["assets"][0]["amount"])
 
-        if currency == "atestfet":
-            # Calculate received cw20 tokens if atestfet tokens are given to LP
+        if currency == "atestasi":
+            # Calculate received cw20 tokens if atestasi tokens are given to LP
             tokens_out = round(
                 ((cw20_amount * tokens) / (native_amount + tokens)) * (1 - commission)
             )
 
-            # Sell price of atestfet => give atestfet, get cw20
+            # Sell price of atestasi => give atestasi, get cw20
             sell_price = tokens / tokens_out
-            print("atestfet sell price: ", sell_price)
+            print("atestasi sell price: ", sell_price)
             if sell_price <= lower_bound:
                 swap_native_for_cw20(tokens, pair_contract, wallet)
                 tokens = int(
@@ -196,14 +196,14 @@ def main():
                 # Trading wallet currency changed to cw20
                 currency = "CW20"
         else:
-            # Calculate received atestfet tokens if cw20 tokens are given to LP
+            # Calculate received atestasi tokens if cw20 tokens are given to LP
             tokens_out = round(
                 ((native_amount * tokens) / (cw20_amount + tokens)) * (1 - commission)
             )
 
-            # Buy price of atestfet => give cw20, get atestfet
+            # Buy price of atestasi => give cw20, get atestasi
             buy_price = tokens_out / tokens
-            print("atestfet buy price: ", buy_price)
+            print("atestasi buy price: ", buy_price)
             if buy_price >= upper_bound:
                 swap_cw20_for_native(
                     tokens, pair_contract_address, token_contract, wallet
@@ -211,7 +211,7 @@ def main():
                 tokens = tokens_out
 
                 # Trading wallet currency changed to cw20
-                currency = "atestfet"
+                currency = "atestasi"
 
         sleep(interval)
 

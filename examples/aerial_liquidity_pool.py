@@ -34,7 +34,7 @@ def _parse_commandline():
         type=int,
         nargs="?",
         default=10000,
-        help="atestfet swap amount to get some cw20 tokens on wallet's address",
+        help="atestasi swap amount to get some cw20 tokens on wallet's address",
     )
     parser.add_argument(
         "cw20_liquidity_amount",
@@ -48,7 +48,7 @@ def _parse_commandline():
         type=int,
         nargs="?",
         default=2470,
-        help="amount of atestfet tokens that will be provided to LP",
+        help="amount of atestasi tokens that will be provided to LP",
     )
     return parser.parse_args()
 
@@ -69,13 +69,13 @@ def main():
 
     # Define cw20, pair and liquidity token contracts
     token_contract_address = (
-        "fetch1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjsxtljxl"
+        "asi1qr8ysysnfxmqzu7cu7cq7dsq5g2r0kvkg5e2wl2fnlkqss60hcjshnau6q"
     )
     pair_contract_address = (
-        "fetch1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0s6ulf2a"
+        "asi1vgnx2d46uvyxrg9pc5mktkcvkp4uflyp3j86v68pq4jxdc8j4y0stya8kz"
     )
     liq_token_contract_address = (
-        "fetch1alzhf9yhghud3qhucdjs895f3aek2egfq44qm0mfvahkv4jukx4qd0ltxx"
+        "asi1alzhf9yhghud3qhucdjs895f3aek2egfq44qm0mfvahkv4jukx4quha96e"
     )
 
     token_contract = LedgerContract(
@@ -91,9 +91,9 @@ def main():
     print("Pool (initial state): ")
     print(pair_contract.query({"pool": {}}), "\n")
 
-    # Swap atestfet for CW20 tokens
+    # Swap atestasi for CW20 tokens
     swap_amount = str(args.swap_amount)
-    native_denom = "atestfet"
+    native_denom = "atestasi"
 
     tx = pair_contract.execute(
         {

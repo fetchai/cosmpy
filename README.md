@@ -30,7 +30,7 @@ from cosmpy.aerial.client import LedgerClient, NetworkConfig
 # connect to Fetch.ai network using default parameters
 ledger_client = LedgerClient(NetworkConfig.fetchai_mainnet())
 
-alice: str = 'fetch12q5gw9l9d0yyq2th77x6pjsesczpsly8h5089x'
+alice: str = 'asi12q5gw9l9d0yyq2th77x6pjsesczpsly8vk5n89'
 balances = ledger_client.query_bank_all_balances(alice)
 
 # show all coin balances

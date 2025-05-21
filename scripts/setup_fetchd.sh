@@ -30,7 +30,7 @@ echo "account snack twist chef razor sing gain birth check identify unable vendo
 # Configure node
 fetchd init --chain-id=testing testing
 fetchd add-genesis-account $(fetchd keys show validator -a) 100000000000000000000000stake 
-fetchd add-genesis-account $(fetchd keys show bob -a) 100000000000000000000000atestfet
+fetchd add-genesis-account $(fetchd keys show bob -a) 100000000000000000000000atestasi
 fetchd gentx validator 10000000000000000000000stake --chain-id testing
 fetchd collect-gentxs
 

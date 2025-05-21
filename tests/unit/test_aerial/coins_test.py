@@ -29,11 +29,11 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
     [
         ("", []),
         ("          ", []),
-        ("50000atestfet", [Coin(amount="50000", denom="atestfet")]),
+        ("50000atestasi", [Coin(amount="50000", denom="atestasi")]),
         (
-            "50000atestfet,     200foobar",
+            "50000atestasi,     200foobar",
             [
-                Coin(amount="50000", denom="atestfet"),
+                Coin(amount="50000", denom="atestasi"),
                 Coin(amount="200", denom="foobar"),
             ],
         ),
@@ -47,13 +47,13 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
             ],
         ),
         (
-            "500ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B, 50000atestfet",
+            "500ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B, 50000atestasi",
             [
                 Coin(
                     amount="500",
                     denom="ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
                 ),
-                Coin(amount="50000", denom="atestfet"),
+                Coin(amount="50000", denom="atestasi"),
             ],
         ),
     ],

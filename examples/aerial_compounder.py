@@ -34,7 +34,7 @@ def _parse_commandline():
         type=int,
         nargs="?",
         default=9000000000000000000,
-        help="Initial amount of atestfet to delegate to validator",
+        help="Initial amount of atestasi to delegate to validator",
     )
     parser.add_argument(
         "time_limit",

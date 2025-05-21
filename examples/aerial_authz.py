@@ -79,7 +79,7 @@ def main():
         faucet_api.get_wealth(wallet.address())
         wallet_balance = ledger.query_bank_balance(wallet.address())
 
-    spend_amount = Coin(amount=str(amount), denom="atestfet")
+    spend_amount = Coin(amount=str(amount), denom="atestasi")
 
     # Authorize authz_wallet to send tokens from wallet
     authz_any = any_pb2.Any()
