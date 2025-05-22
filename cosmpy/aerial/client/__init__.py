@@ -44,18 +44,19 @@ from cosmpy.aerial.client.staking import (
     create_redelegate_msg,
     create_undelegate_msg,
 )
-from cosmpy.aerial.client.types import Account, Block, Coin
 from cosmpy.aerial.client.utils import (
     TxFee,
     ensure_timedelta,
     get_paginated,
     prepare_and_broadcast_basic_transaction,
 )
+from cosmpy.aerial.coins import Coin
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
 from cosmpy.aerial.tx import Transaction, TxState
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
+from cosmpy.aerial.types import Account, Block
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient

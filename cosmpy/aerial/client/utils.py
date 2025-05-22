@@ -20,10 +20,10 @@
 from datetime import timedelta
 from typing import Any, Callable, List, Optional, Tuple, Union
 
-from cosmpy.aerial.client.types import Account
 from cosmpy.aerial.coins import parse_coins
 from cosmpy.aerial.tx import SigningCfg, Transaction, TxFee
 from cosmpy.aerial.tx_helpers import SubmittedTx
+from cosmpy.aerial.types import Account
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 

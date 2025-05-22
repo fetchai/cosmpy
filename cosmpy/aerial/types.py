@@ -28,19 +28,6 @@ from google.protobuf.timestamp_pb2 import Timestamp
 
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
-from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
-
-
-@dataclass
-class Coin:
-    """Coins."""
-
-    amount: int
-    denom: str
-
-    def to_proto(self) -> CoinProto:
-        """Convert this type to protobuf schema Coin type."""
-        return CoinProto(amount=str(self.amount), denom=self.denom)
 
 
 @dataclass
