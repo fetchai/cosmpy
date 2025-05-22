@@ -58,10 +58,10 @@ def to_coins(amount: CoinsParamType) -> List[Coin]:
     """
     Convert various fee amount formats into a standardized list of Coin objects.
 
-    Accepts a single Coin, a list of Coins, or a string in standard Cosmos coin notation
-    (e.g., "100uatom,200afet") and returns a corresponding list of Coin instances.
+    Accepts a string in standard Cosmos coin notation (e.g., "100uatom,200afet"), or a single Coin,
+    or a list of Coins and returns a corresponding list of Coin instances.
 
-    :param amount: A Coin, list of Coin objects, or a string representing one or more coins.
+    :param amount: A string representing one or more coins, Coin, or a list of Coin objects.
     :return: A list of Coin objects.
     :raises TypeError: If the input is not a supported type.
     """

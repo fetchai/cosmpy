@@ -78,10 +78,11 @@ def prepare_basic_transaction(
     :param tx: The transaction
     :param sender: The transaction sender
     :param account: The account
-    :param fee: The tx fee. If the `fee` *or* `fee.gas_limit` is `None`, then this function will execute the
-                `simulate_tx(...)` to estimate the `fee.gas_limit` value.
-                If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
-                values (the `gas_price` value is taken from client config).
+    :param fee: The tx fee (see below the behaviour):
+                - If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+                  estimate the `fee.gas_limit` value.
+                - If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+                  values (the `gas_price` value will be taken from client config).
     :param memo: Transaction memo, defaults to None
     :param timeout_height: timeout height, defaults to None
 
@@ -134,7 +135,11 @@ def prepare_and_broadcast_basic_transaction(
     :param tx: The transaction
     :param sender: The transaction sender
     :param account: The account
-    :param fee: The tx fee
+    :param fee: The tx fee (see below the behaviour):
+                - If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+                  estimate the `fee.gas_limit` value.
+                - If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+                  values (the `gas_price` value will be taken from client config).
     :param memo: Transaction memo, defaults to None
     :param timeout_height: timeout height, defaults to None
 

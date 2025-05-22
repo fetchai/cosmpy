@@ -49,7 +49,14 @@ class TxFee:
 
     Example::
     from cosmpy.aerial.tx import TxFee
-    fee = TxFee(amount=100)
+
+    from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin CoinProto
+
+    fee = TxFee()
+    fee = TxFee(amount="1000afet")
+    fee = TxFee(amount=Coin(amount=str(1000), denom="afet"))
+    fee = TxFee(amount="100afet,10uatom")
+    fee = TxFee(amount=[Coin(amount=str(100), denom="afet"),Coin(amount=str(10), denom="uatom")])
     """
 
     _amount: Optional[List[Coin]] = field(init=False, repr=False, default=None)
