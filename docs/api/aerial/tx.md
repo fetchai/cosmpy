@@ -73,7 +73,7 @@ def amount(value: Optional[CoinsParamType])
 
 Set amount.
 
-Enures conversion to Optional[List[Coin]]
+Ensures conversion to Optional[List[Coin]]
 
 **Arguments**:
 

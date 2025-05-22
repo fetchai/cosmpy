@@ -96,7 +96,7 @@ class TxFee:
     def amount(self, value: Optional[CoinsParamType]):
         """Set amount.
 
-        Enures conversion to Optional[List[Coin]]
+        Ensures conversion to Optional[List[Coin]]
         :param value: The amount value to set using str or Coin or List[Coin] representation of the amount value
         """
         if value is None:
