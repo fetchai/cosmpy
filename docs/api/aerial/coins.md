@@ -26,3 +26,28 @@ Parse the coins.
 
 coins
 
+<a id="cosmpy.aerial.coins.to_coins"></a>
+
+#### to`_`coins
+
+```python
+def to_coins(amount: CoinsParamType) -> List[Coin]
+```
+
+Convert various fee amount formats into a standardized list of Coin objects.
+
+Accepts a string in standard Cosmos coin notation (e.g., "100uatom,200afet"), or a single Coin,
+or a list of Coins and returns a corresponding list of Coin instances.
+
+**Arguments**:
+
+- `amount`: A string representing one or more coins, Coin, or a list of Coin objects.
+
+**Raises**:
+
+- `TypeError`: If the input is not a supported type.
+
+**Returns**:
+
+A list of Coin objects.
+

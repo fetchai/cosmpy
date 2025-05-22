@@ -15,12 +15,76 @@ class TxFee()
 
 Cosmos SDK TxFee abstraction.
 
-<a id="cosmpy.aerial.tx.TxFee.to_pb_fee"></a>
+Example::
+from cosmpy.aerial.tx import TxFee
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 
-#### to`_`pb`_`fee
+fee = TxFee()
+fee = TxFee(amount="1000afet")
+fee = TxFee(amount=CoinProto(amount=str(1000), denom="afet"))
+fee = TxFee(amount="100afet,10uatom")
+fee = TxFee(amount=[CoinProto(amount=str(100), denom="afet"),CoinProto(amount=str(10), denom="uatom")])
+
+<a id="cosmpy.aerial.tx.TxFee.__init__"></a>
+
+#### `__`init`__`
 
 ```python
-def to_pb_fee() -> Fee
+def __init__(amount: Optional[CoinsParamType] = None,
+             gas_limit: Optional[int] = None,
+             granter: Optional[Address] = None,
+             payer: Optional[Address] = None)
+```
+
+Initialize a TxFee object.
+
+**Arguments**:
+
+- `amount`: The transaction fee amount, as a Coin, list of Coins, or string (e.g., "100uatom").
+- `gas_limit`: Optional gas limit for the transaction.
+- `granter`: Optional address of the fee granter.
+- `payer`: Optional address of the fee payer.
+
+<a id="cosmpy.aerial.tx.TxFee.amount"></a>
+
+#### amount
+
+```python
+@property
+def amount() -> Optional[List[Coin]]
+```
+
+Set the transaction fee amount.
+
+Accepts a string, Coin, or list of Coins and converts to a canonical list of Coin objects.
+
+**Returns**:
+
+amount as Optional[List[Coin]]
+
+<a id="cosmpy.aerial.tx.TxFee.amount"></a>
+
+#### amount
+
+```python
+@amount.setter
+def amount(value: Optional[CoinsParamType])
+```
+
+Set amount.
+
+Enures conversion to Optional[List[Coin]]
+
+**Arguments**:
+
+- `value`: The amount value to set using str or Coin or List[Coin] representation of the amount value
+
+<a id="cosmpy.aerial.tx.TxFee.to_proto"></a>
+
+#### to`_`proto
+
+```python
+def to_proto() -> Fee
 ```
 
 Return protobuf representation of TxFee.
