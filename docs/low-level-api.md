@@ -105,7 +105,7 @@ tx.wait_to_complete()
 
 ### More protobuf examples
 
-Before running the above, the necessary `authz` grant must first be put in place. For Ledger Nano users (other hardware wallets are also available) that might mean an excursion to the command line. For the Fetchai network using [FetchD](https://docs.fetch.ai/ledger_v2/):
+Before running the above, the necessary `authz` grant must first be put in place. For Ledger Nano users (other hardware wallets are also available) that might mean an excursion to the command line. For the Fetchai network using [FetchD](https://network.fetch.ai/docs/guides/cosmpy/creating-wallet/):
 
 ```bash
 fetchd tx authz grant $(fetchd keys show grantee --output json | jq -r .address) generic --msg-type "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission" --from=$(fetchd keys show grantor --output json | jq -r .address) --gas auto --gas-adjustment 1.5 --gas-prices 5000000000atestfet

@@ -11,9 +11,9 @@ Helper functions.
 ```python
 def simulate_tx(client: "LedgerClient",
                 tx: Transaction,
-                sender: "Wallet",
-                account: "Account",
-                memo: Optional[str] = None) -> Tuple[int, str]
+                sender: Wallet,
+                account: Optional["Account"] = None,
+                memo: Optional[str] = None) -> Tuple[int, str, "Account"]
 ```
 
 Estimate transaction fees based on either a provided amount, gas limit, or simulation.
@@ -30,38 +30,40 @@ Estimate transaction fees based on either a provided amount, gas limit, or simul
 
 Estimated gas_limit and fee amount tuple
 
-<a id="cosmpy.aerial.client.utils.estimate_tx_fees"></a>
+<a id="cosmpy.aerial.client.utils.prepare_basic_transaction"></a>
 
-#### estimate`_`tx`_`fees
+#### prepare`_`basic`_`transaction
 
 ```python
-def estimate_tx_fees(
+def prepare_basic_transaction(
         client: "LedgerClient",
         tx: Transaction,
-        sender: "Wallet",
-        amount: Optional[str] = None,
-        gas_limit: Optional[int] = None,
-        granter: Optional[Address] = None,
+        sender: Wallet,
         account: Optional["Account"] = None,
-        memo: Optional[str] = None) -> Tuple[Fee, Optional["Account"]]
+        fee: Optional[TxFee] = None,
+        memo: Optional[str] = None,
+        timeout_height: Optional[int] = None) -> Transaction
 ```
 
-Estimate transaction fees based on either a provided amount, gas limit, or simulation.
+Prepare basic transaction.
 
 **Arguments**:
 
 - `client`: Ledger client
 - `tx`: The transaction
 - `sender`: The transaction sender
-- `amount`: Transaction fee amount, defaults to None
-- `gas_limit`: The gas limit
-- `granter`: Transaction fee granter, defaults to None
 - `account`: The account
+- `fee`: The tx fee (see below the behaviour):
+- If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+  estimate the `fee.gas_limit` value.
+- If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+  values (the `gas_price` value will be taken from client config).
 - `memo`: Transaction memo, defaults to None
+- `timeout_height`: timeout height, defaults to None
 
 **Returns**:
 
-Fee object and queried account tuple
+transaction
 
 <a id="cosmpy.aerial.client.utils.prepare_and_broadcast_basic_transaction"></a>
 
@@ -70,14 +72,12 @@ Fee object and queried account tuple
 ```python
 def prepare_and_broadcast_basic_transaction(
         client: "LedgerClient",
-        tx: "Transaction",
-        sender: "Wallet",
+        tx: Transaction,
+        sender: Wallet,
         account: Optional["Account"] = None,
-        gas_limit: Optional[int] = None,
+        fee: Optional[TxFee] = None,
         memo: Optional[str] = None,
-        timeout_height: Optional[int] = None,
-        fee_amount: Optional[str] = None,
-        fee_granter: Optional[Address] = None) -> SubmittedTx
+        timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
 Prepare and broadcast basic transaction.
@@ -88,11 +88,13 @@ Prepare and broadcast basic transaction.
 - `tx`: The transaction
 - `sender`: The transaction sender
 - `account`: The account
-- `gas_limit`: The gas limit
+- `fee`: The tx fee (see below the behaviour):
+- If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+  estimate the `fee.gas_limit` value.
+- If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+  values (the `gas_price` value will be taken from client config).
 - `memo`: Transaction memo, defaults to None
 - `timeout_height`: timeout height, defaults to None
-- `fee_amount`: Transaction fee amount, defaults to None
-- `fee_granter`: Transaction fee granter, defaults to None
 
 **Returns**:
 

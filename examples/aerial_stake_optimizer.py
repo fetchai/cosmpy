@@ -26,7 +26,7 @@ from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import create_delegate_msg
 from cosmpy.aerial.faucet import FaucetApi
-from cosmpy.aerial.tx import SigningCfg, Transaction
+from cosmpy.aerial.tx import SigningCfg, Transaction, TxFee
 from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import QueryTotalSupplyRequest
 from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
@@ -91,14 +91,12 @@ def main():
     stake_threshold = 0.10
 
     for _i in range(len(validators_commission)):
-
         # Choose validator with lower commission
         validator_index = validators_commission.index(min(validators_commission))
 
         # Verify that it meets the minimum % threshold
         validator_stake_pct = validators_stake[validator_index] / total_stake
         if validator_stake_pct >= stake_threshold:
-
             # Set the selected validator
             validator = validators[validator_index]
             break
@@ -150,9 +148,7 @@ def main():
 
     account = ledger.query_account(alice.address())
 
-    tx.seal(
-        SigningCfg.direct(alice.public_key(), account.sequence), fee="", gas_limit=0
-    )
+    tx.seal(SigningCfg.direct(alice.public_key(), account.sequence), TxFee([], 0))
     tx.sign(alice.signer(), ledger.network_config.chain_id, account.number)
     tx.complete()
 

@@ -7,7 +7,7 @@ readme = "README.md"
 license = "Apache-2.0"
 homepage = "https://github.com/fetchai/cosmpy"
 repository = "https://github.com/fetchai/cosmpy"
-documentation = "https://docs.fetch.ai/CosmPy/"
+documentation = "https://network.fetch.ai/docs/guides/cosmpy/installation/"
 keywords = ["CosmPy", "Cosmos-SDK"]
 classifiers=[
     "Environment :: Console",

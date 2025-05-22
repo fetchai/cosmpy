@@ -316,3 +316,5 @@ perf
 mitigations
 radix
 readme
+TxFee
+CoinProto
