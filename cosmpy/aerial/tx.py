@@ -59,7 +59,7 @@ class TxFee:
     fee = TxFee(amount=[Coin(amount=str(100), denom="afet"),Coin(amount=str(10), denom="uatom")])
     """
 
-    _amount: Optional[List[Coin]] = field(init=False, repr=False, default=None)
+    _amount: Optional[List[Coin]] = field(init=False, default=None)
     gas_limit: Optional[int] = None
     granter: Optional[Address] = None
     payer: Optional[Address] = None
