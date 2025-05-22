@@ -20,7 +20,7 @@
 """Parse the coins."""
 
 import re
-from typing import List
+from typing import List, Union
 
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
 
@@ -47,5 +47,31 @@ def parse_coins(value: str) -> List[Coin]:
         # extract out the groups
         amount, denom = match.groups()
         coins.append(Coin(amount=amount, denom=denom))
+
+    return coins
+
+
+CoinsParamType = Union[str, Coin, List[Coin]]
+
+
+def to_coins(amount: CoinsParamType) -> List[Coin]:
+    """
+    Convert various fee amount formats into a standardized list of Coin objects.
+
+    Accepts a string in standard Cosmos coin notation (e.g., "100uatom,200afet"), or a single Coin,
+    or a list of Coins and returns a corresponding list of Coin instances.
+
+    :param amount: A string representing one or more coins, Coin, or a list of Coin objects.
+    :return: A list of Coin objects.
+    :raises TypeError: If the input is not a supported type.
+    """
+    if isinstance(amount, Coin):
+        coins = [amount]
+    elif isinstance(amount, list):
+        coins = amount
+    elif isinstance(amount, str):
+        coins = parse_coins(amount)
+    else:
+        raise TypeError("`amount` must be either str or Coin or list of Coin type")
 
     return coins

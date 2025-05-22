@@ -12,7 +12,7 @@ Helper functions.
 def simulate_tx(client: "LedgerClient",
                 tx: Transaction,
                 sender: Wallet,
-                account: Optional[Account],
+                account: Optional[Account] = None,
                 memo: Optional[str] = None) -> Tuple[int, str, Account]
 ```
 
@@ -53,7 +53,11 @@ Prepare basic transaction.
 - `tx`: The transaction
 - `sender`: The transaction sender
 - `account`: The account
-- `fee`: The tx fee
+- `fee`: The tx fee (see below the behaviour):
+- If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+  estimate the `fee.gas_limit` value.
+- If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+  values (the `gas_price` value will be taken from client config).
 - `memo`: Transaction memo, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
@@ -84,7 +88,11 @@ Prepare and broadcast basic transaction.
 - `tx`: The transaction
 - `sender`: The transaction sender
 - `account`: The account
-- `fee`: The tx fee
+- `fee`: The tx fee (see below the behaviour):
+- If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+  estimate the `fee.gas_limit` value.
+- If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+  values (the `gas_price` value will be taken from client config).
 - `memo`: Transaction memo, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
