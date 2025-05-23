@@ -23,6 +23,7 @@ from typing import Any, Callable, List, Optional, Tuple, Union
 from cosmpy.aerial.coins import parse_coins
 from cosmpy.aerial.tx import SigningCfg, Transaction, TxFee
 from cosmpy.aerial.tx_helpers import SubmittedTx
+from cosmpy.aerial.types import Account
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 
@@ -31,9 +32,9 @@ def simulate_tx(
     client: "LedgerClient",  # type: ignore # noqa: F821
     tx: Transaction,
     sender: Wallet,
-    account: Optional["Account"] = None,  # type: ignore # noqa: F821
+    account: Optional[Account] = None,  # type: ignore # noqa: F821
     memo: Optional[str] = None,
-) -> Tuple[int, str, "Account"]:  # type: ignore # noqa: F821
+) -> Tuple[int, str, Account]:  # type: ignore # noqa: F821
     """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
 
     :param client: Ledger client
@@ -67,7 +68,7 @@ def prepare_basic_transaction(
     client: "LedgerClient",  # type: ignore # noqa: F821
     tx: Transaction,
     sender: Wallet,
-    account: Optional["Account"] = None,  # type: ignore # noqa: F821
+    account: Optional[Account] = None,  # type: ignore # noqa: F821
     fee: Optional[TxFee] = None,
     memo: Optional[str] = None,
     timeout_height: Optional[int] = None,
@@ -124,7 +125,7 @@ def prepare_and_broadcast_basic_transaction(
     client: "LedgerClient",  # type: ignore # noqa: F821
     tx: Transaction,
     sender: Wallet,
-    account: Optional["Account"] = None,  # type: ignore # noqa: F821
+    account: Optional[Account] = None,  # type: ignore # noqa: F821
     fee: Optional[TxFee] = None,
     memo: Optional[str] = None,
     timeout_height: Optional[int] = None,
