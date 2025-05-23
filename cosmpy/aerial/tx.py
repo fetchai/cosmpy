@@ -25,11 +25,11 @@ from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from cosmpy.aerial.coins import CoinsParamType, to_coins
+from cosmpy.aerial.coins import CoinsParamType, Coins
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
-from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin
+from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
@@ -58,7 +58,7 @@ class TxFee:
     fee = TxFee(amount=[CoinProto(amount=str(100), denom="afet"),CoinProto(amount=str(10), denom="uatom")])
     """
 
-    _amount: Optional[List[Coin]] = field(init=False, default=None)
+    _amount: Optional[List[CoinProto]] = field(init=False, default=None)
     gas_limit: Optional[int] = None
     granter: Optional[Address] = None
     payer: Optional[Address] = None
@@ -83,7 +83,7 @@ class TxFee:
         self.payer = payer
 
     @property
-    def amount(self) -> Optional[List[Coin]]:
+    def amount(self) -> Optional[List[CoinProto]]:
         """Set the transaction fee amount.
 
         Accepts a string, Coin, or list of Coins and converts to a canonical list of Coin objects.
@@ -102,7 +102,7 @@ class TxFee:
         if value is None:
             self._amount = None
         else:
-            self._amount = to_coins(value)
+            self._amount = Coins(value).to_proto()
 
     def to_proto(self) -> Fee:
         """Return protobuf representation of TxFee.
