@@ -135,41 +135,45 @@ class Coins(List[Coin]):
 
         return coins
 
-    def __add__(self, other) -> "Coins":
+    def __add__(self, other: List[Coin]) -> List[Coin]:
         result = Coins()
-        for (left, right) in self._math_operation(other, result=result):
+        for (left, right) in self._math_operation(other, result_inout=result):
             left.amount += right.amount
 
         return result
 
-    def __sub__(self, other) -> "Coins":
+    def __sub__(self, other: List[Coin]) -> List[Coin]:
         result = Coins()
-        for (left, right) in self._math_operation(other, result=result):
+        for (left, right) in self._math_operation(other, result_inout=result):
             if left.amount < right.amount:
                 raise RuntimeError(f"Subtracting {left} - {right} would result to negative value")
             left.amount -= right.amount
 
         return result
 
-    def __iadd__(self, other) -> "Coins":
+    def __iadd__(self, other: List[Coin]) -> List[Coin]:
         result = self
-        for (left, right) in self._math_operation(other, result=result):
+        for (left, right) in self._math_operation(other, result_inout=result):
             left.amount += right.amount
 
         return result
 
-    def __isub__(self, other) -> "Coins":
+    def __isub__(self, other: List[Coin]) -> List[Coin]:
         result = self
-        for (left, right) in self._math_operation(other, result=result):
+        for (left, right) in self._math_operation(other, result_inout=result):
             if left.amount < right.amount:
                 raise RuntimeError(f"Subtracting {left} - {right} would result to negative value")
             left.amount -= right.amount
 
         return result
 
-    def _math_operation(self, other: "Coins", result: "Coins") -> (Coin, Coin):
+    def _math_operation(self, other: List[Coin], result_inout: "Coins") -> (Coin, Coin):
         self.validate()
-        other.validate()
+
+        if isinstance(other, Coins):
+            other.validate()
+        else:
+            Coins(other).validate()
 
         res_dict = {c.denom: Coin(amount=c.amount, denom=c.denom) for c in self}
         for c in other:
@@ -196,9 +200,9 @@ class Coins(List[Coin]):
             #    # they will be changed in the externally owned `other` object:
             #    res_dict[c.denom] = Coin(c.amount, c.denom)
 
-        result.clear()
-        result.extend([c for c in res_dict.values()])
-        result.sort_coins()
+        result_inout.clear()
+        result_inout.extend([c for c in res_dict.values()])
+        result_inout.sort_coins()
 
 
 #class CoinsProto(List[CoinProto]):
