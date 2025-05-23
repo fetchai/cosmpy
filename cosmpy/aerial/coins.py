@@ -21,7 +21,7 @@
 
 import re
 from dataclasses import dataclass
-from typing import List, Union, Optional
+from typing import List, Dict, Union, Optional
 
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 import re
@@ -51,11 +51,259 @@ class Coin:
             raise ValueError(f'The "{self.denom}" does not conform to Cosmos-SDK requirements')
 
 
+class Coins(List[Coin]):
+    """Coins."""
+
+    #def __init__(self, coins: Optional[Union[str, "Coins", "CoinsProto", List[Coin], List[CoinProto], Coin, CoinProto]] = None) :
+    def __init__(self, coins: Optional[Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto]] = None) :
+        if coins is None:
+            _coins = coins
+        if isinstance(coins, str):
+            _coins = Coins._from_string(coins)
+        elif isinstance(coins, Coins):
+            _coins = coins
+        #elif isinstance(coins, CoinsProto):
+        #    _coins = Coins._from_proto(coins)
+        elif isinstance(coins, Coin):
+            _coins = [coins]
+        elif isinstance(coins, CoinProto):
+            _coins = Coins._from_proto([coins])
+        elif isinstance(coins, list):
+            if len(coins) == 0:
+                _coins = []
+            elif isinstance(coins[0], Coin):
+                _coins = coins
+            elif isinstance(coins[0], CoinProto):
+                _coins = Coins._from_proto(coins)
+            else:
+                raise TypeError()
+        else:
+            raise ValueError(f'Invalid type {type(coins)}')
+
+        super().__init__(_coins)
+
+    def __repr__(self) -> str:
+        return ",".join([str(c) for c in self[:]])
+
+    def to_proto(self) -> List[CoinProto]:
+        """Convert this type to protobuf schema Coins type."""
+        return [CoinProto(amount=str(c.amount), denom=c.denom) for c in self]
+
+    def sort_coins(self):
+        sort_coins(self)
+
+    def validate(self):
+        validate_coins(self)
+
+    @classmethod
+    #def _from_proto(cls, proto_coins: Union["CoinsProto", List[CoinProto]]) -> List[Coin]:
+    def _from_proto(cls, proto_coins: Union[List[CoinProto]]) -> List[Coin]:
+        """Create aerial Coins from List of CoinProto objects."".
+
+        :param proto_coins: input list of CoinsProto
+        :raises RuntimeError: If unable to parse the value
+        :return: List of Coin objects
+        """
+        #if isinstance(proto_coins, CoinsProto):
+        #    proto_coins: List[CoinProto] = proto_coins
+
+        return [Coin(amount=int(coin.amount), denom=coin.denom) for coin in proto_coins]
+
+    @classmethod
+    def _from_string(cls, value: str) -> List[Coin]:
+        """Parse the coins.
+
+        :param value: coins
+        :raises RuntimeError: If unable to parse the value
+        :return: coins
+        """
+        coins = []
+
+        parts = re.split(r",\s*", value)
+        for part in parts:
+            part = part.strip()
+            if part == "":
+                continue
+
+            match = re.match(r"^(\d+)(.+)$", part)
+            if match is None:
+                raise RuntimeError(f"Unable to parse value {part}")
+
+            # extract out the groups
+            amount, denom = match.groups()
+            coins.append(Coin(amount=int(amount), denom=denom))
+
+        return coins
+
+    def __add__(self, other) -> "Coins":
+        result = Coins()
+        for (left, right) in self._math_operation(other, result=result):
+            left.amount += right.amount
+
+        return result
+
+    def __sub__(self, other) -> "Coins":
+        result = Coins()
+        for (left, right) in self._math_operation(other, result=result):
+            if left.amount < right.amount:
+                raise RuntimeError(f"Subtracting {left} - {right} would result to negative value")
+            left.amount -= right.amount
+
+        return result
+
+    def __iadd__(self, other) -> "Coins":
+        result = self
+        for (left, right) in self._math_operation(other, result=result):
+            left.amount += right.amount
+
+        return result
+
+    def __isub__(self, other) -> "Coins":
+        result = self
+        for (left, right) in self._math_operation(other, result=result):
+            if left.amount < right.amount:
+                raise RuntimeError(f"Subtracting {left} - {right} would result to negative value")
+            left.amount -= right.amount
+
+        return result
+
+    def _math_operation(self, other: "Coins", result: "Coins") -> (Coin, Coin):
+        self.validate()
+        other.validate()
+
+        res_dict = {c.denom: Coin(amount=c.amount, denom=c.denom) for c in self}
+        for c in other:
+            left = res_dict.get(c.denom, Coin(amount=0, denom=c.denom))
+
+            yield left, c
+
+            if left.amount == 0:
+                if left.denom in res_dict:
+                    del res_dict[left.denom]
+            elif left.amount > 0:
+                res_dict[left.denom] = left
+            else:
+                raise RuntimeError(f"Operation between yielded negative amount {left}")
+
+
+            #if c.denom in res_dict:
+            #    yield res_dict[c.denom], c
+            #    #if res_dict[c.denom] == 0
+            #else:
+            #    # Cloning intentionally to avoid potential unexpected values changes of Coin objects leaking in
+            #    # to the this(self) through
+            #    # values when
+            #    # they will be changed in the externally owned `other` object:
+            #    res_dict[c.denom] = Coin(c.amount, c.denom)
+
+        result.clear()
+        result.extend([c for c in res_dict.values()])
+        result.sort_coins()
+
+
+#class CoinsProto(List[CoinProto]):
+#    """List of protobuf Coin objects."""
+#
+#    def __init__(self, coins: Optional[Union[str, "CoinsProto", List[CoinProto], CoinProto]] = None) :
+#        if coins is None:
+#            _coins = coins
+#        if isinstance(coins, str):
+#            _coins = CoinsProto._from_string(coins)
+#        elif isinstance(coins, CoinsProto):
+#            _coins = coins
+#        elif isinstance(coins, CoinProto):
+#            _coins = [coins]
+#        elif isinstance(coins, list):
+#            if len(coins) == 0:
+#                _coins = []
+#            elif isinstance(coins[0], CoinProto):
+#                _coins = coins
+#            else:
+#                raise ValueError(f'Invalid type {type(coins)}')
+#        else:
+#            raise ValueError(f'Invalid type {type(coins)}')
+#
+#        super().__init__(_coins)
+#
+#    def __repr__(self) -> str:
+#        return ",".join([f'{c.amount}{c.denom}' for c in self[:]])
+#
+#    @classmethod
+#    def _from_string(cls, value: str) -> List[CoinProto]:
+#        """Parse the string repr. of coins to protobuf Coins.
+#
+#        :param value: coins
+#        :raises RuntimeError: If unable to parse the value
+#        :return: coins
+#        """
+#        coins = []
+#
+#        parts = re.split(r",\s*", value)
+#        for part in parts:
+#            part = part.strip()
+#            if part == "":
+#                continue
+#
+#            match = re.match(r"^(\d+)(.+)$", part)
+#            if match is None:
+#                raise RuntimeError(f"Unable to parse value {part}")
+#
+#            # extract out the groups
+#            amount, denom = match.groups()
+#            coins.append(CoinProto(amount=amount, denom=denom))
+#
+#        return coins
+#
+#    def sort_coins(self):
+#        """Cosmos-SDK Coins sort"""
+#        sort_coins(self)
+#
+#    def validate(self):
+#        validate_coins(self)
+
+
+def parse_coins(value: str) -> List[CoinProto]:
+    """Parse the coins.
+
+    :param value: coins encoded in cosmos-sdk string format
+    :raises RuntimeError: If unable to parse the value
+    :return: List of CoinProto objects
+    """
+    return Coins(value).to_proto()
+
+
+CoinsParamType = Union[str, Coin, List[Coin]]
+
+
+#def to_coins(amount: CoinsParamType) -> List[Coin]:
+#    """
+#    Convert various fee amount formats into a standardized list of Coin objects.
+#
+#    Accepts a string in standard Cosmos coin notation (e.g., "100uatom,200afet"), or a single Coin,
+#    or a list of Coins and returns a corresponding list of Coin instances.
+#
+#    :param amount: A string representing one or more coins, Coin, or a list of Coin objects.
+#    :return: A list of Coin objects.
+#    :raises TypeError: If the input is not a supported type.
+#    """
+#    if isinstance(amount, Coin):
+#        coins = [amount]
+#    elif isinstance(amount, list):
+#        coins = amount
+#    elif isinstance(amount, str):
+#        coins = parse_coins(amount)
+#    else:
+#        raise TypeError("`amount` must be either str or Coin or list of Coin type")
+#
+#    return coins
+
+
 def is_denom_valid(denom: str) -> bool:
     return denom_regex.match(denom) is not None
 
 
-def is_coins_sorted(coins: Union["Coins", "CoinsProto", List[Coin], List[CoinProto]]) -> bool:
+#def is_coins_sorted(coins: Union[Coins, CoinsProto, List[Coin], List[CoinProto]]) -> bool:
+def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool:
     if not coins:
         return True
 
@@ -73,7 +321,8 @@ def is_coins_sorted(coins: Union["Coins", "CoinsProto", List[Coin], List[CoinPro
 
     return True
 
-def validate_coins(coins: Union[str, "Coins", "CoinsProto", List[Coin], List[CoinProto]]):
+#def validate_coins(coins: Union[str, Coins, CoinsProto, List[Coin], List[CoinProto]]):
+def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
     if not coins:
         return
 
@@ -104,7 +353,8 @@ def validate_coins(coins: Union[str, "Coins", "CoinsProto", List[Coin], List[Coi
         seen.add(c.denom)
 
 
-def sort_coins(coins: Union["Coins", "CoinsProto", List[Coin], List[CoinProto]]):
+#def sort_coins(coins: Union[Coins, CoinsProto, List[Coin], List[CoinProto]]):
+def sort_coins(coins: Union[Coins, List[Coin], List[CoinProto]]):
     """Sort and validate coins collection based on Cosmos-SDK definition of Coins validity.
 
     Coins collection must be sorted descending alphabetically based on denomination, and each denomination
@@ -114,203 +364,3 @@ def sort_coins(coins: Union["Coins", "CoinsProto", List[Coin], List[CoinProto]])
     """
     coins.sort(key=lambda c: c.denom, reverse=False)
     validate_coins(coins)
-
-class Coins(List[Coin]):
-    """Coins."""
-
-    def __init__(self, coins: Optional[Union[str, "Coins", "CoinsProto", List[Coin], List[CoinProto], Coin, CoinProto]] = None) :
-        if coins is None:
-            _coins = coins
-        if isinstance(coins, str):
-            _coins = Coins._from_string(coins)
-        elif isinstance(coins, Coins):
-            _coins = coins
-        elif isinstance(coins, CoinsProto):
-            _coins = Coins._from_proto(coins)
-        elif isinstance(coins, Coin):
-            _coins = [coins]
-        elif isinstance(coins, CoinProto):
-            _coins = Coins._from_proto([coins])
-        elif isinstance(coins, list):
-            if len(coins) == 0:
-                _coins = None
-            elif isinstance(coins[0], Coin):
-                _coins = coins
-            elif isinstance(coins[0], CoinProto):
-                _coins = Coins._from_proto(coins)
-            else:
-                raise TypeError()
-        else:
-            raise ValueError(f'Invalid type {type(coins)}')
-
-        super().__init__(_coins)
-
-    def __repr__(self) -> str:
-        return ",".join([str(c) for c in self[:]])
-
-    def to_proto(self) -> List[CoinProto]:
-        """Convert this type to protobuf schema Coin type."""
-        return [CoinProto(amount=str(c.amount), denom=c.denom) for c in self]
-
-    def sort_coins(self):
-        sort_coins(self)
-
-    def validate(self):
-        validate_coins(self)
-
-    @classmethod
-    def _from_proto(cls, proto_coins: Union["CoinsProto",List[CoinProto]]) -> List[Coin]:
-        """Create aerial Coins from CoinsProto.
-
-        :param proto_coins: input list of CoinsProto
-        :raises RuntimeError: If unable to parse the value
-        :return: List of Coin objects
-        """
-        if isinstance(proto_coins, CoinsProto):
-            proto_coins: List[CoinProto] = [proto_coins]
-
-        return [Coin(amount=int(coin.amount), denom=coin.denom) for coin in proto_coins]
-
-    @classmethod
-    def _from_string(cls, value: str) -> List[Coin]:
-        """Parse the coins.
-
-        :param value: coins
-        :raises RuntimeError: If unable to parse the value
-        :return: coins
-        """
-        coins = []
-
-        parts = re.split(r",\s*", value)
-        for part in parts:
-            part = part.strip()
-            if part == "":
-                continue
-
-            match = re.match(r"^(\d+)(.+)$", part)
-            if match is None:
-                raise RuntimeError(f"Unable to parse value {part}")
-
-            # extract out the groups
-            amount, denom = match.groups()
-            coins.append(Coin(amount=int(amount), denom=denom))
-
-        return coins
-
-    def __add__(self, other: "Coins") -> "Coins":
-        self.is_coins_sorted()
-        other.validate()
-        self_denoms = {}
-
-        return None
-
-class CoinsProto(List[CoinProto]):
-    """List of protobuf Coin objects."""
-
-    def __init__(self, coins: Optional[Union[str, "CoinsProto", List[CoinProto], CoinProto]] = None) :
-        if coins is None:
-            _coins = coins
-        if isinstance(coins, str):
-            _coins = CoinsProto._from_string(coins)
-        elif isinstance(coins, CoinsProto):
-            _coins = coins
-        elif isinstance(coins, CoinProto):
-            _coins = [coins]
-        elif isinstance(coins, list):
-            if len(coins) == 0:
-                _coins = None
-            elif isinstance(coins[0], CoinProto):
-                _coins = [coins]
-            else:
-                raise ValueError(f'Invalid type {type(coins)}')
-        else:
-            raise ValueError(f'Invalid type {type(coins)}')
-
-        super().__init__(_coins)
-
-    def __repr__(self) -> str:
-        return ",".join([f'{c.amount}{c.denom}' for c in self[:]])
-
-    @classmethod
-    def _from_string(cls, value: str) -> List[CoinProto]:
-        """Parse the string repr. of coins to protobuf Coins.
-
-        :param value: coins
-        :raises RuntimeError: If unable to parse the value
-        :return: coins
-        """
-        coins = []
-
-        parts = re.split(r",\s*", value)
-        for part in parts:
-            part = part.strip()
-            if part == "":
-                continue
-
-            match = re.match(r"^(\d+)(.+)$", part)
-            if match is None:
-                raise RuntimeError(f"Unable to parse value {part}")
-
-            # extract out the groups
-            amount, denom = match.groups()
-            coins.append(CoinProto(amount=amount, denom=denom))
-
-        return coins
-
-    def sort_coins(self):
-        """Cosmos-SDK Coins sort"""
-        sort_coins(self)
-
-    def validate(self):
-        validate_coins(self)
-
-def parse_coins(value: str) -> List[CoinProto]:
-    """Parse the coins.
-
-    :param value: coins
-    :raises RuntimeError: If unable to parse the value
-    :return: coins
-    """
-    coins = []
-
-    parts = re.split(r",\s*", value)
-    for part in parts:
-        part = part.strip()
-        if part == "":
-            continue
-
-        match = re.match(r"^(\d+)(.+)$", part)
-        if match is None:
-            raise RuntimeError(f"Unable to parse value {part}")
-
-        # extract out the groups
-        amount, denom = match.groups()
-        coins.append(CoinProto(amount=amount, denom=denom))
-
-    return coins
-
-
-CoinsParamType = Union[str, Coin, List[Coin]]
-
-
-def to_coins(amount: CoinsParamType) -> List[Coin]:
-    """
-    Convert various fee amount formats into a standardized list of Coin objects.
-
-    Accepts a string in standard Cosmos coin notation (e.g., "100uatom,200afet"), or a single Coin,
-    or a list of Coins and returns a corresponding list of Coin instances.
-
-    :param amount: A string representing one or more coins, Coin, or a list of Coin objects.
-    :return: A list of Coin objects.
-    :raises TypeError: If the input is not a supported type.
-    """
-    if isinstance(amount, Coin):
-        coins = [amount]
-    elif isinstance(amount, list):
-        coins = amount
-    elif isinstance(amount, str):
-        coins = parse_coins(amount)
-    else:
-        raise TypeError("`amount` must be either str or Coin or list of Coin type")
-
-    return coins
