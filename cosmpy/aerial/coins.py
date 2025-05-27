@@ -158,7 +158,7 @@ class Coins(List[Coin]):
         return result
 
     def __sub__(self, other):
-        """Perform algebraic vector substraction of two coin lists, ensuring no coin has negative value."""
+        """Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
         result = Coins()
         for (left, right) in self._math_operation(other, result_inout=result):
             if left.amount < right.amount:
@@ -170,7 +170,7 @@ class Coins(List[Coin]):
         return result
 
     def __iadd__(self, other):
-        """Perform *in-place* algebraic vector substraction of two coin lists."""
+        """Perform *in-place* algebraic vector subtraction of two coin lists."""
         result = self
         for (left, right) in self._math_operation(other, result_inout=result):
             left.amount += right.amount
@@ -178,7 +178,7 @@ class Coins(List[Coin]):
         return result
 
     def __isub__(self, other):
-        """Perform *in-place* algebraic vector substraction of two coin lists, ensuring no coin has negative value."""
+        """Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
         result = self
         for (left, right) in self._math_operation(other, result_inout=result):
             if left.amount < right.amount:

@@ -128,7 +128,7 @@ Perform algebraic vector addition of two coin lists.
 def __sub__(other)
 ```
 
-Perform algebraic vector substraction of two coin lists, ensuring no coin has negative value.
+Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value.
 
 <a id="cosmpy.aerial.coins.Coins.__iadd__"></a>
 
@@ -138,7 +138,7 @@ Perform algebraic vector substraction of two coin lists, ensuring no coin has ne
 def __iadd__(other)
 ```
 
-Perform *in-place* algebraic vector substraction of two coin lists.
+Perform *in-place* algebraic vector subtraction of two coin lists.
 
 <a id="cosmpy.aerial.coins.Coins.__isub__"></a>
 
@@ -148,7 +148,7 @@ Perform *in-place* algebraic vector substraction of two coin lists.
 def __isub__(other)
 ```
 
-Perform *in-place* algebraic vector substraction of two coin lists, ensuring no coin has negative value.
+Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value.
 
 <a id="cosmpy.aerial.coins.parse_coins"></a>
 
