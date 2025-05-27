@@ -45,7 +45,10 @@ class Coin:
         return f"{self.amount}{self.denom}"
 
     def validate(self):
-        """Validate this type based on Cosmos-SDK requirements for Coin."""
+        """Validate this type based on Cosmos-SDK requirements for Coin.
+
+        :raises ValueError: If amount is negative or denom does not conform to cosmos-sdk requirement for denomination.
+        """
         if self.amount < 0:
             raise ValueError("Coin amount must be greater than zero")
 
@@ -64,7 +67,7 @@ class Coins(List[Coin]):
             Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto]
         ] = None,
     ):
-        """Convert any coin representation into normalised Coins."""
+        """Convert any coin representation into Coins."""
         if coins is None:
             super().__init__()
             return
@@ -237,39 +240,30 @@ def is_denom_valid(denom: str) -> bool:
     return denom_regex.match(denom) is not None
 
 
-def _normalise_coins(
-    coins: Union[str, Coins, List[Coin], List[CoinProto]]
-) -> List[Coin]:
-    """Convert any coins representation to a validated list of Coin instances.
-
-    :param coins: Any type representing coins
-    :return: List of normalised Coins
-    """
-    if not coins:
-        return []
-
-    if isinstance(coins, str):
-        coins = Coins(coins)
-
-    normalised = []
-    for c in coins:
-        if isinstance(c, CoinProto):
-            c = Coin(int(c.amount), c.denom)
-        normalised.append(c)
-
-    return normalised
-
-
 def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool:
     """Return true if given coins representation is sorted.
 
     :param coins: Any type representing coins
     :return: bool is_sorted
     """
-    coins = _normalise_coins(coins)
-    for i, c in enumerate(coins):
-        if i > 0 and coins[i - 1].denom >= c.denom:
+    if not coins:
+        return True
+
+    if isinstance(coins, str):
+        coins = Coins(coins)
+
+    seen = set()
+
+    last_denom = coins[0].denom
+    seen.add(last_denom)
+
+    for c in coins[1:]:
+        if last_denom >= c.denom:
             return False
+
+        last_denom = c.denom
+        seen.add(last_denom)
+
     return True
 
 
@@ -277,19 +271,45 @@ def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
     """Return true if given coins representation is valid.
 
     :param coins: Any type representing coins
-    :raises ValueError: If there are multiple coins with same denom or coins are not sorted alphabetically
+    :return: bool validity
     """
-    coins = _normalise_coins(coins)
+    if not coins:
+        return
 
-    seen = set()
-    for i, c in enumerate(coins):
-        if c.denom in seen:
+    if isinstance(coins, str):
+        coins = Coins(coins)
+
+    if len(coins) == 0:
+        return
+
+    def _validate_coin(coin: Union[Coin, CoinProto]):
+        """Validate coin.
+
+        :param coin: Coin or CoinProto
+        :raises ValueError: If there are multiple coins with the same denom
+        """
+        if coin.denom in seen:
             raise ValueError(f'Multiple occurrences of the "{c.denom}" denomination')
-        if i > 0 and coins[i - 1].denom >= c.denom:
+
+        if last_denom >= coin.denom:
             raise ValueError(
                 "Coins are not sorted as cosmos-sdk expects it (ascending based on denom)"
             )
-        c.validate()
+
+        if isinstance(coin, CoinProto):
+            coin = Coin(int(coin.amount), coin.denom)
+
+        coin.validate()
+
+    seen = set()
+
+    last_denom = coins[0].denom
+    seen.add(last_denom)
+    _validate_coin(coins[0])
+
+    for c in coins[1:]:
+        _validate_coin(c)
+        last_denom = c.denom
         seen.add(c.denom)
 
 
