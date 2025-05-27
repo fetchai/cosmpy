@@ -241,7 +241,7 @@ def is_denom_valid(denom: str) -> bool:
 
 
 def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool:
-    """Return true if given coins representation is sorted.
+    """Return true if given coins representation is sorted in descending order of denom.
 
     :param coins: Any type representing coins
     :return: bool is_sorted
@@ -252,17 +252,13 @@ def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bo
     if isinstance(coins, str):
         coins = Coins(coins)
 
-    seen = set()
-
     last_denom = coins[0].denom
-    seen.add(last_denom)
 
     for c in coins[1:]:
         if last_denom >= c.denom:
             return False
 
         last_denom = c.denom
-        seen.add(last_denom)
 
     return True
 
