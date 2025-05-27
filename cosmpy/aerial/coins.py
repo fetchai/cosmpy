@@ -102,7 +102,7 @@ class Coins(List[Coin]):
     def canonicalise(self):
         """Reorganise the value of the instance (list of coins) in to canonical form defined by cosmos-sdk for `Coins`.
 
-        This means alphabetically sorting (descending) the coins based on denomination.
+        This means alphabetically sorting (ascending) the coins based on denomination.
         The algorithm *fails* with exception *if* each denomination in the list is *not* unique = if some denominations
         are present in the coin list more than once.
         """
@@ -237,7 +237,6 @@ def is_denom_valid(denom: str) -> bool:
     return denom_regex.match(denom) is not None
 
 
-# def is_coins_sorted(coins: Union[Coins, CoinsProto, List[Coin], List[CoinProto]]) -> bool:
 def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool:
     """Return true if given coins representation is sorted.
 
@@ -258,11 +257,11 @@ def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bo
     for c in coins[1:]:
         if last_denom >= c.denom:
             return False
+        last_denom = c.denom
 
     return True
 
 
-# def validate_coins(coins: Union[str, Coins, CoinsProto, List[Coin], List[CoinProto]]):
 def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
     """Return true if given coins representation is valid.
 
@@ -285,7 +284,7 @@ def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
     seen.add(last_denom)
 
     for c in coins[1:]:
-        if c.denom not in seen:
+        if c.denom in seen:
             raise ValueError(f'Multiple occurrences of the "{c.denom}" denomination')
 
         if last_denom >= c.denom:
@@ -306,7 +305,7 @@ def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
 def sort_coins(coins: Union[Coins, List[Coin], List[CoinProto]]):
     """Sort and validate coins collection based on Cosmos-SDK definition of Coins validity.
 
-    Coins collection must be sorted descending alphabetically based on denomination, and each denomination
+    Coins collection must be sorted ascending alphabetically based on denomination, and each denomination
     in the collection must be unique = be present in the collection just once.
 
     :param coins: Coins to sort
