@@ -58,7 +58,7 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
         ),
     ],
 )
-def test_parsing_coins(input_coins, expected_result):
+def test_parsing_coins_string(input_coins, expected_result):
     """Test parsing coins."""
     assert parse_coins(input_coins) == expected_result
     assert Coins(input_coins).to_proto() == expected_result
@@ -70,6 +70,22 @@ def test_parsing_coins(input_coins, expected_result):
         ([], [], None),
         ("4afet,5afet", None, 'Multiple occurrences of the "afet" denomination'),
         ("4acc,2bcc,5ccc", [Coin(4, "acc"), Coin(2, "bcc"), Coin(5, "ccc")], None),
+        (
+            [
+                CoinProto(amount="4", denom="acc"),
+                CoinProto(amount="2", denom="bcc"),
+                CoinProto(amount="5", denom="ccc"),
+            ],
+            [Coin(4, "acc"), Coin(2, "bcc"), Coin(5, "ccc")],
+            None,
+        ),
+        (CoinProto(amount="4", denom="acc"), [Coin(4, "acc")], None),
+        (Coin(4, "acc"), [Coin(4, "acc")], None),
+        (
+            [Coin(2, "bcc"), CoinProto(amount="4", denom="acc")],
+            [Coin(4, "acc"), Coin(2, "bcc")],
+            None,
+        ),
         (
             "4acc,2ccc,5bcc",
             [Coin(4, "acc"), Coin(2, "ccc"), Coin(5, "bcc")],
