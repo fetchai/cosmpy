@@ -199,7 +199,7 @@ def is_coins_sorted(
         coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool
 ```
 
-Return true if given coins representation is sorted.
+Return true if given coins representation is sorted in descending order of denom.
 
 **Arguments**:
 
