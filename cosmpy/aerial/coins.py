@@ -271,6 +271,7 @@ def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
     """Return true if given coins representation is valid.
 
     :param coins: Any type representing coins
+    :raises ValueError: If there are multiple coins with the same denom
     :return: bool validity
     """
     if not coins:
@@ -286,29 +287,30 @@ def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
         """Validate coin.
 
         :param coin: Coin or CoinProto
-        :raises ValueError: If there are multiple coins with the same denom
+
         """
-        if coin.denom in seen:
-            raise ValueError(f'Multiple occurrences of the "{c.denom}" denomination')
-
-        if last_denom >= coin.denom:
-            raise ValueError(
-                "Coins are not sorted as cosmos-sdk expects it (ascending based on denom)"
-            )
-
         if isinstance(coin, CoinProto):
             coin = Coin(int(coin.amount), coin.denom)
 
         coin.validate()
 
-    seen = set()
-
-    last_denom = coins[0].denom
-    seen.add(last_denom)
     _validate_coin(coins[0])
 
+    seen = set()
+    last_denom = coins[0].denom
+    seen.add(last_denom)
+
     for c in coins[1:]:
+        if c.denom in seen:
+            raise ValueError(f'Multiple occurrences of the "{c.denom}" denomination')
+
+        if last_denom >= c.denom:
+            raise ValueError(
+                "Coins are not sorted as cosmos-sdk expects it (ascending based on denom)"
+            )
+
         _validate_coin(c)
+
         last_denom = c.denom
         seen.add(c.denom)
 

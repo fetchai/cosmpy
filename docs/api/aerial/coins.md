@@ -223,6 +223,10 @@ Return true if given coins representation is valid.
 
 - `coins`: Any type representing coins
 
+**Raises**:
+
+- `ValueError`: If there are multiple coins with the same denom
+
 **Returns**:
 
 bool validity
