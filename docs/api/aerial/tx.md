@@ -17,13 +17,13 @@ Cosmos SDK TxFee abstraction.
 
 Example::
 from cosmpy.aerial.tx import TxFee
-from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
+from cosmpy.aerial.coins import Coin, Coins
 
 fee = TxFee()
 fee = TxFee(amount="1000afet")
-fee = TxFee(amount=CoinProto(amount=str(1000), denom="afet"))
+fee = TxFee(amount=Coin(1000, "afet"))
 fee = TxFee(amount="100afet,10uatom")
-fee = TxFee(amount=[CoinProto(amount=str(100), denom="afet"),CoinProto(amount=str(10), denom="uatom")])
+fee = TxFee(amount=[Coin(100, "afet"), Coin(10, "uatom")])
 
 <a id="cosmpy.aerial.tx.TxFee.__init__"></a>
 
@@ -51,7 +51,7 @@ Initialize a TxFee object.
 
 ```python
 @property
-def amount() -> Optional[List[Coin]]
+def amount() -> Optional[Coins]
 ```
 
 Set the transaction fee amount.
@@ -73,11 +73,12 @@ def amount(value: Optional[CoinsParamType])
 
 Set amount.
 
-Ensures conversion to Optional[List[Coin]]
+Ensures conversion to expected resulting type Optional[Coins]
 
 **Arguments**:
 
-- `value`: The amount value to set using str or Coin or List[Coin] representation of the amount value
+- `value`: The amount represented as one of the following types: str, Coins, List[Coin], List[CoinProto],
+Coin or CoinProto.
 
 <a id="cosmpy.aerial.tx.TxFee.to_proto"></a>
 
