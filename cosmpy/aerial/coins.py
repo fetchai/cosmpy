@@ -211,7 +211,7 @@ class Coins(List[Coin]):
                 raise RuntimeError(f"Operation between yielded negative amount {left}")
 
         result_inout.clear()
-        result_inout.extend([c for c in res_dict.values()])
+        result_inout.extend(res_dict.values())
         result_inout.canonicalise()
 
 
