@@ -83,10 +83,10 @@ class Coins(List[Coin]):
         elif isinstance(coins, list):
             if len(coins) == 0:
                 _coins = []
-            elif isinstance(coins[0], Coin) or isinstance(coins[0], CoinProto):
+            elif isinstance(coins[0], (Coin, CoinProto)):
                 _coins = Coins._from_coins_list(coins)
             else:
-                raise TypeError()
+                raise TypeError(f"Invalid type {type(coins)}")
         else:
             raise ValueError(f"Invalid type {type(coins)}")
 
