@@ -82,8 +82,8 @@ def test_parsing_coins_string(input_coins, expected_result):
         (CoinProto(amount="4", denom="acc"), [Coin(4, "acc")], None),
         (Coin(4, "acc"), [Coin(4, "acc")], None),
         (
-            [Coin(2, "bcc"), CoinProto(amount="4", denom="acc")],
-            [Coin(4, "acc"), Coin(2, "bcc")],
+            [Coin(2, "acc"), CoinProto(amount="4", denom="bcc")],
+            [Coin(2, "acc"), Coin(4, "bcc")],
             None,
         ),
         (

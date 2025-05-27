@@ -75,16 +75,16 @@ class Coins(List[Coin]):
         if isinstance(coins, str):
             _coins = Coins._from_string(coins)
         elif isinstance(coins, Coins):
-            _coins = Coins._from_proto(coins)
+            _coins = Coins._from_coins_list(coins)
         elif isinstance(coins, Coin):
             _coins = [coins]
         elif isinstance(coins, CoinProto):
-            _coins = Coins._from_proto([coins])
+            _coins = Coins._from_coins_list([coins])
         elif isinstance(coins, list):
             if len(coins) == 0:
                 _coins = []
             elif isinstance(coins[0], Coin) or isinstance(coins[0], CoinProto):
-                _coins = Coins._from_proto(coins)
+                _coins = Coins._from_coins_list(coins)
             else:
                 raise TypeError()
         else:
@@ -115,13 +115,13 @@ class Coins(List[Coin]):
         validate_coins(self)
 
     @classmethod
-    def _from_proto(cls, proto_coins: List[Union[Coin, CoinProto]]) -> List[Coin]:
+    def _from_coins_list(cls, coins: List[Union[Coin, CoinProto]]) -> List[Coin]:
         """Create aerial Coins from List of CoinProto objects."".
 
-        :param proto_coins: input list of CoinsProto
+        :param coins: input list of CoinsProto
         :return: List of Coin objects
         """
-        return [Coin(amount=int(coin.amount), denom=coin.denom) for coin in proto_coins]
+        return [Coin(amount=int(coin.amount), denom=coin.denom) for coin in coins]
 
     @classmethod
     def _from_string(cls, value: str) -> List[Coin]:
@@ -238,7 +238,7 @@ def is_denom_valid(denom: str) -> bool:
 
 
 def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool:
-    """Return true if given coins representation is sorted in descending order of denom.
+    """Return true if given coins representation is sorted in ascending order of denom.
 
     :param coins: Any type representing coins
     :return: bool is_sorted
