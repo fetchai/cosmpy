@@ -49,17 +49,45 @@ class Coin:
 
         :raises ValueError: If amount is negative or denom does not conform to cosmos-sdk requirement for denomination.
         """
-        if self.amount < 0:
+        if not self.is_amount_valid():
             raise ValueError("Coin amount must be greater than zero")
 
-        if not is_denom_valid(self.denom):
+        if not self.is_denom_valid():
             raise ValueError(
-                f'The "{self.denom}" does not conform to Cosmos-SDK requirements'
+                f'The "{self.denom}" denom does not conform to Cosmos-SDK requirements'
             )
+
+    def is_valid(self) -> bool:
+        """Validate Coin instance based on Cosmos-SDK requirements.
+
+        :return: True if the Coin instance conforms to cosmos-sdk requirement for Coin, False otherwise.
+        """
+        return self.is_amount_valid() and self.is_denom_valid()
+
+    def is_amount_valid(self) -> bool:
+        """Validate amount value based on Cosmos-SDK requirements.
+
+        :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
+                 False otherwise.
+        """
+        return self.amount > 0
+
+    def is_denom_valid(self) -> bool:
+        """Validate denom value based on Cosmos-SDK requirements.
+
+        :return: True if denom conforms to cosmos-sdk requirement for denomination, False otherwise.
+        """
+        return is_denom_valid(self.denom)
 
 
 class Coins(List[Coin]):
-    """Coins."""
+    """Coins.
+
+    It is required to call the 'canonicalise()' method in order to ensure that the Coins instance conforms to
+    Cosmos-SDK requirements for Coins type!
+    This is because one way or another, due to the nature of the base List type, it is possible to create such an
+    instance of Coins which does not conform to Cosmos-SDK requirements.
+    """
 
     def __init__(
         self,
@@ -93,25 +121,47 @@ class Coins(List[Coin]):
         super().__init__(_coins)
 
     def __repr__(self) -> str:
-        """Return string representation of Coins."""
+        """Return cosmos-sdk string representation of Coins.
+
+        :return: cosmos-sdk formatted string representation of Coins.
+
+        Example::
+        from cosmpy.aerial.client.coins import Coin, Coins
+
+        coins = Coins([Coin(1,"afet"), Coin(2,"uatom"), Coin(3,"nanomobx")])
+        assert str(coins) == "1afet,2uatom,3nanomobx"
+        """
         return ",".join([str(c) for c in self[:]])
 
     def to_proto(self) -> List[CoinProto]:
-        """Convert this type to protobuf schema Coins type."""
+        """Convert this type to *protobuf schema* Coins type."""
         return [CoinProto(amount=str(c.amount), denom=c.denom) for c in self]
 
-    def canonicalise(self):
-        """Reorganise the value of the instance (list of coins) in to canonical form defined by cosmos-sdk for `Coins`.
+    def canonicalise(self) -> "Coins":
+        """Reorganise the value of the 'self' instance in to canonical form defined by cosmos-sdk for `Coins`.
 
-        This means alphabetically sorting (ascending) the coins based on denomination.
-        The algorithm *fails* with exception *if* each denomination in the list is *not* unique = if some denominations
-        are present in the coin list more than once.
+        This means dropping all coins with zero value, and alphabetically sorting (ascending) the coins based
+        on denomination.
+        The algorithm *fails* with exception *if* any of the denominations in the list is *not* unique = if some of the
+        denominations are present in the coin list more than once, or if validation of any individual coin will fail.
+        :returns: The 'self' instance.
         """
+        coins = [c for c in self if c.amount > 0]
+
+        self.clear()
+        self.extend(coins)
+
         sort_coins(self)
         self.validate()
 
+        return self
+
     def validate(self):
-        """Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk."""
+        """Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk.
+
+        Raises ValueError exception *IF* denominations are not unique, or if validation of individual coins raises an
+        exception.
+        """
         validate_coins(self)
 
     @classmethod
@@ -143,7 +193,6 @@ class Coins(List[Coin]):
             if match is None:
                 raise RuntimeError(f"Unable to parse value {part}")
 
-            # extract out the groups
             amount, denom = match.groups()
             coins.append(Coin(amount=int(amount), denom=denom))
 
@@ -209,7 +258,7 @@ class Coins(List[Coin]):
             elif left.amount > 0:
                 res_dict[left.denom] = left
             else:
-                raise RuntimeError(f"Operation between yielded negative amount {left}")
+                raise RuntimeError(f"Operation yielded negative amount {left}")
 
         result_inout.clear()
         result_inout.extend(res_dict.values())
@@ -310,10 +359,11 @@ def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
 
 # def sort_coins(coins: Union[Coins, CoinsProto, List[Coin], List[CoinProto]]):
 def sort_coins(coins: Union[Coins, List[Coin], List[CoinProto]]):
-    """Sort and validate coins collection based on Cosmos-SDK definition of Coins validity.
+    """Sort the collection of coins based on Cosmos-SDK definition of Coins validity.
 
-    Coins collection must be sorted ascending alphabetically based on denomination, and each denomination
-    in the collection must be unique = be present in the collection just once.
+    Coins collection is sorted ascending alphabetically based on denomination.
+
+    NOTE: The resulting sorted collection of coins is *NOT* validated by calling the 'Coins.validate()'.
 
     :param coins: Coins to sort
     """
