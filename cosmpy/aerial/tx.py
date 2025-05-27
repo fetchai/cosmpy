@@ -114,7 +114,7 @@ class TxFee:
             raise RuntimeError("Gas limit must be set")
 
         return Fee(
-            amount=self.amount.to_proto() if self.amount else [], # type: ignore
+            amount=self.amount.to_proto() if self.amount else [],  # type: ignore
             gas_limit=self.gas_limit,
             granter=self.granter,
             payer=self.payer,

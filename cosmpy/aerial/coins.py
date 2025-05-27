@@ -108,7 +108,6 @@ class Coins(List[Coin]):
         sort_coins(self)
         self.validate()
 
-
     def validate(self):
         """Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk."""
         validate_coins(self)
