@@ -318,3 +318,7 @@ radix
 readme
 TxFee
 CoinProto
+canonicalise
+iadd
+isub
+repr

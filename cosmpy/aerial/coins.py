@@ -100,10 +100,11 @@ class Coins(List[Coin]):
         return [CoinProto(amount=str(c.amount), denom=c.denom) for c in self]
 
     def canonicalise(self):
-        """Reorganise the value of the instance (list of Coin objects)) in to canonical form defined by cosmos-sdk for Coins.
+        """Reorganise the value of the instance (list of coins) in to canonical form defined by cosmos-sdk for `Coins`.
 
-        This means alphabetically sorting (desc) the coins based on denomination and *fail* with exception *if* each
-        denomination in the list is *not* unique = if some denominations are present in the list more than once.
+        This means alphabetically sorting (descending) the coins based on denomination.
+        The algorithm *fails* with exception *if* each denomination in the list is *not* unique = if some denominations
+        are present in the coin list more than once.
         """
         sort_coins(self)
         self.validate()
@@ -149,7 +150,7 @@ class Coins(List[Coin]):
         return coins
 
     def __add__(self, other):
-        """Add coins togetger."""
+        """Perform algebraic vector addition of two coin lists."""
         result = Coins()
         for (left, right) in self._math_operation(other, result_inout=result):
             left.amount += right.amount
@@ -157,7 +158,7 @@ class Coins(List[Coin]):
         return result
 
     def __sub__(self, other):
-        """Subtract coins ensuring no coin has negative value."""
+        """Perform algebraic vector substraction of two coin lists, ensuring no coin has negative value."""
         result = Coins()
         for (left, right) in self._math_operation(other, result_inout=result):
             if left.amount < right.amount:
@@ -169,7 +170,7 @@ class Coins(List[Coin]):
         return result
 
     def __iadd__(self, other):
-        """Add coins in-place."""
+        """Perform *in-place* algebraic vector substraction of two coin lists."""
         result = self
         for (left, right) in self._math_operation(other, result_inout=result):
             left.amount += right.amount
@@ -177,7 +178,7 @@ class Coins(List[Coin]):
         return result
 
     def __isub__(self, other):
-        """Subtract coins in-place ensuring no coin has negative value."""
+        """Perform *in-place* algebraic vector substraction of two coin lists, ensuring no coin has negative value."""
         result = self
         for (left, right) in self._math_operation(other, result_inout=result):
             if left.amount < right.amount:

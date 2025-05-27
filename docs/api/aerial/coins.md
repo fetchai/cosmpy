@@ -94,10 +94,11 @@ Convert this type to protobuf schema Coins type.
 def canonicalise()
 ```
 
-Reorganise the value of the instance (list of Coin objects)) in to canonical form defined by cosmos-sdk for Coins.
+Reorganise the value of the instance (list of coins) in to canonical form defined by cosmos-sdk for `Coins`.
 
-This means alphabetically sorting (desc) the coins based on denomination and *fail* with exception *if* each
-denomination in the list is *not* unique = if some denominations are present in the list more than once.
+This means alphabetically sorting (descending) the coins based on denomination.
+The algorithm *fails* with exception *if* each denomination in the list is *not* unique = if some denominations
+are present in the coin list more than once.
 
 <a id="cosmpy.aerial.coins.Coins.validate"></a>
 
@@ -117,7 +118,7 @@ Validate whether current value conforms to canonical form for list of coins defi
 def __add__(other)
 ```
 
-Add coins togetger.
+Perform algebraic vector addition of two coin lists.
 
 <a id="cosmpy.aerial.coins.Coins.__sub__"></a>
 
@@ -127,7 +128,7 @@ Add coins togetger.
 def __sub__(other)
 ```
 
-Subtract coins ensuring no coin has negative value.
+Perform algebraic vector substraction of two coin lists, ensuring no coin has negative value.
 
 <a id="cosmpy.aerial.coins.Coins.__iadd__"></a>
 
@@ -137,7 +138,7 @@ Subtract coins ensuring no coin has negative value.
 def __iadd__(other)
 ```
 
-Add coins in-place.
+Perform *in-place* algebraic vector substraction of two coin lists.
 
 <a id="cosmpy.aerial.coins.Coins.__isub__"></a>
 
@@ -147,7 +148,7 @@ Add coins in-place.
 def __isub__(other)
 ```
 
-Subtract coins in-place ensuring no coin has negative value.
+Perform *in-place* algebraic vector substraction of two coin lists, ensuring no coin has negative value.
 
 <a id="cosmpy.aerial.coins.parse_coins"></a>
 
