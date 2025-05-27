@@ -99,12 +99,18 @@ class Coins(List[Coin]):
         """Convert this type to protobuf schema Coins type."""
         return [CoinProto(amount=str(c.amount), denom=c.denom) for c in self]
 
-    def sort_coins(self):
-        """Sort coins in alphabetical order."""
+    def canonicalise(self):
+        """Reorganise the value of the instance (list of Coin objects)) in to canonical form defined by cosmos-sdk for Coins.
+
+        This means alphabetically sorting (desc) the coins based on denomination and *fail* with exception *if* each
+        denomination in the list is *not* unique = if some denominations are present in the list more than once.
+        """
         sort_coins(self)
+        self.validate()
+
 
     def validate(self):
-        """Validate coins."""
+        """Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk."""
         validate_coins(self)
 
     @classmethod
@@ -207,7 +213,7 @@ class Coins(List[Coin]):
 
         result_inout.clear()
         result_inout.extend([c for c in res_dict.values()])
-        result_inout.sort_coins()
+        result_inout.canonicalise()
 
 
 def parse_coins(value: str) -> List[CoinProto]:
@@ -306,4 +312,3 @@ def sort_coins(coins: Union[Coins, List[Coin], List[CoinProto]]):
     :param coins: Coins to sort
     """
     coins.sort(key=lambda c: c.denom, reverse=False)
-    validate_coins(coins)
