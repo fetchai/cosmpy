@@ -29,7 +29,6 @@ from cosmpy.aerial.coins import Coins, CoinsParamType
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
-from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
 from cosmpy.protos.cosmos.tx.signing.v1beta1.signing_pb2 import SignMode
 from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
@@ -49,16 +48,16 @@ class TxFee:
 
     Example::
     from cosmpy.aerial.tx import TxFee
-    from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
+    from cosmpy.aerial.coins import Coin, Coins
 
     fee = TxFee()
     fee = TxFee(amount="1000afet")
-    fee = TxFee(amount=CoinProto(amount=str(1000), denom="afet"))
+    fee = TxFee(amount=Coin(1000, "afet"))
     fee = TxFee(amount="100afet,10uatom")
-    fee = TxFee(amount=[CoinProto(amount=str(100), denom="afet"),CoinProto(amount=str(10), denom="uatom")])
+    fee = TxFee(amount=[Coin(100, "afet"), Coin(10, "uatom")])
     """
 
-    _amount: Optional[List[CoinProto]] = field(init=False, default=None)
+    _amount: Optional[Coins] = field(init=False, default=None)
     gas_limit: Optional[int] = None
     granter: Optional[Address] = None
     payer: Optional[Address] = None
@@ -83,7 +82,7 @@ class TxFee:
         self.payer = payer
 
     @property
-    def amount(self) -> Optional[List[CoinProto]]:
+    def amount(self) -> Optional[Coins]:
         """Set the transaction fee amount.
 
         Accepts a string, Coin, or list of Coins and converts to a canonical list of Coin objects.
@@ -102,7 +101,7 @@ class TxFee:
         if value is None:
             self._amount = None
         else:
-            self._amount = Coins(value).to_proto()
+            self._amount = Coins(value)
 
     def to_proto(self) -> Fee:
         """Return protobuf representation of TxFee.
@@ -112,11 +111,12 @@ class TxFee:
         """
         if self.gas_limit is None:
             raise RuntimeError("Gas limit must be set")
+
         if self.amount is None:
-            self.amount = []
+            self.amount = Coins()
 
         return Fee(
-            amount=self.amount,
+            amount=self.amount.to_proto() if self.amount else [],
             gas_limit=self.gas_limit,
             granter=self.granter,
             payer=self.payer,

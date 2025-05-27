@@ -20,7 +20,7 @@
 from datetime import timedelta
 from typing import Any, Callable, List, Optional, Tuple, Union
 
-from cosmpy.aerial.coins import parse_coins
+from cosmpy.aerial.coins import Coins
 from cosmpy.aerial.tx import SigningCfg, Transaction, TxFee
 from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.types import Account
@@ -102,10 +102,10 @@ def prepare_basic_transaction(
             client, tx, sender, account, memo
         )
         # Use estimated amount if not provided
-        fee.amount = fee.amount or parse_coins(estimated_amount)
+        fee.amount = fee.amount or Coins(estimated_amount)
 
     if fee.amount is None:
-        fee.amount = parse_coins(client.estimate_fee_from_gas(fee.gas_limit))
+        fee.amount = client.estimate_fee_from_gas(fee.gas_limit)
 
     # Build the final transaction
     tx.seal(

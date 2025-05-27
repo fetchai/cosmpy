@@ -66,7 +66,9 @@ class Coins(List[Coin]):
     ):
         """Convert any coin representation into normalised Coins."""
         if coins is None:
-            _coins = coins
+            super().__init__()
+            return
+
         if isinstance(coins, str):
             _coins = Coins._from_string(coins)
         elif isinstance(coins, Coins):
