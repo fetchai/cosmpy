@@ -115,7 +115,7 @@ class Coins(List[Coin]):
         validate_coins(self)
 
     @classmethod
-    def _from_proto(cls, proto_coins: List[Union[Coin,CoinProto]]) -> List[Coin]:
+    def _from_proto(cls, proto_coins: List[Union[Coin, CoinProto]]) -> List[Coin]:
         """Create aerial Coins from List of CoinProto objects."".
 
         :param proto_coins: input list of CoinsProto
