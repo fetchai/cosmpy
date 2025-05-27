@@ -78,18 +78,18 @@ def test_parsing_coins(input_coins, expected_result):
         (
             "4cc",
             None,
-            'ValueError: The "cc" does not conform to Cosmos-SDK requirements',
+            'The "cc" does not conform to Cosmos-SDK requirements',
         ),
     ],
 )
 def test_coins_validate(input_coins, expected_coins, validate_error):
     """Test Coins validate."""
     if validate_error:
-        try:
+        with pytest.raises(Exception) as exc_info:
             test_coins = Coins(input_coins)
             test_coins.validate()
-        except Exception as e:
-            assert validate_error in str(e)
+        assert validate_error in str(exc_info.value)
+
     if not validate_error:
         test_coins = Coins(input_coins)
         assert test_coins == expected_coins
