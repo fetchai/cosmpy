@@ -75,7 +75,7 @@ class Coins(List[Coin]):
         if isinstance(coins, str):
             _coins = Coins._from_string(coins)
         elif isinstance(coins, Coins):
-            _coins = coins
+            _coins = Coins._from_proto(coins)
         elif isinstance(coins, Coin):
             _coins = [coins]
         elif isinstance(coins, CoinProto):
@@ -83,9 +83,7 @@ class Coins(List[Coin]):
         elif isinstance(coins, list):
             if len(coins) == 0:
                 _coins = []
-            elif isinstance(coins[0], Coin):
-                _coins = coins
-            elif isinstance(coins[0], CoinProto):
+            elif isinstance(coins[0], Coin) or isinstance(coins[0], CoinProto):
                 _coins = Coins._from_proto(coins)
             else:
                 raise TypeError()
@@ -117,8 +115,7 @@ class Coins(List[Coin]):
         validate_coins(self)
 
     @classmethod
-    # def _from_proto(cls, proto_coins: Union["CoinsProto", List[CoinProto]]) -> List[Coin]:
-    def _from_proto(cls, proto_coins: Union[List[CoinProto]]) -> List[Coin]:
+    def _from_proto(cls, proto_coins: List[Union[Coin,CoinProto]]) -> List[Coin]:
         """Create aerial Coins from List of CoinProto objects."".
 
         :param proto_coins: input list of CoinsProto
