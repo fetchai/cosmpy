@@ -95,8 +95,9 @@ class TxFee:
     def amount(self, value: Optional[CoinsParamType]):
         """Set amount.
 
-        Ensures conversion to Optional[List[Coin]]
-        :param value: The amount value to set using str or Coin or List[Coin] representation of the amount value
+        Ensures conversion to expected resulting type Optional[Coins]
+        :param value: The amount represented as one of the following types: str, Coins, List[Coin], List[CoinProto],
+                      Coin or CoinProto.
         """
         if value is None:
             self._amount = None
@@ -112,11 +113,8 @@ class TxFee:
         if self.gas_limit is None:
             raise RuntimeError("Gas limit must be set")
 
-        if self.amount is None:
-            self.amount = Coins()
-
         return Fee(
-            amount=self.amount.to_proto() if self.amount else [],
+            amount=self.amount.to_proto() if self.amount else [], # type: ignore
             gas_limit=self.gas_limit,
             granter=self.granter,
             payer=self.payer,

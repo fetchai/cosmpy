@@ -219,7 +219,7 @@ def parse_coins(value: str) -> List[CoinProto]:
     return Coins(value).to_proto()
 
 
-CoinsParamType = Union[Union[str, Coins, List[Coin], List[CoinProto], Coin, CoinProto]]
+CoinsParamType = Union[str, Coins, List[Coin], List[CoinProto], Coin, CoinProto]
 
 
 def is_denom_valid(denom: str) -> bool:

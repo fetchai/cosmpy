@@ -102,7 +102,7 @@ def prepare_basic_transaction(
             client, tx, sender, account, memo
         )
         # Use estimated amount if not provided
-        fee.amount = fee.amount or Coins(estimated_amount)
+        fee.amount = fee.amount or estimated_amount # type: ignore
 
     if fee.amount is None:
         fee.amount = client.estimate_fee_from_gas(fee.gas_limit)
