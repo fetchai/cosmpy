@@ -316,3 +316,10 @@ perf
 mitigations
 radix
 readme
+TxFee
+CoinProto
+canonicalise
+iadd
+isub
+repr
+nanomobx

@@ -19,13 +19,14 @@
 
 """Transaction."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, List, Optional, Union
 
 from google.protobuf.any_pb2 import Any as ProtoAny
 
-from cosmpy.aerial.coins import parse_coins
+from cosmpy.aerial.coins import Coins, CoinsParamType
+from cosmpy.crypto.address import Address
 from cosmpy.crypto.interface import Signer
 from cosmpy.crypto.keypairs import PublicKey
 from cosmpy.protos.cosmos.crypto.secp256k1.keys_pb2 import PubKey as ProtoPubKey
@@ -39,6 +40,85 @@ from cosmpy.protos.cosmos.tx.v1beta1.tx_pb2 import (
     Tx,
     TxBody,
 )
+
+
+@dataclass
+class TxFee:
+    """Cosmos SDK TxFee abstraction.
+
+    Example::
+    from cosmpy.aerial.tx import TxFee
+    from cosmpy.aerial.coins import Coin, Coins
+
+    fee = TxFee()
+    fee = TxFee(amount="1000afet")
+    fee = TxFee(amount=Coin(1000, "afet"))
+    fee = TxFee(amount="100afet,10uatom")
+    fee = TxFee(amount=[Coin(100, "afet"), Coin(10, "uatom")])
+    """
+
+    _amount: Optional[Coins] = field(init=False, default=None)
+    gas_limit: Optional[int] = None
+    granter: Optional[Address] = None
+    payer: Optional[Address] = None
+
+    def __init__(
+        self,
+        amount: Optional[CoinsParamType] = None,
+        gas_limit: Optional[int] = None,
+        granter: Optional[Address] = None,
+        payer: Optional[Address] = None,
+    ):
+        """Initialize a TxFee object.
+
+        :param amount: The transaction fee amount, as a Coin, list of Coins, or string (e.g., "100uatom").
+        :param gas_limit: Optional gas limit for the transaction.
+        :param granter: Optional address of the fee granter.
+        :param payer: Optional address of the fee payer.
+        """
+        self.amount = amount  # type: ignore
+        self.gas_limit = gas_limit
+        self.granter = granter
+        self.payer = payer
+
+    @property
+    def amount(self) -> Optional[Coins]:
+        """Set the transaction fee amount.
+
+        Accepts a string, Coin, or list of Coins and converts to a canonical list of Coin objects.
+
+        :return: amount as Optional[List[Coin]]
+        """
+        return self._amount
+
+    @amount.setter
+    def amount(self, value: Optional[CoinsParamType]):
+        """Set amount.
+
+        Ensures conversion to expected resulting type Optional[Coins]
+        :param value: The amount represented as one of the following types: str, Coins, List[Coin], List[CoinProto],
+                      Coin or CoinProto.
+        """
+        if value is None:
+            self._amount = None
+        else:
+            self._amount = Coins(value)
+
+    def to_proto(self) -> Fee:
+        """Return protobuf representation of TxFee.
+
+        :raises RuntimeError: Gas limit must be set
+        :return: Fee
+        """
+        if self.gas_limit is None:
+            raise RuntimeError("Gas limit must be set")
+
+        return Fee(
+            amount=self.amount.to_proto() if self.amount else [],  # type: ignore
+            gas_limit=self.gas_limit,
+            granter=str(self.granter) if self.granter else None,
+            payer=str(self.payer) if self.payer else None,
+        )
 
 
 class TxState(Enum):
@@ -140,7 +220,7 @@ class Transaction:
         return self._msgs
 
     @property
-    def fee(self) -> Optional[str]:
+    def fee(self) -> Optional[Fee]:
         """Get the transaction fee.
 
         :return: transaction fee
@@ -175,16 +255,14 @@ class Transaction:
     def seal(
         self,
         signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-        fee: str,
-        gas_limit: int,
+        fee: TxFee,
         memo: Optional[str] = None,
         timeout_height: Optional[int] = None,
     ) -> "Transaction":
         """Seal the transaction.
 
         :param signing_cfgs: signing configs
-        :param fee: transaction fee
-        :param gas_limit: transaction gas limit
+        :param fee: transaction fee class
         :param memo: transaction memo, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: sealed transaction.
@@ -209,12 +287,12 @@ class Transaction:
                 )
             )
 
+        self._fee = fee
+
         auth_info = AuthInfo(
             signer_infos=signer_infos,
-            fee=Fee(amount=parse_coins(fee), gas_limit=gas_limit),
+            fee=fee.to_proto(),
         )
-
-        self._fee = fee
 
         self._tx_body = TxBody()
         self._tx_body.memo = memo or ""

@@ -4,135 +4,6 @@
 
 Client functionality.
 
-<a id="cosmpy.aerial.client.__init__.Account"></a>
-
-## Account Objects
-
-```python
-@dataclass
-class Account()
-```
-
-Account.
-
-<a id="cosmpy.aerial.client.__init__.StakingPosition"></a>
-
-## StakingPosition Objects
-
-```python
-@dataclass
-class StakingPosition()
-```
-
-Staking positions.
-
-<a id="cosmpy.aerial.client.__init__.UnbondingPositions"></a>
-
-## UnbondingPositions Objects
-
-```python
-@dataclass
-class UnbondingPositions()
-```
-
-Unbonding positions.
-
-<a id="cosmpy.aerial.client.__init__.Validator"></a>
-
-## Validator Objects
-
-```python
-@dataclass
-class Validator()
-```
-
-Validator.
-
-<a id="cosmpy.aerial.client.__init__.Coin"></a>
-
-## Coin Objects
-
-```python
-@dataclass
-class Coin()
-```
-
-Coins.
-
-<a id="cosmpy.aerial.client.__init__.StakingSummary"></a>
-
-## StakingSummary Objects
-
-```python
-@dataclass
-class StakingSummary()
-```
-
-Get the staking summary.
-
-<a id="cosmpy.aerial.client.__init__.StakingSummary.total_staked"></a>
-
-#### total`_`staked
-
-```python
-@property
-def total_staked() -> int
-```
-
-Get the total staked amount.
-
-<a id="cosmpy.aerial.client.__init__.StakingSummary.total_rewards"></a>
-
-#### total`_`rewards
-
-```python
-@property
-def total_rewards() -> int
-```
-
-Get the total rewards.
-
-<a id="cosmpy.aerial.client.__init__.StakingSummary.total_unbonding"></a>
-
-#### total`_`unbonding
-
-```python
-@property
-def total_unbonding() -> int
-```
-
-total unbonding.
-
-<a id="cosmpy.aerial.client.__init__.Block"></a>
-
-## Block Objects
-
-```python
-@dataclass
-class Block()
-```
-
-Block.
-
-<a id="cosmpy.aerial.client.__init__.Block.from_proto"></a>
-
-#### from`_`proto
-
-```python
-@staticmethod
-def from_proto(block: Any) -> "Block"
-```
-
-Parse the block.
-
-**Arguments**:
-
-- `block`: block as Any
-
-**Returns**:
-
-parsed block as Block
-
 <a id="cosmpy.aerial.client.__init__.LedgerClient"></a>
 
 ## LedgerClient Objects
@@ -298,7 +169,7 @@ def send_tokens(destination: Address,
                 denom: str,
                 sender: Wallet,
                 memo: Optional[str] = None,
-                gas_limit: Optional[int] = None,
+                fee: Optional[TxFee] = None,
                 timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
@@ -311,7 +182,7 @@ Send tokens.
 - `denom`: denom
 - `sender`: sender
 - `memo`: memo, defaults to None
-- `gas_limit`: gas limit, defaults to None
+- `fee`: transaction fee, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
 **Returns**:
@@ -364,7 +235,7 @@ def delegate_tokens(validator: Address,
                     amount: int,
                     sender: Wallet,
                     memo: Optional[str] = None,
-                    gas_limit: Optional[int] = None,
+                    fee: Optional[TxFee] = None,
                     timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
@@ -376,7 +247,7 @@ Delegate tokens.
 - `amount`: amount
 - `sender`: sender
 - `memo`: memo, defaults to None
-- `gas_limit`: gas limit, defaults to None
+- `fee`: transaction fee, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
 **Returns**:
@@ -393,7 +264,7 @@ def redelegate_tokens(current_validator: Address,
                       amount: int,
                       sender: Wallet,
                       memo: Optional[str] = None,
-                      gas_limit: Optional[int] = None,
+                      fee: Optional[TxFee] = None,
                       timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
@@ -406,7 +277,7 @@ Redelegate tokens.
 - `amount`: amount
 - `sender`: sender
 - `memo`: memo, defaults to None
-- `gas_limit`: gas limit, defaults to None
+- `fee`: transaction fee, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
 **Returns**:
@@ -422,7 +293,7 @@ def undelegate_tokens(validator: Address,
                       amount: int,
                       sender: Wallet,
                       memo: Optional[str] = None,
-                      gas_limit: Optional[int] = None,
+                      fee: Optional[TxFee] = None,
                       timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
@@ -434,7 +305,7 @@ Undelegate tokens.
 - `amount`: amount
 - `sender`: sender
 - `memo`: memo, defaults to None
-- `gas_limit`: gas limit, defaults to None
+- `fee`: transaction fee, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
 **Returns**:
@@ -449,7 +320,7 @@ prepare and broadcast the transaction and transaction details
 def claim_rewards(validator: Address,
                   sender: Wallet,
                   memo: Optional[str] = None,
-                  gas_limit: Optional[int] = None,
+                  fee: Optional[TxFee] = None,
                   timeout_height: Optional[int] = None) -> SubmittedTx
 ```
 
@@ -460,7 +331,7 @@ claim rewards.
 - `validator`: validator
 - `sender`: sender
 - `memo`: memo, defaults to None
-- `gas_limit`: gas limit, defaults to None
+- `fee`: transaction fee, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
 **Returns**:

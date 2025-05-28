@@ -22,35 +22,40 @@
 import json
 import math
 import time
-from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
 import grpc
 from dateutil.parser import isoparse
-from google.protobuf.timestamp_pb2 import Timestamp
 
 from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
 from cosmpy.aerial.client.staking import (
+    StakingPosition,
+    StakingSummary,
+    UnbondingPositions,
+    Validator,
     ValidatorStatus,
     create_delegate_msg,
     create_redelegate_msg,
     create_undelegate_msg,
 )
 from cosmpy.aerial.client.utils import (
+    TxFee,
     ensure_timedelta,
     get_paginated,
     prepare_and_broadcast_basic_transaction,
 )
+from cosmpy.aerial.coins import Coin
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
 from cosmpy.aerial.tx import Transaction, TxState
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
+from cosmpy.aerial.types import Account, Block
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
@@ -58,7 +63,6 @@ from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.common.rest_client import RestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.distribution.rest_client import DistributionRestClient
 from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
@@ -117,109 +121,6 @@ from cosmpy.tx.rest_client import TxRestClient
 DEFAULT_QUERY_TIMEOUT_SECS = 15
 DEFAULT_QUERY_INTERVAL_SECS = 2
 COSMOS_SDK_DEC_COIN_PRECISION = 10**18
-
-
-@dataclass
-class Account:
-    """Account."""
-
-    address: Address
-    number: int
-    sequence: int
-
-
-@dataclass
-class StakingPosition:
-    """Staking positions."""
-
-    validator: Address
-    amount: int
-    reward: int
-    reward_dec: Decimal
-
-
-@dataclass
-class UnbondingPositions:
-    """Unbonding positions."""
-
-    validator: Address
-    amount: int
-
-
-@dataclass
-class Validator:
-    """Validator."""
-
-    address: Address  # the operators address
-    tokens: int  # The total amount of tokens for the validator
-    moniker: str
-    status: ValidatorStatus
-
-
-@dataclass
-class Coin:
-    """Coins."""
-
-    amount: int
-    denom: str
-
-
-@dataclass
-class StakingSummary:
-    """Get the staking summary."""
-
-    current_positions: List[StakingPosition]
-    unbonding_positions: List[UnbondingPositions]
-
-    @property
-    def total_staked(self) -> int:
-        """Get the total staked amount."""
-        return sum(map(lambda p: p.amount, self.current_positions))
-
-    @property
-    def total_rewards(self) -> int:
-        """Get the total rewards."""
-        return sum(map(lambda p: p.reward, self.current_positions))
-
-    @property
-    def total_unbonding(self) -> int:
-        """total unbonding."""
-        return sum(map(lambda p: p.amount, self.unbonding_positions))
-
-
-@dataclass
-class Block:
-    """Block."""
-
-    height: int
-    time: datetime
-    chain_id: str
-    tx_hashes: List[str]
-
-    @staticmethod
-    def from_proto(block: Any) -> "Block":
-        """Parse the block.
-
-        :param block: block as Any
-        :return: parsed block as Block
-        """
-        return Block(
-            height=int(block.header.height),
-            time=Block._parse_timestamp(block.header.time),
-            tx_hashes=[sha256(tx).hex().upper() for tx in block.data.txs],
-            chain_id=block.header.chain_id,
-        )
-
-    @staticmethod
-    def _parse_timestamp(timestamp: Timestamp):
-        """Parse the timestamp.
-
-        :param timestamp: timestamp
-        :return: parsed timestamp
-        """
-        return datetime.fromtimestamp(timestamp.seconds, tz=timezone.utc) + timedelta(
-            microseconds=timestamp.nanos // 1000
-        )
 
 
 class LedgerClient:
@@ -372,7 +273,7 @@ class LedgerClient:
         denom: str,
         sender: Wallet,
         memo: Optional[str] = None,
-        gas_limit: Optional[int] = None,
+        fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Send tokens.
@@ -382,7 +283,7 @@ class LedgerClient:
         :param denom: denom
         :param sender: sender
         :param memo: memo, defaults to None
-        :param gas_limit: gas limit, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -396,7 +297,7 @@ class LedgerClient:
             self,
             tx,
             sender,
-            gas_limit=gas_limit,
+            fee=fee,
             memo=memo,
             timeout_height=timeout_height,
         )
@@ -499,7 +400,7 @@ class LedgerClient:
         amount: int,
         sender: Wallet,
         memo: Optional[str] = None,
-        gas_limit: Optional[int] = None,
+        fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Delegate tokens.
@@ -508,7 +409,7 @@ class LedgerClient:
         :param amount: amount
         :param sender: sender
         :param memo: memo, defaults to None
-        :param gas_limit: gas limit, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -526,7 +427,7 @@ class LedgerClient:
             self,
             tx,
             sender,
-            gas_limit=gas_limit,
+            fee=fee,
             memo=memo,
             timeout_height=timeout_height,
         )
@@ -538,7 +439,7 @@ class LedgerClient:
         amount: int,
         sender: Wallet,
         memo: Optional[str] = None,
-        gas_limit: Optional[int] = None,
+        fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Redelegate tokens.
@@ -548,7 +449,7 @@ class LedgerClient:
         :param amount: amount
         :param sender: sender
         :param memo: memo, defaults to None
-        :param gas_limit: gas limit, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -567,7 +468,7 @@ class LedgerClient:
             self,
             tx,
             sender,
-            gas_limit=gas_limit,
+            fee=fee,
             memo=memo,
             timeout_height=timeout_height,
         )
@@ -578,7 +479,7 @@ class LedgerClient:
         amount: int,
         sender: Wallet,
         memo: Optional[str] = None,
-        gas_limit: Optional[int] = None,
+        fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """Undelegate tokens.
@@ -587,7 +488,7 @@ class LedgerClient:
         :param amount: amount
         :param sender: sender
         :param memo: memo, defaults to None
-        :param gas_limit: gas limit, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -605,7 +506,7 @@ class LedgerClient:
             self,
             tx,
             sender,
-            gas_limit=gas_limit,
+            fee=fee,
             memo=memo,
             timeout_height=timeout_height,
         )
@@ -615,7 +516,7 @@ class LedgerClient:
         validator: Address,
         sender: Wallet,
         memo: Optional[str] = None,
-        gas_limit: Optional[int] = None,
+        fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
     ) -> SubmittedTx:
         """claim rewards.
@@ -623,7 +524,7 @@ class LedgerClient:
         :param validator: validator
         :param sender: sender
         :param memo: memo, defaults to None
-        :param gas_limit: gas limit, defaults to None
+        :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
         :return: prepare and broadcast the transaction and transaction details
         """
@@ -634,7 +535,7 @@ class LedgerClient:
             self,
             tx,
             sender,
-            gas_limit=gas_limit,
+            fee=fee,
             memo=memo,
             timeout_height=timeout_height,
         )
@@ -647,6 +548,7 @@ class LedgerClient:
         """
         return self._gas_strategy.estimate_gas(tx)
 
+    # NOTE(pb): We should come up with a mechanism how this method (or a new one) can return also `Coin`, resp. `Coins`.
     def estimate_fee_from_gas(self, gas_limit: int) -> str:
         """Estimate fee from gas.
 
@@ -656,6 +558,7 @@ class LedgerClient:
         fee = math.ceil(gas_limit * self.network_config.fee_minimum_gas_price)
         return f"{fee}{self.network_config.fee_denomination}"
 
+    # NOTE(pb): We should come up with a mechanism how this method (or a new one) can return also `Coin`, resp. `Coins`.
     def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
         """Estimate gas and fee for transaction.
 

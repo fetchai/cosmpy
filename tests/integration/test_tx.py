@@ -17,8 +17,6 @@
 #
 # ------------------------------------------------------------------------------
 """Integration tests for basic transactions."""
-from typing import Optional
-
 import pytest
 
 from cosmpy.aerial.client import LedgerClient
@@ -35,7 +33,6 @@ class TestTx:
     """Test Basic Transaction"""
 
     COIN = "atestfet"
-    GAS_LIMIT: Optional[int] = None
 
     def _get_network_config(self):
         """Get network config."""
@@ -75,7 +72,6 @@ class TestTx:
             tokens_to_send,
             self.COIN,
             wallet1,
-            gas_limit=self.GAS_LIMIT,
             timeout_height=block_height + 10,
         )
         tx.wait_to_complete()

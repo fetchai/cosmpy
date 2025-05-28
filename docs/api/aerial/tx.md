@@ -4,6 +4,100 @@
 
 Transaction.
 
+<a id="cosmpy.aerial.tx.TxFee"></a>
+
+## TxFee Objects
+
+```python
+@dataclass
+class TxFee()
+```
+
+Cosmos SDK TxFee abstraction.
+
+Example::
+from cosmpy.aerial.tx import TxFee
+from cosmpy.aerial.coins import Coin, Coins
+
+fee = TxFee()
+fee = TxFee(amount="1000afet")
+fee = TxFee(amount=Coin(1000, "afet"))
+fee = TxFee(amount="100afet,10uatom")
+fee = TxFee(amount=[Coin(100, "afet"), Coin(10, "uatom")])
+
+<a id="cosmpy.aerial.tx.TxFee.__init__"></a>
+
+#### `__`init`__`
+
+```python
+def __init__(amount: Optional[CoinsParamType] = None,
+             gas_limit: Optional[int] = None,
+             granter: Optional[Address] = None,
+             payer: Optional[Address] = None)
+```
+
+Initialize a TxFee object.
+
+**Arguments**:
+
+- `amount`: The transaction fee amount, as a Coin, list of Coins, or string (e.g., "100uatom").
+- `gas_limit`: Optional gas limit for the transaction.
+- `granter`: Optional address of the fee granter.
+- `payer`: Optional address of the fee payer.
+
+<a id="cosmpy.aerial.tx.TxFee.amount"></a>
+
+#### amount
+
+```python
+@property
+def amount() -> Optional[Coins]
+```
+
+Set the transaction fee amount.
+
+Accepts a string, Coin, or list of Coins and converts to a canonical list of Coin objects.
+
+**Returns**:
+
+amount as Optional[List[Coin]]
+
+<a id="cosmpy.aerial.tx.TxFee.amount"></a>
+
+#### amount
+
+```python
+@amount.setter
+def amount(value: Optional[CoinsParamType])
+```
+
+Set amount.
+
+Ensures conversion to expected resulting type Optional[Coins]
+
+**Arguments**:
+
+- `value`: The amount represented as one of the following types: str, Coins, List[Coin], List[CoinProto],
+Coin or CoinProto.
+
+<a id="cosmpy.aerial.tx.TxFee.to_proto"></a>
+
+#### to`_`proto
+
+```python
+def to_proto() -> Fee
+```
+
+Return protobuf representation of TxFee.
+
+**Raises**:
+
+- `RuntimeError`: Gas limit must be set
+
+**Returns**:
+
+Fee
+
 <a id="cosmpy.aerial.tx.TxState"></a>
 
 ## TxState Objects
@@ -119,7 +213,7 @@ transaction messages
 
 ```python
 @property
-def fee() -> Optional[str]
+def fee() -> Optional[Fee]
 ```
 
 Get the transaction fee.
@@ -175,8 +269,7 @@ transaction with message added
 
 ```python
 def seal(signing_cfgs: Union[SigningCfg, List[SigningCfg]],
-         fee: str,
-         gas_limit: int,
+         fee: TxFee,
          memo: Optional[str] = None,
          timeout_height: Optional[int] = None) -> "Transaction"
 ```
@@ -186,8 +279,7 @@ Seal the transaction.
 **Arguments**:
 
 - `signing_cfgs`: signing configs
-- `fee`: transaction fee
-- `gas_limit`: transaction gas limit
+- `fee`: transaction fee class
 - `memo`: transaction memo, defaults to None
 - `timeout_height`: timeout height, defaults to None
 
