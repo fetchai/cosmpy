@@ -1,5 +1,10 @@
 # Release History
 
+## 0.11.0
+
+- feat: TxFee and Coins, support for fee granter & payer 
+- fix: outdated links in documentation
+
 ## 0.9.3
 
 - chore: add/update repo health files
