@@ -116,8 +116,8 @@ class TxFee:
         return Fee(
             amount=self.amount.to_proto() if self.amount else [],  # type: ignore
             gas_limit=self.gas_limit,
-            granter=self.granter,
-            payer=self.payer,
+            granter=str(self.granter) if self.granter else None,
+            payer=str(self.payer) if self.payer else None,
         )
 
 
