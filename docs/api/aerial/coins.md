@@ -49,6 +49,49 @@ Validate this type based on Cosmos-SDK requirements for Coin.
 
 - `ValueError`: If amount is negative or denom does not conform to cosmos-sdk requirement for denomination.
 
+<a id="cosmpy.aerial.coins.Coin.is_valid"></a>
+
+#### is`_`valid
+
+```python
+def is_valid() -> bool
+```
+
+Validate Coin instance based on Cosmos-SDK requirements.
+
+**Returns**:
+
+True if the Coin instance conforms to cosmos-sdk requirement for Coin, False otherwise.
+
+<a id="cosmpy.aerial.coins.Coin.is_amount_valid"></a>
+
+#### is`_`amount`_`valid
+
+```python
+def is_amount_valid() -> bool
+```
+
+Validate amount value based on Cosmos-SDK requirements.
+
+**Returns**:
+
+True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
+False otherwise.
+
+<a id="cosmpy.aerial.coins.Coin.is_denom_valid"></a>
+
+#### is`_`denom`_`valid
+
+```python
+def is_denom_valid() -> bool
+```
+
+Validate denom value based on Cosmos-SDK requirements.
+
+**Returns**:
+
+True if denom conforms to cosmos-sdk requirement for denomination, False otherwise.
+
 <a id="cosmpy.aerial.coins.Coins"></a>
 
 ## Coins Objects
@@ -58,6 +101,11 @@ class Coins(List[Coin])
 ```
 
 Coins.
+
+It is required to call the 'canonicalise()' method in order to ensure that the Coins instance conforms to
+Cosmos-SDK requirements for Coins type!
+This is because one way or another, due to the nature of the base List type, it is possible to create such an
+instance of Coins which does not conform to Cosmos-SDK requirements.
 
 <a id="cosmpy.aerial.coins.Coins.__init__"></a>
 
@@ -78,7 +126,16 @@ Convert any coin representation into Coins.
 def __repr__() -> str
 ```
 
-Return string representation of Coins.
+Return cosmos-sdk string representation of Coins.
+
+**Returns**:
+
+cosmos-sdk formatted string representation of Coins.
+Example::
+from cosmpy.aerial.client.coins import Coin, Coins
+
+coins = Coins([Coin(1,"afet"), Coin(2,"uatom"), Coin(3,"nanomobx")])
+assert str(coins) == "1afet,2uatom,3nanomobx"
 
 <a id="cosmpy.aerial.coins.Coins.to_proto"></a>
 
@@ -88,21 +145,26 @@ Return string representation of Coins.
 def to_proto() -> List[CoinProto]
 ```
 
-Convert this type to protobuf schema Coins type.
+Convert this type to *protobuf schema* Coins type.
 
 <a id="cosmpy.aerial.coins.Coins.canonicalise"></a>
 
 #### canonicalise
 
 ```python
-def canonicalise()
+def canonicalise() -> "Coins"
 ```
 
-Reorganise the value of the instance (list of coins) in to canonical form defined by cosmos-sdk for `Coins`.
+Reorganise the value of the 'self' instance in to canonical form defined by cosmos-sdk for `Coins`.
 
-This means alphabetically sorting (ascending) the coins based on denomination.
-The algorithm *fails* with exception *if* each denomination in the list is *not* unique = if some denominations
-are present in the coin list more than once.
+This means dropping all coins with zero value, and alphabetically sorting (ascending) the coins based
+on denomination.
+The algorithm *fails* with exception *if* any of the denominations in the list is *not* unique = if some of the
+denominations are present in the coin list more than once, or if validation of any individual coin will fail.
+
+**Returns**:
+
+The 'self' instance.
 
 <a id="cosmpy.aerial.coins.Coins.validate"></a>
 
@@ -113,6 +175,9 @@ def validate()
 ```
 
 Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk.
+
+Raises ValueError exception *IF* denominations are not unique, or if validation of individual coins raises an
+exception.
 
 <a id="cosmpy.aerial.coins.Coins.__add__"></a>
 
@@ -199,7 +264,7 @@ def is_coins_sorted(
         coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool
 ```
 
-Return true if given coins representation is sorted in descending order of denom.
+Return true if given coins representation is sorted in ascending order of denom.
 
 **Arguments**:
 
@@ -239,10 +304,11 @@ bool validity
 def sort_coins(coins: Union[Coins, List[Coin], List[CoinProto]])
 ```
 
-Sort and validate coins collection based on Cosmos-SDK definition of Coins validity.
+Sort the collection of coins based on Cosmos-SDK definition of Coins validity.
 
-Coins collection must be sorted ascending alphabetically based on denomination, and each denomination
-in the collection must be unique = be present in the collection just once.
+Coins collection is sorted ascending alphabetically based on denomination.
+
+NOTE: The resulting sorted collection of coins is *NOT* validated by calling the 'Coins.validate()'.
 
 **Arguments**:
 
