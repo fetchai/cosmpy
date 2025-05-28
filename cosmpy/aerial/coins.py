@@ -135,7 +135,8 @@ class Coins(List[Coin]):
 
     def to_proto(self) -> List[CoinProto]:
         """Convert this type to *protobuf schema* Coins type."""
-        return [CoinProto(amount=str(c.amount), denom=c.denom) for c in self]
+        coins = Coins(self).canonicalise()
+        return [CoinProto(amount=str(c.amount), denom=c.denom) for c in coins]
 
     def canonicalise(self) -> "Coins":
         """Reorganise the value of the 'self' instance in to canonical form defined by cosmos-sdk for `Coins`.

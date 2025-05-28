@@ -106,8 +106,6 @@ def prepare_basic_transaction(
     if fee.amount is None:
         fee.amount = client.estimate_fee_from_gas(fee.gas_limit)
 
-    fee.amount.canonicalise()
-
     # Build the final transaction
     tx.seal(
         SigningCfg.direct(sender.public_key(), account.sequence),

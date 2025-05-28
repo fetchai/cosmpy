@@ -57,10 +57,10 @@ def test_create_execute_msg():
     assert msg.contract == str(contract)
     assert msg.msg == b"{}"
     assert len(msg.funds) == 2
-    assert msg.funds[0].denom == "atestfet"
-    assert msg.funds[0].amount == "15"
-    assert msg.funds[1].denom == "another"
-    assert msg.funds[1].amount == "42"
+    assert msg.funds[0].denom == "another"
+    assert msg.funds[0].amount == "42"
+    assert msg.funds[1].denom == "atestfet"
+    assert msg.funds[1].amount == "15"
 
 
 def test_create_migrate_msg():

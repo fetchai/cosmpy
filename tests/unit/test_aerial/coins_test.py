@@ -31,7 +31,7 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
         ("          ", []),
         ("50000atestfet", [CoinProto(amount="50000", denom="atestfet")]),
         (
-            "50000atestfet,     200foobar",
+            "  200foobar   ,      50000atestfet ",
             [
                 CoinProto(amount="50000", denom="atestfet"),
                 CoinProto(amount="200", denom="foobar"),
@@ -49,11 +49,11 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
         (
             "500ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B, 50000atestfet",
             [
+                CoinProto(amount="50000", denom="atestfet"),
                 CoinProto(
                     amount="500",
                     denom="ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
                 ),
-                CoinProto(amount="50000", denom="atestfet"),
             ],
         ),
     ],
