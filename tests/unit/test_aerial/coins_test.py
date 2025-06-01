@@ -64,7 +64,7 @@ def test_parsing_coins_string(input_coins, expected_result):
     assert Coins(input_coins).to_proto() == expected_result
 
 
-#@pytest.mark.parametrize(
+# @pytest.mark.parametrize(
 #    "input_coins,expected_coins,validate_error",
 #    [
 #        ([], [], None),
@@ -92,10 +92,10 @@ def test_parsing_coins_string(input_coins, expected_result):
 #            None,
 #        ),
 #    ],
-#)
-#def test_coins_ordering_preserved_during_instantiation(
+# )
+# def test_coins_ordering_preserved_during_instantiation(
 #    input_coins, expected_coins, validate_error
-#):
+# ):
 #    """Test preservation of ordering during initialidation."""
 #    if validate_error:
 #        with pytest.raises(Exception) as exc_info:
@@ -232,14 +232,13 @@ def test_coins_canonicalise(input_coins, expected_coins, validate_error):
 
 @pytest.mark.parametrize(
     "input_coins,expected_sorted_coins",
-    [([], []), ("5bcc,2ccc,4acc",
-                [Coin(4,"acc"), Coin(5, "bcc"), Coin(2,"ccc")])])
+    [([], []), ("5bcc,2ccc,4acc", [Coin(4, "acc"), Coin(5, "bcc"), Coin(2, "ccc")])],
+)
 def test_coins_sort(input_coins, expected_sorted_coins):
     """Test Coins sort."""
     sorted_coins = Coins(input_coins)
     if input_coins != sorted_coins:
         assert not is_coins_sorted(input_coins)
-
 
     assert is_coins_sorted(input_coins)
 

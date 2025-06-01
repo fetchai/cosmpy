@@ -73,6 +73,7 @@ pyyaml = "==5.3.1"
 packaging = ">=23.0"
 virtualenv = ">=20.26.6"
 marshmallow = "<4.0.0"
+sortedcontainers-stubs = "2.4.3 "
 
 [tool.poetry.group.docs]
 optional = true

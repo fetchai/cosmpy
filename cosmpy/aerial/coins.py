@@ -21,6 +21,7 @@
 
 import re
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Iterable, List, Optional, Union
 
 from sortedcontainers import SortedDict
@@ -49,9 +50,19 @@ class Coin:
         """Return string representation of coin."""
         return f"{self.amount}{self.denom}"
 
-    @property
+    # NOTE(pb): The denom property setter is *NOT* defined by-design
+    @property  # type: ignore
     def denom(self) -> str:
-        """Return denom of coin."""
+        """Return denom of coin.
+        The denom property setter is *NOT* defined *by-design* in order to avoid misalignment/inconsistencies
+        later on in the `Coins` collection class.
+        If the denom setter was enabled, then it would allow changing denom value externally = from without knowledge
+        of the `Coins` collection class, since the `Coin` is reference type. We want to avoid passing the Coin instance
+        always by-value (by-copy).
+
+        :return: denomination of the coin instance
+        """
+
         return self._denom
 
     def to_proto(self) -> CoinProto:
@@ -91,6 +102,11 @@ class Coin:
         return is_denom_valid(self.denom, raise_ex)
 
 
+class OnCollision(Enum):
+    Fail = 0
+    Override = 1
+
+
 class Coins:
     """Coins."""
 
@@ -103,6 +119,79 @@ class Coins:
         """Instantiate Coins from any of the supported coin(s) representation types."""
 
         self._coins: SortedDict[str, Coin] = SortedDict()
+        self.assign(coins)
+
+    def __repr__(self) -> str:
+        """Return cosmos-sdk string representation of Coins.
+
+        :return: cosmos-sdk formatted string representation of Coins.
+
+        Example::
+        from cosmpy.aerial.client.coins import Coin, Coins
+
+        coins = Coins([Coin(1,"afet"), Coin(2,"uatom"), Coin(3,"nanomobx")])
+        assert str(coins) == "1afet,2uatom,3nanomobx"
+        """
+        return ",".join([repr(c) for c in self])
+
+    def __iter__(self):
+        for c in self._coins.values():
+            # yield Coin(c.amount, c.denom)
+            yield c
+
+    def __len__(self) -> int:
+        return len(self._coins)
+
+    def __getitem__(self, key: str) -> Coin:
+        # NOTE(pb): Should we return by-value rather than by-reference in order to prevent potential external
+        #           modifications of the Coin.amount value? However, at the cost performance loss - Coin instance
+        #           would need to be cloned on multiple places ...
+        c = self._coins[key]
+        # return Coin(c.amount, c.denom)
+        return c
+
+    # NOTE(pb): Intentionally commented-out since its presence in public API could cause potential confusion.
+    #           Either the denom value would need to be passed twice (once as key and once in Coin object value, (e.g.
+    #           `coins["mydenom] = Coin(1, "mydenom")`), OR we would need to change the type of the input value to
+    #           `int` (`__setitem__(self, key: str, value: int):`, for example `coins["mydenom] = 1`). However, that
+    #           would make this method *not* symmetrical with the `__getitem__(self, key: str) -> Coin` counterpart,
+    #           which returns the `Coin` type, not `int`.
+    # def __setitem__(self, key: str, value: Coin):
+    #    if value.denom != key:
+    #        raise ValueError(f'Mismatch between the "{key}" key denom and coin denom {value.denom}')
+    #    self._merge_coin(coin=value)
+
+    def __contains__(self, denom: str) -> bool:
+        return denom in self._coins
+
+    def __delitem__(self, denom: str):
+        del self._coins[denom]
+
+    def __eq__(self, right) -> bool:
+        if not isinstance(right, Coins):
+            right = Coins(right)
+
+        return self._coins == right._coins
+
+    def __hash__(self) -> int:
+        return hash(self._coins)
+
+    def clear(self):
+        self._coins.clear()
+
+    def assign(
+        self,
+        coins: Optional[
+            Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto]
+        ] = None,
+    ):
+        """Assign value of this ('self') instance from any of the supported coin(s) representation types.
+
+        This means that the current value of this ('self') instance will be completely replaced with a new value
+        carried in the input `coins` parameter.
+        """
+
+        self.clear()
 
         if coins is None:
             return
@@ -123,57 +212,36 @@ class Coins:
         else:
             raise ValueError(f"Invalid type {type(coins)}")
 
-    def __repr__(self) -> str:
-        """Return cosmos-sdk string representation of Coins.
+    def get_by_index(self, index) -> Coin:
+        """Return Coin instance at given `index`.
 
-        :return: cosmos-sdk formatted string representation of Coins.
+        If the `index` is out of range, raises :exc:`IndexError`.
+
+        Runtime complexity: `O(log(n))`
+
+        This method poses the same risk to validity of the Coins value as the `__getitem__(...)` method,
+        since at the moment it returns Coin instance *by-reference* what allows to change the `Coin.amount` value
+        from external context and so potentially invalidate the value represented by the `Coins` class/container.
 
         Example::
-        from cosmpy.aerial.client.coins import Coin, Coins
+        >>> from cosmpy.aerial.coins import Coin, Coins
+        >>> cs = Coins("1aaa,2baa,3caa")
+        >>> cs.get_by_index(0)
+        1aaa
+        >>> cs.get_by_index(2)
+        3caa
+        >>> cs.get_by_index(3)
+        Traceback (most recent call last):
+          ...
+        IndexError: list index out of range
 
-        coins = Coins([Coin(1,"afet"), Coin(2,"uatom"), Coin(3,"nanomobx")])
-        assert str(coins) == "1afet,2uatom,3nanomobx"
+        :param int index: index of item (default -1)
+        :return: key and value pair
+        :raises IndexError: if `index` out of range
         """
-        return ",".join([repr(c) for c in self])
-
-    def __iter__(self):
-        for coin in self._coins.values():
-            yield coin
-
-    def __len__(self) -> int:
-        return len(self._coins)
-
-    def __getitem__(self, key: str) -> Coin:
-        # NOTE(pb): Should we return by-value rather than by-reference in order to prevent potential external
-        #           modifications of the Coin.amount value? However, at the cost performance loss - Coin instance
-        #           would need to be cloned on multiple places ...
-        return self._coins[key]
-
-    # NOTE(pb): Intentionally commented-out since its presence in public API could cause potential confusion.
-    #           Either the denom value would need to be passed twice (once as key and once in Coin object value, (e.g.
-    #           `coins["mydenom] = Coin(1, "mydenom")`), OR we would need to change the type of the input value to
-    #           `int` (`__setitem__(self, key: str, value: int):`, for example `coins["mydenom] = 1`). However, that
-    #           would make this method *not* symmetrical with the `__getitem__(self, key: str) -> Coin` counterpart,
-    #           which returns the `Coin` type, not `int`.
-    # def __setitem__(self, key: str, value: Coin):
-    #    if value.denom != key:
-    #        raise ValueError(f'Mismatch between the "{key}" key denom and coin denom {value.denom}')
-    #    self._merge_coin(coin=value)
-
-    def __contains__(self, denom: str) -> bool:
-        return denom in self._coins
-
-    def __delitem__(self, denom: str):
-        del self._coins[denom]
-
-    def __eq__(self, right: "Coins") -> bool:
-        if not isinstance(right, Coins):
-            right = Coins(right)
-
-        return self._coins == right._coins
-
-    def __hash__(self) -> int:
-        return hash(self._coins)
+        _, c = self._coins.peekitem(index)
+        # return Coin(c.amount, c.denom)
+        return c
 
     def to_proto(self) -> List[CoinProto]:
         """Convert this type to *protobuf schema* Coins type."""
@@ -204,43 +272,57 @@ class Coins:
     #    coin.is_valid(raise_ex=True)
     #    self._coins[coin.denom] = coin
 
-    def merge_coins(
+    def merge(
         self,
         coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto],
-        override: bool = False,
-    ):
+        on_collision: OnCollision = OnCollision.Fail,
+    ) -> "Coins":
         """Merge passed in coins with this ('self') coins instance, *failing* at first denomination collision."".
 
-        :param coins: input coins in any of supported types
+        :param coins: Input coins in any of supported types.
+        :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden if it already
+                             contains the denomination, if OnCollision.Fail the merge will fail with exception.
         """
         cs = Coins(coins)
 
         for c in cs:
-            self._merge_coin(c, override)
+            self._merge_coin(c, on_collision)
 
-    def _merge_coin(self, coin: Coin, override: bool = False):
+        return self
+
+    def _merge_coin(self, coin: Coin, on_collision: OnCollision = OnCollision.Fail):
         """Merge singular aerial Coin in to this object.
 
         :param coin: input coin to merge
-        :param override: whether to override coin instance in this (self) object if it already contains the denomination
+        :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden
+                             if it already contains the denomination, if OnCollision.Fail the merge will fail with
+                             an exception.
         """
 
+        if on_collision == OnCollision.Override:
+            fail_on_collision = False
+        elif on_collision == OnCollision.Fail:
+            fail_on_collision = True
+        else:
+            raise ValueError(f"Unknown on_collision value: {on_collision}")
+
         is_already_present = coin.denom in self
+
         if coin.amount == 0:
-            if override and is_already_present:
+            if not fail_on_collision and is_already_present:
                 del self._coins[coin.denom]
 
             # Skipping if amount is zero
             return
 
-        if not override and is_already_present:
+        if fail_on_collision and is_already_present:
             raise ValueError(
                 f'Attempt to merge a coin with the "{coin.denom}" denomination which already exists in the receiving coins instance'
             )
 
         # # NOTE(pb): This should be the logical equivalent of the code above:
         # if coin.denom in self:
-        #    if override:
+        #    if not fail_on_collision:
         #        if coin.amount == 0:
         #            del self._coins[coin.denom]
         #    else:
@@ -343,11 +425,11 @@ class Coins:
             #    if left.denom in res:
             #        del res[left.denom]
             # elif left.amount > 0:
-            #    # res._merge_coin(left, override=True)
+            #    # res._merge_coin(left, on_collision=OnCollision.Override)
             #    res._coins[left.denom] = left
             # else:
             #    raise RuntimeError(f"Operation yielded negative amount {left}")
-            res._merge_coin(left, override=True)
+            res._merge_coin(left, on_collision=OnCollision.Override)
 
 
 def parse_coins(value: str) -> List[CoinProto]:
@@ -417,7 +499,7 @@ def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bo
     return True
 
 
-def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
+def validate_coins(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]):
     """Return true if given coins representation is valid.
 
     :param coins: Any type representing coins
