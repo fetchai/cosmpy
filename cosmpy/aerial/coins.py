@@ -212,6 +212,24 @@ class Coins:
         else:
             raise ValueError(f"Invalid type {type(coins)}")
 
+    def merge_from(
+        self,
+        coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto],
+        on_collision: OnCollision = OnCollision.Fail,
+    ) -> "Coins":
+        """Merge passed in coins with this ('self') coins instance.
+
+        :param coins: Input coins in any of supported types.
+        :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden if it already
+                             contains the denomination, if OnCollision.Fail the merge will fail with exception.
+        """
+        cs = Coins(coins)
+
+        for c in cs:
+            self._merge_coin(c, on_collision)
+
+        return self
+
     def get_by_index(self, index) -> Coin:
         """Return Coin instance at given `index`.
 
@@ -261,34 +279,6 @@ class Coins:
         exception.
         """
         validate_coins(self)
-
-    # def set_coins(self, coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto]):
-    #    """Add coins in to this (self) object overriding for colliding denominations"""
-    #    cs = Coins(coins)
-    #    for c in cs:
-    #        self._set_coin(c)
-
-    # def _set_coin(self, coin: Coin):
-    #    coin.is_valid(raise_ex=True)
-    #    self._coins[coin.denom] = coin
-
-    def merge(
-        self,
-        coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto],
-        on_collision: OnCollision = OnCollision.Fail,
-    ) -> "Coins":
-        """Merge passed in coins with this ('self') coins instance, *failing* at first denomination collision."".
-
-        :param coins: Input coins in any of supported types.
-        :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden if it already
-                             contains the denomination, if OnCollision.Fail the merge will fail with exception.
-        """
-        cs = Coins(coins)
-
-        for c in cs:
-            self._merge_coin(c, on_collision)
-
-        return self
 
     def _merge_coin(self, coin: Coin, on_collision: OnCollision = OnCollision.Fail):
         """Merge singular aerial Coin in to this object.
@@ -408,7 +398,7 @@ class Coins:
 
     @staticmethod
     def _math_operation(
-        other: Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto],
+        other: Union[str, "Coins", Iterable[Coin], Iterable[CoinProto], Coin, CoinProto],
         result_inout: "Coins",
     ):
         res = result_inout
@@ -441,7 +431,7 @@ def parse_coins(value: str) -> List[CoinProto]:
     return Coins(value).to_proto()
 
 
-CoinsParamType = Union[str, Coins, List[Coin], List[CoinProto], Coin, CoinProto]
+CoinsParamType = Union[str, Coins, Iterable[Coin], Iterable[CoinProto], Coin, CoinProto]
 
 
 def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
@@ -465,7 +455,7 @@ def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
     return False
 
 
-def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool:
+def is_coins_sorted(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]) -> bool:
     """Return true if given coins representation is sorted in ascending order of denom.
 
     :param coins: Any type representing coins
