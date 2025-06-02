@@ -155,7 +155,6 @@ class Coins:
         amount = self._amounts[denom]
         return Coin(amount, denom)
 
-    """
     # NOTE(pb): Intentionally commented-out since its presence in public API could cause potential confusion.
     #           Either the denom value would need to be passed twice (once as key and once in Coin object value, (e.g.
     #           `coins["mydenom] = Coin(1, "mydenom")`), OR we would need to change the type of the input value to
@@ -166,7 +165,6 @@ class Coins:
     #    if value.denom != key:
     #        raise ValueError(f'Mismatch between the "{key}" key denom and coin denom {value.denom}') # noqa: W291
     #    self._merge_coin(coin=value) # noqa: E800
-    """
 
     def __contains__(self, denom: str) -> bool:
         """Return true if denom is present."""
@@ -385,7 +383,7 @@ class Coins:
     def __add__(self, other):
         """Perform algebraic vector addition of two coin lists."""
         result = Coins(self)
-        for (left, right) in self._math_operation(other, result_inout=result):
+        for (left, right) in self._math_operation(other, result_input=result):
             left.amount += right.amount
 
         return result
@@ -393,7 +391,7 @@ class Coins:
     def __sub__(self, other):
         """Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
         result = Coins(self)
-        for (left, right) in self._math_operation(other, result_inout=result):
+        for (left, right) in self._math_operation(other, result_input=result):
             if left.amount < right.amount:
                 raise RuntimeError(
                     f"Subtracting {left} - {right} would result to negative value"
@@ -405,7 +403,7 @@ class Coins:
     def __iadd__(self, other):
         """Perform *in-place* algebraic vector subtraction of two coin lists."""
         result = self
-        for (left, right) in self._math_operation(other, result_inout=result):
+        for (left, right) in self._math_operation(other, result_input=result):
             left.amount += right.amount
 
         return result
@@ -413,7 +411,7 @@ class Coins:
     def __isub__(self, other):
         """Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
         result = self
-        for (left, right) in self._math_operation(other, result_inout=result):
+        for (left, right) in self._math_operation(other, result_input=result):
             if left.amount < right.amount:
                 raise RuntimeError(
                     f"Subtracting {left} - {right} would result to negative value"
@@ -427,9 +425,9 @@ class Coins:
         other: Union[
             str, "Coins", Iterable[Coin], Iterable[CoinProto], Coin, CoinProto
         ],
-        result_inout: "Coins",
+        result_input: "Coins",
     ):
-        res = result_inout
+        res = result_input
 
         if not isinstance(other, Coins):
             other = Coins(other)
@@ -437,7 +435,9 @@ class Coins:
         for c in other:
             left: Coin = res.get(c.denom, 0)
             yield left, c
-            res._merge_coin(left, on_collision=OnCollision.Override)
+            res._merge_coin(
+                left, on_collision=OnCollision.Override
+            )  # pylint: disable=protected-access
 
 
 def parse_coins(value: str) -> List[CoinProto]:
