@@ -42,6 +42,8 @@ class Coin:
     _denom: str = field(init=False, repr=False, compare=False, hash=False)
 
     def __init__(self, amount: int, denom: str) -> None:
+        """Create Coin instance."""
+
         is_denom_valid(denom, raise_ex=True)
         self.amount = amount
         self._denom = denom
@@ -54,6 +56,7 @@ class Coin:
     @property  # type: ignore
     def denom(self) -> str:
         """Return denom of coin.
+
         The denom property setter is *NOT* defined *by-design* in order to avoid misalignment/inconsistencies
         later on in the `Coins` collection class.
         If the denom setter was enabled, then it would allow changing denom value externally = from without knowledge
@@ -118,7 +121,7 @@ class Coins:
     ):
         """Instantiate Coins from any of the supported coin(s) representation types."""
 
-        self._coins: SortedDict[str, Coin] = SortedDict()
+        self._amounts: SortedDict[str, int] = SortedDict()
         self.assign(coins)
 
     def __repr__(self) -> str:
@@ -135,20 +138,16 @@ class Coins:
         return ",".join([repr(c) for c in self])
 
     def __iter__(self):
-        for c in self._coins.values():
+        for denom, amount in self._amounts.items():
             # yield Coin(c.amount, c.denom)
-            yield c
+            yield Coin(amount, denom)
 
     def __len__(self) -> int:
-        return len(self._coins)
+        return len(self._amounts)
 
-    def __getitem__(self, key: str) -> Coin:
-        # NOTE(pb): Should we return by-value rather than by-reference in order to prevent potential external
-        #           modifications of the Coin.amount value? However, at the cost performance loss - Coin instance
-        #           would need to be cloned on multiple places ...
-        c = self._coins[key]
-        # return Coin(c.amount, c.denom)
-        return c
+    def __getitem__(self, denom: str) -> Coin:
+        amount = self._amounts[denom]
+        return Coin(amount, denom)
 
     # NOTE(pb): Intentionally commented-out since its presence in public API could cause potential confusion.
     #           Either the denom value would need to be passed twice (once as key and once in Coin object value, (e.g.
@@ -162,22 +161,22 @@ class Coins:
     #    self._merge_coin(coin=value)
 
     def __contains__(self, denom: str) -> bool:
-        return denom in self._coins
+        return denom in self._amounts
 
     def __delitem__(self, denom: str):
-        del self._coins[denom]
+        del self._amounts[denom]
 
     def __eq__(self, right) -> bool:
         if not isinstance(right, Coins):
             right = Coins(right)
 
-        return self._coins == right._coins
+        return self._amounts == right._amounts
 
     def __hash__(self) -> int:
-        return hash(self._coins)
+        return hash(self._amounts)
 
     def clear(self):
-        self._coins.clear()
+        self._amounts.clear()
 
     def assign(
         self,
@@ -230,6 +229,76 @@ class Coins:
 
         return self
 
+    def get(self, denom: str, default_amount: int) -> Coin:
+        """Return Coin instance for the given `denom`.
+
+        If coin with the given `denom` is not present, the `default` will be returned.
+
+        Runtime complexity: `O(log(n))`
+
+        This method poses the same risk to validity of the Coins value as the `__getitem__(...)` method,
+        since at the moment it returns Coin instance *by-reference* what allows to change the `Coin.amount` value
+        from external context and so potentially invalidate the value represented by the `Coins` class/container.
+
+        :param denom: denomination of the coin to query.
+        :param default_amount: default amount used to construct returned Coin instance if there is *no* coin with
+                               the given `denom` present in this coins instance.
+        :return: coin instance for the given `denom`, or the `default` value.
+
+        Example::
+        >>> from cosmpy.aerial.coins import Coin, Coins
+        >>> cs = Coins("1aaa,2baa,3caa")
+        >>> cs.get("baa", 0)
+        2baa
+        >>> cs.get("ggg", 0)
+        0ggg
+        """
+        amount = self._amounts[denom] if denom in self._amounts else default_amount
+        return Coin(amount, denom)
+
+    # NOTE(pb): Commented-out in favour of the implementation above.
+    # def get(self, denom: str, default: Union[int, Coin]) -> Coin:
+    #    """Return Coin instance for the given `denom`.
+
+    #    If coin with the given `denom` is not present, the `default` will be returned.
+
+    #    Runtime complexity: `O(log(n))`
+
+    #    This method poses the same risk to validity of the Coins value as the `__getitem__(...)` method,
+    #    since at the moment it returns Coin instance *by-reference* what allows to change the `Coin.amount` value
+    #    from external context and so potentially invalidate the value represented by the `Coins` class/container.
+
+    #    :param denom: denomination of the coin to query.
+    #    :param default: default amount used to construct returned Coin instance if there is *no* coin with
+    #                    the given `denom` present in this coins instance.
+    #    :return: coin instance for the given `denom`, or the `default` value.
+
+    #    Example::
+    #    >>> from cosmpy.aerial.coins import Coin, Coins
+    #    >>> cs = Coins("1aaa,2baa,3caa")
+    #    >>> cs.get("baa", 0)
+    #    2baa
+    #    >>> cs.get("ggg", 0)
+    #    0ggg
+    #    >>> cs.get("ggg", Coin(7, "bla"))
+    #    7bla
+    #    """
+
+    #    #amount = self._amounts[denom] if denom in self._amounts else default_amount
+    #    #return Coin(amount, denom)
+
+    #    if denom in self._amounts:
+    #        return Coin(self._amounts[denom], denom)
+
+    #    if isinstance(default, Coin):
+    #        if denom != default.denom:
+    #            raise ValueError(f'The `denom` {denom} value does not match the Coin.denom "{default.denom}" passed in `default` argument')
+    #        return default
+    #    elif isinstance(default, int):
+    #        return Coin(default, denom)
+
+    #    raise TypeError(f'Unexpected type "{type(default)}" of the `default` argument. Only int or Coin type is allowed.')
+
     def get_by_index(self, index) -> Coin:
         """Return Coin instance at given `index`.
 
@@ -257,9 +326,8 @@ class Coins:
         :return: key and value pair
         :raises IndexError: if `index` out of range
         """
-        _, c = self._coins.peekitem(index)
-        # return Coin(c.amount, c.denom)
-        return c
+        denom, amount = self._amounts.peekitem(index)
+        return Coin(amount, denom)
 
     def to_proto(self) -> List[CoinProto]:
         """Convert this type to *protobuf schema* Coins type."""
@@ -283,7 +351,7 @@ class Coins:
     def _merge_coin(self, coin: Coin, on_collision: OnCollision = OnCollision.Fail):
         """Merge singular aerial Coin in to this object.
 
-        :param coin: input coin to merge
+        :param coin: input coin to merged.
         :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden
                              if it already contains the denomination, if OnCollision.Fail the merge will fail with
                              an exception.
@@ -300,7 +368,7 @@ class Coins:
 
         if coin.amount == 0:
             if not fail_on_collision and is_already_present:
-                del self._coins[coin.denom]
+                del self._amounts[coin.denom]
 
             # Skipping if amount is zero
             return
@@ -310,23 +378,8 @@ class Coins:
                 f'Attempt to merge a coin with the "{coin.denom}" denomination which already exists in the receiving coins instance'
             )
 
-        # # NOTE(pb): This should be the logical equivalent of the code above:
-        # if coin.denom in self:
-        #    if not fail_on_collision:
-        #        if coin.amount == 0:
-        #            del self._coins[coin.denom]
-        #    else:
-        #        if coin.amount == 0:
-        #            return
-        #
-        #        raise ValueError(f'Attempt to merge a coin with the "{coin.denom}" denomination which already exists in the receiving coins instance')
-        #
-        # if coin.amount == 0:
-        #    return
-        # # NOTE(pb): End of the equivalent code section.
-
         coin.is_valid(raise_ex=True)
-        self._coins[coin.denom] = coin
+        self._amounts[coin.denom] = coin.amount
 
     def _from_coins_list(self, coins: Iterable[Union[Coin, CoinProto]]):
         """Create aerial Coins from List of CoinProto objects."".
@@ -398,7 +451,9 @@ class Coins:
 
     @staticmethod
     def _math_operation(
-        other: Union[str, "Coins", Iterable[Coin], Iterable[CoinProto], Coin, CoinProto],
+        other: Union[
+            str, "Coins", Iterable[Coin], Iterable[CoinProto], Coin, CoinProto
+        ],
         result_inout: "Coins",
     ):
         res = result_inout
@@ -407,18 +462,8 @@ class Coins:
             other = Coins(other)
 
         for c in other:
-            left = res._coins.get(c.denom, Coin(0, c.denom))
-
+            left: Coin = res.get(c.denom, 0)
             yield left, c
-
-            # if left.amount == 0:
-            #    if left.denom in res:
-            #        del res[left.denom]
-            # elif left.amount > 0:
-            #    # res._merge_coin(left, on_collision=OnCollision.Override)
-            #    res._coins[left.denom] = left
-            # else:
-            #    raise RuntimeError(f"Operation yielded negative amount {left}")
             res._merge_coin(left, on_collision=OnCollision.Override)
 
 
@@ -455,7 +500,9 @@ def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
     return False
 
 
-def is_coins_sorted(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]) -> bool:
+def is_coins_sorted(
+    coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]
+) -> bool:
     """Return true if given coins representation is sorted in ascending order of denom.
 
     :param coins: Any type representing coins
