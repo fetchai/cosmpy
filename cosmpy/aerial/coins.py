@@ -43,7 +43,6 @@ class Coin:
 
     def __init__(self, amount: int, denom: str) -> None:
         """Create Coin instance."""
-
         is_denom_valid(denom, raise_ex=True)
         self.amount = amount
         self._denom = denom
@@ -65,7 +64,6 @@ class Coin:
 
         :return: denomination of the coin instance
         """
-
         return self._denom
 
     def to_proto(self) -> CoinProto:
@@ -74,6 +72,8 @@ class Coin:
 
     def is_valid(self, raise_ex: bool = False) -> bool:
         """Validate Coin instance based on Cosmos-SDK requirements.
+
+        :param raise_ex: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
 
         :return: True if the Coin instance conforms to cosmos-sdk requirement for Coin, False otherwise.
         """
@@ -87,7 +87,7 @@ class Coin:
         :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than
                  or equal to  zero). False otherwise.
 
-        :exception ValueError: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
+        :raises ValueError: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
         """
         if self.amount > 0:
             return True
@@ -100,12 +100,16 @@ class Coin:
     def is_denom_valid(self, raise_ex: bool = False) -> bool:
         """Validate denom value based on Cosmos-SDK requirements.
 
+        :param raise_ex: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
+
         :return: True if denom conforms to cosmos-sdk requirement for denomination, False otherwise.
         """
         return is_denom_valid(self.denom, raise_ex)
 
 
 class OnCollision(Enum):
+    """OnCollision Enum."""
+
     Fail = 0
     Override = 1
 
@@ -120,7 +124,6 @@ class Coins:
         ] = None,
     ):
         """Instantiate Coins from any of the supported coin(s) representation types."""
-
         self._amounts: SortedDict[str, int] = SortedDict()
         self.assign(coins)
 
@@ -138,17 +141,21 @@ class Coins:
         return ",".join([repr(c) for c in self])
 
     def __iter__(self):
+        """Get coins iterator."""
         for denom, amount in self._amounts.items():
             # yield Coin(c.amount, c.denom)
             yield Coin(amount, denom)
 
     def __len__(self) -> int:
+        """Get number of coins."""
         return len(self._amounts)
 
     def __getitem__(self, denom: str) -> Coin:
+        """Coins safe getter that prevents modifying of the reference."""
         amount = self._amounts[denom]
         return Coin(amount, denom)
 
+    """
     # NOTE(pb): Intentionally commented-out since its presence in public API could cause potential confusion.
     #           Either the denom value would need to be passed twice (once as key and once in Coin object value, (e.g.
     #           `coins["mydenom] = Coin(1, "mydenom")`), OR we would need to change the type of the input value to
@@ -157,25 +164,31 @@ class Coins:
     #           which returns the `Coin` type, not `int`.
     # def __setitem__(self, key: str, value: Coin):
     #    if value.denom != key:
-    #        raise ValueError(f'Mismatch between the "{key}" key denom and coin denom {value.denom}')
-    #    self._merge_coin(coin=value)
+    #        raise ValueError(f'Mismatch between the "{key}" key denom and coin denom {value.denom}') # noqa: W291
+    #    self._merge_coin(coin=value) # noqa: E800
+    """
 
     def __contains__(self, denom: str) -> bool:
+        """Return true if denom is present."""
         return denom in self._amounts
 
     def __delitem__(self, denom: str):
+        """Remove denom."""
         del self._amounts[denom]
 
     def __eq__(self, right) -> bool:
+        """Compare if two instances of Coins are equal."""
         if not isinstance(right, Coins):
             right = Coins(right)
 
         return self._amounts == right._amounts
 
     def __hash__(self) -> int:
+        """Hash."""
         return hash(self._amounts)
 
     def clear(self):
+        """Delete all coins."""
         self._amounts.clear()
 
     def assign(
@@ -186,10 +199,13 @@ class Coins:
     ):
         """Assign value of this ('self') instance from any of the supported coin(s) representation types.
 
+        :param coins: Input coins in any of supported types.
+
+        :raises TypeError: If coins or coin in a list has unexpected type
+
         This means that the current value of this ('self') instance will be completely replaced with a new value
         carried in the input `coins` parameter.
         """
-
         self.clear()
 
         if coins is None:
@@ -209,7 +225,7 @@ class Coins:
             else:
                 raise TypeError(f"Invalid type {type(coins)}")
         else:
-            raise ValueError(f"Invalid type {type(coins)}")
+            raise TypeError(f"Invalid type {type(coins)}")
 
     def merge_from(
         self,
@@ -221,6 +237,8 @@ class Coins:
         :param coins: Input coins in any of supported types.
         :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden if it already
                              contains the denomination, if OnCollision.Fail the merge will fail with exception.
+
+        :return: new instance containing merged coins
         """
         cs = Coins(coins)
 
@@ -256,50 +274,7 @@ class Coins:
         amount = self._amounts[denom] if denom in self._amounts else default_amount
         return Coin(amount, denom)
 
-    # NOTE(pb): Commented-out in favour of the implementation above.
-    # def get(self, denom: str, default: Union[int, Coin]) -> Coin:
-    #    """Return Coin instance for the given `denom`.
-
-    #    If coin with the given `denom` is not present, the `default` will be returned.
-
-    #    Runtime complexity: `O(log(n))`
-
-    #    This method poses the same risk to validity of the Coins value as the `__getitem__(...)` method,
-    #    since at the moment it returns Coin instance *by-reference* what allows to change the `Coin.amount` value
-    #    from external context and so potentially invalidate the value represented by the `Coins` class/container.
-
-    #    :param denom: denomination of the coin to query.
-    #    :param default: default amount used to construct returned Coin instance if there is *no* coin with
-    #                    the given `denom` present in this coins instance.
-    #    :return: coin instance for the given `denom`, or the `default` value.
-
-    #    Example::
-    #    >>> from cosmpy.aerial.coins import Coin, Coins
-    #    >>> cs = Coins("1aaa,2baa,3caa")
-    #    >>> cs.get("baa", 0)
-    #    2baa
-    #    >>> cs.get("ggg", 0)
-    #    0ggg
-    #    >>> cs.get("ggg", Coin(7, "bla"))
-    #    7bla
-    #    """
-
-    #    #amount = self._amounts[denom] if denom in self._amounts else default_amount
-    #    #return Coin(amount, denom)
-
-    #    if denom in self._amounts:
-    #        return Coin(self._amounts[denom], denom)
-
-    #    if isinstance(default, Coin):
-    #        if denom != default.denom:
-    #            raise ValueError(f'The `denom` {denom} value does not match the Coin.denom "{default.denom}" passed in `default` argument')
-    #        return default
-    #    elif isinstance(default, int):
-    #        return Coin(default, denom)
-
-    #    raise TypeError(f'Unexpected type "{type(default)}" of the `default` argument. Only int or Coin type is allowed.')
-
-    def get_by_index(self, index) -> Coin:
+    def get_by_index(self, index: int) -> Coin:
         """Return Coin instance at given `index`.
 
         If the `index` is out of range, raises :exc:`IndexError`.
@@ -322,9 +297,8 @@ class Coins:
           ...
         IndexError: list index out of range
 
-        :param int index: index of item (default -1)
+        :param index: int index of item (default -1)
         :return: key and value pair
-        :raises IndexError: if `index` out of range
         """
         denom, amount = self._amounts.peekitem(index)
         return Coin(amount, denom)
@@ -355,8 +329,8 @@ class Coins:
         :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden
                              if it already contains the denomination, if OnCollision.Fail the merge will fail with
                              an exception.
+        :raises ValueError: If on_collision has unknown value
         """
-
         if on_collision == OnCollision.Override:
             fail_on_collision = False
         elif on_collision == OnCollision.Fail:
@@ -390,11 +364,10 @@ class Coins:
             self._merge_coin(Coin(int(c.amount), c.denom))
 
     def _from_string(self, value: str):
-        """Parse the coins.
+        """Parse the coins string and merge it to self.
 
         :param value: coins
         :raises RuntimeError: If unable to parse the value
-        :return: coins
         """
         parts = re.split(r",\s*", value)
         for part in parts:
@@ -482,12 +455,13 @@ CoinsParamType = Union[str, Coins, Iterable[Coin], Iterable[CoinProto], Coin, Co
 def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
     """Check if denom value conforms to Cosmos-SDK requirements.
 
+    :param denom: Denom to be checked
     :param raise_ex: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
 
     :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
              False otherwise.
 
-    :exception ValueError: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
+    :raises ValueError: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
     """
     if denom_regex.match(denom) is not None:
         return True
@@ -500,47 +474,12 @@ def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
     return False
 
 
-def is_coins_sorted(
-    coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]
-) -> bool:
-    """Return true if given coins representation is sorted in ascending order of denom.
-
-    :param coins: Any type representing coins
-    :return: bool is_sorted
-    """
-    if coins is None:
-        return False
-
-    if not coins:
-        return True
-
-    if isinstance(coins, str):
-        coins = Coins(coins)
-
-    itr = iter(coins)
-    coin = next(itr, None)
-
-    if coin is None:
-        return True
-
-    last_denom = coin.denom
-    coin = next(itr, None)
-
-    while coin is not None:
-        if last_denom >= coin.denom:
-            return False
-
-        last_denom = coin.denom
-        coin = next(itr, None)
-
-    return True
-
-
 def validate_coins(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]):
     """Return true if given coins representation is valid.
 
+    raises ValueError if there are multiple coins with the same denom
+
     :param coins: Any type representing coins
-    :raises ValueError: If there are multiple coins with the same denom
     :return: bool validity
     """
     if not coins:

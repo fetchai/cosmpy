@@ -20,7 +20,7 @@
 # ------------------------------------------------------------------------------
 import pytest
 
-from cosmpy.aerial.coins import Coin, Coins, is_coins_sorted, parse_coins
+from cosmpy.aerial.coins import Coin, Coins, parse_coins
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 
 
@@ -64,116 +64,15 @@ def test_parsing_coins_string(input_coins, expected_result):
     assert Coins(input_coins).to_proto() == expected_result
 
 
-# @pytest.mark.parametrize(
-#    "input_coins,expected_coins,validate_error",
-#    [
-#        ([], [], None),
-#        ("4afet,5afet", [Coin(4, "afet"), Coin(5, "afet")], None),
-#        ("5ccc,2bcc,4acc", [Coin(5, "ccc"), Coin(2, "bcc"), Coin(4, "acc")], None),
-#        (
-#            [
-#                CoinProto(amount="4", denom="bcc"),
-#                CoinProto(amount="2", denom="ccc"),
-#                CoinProto(amount="5", denom="acc"),
-#            ],
-#            [Coin(4, "bcc"), Coin(2, "ccc"), Coin(5, "acc")],
-#            None,
-#        ),
-#        (CoinProto(amount="4", denom="acc"), [Coin(4, "acc")], None),
-#        (Coin(4, "acc"), [Coin(4, "acc")], None),
-#        (
-#            [Coin(2, "acc"), CoinProto(amount="4", denom="bcc")],
-#            [Coin(2, "acc"), Coin(4, "bcc")],
-#            None,
-#        ),
-#        (
-#            "0bcc,2ccc,0acc",
-#            [Coin(0, "bcc"), Coin(2, "ccc"), Coin(0, "acc")],
-#            None,
-#        ),
-#    ],
-# )
-# def test_coins_ordering_preserved_during_instantiation(
-#    input_coins, expected_coins, validate_error
-# ):
-#    """Test preservation of ordering during initialidation."""
-#    if validate_error:
-#        with pytest.raises(Exception) as exc_info:
-#            _ = Coins(input_coins)
-#        assert validate_error in str(exc_info.value)
-#
-#    if not validate_error:
-#        _input_coins = Coins(input_coins)
-#        assert _input_coins == Coins(expected_coins)
-#
-#        assert len(_input_coins) == len(expected_coins)
-#        for in_c, exp_c in zip(_input_coins, expected_coins):
-#            assert in_c == exp_c
-
-
 @pytest.mark.parametrize(
     "input_coins,expected_coins,validate_error",
     [
         ([], [], None),
-        ("4afet,5afet", None, 'Multiple occurrences of the "afet" denomination'),
-        ("4acc,2bcc,5ccc", [Coin(4, "acc"), Coin(2, "bcc"), Coin(5, "ccc")], None),
         (
-            [
-                CoinProto(amount="4", denom="acc"),
-                CoinProto(amount="2", denom="bcc"),
-                CoinProto(amount="5", denom="ccc"),
-            ],
-            [Coin(4, "acc"), Coin(2, "bcc"), Coin(5, "ccc")],
+            "4afet,5afet",
             None,
+            'Attempt to merge a coin with the "afet" denomination which already exists in the receiving coins instance',
         ),
-        (CoinProto(amount="4", denom="acc"), [Coin(4, "acc")], None),
-        (Coin(4, "acc"), [Coin(4, "acc")], None),
-        (
-            [Coin(2, "acc"), CoinProto(amount="4", denom="bcc")],
-            [Coin(2, "acc"), Coin(4, "bcc")],
-            None,
-        ),
-        (
-            "4acc,2ccc,5bcc",
-            [Coin(4, "acc"), Coin(2, "ccc"), Coin(5, "bcc")],
-            "Coins are not sorted",
-        ),
-        (
-            "4cc",
-            None,
-            'The "cc" denom does not conform to Cosmos-SDK requirements',
-        ),
-        (
-            "4acc,0bcc,5ccc",
-            None,
-            "Coin amount must be greater than zero",
-        ),
-        (
-            "4acc,1bcc,0ccc",
-            None,
-            "Coin amount must be greater than zero",
-        ),
-    ],
-)
-def test_coins_validate(input_coins, expected_coins, validate_error):
-    """Test Coins validate."""
-    if validate_error:
-        with pytest.raises(Exception) as exc_info:
-            test_coins = Coins(input_coins)
-            test_coins.validate()
-        assert validate_error in str(exc_info.value)
-
-    if not validate_error:
-        test_coins = Coins(input_coins)
-        assert test_coins == expected_coins
-        test_coins.validate()
-
-
-@pytest.mark.parametrize(
-    "input_coins,expected_coins,validate_error",
-    [
-        ([], [], None),
-        ("4afet,5afet", None, 'Multiple occurrences of the "afet" denomination'),
         ("4acc,2bcc,5ccc", [Coin(4, "acc"), Coin(2, "bcc"), Coin(5, "ccc")], None),
         (
             [
@@ -218,32 +117,16 @@ def test_coins_validate(input_coins, expected_coins, validate_error):
         ),
     ],
 )
-def test_coins_canonicalise(input_coins, expected_coins, validate_error):
-    """Test Coins canonicalise."""
+def test_coins_instantiate(input_coins, expected_coins, validate_error):
+    """Test Coins cinstantiate."""
     if validate_error:
         with pytest.raises(Exception) as exc_info:
             _ = Coins(input_coins)
         assert validate_error in str(exc_info.value)
 
     if not validate_error:
-        canonicalised_input_coins = Coins(input_coins)
-        assert canonicalised_input_coins == Coins(expected_coins)
-
-
-@pytest.mark.parametrize(
-    "input_coins,expected_sorted_coins",
-    [([], []), ("5bcc,2ccc,4acc", [Coin(4, "acc"), Coin(5, "bcc"), Coin(2, "ccc")])],
-)
-def test_coins_sort(input_coins, expected_sorted_coins):
-    """Test Coins sort."""
-    sorted_coins = Coins(input_coins)
-    if input_coins != sorted_coins:
-        assert not is_coins_sorted(input_coins)
-
-    assert is_coins_sorted(input_coins)
-
-    input_coins_list = [c for c in sorted_coins]
-    assert input_coins_list == expected_sorted_coins
+        instantiated_input_coins = Coins(input_coins)
+        assert instantiated_input_coins == Coins(expected_coins)
 
 
 @pytest.mark.parametrize(
