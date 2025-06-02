@@ -286,7 +286,7 @@ def merge_from(coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin,
                on_collision: OnCollision = OnCollision.Fail) -> "Coins"
 ```
 
-Merge passed in coins with this ('self') coins instance.
+Merge passed in coins in to this ('self') coins instance.
 
 **Arguments**:
 
@@ -296,7 +296,7 @@ contains the denomination, if OnCollision.Fail the merge will fail with exceptio
 
 **Returns**:
 
-new instance containing merged coins
+The `self` instance containing merged coins
 
 <a id="cosmpy.aerial.coins.Coins.get"></a>
 
@@ -452,6 +452,34 @@ Parse the coins.
 
 List of CoinProto objects
 
+<a id="cosmpy.aerial.coins.from_string"></a>
+
+#### from`_`string
+
+```python
+def from_string(value: str)
+```
+
+Parse the coins string and yields individual coins as Coin instances in order of their definition in input `value`.
+
+**Arguments**:
+
+- `value`: coins
+
+**Raises**:
+
+- `RuntimeError`: If unable to parse the value
+
+**Returns**:
+
+Coin objects one by one in the order they are specified in the input `value` string, where validation of
+the yielded Coin instance is intentionally *NOT* executed => yielded coin instance might *NOT* be valid
+when judged based on cosmos-sdk requirements.
+This is by-design to enable just basic parsing focused exclusively on the format of the coins string value.
+This leaves a degree of freedom for a caller on how the resulting/parsed coins should be used/consumed,
+rather than forcing any checks/validation for individual coins instances, or coins collection as a whole,
+here.
+
 <a id="cosmpy.aerial.coins.is_denom_valid"></a>
 
 #### is`_`denom`_`valid
@@ -475,6 +503,25 @@ Check if denom value conforms to Cosmos-SDK requirements.
 
 True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
 False otherwise.
+
+<a id="cosmpy.aerial.coins.is_coins_sorted"></a>
+
+#### is`_`coins`_`sorted
+
+```python
+def is_coins_sorted(
+        coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]) -> bool
+```
+
+Return true if given coins representation is sorted in ascending order of denom.
+
+**Arguments**:
+
+- `coins`: Any type representing coins
+
+**Returns**:
+
+bool is_sorted
 
 <a id="cosmpy.aerial.coins.validate_coins"></a>
 

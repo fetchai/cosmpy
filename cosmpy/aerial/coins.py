@@ -232,13 +232,13 @@ class Coins:
         coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto],
         on_collision: OnCollision = OnCollision.Fail,
     ) -> "Coins":
-        """Merge passed in coins with this ('self') coins instance.
+        """Merge passed in coins in to this ('self') coins instance.
 
         :param coins: Input coins in any of supported types.
         :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden if it already
                              contains the denomination, if OnCollision.Fail the merge will fail with exception.
 
-        :return: new instance containing merged coins
+        :return: The `self` instance containing merged coins
         """
         cs = Coins(coins)
 
@@ -329,7 +329,8 @@ class Coins:
         :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden
                              if it already contains the denomination, if OnCollision.Fail the merge will fail with
                              an exception.
-        :raises ValueError: If on_collision has unknown value
+        :raises ValueError: If there is denom collision and the `on_collision` is set to `OnCollision.Fail`,
+                            or if the `on_collision` has unknown enum value.
         """
         if on_collision == OnCollision.Override:
             fail_on_collision = False
@@ -367,20 +368,9 @@ class Coins:
         """Parse the coins string and merge it to self.
 
         :param value: coins
-        :raises RuntimeError: If unable to parse the value
         """
-        parts = re.split(r",\s*", value)
-        for part in parts:
-            part = part.strip()
-            if part == "":
-                continue
-
-            match = re.match(r"^(\d+)(.+)$", part)
-            if match is None:
-                raise RuntimeError(f"Unable to parse value {part}")
-
-            amount, denom = match.groups()
-            self._merge_coin(Coin(int(amount), denom))
+        for coin in from_string(value):
+            self._merge_coin(coin)
 
     def __add__(self, other):
         """Perform algebraic vector addition of two coin lists."""
@@ -452,6 +442,35 @@ def parse_coins(value: str) -> List[CoinProto]:
 CoinsParamType = Union[str, Coins, Iterable[Coin], Iterable[CoinProto], Coin, CoinProto]
 
 
+def from_string(value: str):
+    """Parse the coins string and yields individual coins as Coin instances in order of their definition in input `value`.
+
+    :param value: coins
+
+    :yields: Coin objects one by one in the order they are specified in the input `value` string, where validation of
+             the yielded Coin instance is intentionally *NOT* executed => yielded coin instance might *NOT* be valid
+             when judged based on cosmos-sdk requirements.
+             This is by-design to enable just basic parsing focused exclusively on the format of the coins string value.
+             This leaves a degree of freedom for a caller on how the resulting/parsed coins should be used/consumed,
+             rather than forcing any checks/validation for individual coins instances, or coins collection as a whole,
+             here.
+
+    :raises RuntimeError: If unable to parse the value
+    """
+    parts = re.split(r",\s*", value)
+    for part in parts:
+        part = part.strip()
+        if part == "":
+            continue
+
+        match = re.match(r"^(\d+)(.+)$", part)
+        if match is None:
+            raise RuntimeError(f"Unable to parse value {part}")
+
+        amount, denom = match.groups()
+        yield Coin(int(amount), denom)
+
+
 def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
     """Check if denom value conforms to Cosmos-SDK requirements.
 
@@ -472,6 +491,42 @@ def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
         )
 
     return False
+
+
+def is_coins_sorted(
+    coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]
+) -> bool:
+    """Return true if given coins representation is sorted in ascending order of denom.
+
+    :param coins: Any type representing coins
+    :return: bool is_sorted
+    """
+    if coins is None:
+        return False
+
+    if not coins:
+        return True
+
+    if isinstance(coins, str):
+        coins = from_string(coins)
+
+    itr = iter(coins)
+    coin = next(itr, None)
+
+    if coin is None:
+        return True
+
+    last_denom = coin.denom
+    coin = next(itr, None)
+
+    while coin is not None:
+        if last_denom >= coin.denom:
+            return False
+
+        last_denom = coin.denom
+        coin = next(itr, None)
+
+    return True
 
 
 def validate_coins(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]):
