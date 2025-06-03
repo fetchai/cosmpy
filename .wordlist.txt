@@ -331,3 +331,4 @@ delitem
 eq
 exc
 iterable
+denoms
