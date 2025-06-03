@@ -20,7 +20,7 @@
 # ------------------------------------------------------------------------------
 import pytest
 
-from cosmpy.aerial.coins import Coin, Coins, parse_coins
+from cosmpy.aerial.coins import Coin, Coins, OnCollision, parse_coins
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 
 
@@ -118,7 +118,7 @@ def test_parsing_coins_string(input_coins, expected_result):
     ],
 )
 def test_coins_instantiate(input_coins, expected_coins, validate_error):
-    """Test Coins cinstantiate."""
+    """Test Coins instantiate."""
     if validate_error:
         with pytest.raises(Exception) as exc_info:
             _ = Coins(input_coins)
@@ -175,3 +175,112 @@ def test_subtract(coins_a, coins_b, expected_coins_res, error):
         expected_coins_res = Coins(expected_coins_res)
 
         assert coins_res == expected_coins_res
+
+
+@pytest.mark.parametrize(
+    "coins_a,coins_b,expected_coins_res,error",
+    [
+        ("", "1ccc", "1ccc", None),
+        (None, "3gcc,1ccc", "1ccc,3gcc", None),
+        ("1ccc", "", "1ccc", None),
+        ("3gcc,1ccc", None, "1ccc,3gcc", None),
+        (
+            "4acc,2ccc",
+            "2ccc",
+            None,
+            'Attempt to merge a coin with the "ccc" denomination which already exists in the receiving coins instance',
+        ),
+        ("4acc,2ccc", "1bcc", "4acc,1bcc,2ccc", None),
+        (
+            "4acc,2ccc,5ddd",
+            "1ccc",
+            None,
+            'Attempt to merge a coin with the "ccc" denomination which already exists in the receiving coins instance',
+        ),
+        ("4acc,2ccc,5ddd", "1edd", "4acc,2ccc,5ddd,1edd", None),
+    ],
+)
+def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, error):
+    """Test Coins merge with fail on collision."""
+    coins_a1 = Coins(coins_a)
+    coins_a2 = Coins(coins_a)
+    coins_a3 = Coins(coins_a)
+    coins_a4 = Coins(coins_a)
+    coins_a5 = Coins(coins_a)
+
+    if error:
+        with pytest.raises(Exception) as exc_info:
+            coins_a1.merge_from(coins_b)
+        assert error in str(exc_info.value)
+
+        with pytest.raises(Exception) as exc_info:
+            coins_a2.merge_from(coins_b, on_collision=OnCollision.Fail)
+        assert error in str(exc_info.value)
+
+        with pytest.raises(Exception) as exc_info:
+            coins_a3 <<= coins_b
+        assert error in str(exc_info.value)
+
+        with pytest.raises(Exception) as exc_info:
+            coins_a4 << coins_b
+        assert error in str(exc_info.value)
+
+        with pytest.raises(Exception) as exc_info:
+            Coins(coins_b) >> coins_a5
+        assert error in str(exc_info.value)
+    else:
+        expected_coins_res = Coins(expected_coins_res)
+
+        coins_a1.merge_from(coins_b)
+        assert coins_a1 == expected_coins_res
+
+        coins_a2.merge_from(coins_b, on_collision=OnCollision.Fail)
+        assert coins_a2 == expected_coins_res
+
+        coins_a3 <<= coins_b
+        assert coins_a3 == expected_coins_res
+
+        coins_a4_merged = coins_a4 << coins_b
+        assert coins_a4_merged == expected_coins_res
+
+
+@pytest.mark.parametrize(
+    "coins_a,coins_b,expected_coins_res,error",
+    [
+        ("", "1ccc", "1ccc", None),
+        (None, "3gcc,1ccc", "1ccc,3gcc", None),
+        ("1ccc", "", "1ccc", None),
+        ("3gcc,1ccc", None, "1ccc,3gcc", None),
+        ("4acc,2ccc", "3gcc,1ccc", "4acc,1ccc,3gcc", None),
+        ("4acc,2ccc", "1ccc", "4acc,1ccc", None),
+        ("4acc,2ccc,5ddd,7ecc", "1acc,3ccc,6ddd", "1acc,3ccc,6ddd,7ecc", None),
+        ("4acc,2ccc,5ddd", "1acc,3ccc,6ddd,7ecc", "1acc,3ccc,6ddd,7ecc", None),
+        ("4acc,2ccc,5ddd", "1acc,7ecc", "1acc,2ccc,5ddd,7ecc", None),
+    ],
+)
+def test_merge_coins_override_on_collision(coins_a, coins_b, expected_coins_res, error):
+    """Test Coins merge with override on collision."""
+    expected_coins_res = Coins(expected_coins_res)
+
+    coins_a1 = Coins(coins_a)
+
+    coins_a1.merge_from(coins_b, on_collision=OnCollision.Override)
+    assert coins_a1 == expected_coins_res
+
+
+@pytest.mark.parametrize(
+    "coins_a",
+    [
+        (None),
+        (""),
+        ("1ccc"),
+        ("4acc,2ccc,5ddd,7ecc"),
+    ],
+)
+def test_clear(coins_a):
+    """Test Coins clear."""
+    coins = Coins(coins_a)
+
+    x = coins.clear()
+    assert len(coins) == 0
+    assert x == coins

@@ -59,8 +59,8 @@ class Coin:
         The denom property setter is *NOT* defined *by-design* in order to avoid misalignment/inconsistencies
         later on in the `Coins` collection class.
         If the denom setter was enabled, then it would allow changing denom value externally = from without knowledge
-        of the `Coins` collection class, since the `Coin` is reference type. We want to avoid passing the Coin instance
-        always by-value (by-copy).
+        of the `Coins` collection class, since the `Coin` is a reference type. We want to avoid passing the Coin
+        instance always by-value (by-copy).
 
         :return: denomination of the coin instance
         """
@@ -107,6 +107,11 @@ class Coin:
         return is_denom_valid(self.denom, raise_ex)
 
 
+CoinsParamType = Union[
+    str, "Coins", Iterable[Coin], Iterable[CoinProto], Coin, CoinProto
+]
+
+
 class OnCollision(Enum):
     """OnCollision Enum."""
 
@@ -119,9 +124,7 @@ class Coins:
 
     def __init__(
         self,
-        coins: Optional[
-            Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto]
-        ] = None,
+        coins: Optional[CoinsParamType] = None,
     ):
         """Instantiate Coins from any of the supported coin(s) representation types."""
         self._amounts: SortedDict[str, int] = SortedDict()
@@ -136,37 +139,30 @@ class Coins:
         from cosmpy.aerial.client.coins import Coin, Coins
 
         coins = Coins([Coin(1,"afet"), Coin(2,"uatom"), Coin(3,"nanomobx")])
-        assert str(coins) == "1afet,2uatom,3nanomobx"
+        assert repr(coins) == "1afet,2uatom,3nanomobx"
+        assert str(coins) == repr(coins)
         """
         return ",".join([repr(c) for c in self])
 
-    def __iter__(self):
-        """Get coins iterator."""
-        for denom, amount in self._amounts.items():
-            # yield Coin(c.amount, c.denom)
-            yield Coin(amount, denom)
+    def __hash__(self) -> int:
+        """Hash."""
+        return hash(self._amounts)
 
     def __len__(self) -> int:
         """Get number of coins."""
         return len(self._amounts)
 
+    def __eq__(self, right) -> bool:
+        """Compare if two instances of Coins are equal."""
+        if not isinstance(right, Coins):
+            right = Coins(right)
+
+        return self._amounts == right._amounts
+
     def __getitem__(self, denom: str) -> Coin:
         """Coins safe getter that prevents modifying of the reference."""
         amount = self._amounts[denom]
         return Coin(amount, denom)
-
-    """
-    # NOTE(pb): Intentionally commented-out since its presence in public API could cause potential confusion.
-    #           Either the denom value would need to be passed twice (once as key and once in Coin object value, (e.g.
-    #           `coins["mydenom] = Coin(1, "mydenom")`), OR we would need to change the type of the input value to
-    #           `int` (`__setitem__(self, key: str, value: int):`, for example `coins["mydenom] = 1`). However, that
-    #           would make this method *not* symmetrical with the `__getitem__(self, key: str) -> Coin` counterpart,
-    #           which returns the `Coin` type, not `int`.
-    # def __setitem__(self, key: str, value: Coin):
-    #    if value.denom != key:
-    #        raise ValueError(f'Mismatch between the "{key}" key denom and coin denom {value.denom}') # noqa: W291
-    #    self._merge_coin(coin=value) # noqa: E800
-    """
 
     def __contains__(self, denom: str) -> bool:
         """Return true if denom is present."""
@@ -176,40 +172,119 @@ class Coins:
         """Remove denom."""
         del self._amounts[denom]
 
-    def __eq__(self, right) -> bool:
-        """Compare if two instances of Coins are equal."""
-        if not isinstance(right, Coins):
-            right = Coins(right)
+    def __iter__(self):
+        """Get coins iterator."""
+        for denom, amount in self._amounts.items():
+            yield Coin(amount, denom)
 
-        return self._amounts == right._amounts
+    def __add__(self, other):
+        """Perform algebraic vector addition of two coin lists."""
+        result = Coins(self)
+        for (left, right) in self._math_operation(other, result_inout=result):
+            left.amount += right.amount
 
-    def __hash__(self) -> int:
-        """Hash."""
-        return hash(self._amounts)
+        return result
 
-    def clear(self):
+    def __sub__(self, other):
+        """Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
+        result = Coins(self)
+        for (left, right) in self._math_operation(other, result_inout=result):
+            if left.amount < right.amount:
+                raise RuntimeError(
+                    f"Subtracting {left} - {right} would result to negative value"
+                )
+            left.amount -= right.amount
+
+        return result
+
+    def __iadd__(self, other):
+        """Perform *in-place* algebraic vector subtraction of two coin lists."""
+        result = self
+        for (left, right) in self._math_operation(other, result_inout=result):
+            left.amount += right.amount
+
+        return result
+
+    def __isub__(self, other):
+        """Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
+        result = self
+        for (left, right) in self._math_operation(other, result_inout=result):
+            if left.amount < right.amount:
+                raise RuntimeError(
+                    f"Subtracting {left} - {right} would result to negative value"
+                )
+            left.amount -= right.amount
+
+        return result
+
+    def __ilshift__(self, other) -> "Coins":
+        """Perform *in-place* merging of the `other` coins in to this (self) instance.
+
+        *Fails* on denom collision.
+
+        :param other: Coins to merge.
+
+        :return: self
+        """
+        self.merge_from(other, on_collision=OnCollision.Fail)
+        return self
+
+    def __lshift__(self, other) -> "Coins":
+        """Perform merging of the `other` coins *with* this (self) instance returning the result, leaving this (self) instance *unmodified*.
+
+        *Fails* on denom collision.
+
+        :param other: Coins to merge.
+
+        :return: new Coins instance with the result of the merge operation
+        """
+        result = Coins(self)
+        return result.merge_from(other, on_collision=OnCollision.Fail)
+
+    def __rshift__(self, other) -> "Coins":
+        """Perform *in-place* merging of coins from this (self) instance (the left operand) in to the `other` coins \
+        instance (the right operand), leaving the `other` instance *unmodified*.
+
+        *Fails* on denom collision.
+
+        :param other: Coins instance to merge in to.
+
+        :return: new Coins instance with the result of the merge operation
+        """
+        result = Coins(other)
+        return result.merge_from(self, on_collision=OnCollision.Fail)
+
+    def clear(self) -> "Coins":
         """Delete all coins."""
         self._amounts.clear()
+        return self
+
+    def denoms(self) -> Iterable[str]:
+        """Return denominations of the coins in this(self) instance in ordered ascending alphabetically.
+
+        :return: iterable of denominations
+        """
+        return self._amounts.keys()
 
     def assign(
         self,
-        coins: Optional[
-            Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto]
-        ] = None,
-    ):
+        coins: Optional[CoinsParamType] = None,
+    ) -> "Coins":
         """Assign value of this ('self') instance from any of the supported coin(s) representation types.
+
+        This means that the current value of this ('self') instance will be completely replaced with a new value
+        carried in the input `coins` parameter.
 
         :param coins: Input coins in any of supported types.
 
         :raises TypeError: If coins or coin in a list has unexpected type
 
-        This means that the current value of this ('self') instance will be completely replaced with a new value
-        carried in the input `coins` parameter.
+        :return: self
         """
         self.clear()
 
         if coins is None:
-            return
+            return self
 
         if isinstance(coins, str):
             self._from_string(coins)
@@ -227,9 +302,11 @@ class Coins:
         else:
             raise TypeError(f"Invalid type {type(coins)}")
 
+        return self
+
     def merge_from(
         self,
-        coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto],
+        coins: CoinsParamType,
         on_collision: OnCollision = OnCollision.Fail,
     ) -> "Coins":
         """Merge passed in coins in to this ('self') coins instance.
@@ -244,6 +321,22 @@ class Coins:
 
         for c in cs:
             self._merge_coin(c, on_collision)
+
+        return self
+
+    def delete(self, denominations: Iterable[str]) -> "Coins":
+        """Delete coins from this ('self') instance for each denom listed in `denominations` argument.
+
+        :param denominations: collection of denominations to drop
+        :return: deleted Coins
+        """
+        removed_coins = Coins()
+        for denom in denominations:
+            if denom in self:
+                removed_coins.merge_from(self[denom])
+
+        for c in removed_coins:
+            del self[c.denom]
 
         return self
 
@@ -372,46 +465,6 @@ class Coins:
         for coin in from_string(value):
             self._merge_coin(coin)
 
-    def __add__(self, other):
-        """Perform algebraic vector addition of two coin lists."""
-        result = Coins(self)
-        for (left, right) in self._math_operation(other, result_inout=result):
-            left.amount += right.amount
-
-        return result
-
-    def __sub__(self, other):
-        """Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
-        result = Coins(self)
-        for (left, right) in self._math_operation(other, result_inout=result):
-            if left.amount < right.amount:
-                raise RuntimeError(
-                    f"Subtracting {left} - {right} would result to negative value"
-                )
-            left.amount -= right.amount
-
-        return result
-
-    def __iadd__(self, other):
-        """Perform *in-place* algebraic vector subtraction of two coin lists."""
-        result = self
-        for (left, right) in self._math_operation(other, result_inout=result):
-            left.amount += right.amount
-
-        return result
-
-    def __isub__(self, other):
-        """Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
-        result = self
-        for (left, right) in self._math_operation(other, result_inout=result):
-            if left.amount < right.amount:
-                raise RuntimeError(
-                    f"Subtracting {left} - {right} would result to negative value"
-                )
-            left.amount -= right.amount
-
-        return result
-
     @staticmethod
     def _math_operation(
         other: Union[
@@ -437,9 +490,6 @@ def parse_coins(value: str) -> List[CoinProto]:
     :return: List of CoinProto objects
     """
     return Coins(value).to_proto()
-
-
-CoinsParamType = Union[str, Coins, Iterable[Coin], Iterable[CoinProto], Coin, CoinProto]
 
 
 def from_string(value: str):
@@ -541,7 +591,7 @@ def validate_coins(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]
         return
 
     if isinstance(coins, Coins):
-        # Only thing which can be possibly wrong at this point is amount value:
+        # The only thing which can be possibly wrong at this point is amount value:
         for coin in coins:
             coin.is_amount_valid(raise_ex=True)
     else:

@@ -49,8 +49,8 @@ Return denom of coin.
 The denom property setter is *NOT* defined *by-design* in order to avoid misalignment/inconsistencies
 later on in the `Coins` collection class.
 If the denom setter was enabled, then it would allow changing denom value externally = from without knowledge
-of the `Coins` collection class, since the `Coin` is reference type. We want to avoid passing the Coin instance
-always by-value (by-copy).
+of the `Coins` collection class, since the `Coin` is a reference type. We want to avoid passing the Coin
+instance always by-value (by-copy).
 
 **Returns**:
 
@@ -150,8 +150,7 @@ Coins.
 #### `__`init`__`
 
 ```python
-def __init__(coins: Optional[Union[str, "Coins", List[Coin], List[CoinProto],
-                                   Coin, CoinProto]] = None)
+def __init__(coins: Optional[CoinsParamType] = None)
 ```
 
 Instantiate Coins from any of the supported coin(s) representation types.
@@ -173,17 +172,18 @@ Example::
 from cosmpy.aerial.client.coins import Coin, Coins
 
 coins = Coins([Coin(1,"afet"), Coin(2,"uatom"), Coin(3,"nanomobx")])
-assert str(coins) == "1afet,2uatom,3nanomobx"
+assert repr(coins) == "1afet,2uatom,3nanomobx"
+assert str(coins) == repr(coins)
 
-<a id="cosmpy.aerial.coins.Coins.__iter__"></a>
+<a id="cosmpy.aerial.coins.Coins.__hash__"></a>
 
-#### `__`iter`__`
+#### `__`hash`__`
 
 ```python
-def __iter__()
+def __hash__() -> int
 ```
 
-Get coins iterator.
+Hash.
 
 <a id="cosmpy.aerial.coins.Coins.__len__"></a>
 
@@ -194,6 +194,16 @@ def __len__() -> int
 ```
 
 Get number of coins.
+
+<a id="cosmpy.aerial.coins.Coins.__eq__"></a>
+
+#### `__`eq`__`
+
+```python
+def __eq__(right) -> bool
+```
+
+Compare if two instances of Coins are equal.
 
 <a id="cosmpy.aerial.coins.Coins.__getitem__"></a>
 
@@ -225,46 +235,154 @@ def __delitem__(denom: str)
 
 Remove denom.
 
-<a id="cosmpy.aerial.coins.Coins.__eq__"></a>
+<a id="cosmpy.aerial.coins.Coins.__iter__"></a>
 
-#### `__`eq`__`
-
-```python
-def __eq__(right) -> bool
-```
-
-Compare if two instances of Coins are equal.
-
-<a id="cosmpy.aerial.coins.Coins.__hash__"></a>
-
-#### `__`hash`__`
+#### `__`iter`__`
 
 ```python
-def __hash__() -> int
+def __iter__()
 ```
 
-Hash.
+Get coins iterator.
+
+<a id="cosmpy.aerial.coins.Coins.__add__"></a>
+
+#### `__`add`__`
+
+```python
+def __add__(other)
+```
+
+Perform algebraic vector addition of two coin lists.
+
+<a id="cosmpy.aerial.coins.Coins.__sub__"></a>
+
+#### `__`sub`__`
+
+```python
+def __sub__(other)
+```
+
+Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value.
+
+<a id="cosmpy.aerial.coins.Coins.__iadd__"></a>
+
+#### `__`iadd`__`
+
+```python
+def __iadd__(other)
+```
+
+Perform *in-place* algebraic vector subtraction of two coin lists.
+
+<a id="cosmpy.aerial.coins.Coins.__isub__"></a>
+
+#### `__`isub`__`
+
+```python
+def __isub__(other)
+```
+
+Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value.
+
+<a id="cosmpy.aerial.coins.Coins.__ilshift__"></a>
+
+#### `__`ilshift`__`
+
+```python
+def __ilshift__(other) -> "Coins"
+```
+
+Perform *in-place* merging of the `other` coins in to this (self) instance.
+
+*Fails* on denom collision.
+
+**Arguments**:
+
+- `other`: Coins to merge.
+
+**Returns**:
+
+self
+
+<a id="cosmpy.aerial.coins.Coins.__lshift__"></a>
+
+#### `__`lshift`__`
+
+```python
+def __lshift__(other) -> "Coins"
+```
+
+Perform merging of the `other` coins *with* this (self) instance returning the result, leaving this (self) instance *unmodified*.
+
+*Fails* on denom collision.
+
+**Arguments**:
+
+- `other`: Coins to merge.
+
+**Returns**:
+
+new Coins instance with the result of the merge operation
+
+<a id="cosmpy.aerial.coins.Coins.__rshift__"></a>
+
+#### `__`rshift`__`
+
+```python
+def __rshift__(other) -> "Coins"
+```
+
+Perform *in-place* merging of coins from this (self) instance (the left operand) in to the `other` coins \
+
+instance (the right operand), leaving the `other` instance *unmodified*.
+
+*Fails* on denom collision.
+
+**Arguments**:
+
+- `other`: Coins instance to merge in to.
+
+**Returns**:
+
+new Coins instance with the result of the merge operation
 
 <a id="cosmpy.aerial.coins.Coins.clear"></a>
 
 #### clear
 
 ```python
-def clear()
+def clear() -> "Coins"
 ```
 
 Delete all coins.
+
+<a id="cosmpy.aerial.coins.Coins.denoms"></a>
+
+#### denoms
+
+```python
+def denoms() -> Iterable[str]
+```
+
+Return denominations of the coins in this(self) instance in ordered ascending alphabetically.
+
+**Returns**:
+
+iterable of denominations
 
 <a id="cosmpy.aerial.coins.Coins.assign"></a>
 
 #### assign
 
 ```python
-def assign(coins: Optional[Union[str, "Coins", List[Coin], List[CoinProto],
-                                 Coin, CoinProto]] = None)
+def assign(coins: Optional[CoinsParamType] = None) -> "Coins"
 ```
 
 Assign value of this ('self') instance from any of the supported coin(s) representation types.
+
+This means that the current value of this ('self') instance will be completely replaced with a new value
+carried in the input `coins` parameter.
 
 **Arguments**:
 
@@ -273,16 +391,17 @@ Assign value of this ('self') instance from any of the supported coin(s) represe
 **Raises**:
 
 - `TypeError`: If coins or coin in a list has unexpected type
-This means that the current value of this ('self') instance will be completely replaced with a new value
-carried in the input `coins` parameter.
+
+**Returns**:
+
+self
 
 <a id="cosmpy.aerial.coins.Coins.merge_from"></a>
 
 #### merge`_`from
 
 ```python
-def merge_from(coins: Union[str, "Coins", List[Coin], List[CoinProto], Coin,
-                            CoinProto],
+def merge_from(coins: CoinsParamType,
                on_collision: OnCollision = OnCollision.Fail) -> "Coins"
 ```
 
@@ -297,6 +416,24 @@ contains the denomination, if OnCollision.Fail the merge will fail with exceptio
 **Returns**:
 
 The `self` instance containing merged coins
+
+<a id="cosmpy.aerial.coins.Coins.delete"></a>
+
+#### delete
+
+```python
+def delete(denominations: Iterable[str]) -> "Coins"
+```
+
+Delete coins from this ('self') instance for each denom listed in `denominations` argument.
+
+**Arguments**:
+
+- `denominations`: collection of denominations to drop
+
+**Returns**:
+
+deleted Coins
 
 <a id="cosmpy.aerial.coins.Coins.get"></a>
 
@@ -393,46 +530,6 @@ Validate whether current value conforms to canonical form for list of coins defi
 
 Raises ValueError exception *IF* denominations are not unique, or if validation of individual coins raises an
 exception.
-
-<a id="cosmpy.aerial.coins.Coins.__add__"></a>
-
-#### `__`add`__`
-
-```python
-def __add__(other)
-```
-
-Perform algebraic vector addition of two coin lists.
-
-<a id="cosmpy.aerial.coins.Coins.__sub__"></a>
-
-#### `__`sub`__`
-
-```python
-def __sub__(other)
-```
-
-Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value.
-
-<a id="cosmpy.aerial.coins.Coins.__iadd__"></a>
-
-#### `__`iadd`__`
-
-```python
-def __iadd__(other)
-```
-
-Perform *in-place* algebraic vector subtraction of two coin lists.
-
-<a id="cosmpy.aerial.coins.Coins.__isub__"></a>
-
-#### `__`isub`__`
-
-```python
-def __isub__(other)
-```
-
-Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value.
 
 <a id="cosmpy.aerial.coins.parse_coins"></a>
 
