@@ -285,68 +285,6 @@ def __isub__(other)
 
 Perform *in-place* algebraic vector subtraction of two coin lists, ensuring no coin has negative value.
 
-<a id="cosmpy.aerial.coins.Coins.__ilshift__"></a>
-
-#### `__`ilshift`__`
-
-```python
-def __ilshift__(other) -> "Coins"
-```
-
-Perform *in-place* merging of the `other` coins in to this (self) instance.
-
-*Fails* on denom collision.
-
-**Arguments**:
-
-- `other`: Coins to merge.
-
-**Returns**:
-
-self
-
-<a id="cosmpy.aerial.coins.Coins.__lshift__"></a>
-
-#### `__`lshift`__`
-
-```python
-def __lshift__(other) -> "Coins"
-```
-
-Perform merging of the `other` coins *with* this (self) instance returning the result, leaving this (self) instance *unmodified*.
-
-*Fails* on denom collision.
-
-**Arguments**:
-
-- `other`: Coins to merge.
-
-**Returns**:
-
-new Coins instance with the result of the merge operation
-
-<a id="cosmpy.aerial.coins.Coins.__rshift__"></a>
-
-#### `__`rshift`__`
-
-```python
-def __rshift__(other) -> "Coins"
-```
-
-Perform *in-place* merging of coins from this (self) instance (the left operand) in to the `other` coins \
-
-instance (the right operand), leaving the `other` instance *unmodified*.
-
-*Fails* on denom collision.
-
-**Arguments**:
-
-- `other`: Coins instance to merge in to.
-
-**Returns**:
-
-new Coins instance with the result of the merge operation
-
 <a id="cosmpy.aerial.coins.Coins.clear"></a>
 
 #### clear
@@ -517,19 +455,6 @@ def to_proto() -> List[CoinProto]
 ```
 
 Convert this type to *protobuf schema* Coins type.
-
-<a id="cosmpy.aerial.coins.Coins.validate"></a>
-
-#### validate
-
-```python
-def validate()
-```
-
-Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk.
-
-Raises ValueError exception *IF* denominations are not unique, or if validation of individual coins raises an
-exception.
 
 <a id="cosmpy.aerial.coins.parse_coins"></a>
 

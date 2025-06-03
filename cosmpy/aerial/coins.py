@@ -217,43 +217,6 @@ class Coins:
 
         return result
 
-    def __ilshift__(self, other) -> "Coins":
-        """Perform *in-place* merging of the `other` coins in to this (self) instance.
-
-        *Fails* on denom collision.
-
-        :param other: Coins to merge.
-
-        :return: self
-        """
-        self.merge_from(other, on_collision=OnCollision.Fail)
-        return self
-
-    def __lshift__(self, other) -> "Coins":
-        """Perform merging of the `other` coins *with* this (self) instance returning the result, leaving this (self) instance *unmodified*.
-
-        *Fails* on denom collision.
-
-        :param other: Coins to merge.
-
-        :return: new Coins instance with the result of the merge operation
-        """
-        result = Coins(self)
-        return result.merge_from(other, on_collision=OnCollision.Fail)
-
-    def __rshift__(self, other) -> "Coins":
-        """Perform *in-place* merging of coins from this (self) instance (the left operand) in to the `other` coins \
-        instance (the right operand), leaving the `other` instance *unmodified*.
-
-        *Fails* on denom collision.
-
-        :param other: Coins instance to merge in to.
-
-        :return: new Coins instance with the result of the merge operation
-        """
-        result = Coins(other)
-        return result.merge_from(self, on_collision=OnCollision.Fail)
-
     def clear(self) -> "Coins":
         """Delete all coins."""
         self._amounts.clear()
@@ -400,21 +363,6 @@ class Coins:
         """Convert this type to *protobuf schema* Coins type."""
         return [c.to_proto() for c in self]
 
-    # NOTE(pb): This method should not be necessary, since the API of the Coins class should prevent invalid
-    #           Coins values.
-    #           However, there is a caveat - the `__getitem__(...)` returns Coin instance by-reference, and so
-    #           there is potential for the `Coin.amount` value to be modified from external/caller context.
-    #           This can be simply prevented (however at cost of performance loss) by either returning the Coin
-    #           instance by-value (a clone), or by disabling setter for `Coin.amount` property, as it has
-    #           been done for the `Coin.denom` property.
-    def validate(self):
-        """Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk.
-
-        Raises ValueError exception *IF* denominations are not unique, or if validation of individual coins raises an
-        exception.
-        """
-        validate_coins(self)
-
     def _merge_coin(self, coin: Coin, on_collision: OnCollision = OnCollision.Fail):
         """Merge singular aerial Coin in to this object.
 
@@ -466,13 +414,8 @@ class Coins:
             self._merge_coin(coin)
 
     @staticmethod
-    def _math_operation(
-        other: Union[
-            str, "Coins", Iterable[Coin], Iterable[CoinProto], Coin, CoinProto
-        ],
-        result_inout: "Coins",
-    ):
-        res = result_inout
+    def _math_operation(other: CoinsParamType, result_inout: "Coins"):
+        res: Coins = result_inout
 
         if not isinstance(other, Coins):
             other = Coins(other)

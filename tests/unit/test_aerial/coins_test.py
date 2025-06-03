@@ -204,9 +204,6 @@ def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, err
     """Test Coins merge with fail on collision."""
     coins_a1 = Coins(coins_a)
     coins_a2 = Coins(coins_a)
-    coins_a3 = Coins(coins_a)
-    coins_a4 = Coins(coins_a)
-    coins_a5 = Coins(coins_a)
 
     if error:
         with pytest.raises(Exception) as exc_info:
@@ -216,18 +213,6 @@ def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, err
         with pytest.raises(Exception) as exc_info:
             coins_a2.merge_from(coins_b, on_collision=OnCollision.Fail)
         assert error in str(exc_info.value)
-
-        with pytest.raises(Exception) as exc_info:
-            coins_a3 <<= coins_b
-        assert error in str(exc_info.value)
-
-        with pytest.raises(Exception) as exc_info:
-            coins_a4 << coins_b
-        assert error in str(exc_info.value)
-
-        with pytest.raises(Exception) as exc_info:
-            Coins(coins_b) >> coins_a5
-        assert error in str(exc_info.value)
     else:
         expected_coins_res = Coins(expected_coins_res)
 
@@ -236,12 +221,6 @@ def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, err
 
         coins_a2.merge_from(coins_b, on_collision=OnCollision.Fail)
         assert coins_a2 == expected_coins_res
-
-        coins_a3 <<= coins_b
-        assert coins_a3 == expected_coins_res
-
-        coins_a4_merged = coins_a4 << coins_b
-        assert coins_a4_merged == expected_coins_res
 
 
 @pytest.mark.parametrize(
@@ -271,10 +250,10 @@ def test_merge_coins_override_on_collision(coins_a, coins_b, expected_coins_res,
 @pytest.mark.parametrize(
     "coins_a",
     [
-        (None),
-        (""),
-        ("1ccc"),
-        ("4acc,2ccc,5ddd,7ecc"),
+        None,
+        "",
+        "1ccc",
+        "4acc,2ccc,5ddd,7ecc",
     ],
 )
 def test_clear(coins_a):
