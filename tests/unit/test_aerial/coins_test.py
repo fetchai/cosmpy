@@ -224,20 +224,20 @@ def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, err
 
 
 @pytest.mark.parametrize(
-    "coins_a,coins_b,expected_coins_res,error",
+    "coins_a,coins_b,expected_coins_res",
     [
-        ("", "1ccc", "1ccc", None),
-        (None, "3gcc,1ccc", "1ccc,3gcc", None),
-        ("1ccc", "", "1ccc", None),
-        ("3gcc,1ccc", None, "1ccc,3gcc", None),
-        ("4acc,2ccc", "3gcc,1ccc", "4acc,1ccc,3gcc", None),
-        ("4acc,2ccc", "1ccc", "4acc,1ccc", None),
-        ("4acc,2ccc,5ddd,7ecc", "1acc,3ccc,6ddd", "1acc,3ccc,6ddd,7ecc", None),
-        ("4acc,2ccc,5ddd", "1acc,3ccc,6ddd,7ecc", "1acc,3ccc,6ddd,7ecc", None),
-        ("4acc,2ccc,5ddd", "1acc,7ecc", "1acc,2ccc,5ddd,7ecc", None),
+        ("", "1ccc", "1ccc"),
+        (None, "3gcc,1ccc", "1ccc,3gcc"),
+        ("1ccc", "", "1ccc"),
+        ("3gcc,1ccc", None, "1ccc,3gcc"),
+        ("4acc,2ccc", "3gcc,1ccc", "4acc,1ccc,3gcc"),
+        ("4acc,2ccc", "1ccc", "4acc,1ccc"),
+        ("4acc,2ccc,5ddd,7ecc", "1acc,3ccc,6ddd", "1acc,3ccc,6ddd,7ecc"),
+        ("4acc,2ccc,5ddd", "1acc,3ccc,6ddd,7ecc", "1acc,3ccc,6ddd,7ecc"),
+        ("4acc,2ccc,5ddd", "1acc,7ecc", "1acc,2ccc,5ddd,7ecc"),
     ],
 )
-def test_merge_coins_override_on_collision(coins_a, coins_b, expected_coins_res, error):
+def test_merge_coins_override_on_collision(coins_a, coins_b, expected_coins_res):
     """Test Coins merge with override on collision."""
     expected_coins_res = Coins(expected_coins_res)
 
