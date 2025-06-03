@@ -423,9 +423,9 @@ class Coins:
         for c in other:
             left: Coin = res.get(c.denom, 0)
             yield left, c
-            res._merge_coin(
+            res._merge_coin(  # pylint: disable=protected-access
                 left, on_collision=OnCollision.Override
-            )  # pylint: disable=protected-access
+            )
 
 
 def parse_coins(value: str) -> List[CoinProto]:
