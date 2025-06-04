@@ -48,7 +48,7 @@ class Coin:
         self._denom = denom
 
     def __repr__(self) -> str:
-        """Return string representation of coin."""
+        """Return Cosmos-SDK conformant string representation of the coin this (self) instance holds."""
         return f"{self.amount}{self.denom}"
 
     # NOTE(pb): The denom property setter is *NOT* defined by-design
@@ -120,7 +120,12 @@ class OnCollision(Enum):
 
 
 class Coins:
-    """Coins."""
+    """This class implements the behaviour of Coins as defined by Cosmos-SDK.
+
+    Implementation of this class guarantees, that the value it represents/holds is *always* valid (= conforms to
+    Cosmos-SDK requirements), and all its methods ensure that the value always remains valid, or they fail with
+    an exception.
+    """
 
     def __init__(
         self,
@@ -233,12 +238,12 @@ class Coins:
         self,
         coins: Optional[CoinsParamType] = None,
     ) -> "Coins":
-        """Assign value of this ('self') instance from any of the supported coin(s) representation types.
+        """Assign passed in `coins` *in to* this ('self') instance.
 
-        This means that the current value of this ('self') instance will be completely replaced with a new value
-        carried in the input `coins` parameter.
+        This means that the current value of this ('self') instance will be completely *replaced* with the value
+        carried by the input `coins` parameter.
 
-        :param coins: Input coins in any of supported types.
+        :param coins: Input coins in any of the supported types.
 
         :raises TypeError: If coins or coin in a list has unexpected type
 
@@ -274,9 +279,13 @@ class Coins:
     ) -> "Coins":
         """Merge passed in coins in to this ('self') coins instance.
 
-        :param coins: Input coins in any of supported types.
-        :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden if it already
-                             contains the denomination, if OnCollision.Fail the merge will fail with exception.
+        :param coins: Input coins in any of the supported types.
+        :param on_collision: Instructs what to do in the case of a denom collision = if this (self) already contains
+                             one or more the denomination in the `coins` value:
+                             - if `OnCollision.Override`: then the colliding coin amount in this (self) object will be
+                               *overridden* with the colliding amount value from the `coins` parameter.
+                             - if `OnCollision.Fail`: then the merge will *fail* with the `ValueError` exception when
+                               the first collision is detected
 
         :return: The `self` instance containing merged coins
         """

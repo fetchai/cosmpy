@@ -33,7 +33,7 @@ Create Coin instance.
 def __repr__() -> str
 ```
 
-Return string representation of coin.
+Return Cosmos-SDK conformant string representation of the coin this (self) instance holds.
 
 <a id="cosmpy.aerial.coins.Coin.denom"></a>
 
@@ -143,7 +143,11 @@ OnCollision Enum.
 class Coins()
 ```
 
-Coins.
+This class implements the behaviour of Coins as defined by Cosmos-SDK.
+
+Implementation of this class guarantees, that the value it represents/holds is *always* valid (= conforms to
+Cosmos-SDK requirements), and all its methods ensure that the value always remains valid, or they fail with
+an exception.
 
 <a id="cosmpy.aerial.coins.Coins.__init__"></a>
 
@@ -317,14 +321,14 @@ iterable of denominations
 def assign(coins: Optional[CoinsParamType] = None) -> "Coins"
 ```
 
-Assign value of this ('self') instance from any of the supported coin(s) representation types.
+Assign passed in `coins` *in to* this ('self') instance.
 
-This means that the current value of this ('self') instance will be completely replaced with a new value
-carried in the input `coins` parameter.
+This means that the current value of this ('self') instance will be completely *replaced* with the value
+carried by the input `coins` parameter.
 
 **Arguments**:
 
-- `coins`: Input coins in any of supported types.
+- `coins`: Input coins in any of the supported types.
 
 **Raises**:
 
@@ -347,9 +351,13 @@ Merge passed in coins in to this ('self') coins instance.
 
 **Arguments**:
 
-- `coins`: Input coins in any of supported types.
-- `on_collision`: If OnCollision.Override then the coin instance in this (self) object will be overridden if it already
-contains the denomination, if OnCollision.Fail the merge will fail with exception.
+- `coins`: Input coins in any of the supported types.
+- `on_collision`: Instructs what to do in the case of a denom collision = if this (self) already contains
+one or more the denomination in the `coins` value:
+- if `OnCollision.Override`: then the colliding coin amount in this (self) object will be
+  *overridden* with the colliding amount value from the `coins` parameter.
+- if `OnCollision.Fail`: then the merge will *fail* with the `ValueError` exception when
+  the first collision is detected
 
 **Returns**:
 

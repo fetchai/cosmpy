@@ -180,6 +180,8 @@ def test_subtract(coins_a, coins_b, expected_coins_res, error):
 @pytest.mark.parametrize(
     "coins_a,coins_b,expected_coins_res,error",
     [
+        ("1ccc", "0ccc", "1ccc", None),
+        ("", "0ccc", "", None),
         ("", "1ccc", "1ccc", None),
         (None, "3gcc,1ccc", "1ccc,3gcc", None),
         ("1ccc", "", "1ccc", None),
@@ -198,6 +200,7 @@ def test_subtract(coins_a, coins_b, expected_coins_res, error):
             'Attempt to merge a coin with the "ccc" denomination which already exists in the receiving coins instance',
         ),
         ("4acc,2ccc,5ddd", "1edd", "4acc,2ccc,5ddd,1edd", None),
+        ("4acc,2ccc,5ddd", "1edd,0acc,0ddd", "4acc,2ccc,5ddd,1edd", None),
     ],
 )
 def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, error):
@@ -226,6 +229,8 @@ def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, err
 @pytest.mark.parametrize(
     "coins_a,coins_b,expected_coins_res",
     [
+        ("1ccc", "0ccc", "1ccc"),
+        ("", "0ccc", ""),
         ("", "1ccc", "1ccc"),
         (None, "3gcc,1ccc", "1ccc,3gcc"),
         ("1ccc", "", "1ccc"),
@@ -235,6 +240,7 @@ def test_merge_coins_fail_on_collision(coins_a, coins_b, expected_coins_res, err
         ("4acc,2ccc,5ddd,7ecc", "1acc,3ccc,6ddd", "1acc,3ccc,6ddd,7ecc"),
         ("4acc,2ccc,5ddd", "1acc,3ccc,6ddd,7ecc", "1acc,3ccc,6ddd,7ecc"),
         ("4acc,2ccc,5ddd", "1acc,7ecc", "1acc,2ccc,5ddd,7ecc"),
+        ("4acc,2ccc,5ddd", "1edd,0acc,0ddd", "4acc,2ccc,5ddd,1edd"),
     ],
 )
 def test_merge_coins_override_on_collision(coins_a, coins_b, expected_coins_res):
