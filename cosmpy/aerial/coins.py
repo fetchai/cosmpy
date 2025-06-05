@@ -43,14 +43,14 @@ class Coin:
     an absolute amount value, what might result in to negative coin amount value.
     This is to enable flexibility, rather than fail immediately when setting amount or denom values
 
-    THe implication is that the validation needs to be executed explicitly by calling the `validate()` method.
+    The implication is that the validation needs to be executed explicitly by calling the `validate()` method.
     """
 
     amount: int
     denom: str
 
     def __repr__(self) -> str:
-        """Return Cosmos-SDK conformant string representation of the coin this (self) instance holds."""
+        """Return Cosmos-SDK string representation of the coin this (self) instance holds."""
         return f"{self.amount}{self.denom}"
 
     def to_proto(self) -> CoinProto:

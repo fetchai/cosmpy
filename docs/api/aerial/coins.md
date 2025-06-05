@@ -22,7 +22,7 @@ For example, mathematical calculations/operations which might need to use Coin t
 an absolute amount value, what might result in to negative coin amount value.
 This is to enable flexibility, rather than fail immediately when setting amount or denom values
 
-THe implication is that the validation needs to be executed explicitly by calling the `validate()` method.
+The implication is that the validation needs to be executed explicitly by calling the `validate()` method.
 
 <a id="cosmpy.aerial.coins.Coin.__repr__"></a>
 
@@ -32,7 +32,7 @@ THe implication is that the validation needs to be executed explicitly by callin
 def __repr__() -> str
 ```
 
-Return Cosmos-SDK conformant string representation of the coin this (self) instance holds.
+Return Cosmos-SDK string representation of the coin this (self) instance holds.
 
 <a id="cosmpy.aerial.coins.Coin.to_proto"></a>
 
