@@ -98,7 +98,7 @@ def test_parsing_coins_string(input_coins, expected_result):
         (
             "4cc",
             None,
-            'The "cc" denom does not conform to Cosmos-SDK requirements',
+            'Coin denom "cc" does not conform to Cosmos-SDK requirements',
         ),
         (
             "4acc,5ccc,0bcc",

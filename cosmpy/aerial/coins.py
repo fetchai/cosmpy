@@ -20,7 +20,7 @@
 """Parse the coins."""
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Iterable, List, Optional, Union
 
@@ -32,79 +32,78 @@ from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 denom_regex = re.compile("^[a-zA-Z][a-zA-Z0-9/-]{2,127}$")
 
 
-# @dataclass(frozen=True)
 @dataclass
 class Coin:
-    """Coins."""
+    """Coins.
+
+    This class does not implicitly ensure that its value represents a valid coin based on Cosmos-SDK requirements.
+    This is by design to enable operations with the coin instance which might need to pass Coin instance as
+    by-reference and change coin value the way which will make it invalid from Cosmos-SDK requirements perspective.
+    For example, mathematical calculations/operations which might need to use Coin to store a relative rather than
+    an absolute amount value, what might result in to negative coin amount value.
+    This is to enable flexibility, rather than fail immediately when setting amount or denom values
+
+    THe implication is that the validation needs to be executed explicitly by calling the `validate()` method.
+    """
 
     amount: int
-    denom: str  # Read-only by design (property setter is left intentionally undefined)
-    _denom: str = field(init=False, repr=False, compare=False, hash=False)
-
-    def __init__(self, amount: int, denom: str) -> None:
-        """Create Coin instance."""
-        is_denom_valid(denom, raise_ex=True)
-        self.amount = amount
-        self._denom = denom
+    denom: str
 
     def __repr__(self) -> str:
         """Return Cosmos-SDK conformant string representation of the coin this (self) instance holds."""
         return f"{self.amount}{self.denom}"
 
-    # NOTE(pb): The denom property setter is *NOT* defined by-design
-    @property  # type: ignore
-    def denom(self) -> str:
-        """Return denom of coin.
-
-        The denom property setter is *NOT* defined *by-design* in order to avoid misalignment/inconsistencies
-        later on in the `Coins` collection class.
-        If the denom setter was enabled, then it would allow changing denom value externally = from without knowledge
-        of the `Coins` collection class, since the `Coin` is a reference type. We want to avoid passing the Coin
-        instance always by-value (by-copy).
-
-        :return: denomination of the coin instance
-        """
-        return self._denom
-
     def to_proto(self) -> CoinProto:
         """Convert this type to protobuf schema Coin type."""
         return CoinProto(amount=str(self.amount), denom=self.denom)
 
-    def is_valid(self, raise_ex: bool = False) -> bool:
+    def validate(self):
         """Validate Coin instance based on Cosmos-SDK requirements.
 
-        :param raise_ex: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
+        Throws ValueError exception if coin instance is invalid based on Cosmos-SDK requirements.
+        """
+        self.validate_amount()
+        self.validate_denom()
+
+    def validate_amount(self):
+        """Validate coin amount value based on Cosmos-SDK requirements.
+
+        :raises ValueError: If coin amount value does not conform to cosmos-sdk requirement.
+        """
+        if not self.is_amount_valid():
+            raise ValueError(f"Coin amount {self.amount} must be greater than zero")
+
+    def validate_denom(self):
+        """Validate coin denom value based on Cosmos-SDK requirements.
+
+        :raises ValueError: If coin denom value does not conform to cosmos-sdk requirement.
+        """
+        if not self.is_denom_valid():
+            raise ValueError(
+                f'Coin denom "{self.denom}" does not conform to Cosmos-SDK requirements.'
+            )
+
+    def is_valid(self) -> bool:
+        """Validate Coin instance based on Cosmos-SDK requirements.
 
         :return: True if the Coin instance conforms to cosmos-sdk requirement for Coin, False otherwise.
         """
-        return self.is_amount_valid(raise_ex) and self.is_denom_valid(raise_ex)
+        return self.is_amount_valid() and self.is_denom_valid()
 
-    def is_amount_valid(self, raise_ex: bool = False) -> bool:
+    def is_amount_valid(self) -> bool:
         """Validate amount value based on Cosmos-SDK requirements.
 
-        :param raise_ex: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
-
         :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than
-                 or equal to  zero). False otherwise.
-
-        :raises ValueError: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
+                 or equal to zero). False otherwise.
         """
-        if self.amount > 0:
-            return True
+        return is_coin_amount_valid(self.amount)
 
-        if raise_ex:
-            raise ValueError("Coin amount must be greater than zero")
-
-        return False
-
-    def is_denom_valid(self, raise_ex: bool = False) -> bool:
+    def is_denom_valid(self) -> bool:
         """Validate denom value based on Cosmos-SDK requirements.
-
-        :param raise_ex: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
 
         :return: True if denom conforms to cosmos-sdk requirement for denomination, False otherwise.
         """
-        return is_denom_valid(self.denom, raise_ex)
+        return is_denom_valid(self.denom)
 
 
 CoinsParamType = Union[
@@ -403,7 +402,7 @@ class Coins:
                 f'Attempt to merge a coin with the "{coin.denom}" denomination which already exists in the receiving coins instance'
             )
 
-        coin.is_valid(raise_ex=True)
+        coin.validate()
         self._amounts[coin.denom] = coin.amount
 
     def _from_coins_list(self, coins: Iterable[Union[Coin, CoinProto]]):
@@ -475,26 +474,23 @@ def from_string(value: str):
         yield Coin(int(amount), denom)
 
 
-def is_denom_valid(denom: str, raise_ex: bool = False) -> bool:
+def is_coin_amount_valid(amount: int) -> bool:
+    """Check if amount value conforms to Cosmos-SDK requirements.
+
+    :param amount: amount to be checked
+    :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
+             False otherwise.
+    """
+    return amount > 0
+
+
+def is_denom_valid(denom: str) -> bool:
     """Check if denom value conforms to Cosmos-SDK requirements.
 
     :param denom: Denom to be checked
-    :param raise_ex: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
-
-    :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
-             False otherwise.
-
-    :raises ValueError: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
+    :return: True if the denom conforms to cosmos-sdk requirement
     """
-    if denom_regex.match(denom) is not None:
-        return True
-
-    if raise_ex:
-        raise ValueError(
-            f'The "{denom}" denom does not conform to Cosmos-SDK requirements'
-        )
-
-    return False
+    return denom_regex.match(denom) is not None
 
 
 def is_coins_sorted(
@@ -539,15 +535,21 @@ def validate_coins(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]
     raises ValueError if there are multiple coins with the same denom
 
     :param coins: Any type representing coins
-    :return: bool validity
+    :return: True if valid, False otherwise
     """
     if not coins:
         return
 
+    # NOTE(pb): Following simple 2 lines can replace the uncommented code that follows. The is commented out in order
+    #           to ensure the *explicit* execution of the validation:
+    #if not isinstance(coins, Coins):
+    #    _ = Coins(coins)
+
     if isinstance(coins, Coins):
-        # The only thing which can be possibly wrong at this point is amount value:
+        # Strictly speaking, this is not necessary, since API of the Coins class implicitly ensures validity of
+        # the value it holds.
         for coin in coins:
-            coin.is_amount_valid(raise_ex=True)
+            coin.validate()
     else:
         # Conversion to Coins will verify everything, no need to do anything else:
         _ = Coins(coins)
