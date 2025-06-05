@@ -1,5 +1,9 @@
 # Release History
 
+## 0.11.1
+
+- feat: Coins impl. using sorted dictionary
+
 ## 0.11.0
 
 - feat: TxFee and Coins, support for fee granter & payer 
