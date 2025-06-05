@@ -45,6 +45,7 @@ python-dateutil = "*"
 pycryptodome = "^3.18.0"
 googleapis-common-protos = "*"
 virtualenv = ">=20.26.6"
+sortedcontainers = "==2.4.0"
 
 [tool.poetry.group.dev]
 optional = true
@@ -54,7 +55,7 @@ check-manifest = "*"
 tox = "^3.26"
 flake8 = "==5.0.4"
 black = "^22.10"
-mypy = "==0.982"
+mypy = "==1.15.0"
 bandit = "==1.7.4"
 safety = "==3.3.1"
 isort = "==5.10.1"
@@ -72,6 +73,7 @@ pyyaml = "==5.3.1"
 packaging = ">=23.0"
 virtualenv = ">=20.26.6"
 marshmallow = "<4.0.0"
+sortedcontainers-stubs = "2.4.3"
 
 [tool.poetry.group.docs]
 optional = true
@@ -113,7 +115,8 @@ module = [
     "certifi.*",
     "mbedtls.*",
     "jsonschema.*",
-    "dateutil.*"
+    "dateutil.*",
+    "sortedcontainers.*"
 ]
 ignore_missing_imports = true
 

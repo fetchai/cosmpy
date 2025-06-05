@@ -21,7 +21,10 @@
 
 import re
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from enum import Enum
+from typing import Iterable, List, Optional, Union
+
+from sortedcontainers import SortedDict
 
 from cosmpy.protos.cosmos.base.v1beta1.coin_pb2 import Coin as CoinProto
 
@@ -31,30 +34,53 @@ denom_regex = re.compile("^[a-zA-Z][a-zA-Z0-9/-]{2,127}$")
 
 @dataclass
 class Coin:
-    """Coins."""
+    """Coins.
+
+    This class does not implicitly ensure that its value represents a valid coin based on Cosmos-SDK requirements.
+    This is by design to enable operations with the coin instance which might need to pass Coin instance as
+    by-reference and change coin value the way which will make it invalid from Cosmos-SDK requirements perspective.
+    For example, mathematical calculations/operations which might need to use Coin to store a relative rather than
+    an absolute amount value, what might result in to negative coin amount value.
+    This is to enable flexibility, rather than fail immediately when setting amount or denom values
+
+    The implication is that the validation needs to be executed explicitly by calling the `validate()` method.
+    """
 
     amount: int
     denom: str
+
+    def __repr__(self) -> str:
+        """Return Cosmos-SDK string representation of the coin this (self) instance holds."""
+        return f"{self.amount}{self.denom}"
 
     def to_proto(self) -> CoinProto:
         """Convert this type to protobuf schema Coin type."""
         return CoinProto(amount=str(self.amount), denom=self.denom)
 
-    def __repr__(self) -> str:
-        """Return string representation of coin."""
-        return f"{self.amount}{self.denom}"
-
     def validate(self):
-        """Validate this type based on Cosmos-SDK requirements for Coin.
+        """Validate Coin instance based on Cosmos-SDK requirements.
 
-        :raises ValueError: If amount is negative or denom does not conform to cosmos-sdk requirement for denomination.
+        Throws ValueError exception if coin instance is invalid based on Cosmos-SDK requirements.
+        """
+        self.validate_amount()
+        self.validate_denom()
+
+    def validate_amount(self):
+        """Validate coin amount value based on Cosmos-SDK requirements.
+
+        :raises ValueError: If coin amount value does not conform to cosmos-sdk requirement.
         """
         if not self.is_amount_valid():
-            raise ValueError("Coin amount must be greater than zero")
+            raise ValueError(f"Coin amount {self.amount} must be greater than zero")
 
+    def validate_denom(self):
+        """Validate coin denom value based on Cosmos-SDK requirements.
+
+        :raises ValueError: If coin denom value does not conform to cosmos-sdk requirement.
+        """
         if not self.is_denom_valid():
             raise ValueError(
-                f'The "{self.denom}" denom does not conform to Cosmos-SDK requirements'
+                f'Coin denom "{self.denom}" does not conform to Cosmos-SDK requirements.'
             )
 
     def is_valid(self) -> bool:
@@ -67,10 +93,10 @@ class Coin:
     def is_amount_valid(self) -> bool:
         """Validate amount value based on Cosmos-SDK requirements.
 
-        :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
-                 False otherwise.
+        :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than
+                 or equal to zero). False otherwise.
         """
-        return self.amount > 0
+        return is_coin_amount_valid(self.amount)
 
     def is_denom_valid(self) -> bool:
         """Validate denom value based on Cosmos-SDK requirements.
@@ -80,45 +106,33 @@ class Coin:
         return is_denom_valid(self.denom)
 
 
-class Coins(List[Coin]):
-    """Coins.
+CoinsParamType = Union[
+    str, "Coins", Iterable[Coin], Iterable[CoinProto], Coin, CoinProto
+]
 
-    It is required to call the 'canonicalise()' method in order to ensure that the Coins instance conforms to
-    Cosmos-SDK requirements for Coins type!
-    This is because one way or another, due to the nature of the base List type, it is possible to create such an
-    instance of Coins which does not conform to Cosmos-SDK requirements.
+
+class OnCollision(Enum):
+    """OnCollision Enum."""
+
+    Fail = 0
+    Override = 1
+
+
+class Coins:
+    """This class implements the behaviour of Coins as defined by Cosmos-SDK.
+
+    Implementation of this class guarantees, that the value it represents/holds is *always* valid (= conforms to
+    Cosmos-SDK requirements), and all its methods ensure that the value always remains valid, or they fail with
+    an exception.
     """
 
     def __init__(
         self,
-        coins: Optional[
-            Union[str, "Coins", List[Coin], List[CoinProto], Coin, CoinProto]
-        ] = None,
+        coins: Optional[CoinsParamType] = None,
     ):
-        """Convert any coin representation into Coins."""
-        if coins is None:
-            super().__init__()
-            return
-
-        if isinstance(coins, str):
-            _coins = Coins._from_string(coins)
-        elif isinstance(coins, Coins):
-            _coins = Coins._from_coins_list(coins)
-        elif isinstance(coins, Coin):
-            _coins = [coins]
-        elif isinstance(coins, CoinProto):
-            _coins = Coins._from_coins_list([coins])
-        elif isinstance(coins, list):
-            if len(coins) == 0:
-                _coins = []
-            elif isinstance(coins[0], (Coin, CoinProto)):
-                _coins = Coins._from_coins_list(coins)
-            else:
-                raise TypeError(f"Invalid type {type(coins)}")
-        else:
-            raise ValueError(f"Invalid type {type(coins)}")
-
-        super().__init__(_coins)
+        """Instantiate Coins from any of the supported coin(s) representation types."""
+        self._amounts: SortedDict[str, int] = SortedDict()
+        self.assign(coins)
 
     def __repr__(self) -> str:
         """Return cosmos-sdk string representation of Coins.
@@ -129,79 +143,47 @@ class Coins(List[Coin]):
         from cosmpy.aerial.client.coins import Coin, Coins
 
         coins = Coins([Coin(1,"afet"), Coin(2,"uatom"), Coin(3,"nanomobx")])
-        assert str(coins) == "1afet,2uatom,3nanomobx"
+        assert repr(coins) == "1afet,2uatom,3nanomobx"
+        assert str(coins) == repr(coins)
         """
-        return ",".join([str(c) for c in self[:]])
+        return ",".join([repr(c) for c in self])
 
-    def to_proto(self) -> List[CoinProto]:
-        """Convert this type to *protobuf schema* Coins type."""
-        coins = Coins(self).canonicalise()
-        return [CoinProto(amount=str(c.amount), denom=c.denom) for c in coins]
+    def __hash__(self) -> int:
+        """Hash."""
+        return hash(self._amounts)
 
-    def canonicalise(self) -> "Coins":
-        """Reorganise the value of the 'self' instance in to canonical form defined by cosmos-sdk for `Coins`.
+    def __len__(self) -> int:
+        """Get number of coins."""
+        return len(self._amounts)
 
-        This means dropping all coins with zero value, and alphabetically sorting (ascending) the coins based
-        on denomination.
-        The algorithm *fails* with exception *if* any of the denominations in the list is *not* unique = if some of the
-        denominations are present in the coin list more than once, or if validation of any individual coin will fail.
-        :returns: The 'self' instance.
-        """
-        coins = [c for c in self if c.amount > 0]
+    def __eq__(self, right) -> bool:
+        """Compare if two instances of Coins are equal."""
+        if not isinstance(right, Coins):
+            right = Coins(right)
 
-        self.clear()
-        self.extend(coins)
+        return self._amounts == right._amounts
 
-        sort_coins(self)
-        self.validate()
+    def __getitem__(self, denom: str) -> Coin:
+        """Coins safe getter that prevents modifying of the reference."""
+        amount = self._amounts[denom]
+        return Coin(amount, denom)
 
-        return self
+    def __contains__(self, denom: str) -> bool:
+        """Return true if denom is present."""
+        return denom in self._amounts
 
-    def validate(self):
-        """Validate whether current value conforms to canonical form for list of coins defined by cosmos-sdk.
+    def __delitem__(self, denom: str):
+        """Remove denom."""
+        del self._amounts[denom]
 
-        Raises ValueError exception *IF* denominations are not unique, or if validation of individual coins raises an
-        exception.
-        """
-        validate_coins(self)
-
-    @classmethod
-    def _from_coins_list(cls, coins: List[Union[Coin, CoinProto]]) -> List[Coin]:
-        """Create aerial Coins from List of CoinProto objects."".
-
-        :param coins: input list of CoinsProto
-        :return: List of Coin objects
-        """
-        return [Coin(amount=int(coin.amount), denom=coin.denom) for coin in coins]
-
-    @classmethod
-    def _from_string(cls, value: str) -> List[Coin]:
-        """Parse the coins.
-
-        :param value: coins
-        :raises RuntimeError: If unable to parse the value
-        :return: coins
-        """
-        coins = []
-
-        parts = re.split(r",\s*", value)
-        for part in parts:
-            part = part.strip()
-            if part == "":
-                continue
-
-            match = re.match(r"^(\d+)(.+)$", part)
-            if match is None:
-                raise RuntimeError(f"Unable to parse value {part}")
-
-            amount, denom = match.groups()
-            coins.append(Coin(amount=int(amount), denom=denom))
-
-        return coins
+    def __iter__(self):
+        """Get coins iterator."""
+        for denom, amount in self._amounts.items():
+            yield Coin(amount, denom)
 
     def __add__(self, other):
         """Perform algebraic vector addition of two coin lists."""
-        result = Coins()
+        result = Coins(self)
         for (left, right) in self._math_operation(other, result_inout=result):
             left.amount += right.amount
 
@@ -209,7 +191,7 @@ class Coins(List[Coin]):
 
     def __sub__(self, other):
         """Perform algebraic vector subtraction of two coin lists, ensuring no coin has negative value."""
-        result = Coins()
+        result = Coins(self)
         for (left, right) in self._math_operation(other, result_inout=result):
             if left.amount < right.amount:
                 raise RuntimeError(
@@ -239,31 +221,219 @@ class Coins(List[Coin]):
 
         return result
 
-    def _math_operation(self, other: List[Coin], result_inout: "Coins"):
-        self.validate()
+    def clear(self) -> "Coins":
+        """Delete all coins."""
+        self._amounts.clear()
+        return self
 
-        if isinstance(other, Coins):
-            other.validate()
-        else:
-            Coins(other).validate()
+    def denoms(self) -> Iterable[str]:
+        """Return denominations of the coins in this(self) instance in ordered ascending alphabetically.
 
-        res_dict = {c.denom: Coin(amount=c.amount, denom=c.denom) for c in self}
-        for c in other:
-            left = res_dict.get(c.denom, Coin(amount=0, denom=c.denom))
+        :return: iterable of denominations
+        """
+        return self._amounts.keys()
 
-            yield left, c
+    def assign(
+        self,
+        coins: Optional[CoinsParamType] = None,
+    ) -> "Coins":
+        """Assign passed in `coins` *in to* this ('self') instance.
 
-            if left.amount == 0:
-                if left.denom in res_dict:
-                    del res_dict[left.denom]
-            elif left.amount > 0:
-                res_dict[left.denom] = left
+        This means that the current value of this ('self') instance will be completely *replaced* with the value
+        carried by the input `coins` parameter.
+
+        :param coins: Input coins in any of the supported types.
+
+        :raises TypeError: If coins or coin in a list has unexpected type
+
+        :return: self
+        """
+        self.clear()
+
+        if coins is None:
+            return self
+
+        if isinstance(coins, str):
+            self._from_string(coins)
+        elif isinstance(coins, Coins):
+            self._from_coins_list(coins)
+        elif isinstance(coins, (Coin, CoinProto)):
+            self._from_coins_list([coins])
+        elif isinstance(coins, list):
+            if len(coins) == 0:
+                pass
+            elif isinstance(coins[0], (Coin, CoinProto)):
+                self._from_coins_list(coins)
             else:
-                raise RuntimeError(f"Operation yielded negative amount {left}")
+                raise TypeError(f"Invalid type {type(coins)}")
+        else:
+            raise TypeError(f"Invalid type {type(coins)}")
 
-        result_inout.clear()
-        result_inout.extend(res_dict.values())
-        result_inout.canonicalise()
+        return self
+
+    def merge_from(
+        self,
+        coins: CoinsParamType,
+        on_collision: OnCollision = OnCollision.Fail,
+    ) -> "Coins":
+        """Merge passed in coins in to this ('self') coins instance.
+
+        :param coins: Input coins in any of the supported types.
+        :param on_collision: Instructs what to do in the case of a denom collision = if this (self) already contains
+                             one or more the denomination in the `coins` value:
+                             - if `OnCollision.Override`: then the colliding coin amount in this (self) object will be
+                               *overridden* with the colliding amount value from the `coins` parameter.
+                             - if `OnCollision.Fail`: then the merge will *fail* with the `ValueError` exception when
+                               the first collision is detected
+
+        :return: The `self` instance containing merged coins
+        """
+        cs = Coins(coins)
+
+        for c in cs:
+            self._merge_coin(c, on_collision)
+
+        return self
+
+    def delete(self, denominations: Iterable[str]) -> "Coins":
+        """Delete coins from this ('self') instance for each denom listed in `denominations` argument.
+
+        :param denominations: collection of denominations to drop
+        :return: deleted Coins
+        """
+        removed_coins = Coins()
+        for denom in denominations:
+            if denom in self:
+                removed_coins.merge_from(self[denom])
+
+        for c in removed_coins:
+            del self[c.denom]
+
+        return self
+
+    def get(self, denom: str, default_amount: int) -> Coin:
+        """Return Coin instance for the given `denom`.
+
+        If coin with the given `denom` is not present, the `default` will be returned.
+
+        Runtime complexity: `O(log(n))`
+
+        This method poses the same risk to validity of the Coins value as the `__getitem__(...)` method,
+        since at the moment it returns Coin instance *by-reference* what allows to change the `Coin.amount` value
+        from external context and so potentially invalidate the value represented by the `Coins` class/container.
+
+        :param denom: denomination of the coin to query.
+        :param default_amount: default amount used to construct returned Coin instance if there is *no* coin with
+                               the given `denom` present in this coins instance.
+        :return: coin instance for the given `denom`, or the `default` value.
+
+        Example::
+        >>> from cosmpy.aerial.coins import Coin, Coins
+        >>> cs = Coins("1aaa,2baa,3caa")
+        >>> cs.get("baa", 0)
+        2baa
+        >>> cs.get("ggg", 0)
+        0ggg
+        """
+        amount = self._amounts[denom] if denom in self._amounts else default_amount
+        return Coin(amount, denom)
+
+    def get_by_index(self, index: int) -> Coin:
+        """Return Coin instance at given `index`.
+
+        If the `index` is out of range, raises :exc:`IndexError`.
+
+        Runtime complexity: `O(log(n))`
+
+        This method poses the same risk to validity of the Coins value as the `__getitem__(...)` method,
+        since at the moment it returns Coin instance *by-reference* what allows to change the `Coin.amount` value
+        from external context and so potentially invalidate the value represented by the `Coins` class/container.
+
+        Example::
+        >>> from cosmpy.aerial.coins import Coin, Coins
+        >>> cs = Coins("1aaa,2baa,3caa")
+        >>> cs.get_by_index(0)
+        1aaa
+        >>> cs.get_by_index(2)
+        3caa
+        >>> cs.get_by_index(3)
+        Traceback (most recent call last):
+          ...
+        IndexError: list index out of range
+
+        :param index: int index of item (default -1)
+        :return: key and value pair
+        """
+        denom, amount = self._amounts.peekitem(index)
+        return Coin(amount, denom)
+
+    def to_proto(self) -> List[CoinProto]:
+        """Convert this type to *protobuf schema* Coins type."""
+        return [c.to_proto() for c in self]
+
+    def _merge_coin(self, coin: Coin, on_collision: OnCollision = OnCollision.Fail):
+        """Merge singular aerial Coin in to this object.
+
+        :param coin: input coin to merged.
+        :param on_collision: If OnCollision.Override then the coin instance in this (self) object will be overridden
+                             if it already contains the denomination, if OnCollision.Fail the merge will fail with
+                             an exception.
+        :raises ValueError: If there is denom collision and the `on_collision` is set to `OnCollision.Fail`,
+                            or if the `on_collision` has unknown enum value.
+        """
+        if on_collision == OnCollision.Override:
+            fail_on_collision = False
+        elif on_collision == OnCollision.Fail:
+            fail_on_collision = True
+        else:
+            raise ValueError(f"Unknown on_collision value: {on_collision}")
+
+        is_already_present = coin.denom in self
+
+        if coin.amount == 0:
+            if not fail_on_collision and is_already_present:
+                del self._amounts[coin.denom]
+
+            # Skipping if amount is zero
+            return
+
+        if fail_on_collision and is_already_present:
+            raise ValueError(
+                f'Attempt to merge a coin with the "{coin.denom}" denomination which already exists in the receiving coins instance'
+            )
+
+        coin.validate()
+        self._amounts[coin.denom] = coin.amount
+
+    def _from_coins_list(self, coins: Iterable[Union[Coin, CoinProto]]):
+        """Create aerial Coins from List of CoinProto objects."".
+
+        :param coins: input list of coins
+        """
+        for c in coins:
+            self._merge_coin(Coin(int(c.amount), c.denom))
+
+    def _from_string(self, value: str):
+        """Parse the coins string and merge it to self.
+
+        :param value: coins
+        """
+        for coin in from_string(value):
+            self._merge_coin(coin)
+
+    @staticmethod
+    def _math_operation(other: CoinsParamType, result_inout: "Coins"):
+        res: Coins = result_inout
+
+        if not isinstance(other, Coins):
+            other = Coins(other)
+
+        for c in other:
+            left: Coin = res.get(c.denom, 0)
+            yield left, c
+            res._merge_coin(  # pylint: disable=protected-access
+                left, on_collision=OnCollision.Override
+            )
 
 
 def parse_coins(value: str) -> List[CoinProto]:
@@ -275,97 +445,106 @@ def parse_coins(value: str) -> List[CoinProto]:
     return Coins(value).to_proto()
 
 
-CoinsParamType = Union[str, Coins, List[Coin], List[CoinProto], Coin, CoinProto]
+def from_string(value: str):
+    """Parse the coins string and yields individual coins as Coin instances in order of their definition in input `value`.
+
+    :param value: coins
+
+    :yields: Coin objects one by one in the order they are specified in the input `value` string, where validation of
+             the yielded Coin instance is intentionally *NOT* executed => yielded coin instance might *NOT* be valid
+             when judged based on cosmos-sdk requirements.
+             This is by-design to enable just basic parsing focused exclusively on the format of the coins string value.
+             This leaves a degree of freedom for a caller on how the resulting/parsed coins should be used/consumed,
+             rather than forcing any checks/validation for individual coins instances, or coins collection as a whole,
+             here.
+
+    :raises RuntimeError: If unable to parse the value
+    """
+    parts = re.split(r",\s*", value)
+    for part in parts:
+        part = part.strip()
+        if part == "":
+            continue
+
+        match = re.match(r"^(\d+)(.+)$", part)
+        if match is None:
+            raise RuntimeError(f"Unable to parse value {part}")
+
+        amount, denom = match.groups()
+        yield Coin(int(amount), denom)
+
+
+def is_coin_amount_valid(amount: int) -> bool:
+    """Check if amount value conforms to Cosmos-SDK requirements.
+
+    :param amount: amount to be checked
+    :return: True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
+             False otherwise.
+    """
+    return amount > 0
 
 
 def is_denom_valid(denom: str) -> bool:
-    """Return true if coin denom name is valid.
+    """Check if denom value conforms to Cosmos-SDK requirements.
 
-    :param denom: string denom
-    :return: bool validity
+    :param denom: Denom to be checked
+    :return: True if the denom conforms to cosmos-sdk requirement
     """
     return denom_regex.match(denom) is not None
 
 
-def is_coins_sorted(coins: Union[str, Coins, List[Coin], List[CoinProto]]) -> bool:
+def is_coins_sorted(
+    coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]
+) -> bool:
     """Return true if given coins representation is sorted in ascending order of denom.
 
     :param coins: Any type representing coins
     :return: bool is_sorted
     """
+    if coins is None:
+        return False
+
     if not coins:
         return True
 
     if isinstance(coins, str):
-        coins = Coins(coins)
+        coins = from_string(coins)
 
-    last_denom = coins[0].denom
+    itr = iter(coins)
+    coin = next(itr, None)
 
-    for c in coins[1:]:
-        if last_denom >= c.denom:
+    if coin is None:
+        return True
+
+    last_denom = coin.denom
+    coin = next(itr, None)
+
+    while coin is not None:
+        if last_denom >= coin.denom:
             return False
 
-        last_denom = c.denom
+        last_denom = coin.denom
+        coin = next(itr, None)
 
     return True
 
 
-def validate_coins(coins: Union[str, Coins, List[Coin], List[CoinProto]]):
+def validate_coins(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]):
     """Return true if given coins representation is valid.
 
+    raises ValueError if there are multiple coins with the same denom
+
     :param coins: Any type representing coins
-    :raises ValueError: If there are multiple coins with the same denom
-    :return: bool validity
+    :return: True if valid, False otherwise
     """
     if not coins:
         return
 
-    if isinstance(coins, str):
-        coins = Coins(coins)
-
-    if len(coins) == 0:
-        return
-
-    def _validate_coin(coin: Union[Coin, CoinProto]):
-        """Validate coin.
-
-        :param coin: Coin or CoinProto
-
-        """
-        if isinstance(coin, CoinProto):
-            coin = Coin(int(coin.amount), coin.denom)
-
-        coin.validate()
-
-    _validate_coin(coins[0])
-
-    seen = set()
-    last_denom = coins[0].denom
-    seen.add(last_denom)
-
-    for c in coins[1:]:
-        if c.denom in seen:
-            raise ValueError(f'Multiple occurrences of the "{c.denom}" denomination')
-
-        if last_denom >= c.denom:
-            raise ValueError(
-                "Coins are not sorted as cosmos-sdk expects it (ascending based on denom)"
-            )
-
-        _validate_coin(c)
-
-        last_denom = c.denom
-        seen.add(c.denom)
-
-
-# def sort_coins(coins: Union[Coins, CoinsProto, List[Coin], List[CoinProto]]):
-def sort_coins(coins: Union[Coins, List[Coin], List[CoinProto]]):
-    """Sort the collection of coins based on Cosmos-SDK definition of Coins validity.
-
-    Coins collection is sorted ascending alphabetically based on denomination.
-
-    NOTE: The resulting sorted collection of coins is *NOT* validated by calling the 'Coins.validate()'.
-
-    :param coins: Coins to sort
-    """
-    coins.sort(key=lambda c: c.denom, reverse=False)
+    if isinstance(coins, Coins):
+        # Strictly speaking, this is not necessary, since API of the Coins class implicitly ensures validity of
+        # the value it holds.
+        for coin in coins:
+            coin.validate()
+    else:
+        # Conversion to Coins will verify everything, no need to do anything else:
+        _ = Coins(coins)
