@@ -540,11 +540,6 @@ def validate_coins(coins: Union[str, Coins, Iterable[Coin], Iterable[CoinProto]]
     if not coins:
         return
 
-    # NOTE(pb): Following simple 2 lines can replace the uncommented code that follows. The is commented out in order
-    #           to ensure the *explicit* execution of the validation:
-    #if not isinstance(coins, Coins):
-    #    _ = Coins(coins)
-
     if isinstance(coins, Coins):
         # Strictly speaking, this is not necessary, since API of the Coins class implicitly ensures validity of
         # the value it holds.

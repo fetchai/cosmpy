@@ -15,15 +15,14 @@ class Coin()
 
 Coins.
 
-<a id="cosmpy.aerial.coins.Coin.__init__"></a>
+This class does not implicitly ensure that its value represents a valid coin based on Cosmos-SDK requirements.
+This is by design to enable operations with the coin instance which might need to pass Coin instance as
+by-reference and change coin value the way which will make it invalid from Cosmos-SDK requirements perspective.
+For example, mathematical calculations/operations which might need to use Coin to store a relative rather than
+an absolute amount value, what might result in to negative coin amount value.
+This is to enable flexibility, rather than fail immediately when setting amount or denom values
 
-#### `__`init`__`
-
-```python
-def __init__(amount: int, denom: str) -> None
-```
-
-Create Coin instance.
+THe implication is that the validation needs to be executed explicitly by calling the `validate()` method.
 
 <a id="cosmpy.aerial.coins.Coin.__repr__"></a>
 
@@ -35,27 +34,6 @@ def __repr__() -> str
 
 Return Cosmos-SDK conformant string representation of the coin this (self) instance holds.
 
-<a id="cosmpy.aerial.coins.Coin.denom"></a>
-
-#### denom
-
-```python
-@property
-def denom() -> str
-```
-
-Return denom of coin.
-
-The denom property setter is *NOT* defined *by-design* in order to avoid misalignment/inconsistencies
-later on in the `Coins` collection class.
-If the denom setter was enabled, then it would allow changing denom value externally = from without knowledge
-of the `Coins` collection class, since the `Coin` is a reference type. We want to avoid passing the Coin
-instance always by-value (by-copy).
-
-**Returns**:
-
-denomination of the coin instance
-
 <a id="cosmpy.aerial.coins.Coin.to_proto"></a>
 
 #### to`_`proto
@@ -66,19 +44,55 @@ def to_proto() -> CoinProto
 
 Convert this type to protobuf schema Coin type.
 
+<a id="cosmpy.aerial.coins.Coin.validate"></a>
+
+#### validate
+
+```python
+def validate()
+```
+
+Validate Coin instance based on Cosmos-SDK requirements.
+
+Throws ValueError exception if coin instance is invalid based on Cosmos-SDK requirements.
+
+<a id="cosmpy.aerial.coins.Coin.validate_amount"></a>
+
+#### validate`_`amount
+
+```python
+def validate_amount()
+```
+
+Validate coin amount value based on Cosmos-SDK requirements.
+
+**Raises**:
+
+- `ValueError`: If coin amount value does not conform to cosmos-sdk requirement.
+
+<a id="cosmpy.aerial.coins.Coin.validate_denom"></a>
+
+#### validate`_`denom
+
+```python
+def validate_denom()
+```
+
+Validate coin denom value based on Cosmos-SDK requirements.
+
+**Raises**:
+
+- `ValueError`: If coin denom value does not conform to cosmos-sdk requirement.
+
 <a id="cosmpy.aerial.coins.Coin.is_valid"></a>
 
 #### is`_`valid
 
 ```python
-def is_valid(raise_ex: bool = False) -> bool
+def is_valid() -> bool
 ```
 
 Validate Coin instance based on Cosmos-SDK requirements.
-
-**Arguments**:
-
-- `raise_ex`: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
 
 **Returns**:
 
@@ -89,37 +103,25 @@ True if the Coin instance conforms to cosmos-sdk requirement for Coin, False oth
 #### is`_`amount`_`valid
 
 ```python
-def is_amount_valid(raise_ex: bool = False) -> bool
+def is_amount_valid() -> bool
 ```
 
 Validate amount value based on Cosmos-SDK requirements.
 
-**Arguments**:
-
-- `raise_ex`: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
-
-**Raises**:
-
-- `ValueError`: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
-
 **Returns**:
 
 True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than
-or equal to  zero). False otherwise.
+or equal to zero). False otherwise.
 
 <a id="cosmpy.aerial.coins.Coin.is_denom_valid"></a>
 
 #### is`_`denom`_`valid
 
 ```python
-def is_denom_valid(raise_ex: bool = False) -> bool
+def is_denom_valid() -> bool
 ```
 
 Validate denom value based on Cosmos-SDK requirements.
-
-**Arguments**:
-
-- `raise_ex`: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
 
 **Returns**:
 
@@ -510,12 +512,31 @@ This leaves a degree of freedom for a caller on how the resulting/parsed coins s
 rather than forcing any checks/validation for individual coins instances, or coins collection as a whole,
 here.
 
+<a id="cosmpy.aerial.coins.is_coin_amount_valid"></a>
+
+#### is`_`coin`_`amount`_`valid
+
+```python
+def is_coin_amount_valid(amount: int) -> bool
+```
+
+Check if amount value conforms to Cosmos-SDK requirements.
+
+**Arguments**:
+
+- `amount`: amount to be checked
+
+**Returns**:
+
+True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
+False otherwise.
+
 <a id="cosmpy.aerial.coins.is_denom_valid"></a>
 
 #### is`_`denom`_`valid
 
 ```python
-def is_denom_valid(denom: str, raise_ex: bool = False) -> bool
+def is_denom_valid(denom: str) -> bool
 ```
 
 Check if denom value conforms to Cosmos-SDK requirements.
@@ -523,16 +544,10 @@ Check if denom value conforms to Cosmos-SDK requirements.
 **Arguments**:
 
 - `denom`: Denom to be checked
-- `raise_ex`: If True raises exception in case when amount does not conform to cosmos-sdk requirement.
-
-**Raises**:
-
-- `ValueError`: If `raise_ex` is True and amount does not conform to cosmos-sdk requirement.
 
 **Returns**:
 
-True if the amount conforms to cosmos-sdk requirement for Coin amount (when it is greater than zero),
-False otherwise.
+True if the denom conforms to cosmos-sdk requirement
 
 <a id="cosmpy.aerial.coins.is_coins_sorted"></a>
 
@@ -572,5 +587,5 @@ raises ValueError if there are multiple coins with the same denom
 
 **Returns**:
 
-bool validity
+True if valid, False otherwise
 
