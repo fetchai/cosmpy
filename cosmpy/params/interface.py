@@ -20,6 +20,7 @@
 """Interface for the Params functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import (
     QueryParamsRequest,
@@ -31,10 +32,15 @@ class Params(ABC):
     """Params abstract class."""
 
     @abstractmethod
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Params queries a specific Cosmos SDK parameter.
 
         :param request: QueryParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryParamsResponse
         """

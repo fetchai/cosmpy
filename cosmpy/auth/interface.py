@@ -20,6 +20,7 @@
 """Interface for the Auth functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import (
     QueryAccountRequest,
@@ -33,21 +34,31 @@ class Auth(ABC):
     """Auth abstract class."""
 
     @abstractmethod
-    def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
+    def Account(
+        self,
+        request: QueryAccountRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryAccountResponse:
         """
         Query account data - sequence, account_id, etc.
 
         :param request: QueryAccountRequest that contains account address
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryAccountResponse
         """
 
     @abstractmethod
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Query all parameters.
 
         :param request: QueryParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryParamsResponse
         """
