@@ -25,10 +25,45 @@ class QueryStub(object):
                 request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountRequest.SerializeToString,
                 response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountResponse.FromString,
                 )
+        self.AccountAddressByID = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/AccountAddressByID',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountAddressByIDRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountAddressByIDResponse.FromString,
+                )
         self.Params = channel.unary_unary(
                 '/cosmos.auth.v1beta1.Query/Params',
                 request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryParamsRequest.SerializeToString,
                 response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryParamsResponse.FromString,
+                )
+        self.ModuleAccounts = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/ModuleAccounts',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountsRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountsResponse.FromString,
+                )
+        self.ModuleAccountByName = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/ModuleAccountByName',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountByNameRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountByNameResponse.FromString,
+                )
+        self.Bech32Prefix = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/Bech32Prefix',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.Bech32PrefixRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.Bech32PrefixResponse.FromString,
+                )
+        self.AddressBytesToString = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/AddressBytesToString',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressBytesToStringRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressBytesToStringResponse.FromString,
+                )
+        self.AddressStringToBytes = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/AddressStringToBytes',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressStringToBytesRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressStringToBytesResponse.FromString,
+                )
+        self.AccountInfo = channel.unary_unary(
+                '/cosmos.auth.v1beta1.Query/AccountInfo',
+                request_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountInfoRequest.SerializeToString,
+                response_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountInfoResponse.FromString,
                 )
 
 
@@ -37,9 +72,10 @@ class QueryServicer(object):
     """
 
     def Accounts(self, request, context):
-        """Accounts returns all the existing accounts
+        """Accounts returns all the existing accounts.
 
-        Since: cosmos-sdk 0.43
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -52,8 +88,57 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AccountAddressByID(self, request, context):
+        """AccountAddressByID returns account address based on account number.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Params(self, request, context):
         """Params queries all parameters.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ModuleAccounts(self, request, context):
+        """ModuleAccounts returns all the existing module accounts.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ModuleAccountByName(self, request, context):
+        """ModuleAccountByName returns the module account info by module name
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Bech32Prefix(self, request, context):
+        """Bech32Prefix queries bech32Prefix
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddressBytesToString(self, request, context):
+        """AddressBytesToString converts Account Address bytes to string
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddressStringToBytes(self, request, context):
+        """AddressStringToBytes converts Address string to bytes
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AccountInfo(self, request, context):
+        """AccountInfo queries account info which is common to all account types.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -72,10 +157,45 @@ def add_QueryServicer_to_server(servicer, server):
                     request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountRequest.FromString,
                     response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountResponse.SerializeToString,
             ),
+            'AccountAddressByID': grpc.unary_unary_rpc_method_handler(
+                    servicer.AccountAddressByID,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountAddressByIDRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountAddressByIDResponse.SerializeToString,
+            ),
             'Params': grpc.unary_unary_rpc_method_handler(
                     servicer.Params,
                     request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryParamsRequest.FromString,
                     response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryParamsResponse.SerializeToString,
+            ),
+            'ModuleAccounts': grpc.unary_unary_rpc_method_handler(
+                    servicer.ModuleAccounts,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountsRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountsResponse.SerializeToString,
+            ),
+            'ModuleAccountByName': grpc.unary_unary_rpc_method_handler(
+                    servicer.ModuleAccountByName,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountByNameRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountByNameResponse.SerializeToString,
+            ),
+            'Bech32Prefix': grpc.unary_unary_rpc_method_handler(
+                    servicer.Bech32Prefix,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.Bech32PrefixRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.Bech32PrefixResponse.SerializeToString,
+            ),
+            'AddressBytesToString': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddressBytesToString,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressBytesToStringRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressBytesToStringResponse.SerializeToString,
+            ),
+            'AddressStringToBytes': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddressStringToBytes,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressStringToBytesRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressStringToBytesResponse.SerializeToString,
+            ),
+            'AccountInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.AccountInfo,
+                    request_deserializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountInfoRequest.FromString,
+                    response_serializer=cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountInfoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -123,6 +243,23 @@ class Query(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def AccountAddressByID(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/AccountAddressByID',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountAddressByIDRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountAddressByIDResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def Params(request,
             target,
             options=(),
@@ -136,5 +273,107 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/Params',
             cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryParamsRequest.SerializeToString,
             cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryParamsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ModuleAccounts(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/ModuleAccounts',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountsRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ModuleAccountByName(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/ModuleAccountByName',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountByNameRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryModuleAccountByNameResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Bech32Prefix(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/Bech32Prefix',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.Bech32PrefixRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.Bech32PrefixResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddressBytesToString(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/AddressBytesToString',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressBytesToStringRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressBytesToStringResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddressStringToBytes(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/AddressStringToBytes',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressStringToBytesRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.AddressStringToBytesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AccountInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.auth.v1beta1.Query/AccountInfo',
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountInfoRequest.SerializeToString,
+            cosmos_dot_auth_dot_v1beta1_dot_query__pb2.QueryAccountInfoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

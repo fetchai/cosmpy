@@ -25,6 +25,16 @@ class MsgStub(object):
                 request_serializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgMultiSend.SerializeToString,
                 response_deserializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgMultiSendResponse.FromString,
                 )
+        self.UpdateParams = channel.unary_unary(
+                '/cosmos.bank.v1beta1.Msg/UpdateParams',
+                request_serializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgUpdateParams.SerializeToString,
+                response_deserializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgUpdateParamsResponse.FromString,
+                )
+        self.SetSendEnabled = channel.unary_unary(
+                '/cosmos.bank.v1beta1.Msg/SetSendEnabled',
+                request_serializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgSetSendEnabled.SerializeToString,
+                response_deserializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgSetSendEnabledResponse.FromString,
+                )
 
 
 class MsgServicer(object):
@@ -45,6 +55,24 @@ class MsgServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def UpdateParams(self, request, context):
+        """UpdateParams defines a governance operation for updating the x/bank module parameters.
+        The authority is defined in the keeper.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetSendEnabled(self, request, context):
+        """SetSendEnabled is a governance operation for setting the SendEnabled flag
+        on any number of Denoms. Only the entries to add or update should be
+        included. Entries that already exist in the store, but that aren't
+        included in this message, will be left unchanged.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MsgServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -57,6 +85,16 @@ def add_MsgServicer_to_server(servicer, server):
                     servicer.MultiSend,
                     request_deserializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgMultiSend.FromString,
                     response_serializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgMultiSendResponse.SerializeToString,
+            ),
+            'UpdateParams': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateParams,
+                    request_deserializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgUpdateParams.FromString,
+                    response_serializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgUpdateParamsResponse.SerializeToString,
+            ),
+            'SetSendEnabled': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetSendEnabled,
+                    request_deserializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgSetSendEnabled.FromString,
+                    response_serializer=cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgSetSendEnabledResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -100,5 +138,39 @@ class Msg(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.bank.v1beta1.Msg/MultiSend',
             cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgMultiSend.SerializeToString,
             cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgMultiSendResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UpdateParams(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.bank.v1beta1.Msg/UpdateParams',
+            cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgUpdateParams.SerializeToString,
+            cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgUpdateParamsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetSendEnabled(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.bank.v1beta1.Msg/SetSendEnabled',
+            cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgSetSendEnabled.SerializeToString,
+            cosmos_dot_bank_dot_v1beta1_dot_tx__pb2.MsgSetSendEnabledResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

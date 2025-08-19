@@ -35,6 +35,31 @@ class ServiceStub(object):
                 request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventRequest.SerializeToString,
                 response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventResponse.FromString,
                 )
+        self.GetBlockWithTxs = channel.unary_unary(
+                '/cosmos.tx.v1beta1.Service/GetBlockWithTxs',
+                request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsRequest.SerializeToString,
+                response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsResponse.FromString,
+                )
+        self.TxDecode = channel.unary_unary(
+                '/cosmos.tx.v1beta1.Service/TxDecode',
+                request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeRequest.SerializeToString,
+                response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeResponse.FromString,
+                )
+        self.TxEncode = channel.unary_unary(
+                '/cosmos.tx.v1beta1.Service/TxEncode',
+                request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeRequest.SerializeToString,
+                response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeResponse.FromString,
+                )
+        self.TxEncodeAmino = channel.unary_unary(
+                '/cosmos.tx.v1beta1.Service/TxEncodeAmino',
+                request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeAminoRequest.SerializeToString,
+                response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeAminoResponse.FromString,
+                )
+        self.TxDecodeAmino = channel.unary_unary(
+                '/cosmos.tx.v1beta1.Service/TxDecodeAmino',
+                request_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeAminoRequest.SerializeToString,
+                response_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeAminoResponse.FromString,
+                )
 
 
 class ServiceServicer(object):
@@ -69,6 +94,41 @@ class ServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetBlockWithTxs(self, request, context):
+        """GetBlockWithTxs fetches a block with decoded txs.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TxDecode(self, request, context):
+        """TxDecode decodes the transaction.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TxEncode(self, request, context):
+        """TxEncode encodes the transaction.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TxEncodeAmino(self, request, context):
+        """TxEncodeAmino encodes an Amino transaction from JSON to encoded bytes.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TxDecodeAmino(self, request, context):
+        """TxDecodeAmino decodes an Amino transaction from encoded bytes to JSON.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -91,6 +151,31 @@ def add_ServiceServicer_to_server(servicer, server):
                     servicer.GetTxsEvent,
                     request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventRequest.FromString,
                     response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventResponse.SerializeToString,
+            ),
+            'GetBlockWithTxs': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetBlockWithTxs,
+                    request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsRequest.FromString,
+                    response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsResponse.SerializeToString,
+            ),
+            'TxDecode': grpc.unary_unary_rpc_method_handler(
+                    servicer.TxDecode,
+                    request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeRequest.FromString,
+                    response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeResponse.SerializeToString,
+            ),
+            'TxEncode': grpc.unary_unary_rpc_method_handler(
+                    servicer.TxEncode,
+                    request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeRequest.FromString,
+                    response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeResponse.SerializeToString,
+            ),
+            'TxEncodeAmino': grpc.unary_unary_rpc_method_handler(
+                    servicer.TxEncodeAmino,
+                    request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeAminoRequest.FromString,
+                    response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeAminoResponse.SerializeToString,
+            ),
+            'TxDecodeAmino': grpc.unary_unary_rpc_method_handler(
+                    servicer.TxDecodeAmino,
+                    request_deserializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeAminoRequest.FromString,
+                    response_serializer=cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeAminoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -168,5 +253,90 @@ class Service(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/GetTxsEvent',
             cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventRequest.SerializeToString,
             cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetTxsEventResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetBlockWithTxs(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/GetBlockWithTxs',
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsRequest.SerializeToString,
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.GetBlockWithTxsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TxDecode(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/TxDecode',
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeRequest.SerializeToString,
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TxEncode(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/TxEncode',
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeRequest.SerializeToString,
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TxEncodeAmino(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/TxEncodeAmino',
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeAminoRequest.SerializeToString,
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxEncodeAminoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TxDecodeAmino(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.tx.v1beta1.Service/TxDecodeAmino',
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeAminoRequest.SerializeToString,
+            cosmos_dot_tx_dot_v1beta1_dot_service__pb2.TxDecodeAminoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
