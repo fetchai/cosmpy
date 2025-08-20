@@ -274,6 +274,9 @@ generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DI
 #	python -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path *///third_party/proto/* \) -type f -name *.proto)
 # ensure cosmos-sdk is last as previous modules may have duplicated proto models which are now outdated
 	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOS_SDK_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(GOGOPROTO_DIR) \( -path */gogoproto/* \) -type f -name *.proto)	
+	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOSPROTO_DIR) \( -path */proto/* \) -type f -name *.proto)
+
 
 fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) 
 
