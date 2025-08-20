@@ -45,6 +45,11 @@ class ServiceStub(object):
                 request_serializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.GetValidatorSetByHeightRequest.SerializeToString,
                 response_deserializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.GetValidatorSetByHeightResponse.FromString,
                 )
+        self.ABCIQuery = channel.unary_unary(
+                '/cosmos.base.tendermint.v1beta1.Service/ABCIQuery',
+                request_serializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.ABCIQueryRequest.SerializeToString,
+                response_deserializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.ABCIQueryResponse.FromString,
+                )
 
 
 class ServiceServicer(object):
@@ -93,6 +98,15 @@ class ServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ABCIQuery(self, request, context):
+        """ABCIQuery defines a query handler that supports ABCI queries directly to the
+        application, bypassing Tendermint completely. The ABCI query must contain
+        a valid and supported path, including app, custom, p2p, and store.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -125,6 +139,11 @@ def add_ServiceServicer_to_server(servicer, server):
                     servicer.GetValidatorSetByHeight,
                     request_deserializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.GetValidatorSetByHeightRequest.FromString,
                     response_serializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.GetValidatorSetByHeightResponse.SerializeToString,
+            ),
+            'ABCIQuery': grpc.unary_unary_rpc_method_handler(
+                    servicer.ABCIQuery,
+                    request_deserializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.ABCIQueryRequest.FromString,
+                    response_serializer=cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.ABCIQueryResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -236,5 +255,22 @@ class Service(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.base.tendermint.v1beta1.Service/GetValidatorSetByHeight',
             cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.GetValidatorSetByHeightRequest.SerializeToString,
             cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.GetValidatorSetByHeightResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ABCIQuery(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.base.tendermint.v1beta1.Service/ABCIQuery',
+            cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.ABCIQueryRequest.SerializeToString,
+            cosmos_dot_base_dot_tendermint_dot_v1beta1_dot_query__pb2.ABCIQueryResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

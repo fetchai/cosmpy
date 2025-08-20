@@ -93,6 +93,9 @@ class QueryServicer(object):
 
     def Validators(self, request, context):
         """Validators queries all validators that match the given status.
+
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -107,6 +110,9 @@ class QueryServicer(object):
 
     def ValidatorDelegations(self, request, context):
         """ValidatorDelegations queries delegate info for given validator.
+
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -114,6 +120,9 @@ class QueryServicer(object):
 
     def ValidatorUnbondingDelegations(self, request, context):
         """ValidatorUnbondingDelegations queries unbonding delegations of a validator.
+
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -136,6 +145,9 @@ class QueryServicer(object):
 
     def DelegatorDelegations(self, request, context):
         """DelegatorDelegations queries all delegations of a given delegator address.
+
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -144,6 +156,9 @@ class QueryServicer(object):
     def DelegatorUnbondingDelegations(self, request, context):
         """DelegatorUnbondingDelegations queries all unbonding delegations of a given
         delegator address.
+
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -151,6 +166,9 @@ class QueryServicer(object):
 
     def Redelegations(self, request, context):
         """Redelegations queries redelegations of given address.
+
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -159,6 +177,9 @@ class QueryServicer(object):
     def DelegatorValidators(self, request, context):
         """DelegatorValidators queries all validators info for given delegator
         address.
+
+        When called from another module, this query might consume a high amount of
+        gas if the pagination field is incorrectly set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

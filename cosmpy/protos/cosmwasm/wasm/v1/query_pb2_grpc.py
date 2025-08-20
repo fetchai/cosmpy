@@ -55,10 +55,35 @@ class QueryStub(object):
                 request_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodesRequest.SerializeToString,
                 response_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodesResponse.FromString,
                 )
+        self.CodeInfo = channel.unary_unary(
+                '/cosmwasm.wasm.v1.Query/CodeInfo',
+                request_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodeInfoRequest.SerializeToString,
+                response_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodeInfoResponse.FromString,
+                )
         self.PinnedCodes = channel.unary_unary(
                 '/cosmwasm.wasm.v1.Query/PinnedCodes',
                 request_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryPinnedCodesRequest.SerializeToString,
                 response_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryPinnedCodesResponse.FromString,
+                )
+        self.Params = channel.unary_unary(
+                '/cosmwasm.wasm.v1.Query/Params',
+                request_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryParamsRequest.SerializeToString,
+                response_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryParamsResponse.FromString,
+                )
+        self.ContractsByCreator = channel.unary_unary(
+                '/cosmwasm.wasm.v1.Query/ContractsByCreator',
+                request_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryContractsByCreatorRequest.SerializeToString,
+                response_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryContractsByCreatorResponse.FromString,
+                )
+        self.WasmLimitsConfig = channel.unary_unary(
+                '/cosmwasm.wasm.v1.Query/WasmLimitsConfig',
+                request_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryWasmLimitsConfigRequest.SerializeToString,
+                response_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryWasmLimitsConfigResponse.FromString,
+                )
+        self.BuildAddress = channel.unary_unary(
+                '/cosmwasm.wasm.v1.Query/BuildAddress',
+                request_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryBuildAddressRequest.SerializeToString,
+                response_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryBuildAddressResponse.FromString,
                 )
 
 
@@ -109,7 +134,7 @@ class QueryServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def Code(self, request, context):
-        """Code gets the binary code and metadata for a singe wasm code
+        """Code gets the binary code and metadata for a single wasm code
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -122,8 +147,44 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CodeInfo(self, request, context):
+        """CodeInfo gets the metadata for a single wasm code
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def PinnedCodes(self, request, context):
         """PinnedCodes gets the pinned code ids
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Params(self, request, context):
+        """Params gets the module params
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ContractsByCreator(self, request, context):
+        """ContractsByCreator gets the contracts by creator
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def WasmLimitsConfig(self, request, context):
+        """WasmLimitsConfig gets the configured limits for static validation of Wasm
+        files, encoded in JSON.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def BuildAddress(self, request, context):
+        """BuildAddress builds a contract address
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -172,10 +233,35 @@ def add_QueryServicer_to_server(servicer, server):
                     request_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodesRequest.FromString,
                     response_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodesResponse.SerializeToString,
             ),
+            'CodeInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.CodeInfo,
+                    request_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodeInfoRequest.FromString,
+                    response_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodeInfoResponse.SerializeToString,
+            ),
             'PinnedCodes': grpc.unary_unary_rpc_method_handler(
                     servicer.PinnedCodes,
                     request_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryPinnedCodesRequest.FromString,
                     response_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryPinnedCodesResponse.SerializeToString,
+            ),
+            'Params': grpc.unary_unary_rpc_method_handler(
+                    servicer.Params,
+                    request_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryParamsRequest.FromString,
+                    response_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryParamsResponse.SerializeToString,
+            ),
+            'ContractsByCreator': grpc.unary_unary_rpc_method_handler(
+                    servicer.ContractsByCreator,
+                    request_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryContractsByCreatorRequest.FromString,
+                    response_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryContractsByCreatorResponse.SerializeToString,
+            ),
+            'WasmLimitsConfig': grpc.unary_unary_rpc_method_handler(
+                    servicer.WasmLimitsConfig,
+                    request_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryWasmLimitsConfigRequest.FromString,
+                    response_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryWasmLimitsConfigResponse.SerializeToString,
+            ),
+            'BuildAddress': grpc.unary_unary_rpc_method_handler(
+                    servicer.BuildAddress,
+                    request_deserializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryBuildAddressRequest.FromString,
+                    response_serializer=cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryBuildAddressResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -325,6 +411,23 @@ class Query(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def CodeInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmwasm.wasm.v1.Query/CodeInfo',
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodeInfoRequest.SerializeToString,
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryCodeInfoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def PinnedCodes(request,
             target,
             options=(),
@@ -338,5 +441,73 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/cosmwasm.wasm.v1.Query/PinnedCodes',
             cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryPinnedCodesRequest.SerializeToString,
             cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryPinnedCodesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Params(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmwasm.wasm.v1.Query/Params',
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryParamsRequest.SerializeToString,
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryParamsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ContractsByCreator(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmwasm.wasm.v1.Query/ContractsByCreator',
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryContractsByCreatorRequest.SerializeToString,
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryContractsByCreatorResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def WasmLimitsConfig(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmwasm.wasm.v1.Query/WasmLimitsConfig',
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryWasmLimitsConfigRequest.SerializeToString,
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryWasmLimitsConfigResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def BuildAddress(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmwasm.wasm.v1.Query/BuildAddress',
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryBuildAddressRequest.SerializeToString,
+            cosmwasm_dot_wasm_dot_v1_dot_query__pb2.QueryBuildAddressResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

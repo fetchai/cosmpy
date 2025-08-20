@@ -1,14 +1,24 @@
-COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
-COSMOS_SDK_VERSION := v0.18.0
+COSMOS_SDK_URL := https://github.com/cosmos/cosmos-sdk
+COSMOS_SDK_VERSION := v0.53.3
 COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
 
 WASMD_URL := https://github.com/CosmWasm/wasmd
-WASMD_VERSION := v0.27.0
+WASMD_VERSION := v0.61.2
 WASMD_DIR := build/wasm-proto-shema
 
 IBCGO_URL := https://github.com/cosmos/ibc-go
-IBCGO_VERSION := v2.2.0
+IBCGO_VERSION := v10.2.0
 IBCGO_DIR := build/ibcgo-proto-schema
+
+GOGOPROTO_URL := https://github.com/cosmos/gogoproto
+GOGOPROTO_VERSION := v1.7.0
+GOGOPROTO_DIR := build/gogo-proto
+
+COSMOSPROTO_URL := https://github.com/cosmos/cosmos-proto
+COSMOSPROTO_VERSION := v1.0.0-beta.5
+COSMOSPROTO_DIR := build/cosmos-proto
+
+PY_GOOGLEAPIS_ROOT := $(shell python -c "import importlib.util, pathlib, sys; s=importlib.util.find_spec('google.api'); print(pathlib.Path(next(iter(s.submodule_search_locations))).parents[1]) if s and s.submodule_search_locations else sys.stdout.write('')")
 
 COSMPY_PROTOS_DIR := cosmpy/protos
 COSMPY_SRC_DIR := cosmpy
@@ -22,7 +32,7 @@ PYTHON_CODE_DIRS := $(COSMPY_SRC_DIR) $(COSMPY_TESTS_DIR) $(COSMPY_EXAMPLES_DIR)
 ### Initialise dev environment
 ########################################
 
-# Create a new poetry virtual environment with all the necessary dependencies installed.
+# Create a new 	poetry virtual environment with all the necessary dependencies installed.
 # Once finished, `poetry shell` to enter the virtual environment
 v := $(shell pip -V | grep virtualenvs)
 
@@ -258,14 +268,17 @@ unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1))
 
 proto: fetch_proto_schema_source generate_proto_types generate_init_py_files
 
-generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
+generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) $(PY_GOOGLEAPIS_ROOT)
 	rm -frv $(COSMPY_PROTOS_DIR)/*
-	python -m grpc_tools.protoc --proto_path=$(WASMD_DIR)/proto --proto_path=$(WASMD_DIR)/third_party/proto  --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(WASMD_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
-	python -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(IBCGO_DIR)/third_party/proto  --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python -m grpc_tools.protoc  --proto_path=$(WASMD_DIR)/proto  --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(WASMD_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+#	python -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path *///third_party/proto/* \) -type f -name *.proto)
 # ensure cosmos-sdk is last as previous modules may have duplicated proto models which are now outdated
-	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --proto_path=$(COSMOS_SDK_DIR)/third_party/proto  --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOS_SDK_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOS_SDK_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
+	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(GOGOPROTO_DIR) \( -path */gogoproto/* \) -type f -name *.proto)	
+	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOSPROTO_DIR) \( -path */proto/* \) -type f -name *.proto)
 
-fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
+
+fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) 
 
 .PHONY: generate_init_py_files
 generate_init_py_files: generate_proto_types
@@ -281,7 +294,7 @@ $(GENERATED): $(SOURCE)
 $(INIT_PY_FILES_TO_CREATE): $(GENERATED_DIRS)
 	touch $(INIT_PY_FILES_TO_CREATE)
 
-$(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR)
+$(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) 
 
 $(COSMOS_SDK_DIR): Makefile
 	rm -rfv $(COSMOS_SDK_DIR)
@@ -297,6 +310,14 @@ $(IBCGO_DIR): Makefile
 	rm -rfv $(IBCGO_DIR)
 	git clone --branch $(IBCGO_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(IBCGO_URL) $(IBCGO_DIR)
 	cd $(IBCGO_DIR) && git checkout $(IBCGO_VERSION) -- $(IBCGO_PROTO_RELATIVE_DIRS)
+
+$(GOGOPROTO_DIR): Makefile
+	rm -rfv $(GOGOPROTO_DIR)
+	git clone --branch $(GOGOPROTO_VERSION) --depth 1 --quiet $(GOGOPROTO_URL) $(GOGOPROTO_DIR)
+	
+$(COSMOSPROTO_DIR): Makefile
+	rm -rfv $(COSMOSPROTO_DIR)
+	git clone --branch $(COSMOSPROTO_VERSION) --depth 1 --quiet $(COSMOSPROTO_URL) $(COSMOSPROTO_DIR)
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
