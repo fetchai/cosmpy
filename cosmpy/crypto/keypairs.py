@@ -21,7 +21,7 @@
 
 import base64
 import hashlib
-from typing import Callable, Optional, Union, BinaryIO
+from typing import BinaryIO, Callable, Optional, Union
 
 import ecdsa
 from ecdsa.curves import Curve

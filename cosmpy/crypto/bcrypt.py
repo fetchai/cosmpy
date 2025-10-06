@@ -19,13 +19,15 @@
 
 """Utilities for importing bcrypt-armored private keys."""
 
+import base64
 import binascii
 import hashlib
-import base64
 import re
 from typing import Tuple
-from nacl.secret import SecretBox
+
 import bcrypt
+from nacl.secret import SecretBox
+
 
 BEGIN_RE = re.compile(r"^-{5}BEGIN\s+([A-Z0-9]+)\s+PRIVATE KEY-{5}\s*$")
 END_RE = re.compile(r"^-{5}END\s+([A-Z0-9]+)\s+PRIVATE KEY-{5}\s*$")
@@ -55,13 +57,13 @@ def _bcrypt_base64_encode(raw: bytes) -> bytes:
     """
     out = bytearray()
     i = 0
-    l = len(raw)
-    while i < l:
+    raw_len = len(raw)
+    while i < raw_len:
         c1 = raw[i]
         i += 1
         out.append(_BCRYPT_B64_ALPHABET[c1 >> 2])
         c1 = (c1 & 0x03) << 4
-        if i >= l:
+        if i >= raw_len:
             out.append(_BCRYPT_B64_ALPHABET[c1])
             break
         c2 = raw[i]
@@ -69,7 +71,7 @@ def _bcrypt_base64_encode(raw: bytes) -> bytes:
         c1 |= c2 >> 4
         out.append(_BCRYPT_B64_ALPHABET[c1])
         c1 = (c2 & 0x0F) << 2
-        if i >= l:
+        if i >= raw_len:
             out.append(_BCRYPT_B64_ALPHABET[c1])
             break
         c3 = raw[i]
@@ -89,6 +91,9 @@ def _make_bcrypt_salt_from_hex(
     :param hexsalt: str 32-hex-char salt (16 bytes).
     :param cost: int log2 work factor (e.g. 12).
     :param version: bytes bcrypt version tag (e.g. b"2a").
+
+    :raises ArmorError: if salt has icorrect number of bytes
+
     :return: bytes bcrypt salt of the form b"$<ver>$<cc>$<22chars>".
     """
     salt_bytes = binascii.unhexlify(hexsalt)
@@ -107,6 +112,9 @@ def _parse_armor_bcrypt(armor_str: str) -> Tuple[str, bytes, str]:
     Parse a bcrypt-armored private key block and extract fields.
 
     :param armor_str: str full ASCII armor including BEGIN/END lines.
+
+    :raises ArmorError: salt, header, or body is missing or malformed
+
     :return: tuple (algo: str, ciphertext: bytes, salt_hex: str).
     """
     lines = [ln.rstrip("\r\n") for ln in armor_str.splitlines()]
@@ -173,6 +181,9 @@ def _secretbox_decrypt_prefixed_nonce(ciphertext: bytes, key32: bytes) -> bytes:
 
     :param ciphertext: bytes nonce||ciphertext (nonce is first 24 bytes).
     :param key32: bytes 32-byte SecretBox key.
+
+    :raises ArmorError: if ciphertext or key32 are incorrect
+
     :return: bytes plaintext on successful authentication/decryption.
     """
     if len(key32) != 32:
@@ -192,6 +203,9 @@ def import_cosmos_bcrypt_armored_privkey(
     :param armor_str: str full ASCII armor including headers and body.
     :param passphrase: str passphrase for bcrypt KDF.
     :param rounds: int bcrypt cost (log2 work factor).
+
+    :raises ArmorError: if passphrase is wrong or keyfile is corrupted
+
     :return: tuple (privkey32: bytes, algo: str) where privkey32 is 32 bytes.
     """
     algo, ciphertext, salt_hex = _parse_armor_bcrypt(armor_str)
