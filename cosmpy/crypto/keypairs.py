@@ -27,7 +27,7 @@ import ecdsa
 from ecdsa.curves import Curve
 from ecdsa.util import sigencode_string, sigencode_string_canonize
 
-from cosmpy.crypto.armored import import_cosmos_bcrypt_armored_privkey
+from cosmpy.crypto.bcrypt import import_cosmos_bcrypt_armored_privkey
 from cosmpy.crypto.interface import Signer
 
 
