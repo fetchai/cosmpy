@@ -21,12 +21,13 @@
 
 import base64
 import hashlib
-from typing import Callable, Optional, Union
+from typing import Callable, Optional, Union, BinaryIO
 
 import ecdsa
 from ecdsa.curves import Curve
 from ecdsa.util import sigencode_string, sigencode_string_canonize
 
+from cosmpy.crypto.armored import import_cosmos_bcrypt_armored_privkey
 from cosmpy.crypto.interface import Signer
 
 
@@ -160,6 +161,30 @@ class PrivateKey(Signer):
         # cache the binary representations of the private key
         self._private_key_bytes = self._signing_key.to_string()
         self._private_key = base64.b64encode(self._private_key_bytes).decode()
+
+    @classmethod
+    def from_bcrypt_key(cls, io: BinaryIO, passphrase: str) -> "PrivateKey":
+        """
+        Load a PrivateKey from a bcrypt-armored key file.
+
+        :param io: BinaryIO file-like object containing the armored key.
+        :param passphrase: str passphrase to decrypt the key.
+        :return: PrivateKey instance initialized with the decrypted key.
+        :raises ValueError: if the key algorithm is not secp256k1.
+        """
+        # keep your deterministic account name (hash of file contents)
+        raw = io.read()
+
+        # decrypt armor (bcrypt + xsalsa20), get raw privkey bytes
+        armor_str = raw.decode("utf-8", errors="strict")
+        privkey_bytes, algo = import_cosmos_bcrypt_armored_privkey(
+            armor_str, passphrase=passphrase, rounds=12
+        )
+
+        if algo.lower() != "secp256k1":
+            raise ValueError(f"Unsupported key algo '{algo}', expected secp256k1")
+
+        return cls(privkey_bytes)
 
     @property
     def private_key(self) -> str:

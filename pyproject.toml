@@ -46,6 +46,8 @@ pycryptodome = "^3.18.0"
 googleapis-common-protos = "*"
 virtualenv = ">=20.26.6"
 sortedcontainers = "==2.4.0"
+bcrypt = "==5.0.0"
+pynacl = "==1.6.0"
 
 [tool.poetry.group.dev]
 optional = true
