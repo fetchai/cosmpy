@@ -1,5 +1,9 @@
 # Release History
 
+## 0.11.2
+
+- feat: Ability to use Cosmos SDK bcrypt armored key files
+
 ## 0.11.1
 
 - feat: Coins impl. using sorted dictionary
