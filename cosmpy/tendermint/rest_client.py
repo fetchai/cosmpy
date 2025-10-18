@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 """Implementation of IBC Applications Transfer  interface using REST."""
+from typing import Optional, Tuple
+
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
@@ -50,11 +52,17 @@ class CosmosBaseTendermintRestClient(CosmosBaseTendermint):
         """
         self._rest_api = rest_api
 
-    def GetNodeInfo(self, request: GetNodeInfoRequest) -> GetNodeInfoResponse:
+    def GetNodeInfo(
+        self,
+        request: GetNodeInfoRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> GetNodeInfoResponse:
         """
         GetNodeInfo queries the current node info.
 
         :param request: GetNodeInfoRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: GetNodeInfoResponse
         """
         json_response = self._rest_api.get(
@@ -62,11 +70,17 @@ class CosmosBaseTendermintRestClient(CosmosBaseTendermint):
         )
         return Parse(json_response, GetNodeInfoResponse())
 
-    def GetSyncing(self, request: GetSyncingRequest) -> GetSyncingResponse:
+    def GetSyncing(
+        self,
+        request: GetSyncingRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> GetSyncingResponse:
         """
         GetSyncing queries node syncing.
 
         :param request: GetSyncingRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: GetSyncingResponse
         """
         json_response = self._rest_api.get(
@@ -74,11 +88,17 @@ class CosmosBaseTendermintRestClient(CosmosBaseTendermint):
         )
         return Parse(json_response, GetSyncingResponse())
 
-    def GetLatestBlock(self, request: GetLatestBlockRequest) -> GetLatestBlockResponse:
+    def GetLatestBlock(
+        self,
+        request: GetLatestBlockRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> GetLatestBlockResponse:
         """
         GetLatestBlock returns the latest block.
 
         :param request: GetLatestBlockRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: GetLatestBlockResponse
         """
         json_response = self._rest_api.get(
@@ -87,24 +107,32 @@ class CosmosBaseTendermintRestClient(CosmosBaseTendermint):
         return Parse(json_response, GetLatestBlockResponse())
 
     def GetBlockByHeight(
-        self, request: GetBlockByHeightRequest
+        self,
+        request: GetBlockByHeightRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> GetBlockByHeightResponse:
         """
         GetBlockByHeight queries block for given height.
 
         :param request: GetBlockByHeightRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: GetBlockByHeightResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/blocks/{request.height}")
         return Parse(json_response, GetBlockByHeightResponse())
 
     def GetLatestValidatorSet(
-        self, request: GetLatestValidatorSetRequest
+        self,
+        request: GetLatestValidatorSetRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> GetLatestValidatorSetResponse:
         """
         GetLatestValidatorSet queries latest validator-set.
 
         :param request: GetLatestValidatorSetRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: GetLatestValidatorSetResponse
         """
         json_response = self._rest_api.get(
@@ -113,12 +141,16 @@ class CosmosBaseTendermintRestClient(CosmosBaseTendermint):
         return Parse(json_response, GetLatestValidatorSetResponse())
 
     def GetValidatorSetByHeight(
-        self, request: GetValidatorSetByHeightRequest
+        self,
+        request: GetValidatorSetByHeightRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> GetValidatorSetByHeightResponse:
         """
         GetValidatorSetByHeight queries validator-set at a given height.
 
         :param request: GetValidatorSetByHeightRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: GetValidatorSetByHeightResponse
         """
         json_response = self._rest_api.get(

@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of Distribution interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -66,12 +67,16 @@ class DistributionRestClient(Distribution):
         return Parse(json_response, QueryCommunityPoolResponse())
 
     def DelegationTotalRewards(
-        self, request: QueryDelegationTotalRewardsRequest
+        self,
+        request: QueryDelegationTotalRewardsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegationTotalRewardsResponse:
         """
         DelegationTotalRewards queries the total rewards accrued by each validator.
 
         :param request: a QueryDelegationTotalRewardsRequest instance
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: a QueryDelegationTotalRewardsResponse instance
         """
         json_response = self._rest_api.get(
@@ -80,12 +85,16 @@ class DistributionRestClient(Distribution):
         return Parse(json_response, QueryDelegationTotalRewardsResponse())
 
     def DelegationRewards(
-        self, request: QueryDelegationRewardsRequest
+        self,
+        request: QueryDelegationRewardsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegationRewardsResponse:
         """
         DelegationRewards queries the total rewards accrued by a delegation.
 
         :param request: a QueryDelegationRewardsRequest instance
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: a QueryDelegationRewardsResponse instance
         """
         json_response = self._rest_api.get(
@@ -94,12 +103,16 @@ class DistributionRestClient(Distribution):
         return Parse(json_response, QueryDelegationRewardsResponse())
 
     def DelegatorValidators(
-        self, request: QueryDelegatorValidatorsRequest
+        self,
+        request: QueryDelegatorValidatorsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegatorValidatorsResponse:
         """
         DelegatorValidators queries the validators of a delegator.
 
         :param request: a QueryDelegatorValidatorsRequest instance
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: a QueryDelegatorValidatorsResponse instance
         """
         json_response = self._rest_api.get(
@@ -108,12 +121,16 @@ class DistributionRestClient(Distribution):
         return Parse(json_response, QueryDelegatorValidatorsResponse())
 
     def DelegatorWithdrawAddress(
-        self, request: QueryDelegatorWithdrawAddressRequest
+        self,
+        request: QueryDelegatorWithdrawAddressRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegatorWithdrawAddressResponse:
         """
         DelegatorWithdrawAddress queries withdraw address of a delegator.
 
         :param request: a QueryDelegatorWithdrawAddressRequest instance
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: a QueryDelegatorWithdrawAddressResponse instance
         """
         json_response = self._rest_api.get(
@@ -131,12 +148,16 @@ class DistributionRestClient(Distribution):
         return Parse(json_response, QueryParamsResponse())
 
     def ValidatorCommission(
-        self, request: QueryValidatorCommissionRequest
+        self,
+        request: QueryValidatorCommissionRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryValidatorCommissionResponse:
         """
         ValidatorCommission queries accumulated commission for a validator.
 
         :param request: QueryValidatorCommissionRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryValidatorCommissionResponse
         """
         json_response = self._rest_api.get(
@@ -145,12 +166,16 @@ class DistributionRestClient(Distribution):
         return Parse(json_response, QueryValidatorCommissionResponse())
 
     def ValidatorOutstandingRewards(
-        self, request: QueryValidatorOutstandingRewardsRequest
+        self,
+        request: QueryValidatorOutstandingRewardsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryValidatorOutstandingRewardsResponse:
         """
         ValidatorOutstandingRewards queries rewards of a validator address.
 
         :param request: QueryValidatorOutstandingRewardsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryValidatorOutstandingRewardsResponse
         """
         json_response = self._rest_api.get(
@@ -159,12 +184,16 @@ class DistributionRestClient(Distribution):
         return Parse(json_response, QueryValidatorOutstandingRewardsResponse())
 
     def ValidatorSlashes(
-        self, request: QueryValidatorSlashesRequest
+        self,
+        request: QueryValidatorSlashesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryValidatorSlashesResponse:
         """
         ValidatorSlashes queries slash events of a validator.
 
         :param request: QueryValidatorSlashesRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryValidatorSlashesResponse
         """
         json_response = self._rest_api.get(

@@ -19,6 +19,7 @@
 """Interface for the Slashing functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from cosmpy.protos.cosmos.slashing.v1beta1.query_pb2 import (
     QueryParamsResponse,
@@ -41,23 +42,29 @@ class Slashing(ABC):
         """
 
     @abstractmethod
-    def SigningInfo(self, request: QuerySigningInfoRequest) -> QuerySigningInfoResponse:
+    def SigningInfo(
+        self,
+        request: QuerySigningInfoRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QuerySigningInfoResponse:
         """
         SigningInfo queries the signing info of given cons address.
 
         :param request: QuerySigningInfoRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QuerySigningInfoResponse
         """
 
     @abstractmethod
     def SigningInfos(
-        self, request: QuerySigningInfosRequest
+        self,
+        request: QuerySigningInfosRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QuerySigningInfosResponse:
         """
         SigningInfos queries signing info of all validators.
 
         :param request: QuerySigningInfosRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QuerySigningInfosResponse
         """

@@ -19,6 +19,7 @@
 """Interface for the Cosmos Upgrade functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from cosmpy.protos.cosmos.upgrade.v1beta1.query_pb2 import (
     QueryAppliedPlanRequest,
@@ -32,19 +33,31 @@ class CosmosUpgrade(ABC):
     """Cosmos Upgrade abstract class."""
 
     @abstractmethod
-    def CurrentPlan(self, request: QueryCurrentPlanRequest) -> QueryCurrentPlanResponse:
+    def CurrentPlan(
+        self,
+        request: QueryCurrentPlanRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryCurrentPlanResponse:
         """
         CurrentPlan queries the current upgrade plan.
 
         :param request: QueryCurrentPlanRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryCurrentPlanResponse
         """
 
     @abstractmethod
-    def AppliedPlan(self, request: QueryAppliedPlanRequest) -> QueryAppliedPlanResponse:
+    def AppliedPlan(
+        self,
+        request: QueryAppliedPlanRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryAppliedPlanResponse:
         """
         AppliedPlan queries a previously applied upgrade plan by its name.
 
         :param request: QueryAppliedPlanRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryAppliedPlanResponse
         """

@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of Staking interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -68,21 +69,33 @@ class StakingRestClient(Staking):
         """
         self._rest_api = rest_api
 
-    def Validators(self, request: QueryValidatorsRequest) -> QueryValidatorsResponse:
+    def Validators(
+        self,
+        request: QueryValidatorsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryValidatorsResponse:
         """
         Query all validators that match the given status.
 
         :param request: QueryValidatorsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryValidatorsResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/validators", request)
         return Parse(json_response, QueryValidatorsResponse())
 
-    def Validator(self, request: QueryValidatorRequest) -> QueryValidatorResponse:
+    def Validator(
+        self,
+        request: QueryValidatorRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryValidatorResponse:
         """
         Query validator info for given validator address.
 
         :param request: QueryValidatorRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryValidatorResponse
         """
         json_response = self._rest_api.get(
@@ -91,12 +104,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryValidatorResponse())
 
     def ValidatorDelegations(
-        self, request: QueryValidatorDelegationsRequest
+        self,
+        request: QueryValidatorDelegationsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryValidatorDelegationsResponse:
         """
         ValidatorDelegations queries delegate info for given validator.
 
         :param request: QueryValidatorDelegationsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryValidatorDelegationsResponse
         """
         json_response = self._rest_api.get(
@@ -107,12 +124,15 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryValidatorDelegationsResponse())
 
     def ValidatorUnbondingDelegations(
-        self, request: QueryValidatorUnbondingDelegationsRequest
+        self,
+        request: QueryValidatorUnbondingDelegationsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryValidatorUnbondingDelegationsResponse:
         """
         ValidatorUnbondingDelegations queries unbonding delegations of a validator.
 
         :param request: ValidatorUnbondingDelegations
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryValidatorUnbondingDelegationsResponse
         """
         json_response = self._rest_api.get(
@@ -122,11 +142,17 @@ class StakingRestClient(Staking):
         )
         return Parse(json_response, QueryValidatorUnbondingDelegationsResponse())
 
-    def Delegation(self, request: QueryDelegationRequest) -> QueryDelegationResponse:
+    def Delegation(
+        self,
+        request: QueryDelegationRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryDelegationResponse:
         """
         Query delegate info for given validator delegator pair.
 
         :param request: QueryDelegationRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryDelegationResponse
         """
         json_response = self._rest_api.get(
@@ -135,12 +161,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryDelegationResponse())
 
     def UnbondingDelegation(
-        self, request: QueryUnbondingDelegationRequest
+        self,
+        request: QueryUnbondingDelegationRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryUnbondingDelegationResponse:
         """
         UnbondingDelegation queries unbonding info for given validator delegator pair.
 
         :param request: QueryUnbondingDelegationRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryUnbondingDelegationResponse
         """
         json_response = self._rest_api.get(
@@ -149,12 +179,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryUnbondingDelegationResponse())
 
     def DelegatorDelegations(
-        self, request: QueryDelegatorDelegationsRequest
+        self,
+        request: QueryDelegatorDelegationsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegatorDelegationsResponse:
         """
         DelegatorDelegations queries all delegations of a given delegator address.
 
         :param request: QueryDelegatorDelegationsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryDelegatorDelegationsResponse
         """
         json_response = self._rest_api.get(
@@ -165,12 +199,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryDelegatorDelegationsResponse())
 
     def DelegatorUnbondingDelegations(
-        self, request: QueryDelegatorUnbondingDelegationsRequest
+        self,
+        request: QueryDelegatorUnbondingDelegationsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegatorUnbondingDelegationsResponse:
         """
         DelegatorUnbondingDelegations queries all unbonding delegations of a given delegator address.
 
         :param request: QueryDelegatorUnbondingDelegationsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryDelegatorUnbondingDelegationsResponse
         """
         json_response = self._rest_api.get(
@@ -181,12 +219,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryDelegatorUnbondingDelegationsResponse())
 
     def Redelegations(
-        self, request: QueryRedelegationsRequest
+        self,
+        request: QueryRedelegationsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryRedelegationsResponse:
         """
         Redelegations queries redelegations of given address.
 
         :param request: QueryRedelegationsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryRedelegationsResponse
         """
         json_response = self._rest_api.get(
@@ -197,12 +239,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryRedelegationsResponse())
 
     def DelegatorValidators(
-        self, request: QueryDelegatorValidatorsRequest
+        self,
+        request: QueryDelegatorValidatorsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegatorValidatorsResponse:
         """
         DelegatorValidators queries all validators info for given delegator address.
 
         :param request: QueryDelegatorValidatorsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryDelegatorValidatorsRequest
         """
         json_response = self._rest_api.get(
@@ -213,12 +259,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryDelegatorValidatorsResponse())
 
     def DelegatorValidator(
-        self, request: QueryDelegatorValidatorRequest
+        self,
+        request: QueryDelegatorValidatorRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryDelegatorValidatorResponse:
         """
         DelegatorValidator queries validator info for given delegator validator pair.
 
         :param request: QueryDelegatorValidatorRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryDelegatorValidatorResponse
         """
         json_response = self._rest_api.get(
@@ -227,12 +277,16 @@ class StakingRestClient(Staking):
         return Parse(json_response, QueryDelegatorValidatorResponse())
 
     def HistoricalInfo(
-        self, request: QueryHistoricalInfoRequest
+        self,
+        request: QueryHistoricalInfoRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryHistoricalInfoResponse:
         """
         HistoricalInfo queries the historical info for given height.
 
         :param request: QueryHistoricalInfoRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryHistoricalInfoResponse
         """
         json_response = self._rest_api.get(
@@ -240,21 +294,33 @@ class StakingRestClient(Staking):
         )
         return Parse(json_response, QueryHistoricalInfoResponse())
 
-    def Pool(self, request: QueryPoolRequest) -> QueryPoolResponse:
+    def Pool(
+        self,
+        request: QueryPoolRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryPoolResponse:
         """
         Pool queries the pool info.
 
         :param request: QueryPoolRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryPoolResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/pool")
         return Parse(json_response, QueryPoolResponse())
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Parameters queries the staking parameters.
 
         :param request: QueryParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
+
         :return: QueryParamsResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params")

@@ -21,6 +21,7 @@
 
 import base64
 import json
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse, ParseDict
 
@@ -63,13 +64,15 @@ class CosmWasmRestClient(CosmWasm):
         self._rest_api = rest_api
 
     def ContractInfo(
-        self, request: QueryContractInfoRequest
+        self,
+        request: QueryContractInfoRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryContractInfoResponse:
         """
         Get the contract meta data.
 
         :param request: QueryContractInfoRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryContractInfoResponse
         """
         response = self._rest_api.get(
@@ -78,13 +81,15 @@ class CosmWasmRestClient(CosmWasm):
         return Parse(response, QueryContractInfoResponse())
 
     def ContractHistory(
-        self, request: QueryContractHistoryRequest
+        self,
+        request: QueryContractHistoryRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryContractHistoryResponse:
         """
         Get the contract code history.
 
         :param request: QueryContractHistoryRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryContractHistoryResponse
         """
         response = self._rest_api.get(
@@ -96,12 +101,15 @@ class CosmWasmRestClient(CosmWasm):
         )
 
     def ContractsByCode(
-        self, request: QueryContractsByCodeRequest
+        self,
+        request: QueryContractsByCodeRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryContractsByCodeResponse:
         """
         List all smart contracts for a code id.
 
         :param request: QueryContractsByCodeRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryContractsByCodeResponse
         """
@@ -111,12 +119,15 @@ class CosmWasmRestClient(CosmWasm):
         return Parse(response, QueryContractsByCodeResponse())
 
     def AllContractState(
-        self, request: QueryAllContractStateRequest
+        self,
+        request: QueryAllContractStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryAllContractStateResponse:
         """
         Get all raw store data for a single contract.
 
         :param request: QueryAllContractStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryAllContractStateResponse
         """
@@ -126,12 +137,15 @@ class CosmWasmRestClient(CosmWasm):
         return Parse(response, QueryAllContractStateResponse())
 
     def RawContractState(
-        self, request: QueryRawContractStateRequest
+        self,
+        request: QueryRawContractStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryRawContractStateResponse:
         """
         Get single key from the raw store data of a contract.
 
         :param request: QueryRawContractStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryRawContractStateResponse
         """
@@ -149,12 +163,15 @@ class CosmWasmRestClient(CosmWasm):
         )
 
     def SmartContractState(
-        self, request: QuerySmartContractStateRequest
+        self,
+        request: QuerySmartContractStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QuerySmartContractStateResponse:
         """
         Get smart query result from the contract.
 
         :param request: QuerySmartContractStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QuerySmartContractStateResponse
         """
@@ -169,11 +186,16 @@ class CosmWasmRestClient(CosmWasm):
             self._fix_state_response(response), QuerySmartContractStateResponse()
         )
 
-    def Code(self, request: QueryCodeRequest) -> QueryCodeResponse:
+    def Code(
+        self,
+        request: QueryCodeRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryCodeResponse:
         """
         Get the binary code and metadata for a single wasm code.
 
         :param request: QueryCodeRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryCodeResponse
         """
@@ -183,11 +205,16 @@ class CosmWasmRestClient(CosmWasm):
 
         return Parse(response, QueryCodeResponse())
 
-    def Codes(self, request: QueryCodesRequest) -> QueryCodesResponse:
+    def Codes(
+        self,
+        request: QueryCodesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryCodesResponse:
         """
         Get the metadata for all stored wasm codes.
 
         :param request: QueryCodesRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryCodesResponse
         """

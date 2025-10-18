@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 """Implementation of IBC Applications Transfer  interface using REST."""
+from typing import Optional, Tuple
+
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
@@ -48,11 +50,16 @@ class IBCCoreClientRestClient(IBCCoreClient):
         """
         self._rest_api = rest_api
 
-    def ClientState(self, request: QueryClientStateRequest) -> QueryClientStateResponse:
+    def ClientState(
+        self,
+        request: QueryClientStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryClientStateResponse:
         """
         ClientState queries an IBC light client.
 
         :param request: QueryClientStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryClientStateResponse
         """
         json_response = self._rest_api.get(
@@ -61,24 +68,30 @@ class IBCCoreClientRestClient(IBCCoreClient):
         return Parse(json_response, QueryClientStateResponse())
 
     def ClientStates(
-        self, request: QueryClientStatesRequest
+        self,
+        request: QueryClientStatesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryClientStatesResponse:
         """
         ClientStates queries all the IBC light clients of a chain.
 
         :param request: QueryClientStatesRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryClientStatesResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/client_states", request)
         return Parse(json_response, QueryClientStatesResponse())
 
     def ConsensusState(
-        self, request: QueryConsensusStateRequest
+        self,
+        request: QueryConsensusStateRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryConsensusStateResponse:
         """
         ConsensusState queries a consensus state associated with a client state at a given height.
 
         :param request: QueryConsensusStateRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConsensusStateResponse
         """
         json_response = self._rest_api.get(
@@ -87,12 +100,15 @@ class IBCCoreClientRestClient(IBCCoreClient):
         return Parse(json_response, QueryConsensusStateResponse())
 
     def ConsensusStates(
-        self, request: QueryConsensusStatesRequest
+        self,
+        request: QueryConsensusStatesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryConsensusStatesResponse:
         """
         ConsensusStates queries all the consensus states associated with a given client.
 
         :param request: QueryConsensusStatesRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryConsensusStatesResponse
         """
         json_response = self._rest_api.get(
@@ -101,12 +117,15 @@ class IBCCoreClientRestClient(IBCCoreClient):
         return Parse(json_response, QueryConsensusStatesResponse())
 
     def ClientParams(
-        self, request: QueryClientParamsRequest
+        self,
+        request: QueryClientParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QueryClientParamsResponse:
         """
         ClientParams queries all parameters of the IBC client.
 
         :param request: QueryClientParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryClientParamsResponse
         """
         json_response = self._rest_api.get("/ibc/client/v1beta1/params")
