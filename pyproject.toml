@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cosmpy"
-version = "0.11.1"
+version = "0.11.2"
 packages = [
     { include = "cosmpy" },
     { include = "gogoproto", from = "cosmpy/protos" }
@@ -50,6 +50,8 @@ pycryptodome = "^3.18.0"
 googleapis-common-protos = "*"
 virtualenv = ">=20.26.6"
 sortedcontainers = "==2.4.0"
+bcrypt = "==5.0.0"
+pynacl = "==1.6.0"
 
 [tool.poetry.group.dev]
 optional = true
@@ -61,7 +63,7 @@ flake8 = "==5.0.4"
 black = "^22.10"
 mypy = "==1.15.0"
 bandit = "==1.7.4"
-safety = "==3.3.1"
+safety = "==3.6.1"
 isort = "==5.10.1"
 darglint = "==1.8.1"
 vulture = "==2.6"
@@ -120,7 +122,9 @@ module = [
     "mbedtls.*",
     "jsonschema.*",
     "dateutil.*",
-    "sortedcontainers.*"
+    "sortedcontainers.*",
+    "bcrypt.*",
+    "nacl.*"
 ]
 ignore_missing_imports = true
 

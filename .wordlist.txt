@@ -333,3 +333,4 @@ exc
 iterable
 denoms
 impl
+bcrypt
