@@ -19,7 +19,6 @@
 
 """Client functionality."""
 
-import json
 import math
 import time
 from datetime import datetime, timedelta
@@ -29,7 +28,6 @@ from typing import Any, Dict, List, Optional, Tuple
 import certifi
 import grpc
 from dateutil.parser import isoparse
-from google.protobuf.json_format import MessageToDict
 
 from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
@@ -81,10 +79,7 @@ from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
     ServiceStub as TendermintQueryGrpcClient,
 )
-from cosmpy.protos.cosmos.consensus.v1.query_pb2 import (
-    QueryParamsRequest,
-    QueryParamsResponse,
-)
+from cosmpy.protos.cosmos.consensus.v1.query_pb2 import QueryParamsRequest
 from cosmpy.protos.cosmos.consensus.v1.query_pb2_grpc import (
     QueryStub as QueryConsensusGrpcClient,
 )
@@ -120,12 +115,6 @@ from cosmpy.tendermint.rest_client import (
     CosmosBaseTendermintRestClient as TendermintRestClient,
 )
 from cosmpy.tx.rest_client import TxRestClient
-
-
-# from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
-# from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
-#    QueryStub as QueryParamsGrpcClient,
-# )
 
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
@@ -235,22 +224,9 @@ class LedgerClient:
             sequence=account.sequence,
         )
 
-    # def query_params(self, subspace: str, key: str) -> Any:
-    #     """Query Prams.
-    #
-    #     :param subspace: subspace
-    #     :param key: key
-    #     :return: Query params
-    #     """
-    #     req = QueryParamsRequest(subspace=subspace, key=key)
-    #     resp = self.params.Params(req)
-    #     return json.loads(resp.param.value)
-
     def query_consensus(self) -> Any:
         """Query Params.
 
-        :param subspace: subspace
-        :param key: key
         :return: Query params
         """
         req = QueryParamsRequest()
