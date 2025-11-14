@@ -18,7 +18,7 @@ from amino import amino_pb2 as amino_dot_amino__pb2
 from cosmos_proto import cosmos_pb2 as cosmos__proto_dot_cosmos__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1f\x63osmos/mint/v1beta1/query.proto\x12\x13\x63osmos.mint.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1e\x63osmos/mint/v1beta1/mint.proto\x1a\x11\x61mino/amino.proto\x1a\x19\x63osmos_proto/cosmos.proto\"\x14\n\x12QueryParamsRequest\"M\n\x13QueryParamsResponse\x12\x36\n\x06params\x18\x01 \x01(\x0b\x32\x1b.cosmos.mint.v1beta1.ParamsB\t\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\"\x17\n\x15QueryInflationRequest\"c\n\x16QueryInflationResponse\x12I\n\tinflation\x18\x01 \x01(\x0c\x42\x36\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\"\x1e\n\x1cQueryAnnualProvisionsRequest\"r\n\x1dQueryAnnualProvisionsResponse\x12Q\n\x11\x61nnual_provisions\x18\x01 \x01(\x0c\x42\x36\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\x32\xc5\x03\n\x05Query\x12\x80\x01\n\x06Params\x12\'.cosmos.mint.v1beta1.QueryParamsRequest\x1a(.cosmos.mint.v1beta1.QueryParamsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/cosmos/mint/v1beta1/params\x12\x8c\x01\n\tInflation\x12*.cosmos.mint.v1beta1.QueryInflationRequest\x1a+.cosmos.mint.v1beta1.QueryInflationResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/cosmos/mint/v1beta1/inflation\x12\xa9\x01\n\x10\x41nnualProvisions\x12\x31.cosmos.mint.v1beta1.QueryAnnualProvisionsRequest\x1a\x32.cosmos.mint.v1beta1.QueryAnnualProvisionsResponse\".\x82\xd3\xe4\x93\x02(\x12&/cosmos/mint/v1beta1/annual_provisionsB+Z)github.com/cosmos/cosmos-sdk/x/mint/typesb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1f\x63osmos/mint/v1beta1/query.proto\x12\x13\x63osmos.mint.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1e\x63osmos/mint/v1beta1/mint.proto\x1a\x11\x61mino/amino.proto\x1a\x19\x63osmos_proto/cosmos.proto\"\x14\n\x12QueryParamsRequest\"M\n\x13QueryParamsResponse\x12\x36\n\x06params\x18\x01 \x01(\x0b\x32\x1b.cosmos.mint.v1beta1.ParamsB\t\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\"/\n\x1eQueryMunicipalInflationRequest\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\"b\n\x1fQueryMunicipalInflationResponse\x12?\n\ninflations\x18\x01 \x03(\x0b\x32+.cosmos.mint.v1beta1.MunicipalInflationPair\"\x17\n\x15QueryInflationRequest\"c\n\x16QueryInflationResponse\x12I\n\tinflation\x18\x01 \x01(\x0c\x42\x36\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\"\x1e\n\x1cQueryAnnualProvisionsRequest\"r\n\x1dQueryAnnualProvisionsResponse\x12Q\n\x11\x61nnual_provisions\x18\x01 \x01(\x0c\x42\x36\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\x32\xf9\x04\n\x05Query\x12\x80\x01\n\x06Params\x12\'.cosmos.mint.v1beta1.QueryParamsRequest\x1a(.cosmos.mint.v1beta1.QueryParamsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/cosmos/mint/v1beta1/params\x12\x8c\x01\n\tInflation\x12*.cosmos.mint.v1beta1.QueryInflationRequest\x1a+.cosmos.mint.v1beta1.QueryInflationResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/cosmos/mint/v1beta1/inflation\x12\xb1\x01\n\x12MunicipalInflation\x12\x33.cosmos.mint.v1beta1.QueryMunicipalInflationRequest\x1a\x34.cosmos.mint.v1beta1.QueryMunicipalInflationResponse\"0\x82\xd3\xe4\x93\x02*\x12(/cosmos/mint/v1beta1/municipal_inflation\x12\xa9\x01\n\x10\x41nnualProvisions\x12\x31.cosmos.mint.v1beta1.QueryAnnualProvisionsRequest\x1a\x32.cosmos.mint.v1beta1.QueryAnnualProvisionsResponse\".\x82\xd3\xe4\x93\x02(\x12&/cosmos/mint/v1beta1/annual_provisionsB+Z)github.com/cosmos/cosmos-sdk/x/mint/typesb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'cosmos.mint.v1beta1.query_pb2', globals())
@@ -36,20 +36,26 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _QUERY.methods_by_name['Params']._serialized_options = b'\202\323\344\223\002\035\022\033/cosmos/mint/v1beta1/params'
   _QUERY.methods_by_name['Inflation']._options = None
   _QUERY.methods_by_name['Inflation']._serialized_options = b'\202\323\344\223\002 \022\036/cosmos/mint/v1beta1/inflation'
+  _QUERY.methods_by_name['MunicipalInflation']._options = None
+  _QUERY.methods_by_name['MunicipalInflation']._serialized_options = b'\202\323\344\223\002*\022(/cosmos/mint/v1beta1/municipal_inflation'
   _QUERY.methods_by_name['AnnualProvisions']._options = None
   _QUERY.methods_by_name['AnnualProvisions']._serialized_options = b'\202\323\344\223\002(\022&/cosmos/mint/v1beta1/annual_provisions'
   _QUERYPARAMSREQUEST._serialized_start=186
   _QUERYPARAMSREQUEST._serialized_end=206
   _QUERYPARAMSRESPONSE._serialized_start=208
   _QUERYPARAMSRESPONSE._serialized_end=285
-  _QUERYINFLATIONREQUEST._serialized_start=287
-  _QUERYINFLATIONREQUEST._serialized_end=310
-  _QUERYINFLATIONRESPONSE._serialized_start=312
-  _QUERYINFLATIONRESPONSE._serialized_end=411
-  _QUERYANNUALPROVISIONSREQUEST._serialized_start=413
-  _QUERYANNUALPROVISIONSREQUEST._serialized_end=443
-  _QUERYANNUALPROVISIONSRESPONSE._serialized_start=445
-  _QUERYANNUALPROVISIONSRESPONSE._serialized_end=559
-  _QUERY._serialized_start=562
-  _QUERY._serialized_end=1015
+  _QUERYMUNICIPALINFLATIONREQUEST._serialized_start=287
+  _QUERYMUNICIPALINFLATIONREQUEST._serialized_end=334
+  _QUERYMUNICIPALINFLATIONRESPONSE._serialized_start=336
+  _QUERYMUNICIPALINFLATIONRESPONSE._serialized_end=434
+  _QUERYINFLATIONREQUEST._serialized_start=436
+  _QUERYINFLATIONREQUEST._serialized_end=459
+  _QUERYINFLATIONRESPONSE._serialized_start=461
+  _QUERYINFLATIONRESPONSE._serialized_end=560
+  _QUERYANNUALPROVISIONSREQUEST._serialized_start=562
+  _QUERYANNUALPROVISIONSREQUEST._serialized_end=592
+  _QUERYANNUALPROVISIONSRESPONSE._serialized_start=594
+  _QUERYANNUALPROVISIONSRESPONSE._serialized_end=708
+  _QUERY._serialized_start=711
+  _QUERY._serialized_end=1344
 # @@protoc_insertion_point(module_scope)

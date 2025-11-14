@@ -16,7 +16,7 @@ from cosmos_proto import cosmos_pb2 as cosmos__proto_dot_cosmos__pb2
 from amino import amino_pb2 as amino_dot_amino__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1e\x63osmos/mint/v1beta1/mint.proto\x12\x13\x63osmos.mint.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x11\x61mino/amino.proto\"\x9c\x01\n\x06Minter\x12\x44\n\tinflation\x18\x01 \x01(\tB1\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\x12L\n\x11\x61nnual_provisions\x18\x02 \x01(\tB1\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\"\x96\x03\n\x06Params\x12\x12\n\nmint_denom\x18\x01 \x01(\t\x12U\n\x15inflation_rate_change\x18\x02 \x01(\tB6\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\x12M\n\rinflation_max\x18\x03 \x01(\tB6\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\x12M\n\rinflation_min\x18\x04 \x01(\tB6\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\x12K\n\x0bgoal_bonded\x18\x05 \x01(\tB6\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\x12\x17\n\x0f\x62locks_per_year\x18\x06 \x01(\x04:\x1d\x8a\xe7\xb0*\x18\x63osmos-sdk/x/mint/ParamsB+Z)github.com/cosmos/cosmos-sdk/x/mint/typesb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1e\x63osmos/mint/v1beta1/mint.proto\x12\x13\x63osmos.mint.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x19\x63osmos_proto/cosmos.proto\x1a\x11\x61mino/amino.proto\"\xe6\x01\n\x06Minter\x12\x44\n\tinflation\x18\x01 \x01(\tB1\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\x12L\n\x11\x61nnual_provisions\x18\x02 \x01(\tB1\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\x12H\n\x13municipal_inflation\x18\x03 \x03(\x0b\x32+.cosmos.mint.v1beta1.MunicipalInflationPair\"\x89\x01\n\x12MunicipalInflation\x12\x31\n\x0etarget_address\x18\x02 \x01(\tB\x19\xf2\xde\x1f\x15yaml:\"target_address\"\x12@\n\x05value\x18\x03 \x01(\tB1\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\"c\n\x16MunicipalInflationPair\x12\r\n\x05\x64\x65nom\x18\x01 \x01(\t\x12:\n\tinflation\x18\x02 \x01(\x0b\x32\'.cosmos.mint.v1beta1.MunicipalInflation\"\xa4\x01\n\x06Params\x12\x12\n\nmint_denom\x18\x01 \x01(\t\x12N\n\x0einflation_rate\x18\x02 \x01(\tB6\xd2\xb4-\ncosmos.Dec\xda\xde\x1f\x1b\x63osmossdk.io/math.LegacyDec\xc8\xde\x1f\x00\xa8\xe7\xb0*\x01\x12\x17\n\x0f\x62locks_per_year\x18\x06 \x01(\x04:\x1d\x8a\xe7\xb0*\x18\x63osmos-sdk/x/mint/ParamsB+Z)github.com/cosmos/cosmos-sdk/x/mint/typesb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'cosmos.mint.v1beta1.mint_pb2', globals())
@@ -28,18 +28,20 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _MINTER.fields_by_name['inflation']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000'
   _MINTER.fields_by_name['annual_provisions']._options = None
   _MINTER.fields_by_name['annual_provisions']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000'
-  _PARAMS.fields_by_name['inflation_rate_change']._options = None
-  _PARAMS.fields_by_name['inflation_rate_change']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000\250\347\260*\001'
-  _PARAMS.fields_by_name['inflation_max']._options = None
-  _PARAMS.fields_by_name['inflation_max']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000\250\347\260*\001'
-  _PARAMS.fields_by_name['inflation_min']._options = None
-  _PARAMS.fields_by_name['inflation_min']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000\250\347\260*\001'
-  _PARAMS.fields_by_name['goal_bonded']._options = None
-  _PARAMS.fields_by_name['goal_bonded']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000\250\347\260*\001'
+  _MUNICIPALINFLATION.fields_by_name['target_address']._options = None
+  _MUNICIPALINFLATION.fields_by_name['target_address']._serialized_options = b'\362\336\037\025yaml:\"target_address\"'
+  _MUNICIPALINFLATION.fields_by_name['value']._options = None
+  _MUNICIPALINFLATION.fields_by_name['value']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000'
+  _PARAMS.fields_by_name['inflation_rate']._options = None
+  _PARAMS.fields_by_name['inflation_rate']._serialized_options = b'\322\264-\ncosmos.Dec\332\336\037\033cosmossdk.io/math.LegacyDec\310\336\037\000\250\347\260*\001'
   _PARAMS._options = None
   _PARAMS._serialized_options = b'\212\347\260*\030cosmos-sdk/x/mint/Params'
   _MINTER._serialized_start=124
-  _MINTER._serialized_end=280
-  _PARAMS._serialized_start=283
-  _PARAMS._serialized_end=689
+  _MINTER._serialized_end=354
+  _MUNICIPALINFLATION._serialized_start=357
+  _MUNICIPALINFLATION._serialized_end=494
+  _MUNICIPALINFLATIONPAIR._serialized_start=496
+  _MUNICIPALINFLATIONPAIR._serialized_end=595
+  _PARAMS._serialized_start=598
+  _PARAMS._serialized_end=762
 # @@protoc_insertion_point(module_scope)
