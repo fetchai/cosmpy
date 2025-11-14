@@ -103,20 +103,15 @@ Query account.
 
 account details
 
-<a id="cosmpy.aerial.client.__init__.LedgerClient.query_params"></a>
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_consensus"></a>
 
-#### query`_`params
+#### query`_`consensus
 
 ```python
-def query_params(subspace: str, key: str) -> Any
+def query_consensus() -> Any
 ```
 
-Query Prams.
-
-**Arguments**:
-
-- `subspace`: subspace
-- `key`: key
+Query Params.
 
 **Returns**:
 
