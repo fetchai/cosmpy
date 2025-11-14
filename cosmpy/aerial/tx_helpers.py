@@ -179,3 +179,8 @@ class SubmittedTx:
         self._response.ensure_successful()
 
         return self
+
+def safe_decode(v):
+    if isinstance(v, bytes):
+        return v.decode("utf-8")
+    return v

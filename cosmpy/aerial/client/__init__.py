@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import certifi
 import grpc
 from dateutil.parser import isoparse
+from google.protobuf.json_format import MessageToDict
 
 from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
@@ -54,17 +55,17 @@ from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
 from cosmpy.aerial.tx import Transaction, TxState
-from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
+from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse, safe_decode
 from cosmpy.aerial.types import Account, Block
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.common.rest_client import RestClient
+from cosmpy.consensus.rest_client import ConsensusRestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
 from cosmpy.distribution.rest_client import DistributionRestClient
-from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
@@ -80,6 +81,13 @@ from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
     ServiceStub as TendermintQueryGrpcClient,
 )
+from cosmpy.protos.cosmos.consensus.v1.query_pb2 import (
+    QueryParamsRequest,
+    QueryParamsResponse,
+)
+from cosmpy.protos.cosmos.consensus.v1.query_pb2_grpc import (
+    QueryStub as QueryConsensusGrpcClient,
+)
 from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
     PubKey,
 )
@@ -88,10 +96,6 @@ from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
 )
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2_grpc import (
     QueryStub as DistributionGrpcClient,
-)
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
-from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
-    QueryStub as QueryParamsGrpcClient,
 )
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegatorDelegationsRequest,
@@ -116,6 +120,15 @@ from cosmpy.tendermint.rest_client import (
     CosmosBaseTendermintRestClient as TendermintRestClient,
 )
 from cosmpy.tx.rest_client import TxRestClient
+
+
+#from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
+#from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
+#    QueryStub as QueryParamsGrpcClient,
+#)
+
+
+
 
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
@@ -163,7 +176,7 @@ class LedgerClient:
             self.bank = BankGrpcClient(grpc_client)
             self.staking = StakingGrpcClient(grpc_client)
             self.distribution = DistributionGrpcClient(grpc_client)
-            self.params = QueryParamsGrpcClient(grpc_client)
+            self.consensus = QueryConsensusGrpcClient(grpc_client)
             self.tendermint = TendermintQueryGrpcClient(grpc_client)
         else:
             rest_client = RestClient(parsed_url.rest_url)
@@ -174,7 +187,7 @@ class LedgerClient:
             self.bank = BankRestClient(rest_client)  # type: ignore
             self.staking = StakingRestClient(rest_client)  # type: ignore
             self.distribution = DistributionRestClient(rest_client)  # type: ignore
-            self.params = ParamsRestClient(rest_client)  # type: ignore
+            self.consensus = ConsensusRestClient(rest_client)  # type: ignore
             self.tendermint = TendermintRestClient(rest_client)  # type: ignore
 
     @property
@@ -225,16 +238,27 @@ class LedgerClient:
             sequence=account.sequence,
         )
 
-    def query_params(self, subspace: str, key: str) -> Any:
-        """Query Prams.
+    # def query_params(self, subspace: str, key: str) -> Any:
+    #     """Query Prams.
+    #
+    #     :param subspace: subspace
+    #     :param key: key
+    #     :return: Query params
+    #     """
+    #     req = QueryParamsRequest(subspace=subspace, key=key)
+    #     resp = self.params.Params(req)
+    #     return json.loads(resp.param.value)
+
+    def query_consensus(self) -> Any:
+        """Query Params.
 
         :param subspace: subspace
         :param key: key
         :return: Query params
         """
-        req = QueryParamsRequest(subspace=subspace, key=key)
-        resp = self.params.Params(req)
-        return json.loads(resp.param.value)
+        req = QueryParamsRequest()
+        resp = self.consensus.Params(req)
+        return resp
 
     def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
         """Query bank balance.
@@ -652,7 +676,7 @@ class LedgerClient:
         for event in tx_response.events:
             event_data = events.get(event.type, {})
             for attribute in event.attributes:
-                event_data[attribute.key.decode()] = attribute.value.decode()
+                event_data[safe_decode(attribute.key)] = safe_decode(attribute.value)
             events[event.type] = event_data
 
         timestamp = None
