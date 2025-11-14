@@ -24,15 +24,15 @@ from cosmpy.ibc.applications.transfer.interface import (  # type: ignore
     IBCApplicationsTransfer,
 )
 from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
+    QueryDenomHashRequest,
+    QueryDenomHashResponse,
     QueryDenomRequest,
     QueryDenomResponse,
     QueryDenomsRequest,
     QueryDenomsResponse,
     QueryParamsRequest,
     QueryParamsResponse,
-    QueryDenomHashRequest,
-    QueryDenomHashResponse,
-    )
+)
 
 
 class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
@@ -55,9 +55,7 @@ class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
         :param request: QueryDenomRequest
         :return: QueryDenomResponse
         """
-        json_response = self._rest_api.get(
-            f"{self.API_URL}/denoms/{request.hash}"
-        )
+        json_response = self._rest_api.get(f"{self.API_URL}/denoms/{request.hash}")
         return Parse(json_response, QueryDenomResponse())
 
     def Denoms(self, request: QueryDenomsRequest) -> QueryDenomsResponse:
@@ -79,7 +77,6 @@ class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())
-
 
     def DenomHash(self, request: QueryDenomHashRequest) -> QueryDenomHashResponse:
         """

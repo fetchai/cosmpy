@@ -27,14 +27,14 @@ from cosmpy.ibc.applications.transfer.rest_client import (  # type: ignore
     IBCApplicationsTransferRestClient,
 )
 from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
+    QueryDenomHashRequest,
+    QueryDenomHashResponse,
     QueryDenomRequest,
     QueryDenomResponse,
     QueryDenomsRequest,
     QueryDenomsResponse,
     QueryParamsRequest,
     QueryParamsResponse,
-    QueryDenomHashRequest,
-    QueryDenomHashResponse,
 )
 
 from tests.helpers import MockRestClient
@@ -78,7 +78,6 @@ class IBCApplicationsTransferRestClientTestCase(TestCase):
         assert rest_client.Denom(QueryDenomRequest(hash="hash")) == expected_response
         assert mock_client.last_base_url == "/ibc/apps/transfer/v1/denoms/hash"
 
-
     def test_Denoms(self):
         """Test Denoms method."""
         # shape according to QueryDenomsResponse { denoms: [Denom], pagination: PageResponse }
@@ -112,16 +111,18 @@ class IBCApplicationsTransferRestClientTestCase(TestCase):
         assert rest_client.Params(QueryParamsRequest()) == expected_response
         assert mock_client.last_base_url == "/ibc/apps/transfer/v1/params"
 
-
     def test_DenomHash(self):
         """Test DenomHash method."""
         content = {"hash": "ABCD1234"}
         mock_client, rest_client = self.make_clients(content)
         expected_response = ParseDict(content, QueryDenomHashResponse())
 
-        assert rest_client.DenomHash(
-            QueryDenomHashRequest(trace="transfer/channel-0/uatom")
-        ) == expected_response
+        assert (
+            rest_client.DenomHash(
+                QueryDenomHashRequest(trace="transfer/channel-0/uatom")
+            )
+            == expected_response
+        )
         assert (
             mock_client.last_base_url
             == "/ibc/apps/transfer/v1/denom_hashes/transfer/channel-0/uatom"
