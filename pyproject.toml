@@ -106,6 +106,7 @@ module = [
     "cosmpy.protos.*",
 ]
 ignore_errors = true
+follow_imports = "skip"
 
 [[tool.mypy.overrides]]
 module = [
