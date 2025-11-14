@@ -34,12 +34,16 @@ class TestTx:
 
     COIN = "atestfet"
 
-
     def get_funds(self, wallet: LocalWallet):
         """Send funds from validator wallet to given wallet."""
         ledger = self.get_ledger()
         validator_walet = self.get_validator_wallet()
-        ledger.send_tokens(wallet, 10*10**18, ledger.network_config.fee_denomination, validator_walet).wait_to_complete()
+        ledger.send_tokens(
+            wallet,
+            10 * 10**18,
+            ledger.network_config.fee_denomination,
+            validator_walet,
+        ).wait_to_complete()
 
     def _get_network_config(self):
         """Get network config."""

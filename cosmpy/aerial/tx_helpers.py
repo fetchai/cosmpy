@@ -180,6 +180,7 @@ class SubmittedTx:
 
         return self
 
+
 def safe_decode(v):
     if isinstance(v, bytes):
         return v.decode("utf-8")

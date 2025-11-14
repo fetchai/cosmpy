@@ -32,6 +32,7 @@ CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple/simple.wasm"
 SCHEMA_PATH = Path(__file__).parent / "../../contracts/simple/schema"
 VALIDATOR_MNEMONIC = "night mistake cart palm shed roast offer found ribbon unique bulk panel bracket stand fragile staff dumb glove hand cash moon search cable repair"
 
+
 class ValidationTestFailure(Exception):
     """Validation test failure exception"""
 
@@ -47,7 +48,12 @@ class TestContract:
         """Send funds from validator wallet to given wallet."""
         ledger = self.get_ledger()
         validator_walet = self.get_validator_wallet()
-        ledger.send_tokens(wallet, 10*10**18, ledger.network_config.fee_denomination, validator_walet).wait_to_complete()
+        ledger.send_tokens(
+            wallet,
+            10 * 10**18,
+            ledger.network_config.fee_denomination,
+            validator_walet,
+        ).wait_to_complete()
 
     def _get_network_config(self):
         """Get network config."""
@@ -192,6 +198,7 @@ class TestContract:
         except Exception as exc:
             raise ValidationTestFailure("Msg should have failed validation") from exc
 
+
 class TestContractRestAPI(TestContract):
     """Test rest api"""
 
@@ -205,6 +212,7 @@ class TestContractRestAPI(TestContract):
             staking_denomination=denom,
             faucet_url=None,
         )
+
 
 if __name__ == "__main__":
     pytest.main([__file__])

@@ -75,17 +75,11 @@ class MockLedger:
         """Simulate tx."""
         return self._table.estimate_gas(tx)
 
-    def query_consensus(
-        self  # pylint: disable=unused-argument
-    ) -> Any:
+    def query_consensus(self) -> Any:  # pylint: disable=unused-argument
         """Set query params."""
         return SimpleNamespace(
-    params=SimpleNamespace(
-        block=SimpleNamespace(
-            max_gas=-1
+            params=SimpleNamespace(block=SimpleNamespace(max_gas=-1))
         )
-    )
-)
 
 
 @pytest.mark.parametrize(

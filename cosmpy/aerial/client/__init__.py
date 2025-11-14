@@ -122,13 +122,10 @@ from cosmpy.tendermint.rest_client import (
 from cosmpy.tx.rest_client import TxRestClient
 
 
-#from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
-#from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
+# from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
+# from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
 #    QueryStub as QueryParamsGrpcClient,
-#)
-
-
-
+# )
 
 
 DEFAULT_QUERY_TIMEOUT_SECS = 15
