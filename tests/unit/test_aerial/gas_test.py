@@ -18,6 +18,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -74,11 +75,17 @@ class MockLedger:
         """Simulate tx."""
         return self._table.estimate_gas(tx)
 
-    def query_params(
-        self, subspace: str, key: str  # pylint: disable=unused-argument
+    def query_consensus(
+        self  # pylint: disable=unused-argument
     ) -> Any:
         """Set query params."""
-        return {"max_gas": -1}
+        return SimpleNamespace(
+    params=SimpleNamespace(
+        block=SimpleNamespace(
+            max_gas=-1
+        )
+    )
+)
 
 
 @pytest.mark.parametrize(
