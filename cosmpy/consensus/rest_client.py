@@ -38,7 +38,7 @@ class ConsensusRestClient(Params):
         """
         Initialize.
 
-        :param rest_api: RestClient api
+        :param rest_api: REST client api
         """
         self._rest_api = rest_api
 

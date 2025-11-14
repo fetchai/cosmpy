@@ -26,7 +26,7 @@ Initialize.
 
 **Arguments**:
 
-- `rest_api`: RestClient api
+- `rest_api`: REST client api
 
 <a id="cosmpy.consensus.rest_client.ConsensusRestClient.Params"></a>
 
