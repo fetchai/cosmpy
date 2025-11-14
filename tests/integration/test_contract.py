@@ -63,6 +63,7 @@ class TestContract:
         """Get contract"""
         return LedgerContract(CONTRACT_PATH, self.get_ledger())
 
+    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_contract(self):
@@ -83,6 +84,7 @@ class TestContract:
         assert result["exists"]
         assert result["value"] == value
 
+    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_deployed_contract(self):
@@ -137,6 +139,7 @@ class TestContract:
         tx_res = deployed_contract.update_admin(wallet2, None)
         assert tx_res.response
 
+    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_contract_schema_validation(self):

@@ -54,6 +54,7 @@ class TestTx:
         wallet2 = LocalWallet.generate()
         return wallet2
 
+    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_faucet_transaction_balance(self):
