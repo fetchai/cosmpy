@@ -22,6 +22,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
 
+from packaging.version import Version
+
 from cosmpy.aerial.tx import Transaction
 
 
@@ -83,9 +85,15 @@ class SimulationGasStrategy(GasStrategy):
 
         :return: block gas limit
         """
+
         if self._max_gas is None:
-            params = self._client.query_consensus()
-            self._max_gas = int(params.params.block.max_gas)
+            cosmos_sdk_version = self._client.query_cosmos_sdk_version()
+            if cosmos_sdk_version >= Version("0.50"):
+                params = self._client.query_consensus()
+                self._max_gas = int(params.params.block.max_gas)
+            else:
+                block_params = self._client.query_params("baseapp", "BlockParams")
+                self._max_gas = int(block_params["max_gas"])
 
         return self._max_gas or -1
 

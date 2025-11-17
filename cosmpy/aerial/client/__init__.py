@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Client functionality."""
-
+import json
 import math
 import time
 from datetime import datetime, timedelta
@@ -28,6 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import certifi
 import grpc
 from dateutil.parser import isoparse
+from packaging.version import Version
 
 from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
@@ -64,6 +65,7 @@ from cosmpy.consensus.rest_client import ConsensusRestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
 from cosmpy.distribution.rest_client import DistributionRestClient
+from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2_grpc import QueryStub as AuthGrpcClient
@@ -75,13 +77,10 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGr
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetBlockByHeightRequest,
     GetLatestBlockRequest,
+    GetNodeInfoRequest,
 )
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
     ServiceStub as TendermintQueryGrpcClient,
-)
-from cosmpy.protos.cosmos.consensus.v1.query_pb2 import QueryParamsRequest
-from cosmpy.protos.cosmos.consensus.v1.query_pb2_grpc import (
-    QueryStub as QueryConsensusGrpcClient,
 )
 from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
     PubKey,
@@ -91,6 +90,10 @@ from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2 import (
 )
 from cosmpy.protos.cosmos.distribution.v1beta1.query_pb2_grpc import (
     QueryStub as DistributionGrpcClient,
+)
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2 import QueryParamsRequest
+from cosmpy.protos.cosmos.params.v1beta1.query_pb2_grpc import (
+    QueryStub as QueryParamsGrpcClient,
 )
 from cosmpy.protos.cosmos.staking.v1beta1.query_pb2 import (
     QueryDelegatorDelegationsRequest,
@@ -162,6 +165,7 @@ class LedgerClient:
             self.bank = BankGrpcClient(grpc_client)
             self.staking = StakingGrpcClient(grpc_client)
             self.distribution = DistributionGrpcClient(grpc_client)
+            self.params = QueryParamsGrpcClient(grpc_client)
             self.consensus = QueryConsensusGrpcClient(grpc_client)
             self.tendermint = TendermintQueryGrpcClient(grpc_client)
         else:
@@ -173,6 +177,7 @@ class LedgerClient:
             self.bank = BankRestClient(rest_client)  # type: ignore
             self.staking = StakingRestClient(rest_client)  # type: ignore
             self.distribution = DistributionRestClient(rest_client)  # type: ignore
+            self.params = ParamsRestClient(rest_client)  # type: ignore
             self.consensus = ConsensusRestClient(rest_client)  # type: ignore
             self.tendermint = TendermintRestClient(rest_client)  # type: ignore
 
@@ -223,6 +228,35 @@ class LedgerClient:
             number=account.account_number,
             sequence=account.sequence,
         )
+
+    def query_params(self, subspace: str, key: str) -> Any:
+        """Query Prams.
+        :param subspace: subspace
+        :param key: key
+        :return: Query params
+        """
+        req = QueryParamsRequest(subspace=subspace, key=key)
+        resp = self.params.Params(req)
+        return json.loads(resp.param.value)
+
+    def query_node_info(self) -> Any:
+        """
+        Query basic Tendermint / node information (moniker, chain-id, version, etc.).
+
+        :return: `GetNodeInfoResponse` protobuf message.
+        """
+        request = GetNodeInfoRequest()
+        return self.tendermint.GetNodeInfo(request)
+
+    def query_cosmos_sdk_version(self) -> Version:
+        """
+        Query version of cosmos sdk
+
+        :return: Version
+        """
+        res = self.query_node_info()
+        cosmos_sdk_version = res.application_version.cosmos_sdk_version
+        return Version(cosmos_sdk_version.lstrip("v"))
 
     def query_consensus(self) -> Any:
         """Query Params.
