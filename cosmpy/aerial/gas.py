@@ -85,7 +85,6 @@ class SimulationGasStrategy(GasStrategy):
 
         :return: block gas limit
         """
-
         if self._max_gas is None:
             cosmos_sdk_version = self._client.query_cosmos_sdk_version()
             if cosmos_sdk_version >= Version("0.50"):

@@ -82,6 +82,9 @@ from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
     ServiceStub as TendermintQueryGrpcClient,
 )
+from cosmpy.protos.cosmos.consensus.v1.query_pb2_grpc import (
+    QueryStub as QueryConsensusGrpcClient,
+)
 from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
     PubKey,
 )
@@ -231,6 +234,7 @@ class LedgerClient:
 
     def query_params(self, subspace: str, key: str) -> Any:
         """Query Prams.
+
         :param subspace: subspace
         :param key: key
         :return: Query params
@@ -250,7 +254,7 @@ class LedgerClient:
 
     def query_cosmos_sdk_version(self) -> Version:
         """
-        Query version of cosmos sdk
+        Query version of cosmos sdk.
 
         :return: Version
         """

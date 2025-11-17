@@ -22,6 +22,7 @@ from types import SimpleNamespace
 from typing import Any
 
 import pytest
+from packaging.version import Version
 
 from cosmpy.aerial.gas import (
     GasStrategy,
@@ -67,19 +68,33 @@ def test_table_gas_estimation(input_msgs, expected_gas_estimate):
 class MockLedger:
     """Test for ledger."""
 
-    def __init__(self):
+    def __init__(self, legacy=False):
         """Initiate Mock Ledger with table."""
         self._table = OfflineMessageTableStrategy.default_table()
+        self.legacy = legacy
 
     def simulate_tx(self, tx: Transaction) -> int:
         """Simulate tx."""
         return self._table.estimate_gas(tx)
 
     def query_consensus(self) -> Any:  # pylint: disable=unused-argument
-        """Set query params."""
+        """Set query consensus params."""
         return SimpleNamespace(
             params=SimpleNamespace(block=SimpleNamespace(max_gas=-1))
         )
+
+    def query_params(
+        self, subspace: str, key: str  # pylint: disable=unused-argument
+    ) -> Any:
+        """Set query params."""
+        return {"max_gas": -1}
+
+    def query_cosmos_sdk_version(self) -> Version:
+        """Set query cosmos sdk version."""
+        if self.legacy:
+            return Version("0.47.9")
+        else:
+            return Version("0.53.4")
 
 
 @pytest.mark.parametrize(
@@ -97,7 +112,20 @@ class MockLedger:
 )
 def test_simulated_estimation(input_msgs, expected_gas_estimate):
     """Test simulated estimation of gas for transaction."""
-    ledger = MockLedger()
+    ledger = MockLedger(legacy=False)
+    strategy = SimulationGasStrategy(ledger, 1.0)
+
+    # build up the TX
+    tx = Transaction()
+    for input_msg in input_msgs:
+        tx.add_message(input_msg)
+
+    gas_estimate = strategy.estimate_gas(tx)
+
+    assert gas_estimate == expected_gas_estimate
+
+    # Test against legacy version
+    ledger = MockLedger(legacy=True)
     strategy = SimulationGasStrategy(ledger, 1.0)
 
     # build up the TX
