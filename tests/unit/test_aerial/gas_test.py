@@ -93,8 +93,7 @@ class MockLedger:
         """Set query cosmos sdk version."""
         if self.legacy:
             return Version("0.47.9")
-        else:
-            return Version("0.53.4")
+        return Version("0.53.4")
 
 
 @pytest.mark.parametrize(
