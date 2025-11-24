@@ -1,5 +1,5 @@
 COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
-COSMOS_SDK_VERSION := merge/v0.53.4_to_v0.19.4__jiri
+COSMOS_SDK_VERSION := v0.20.0-rc0
 COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
 
 WASMD_URL := https://github.com/CosmWasm/wasmd
@@ -21,6 +21,11 @@ GOGOPROTO_DIR := build/gogo-proto
 COSMOSPROTO_URL := https://github.com/cosmos/cosmos-proto
 COSMOSPROTO_VERSION := v1.0.0-beta.5
 COSMOSPROTO_DIR := build/cosmos-proto
+
+GAIA_URL := https://github.com/cosmos/gaia
+GAIA_VERSION := v25.1.1
+GAIA_DIR := build/gaia-proto-shema
+
 
 PY_GOOGLEAPIS_ROOT := $(shell python -c "import importlib.util, pathlib, sys; s=importlib.util.find_spec('google.api'); print(pathlib.Path(next(iter(s.submodule_search_locations))).parents[1]) if s and s.submodule_search_locations else sys.stdout.write('')")
 
@@ -272,7 +277,7 @@ unique = $(if $1,$(firstword $1) $(call unique,$(filter-out $(firstword $1),$1))
 
 proto: fetch_proto_schema_source generate_proto_types generate_init_py_files
 
-generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) $(PY_GOOGLEAPIS_ROOT)
+generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) $(PY_GOOGLEAPIS_ROOT) $(GAIA_DIR)
 	rm -frv $(COSMPY_PROTOS_DIR)/*
 	python -m grpc_tools.protoc  --proto_path=$(WASMD_DIR)/proto  --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(WASMD_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 	python -m grpc_tools.protoc --proto_path=$(IBCGO_DIR)/proto --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(IBCGO_DIR) \( -path */proto/* -or -path *///third_party/proto/* \) -type f -name *.proto) --proto_path=$(COSMOS_SDK_DIR)/third_party/proto --proto_path=$(ICS23_DIR)/proto
@@ -281,9 +286,10 @@ generate_proto_types: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DI
 	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOS_SDK_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(GOGOPROTO_DIR) \( -path */gogoproto/* \) -type f -name *.proto)	
 	python -m grpc_tools.protoc --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(COSMOSPROTO_DIR) \( -path */proto/* \) -type f -name *.proto)
+	python -m grpc_tools.protoc  --proto_path=$(GAIA_DIR)/proto  --proto_path=$(GOGOPROTO_DIR) --proto_path=$(COSMOSPROTO_DIR)/proto --proto_path=$(PY_GOOGLEAPIS_ROOT) --proto_path=$(COSMOS_SDK_DIR)/proto --python_out=$(COSMPY_PROTOS_DIR) --grpc_python_out=$(COSMPY_PROTOS_DIR) $(shell find $(GAIA_DIR) \( -path */proto/* -or -path */third_party/proto/* \) -type f -name *.proto)
 
 
-fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(ICS23_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR)
+fetch_proto_schema_source: $(COSMOS_SDK_DIR) $(WASMD_DIR) $(ICS23_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) $(GAIA_DIR)
 
 .PHONY: generate_init_py_files
 generate_init_py_files: generate_proto_types
@@ -299,7 +305,7 @@ $(GENERATED): $(SOURCE)
 $(INIT_PY_FILES_TO_CREATE): $(GENERATED_DIRS)
 	touch $(INIT_PY_FILES_TO_CREATE)
 
-$(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR) 
+$(GENERATED_DIRS): $(COSMOS_SDK_DIR) $(WASMD_DIR) $(IBCGO_DIR) $(GOGOPROTO_DIR) $(COSMOSPROTO_DIR)  $(GAIA_DIR)
 
 $(COSMOS_SDK_DIR): Makefile
 	rm -rfv $(COSMOS_SDK_DIR)
@@ -328,6 +334,11 @@ $(GOGOPROTO_DIR): Makefile
 $(COSMOSPROTO_DIR): Makefile
 	rm -rfv $(COSMOSPROTO_DIR)
 	git clone --branch $(COSMOSPROTO_VERSION) --depth 1 --quiet $(COSMOSPROTO_URL) $(COSMOSPROTO_DIR)
+
+$(GAIA_DIR): Makefile
+	rm -rfv $(GAIA_DIR)
+	git clone --branch $(GAIA_VERSION) --depth 1 --quiet --no-checkout --filter=blob:none $(GAIA_URL) $(GAIA_DIR)
+	cd $(GAIA_DIR) && git checkout $(GAIA_VERSION) -- $(GAIA_PROTO_RELATIVE_DIRS)
 
 debug:
 	$(info SOURCES_REGEX_TO_EXCLUDE: $(SOURCES_REGEX_TO_EXCLUDE))
