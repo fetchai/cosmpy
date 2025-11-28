@@ -107,7 +107,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: fetchai/fetchd
-          ref: 18e8c64b433f860079ebd54d8b6404b2abd290c7
+          ref: feat/remove_liquid_module
           path: repo-docker
           token: ${{ secrets.GITHUB_TOKEN }}
 
