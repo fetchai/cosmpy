@@ -201,7 +201,7 @@ class TestContractRestAPI(TestContract):
     def _get_network_config(self):
         denom = "atestfet"
         return NetworkConfig(
-            chain_id="test",
+            chain_id="localnet",
             url="rest+http://127.0.0.1:1317",
             fee_minimum_gas_price=0,
             fee_denomination=denom,
