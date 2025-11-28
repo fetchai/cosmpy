@@ -87,7 +87,8 @@ class SimulationGasStrategy(GasStrategy):
         """
         if self._max_gas is None:
             cosmos_sdk_version = self._client.query_cosmos_sdk_version()
-            if cosmos_sdk_version >= Version("0.50"):
+            # Workaround for fetchai/cosmos-sdk using different versioning
+            if Version("0.20.dev0") <= cosmos_sdk_version < Version("0.30") or cosmos_sdk_version >= Version("0.50"):
                 params = self._client.query_consensus()
                 self._max_gas = int(params.params.block.max_gas)
             else:

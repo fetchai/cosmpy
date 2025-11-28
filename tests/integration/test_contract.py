@@ -30,8 +30,7 @@ from cosmpy.aerial.wallet import LocalWallet
 
 CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple/simple.wasm"
 SCHEMA_PATH = Path(__file__).parent / "../../contracts/simple/schema"
-VALIDATOR_MNEMONIC = "night mistake cart palm shed roast offer found ribbon unique bulk panel bracket stand fragile staff dumb glove hand cash moon search cable repair"
-
+VALIDATOR_MNEMONIC = "boat leave enrich glare into second this model appear owner strong tail perfect fringe best still soup clap betray rigid bleak return minimum goddess"
 
 class ValidationTestFailure(Exception):
     """Validation test failure exception"""
@@ -59,7 +58,7 @@ class TestContract:
         """Get network config."""
         denom = "atestfet"
         local_config = NetworkConfig(
-            chain_id="test",
+            chain_id="localnet",
             url="grpc+http://127.0.0.1:9090",
             fee_minimum_gas_price=0,
             fee_denomination=denom,
@@ -87,7 +86,6 @@ class TestContract:
         """Get contract"""
         return LedgerContract(CONTRACT_PATH, self.get_ledger())
 
-    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_contract(self):
@@ -108,7 +106,6 @@ class TestContract:
         assert result["exists"]
         assert result["value"] == value
 
-    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_deployed_contract(self):
@@ -163,7 +160,6 @@ class TestContract:
         tx_res = deployed_contract.update_admin(wallet2, None)
         assert tx_res.response
 
-    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_contract_schema_validation(self):
