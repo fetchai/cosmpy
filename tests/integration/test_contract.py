@@ -32,6 +32,7 @@ CONTRACT_PATH = Path(__file__).parent / "../../contracts/simple/simple.wasm"
 SCHEMA_PATH = Path(__file__).parent / "../../contracts/simple/schema"
 VALIDATOR_MNEMONIC = "boat leave enrich glare into second this model appear owner strong tail perfect fringe best still soup clap betray rigid bleak return minimum goddess"
 
+
 class ValidationTestFailure(Exception):
     """Validation test failure exception"""
 

@@ -29,6 +29,7 @@ from tests.integration.test_contract import MAX_FLAKY_RERUNS, RERUNS_DELAY
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent
 
+
 @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
 @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
 def test_staking_example():

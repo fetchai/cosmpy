@@ -28,6 +28,7 @@ MAX_FLAKY_RERUNS = 3
 RERUNS_DELAY = 10
 VALIDATOR_MNEMONIC = "boat leave enrich glare into second this model appear owner strong tail perfect fringe best still soup clap betray rigid bleak return minimum goddess"
 
+
 class TestTx:
     """Test Basic Transaction"""
 
@@ -83,7 +84,7 @@ class TestTx:
         return LedgerClient(self._get_network_config())
 
     @pytest.mark.integration
-    #@pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_faucet_transaction_balance(self):
         """Test faucet claims, tx settled, balance check."""
         ledger = self.get_ledger()
