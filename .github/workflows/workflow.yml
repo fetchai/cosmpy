@@ -129,6 +129,42 @@ jobs:
           done
           echo "Server did not become ready in time"
           exit 1
+          
+      - name: Debug docker ports
+        working-directory: repo-docker
+        run: |
+          echo "=== docker ps ==="
+          docker ps
+    
+          echo
+          echo "=== Listening ports on host ==="
+          ss -tln || netstat -tln || true
+    
+          echo
+          echo "=== Test host port 9090 ==="
+          if bash -c "</dev/tcp/127.0.0.1/9090" 2>/dev/null; then
+            echo "Host port 9090 is OPEN"
+          else
+            echo "Host port 9090 is CLOSED"
+          fi
+
+      - name: Inspect fetchd inside container
+        working-directory: repo-docker
+        run: |
+          cid=$(docker ps --filter "name=repo-docker-node0-1" --format "{{.ID}}" | head -n1)
+          echo "Using container: $cid"
+    
+          echo
+          echo "=== Ports inside container ==="
+          docker exec "$cid" sh -lc 'ss -tln || netstat -tln || true'
+    
+          echo
+          echo "=== [grpc] section from app.toml ==="
+          docker exec "$cid" sh -lc 'grep -A5 "^\[grpc\]" /root/.fetchd/config/app.toml || echo "grpc section not found"'
+    
+          echo
+          echo "=== Last 50 lines of logs ==="
+          docker logs "$cid" | tail -n 50 || true          
 
       - name: Integration Tests
         run: |
