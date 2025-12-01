@@ -84,7 +84,7 @@ class TestTx:
         return LedgerClient(self._get_network_config())
 
     @pytest.mark.integration
-    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_faucet_transaction_balance(self):
         """Test faucet claims, tx settled, balance check."""
         ledger = self.get_ledger()

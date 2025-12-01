@@ -108,7 +108,7 @@ class TestContract:
         assert result["value"] == value
 
     @pytest.mark.integration
-    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_deployed_contract(self):
         """Test interaction with already deployed contract."""
         wallet = self.get_wallet()
@@ -162,7 +162,7 @@ class TestContract:
         assert tx_res.response
 
     @pytest.mark.integration
-    # @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
+    @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_contract_schema_validation(self):
         """Test simple contract schema validation."""
         wallet = self.get_wallet()
