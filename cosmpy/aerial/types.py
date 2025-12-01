@@ -25,9 +25,19 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, List
 
 from google.protobuf.timestamp_pb2 import Timestamp
+from packaging.version import Version
 
 from cosmpy.crypto.address import Address
 from cosmpy.crypto.hashfuncs import sha256
+
+
+@dataclass
+class NodeInfo:
+    """NodeInfo."""
+
+    cosmos_sdk_version: Version
+    app_version: Version
+    app_name: str
 
 
 @dataclass

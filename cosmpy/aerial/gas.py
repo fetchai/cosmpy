@@ -22,8 +22,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
 
-from packaging.version import Version
-
 from cosmpy.aerial.tx import Transaction
 
 
@@ -83,19 +81,31 @@ class SimulationGasStrategy(GasStrategy):
     def block_gas_limit(self) -> int:
         """Get the block gas limit.
 
+        :raises Exception: Failed to query max_gas
         :return: block gas limit
         """
         if self._max_gas is None:
-            cosmos_sdk_version = self._client.query_cosmos_sdk_version()
-            # Workaround for fetchai/cosmos-sdk using different versioning
-            if Version("0.20.dev0") <= cosmos_sdk_version < Version(
-                "0.30"
-            ) or cosmos_sdk_version >= Version("0.50"):
-                params = self._client.query_consensus()
+            try:
+                params = self._client.query_consensus_params()
                 self._max_gas = int(params.params.block.max_gas)
-            else:
-                block_params = self._client.query_params("baseapp", "BlockParams")
-                self._max_gas = int(block_params["max_gas"])
+            except Exception as e:
+                try:
+                    block_params = self._client.query_params("baseapp", "BlockParams")
+                    self._max_gas = int(block_params["max_gas"])
+                except Exception as f:
+                    raise f from e
+
+            # Alternative implementation
+            """
+             node_info = self._client.query_node_info()
+             if (node_info.app_name == "fetch" and node_info.cosmos_sdk_version >= Version("0.20.0-rc0")) \
+                 or node_info.cosmos_sdk_version >= Version("0.50.0-rc0"):
+                 params = self._client.query_consensus()
+                 self._max_gas = int(params.params.block.max_gas)
+             else:
+                 block_params = self._client.query_params("baseapp", "BlockParams")
+                 self._max_gas = int(block_params["max_gas"])
+             """
 
         return self._max_gas or -1
 
