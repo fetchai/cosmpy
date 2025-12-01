@@ -206,7 +206,6 @@ class CosmWasmRestClient(CosmWasm):
     def _fix_permission(permission_name):
         permission_map = {
             "Nobody": AccessType.Value("ACCESS_TYPE_NOBODY"),
-            "OnlyAddress": AccessType.Value("ACCESS_TYPE_ONLY_ADDRESS"),
             "AnyOfAddresses": AccessType.Value("ACCESS_TYPE_ANY_OF_ADDRESSES"),
             "Everybody": AccessType.Value("ACCESS_TYPE_EVERYBODY"),
             "Unspecified": AccessType.Value("ACCESS_TYPE_UNSPECIFIED"),
