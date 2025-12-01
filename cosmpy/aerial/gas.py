@@ -88,14 +88,14 @@ class SimulationGasStrategy(GasStrategy):
             try:
                 params = self._client.query_consensus_params()
                 self._max_gas = int(params.params.block.max_gas)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-except
                 try:
                     block_params = self._client.query_params("baseapp", "BlockParams")
                     self._max_gas = int(block_params["max_gas"])
-                except Exception as f:
+                except Exception as f:  # pylint: disable=broad-except
                     raise f from e
-
             # Alternative implementation
+            # pylint: disable=pointless-string-statement
             """
              node_info = self._client.query_node_info()
              if (node_info.app_name == "fetch" and node_info.cosmos_sdk_version >= Version("0.20.0-rc0")) \
