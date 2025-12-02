@@ -22,7 +22,6 @@ from types import SimpleNamespace
 from typing import Any
 
 import pytest
-from packaging.version import Version
 
 from cosmpy.aerial.gas import (
     GasStrategy,
@@ -77,8 +76,11 @@ class MockLedger:
         """Simulate tx."""
         return self._table.estimate_gas(tx)
 
-    def query_consensus(self) -> Any:  # pylint: disable=unused-argument
+    def query_consensus_params(self) -> Any:  # pylint: disable=unused-argument
         """Set query consensus params."""
+        if self.legacy:
+            raise RuntimeError("Legacy mode")
+
         return SimpleNamespace(
             params=SimpleNamespace(block=SimpleNamespace(max_gas=-1))
         )
@@ -88,12 +90,6 @@ class MockLedger:
     ) -> Any:
         """Set query params."""
         return {"max_gas": -1}
-
-    def query_cosmos_sdk_version(self) -> Version:
-        """Set query cosmos sdk version."""
-        if self.legacy:
-            return Version("0.47.9")
-        return Version("0.53.4")
 
 
 @pytest.mark.parametrize(

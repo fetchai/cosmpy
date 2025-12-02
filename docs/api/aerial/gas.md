@@ -105,6 +105,10 @@ def block_gas_limit() -> int
 
 Get the block gas limit.
 
+**Raises**:
+
+- `Exception`: Failed to query max_gas
+
 **Returns**:
 
 block gas limit

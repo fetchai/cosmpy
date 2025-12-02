@@ -26,7 +26,7 @@ from cosmpy.aerial.wallet import LocalWallet
 
 MAX_FLAKY_RERUNS = 3
 RERUNS_DELAY = 10
-VALIDATOR_MNEMONIC = "night mistake cart palm shed roast offer found ribbon unique bulk panel bracket stand fragile staff dumb glove hand cash moon search cable repair"
+VALIDATOR_MNEMONIC = "boat leave enrich glare into second this model appear owner strong tail perfect fringe best still soup clap betray rigid bleak return minimum goddess"
 
 
 class TestTx:
@@ -48,7 +48,7 @@ class TestTx:
     def _get_network_config(self):
         """Get network config."""
         local_config = NetworkConfig(
-            chain_id="test",
+            chain_id="localnet",
             url="grpc+http://127.0.0.1:9090",
             fee_minimum_gas_price=0,
             fee_denomination=self.COIN,
@@ -83,7 +83,6 @@ class TestTx:
         """Get ledger"""
         return LedgerClient(self._get_network_config())
 
-    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_faucet_transaction_balance(self):
@@ -117,7 +116,7 @@ class TestTxRestAPI(TestTx):
     def _get_network_config(self):
         denom = "atestfet"
         return NetworkConfig(
-            chain_id="test",
+            chain_id="localnet",
             url="rest+http://127.0.0.1:1317",
             fee_minimum_gas_price=0,
             fee_denomination=denom,
