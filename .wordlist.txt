@@ -337,3 +337,4 @@ bcrypt
 QueryParamsResponse
 ConsensusRestClient
 CosmosSDK
+NodeInfo

@@ -4,6 +4,17 @@
 
 Types.
 
+<a id="cosmpy.aerial.types.NodeInfo"></a>
+
+## NodeInfo Objects
+
+```python
+@dataclass
+class NodeInfo()
+```
+
+NodeInfo.
+
 <a id="cosmpy.aerial.types.Account"></a>
 
 ## Account Objects

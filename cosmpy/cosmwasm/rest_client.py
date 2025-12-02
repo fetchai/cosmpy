@@ -202,7 +202,8 @@ class CosmWasmRestClient(CosmWasm):
         response = json.dumps(responses_json).encode("utf-8")
         return Parse(response, QueryCodesResponse())
 
-    def _fix_permission(self, permission_name):
+    @staticmethod
+    def _fix_permission(permission_name):
         permission_map = {
             "Nobody": AccessType.Value("ACCESS_TYPE_NOBODY"),
             "AnyOfAddresses": AccessType.Value("ACCESS_TYPE_ANY_OF_ADDRESSES"),
