@@ -107,7 +107,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: fetchai/fetchd
-          ref: feat/remove_liquid_module
+          ref: feat/cosmos_sdk_update_0_20_0
           path: repo-docker
           token: ${{ secrets.GITHUB_TOKEN }}
 
