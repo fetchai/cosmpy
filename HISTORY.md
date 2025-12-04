@@ -1,5 +1,9 @@
 # Release History
 
+## 0.12.0-rc0
+
+- feat: Cosmos SDK v0.53.4
+
 ## 0.11.2
 
 - feat: Ability to use Cosmos SDK bcrypt armored key files
