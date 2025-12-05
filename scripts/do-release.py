@@ -29,7 +29,6 @@ from typing import Dict, List, Tuple
 import tomli
 from packaging.version import Version
 
-
 ROOT = Path(__file__).parent.parent
 
 
@@ -45,6 +44,12 @@ class EnvCredentials:
     def pypi_password(self) -> str:
         """Get PYPI password."""
         return os.environ.get("PYPI_PASSWORD") or ""
+
+    @property
+    def is_prerelease(self) -> bool:
+        """Whether this release should be marked as prerelease."""
+        raw = os.environ.get("IS_PRERELEASE", "").lower()
+        return raw in ("1", "true", "yes", "on")
 
 
 class ReleaseTool:
@@ -100,10 +105,11 @@ class ReleaseTool:
         """Push tag to github."""
         subprocess.check_call(f"git push origin v{current_version}", shell=True)
 
-    def make_release(self, current_version: Version, release_history: str) -> None:
+    def make_release(self, current_version: Version, release_history: str, prerelease: bool = False) -> None:
         """Make release on Github."""
+        prerelease_flag = "--prerelease" if prerelease else ""
         subprocess.check_call(
-            f"""gh release create v{current_version} --title "v{current_version}" --notes "{release_history}" """,
+            f"""gh release create v{current_version} --title "v{current_version}" --notes "{release_history}" {prerelease_flag}""",
             shell=True,
         )
 
@@ -164,7 +170,8 @@ class ReleaseTool:
         print("Tag pushed")
 
         print("\nMake release")
-        self.make_release(current_version, release_history=histories[current_version])
+        self.make_release(current_version, release_history=histories[current_version],
+                          prerelease=self._credentials.is_prerelease)
         print("Release made." "")
 
         print("\nDONE")

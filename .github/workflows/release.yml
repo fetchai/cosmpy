@@ -5,8 +5,10 @@ name: Check and realese cosmpy
 # secrets PYPI_USERNAME and PYPI_PASSWORD are required!
 on:
   pull_request:
-    branches: [main]
-    types: [closed]
+  branches:
+      - main
+      - develop
+  types: [closed]
 
 jobs:
   build:
@@ -23,6 +25,7 @@ jobs:
         PYPI_PASSWORD: ${{secrets.FETCHBOT_PYPI_TOKEN}}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # required to make a release page
         GH_TOKEN: ${{ github.token }}
+        IS_PRERELEASE: ${{ github.base_ref == 'develop' }}
       run: |
         pip install tomli packaging poetry
         git config --global user.email "ci-bot@fetch.ai"
