@@ -29,6 +29,7 @@ from typing import Dict, List, Tuple
 import tomli
 from packaging.version import Version
 
+
 ROOT = Path(__file__).parent.parent
 
 
@@ -105,7 +106,9 @@ class ReleaseTool:
         """Push tag to github."""
         subprocess.check_call(f"git push origin v{current_version}", shell=True)
 
-    def make_release(self, current_version: Version, release_history: str, prerelease: bool = False) -> None:
+    def make_release(
+        self, current_version: Version, release_history: str, prerelease: bool = False
+    ) -> None:
         """Make release on Github."""
         prerelease_flag = "--prerelease" if prerelease else ""
         subprocess.check_call(
@@ -170,8 +173,11 @@ class ReleaseTool:
         print("Tag pushed")
 
         print("\nMake release")
-        self.make_release(current_version, release_history=histories[current_version],
-                          prerelease=self._credentials.is_prerelease)
+        self.make_release(
+            current_version,
+            release_history=histories[current_version],
+            prerelease=self._credentials.is_prerelease,
+        )
         print("Release made." "")
 
         print("\nDONE")
