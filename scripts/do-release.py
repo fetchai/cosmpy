@@ -46,12 +46,6 @@ class EnvCredentials:
         """Get PYPI password."""
         return os.environ.get("PYPI_PASSWORD") or ""
 
-    @property
-    def is_prerelease(self) -> bool:
-        """Whether this release should be marked as prerelease."""
-        raw = os.environ.get("IS_PRERELEASE", "").lower()
-        return raw in ("1", "true", "yes", "on")
-
 
 class ReleaseTool:
     """Release helper tool."""
@@ -106,10 +100,9 @@ class ReleaseTool:
         """Push tag to github."""
         subprocess.check_call(f"git push origin v{current_version}", shell=True)
 
-    def make_release(
-        self, current_version: Version, release_history: str, prerelease: bool = False
-    ) -> None:
+    def make_release(self, current_version: Version, release_history: str) -> None:
         """Make release on Github."""
+        prerelease = current_version.is_prerelease or current_version.is_devrelease
         prerelease_flag = "--prerelease" if prerelease else ""
         subprocess.check_call(
             f"""gh release create v{current_version} --title "v{current_version}" --notes "{release_history}" {prerelease_flag}""",
@@ -176,7 +169,6 @@ class ReleaseTool:
         self.make_release(
             current_version,
             release_history=histories[current_version],
-            prerelease=self._credentials.is_prerelease,
         )
         print("Release made." "")
 
