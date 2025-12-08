@@ -5,7 +5,8 @@ name: Check and realese cosmpy
 # secrets PYPI_USERNAME and PYPI_PASSWORD are required!
 on:
   pull_request:
-    branches: [main]
+    branches:
+        - '**'
     types: [closed]
 
 jobs:

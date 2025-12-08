@@ -102,8 +102,10 @@ class ReleaseTool:
 
     def make_release(self, current_version: Version, release_history: str) -> None:
         """Make release on Github."""
+        prerelease = current_version.is_prerelease or current_version.is_devrelease
+        prerelease_flag = "--prerelease" if prerelease else ""
         subprocess.check_call(
-            f"""gh release create v{current_version} --title "v{current_version}" --notes "{release_history}" """,
+            f"""gh release create v{current_version} --title "v{current_version}" --notes "{release_history}" {prerelease_flag}""",
             shell=True,
         )
 
@@ -164,7 +166,10 @@ class ReleaseTool:
         print("Tag pushed")
 
         print("\nMake release")
-        self.make_release(current_version, release_history=histories[current_version])
+        self.make_release(
+            current_version,
+            release_history=histories[current_version],
+        )
         print("Release made." "")
 
         print("\nDONE")
