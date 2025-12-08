@@ -1,6 +1,6 @@
 # Release History
 
-## 0.12.0-rc0
+## 0.12.0rc0
 
 - feat: Cosmos SDK v0.53.4
 
