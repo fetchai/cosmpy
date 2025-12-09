@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of Auth interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -44,23 +45,32 @@ class AuthRestClient(Auth):
         """
         self._rest_api = rest_api
 
-    def Account(self, request: QueryAccountRequest) -> QueryAccountResponse:
+    def Account(
+        self,
+        request: QueryAccountRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryAccountResponse:
         """
         Query account data - sequence, account_id, etc.
 
         :param request: QueryAccountRequest that contains account address
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryAccountResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/accounts/{request.address}")
         return Parse(json_response, QueryAccountResponse())
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Query all parameters.
 
         :param request: QueryParamsRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryParamsResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params")

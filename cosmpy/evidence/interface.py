@@ -19,6 +19,7 @@
 """Interface for the Evidence functionality of CosmosSDK."""
 
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from cosmpy.protos.cosmos.evidence.v1beta1.query_pb2 import (
     QueryAllEvidenceRequest,
@@ -32,21 +33,29 @@ class Evidence(ABC):
     """Evidence abstract class."""
 
     @abstractmethod
-    def Evidence(self, request: QueryEvidenceRequest) -> QueryEvidenceResponse:
+    def Evidence(
+        self,
+        request: QueryEvidenceRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryEvidenceResponse:
         """
         Evidence queries evidence based on evidence hash.
 
         :param request: QueryEvidenceRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryEvidenceResponse
         """
 
     @abstractmethod
-    def AllEvidence(self, request: QueryAllEvidenceRequest) -> QueryAllEvidenceResponse:
+    def AllEvidence(
+        self,
+        request: QueryAllEvidenceRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryAllEvidenceResponse:
         """
         AllEvidence queries all evidence.
 
         :param request: QueryAllEvidenceRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryAllEvidenceResponse
         """

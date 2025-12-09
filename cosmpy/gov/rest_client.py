@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 """Implementation of Gov interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -55,11 +56,16 @@ class GovRestClient(Gov):
         """
         self._rest_api = rest_api
 
-    def Proposal(self, request: QueryProposalRequest) -> QueryProposalResponse:
+    def Proposal(
+        self,
+        request: QueryProposalRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryProposalResponse:
         """
         Proposal queries proposal details based on ProposalID.
 
         :param request: QueryProposalRequest with proposal id
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryProposalResponse
         """
@@ -68,11 +74,16 @@ class GovRestClient(Gov):
         )
         return Parse(json_response, QueryProposalResponse())
 
-    def Proposals(self, request: QueryProposalsRequest) -> QueryProposalsResponse:
+    def Proposals(
+        self,
+        request: QueryProposalsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryProposalsResponse:
         """
         Proposals queries all proposals based on given status.
 
         :param request: QueryProposalsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryProposalsResponse
         """
@@ -82,11 +93,16 @@ class GovRestClient(Gov):
         )
         return Parse(json_response, QueryProposalsResponse())
 
-    def Vote(self, request: QueryVoteRequest) -> QueryVoteResponse:
+    def Vote(
+        self,
+        request: QueryVoteRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryVoteResponse:
         """
         Vote queries voted information based on proposalID, voterAddr.
 
         :param request: QueryVoteRequest with voter and proposal id
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryVoteResponse
         """
@@ -95,11 +111,16 @@ class GovRestClient(Gov):
         )
         return Parse(json_response, QueryVoteResponse())
 
-    def Votes(self, request: QueryVotesRequest) -> QueryVotesResponse:
+    def Votes(
+        self,
+        request: QueryVotesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryVotesResponse:
         """
         Votes queries votes of a given proposal.
 
         :param request: QueryVotesResponse with proposal id
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryVotesResponse
         """
@@ -110,11 +131,16 @@ class GovRestClient(Gov):
         )
         return Parse(json_response, QueryVotesResponse())
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Params queries all parameters of the gov module.
 
         :param request: QueryParamsRequest with params_type
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryParamsResponse
         """
@@ -123,11 +149,16 @@ class GovRestClient(Gov):
         )
         return Parse(json_response, QueryParamsResponse())
 
-    def Deposit(self, request: QueryDepositRequest) -> QueryDepositResponse:
+    def Deposit(
+        self,
+        request: QueryDepositRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryDepositResponse:
         """
         Deposit queries single deposit information based proposalID, depositAddr.
 
         :param request: QueryDepositRequest with depositor and proposal_id
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryDepositResponse
         """
@@ -136,10 +167,15 @@ class GovRestClient(Gov):
         )
         return Parse(json_response, QueryDepositResponse())
 
-    def Deposits(self, request: QueryDepositsRequest) -> QueryDepositsResponse:
+    def Deposits(
+        self,
+        request: QueryDepositsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryDepositsResponse:
         """Deposits queries all deposits of a single proposal.
 
         :param request: QueryDepositsRequest with proposal_id
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryDepositsResponse
         """
@@ -150,11 +186,16 @@ class GovRestClient(Gov):
         )
         return Parse(json_response, QueryDepositsResponse())
 
-    def TallyResult(self, request: QueryTallyResultRequest) -> QueryTallyResultResponse:
+    def TallyResult(
+        self,
+        request: QueryTallyResultRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryTallyResultResponse:
         """
         Tally Result queries the tally of a proposal vote.
 
         :param request: QueryTallyResultRequest with proposal_id
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryTallyResultResponse
         """

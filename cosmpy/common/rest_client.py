@@ -20,7 +20,7 @@
 """Implementation of REST api client."""
 import base64
 import json
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from urllib.parse import urlencode
 
 import requests
@@ -45,6 +45,7 @@ class RestClient:
         url_base_path: str,
         request: Optional[Message] = None,
         used_params: Optional[List[str]] = None,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> bytes:
         """
         Send a GET request.
@@ -52,6 +53,7 @@ class RestClient:
         :param url_base_path: URL base path
         :param request: Protobuf coded request
         :param used_params: Parameters to be removed from request after converting it to dict
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :raises RuntimeError: if response code is not 200
 
@@ -60,8 +62,11 @@ class RestClient:
         url = self._make_url(
             url_base_path=url_base_path, request=request, used_params=used_params
         )
-
-        response = self._session.get(url=url)
+        headers = {}
+        if metadata:
+            for key, value in metadata:
+                headers[key] = value
+        response = self._session.get(url=url, headers=headers)
         if response.status_code != 200:
             raise RuntimeError(
                 f"Error when sending a GET request.\n Response: {response.status_code}, {str(response.content)})"

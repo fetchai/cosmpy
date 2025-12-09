@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Implementation of Evidence interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -44,12 +45,16 @@ class EvidenceRestClient(Evidence):
         """
         self._rest_api = rest_api
 
-    def Evidence(self, request: QueryEvidenceRequest) -> QueryEvidenceResponse:
+    def Evidence(
+        self,
+        request: QueryEvidenceRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryEvidenceResponse:
         """
         Evidence queries evidence based on evidence hash.
 
         :param request: QueryEvidenceRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryEvidenceResponse
         """
         json_response = self._rest_api.get(
@@ -57,11 +62,16 @@ class EvidenceRestClient(Evidence):
         )
         return Parse(json_response, QueryEvidenceResponse())
 
-    def AllEvidence(self, request: QueryAllEvidenceRequest) -> QueryAllEvidenceResponse:
+    def AllEvidence(
+        self,
+        request: QueryAllEvidenceRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryAllEvidenceResponse:
         """
         AllEvidence queries all evidence.
 
         :param request: QueryAllEvidenceRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QueryAllEvidenceResponse
         """

@@ -17,6 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 """Implementation of IBC Applications Transfer  interface using REST."""
+from typing import Optional, Tuple
+
 from google.protobuf.json_format import Parse
 
 from cosmpy.common.rest_client import RestClient
@@ -46,11 +48,16 @@ class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
         """
         self._rest_api = rest_api
 
-    def DenomTrace(self, request: QueryDenomTraceRequest) -> QueryDenomTraceResponse:
+    def DenomTrace(
+        self,
+        request: QueryDenomTraceRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryDenomTraceResponse:
         """
         DenomTrace queries a denomination trace information.
 
         :param request: QueryDenomTraceRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryDenomTraceResponse
         """
         json_response = self._rest_api.get(
@@ -58,21 +65,31 @@ class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
         )
         return Parse(json_response, QueryDenomTraceResponse())
 
-    def DenomTraces(self, request: QueryDenomTracesRequest) -> QueryDenomTracesResponse:
+    def DenomTraces(
+        self,
+        request: QueryDenomTracesRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryDenomTracesResponse:
         """
         DenomTraces queries all denomination traces.
 
         :param request: QueryDenomTracesRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryDenomTracesResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/denom_traces", request)
         return Parse(json_response, QueryDenomTracesResponse())
 
-    def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
+    def Params(
+        self,
+        request: QueryParamsRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QueryParamsResponse:
         """
         Params queries all parameters of the ibc-transfer module.
 
         :param request: QueryParamsRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QueryParamsResponse
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params")

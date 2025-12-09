@@ -17,6 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 """Implementation of Slashing interface using REST."""
+from typing import Optional, Tuple
 
 from google.protobuf.json_format import Parse
 
@@ -55,12 +56,16 @@ class SlashingRestClient(Slashing):
         )
         return Parse(json_response, QueryParamsResponse())
 
-    def SigningInfo(self, request: QuerySigningInfoRequest) -> QuerySigningInfoResponse:
+    def SigningInfo(
+        self,
+        request: QuerySigningInfoRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
+    ) -> QuerySigningInfoResponse:
         """
         SigningInfo queries the signing info of given cons address.
 
         :param request: QuerySigningInfoRequest
-
+        :param metadata: The metadata for the call or None. metadata are additional headers
         :return: QuerySigningInfoResponse
         """
         json_response = self._rest_api.get(
@@ -69,12 +74,15 @@ class SlashingRestClient(Slashing):
         return Parse(json_response, QuerySigningInfoResponse())
 
     def SigningInfos(
-        self, request: QuerySigningInfosRequest
+        self,
+        request: QuerySigningInfosRequest,
+        metadata: Optional[Tuple[Tuple[str, str]]] = None,
     ) -> QuerySigningInfosResponse:
         """
         SigningInfos queries signing info of all validators.
 
         :param request: QuerySigningInfosRequest
+        :param metadata: The metadata for the call or None. metadata are additional headers
 
         :return: QuerySigningInfosResponse
         """
