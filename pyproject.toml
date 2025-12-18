@@ -1,13 +1,6 @@
 [tool.poetry]
 name = "cosmpy"
 version = "0.12.0rc0"
-packages = [
-    { include = "cosmpy" },
-    { include = "gogoproto", from = "cosmpy/protos" },
-    { include = "cosmos", from = "cosmpy/protos" },
-    { include = "amino", from = "cosmpy/protos" },
-    { include = "cosmos_proto", from = "cosmpy/protos" },
-]
 description = "A library for interacting with the cosmos networks"
 authors = ["Fetch.AI Limited"]
 readme = "README.md"
