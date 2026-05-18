@@ -1,5 +1,5 @@
 COSMOS_SDK_URL := https://github.com/fetchai/cosmos-sdk
-COSMOS_SDK_VERSION := merge/v0.53.4_to_v0.19.4__jiri
+COSMOS_SDK_VERSION := v0.20.0-rc0
 COSMOS_SDK_DIR := build/cosmos-sdk-proto-schema
 
 WASMD_URL := https://github.com/CosmWasm/wasmd
