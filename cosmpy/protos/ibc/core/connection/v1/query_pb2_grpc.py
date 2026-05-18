@@ -40,6 +40,11 @@ class QueryStub(object):
                 request_serializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionConsensusStateRequest.SerializeToString,
                 response_deserializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionConsensusStateResponse.FromString,
                 )
+        self.ConnectionParams = channel.unary_unary(
+                '/ibc.core.connection.v1.Query/ConnectionParams',
+                request_serializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionParamsRequest.SerializeToString,
+                response_deserializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionParamsResponse.FromString,
+                )
 
 
 class QueryServicer(object):
@@ -84,6 +89,13 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ConnectionParams(self, request, context):
+        """ConnectionParams queries all parameters of the ibc connection submodule.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_QueryServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -111,6 +123,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.ConnectionConsensusState,
                     request_deserializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionConsensusStateRequest.FromString,
                     response_serializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionConsensusStateResponse.SerializeToString,
+            ),
+            'ConnectionParams': grpc.unary_unary_rpc_method_handler(
+                    servicer.ConnectionParams,
+                    request_deserializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionParamsRequest.FromString,
+                    response_serializer=ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionParamsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -205,5 +222,22 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/ibc.core.connection.v1.Query/ConnectionConsensusState',
             ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionConsensusStateRequest.SerializeToString,
             ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionConsensusStateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ConnectionParams(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.core.connection.v1.Query/ConnectionParams',
+            ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionParamsRequest.SerializeToString,
+            ibc_dot_core_dot_connection_dot_v1_dot_query__pb2.QueryConnectionParamsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

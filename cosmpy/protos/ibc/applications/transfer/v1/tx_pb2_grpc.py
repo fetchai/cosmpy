@@ -20,6 +20,11 @@ class MsgStub(object):
                 request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgTransfer.SerializeToString,
                 response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgTransferResponse.FromString,
                 )
+        self.UpdateParams = channel.unary_unary(
+                '/ibc.applications.transfer.v1.Msg/UpdateParams',
+                request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgUpdateParams.SerializeToString,
+                response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgUpdateParamsResponse.FromString,
+                )
 
 
 class MsgServicer(object):
@@ -33,6 +38,13 @@ class MsgServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def UpdateParams(self, request, context):
+        """UpdateParams defines a rpc handler for MsgUpdateParams.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MsgServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -40,6 +52,11 @@ def add_MsgServicer_to_server(servicer, server):
                     servicer.Transfer,
                     request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgTransfer.FromString,
                     response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgTransferResponse.SerializeToString,
+            ),
+            'UpdateParams': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateParams,
+                    request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgUpdateParams.FromString,
+                    response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgUpdateParamsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -66,5 +83,22 @@ class Msg(object):
         return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Msg/Transfer',
             ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgTransfer.SerializeToString,
             ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgTransferResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UpdateParams(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Msg/UpdateParams',
+            ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgUpdateParams.SerializeToString,
+            ibc_dot_applications_dot_transfer_dot_v1_dot_tx__pb2.MsgUpdateParamsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

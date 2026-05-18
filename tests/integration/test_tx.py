@@ -21,12 +21,12 @@ import pytest
 
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.config import NetworkConfig
-from cosmpy.aerial.faucet import FaucetApi
 from cosmpy.aerial.wallet import LocalWallet
 
 
 MAX_FLAKY_RERUNS = 3
 RERUNS_DELAY = 10
+VALIDATOR_MNEMONIC = "night mistake cart palm shed roast offer found ribbon unique bulk panel bracket stand fragile staff dumb glove hand cash moon search cable repair"
 
 
 class TestTx:
@@ -34,19 +34,44 @@ class TestTx:
 
     COIN = "atestfet"
 
+    def get_funds(self, wallet: LocalWallet):
+        """Send funds from validator wallet to given wallet."""
+        ledger = self.get_ledger()
+        validator_walet = self.get_validator_wallet()
+        ledger.send_tokens(
+            wallet,
+            10 * 10**18,
+            ledger.network_config.fee_denomination,
+            validator_walet,
+        ).wait_to_complete()
+
     def _get_network_config(self):
         """Get network config."""
-        return NetworkConfig.fetchai_stable_testnet()
+        local_config = NetworkConfig(
+            chain_id="test",
+            url="grpc+http://127.0.0.1:9090",
+            fee_minimum_gas_price=0,
+            fee_denomination=self.COIN,
+            staking_denomination=self.COIN,
+            faucet_url=None,
+        )
+        return local_config
 
-    def get_ledger(self):
-        """Get Ledger"""
-        return LedgerClient(self._get_network_config())
+    def get_validator_wallet(self):
+        """Get validator wallet"""
+        wallet = LocalWallet.from_mnemonic(VALIDATOR_MNEMONIC)
+        return wallet
+
+    def get_wallet(self):
+        """Get wallet"""
+        wallet = LocalWallet.generate()
+        self.get_funds(wallet)
+        return wallet
 
     def get_wallet_1(self):
         """Get wallet 1."""
-        faucet_api = FaucetApi(self._get_network_config())
         wallet1 = LocalWallet.generate()
-        faucet_api.get_wealth(wallet1.address())
+        self.get_funds(wallet1)
         return wallet1
 
     def get_wallet_2(self):
@@ -54,6 +79,11 @@ class TestTx:
         wallet2 = LocalWallet.generate()
         return wallet2
 
+    def get_ledger(self):
+        """Get ledger"""
+        return LedgerClient(self._get_network_config())
+
+    @pytest.mark.skip(reason="Temporarily disabled until reworked to use local node")
     @pytest.mark.integration
     @pytest.mark.flaky(reruns=MAX_FLAKY_RERUNS, reruns_delay=RERUNS_DELAY)
     def test_faucet_transaction_balance(self):
@@ -82,16 +112,17 @@ class TestTx:
 
 
 class TestTxRestAPI(TestTx):
-    """Test dorado rest api"""
+    """Test rest api"""
 
     def _get_network_config(self):
+        denom = "atestfet"
         return NetworkConfig(
-            chain_id="dorado-1",
-            url="rest+https://rest-dorado.fetch.ai:443",
-            fee_minimum_gas_price=5000000000,
-            fee_denomination="atestfet",
-            staking_denomination="atestfet",
-            faucet_url="https://faucet-dorado.fetch.ai",
+            chain_id="test",
+            url="rest+http://127.0.0.1:1317",
+            fee_minimum_gas_price=0,
+            fee_denomination=denom,
+            staking_denomination=denom,
+            faucet_url=None,
         )
 
 

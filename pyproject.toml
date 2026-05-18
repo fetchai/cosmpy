@@ -1,6 +1,10 @@
 [tool.poetry]
 name = "cosmpy"
 version = "0.11.2"
+packages = [
+    { include = "cosmpy" },
+    { include = "gogoproto", from = "cosmpy/protos" }
+]
 description = "A library for interacting with the cosmos networks"
 authors = ["Fetch.AI Limited"]
 readme = "README.md"
@@ -102,6 +106,7 @@ module = [
     "cosmpy.protos.*",
 ]
 ignore_errors = true
+follow_imports = "skip"
 
 [[tool.mypy.overrides]]
 module = [

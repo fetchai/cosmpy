@@ -15,25 +15,35 @@ class QueryStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.DenomTrace = channel.unary_unary(
-                '/ibc.applications.transfer.v1.Query/DenomTrace',
-                request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTraceRequest.SerializeToString,
-                response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTraceResponse.FromString,
-                )
-        self.DenomTraces = channel.unary_unary(
-                '/ibc.applications.transfer.v1.Query/DenomTraces',
-                request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTracesRequest.SerializeToString,
-                response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTracesResponse.FromString,
-                )
         self.Params = channel.unary_unary(
                 '/ibc.applications.transfer.v1.Query/Params',
                 request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryParamsRequest.SerializeToString,
                 response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryParamsResponse.FromString,
                 )
+        self.Denoms = channel.unary_unary(
+                '/ibc.applications.transfer.v1.Query/Denoms',
+                request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomsRequest.SerializeToString,
+                response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomsResponse.FromString,
+                )
+        self.Denom = channel.unary_unary(
+                '/ibc.applications.transfer.v1.Query/Denom',
+                request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomRequest.SerializeToString,
+                response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomResponse.FromString,
+                )
         self.DenomHash = channel.unary_unary(
                 '/ibc.applications.transfer.v1.Query/DenomHash',
                 request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomHashRequest.SerializeToString,
                 response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomHashResponse.FromString,
+                )
+        self.EscrowAddress = channel.unary_unary(
+                '/ibc.applications.transfer.v1.Query/EscrowAddress',
+                request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryEscrowAddressRequest.SerializeToString,
+                response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryEscrowAddressResponse.FromString,
+                )
+        self.TotalEscrowForDenom = channel.unary_unary(
+                '/ibc.applications.transfer.v1.Query/TotalEscrowForDenom',
+                request_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryTotalEscrowForDenomRequest.SerializeToString,
+                response_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryTotalEscrowForDenomResponse.FromString,
                 )
 
 
@@ -41,22 +51,22 @@ class QueryServicer(object):
     """Query provides defines the gRPC querier service.
     """
 
-    def DenomTrace(self, request, context):
-        """DenomTrace queries a denomination trace information.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def DenomTraces(self, request, context):
-        """DenomTraces queries all denomination traces.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def Params(self, request, context):
         """Params queries all parameters of the ibc-transfer module.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Denoms(self, request, context):
+        """Denoms queries all denominations
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Denom(self, request, context):
+        """Denom queries a denomination
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -69,28 +79,52 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def EscrowAddress(self, request, context):
+        """EscrowAddress returns the escrow address for a particular port and channel id.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TotalEscrowForDenom(self, request, context):
+        """TotalEscrowForDenom returns the total amount of tokens in escrow based on the denom.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_QueryServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'DenomTrace': grpc.unary_unary_rpc_method_handler(
-                    servicer.DenomTrace,
-                    request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTraceRequest.FromString,
-                    response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTraceResponse.SerializeToString,
-            ),
-            'DenomTraces': grpc.unary_unary_rpc_method_handler(
-                    servicer.DenomTraces,
-                    request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTracesRequest.FromString,
-                    response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTracesResponse.SerializeToString,
-            ),
             'Params': grpc.unary_unary_rpc_method_handler(
                     servicer.Params,
                     request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryParamsRequest.FromString,
                     response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryParamsResponse.SerializeToString,
             ),
+            'Denoms': grpc.unary_unary_rpc_method_handler(
+                    servicer.Denoms,
+                    request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomsRequest.FromString,
+                    response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomsResponse.SerializeToString,
+            ),
+            'Denom': grpc.unary_unary_rpc_method_handler(
+                    servicer.Denom,
+                    request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomRequest.FromString,
+                    response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomResponse.SerializeToString,
+            ),
             'DenomHash': grpc.unary_unary_rpc_method_handler(
                     servicer.DenomHash,
                     request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomHashRequest.FromString,
                     response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomHashResponse.SerializeToString,
+            ),
+            'EscrowAddress': grpc.unary_unary_rpc_method_handler(
+                    servicer.EscrowAddress,
+                    request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryEscrowAddressRequest.FromString,
+                    response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryEscrowAddressResponse.SerializeToString,
+            ),
+            'TotalEscrowForDenom': grpc.unary_unary_rpc_method_handler(
+                    servicer.TotalEscrowForDenom,
+                    request_deserializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryTotalEscrowForDenomRequest.FromString,
+                    response_serializer=ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryTotalEscrowForDenomResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -102,40 +136,6 @@ def add_QueryServicer_to_server(servicer, server):
 class Query(object):
     """Query provides defines the gRPC querier service.
     """
-
-    @staticmethod
-    def DenomTrace(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Query/DenomTrace',
-            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTraceRequest.SerializeToString,
-            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTraceResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def DenomTraces(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Query/DenomTraces',
-            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTracesRequest.SerializeToString,
-            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomTracesResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def Params(request,
@@ -155,6 +155,40 @@ class Query(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def Denoms(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Query/Denoms',
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomsRequest.SerializeToString,
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Denom(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Query/Denom',
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomRequest.SerializeToString,
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def DenomHash(request,
             target,
             options=(),
@@ -168,5 +202,39 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Query/DenomHash',
             ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomHashRequest.SerializeToString,
             ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryDenomHashResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EscrowAddress(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Query/EscrowAddress',
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryEscrowAddressRequest.SerializeToString,
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryEscrowAddressResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TotalEscrowForDenom(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.applications.transfer.v1.Query/TotalEscrowForDenom',
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryTotalEscrowForDenomRequest.SerializeToString,
+            ibc_dot_applications_dot_transfer_dot_v1_dot_query__pb2.QueryTotalEscrowForDenomResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

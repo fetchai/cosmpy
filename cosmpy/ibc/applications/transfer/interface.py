@@ -21,10 +21,10 @@
 from abc import ABC, abstractmethod
 
 from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
-    QueryDenomTraceRequest,
-    QueryDenomTraceResponse,
-    QueryDenomTracesRequest,
-    QueryDenomTracesResponse,
+    QueryDenomRequest,
+    QueryDenomResponse,
+    QueryDenomsRequest,
+    QueryDenomsResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
@@ -34,21 +34,21 @@ class IBCApplicationsTransfer(ABC):
     """IBC Applications Transfer abstract class."""
 
     @abstractmethod
-    def DenomTrace(self, request: QueryDenomTraceRequest) -> QueryDenomTraceResponse:
+    def Denom(self, request: QueryDenomRequest) -> QueryDenomResponse:
         """
-        DenomTrace queries a denomination trace information.
+        Denom queries a denominatio information.
 
-        :param request: QueryDenomTraceRequest
-        :return: QueryDenomTraceResponse
+        :param request: QueryDenomRequest
+        :return: QueryDenomResponse
         """
 
     @abstractmethod
-    def DenomTraces(self, request: QueryDenomTracesRequest) -> QueryDenomTracesResponse:
+    def Denoms(self, request: QueryDenomsRequest) -> QueryDenomsResponse:
         """
-        DenomTraces queries all denomination traces.
+        Denoms queries all denominations.
 
-        :param request: QueryDenomTracesRequest
-        :return: QueryDenomTracesResponse
+        :param request: QueryDenomsRequest
+        :return: QueryDenomsResponse
         """
 
     @abstractmethod
