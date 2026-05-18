@@ -106,7 +106,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: fetchai/fetchd
-          ref: feat/cosmos_sdk_update_0_20_0
+          ref: fix/docker_compose_genesis
           path: repo-docker
           token: ${{ secrets.GITHUB_TOKEN }}
 
