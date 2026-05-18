@@ -24,10 +24,12 @@ from cosmpy.ibc.applications.transfer.interface import (  # type: ignore
     IBCApplicationsTransfer,
 )
 from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
-    QueryDenomTraceRequest,
-    QueryDenomTraceResponse,
-    QueryDenomTracesRequest,
-    QueryDenomTracesResponse,
+    QueryDenomHashRequest,
+    QueryDenomHashResponse,
+    QueryDenomRequest,
+    QueryDenomResponse,
+    QueryDenomsRequest,
+    QueryDenomsResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
@@ -36,7 +38,7 @@ from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
 class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
     """IBC Applications Transfer REST client."""
 
-    API_URL = "/ibc/applications/transfer/v1beta1"
+    API_URL = "/ibc/apps/transfer/v1"
 
     def __init__(self, rest_api: RestClient) -> None:
         """
@@ -46,27 +48,25 @@ class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
         """
         self._rest_api = rest_api
 
-    def DenomTrace(self, request: QueryDenomTraceRequest) -> QueryDenomTraceResponse:
+    def Denom(self, request: QueryDenomRequest) -> QueryDenomResponse:
         """
-        DenomTrace queries a denomination trace information.
+        Denom queries a denomination trace information.
 
-        :param request: QueryDenomTraceRequest
-        :return: QueryDenomTraceResponse
+        :param request: QueryDenomRequest
+        :return: QueryDenomResponse
         """
-        json_response = self._rest_api.get(
-            f"{self.API_URL}/denom_traces/{request.hash}"
-        )
-        return Parse(json_response, QueryDenomTraceResponse())
+        json_response = self._rest_api.get(f"{self.API_URL}/denoms/{request.hash}")
+        return Parse(json_response, QueryDenomResponse())
 
-    def DenomTraces(self, request: QueryDenomTracesRequest) -> QueryDenomTracesResponse:
+    def Denoms(self, request: QueryDenomsRequest) -> QueryDenomsResponse:
         """
-        DenomTraces queries all denomination traces.
+        Denoms queries all denomination traces.
 
-        :param request: QueryDenomTracesRequest
-        :return: QueryDenomTracesResponse
+        :param request: QueryDenomsRequest
+        :return: QueryDenomsResponse
         """
-        json_response = self._rest_api.get(f"{self.API_URL}/denom_traces", request)
-        return Parse(json_response, QueryDenomTracesResponse())
+        json_response = self._rest_api.get(f"{self.API_URL}/denoms", request)
+        return Parse(json_response, QueryDenomsResponse())
 
     def Params(self, request: QueryParamsRequest) -> QueryParamsResponse:
         """
@@ -77,3 +77,15 @@ class IBCApplicationsTransferRestClient(IBCApplicationsTransfer):
         """
         json_response = self._rest_api.get(f"{self.API_URL}/params")
         return Parse(json_response, QueryParamsResponse())
+
+    def DenomHash(self, request: QueryDenomHashRequest) -> QueryDenomHashResponse:
+        """
+        DenomHash queries denomination hash.
+
+        :param request: QueryDenomHashRequest (with .trace set to something like 'transfer/channel-0/uatom')
+        :return: QueryDenomHashResponse
+        """
+        json_response = self._rest_api.get(
+            f"{self.API_URL}/denom_hashes/{request.trace}"
+        )
+        return Parse(json_response, QueryDenomHashResponse())

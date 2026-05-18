@@ -169,3 +169,22 @@ Wait to complete the transaction.
 
 Submitted Transaction
 
+<a id="cosmpy.aerial.tx_helpers.safe_decode"></a>
+
+#### safe`_`decode
+
+```python
+def safe_decode(v)
+```
+
+Decode a value from bytes to UTF-8 string if necessary.
+
+**Arguments**:
+
+- `v`: The value to decode. If ``bytes`` it will be decoded using UTF-8,
+otherwise returned unchanged.
+
+**Returns**:
+
+The decoded string or the original value if it was not ``bytes``.
+

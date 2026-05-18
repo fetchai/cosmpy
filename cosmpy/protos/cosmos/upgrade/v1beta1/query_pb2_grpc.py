@@ -35,6 +35,11 @@ class QueryStub(object):
                 request_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsRequest.SerializeToString,
                 response_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsResponse.FromString,
                 )
+        self.Authority = channel.unary_unary(
+                '/cosmos.upgrade.v1beta1.Query/Authority',
+                request_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryAuthorityRequest.SerializeToString,
+                response_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryAuthorityResponse.FromString,
+                )
 
 
 class QueryServicer(object):
@@ -69,8 +74,13 @@ class QueryServicer(object):
 
     def ModuleVersions(self, request, context):
         """ModuleVersions queries the list of module versions from state.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
-        Since: cosmos-sdk 0.43
+    def Authority(self, request, context):
+        """Returns the account with authority to conduct upgrades
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -98,6 +108,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.ModuleVersions,
                     request_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsRequest.FromString,
                     response_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsResponse.SerializeToString,
+            ),
+            'Authority': grpc.unary_unary_rpc_method_handler(
+                    servicer.Authority,
+                    request_deserializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryAuthorityRequest.FromString,
+                    response_serializer=cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryAuthorityResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -175,5 +190,22 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.upgrade.v1beta1.Query/ModuleVersions',
             cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsRequest.SerializeToString,
             cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryModuleVersionsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Authority(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.upgrade.v1beta1.Query/Authority',
+            cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryAuthorityRequest.SerializeToString,
+            cosmos_dot_upgrade_dot_v1beta1_dot_query__pb2.QueryAuthorityResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

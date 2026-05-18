@@ -179,3 +179,17 @@ class SubmittedTx:
         self._response.ensure_successful()
 
         return self
+
+
+def safe_decode(v):
+    """
+    Decode a value from bytes to UTF-8 string if necessary.
+
+    :param v: The value to decode. If ``bytes`` it will be decoded using UTF-8,
+              otherwise returned unchanged.
+
+    :return: The decoded string or the original value if it was not ``bytes``.
+    """
+    if isinstance(v, bytes):
+        return v.decode("utf-8")
+    return v

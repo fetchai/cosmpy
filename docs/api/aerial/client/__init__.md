@@ -122,6 +122,48 @@ Query Prams.
 
 Query params
 
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_node_info"></a>
+
+#### query`_`node`_`info
+
+```python
+def query_node_info() -> Any
+```
+
+Query basic Tendermint / node information (moniker, chain-id, version, etc.).
+
+**Returns**:
+
+`GetNodeInfoResponse` protobuf message.
+
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_cosmos_sdk_version"></a>
+
+#### query`_`cosmos`_`sdk`_`version
+
+```python
+def query_cosmos_sdk_version() -> Version
+```
+
+Query version of cosmos sdk.
+
+**Returns**:
+
+Version
+
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_consensus"></a>
+
+#### query`_`consensus
+
+```python
+def query_consensus() -> Any
+```
+
+Query Params.
+
+**Returns**:
+
+Query params
+
 <a id="cosmpy.aerial.client.__init__.LedgerClient.query_bank_balance"></a>
 
 #### query`_`bank`_`balance

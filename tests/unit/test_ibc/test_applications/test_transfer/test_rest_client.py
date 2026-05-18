@@ -27,10 +27,12 @@ from cosmpy.ibc.applications.transfer.rest_client import (  # type: ignore
     IBCApplicationsTransferRestClient,
 )
 from cosmpy.protos.ibc.applications.transfer.v1.query_pb2 import (
-    QueryDenomTraceRequest,
-    QueryDenomTraceResponse,
-    QueryDenomTracesRequest,
-    QueryDenomTracesResponse,
+    QueryDenomHashRequest,
+    QueryDenomHashResponse,
+    QueryDenomRequest,
+    QueryDenomResponse,
+    QueryDenomsRequest,
+    QueryDenomsResponse,
     QueryParamsRequest,
     QueryParamsResponse,
 )
@@ -56,41 +58,72 @@ class IBCApplicationsTransferRestClientTestCase(TestCase):
         rest_client = self.REST_CLIENT(mock_client)
         return mock_client, rest_client
 
-    def test_DenomTrace(self):
-        """Test DenomTrace method."""
-        content = {"denom_trace": {"path": "string", "base_denom": "string"}}
-        mock_client, rest_client = self.make_clients(content)
-        expected_response = ParseDict(content, QueryDenomTraceResponse())
-
-        assert (
-            rest_client.DenomTrace(QueryDenomTraceRequest(hash="hash"))
-            == expected_response
-        )
-        assert (
-            mock_client.last_base_url
-            == "/ibc/applications/transfer/v1beta1/denom_traces/hash"
-        )
-
-    def test_DenomTraces(self):
-        """Test DenomTraces method."""
+    def test_Denom(self):
+        """Test Denom method."""
+        # shape according to QueryDenomResponse { denom: Denom }
         content = {
-            "denom_traces": [{"path": "string", "base_denom": "string"}],
+            "denom": {
+                "trace": [
+                    {
+                        "portId": "transfer",
+                        "channelId": "channel-0",
+                    }
+                ],
+                "base": "uatom",
+            }
+        }
+        mock_client, rest_client = self.make_clients(content)
+        expected_response = ParseDict(content, QueryDenomResponse())
+
+        assert rest_client.Denom(QueryDenomRequest(hash="hash")) == expected_response
+        assert mock_client.last_base_url == "/ibc/apps/transfer/v1/denoms/hash"
+
+    def test_Denoms(self):
+        """Test Denoms method."""
+        # shape according to QueryDenomsResponse { denoms: [Denom], pagination: PageResponse }
+        content = {
+            "denoms": [
+                {
+                    "trace": [
+                        {
+                            "portId": "transfer",
+                            "channelId": "channel-0",
+                        }
+                    ],
+                    "base": "uatom",  # <-- 'base' here too
+                }
+            ],
             "pagination": {"next_key": "string", "total": "1"},
         }
         mock_client, rest_client = self.make_clients(content)
-        expected_response = ParseDict(content, QueryDenomTracesResponse())
+        expected_response = ParseDict(content, QueryDenomsResponse())
 
-        assert rest_client.DenomTraces(QueryDenomTracesRequest()) == expected_response
-        assert (
-            mock_client.last_base_url
-            == "/ibc/applications/transfer/v1beta1/denom_traces"
-        )
+        assert rest_client.Denoms(QueryDenomsRequest()) == expected_response
+        assert mock_client.last_base_url == "/ibc/apps/transfer/v1/denoms"
 
     def test_Params(self):
         """Test Params method."""
+        # empty params is fine for a unit test; ParseDict will fill defaults
         content = {}
         mock_client, rest_client = self.make_clients(content)
         expected_response = ParseDict(content, QueryParamsResponse())
 
         assert rest_client.Params(QueryParamsRequest()) == expected_response
-        assert mock_client.last_base_url == "/ibc/applications/transfer/v1beta1/params"
+        assert mock_client.last_base_url == "/ibc/apps/transfer/v1/params"
+
+    def test_DenomHash(self):
+        """Test DenomHash method."""
+        content = {"hash": "ABCD1234"}
+        mock_client, rest_client = self.make_clients(content)
+        expected_response = ParseDict(content, QueryDenomHashResponse())
+
+        assert (
+            rest_client.DenomHash(
+                QueryDenomHashRequest(trace="transfer/channel-0/uatom")
+            )
+            == expected_response
+        )
+        assert (
+            mock_client.last_base_url
+            == "/ibc/apps/transfer/v1/denom_hashes/transfer/channel-0/uatom"
+        )
