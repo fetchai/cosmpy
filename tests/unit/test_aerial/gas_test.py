@@ -18,6 +18,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -66,13 +67,23 @@ def test_table_gas_estimation(input_msgs, expected_gas_estimate):
 class MockLedger:
     """Test for ledger."""
 
-    def __init__(self):
+    def __init__(self, legacy=False):
         """Initiate Mock Ledger with table."""
         self._table = OfflineMessageTableStrategy.default_table()
+        self.legacy = legacy
 
     def simulate_tx(self, tx: Transaction) -> int:
         """Simulate tx."""
         return self._table.estimate_gas(tx)
+
+    def query_consensus_params(self) -> Any:  # pylint: disable=unused-argument
+        """Set query consensus params."""
+        if self.legacy:
+            raise RuntimeError("Legacy mode")
+
+        return SimpleNamespace(
+            params=SimpleNamespace(block=SimpleNamespace(max_gas=-1))
+        )
 
     def query_params(
         self, subspace: str, key: str  # pylint: disable=unused-argument
@@ -96,7 +107,20 @@ class MockLedger:
 )
 def test_simulated_estimation(input_msgs, expected_gas_estimate):
     """Test simulated estimation of gas for transaction."""
-    ledger = MockLedger()
+    ledger = MockLedger(legacy=False)
+    strategy = SimulationGasStrategy(ledger, 1.0)
+
+    # build up the TX
+    tx = Transaction()
+    for input_msg in input_msgs:
+        tx.add_message(input_msg)
+
+    gas_estimate = strategy.estimate_gas(tx)
+
+    assert gas_estimate == expected_gas_estimate
+
+    # Test against legacy version
+    ledger = MockLedger(legacy=True)
     strategy = SimulationGasStrategy(ledger, 1.0)
 
     # build up the TX

@@ -25,6 +25,11 @@ class QueryStub(object):
                 request_serializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryInflationRequest.SerializeToString,
                 response_deserializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryInflationResponse.FromString,
                 )
+        self.MunicipalInflation = channel.unary_unary(
+                '/cosmos.mint.v1beta1.Query/MunicipalInflation',
+                request_serializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryMunicipalInflationRequest.SerializeToString,
+                response_deserializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryMunicipalInflationResponse.FromString,
+                )
         self.AnnualProvisions = channel.unary_unary(
                 '/cosmos.mint.v1beta1.Query/AnnualProvisions',
                 request_serializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryAnnualProvisionsRequest.SerializeToString,
@@ -50,6 +55,13 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def MunicipalInflation(self, request, context):
+        """Inflation returns the current minting inflation value.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def AnnualProvisions(self, request, context):
         """AnnualProvisions current minting annual provisions value.
         """
@@ -69,6 +81,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.Inflation,
                     request_deserializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryInflationRequest.FromString,
                     response_serializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryInflationResponse.SerializeToString,
+            ),
+            'MunicipalInflation': grpc.unary_unary_rpc_method_handler(
+                    servicer.MunicipalInflation,
+                    request_deserializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryMunicipalInflationRequest.FromString,
+                    response_serializer=cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryMunicipalInflationResponse.SerializeToString,
             ),
             'AnnualProvisions': grpc.unary_unary_rpc_method_handler(
                     servicer.AnnualProvisions,
@@ -117,6 +134,23 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.mint.v1beta1.Query/Inflation',
             cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryInflationRequest.SerializeToString,
             cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryInflationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def MunicipalInflation(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.mint.v1beta1.Query/MunicipalInflation',
+            cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryMunicipalInflationRequest.SerializeToString,
+            cosmos_dot_mint_dot_v1beta1_dot_query__pb2.QueryMunicipalInflationResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

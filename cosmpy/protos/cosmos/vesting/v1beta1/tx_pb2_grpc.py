@@ -20,6 +20,16 @@ class MsgStub(object):
                 request_serializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreateVestingAccount.SerializeToString,
                 response_deserializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreateVestingAccountResponse.FromString,
                 )
+        self.CreatePermanentLockedAccount = channel.unary_unary(
+                '/cosmos.vesting.v1beta1.Msg/CreatePermanentLockedAccount',
+                request_serializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePermanentLockedAccount.SerializeToString,
+                response_deserializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePermanentLockedAccountResponse.FromString,
+                )
+        self.CreatePeriodicVestingAccount = channel.unary_unary(
+                '/cosmos.vesting.v1beta1.Msg/CreatePeriodicVestingAccount',
+                request_serializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePeriodicVestingAccount.SerializeToString,
+                response_deserializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePeriodicVestingAccountResponse.FromString,
+                )
 
 
 class MsgServicer(object):
@@ -34,6 +44,22 @@ class MsgServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CreatePermanentLockedAccount(self, request, context):
+        """CreatePermanentLockedAccount defines a method that enables creating a permanent
+        locked account.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CreatePeriodicVestingAccount(self, request, context):
+        """CreatePeriodicVestingAccount defines a method that enables creating a
+        periodic vesting account.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MsgServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -41,6 +67,16 @@ def add_MsgServicer_to_server(servicer, server):
                     servicer.CreateVestingAccount,
                     request_deserializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreateVestingAccount.FromString,
                     response_serializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreateVestingAccountResponse.SerializeToString,
+            ),
+            'CreatePermanentLockedAccount': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreatePermanentLockedAccount,
+                    request_deserializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePermanentLockedAccount.FromString,
+                    response_serializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePermanentLockedAccountResponse.SerializeToString,
+            ),
+            'CreatePeriodicVestingAccount': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreatePeriodicVestingAccount,
+                    request_deserializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePeriodicVestingAccount.FromString,
+                    response_serializer=cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePeriodicVestingAccountResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -67,5 +103,39 @@ class Msg(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.vesting.v1beta1.Msg/CreateVestingAccount',
             cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreateVestingAccount.SerializeToString,
             cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreateVestingAccountResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CreatePermanentLockedAccount(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.vesting.v1beta1.Msg/CreatePermanentLockedAccount',
+            cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePermanentLockedAccount.SerializeToString,
+            cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePermanentLockedAccountResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CreatePeriodicVestingAccount(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.vesting.v1beta1.Msg/CreatePeriodicVestingAccount',
+            cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePeriodicVestingAccount.SerializeToString,
+            cosmos_dot_vesting_dot_v1beta1_dot_tx__pb2.MsgCreatePeriodicVestingAccountResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -122,6 +122,34 @@ Query Prams.
 
 Query params
 
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_node_info"></a>
+
+#### query`_`node`_`info
+
+```python
+def query_node_info() -> NodeInfo
+```
+
+Query basic Tendermint / node information (moniker, chain-id, version, etc.).
+
+**Returns**:
+
+NodeInfo.
+
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_consensus_params"></a>
+
+#### query`_`consensus`_`params
+
+```python
+def query_consensus_params() -> Any
+```
+
+Query consensus params.
+
+**Returns**:
+
+Query consensus params
+
 <a id="cosmpy.aerial.client.__init__.LedgerClient.query_bank_balance"></a>
 
 #### query`_`bank`_`balance

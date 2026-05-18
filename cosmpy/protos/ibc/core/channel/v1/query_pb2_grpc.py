@@ -80,6 +80,11 @@ class QueryStub(object):
                 request_serializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceReceiveRequest.SerializeToString,
                 response_deserializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceReceiveResponse.FromString,
                 )
+        self.NextSequenceSend = channel.unary_unary(
+                '/ibc.core.channel.v1.Query/NextSequenceSend',
+                request_serializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceSendRequest.SerializeToString,
+                response_deserializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceSendResponse.FromString,
+                )
 
 
 class QueryServicer(object):
@@ -185,6 +190,13 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def NextSequenceSend(self, request, context):
+        """NextSequenceSend returns the next send sequence for a given channel.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_QueryServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -252,6 +264,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.NextSequenceReceive,
                     request_deserializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceReceiveRequest.FromString,
                     response_serializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceReceiveResponse.SerializeToString,
+            ),
+            'NextSequenceSend': grpc.unary_unary_rpc_method_handler(
+                    servicer.NextSequenceSend,
+                    request_deserializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceSendRequest.FromString,
+                    response_serializer=ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceSendResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -482,5 +499,22 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/ibc.core.channel.v1.Query/NextSequenceReceive',
             ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceReceiveRequest.SerializeToString,
             ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceReceiveResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NextSequenceSend(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.core.channel.v1.Query/NextSequenceSend',
+            ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceSendRequest.SerializeToString,
+            ibc_dot_core_dot_channel_dot_v1_dot_query__pb2.QueryNextSequenceSendResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

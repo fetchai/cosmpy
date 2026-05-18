@@ -81,11 +81,31 @@ class SimulationGasStrategy(GasStrategy):
     def block_gas_limit(self) -> int:
         """Get the block gas limit.
 
+        :raises Exception: Failed to query max_gas
         :return: block gas limit
         """
         if self._max_gas is None:
-            block_params = self._client.query_params("baseapp", "BlockParams")
-            self._max_gas = int(block_params["max_gas"])
+            try:
+                params = self._client.query_consensus_params()
+                self._max_gas = int(params.params.block.max_gas)
+            except Exception as e:  # pylint: disable=broad-except
+                try:
+                    block_params = self._client.query_params("baseapp", "BlockParams")
+                    self._max_gas = int(block_params["max_gas"])
+                except Exception as f:  # pylint: disable=broad-except
+                    raise f from e
+            # Alternative implementation
+            # pylint: disable=pointless-string-statement
+            """
+             node_info = self._client.query_node_info()
+             if (node_info.app_name == "fetch" and node_info.cosmos_sdk_version >= Version("0.20.0-rc0")) \
+                 or node_info.cosmos_sdk_version >= Version("0.50.0-rc0"):
+                 params = self._client.query_consensus()
+                 self._max_gas = int(params.params.block.max_gas)
+             else:
+                 block_params = self._client.query_params("baseapp", "BlockParams")
+                 self._max_gas = int(block_params["max_gas"])
+             """
 
         return self._max_gas or -1
 

@@ -18,7 +18,6 @@
 # ------------------------------------------------------------------------------
 
 """Client functionality."""
-
 import json
 import math
 import time
@@ -29,6 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import certifi
 import grpc
 from dateutil.parser import isoparse
+from packaging.version import Version
 
 from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
@@ -54,13 +54,14 @@ from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
 from cosmpy.aerial.tx import Transaction, TxState
-from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse
-from cosmpy.aerial.types import Account, Block
+from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse, safe_decode
+from cosmpy.aerial.types import Account, Block, NodeInfo
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
 from cosmpy.common.rest_client import RestClient
+from cosmpy.consensus.rest_client import ConsensusRestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
 from cosmpy.distribution.rest_client import DistributionRestClient
@@ -76,9 +77,13 @@ from cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc import QueryStub as BankGr
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetBlockByHeightRequest,
     GetLatestBlockRequest,
+    GetNodeInfoRequest,
 )
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2_grpc import (
     ServiceStub as TendermintQueryGrpcClient,
+)
+from cosmpy.protos.cosmos.consensus.v1.query_pb2_grpc import (
+    QueryStub as QueryConsensusGrpcClient,
 )
 from cosmpy.protos.cosmos.crypto.ed25519.keys_pb2 import (  # noqa # pylint: disable=unused-import
     PubKey,
@@ -164,6 +169,7 @@ class LedgerClient:
             self.staking = StakingGrpcClient(grpc_client)
             self.distribution = DistributionGrpcClient(grpc_client)
             self.params = QueryParamsGrpcClient(grpc_client)
+            self.consensus = QueryConsensusGrpcClient(grpc_client)
             self.tendermint = TendermintQueryGrpcClient(grpc_client)
         else:
             rest_client = RestClient(parsed_url.rest_url)
@@ -175,6 +181,7 @@ class LedgerClient:
             self.staking = StakingRestClient(rest_client)  # type: ignore
             self.distribution = DistributionRestClient(rest_client)  # type: ignore
             self.params = ParamsRestClient(rest_client)  # type: ignore
+            self.consensus = ConsensusRestClient(rest_client)  # type: ignore
             self.tendermint = TendermintRestClient(rest_client)  # type: ignore
 
     @property
@@ -235,6 +242,36 @@ class LedgerClient:
         req = QueryParamsRequest(subspace=subspace, key=key)
         resp = self.params.Params(req)
         return json.loads(resp.param.value)
+
+    def query_node_info(self) -> NodeInfo:
+        """
+        Query basic Tendermint / node information (moniker, chain-id, version, etc.).
+
+        :return: NodeInfo.
+        """
+        request = GetNodeInfoRequest()
+        response = self.tendermint.GetNodeInfo(request)
+
+        cosmos_sdk_version = Version(
+            response.application_version.cosmos_sdk_version.lstrip("v")
+        )
+        app_name = response.application_version.name
+        app_version = Version(response.application_version.version.lstrip("v"))
+
+        return NodeInfo(
+            cosmos_sdk_version=cosmos_sdk_version,
+            app_name=app_name,
+            app_version=app_version,
+        )
+
+    def query_consensus_params(self) -> Any:
+        """Query consensus params.
+
+        :return: Query consensus params
+        """
+        req = QueryParamsRequest()
+        resp = self.consensus.Params(req)
+        return resp
 
     def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
         """Query bank balance.
@@ -652,7 +689,7 @@ class LedgerClient:
         for event in tx_response.events:
             event_data = events.get(event.type, {})
             for attribute in event.attributes:
-                event_data[attribute.key.decode()] = attribute.value.decode()
+                event_data[safe_decode(attribute.key)] = safe_decode(attribute.value)
             events[event.type] = event_data
 
         timestamp = None

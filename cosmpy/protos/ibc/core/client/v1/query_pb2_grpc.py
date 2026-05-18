@@ -35,6 +35,11 @@ class QueryStub(object):
                 request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStatesRequest.SerializeToString,
                 response_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStatesResponse.FromString,
                 )
+        self.ConsensusStateHeights = channel.unary_unary(
+                '/ibc.core.client.v1.Query/ConsensusStateHeights',
+                request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStateHeightsRequest.SerializeToString,
+                response_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStateHeightsResponse.FromString,
+                )
         self.ClientStatus = channel.unary_unary(
                 '/ibc.core.client.v1.Query/ClientStatus',
                 request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientStatusRequest.SerializeToString,
@@ -45,6 +50,11 @@ class QueryStub(object):
                 request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientParamsRequest.SerializeToString,
                 response_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientParamsResponse.FromString,
                 )
+        self.ClientCreator = channel.unary_unary(
+                '/ibc.core.client.v1.Query/ClientCreator',
+                request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientCreatorRequest.SerializeToString,
+                response_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientCreatorResponse.FromString,
+                )
         self.UpgradedClientState = channel.unary_unary(
                 '/ibc.core.client.v1.Query/UpgradedClientState',
                 request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedClientStateRequest.SerializeToString,
@@ -54,6 +64,11 @@ class QueryStub(object):
                 '/ibc.core.client.v1.Query/UpgradedConsensusState',
                 request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedConsensusStateRequest.SerializeToString,
                 response_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedConsensusStateResponse.FromString,
+                )
+        self.VerifyMembership = channel.unary_unary(
+                '/ibc.core.client.v1.Query/VerifyMembership',
+                request_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryVerifyMembershipRequest.SerializeToString,
+                response_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryVerifyMembershipResponse.FromString,
                 )
 
 
@@ -91,6 +106,13 @@ class QueryServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ConsensusStateHeights(self, request, context):
+        """ConsensusStateHeights queries the height of every consensus states associated with a given client.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def ClientStatus(self, request, context):
         """Status queries the status of an IBC client.
         """
@@ -99,7 +121,14 @@ class QueryServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ClientParams(self, request, context):
-        """ClientParams queries all parameters of the ibc client.
+        """ClientParams queries all parameters of the ibc client submodule.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ClientCreator(self, request, context):
+        """ClientCreator queries the creator of a given client.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -114,6 +143,13 @@ class QueryServicer(object):
 
     def UpgradedConsensusState(self, request, context):
         """UpgradedConsensusState queries an Upgraded IBC consensus state.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def VerifyMembership(self, request, context):
+        """VerifyMembership queries an IBC light client for proof verification of a value at a given key path.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -142,6 +178,11 @@ def add_QueryServicer_to_server(servicer, server):
                     request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStatesRequest.FromString,
                     response_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStatesResponse.SerializeToString,
             ),
+            'ConsensusStateHeights': grpc.unary_unary_rpc_method_handler(
+                    servicer.ConsensusStateHeights,
+                    request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStateHeightsRequest.FromString,
+                    response_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStateHeightsResponse.SerializeToString,
+            ),
             'ClientStatus': grpc.unary_unary_rpc_method_handler(
                     servicer.ClientStatus,
                     request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientStatusRequest.FromString,
@@ -152,6 +193,11 @@ def add_QueryServicer_to_server(servicer, server):
                     request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientParamsRequest.FromString,
                     response_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientParamsResponse.SerializeToString,
             ),
+            'ClientCreator': grpc.unary_unary_rpc_method_handler(
+                    servicer.ClientCreator,
+                    request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientCreatorRequest.FromString,
+                    response_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientCreatorResponse.SerializeToString,
+            ),
             'UpgradedClientState': grpc.unary_unary_rpc_method_handler(
                     servicer.UpgradedClientState,
                     request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedClientStateRequest.FromString,
@@ -161,6 +207,11 @@ def add_QueryServicer_to_server(servicer, server):
                     servicer.UpgradedConsensusState,
                     request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedConsensusStateRequest.FromString,
                     response_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedConsensusStateResponse.SerializeToString,
+            ),
+            'VerifyMembership': grpc.unary_unary_rpc_method_handler(
+                    servicer.VerifyMembership,
+                    request_deserializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryVerifyMembershipRequest.FromString,
+                    response_serializer=ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryVerifyMembershipResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -242,6 +293,23 @@ class Query(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def ConsensusStateHeights(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.core.client.v1.Query/ConsensusStateHeights',
+            ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStateHeightsRequest.SerializeToString,
+            ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryConsensusStateHeightsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def ClientStatus(request,
             target,
             options=(),
@@ -276,6 +344,23 @@ class Query(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def ClientCreator(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.core.client.v1.Query/ClientCreator',
+            ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientCreatorRequest.SerializeToString,
+            ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryClientCreatorResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def UpgradedClientState(request,
             target,
             options=(),
@@ -306,5 +391,22 @@ class Query(object):
         return grpc.experimental.unary_unary(request, target, '/ibc.core.client.v1.Query/UpgradedConsensusState',
             ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedConsensusStateRequest.SerializeToString,
             ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryUpgradedConsensusStateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def VerifyMembership(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ibc.core.client.v1.Query/VerifyMembership',
+            ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryVerifyMembershipRequest.SerializeToString,
+            ibc_dot_core_dot_client_dot_v1_dot_query__pb2.QueryVerifyMembershipResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

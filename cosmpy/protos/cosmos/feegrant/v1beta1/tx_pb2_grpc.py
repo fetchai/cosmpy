@@ -25,6 +25,11 @@ class MsgStub(object):
                 request_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgRevokeAllowance.SerializeToString,
                 response_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgRevokeAllowanceResponse.FromString,
                 )
+        self.PruneAllowances = channel.unary_unary(
+                '/cosmos.feegrant.v1beta1.Msg/PruneAllowances',
+                request_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgPruneAllowances.SerializeToString,
+                response_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgPruneAllowancesResponse.FromString,
+                )
 
 
 class MsgServicer(object):
@@ -47,6 +52,13 @@ class MsgServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PruneAllowances(self, request, context):
+        """PruneAllowances prunes expired fee allowances, currently up to 75 at a time.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MsgServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -59,6 +71,11 @@ def add_MsgServicer_to_server(servicer, server):
                     servicer.RevokeAllowance,
                     request_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgRevokeAllowance.FromString,
                     response_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgRevokeAllowanceResponse.SerializeToString,
+            ),
+            'PruneAllowances': grpc.unary_unary_rpc_method_handler(
+                    servicer.PruneAllowances,
+                    request_deserializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgPruneAllowances.FromString,
+                    response_serializer=cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgPruneAllowancesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -102,5 +119,22 @@ class Msg(object):
         return grpc.experimental.unary_unary(request, target, '/cosmos.feegrant.v1beta1.Msg/RevokeAllowance',
             cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgRevokeAllowance.SerializeToString,
             cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgRevokeAllowanceResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def PruneAllowances(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cosmos.feegrant.v1beta1.Msg/PruneAllowances',
+            cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgPruneAllowances.SerializeToString,
+            cosmos_dot_feegrant_dot_v1beta1_dot_tx__pb2.MsgPruneAllowancesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
