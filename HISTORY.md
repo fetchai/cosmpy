@@ -1,5 +1,13 @@
 # Release History
 
+## 0.12.0rc1
+
+- fix: Init files
+
+## 0.12.0rc0
+
+- feat: Cosmos SDK v0.53.4
+
 ## 0.11.2
 
 - feat: Ability to use Cosmos SDK bcrypt armored key files
