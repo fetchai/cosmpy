@@ -127,42 +127,28 @@ Query params
 #### query`_`node`_`info
 
 ```python
-def query_node_info() -> Any
+def query_node_info() -> NodeInfo
 ```
 
 Query basic Tendermint / node information (moniker, chain-id, version, etc.).
 
 **Returns**:
 
-`GetNodeInfoResponse` protobuf message.
+NodeInfo.
 
-<a id="cosmpy.aerial.client.__init__.LedgerClient.query_cosmos_sdk_version"></a>
+<a id="cosmpy.aerial.client.__init__.LedgerClient.query_consensus_params"></a>
 
-#### query`_`cosmos`_`sdk`_`version
+#### query`_`consensus`_`params
 
 ```python
-def query_cosmos_sdk_version() -> Version
+def query_consensus_params() -> Any
 ```
 
-Query version of cosmos sdk.
+Query consensus params.
 
 **Returns**:
 
-Version
-
-<a id="cosmpy.aerial.client.__init__.LedgerClient.query_consensus"></a>
-
-#### query`_`consensus
-
-```python
-def query_consensus() -> Any
-```
-
-Query Params.
-
-**Returns**:
-
-Query params
+Query consensus params
 
 <a id="cosmpy.aerial.client.__init__.LedgerClient.query_bank_balance"></a>
 

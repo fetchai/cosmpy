@@ -55,7 +55,7 @@ from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
 from cosmpy.aerial.tx import Transaction, TxState
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse, safe_decode
-from cosmpy.aerial.types import Account, Block
+from cosmpy.aerial.types import Account, Block, NodeInfo
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
@@ -243,29 +243,31 @@ class LedgerClient:
         resp = self.params.Params(req)
         return json.loads(resp.param.value)
 
-    def query_node_info(self) -> Any:
+    def query_node_info(self) -> NodeInfo:
         """
         Query basic Tendermint / node information (moniker, chain-id, version, etc.).
 
-        :return: `GetNodeInfoResponse` protobuf message.
+        :return: NodeInfo.
         """
         request = GetNodeInfoRequest()
-        return self.tendermint.GetNodeInfo(request)
+        response = self.tendermint.GetNodeInfo(request)
 
-    def query_cosmos_sdk_version(self) -> Version:
-        """
-        Query version of cosmos sdk.
+        cosmos_sdk_version = Version(
+            response.application_version.cosmos_sdk_version.lstrip("v")
+        )
+        app_name = response.application_version.name
+        app_version = Version(response.application_version.version.lstrip("v"))
 
-        :return: Version
-        """
-        res = self.query_node_info()
-        cosmos_sdk_version = res.application_version.cosmos_sdk_version
-        return Version(cosmos_sdk_version.lstrip("v"))
+        return NodeInfo(
+            cosmos_sdk_version=cosmos_sdk_version,
+            app_name=app_name,
+            app_version=app_version,
+        )
 
-    def query_consensus(self) -> Any:
-        """Query Params.
+    def query_consensus_params(self) -> Any:
+        """Query consensus params.
 
-        :return: Query params
+        :return: Query consensus params
         """
         req = QueryParamsRequest()
         resp = self.consensus.Params(req)
