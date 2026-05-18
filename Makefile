@@ -22,7 +22,7 @@ COSMOSPROTO_URL := https://github.com/cosmos/cosmos-proto
 COSMOSPROTO_VERSION := v1.0.0-beta.5
 COSMOSPROTO_DIR := build/cosmos-proto
 
-PY_GOOGLEAPIS_ROOT := $(shell python -c "import importlib.util, pathlib, sys; s=importlib.util.find_spec('google.api'); print(pathlib.Path(next(iter(s.submodule_search_locations))).parents[1]) if s and s.submodule_search_locations else sys.stdout.write('')")
+PY_GOOGLEAPIS_ROOT := $(shell python -c "import importlib.util, pathlib, sys; g=importlib.util.find_spec('google'); s=importlib.util.find_spec('google.api') if g else None; print(pathlib.Path(next(iter(s.submodule_search_locations))).parents[1]) if s and s.submodule_search_locations else sys.stdout.write('')")
 
 COSMPY_PROTOS_DIR := cosmpy/protos
 COSMPY_SRC_DIR := cosmpy
