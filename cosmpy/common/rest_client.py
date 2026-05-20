@@ -20,25 +20,42 @@
 """Implementation of REST api client."""
 import base64
 import json
-from typing import List, Optional
+from typing import Callable, List, Optional
 from urllib.parse import urlencode
 
 import requests
 from google.protobuf.json_format import MessageToDict
 from google.protobuf.message import Message
 
+COSMOS_BLOCK_HEIGHT_HEADER = "x-cosmos-block-height"
+
 
 class RestClient:
     """REST api client."""
 
-    def __init__(self, rest_address: str):
+    def __init__(
+        self,
+        rest_address: str,
+        height: Optional[int] = None,
+        height_provider: Optional[Callable[[], Optional[int]]] = None,
+    ):
         """
         Create REST api client.
 
         :param rest_address: Address of REST node
+        :param height: Optional block height for historical query requests
+        :param height_provider: Optional callable returning the current query height
         """
         self._session = requests.session()
         self.rest_address = rest_address
+        self.height = height
+        self._height_provider = height_provider
+
+    def _height(self) -> Optional[int]:
+        """Get the current query block height."""
+        if self._height_provider is not None:
+            return self._height_provider()
+        return self.height
 
     def get(
         self,
@@ -61,7 +78,12 @@ class RestClient:
             url_base_path=url_base_path, request=request, used_params=used_params
         )
 
-        response = self._session.get(url=url)
+        height = self._height()
+        request_kwargs = {"url": url}
+        if height is not None:
+            request_kwargs["headers"] = {COSMOS_BLOCK_HEIGHT_HEADER: str(height)}
+
+        response = self._session.get(**request_kwargs)
         if response.status_code != 200:
             raise RuntimeError(
                 f"Error when sending a GET request.\n Response: {response.status_code}, {str(response.content)})"

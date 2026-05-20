@@ -21,9 +21,12 @@
 import json
 import math
 import time
+from collections import namedtuple
+from contextlib import contextmanager
+from contextvars import ContextVar, Token
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, List, Optional, Tuple
 
 import certifi
 import grpc
@@ -61,7 +64,7 @@ from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
-from cosmpy.common.rest_client import RestClient
+from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER, RestClient
 from cosmpy.consensus.rest_client import ConsensusRestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
@@ -129,6 +132,60 @@ DEFAULT_QUERY_INTERVAL_SECS = 2
 COSMOS_SDK_DEC_COIN_PRECISION = 10**18
 
 
+class _ClientCallDetails(
+    namedtuple(
+        "_ClientCallDetails",
+        ("method", "timeout", "metadata", "credentials", "wait_for_ready", "compression"),
+    ),
+    grpc.ClientCallDetails,
+):
+    """Client call details with updated metadata."""
+
+
+class GrpcHeightInterceptor(grpc.UnaryUnaryClientInterceptor):
+    """Attach the current Cosmos block height to gRPC calls."""
+
+    def __init__(self, height_provider: Callable[[], Optional[int]]):
+        """
+        Init gRPC height interceptor.
+
+        :param height_provider: callable returning the current query height
+        """
+        self._height_provider = height_provider
+
+    def intercept_unary_unary(self, continuation, client_call_details, request):
+        """Attach the current height metadata to unary-unary calls."""
+        height = self._height_provider()
+        if height is None:
+            return continuation(client_call_details, request)
+
+        metadata = tuple(client_call_details.metadata or ())
+        metadata += ((COSMOS_BLOCK_HEIGHT_HEADER, str(height)),)
+        client_call_details = _ClientCallDetails(
+            client_call_details.method,
+            client_call_details.timeout,
+            metadata,
+            client_call_details.credentials,
+            client_call_details.wait_for_ready,
+            getattr(client_call_details, "compression", None),
+        )
+        return continuation(client_call_details, request)
+
+
+def _is_query_grpc_stub(stub_cls: Any) -> bool:
+    """Return true if a generated gRPC stub represents a Cosmos query service."""
+    return str(getattr(stub_cls, "__module__", "")).endswith(".query_pb2_grpc")
+
+
+def _make_grpc_stub(
+    stub_cls: Any,
+    grpc_client: grpc.Channel,
+    query_grpc_client: grpc.Channel,
+) -> Any:
+    """Create a generated gRPC stub, using height-aware channel for query stubs."""
+    channel = query_grpc_client if _is_query_grpc_stub(stub_cls) else grpc_client
+    return stub_cls(channel)
+
 class LedgerClient:
     """Ledger client."""
 
@@ -149,6 +206,14 @@ class LedgerClient:
         cfg.validate()
         self._network_config = cfg
         self._gas_strategy: GasStrategy = SimulationGasStrategy(self)
+        self._query_height: ContextVar[Optional[int]] = ContextVar(
+            f"ledger_client_query_height_{id(self)}", default=None
+        )
+        self._init_clients()
+
+    def _init_clients(self):
+        """Initialize transport-specific module clients."""
+        cfg = self.network_config
 
         parsed_url = parse_url(cfg.url)
 
@@ -163,17 +228,35 @@ class LedgerClient:
             else:
                 grpc_client = grpc.insecure_channel(parsed_url.host_and_port)
 
-            self.wasm = CosmWasmGrpcClient(grpc_client)
-            self.auth = AuthGrpcClient(grpc_client)
-            self.txs = TxGrpcClient(grpc_client)
-            self.bank = BankGrpcClient(grpc_client)
-            self.staking = StakingGrpcClient(grpc_client)
-            self.distribution = DistributionGrpcClient(grpc_client)
-            self.params = QueryParamsGrpcClient(grpc_client)
-            self.consensus = QueryConsensusGrpcClient(grpc_client)
-            self.tendermint = TendermintQueryGrpcClient(grpc_client)
+            height_query_grpc_client = grpc.intercept_channel(
+                grpc_client, GrpcHeightInterceptor(self._query_height.get)
+            )
+
+            self.wasm = _make_grpc_stub(
+                CosmWasmGrpcClient, grpc_client, height_query_grpc_client
+            )
+            self.auth = _make_grpc_stub(AuthGrpcClient, grpc_client, height_query_grpc_client)
+            self.txs = _make_grpc_stub(TxGrpcClient, grpc_client, height_query_grpc_client)
+            self.bank = _make_grpc_stub(BankGrpcClient, grpc_client, height_query_grpc_client)
+            self.staking = _make_grpc_stub(
+                StakingGrpcClient, grpc_client, height_query_grpc_client
+            )
+            self.distribution = _make_grpc_stub(
+                DistributionGrpcClient, grpc_client, height_query_grpc_client
+            )
+            self.params = _make_grpc_stub(
+                QueryParamsGrpcClient, grpc_client, height_query_grpc_client
+            )
+            self.consensus = _make_grpc_stub(
+                QueryConsensusGrpcClient, grpc_client, height_query_grpc_client
+            )
+            self.tendermint = _make_grpc_stub(
+                TendermintQueryGrpcClient, grpc_client, height_query_grpc_client
+            )
         else:
-            rest_client = RestClient(parsed_url.rest_url)
+            rest_client = RestClient(
+                parsed_url.rest_url, height_provider=self._query_height.get
+            )
 
             self.wasm = CosmWasmRestClient(rest_client)  # type: ignore
             self.auth = AuthRestClient(rest_client)  # type: ignore
@@ -192,6 +275,25 @@ class LedgerClient:
         :return: network config
         """
         return self._network_config
+
+    @contextmanager
+    def with_height(self, height: Optional[int]):
+        """Create a context manager for querying state at a block height.
+
+        This temporarily swaps query transports on the current client and restores
+        them when the context exits. It is intended for call-scoped use, for
+        example ``with client.with_height(123) as query_client:``.
+
+        :param height: block height, or None to query the latest state
+        :return: ledger client height context manager
+        """
+
+        try:
+            token = self._query_height.set(height)
+            yield self
+        finally:
+            self._query_height.reset(token)
+
 
     @property
     def gas_strategy(self) -> GasStrategy:

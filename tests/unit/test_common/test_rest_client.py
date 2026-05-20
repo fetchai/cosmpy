@@ -24,7 +24,7 @@ from unittest.mock import Mock, patch
 
 from requests import Response, Session
 
-from cosmpy.common.rest_client import RestClient
+from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER, RestClient
 
 
 class QueryRestClientTestCase(TestCase):
@@ -96,6 +96,30 @@ class QueryRestClientTestCase(TestCase):
 
         messageToDict_mock.assert_called_once_with(request)
         self.assertTrue("Error when sending a GET request" in str(context.exception))
+
+    @staticmethod
+    @patch("requests.session", spec=Session)
+    def test_get_with_height_header(session_mock):
+        """
+        Test get method sends height header when configured.
+
+        :param session_mock: mock
+        """
+        rest_address = "some url"
+        client = RestClient(rest_address, height=123)
+
+        request_url_path = "/my/weird/url/path"
+        resp = Mock(spec=Response)
+        resp.status_code = 200
+        resp.content = "dfdffdss".encode(encoding="utf8")
+
+        session_mock.return_value.get.return_value = resp
+        client.get(request_url_path)
+
+        session_mock.return_value.get.assert_called_once_with(
+            url=f"{rest_address}{request_url_path}",
+            headers={COSMOS_BLOCK_HEIGHT_HEADER: "123"},
+        )
 
     @staticmethod
     @patch("requests.session", spec=Session)
