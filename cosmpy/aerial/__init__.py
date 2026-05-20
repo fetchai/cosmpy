@@ -19,6 +19,8 @@
 
 """Cosmpy aerial module."""
 
+from cosmpy.aerial.query_context import RequestQueryContext, ResponseQueryContext
+
 
 def cast_to_int(value: str, verify_decimal_part: bool = True, base: int = 10) -> int:
     """Casts string representing a number to python native integer type.

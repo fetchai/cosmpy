@@ -170,6 +170,7 @@ def get_paginated(
     request_method: Callable,
     pages_limit: int = 0,
     per_page_limit: Optional[int] = DEFAULT_PER_PAGE_LIMIT,
+    ctx: Optional[Any] = None,
 ) -> List[Any]:
     """
     Get pages for specific request.
@@ -178,6 +179,7 @@ def get_paginated(
     :param request_method: function to perform request
     :param pages_limit: max number of pages to return. default - 0 unlimited
     :param per_page_limit: Optional int: amount of records per one page. default is None, determined by server
+    :param ctx: optional query context
 
     :return: List of responses
     """
@@ -189,7 +191,11 @@ def get_paginated(
         request.CopyFrom(initial_request)
         request.pagination.CopyFrom(pagination)
 
-        resp = request_method(request)
+        resp = (
+            request_method(request, ctx=ctx)
+            if ctx is not None
+            else request_method(request)
+        )
 
         pages.append(resp)
 

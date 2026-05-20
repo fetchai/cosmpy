@@ -20,12 +20,16 @@
 """Implementation of REST api client."""
 import base64
 import json
-from typing import Callable, List, Optional
+from contextlib import contextmanager
+from contextvars import ContextVar, Token
+from typing import List, Optional
 from urllib.parse import urlencode
 
 import requests
 from google.protobuf.json_format import MessageToDict
 from google.protobuf.message import Message
+
+from cosmpy.aerial.query_context import ResponseQueryContext
 
 COSMOS_BLOCK_HEIGHT_HEADER = "x-cosmos-block-height"
 
@@ -36,32 +40,48 @@ class RestClient:
     def __init__(
         self,
         rest_address: str,
-        height: Optional[int] = None,
-        height_provider: Optional[Callable[[], Optional[int]]] = None,
     ):
         """
         Create REST api client.
 
         :param rest_address: Address of REST node
-        :param height: Optional block height for historical query requests
-        :param height_provider: Optional callable returning the current query height
         """
         self._session = requests.session()
         self.rest_address = rest_address
-        self.height = height
-        self._height_provider = height_provider
+        self._query_ctx: ContextVar[Optional[ResponseQueryContext]] = ContextVar(
+            "rest_query_context", default=None
+        )
 
-    def _height(self) -> Optional[int]:
-        """Get the current query block height."""
-        if self._height_provider is not None:
-            return self._height_provider()
-        return self.height
+    @contextmanager
+    def query_context(self, ctx: Optional[ResponseQueryContext]):
+        """Temporarily set the current query context."""
+        token: Optional[Token] = None
+        try:
+            token = self._query_ctx.set(ctx)
+            yield
+        finally:
+            if token is not None:
+                self._query_ctx.reset(token)
+
+    @staticmethod
+    def _request_height(ctx: Optional[ResponseQueryContext]) -> Optional[int]:
+        """Get requested query height from a query context."""
+        return getattr(ctx, "request_height", None) if ctx is not None else None
+
+    @staticmethod
+    def _response_height(response: requests.Response) -> Optional[int]:
+        """Get response query height from response headers."""
+        height = response.headers.get(COSMOS_BLOCK_HEIGHT_HEADER)
+        if height is None:
+            height = response.headers.get(f"grpc-metadata-{COSMOS_BLOCK_HEIGHT_HEADER}")
+        return int(height) if height is not None else None
 
     def get(
         self,
         url_base_path: str,
         request: Optional[Message] = None,
         used_params: Optional[List[str]] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> bytes:
         """
         Send a GET request.
@@ -69,6 +89,7 @@ class RestClient:
         :param url_base_path: URL base path
         :param request: Protobuf coded request
         :param used_params: Parameters to be removed from request after converting it to dict
+        :param ctx: optional query context
 
         :raises RuntimeError: if response code is not 200
 
@@ -78,16 +99,21 @@ class RestClient:
             url_base_path=url_base_path, request=request, used_params=used_params
         )
 
-        height = self._height()
+        ctx = ctx or self._query_ctx.get()
+        request_height = self._request_height(ctx)
         request_kwargs = {"url": url}
-        if height is not None:
-            request_kwargs["headers"] = {COSMOS_BLOCK_HEIGHT_HEADER: str(height)}
+        if request_height is not None:
+            request_kwargs["headers"] = {
+                COSMOS_BLOCK_HEIGHT_HEADER: str(request_height)
+            }
 
         response = self._session.get(**request_kwargs)
         if response.status_code != 200:
             raise RuntimeError(
                 f"Error when sending a GET request.\n Response: {response.status_code}, {str(response.content)})"
             )
+        if ctx is not None:
+            ctx.response_height = self._response_height(response)
         return response.content
 
     def _make_url(

@@ -21,12 +21,9 @@
 import json
 import math
 import time
-from collections import namedtuple
-from contextlib import contextmanager
-from contextvars import ContextVar, Token
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Any, Callable, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import certifi
 import grpc
@@ -56,6 +53,8 @@ from cosmpy.aerial.coins import Coin
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
+from cosmpy.aerial.query_client import wrap_query_client
+from cosmpy.aerial.query_context import ResponseQueryContext
 from cosmpy.aerial.tx import Transaction, TxState
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse, safe_decode
 from cosmpy.aerial.types import Account, Block, NodeInfo
@@ -63,7 +62,7 @@ from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
 from cosmpy.auth.rest_client import AuthRestClient
 from cosmpy.bank.rest_client import BankRestClient
-from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER, RestClient
+from cosmpy.common.rest_client import RestClient
 from cosmpy.consensus.rest_client import ConsensusRestClient
 from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
@@ -131,60 +130,6 @@ DEFAULT_QUERY_INTERVAL_SECS = 2
 COSMOS_SDK_DEC_COIN_PRECISION = 10**18
 
 
-class _ClientCallDetails(
-    namedtuple(
-        "_ClientCallDetails",
-        ("method", "timeout", "metadata", "credentials", "wait_for_ready", "compression"),
-    ),
-    grpc.ClientCallDetails,
-):
-    """Client call details with updated metadata."""
-
-
-class GrpcHeightInterceptor(grpc.UnaryUnaryClientInterceptor):
-    """Attach the current Cosmos block height to gRPC calls."""
-
-    def __init__(self, height_provider: Callable[[], Optional[int]]):
-        """
-        Init gRPC height interceptor.
-
-        :param height_provider: callable returning the current query height
-        """
-        self._height_provider = height_provider
-
-    def intercept_unary_unary(self, continuation, client_call_details, request):
-        """Attach the current height metadata to unary-unary calls."""
-        height = self._height_provider()
-        if height is None:
-            return continuation(client_call_details, request)
-
-        metadata = tuple(client_call_details.metadata or ())
-        metadata += ((COSMOS_BLOCK_HEIGHT_HEADER, str(height)),)
-        client_call_details = _ClientCallDetails(
-            client_call_details.method,
-            client_call_details.timeout,
-            metadata,
-            client_call_details.credentials,
-            client_call_details.wait_for_ready,
-            getattr(client_call_details, "compression", None),
-        )
-        return continuation(client_call_details, request)
-
-
-def _is_query_grpc_stub(stub_cls: Any) -> bool:
-    """Return true if a generated gRPC stub represents a Cosmos query service."""
-    return str(getattr(stub_cls, "__module__", "")).endswith(".query_pb2_grpc")
-
-
-def _make_grpc_stub(
-    stub_cls: Any,
-    grpc_client: grpc.Channel,
-    query_grpc_client: grpc.Channel,
-) -> Any:
-    """Create a generated gRPC stub, using height-aware channel for query stubs."""
-    channel = query_grpc_client if _is_query_grpc_stub(stub_cls) else grpc_client
-    return stub_cls(channel)
-
 class LedgerClient:
     """Ledger client."""
 
@@ -205,9 +150,6 @@ class LedgerClient:
         cfg.validate()
         self._network_config = cfg
         self._gas_strategy: GasStrategy = SimulationGasStrategy(self)
-        self._query_height: ContextVar[Optional[int]] = ContextVar(
-            f"ledger_client_query_height_{id(self)}", default=None
-        )
         self._init_clients()
 
     def _init_clients(self):
@@ -227,45 +169,29 @@ class LedgerClient:
             else:
                 grpc_client = grpc.insecure_channel(parsed_url.host_and_port)
 
-            height_query_grpc_client = grpc.intercept_channel(
-                grpc_client, GrpcHeightInterceptor(self._query_height.get)
-            )
-
-            self.wasm = _make_grpc_stub(
-                CosmWasmGrpcClient, grpc_client, height_query_grpc_client
-            )
-            self.auth = _make_grpc_stub(AuthGrpcClient, grpc_client, height_query_grpc_client)
-            self.txs = _make_grpc_stub(TxGrpcClient, grpc_client, height_query_grpc_client)
-            self.bank = _make_grpc_stub(BankGrpcClient, grpc_client, height_query_grpc_client)
-            self.staking = _make_grpc_stub(
-                StakingGrpcClient, grpc_client, height_query_grpc_client
-            )
-            self.distribution = _make_grpc_stub(
-                DistributionGrpcClient, grpc_client, height_query_grpc_client
-            )
-            self.params = _make_grpc_stub(
-                QueryParamsGrpcClient, grpc_client, height_query_grpc_client
-            )
-            self.consensus = _make_grpc_stub(
-                QueryConsensusGrpcClient, grpc_client, height_query_grpc_client
-            )
-            self.tendermint = _make_grpc_stub(
-                TendermintQueryGrpcClient, grpc_client, height_query_grpc_client
+            self.wasm = wrap_query_client(CosmWasmGrpcClient(grpc_client))
+            self.auth = wrap_query_client(AuthGrpcClient(grpc_client))
+            self.txs = wrap_query_client(TxGrpcClient(grpc_client))
+            self.bank = wrap_query_client(BankGrpcClient(grpc_client))
+            self.staking = wrap_query_client(StakingGrpcClient(grpc_client))
+            self.distribution = wrap_query_client(DistributionGrpcClient(grpc_client))
+            self.params = wrap_query_client(QueryParamsGrpcClient(grpc_client))
+            self.consensus = wrap_query_client(QueryConsensusGrpcClient(grpc_client))
+            self.tendermint = wrap_query_client(
+                TendermintQueryGrpcClient(grpc_client)
             )
         else:
-            rest_client = RestClient(
-                parsed_url.rest_url, height_provider=self._query_height.get
-            )
+            rest_client = RestClient(parsed_url.rest_url)
 
-            self.wasm = CosmWasmRestClient(rest_client)  # type: ignore
-            self.auth = AuthRestClient(rest_client)  # type: ignore
-            self.txs = TxRestClient(rest_client)  # type: ignore
-            self.bank = BankRestClient(rest_client)  # type: ignore
-            self.staking = StakingRestClient(rest_client)  # type: ignore
-            self.distribution = DistributionRestClient(rest_client)  # type: ignore
-            self.params = ParamsRestClient(rest_client)  # type: ignore
-            self.consensus = ConsensusRestClient(rest_client)  # type: ignore
-            self.tendermint = TendermintRestClient(rest_client)  # type: ignore
+            self.wasm = wrap_query_client(CosmWasmRestClient(rest_client))  # type: ignore
+            self.auth = wrap_query_client(AuthRestClient(rest_client))  # type: ignore
+            self.txs = wrap_query_client(TxRestClient(rest_client))  # type: ignore
+            self.bank = wrap_query_client(BankRestClient(rest_client))  # type: ignore
+            self.staking = wrap_query_client(StakingRestClient(rest_client))  # type: ignore
+            self.distribution = wrap_query_client(DistributionRestClient(rest_client))  # type: ignore
+            self.params = wrap_query_client(ParamsRestClient(rest_client))  # type: ignore
+            self.consensus = wrap_query_client(ConsensusRestClient(rest_client))  # type: ignore
+            self.tendermint = wrap_query_client(TendermintRestClient(rest_client))  # type: ignore
 
     @property
     def network_config(self) -> NetworkConfig:
@@ -274,25 +200,6 @@ class LedgerClient:
         :return: network config
         """
         return self._network_config
-
-    @contextmanager
-    def with_height(self, height: Optional[int]):
-        """Create a context manager for querying state at a block height.
-
-        This temporarily swaps query transports on the current client and restores
-        them when the context exits. It is intended for call-scoped use, for
-        example ``with client.with_height(123) as query_client:``.
-
-        :param height: block height, or None to query the latest state
-        :return: ledger client height context manager
-        """
-
-        try:
-            token = self._query_height.set(height)
-            yield self
-        finally:
-            self._query_height.reset(token)
-
 
     @property
     def gas_strategy(self) -> GasStrategy:
@@ -313,7 +220,9 @@ class LedgerClient:
             raise RuntimeError("Invalid strategy must implement GasStrategy interface")
         self._gas_strategy = strategy
 
-    def query_account(self, address: Address) -> Account:
+    def query_account(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> Account:
         """Query account.
 
         :param address: address
@@ -321,7 +230,7 @@ class LedgerClient:
         :return: account details
         """
         request = QueryAccountRequest(address=str(address))
-        response = self.auth.Account(request)
+        response = self.auth.Account(request, ctx=ctx)
 
         account = BaseAccount()
         if not response.account.Is(BaseAccount.DESCRIPTOR):
@@ -334,7 +243,12 @@ class LedgerClient:
             sequence=account.sequence,
         )
 
-    def query_params(self, subspace: str, key: str) -> Any:
+    def query_params(
+        self,
+        subspace: str,
+        key: str,
+        ctx: Optional[ResponseQueryContext] = None,
+    ) -> Any:
         """Query Prams.
 
         :param subspace: subspace
@@ -342,17 +256,19 @@ class LedgerClient:
         :return: Query params
         """
         req = QueryParamsRequest(subspace=subspace, key=key)
-        resp = self.params.Params(req)
+        resp = self.params.Params(req, ctx=ctx)
         return json.loads(resp.param.value)
 
-    def query_node_info(self) -> NodeInfo:
+    def query_node_info(
+        self, ctx: Optional[ResponseQueryContext] = None
+    ) -> NodeInfo:
         """
         Query basic Tendermint / node information (moniker, chain-id, version, etc.).
 
         :return: NodeInfo.
         """
         request = GetNodeInfoRequest()
-        response = self.tendermint.GetNodeInfo(request)
+        response = self.tendermint.GetNodeInfo(request, ctx=ctx)
 
         cosmos_sdk_version = Version(
             response.application_version.cosmos_sdk_version.lstrip("v")
@@ -366,16 +282,23 @@ class LedgerClient:
             app_version=app_version,
         )
 
-    def query_consensus_params(self) -> Any:
+    def query_consensus_params(
+        self, ctx: Optional[ResponseQueryContext] = None
+    ) -> Any:
         """Query consensus params.
 
         :return: Query consensus params
         """
         req = QueryParamsRequest()
-        resp = self.consensus.Params(req)
+        resp = self.consensus.Params(req, ctx=ctx)
         return resp
 
-    def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
+    def query_bank_balance(
+        self,
+        address: Address,
+        denom: Optional[str] = None,
+        ctx: Optional[ResponseQueryContext] = None,
+    ) -> int:
         """Query bank balance.
 
         :param address: address
@@ -389,19 +312,21 @@ class LedgerClient:
             denom=denom,
         )
 
-        resp = self.bank.Balance(req)
+        resp = self.bank.Balance(req, ctx=ctx)
         assert resp.balance.denom == denom  # sanity check
 
         return int(resp.balance.amount)
 
-    def query_bank_all_balances(self, address: Address) -> List[Coin]:
+    def query_bank_all_balances(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> List[Coin]:
         """Query bank all balances.
 
         :param address: address
         :return: bank all balances
         """
         req = QueryAllBalancesRequest(address=str(address))
-        resp = self.bank.AllBalances(req)
+        resp = self.bank.AllBalances(req, ctx=ctx)
 
         return [Coin(amount=coin.amount, denom=coin.denom) for coin in resp.balances]
 
@@ -442,7 +367,9 @@ class LedgerClient:
         )
 
     def query_validators(
-        self, status: Optional[ValidatorStatus] = None
+        self,
+        status: Optional[ValidatorStatus] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> List[Validator]:
         """Query validators.
 
@@ -455,7 +382,7 @@ class LedgerClient:
         if filtered_status != ValidatorStatus.UNSPECIFIED:
             req.status = filtered_status.value
 
-        resp = self.staking.Validators(req)
+        resp = self.staking.Validators(req, ctx=ctx)
 
         validators: List[Validator] = []
         for validator in resp.validators:
@@ -469,7 +396,9 @@ class LedgerClient:
             )
         return validators
 
-    def query_staking_summary(self, address: Address) -> StakingSummary:
+    def query_staking_summary(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> StakingSummary:
         """Query staking summary.
 
         :param address: address
@@ -480,14 +409,14 @@ class LedgerClient:
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
 
         for resp in get_paginated(
-            req, self.staking.DelegatorDelegations, per_page_limit=1
+            req, self.staking.DelegatorDelegations, per_page_limit=1, ctx=ctx
         ):
             for item in resp.delegation_responses:
                 req = QueryDelegationRewardsRequest(
                     delegator_address=str(address),
                     validator_address=str(item.delegation.validator_address),
                 )
-                rewards_resp = self.distribution.DelegationRewards(req)
+                rewards_resp = self.distribution.DelegationRewards(req, ctx=ctx)
 
                 stake_reward_dec = Decimal(0)
                 stake_reward = 0
@@ -509,7 +438,9 @@ class LedgerClient:
         unbonding_summary: Dict[str, int] = {}
         req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
 
-        for resp in get_paginated(req, self.staking.DelegatorUnbondingDelegations):
+        for resp in get_paginated(
+            req, self.staking.DelegatorUnbondingDelegations, ctx=ctx
+        ):
             for item in resp.unbonding_responses:
                 validator = str(item.validator_address)
                 total_unbonding = unbonding_summary.get(validator, 0)
@@ -713,6 +644,7 @@ class LedgerClient:
         tx_hash: str,
         timeout: Optional[timedelta] = None,
         poll_period: Optional[timedelta] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> TxResponse:
         """Wait for query transaction.
 
@@ -738,7 +670,7 @@ class LedgerClient:
         start = datetime.now()
         while True:
             try:
-                return self.query_tx(tx_hash)
+                return self.query_tx(tx_hash, ctx=ctx)
             except NotFoundError:
                 pass
 
@@ -748,7 +680,9 @@ class LedgerClient:
 
             time.sleep(poll_period.total_seconds())
 
-    def query_tx(self, tx_hash: str) -> TxResponse:
+    def query_tx(
+        self, tx_hash: str, ctx: Optional[ResponseQueryContext] = None
+    ) -> TxResponse:
         """query transaction.
 
         :param tx_hash: transaction hash
@@ -758,7 +692,7 @@ class LedgerClient:
         """
         req = GetTxRequest(hash=tx_hash)
         try:
-            resp = self.txs.GetTx(req)
+            resp = self.txs.GetTx(req, ctx=ctx)
         except grpc.RpcError as e:
             details = e.details()
             if "not found" in details:
@@ -846,35 +780,39 @@ class LedgerClient:
 
         return SubmittedTx(self, tx_digest)
 
-    def query_latest_block(self) -> Block:
+    def query_latest_block(
+        self, ctx: Optional[ResponseQueryContext] = None
+    ) -> Block:
         """Query the latest block.
 
         :return: latest block
         """
         req = GetLatestBlockRequest()
-        resp = self.tendermint.GetLatestBlock(req)
+        resp = self.tendermint.GetLatestBlock(req, ctx=ctx)
         return Block.from_proto(resp.block)
 
-    def query_block(self, height: int) -> Block:
+    def query_block(
+        self, height: int, ctx: Optional[ResponseQueryContext] = None
+    ) -> Block:
         """Query the block.
 
         :param height: block height
         :return: block
         """
         req = GetBlockByHeightRequest(height=height)
-        resp = self.tendermint.GetBlockByHeight(req)
+        resp = self.tendermint.GetBlockByHeight(req, ctx=ctx)
         return Block.from_proto(resp.block)
 
-    def query_height(self) -> int:
+    def query_height(self, ctx: Optional[ResponseQueryContext] = None) -> int:
         """Query the latest block height.
 
         :return: latest block height
         """
-        return self.query_latest_block().height
+        return self.query_latest_block(ctx=ctx).height
 
-    def query_chain_id(self) -> str:
+    def query_chain_id(self, ctx: Optional[ResponseQueryContext] = None) -> str:
         """Query the chain id.
 
         :return: chain id
         """
-        return self.query_latest_block().chain_id
+        return self.query_latest_block(ctx=ctx).chain_id

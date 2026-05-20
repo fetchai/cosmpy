@@ -30,11 +30,12 @@ from cosmpy.aerial.client import (
     Block,
     DEFAULT_QUERY_INTERVAL_SECS,
     DEFAULT_QUERY_TIMEOUT_SECS,
-    GrpcHeightInterceptor,
     LedgerClient,
-    _is_query_grpc_stub,
 )
 from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.grpc.rpc_wrapper import RpcMethodWrapper
+from cosmpy.aerial.query_client import is_query_grpc_stub
+from cosmpy.aerial.query_context import RequestQueryContext, ResponseQueryContext
 from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER
 from cosmpy.protos.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse as PbTxResponse
 from cosmpy.protos.tendermint.types.block_pb2 import Block as PbBlock
@@ -65,8 +66,8 @@ def test_ledger_client_timeouts():
     assert client._query_timeout_secs == timeout  # pylint: disable=protected-access
 
 
-def test_ledger_client_with_height_is_isolated():
-    """Test ledger client can create an isolated query height context."""
+def test_ledger_client_query_context_is_optional():
+    """Test ledger client query context is per call and optional."""
     cfg = NetworkConfig(
         chain_id="test-chain",
         fee_minimum_gas_price=1,
@@ -76,55 +77,69 @@ def test_ledger_client_with_height_is_isolated():
     )
 
     client = LedgerClient(cfg)
-    assert client.bank._rest_api._height() is None  # pylint: disable=protected-access
     original_bank = client.bank
 
-    with client.with_height(123) as height_client:
-        assert height_client is client
-        assert height_client.network_config == cfg
-        assert height_client._query_interval_secs == client._query_interval_secs  # pylint: disable=protected-access
-        assert height_client._query_timeout_secs == client._query_timeout_secs  # pylint: disable=protected-access
-        assert height_client.bank._rest_api._height() == 123  # pylint: disable=protected-access
-        assert height_client.bank is original_bank
-
-        with height_client.with_height(456) as nested_client:
-            assert nested_client is client
-            assert nested_client.bank._rest_api._height() == 456  # pylint: disable=protected-access
-
-        assert height_client.bank._rest_api._height() == 123  # pylint: disable=protected-access
-
-    assert client.bank._rest_api._height() is None  # pylint: disable=protected-access
+    assert client.network_config == cfg
+    assert client._query_interval_secs == DEFAULT_QUERY_INTERVAL_SECS  # pylint: disable=protected-access
+    assert client._query_timeout_secs == DEFAULT_QUERY_TIMEOUT_SECS  # pylint: disable=protected-access
     assert client.bank is original_bank
 
-    with client.with_height(None) as latest_client:
-        assert latest_client is client
-        assert latest_client.bank._rest_api._height() is None  # pylint: disable=protected-access
 
+def test_rpc_method_wrapper_merges_metadata_and_reads_response_height():
+    """Test gRPC RPC wrapper handles request and response query height."""
 
-def test_grpc_height_interceptor_merges_metadata():
-    """Test gRPC height interceptor appends Cosmos block height metadata."""
-    interceptor = GrpcHeightInterceptor(lambda: 123)
-    call_details = SimpleNamespace(
-        method="/test.Service/Query",
-        timeout=1,
+    class Rpc:
+        """Fake gRPC RPC method."""
+
+        def with_call(self, request, metadata=None, **kwargs):
+            self.request = request
+            self.metadata = metadata
+            self.kwargs = kwargs
+            call = SimpleNamespace(
+                trailing_metadata=lambda: ((COSMOS_BLOCK_HEIGHT_HEADER, "456"),),
+                initial_metadata=lambda: (),
+            )
+            return "response", call
+
+    rpc = Rpc()
+    ctx = RequestQueryContext(request_height=123)
+
+    response = RpcMethodWrapper(rpc)(
+        "request",
+        ctx=ctx,
         metadata=(("existing", "value"),),
-        credentials=None,
-        wait_for_ready=None,
-        compression=None,
+        timeout=1,
     )
 
-    def continuation(next_call_details, request):
-        return next_call_details, request
-
-    next_call_details, request = interceptor.intercept_unary_unary(
-        continuation, call_details, "request"
-    )
-
-    assert request == "request"
-    assert next_call_details.metadata == (
+    assert response == "response"
+    assert rpc.request == "request"
+    assert rpc.metadata == [
         ("existing", "value"),
         (COSMOS_BLOCK_HEIGHT_HEADER, "123"),
-    )
+    ]
+    assert rpc.kwargs == {"timeout": 1}
+    assert ctx.response_height == 456
+
+
+def test_rpc_method_wrapper_reads_latest_response_height():
+    """Test gRPC RPC wrapper can read response height without request height."""
+
+    class Rpc:
+        """Fake gRPC RPC method."""
+
+        @staticmethod
+        def with_call(request, metadata=None, **kwargs):
+            call = SimpleNamespace(
+                trailing_metadata=lambda: (),
+                initial_metadata=lambda: ((COSMOS_BLOCK_HEIGHT_HEADER, "789"),),
+            )
+            return "response", call
+
+    ctx = ResponseQueryContext()
+    response = RpcMethodWrapper(Rpc())("request", ctx=ctx)
+
+    assert response == "response"
+    assert ctx.response_height == 789
 
 
 def test_grpc_query_stub_detection():
@@ -139,8 +154,8 @@ def test_grpc_query_stub_detection():
     QueryStub.__module__ = "cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc"
     TxServiceStub.__module__ = "cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc"
 
-    assert _is_query_grpc_stub(QueryStub)
-    assert not _is_query_grpc_stub(TxServiceStub)
+    assert is_query_grpc_stub(QueryStub())
+    assert not is_query_grpc_stub(TxServiceStub())
 
 
 def test_parsing_tx_response():
