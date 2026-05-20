@@ -63,7 +63,6 @@ jobs:
           - macos-latest
           - windows-latest
         python-version:
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
@@ -89,18 +88,52 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - windows-latest
-          - macos-latest
         python-version:
-          - 3.9
+          - '3.10'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python-version }}'
+
       - name: Install dependencies
         run: pip install tox==3.25.1
+
+      # Checkout docker repo
+      - name: Checkout fetchd docker repo
+        uses: actions/checkout@v4
+        with:
+          repository: fetchai/fetchd
+          ref: fix/docker_compose_genesis
+          path: repo-docker
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and run docker compose
+        working-directory: repo-docker
+        run: |
+          docker compose build
+          docker compose up -d
+
+      - name: Wait for server
+        run: |
+          waiting_period=3
+          for i in {1..30}; do
+             elapsed_time=$((i * waiting_period))
+         
+             if curl -s http://localhost:26657/status >/dev/null; then
+                 echo "Server is ready!"
+                 exit 0
+             fi
+          
+             echo "Waiting for the node to be ready (retry after ${elapsed_time}s) ..."
+             sleep "$waiting_period"
+          done
+          
+          echo "Server did not become ready in time"
+          exit 1
+
       - name: Integration Tests
         run: |
           tox -e test-integration
@@ -114,7 +147,7 @@ jobs:
           - windows-latest
           - macos-latest
         python-version:
-          - 3.9
+          - '3.10'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
