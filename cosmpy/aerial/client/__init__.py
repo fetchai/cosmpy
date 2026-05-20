@@ -36,7 +36,6 @@ from packaging.version import Version
 from cosmpy.aerial import cast_to_int
 from cosmpy.aerial.client.bank import create_bank_send_msg
 from cosmpy.aerial.client.distribution import create_withdraw_delegator_reward
-from cosmpy.aerial.client.height import LedgerClientAtHeightView
 from cosmpy.aerial.client.staking import (
     StakingPosition,
     StakingSummary,
@@ -879,8 +878,3 @@ class LedgerClient:
         :return: chain id
         """
         return self.query_latest_block().chain_id
-
-    def at_height(self, height: int) -> "LedgerClientAtHeightView":
-        if height <= 0:
-            raise ValueError("height must be a positive integer")
-        return LedgerClientAtHeightView(self, height)
