@@ -1,5 +1,9 @@
 # Release History
 
+## 0.12.1
+
+- fix: missing packaging dependency
+
 ## 0.12.0
 
 - Upgrade to fetchai Cosmos-SDK v0.20.0 (canonical v0.53.7)
