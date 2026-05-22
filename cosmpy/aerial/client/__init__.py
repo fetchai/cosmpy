@@ -177,9 +177,7 @@ class LedgerClient:
             self.distribution = wrap_query_client(DistributionGrpcClient(grpc_client))
             self.params = wrap_query_client(QueryParamsGrpcClient(grpc_client))
             self.consensus = wrap_query_client(QueryConsensusGrpcClient(grpc_client))
-            self.tendermint = wrap_query_client(
-                TendermintQueryGrpcClient(grpc_client)
-            )
+            self.tendermint = wrap_query_client(TendermintQueryGrpcClient(grpc_client))
         else:
             rest_client = RestClient(parsed_url.rest_url)
 
@@ -259,9 +257,7 @@ class LedgerClient:
         resp = self.params.Params(req, ctx=ctx)
         return json.loads(resp.param.value)
 
-    def query_node_info(
-        self, ctx: Optional[ResponseQueryContext] = None
-    ) -> NodeInfo:
+    def query_node_info(self, ctx: Optional[ResponseQueryContext] = None) -> NodeInfo:
         """
         Query basic Tendermint / node information (moniker, chain-id, version, etc.).
 
@@ -282,9 +278,7 @@ class LedgerClient:
             app_version=app_version,
         )
 
-    def query_consensus_params(
-        self, ctx: Optional[ResponseQueryContext] = None
-    ) -> Any:
+    def query_consensus_params(self, ctx: Optional[ResponseQueryContext] = None) -> Any:
         """Query consensus params.
 
         :return: Query consensus params
@@ -780,9 +774,7 @@ class LedgerClient:
 
         return SubmittedTx(self, tx_digest)
 
-    def query_latest_block(
-        self, ctx: Optional[ResponseQueryContext] = None
-    ) -> Block:
+    def query_latest_block(self, ctx: Optional[ResponseQueryContext] = None) -> Block:
         """Query the latest block.
 
         :return: latest block

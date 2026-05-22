@@ -80,8 +80,12 @@ def test_ledger_client_query_context_is_optional():
     original_bank = client.bank
 
     assert client.network_config == cfg
-    assert client._query_interval_secs == DEFAULT_QUERY_INTERVAL_SECS  # pylint: disable=protected-access
-    assert client._query_timeout_secs == DEFAULT_QUERY_TIMEOUT_SECS  # pylint: disable=protected-access
+    assert (
+        client._query_interval_secs == DEFAULT_QUERY_INTERVAL_SECS
+    )  # pylint: disable=protected-access
+    assert (
+        client._query_timeout_secs == DEFAULT_QUERY_TIMEOUT_SECS
+    )  # pylint: disable=protected-access
     assert client.bank is original_bank
 
 
