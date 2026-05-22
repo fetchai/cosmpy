@@ -53,6 +53,8 @@ from cosmpy.aerial.coins import Coin
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
+from cosmpy.aerial.query_client import wrap_query_client
+from cosmpy.aerial.query_context import ResponseQueryContext
 from cosmpy.aerial.tx import Transaction, TxState
 from cosmpy.aerial.tx_helpers import MessageLog, SubmittedTx, TxResponse, safe_decode
 from cosmpy.aerial.types import Account, Block, NodeInfo
@@ -148,6 +150,11 @@ class LedgerClient:
         cfg.validate()
         self._network_config = cfg
         self._gas_strategy: GasStrategy = SimulationGasStrategy(self)
+        self._init_clients()
+
+    def _init_clients(self):
+        """Initialize transport-specific module clients."""
+        cfg = self.network_config
 
         parsed_url = parse_url(cfg.url)
 
@@ -162,27 +169,27 @@ class LedgerClient:
             else:
                 grpc_client = grpc.insecure_channel(parsed_url.host_and_port)
 
-            self.wasm = CosmWasmGrpcClient(grpc_client)
-            self.auth = AuthGrpcClient(grpc_client)
-            self.txs = TxGrpcClient(grpc_client)
-            self.bank = BankGrpcClient(grpc_client)
-            self.staking = StakingGrpcClient(grpc_client)
-            self.distribution = DistributionGrpcClient(grpc_client)
-            self.params = QueryParamsGrpcClient(grpc_client)
-            self.consensus = QueryConsensusGrpcClient(grpc_client)
-            self.tendermint = TendermintQueryGrpcClient(grpc_client)
+            self.wasm = wrap_query_client(CosmWasmGrpcClient(grpc_client))
+            self.auth = wrap_query_client(AuthGrpcClient(grpc_client))
+            self.txs = wrap_query_client(TxGrpcClient(grpc_client))
+            self.bank = wrap_query_client(BankGrpcClient(grpc_client))
+            self.staking = wrap_query_client(StakingGrpcClient(grpc_client))
+            self.distribution = wrap_query_client(DistributionGrpcClient(grpc_client))
+            self.params = wrap_query_client(QueryParamsGrpcClient(grpc_client))
+            self.consensus = wrap_query_client(QueryConsensusGrpcClient(grpc_client))
+            self.tendermint = wrap_query_client(TendermintQueryGrpcClient(grpc_client))
         else:
             rest_client = RestClient(parsed_url.rest_url)
 
-            self.wasm = CosmWasmRestClient(rest_client)  # type: ignore
-            self.auth = AuthRestClient(rest_client)  # type: ignore
-            self.txs = TxRestClient(rest_client)  # type: ignore
-            self.bank = BankRestClient(rest_client)  # type: ignore
-            self.staking = StakingRestClient(rest_client)  # type: ignore
-            self.distribution = DistributionRestClient(rest_client)  # type: ignore
-            self.params = ParamsRestClient(rest_client)  # type: ignore
-            self.consensus = ConsensusRestClient(rest_client)  # type: ignore
-            self.tendermint = TendermintRestClient(rest_client)  # type: ignore
+            self.wasm = wrap_query_client(CosmWasmRestClient(rest_client))  # type: ignore
+            self.auth = wrap_query_client(AuthRestClient(rest_client))  # type: ignore
+            self.txs = wrap_query_client(TxRestClient(rest_client))  # type: ignore
+            self.bank = wrap_query_client(BankRestClient(rest_client))  # type: ignore
+            self.staking = wrap_query_client(StakingRestClient(rest_client))  # type: ignore
+            self.distribution = wrap_query_client(DistributionRestClient(rest_client))  # type: ignore
+            self.params = wrap_query_client(ParamsRestClient(rest_client))  # type: ignore
+            self.consensus = wrap_query_client(ConsensusRestClient(rest_client))  # type: ignore
+            self.tendermint = wrap_query_client(TendermintRestClient(rest_client))  # type: ignore
 
     @property
     def network_config(self) -> NetworkConfig:
@@ -211,15 +218,18 @@ class LedgerClient:
             raise RuntimeError("Invalid strategy must implement GasStrategy interface")
         self._gas_strategy = strategy
 
-    def query_account(self, address: Address) -> Account:
+    def query_account(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> Account:
         """Query account.
 
         :param address: address
+        :param ctx: Optional QueryContext
         :raises RuntimeError: Unexpected account type returned from query
         :return: account details
         """
         request = QueryAccountRequest(address=str(address))
-        response = self.auth.Account(request)
+        response = self.auth.Account(request, ctx=ctx)
 
         account = BaseAccount()
         if not response.account.Is(BaseAccount.DESCRIPTOR):
@@ -232,25 +242,33 @@ class LedgerClient:
             sequence=account.sequence,
         )
 
-    def query_params(self, subspace: str, key: str) -> Any:
+    def query_params(
+        self,
+        subspace: str,
+        key: str,
+        ctx: Optional[ResponseQueryContext] = None,
+    ) -> Any:
         """Query Prams.
 
         :param subspace: subspace
         :param key: key
+        :param ctx: Optional QueryContext
         :return: Query params
         """
         req = QueryParamsRequest(subspace=subspace, key=key)
-        resp = self.params.Params(req)
+        resp = self.params.Params(req, ctx=ctx)
         return json.loads(resp.param.value)
 
-    def query_node_info(self) -> NodeInfo:
+    def query_node_info(self, ctx: Optional[ResponseQueryContext] = None) -> NodeInfo:
         """
         Query basic Tendermint / node information (moniker, chain-id, version, etc.).
+
+        :param ctx: Optional QueryContext
 
         :return: NodeInfo.
         """
         request = GetNodeInfoRequest()
-        response = self.tendermint.GetNodeInfo(request)
+        response = self.tendermint.GetNodeInfo(request, ctx=ctx)
 
         cosmos_sdk_version = Version(
             response.application_version.cosmos_sdk_version.lstrip("v")
@@ -264,18 +282,25 @@ class LedgerClient:
             app_version=app_version,
         )
 
-    def query_consensus_params(self) -> Any:
+    def query_consensus_params(self, ctx: Optional[ResponseQueryContext] = None) -> Any:
         """Query consensus params.
 
+        :param ctx: Optional QueryContext
         :return: Query consensus params
         """
         req = QueryParamsRequest()
-        resp = self.consensus.Params(req)
+        resp = self.consensus.Params(req, ctx=ctx)
         return resp
 
-    def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
+    def query_bank_balance(
+        self,
+        address: Address,
+        denom: Optional[str] = None,
+        ctx: Optional[ResponseQueryContext] = None,
+    ) -> int:
         """Query bank balance.
 
+        :param ctx: Optional QueryContext
         :param address: address
         :param denom: denom, defaults to None
         :return: bank balance
@@ -287,19 +312,22 @@ class LedgerClient:
             denom=denom,
         )
 
-        resp = self.bank.Balance(req)
+        resp = self.bank.Balance(req, ctx=ctx)
         assert resp.balance.denom == denom  # sanity check
 
         return int(resp.balance.amount)
 
-    def query_bank_all_balances(self, address: Address) -> List[Coin]:
+    def query_bank_all_balances(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> List[Coin]:
         """Query bank all balances.
 
+        :param ctx: Optional QueryContext
         :param address: address
         :return: bank all balances
         """
         req = QueryAllBalancesRequest(address=str(address))
-        resp = self.bank.AllBalances(req)
+        resp = self.bank.AllBalances(req, ctx=ctx)
 
         return [Coin(amount=coin.amount, denom=coin.denom) for coin in resp.balances]
 
@@ -340,11 +368,14 @@ class LedgerClient:
         )
 
     def query_validators(
-        self, status: Optional[ValidatorStatus] = None
+        self,
+        status: Optional[ValidatorStatus] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> List[Validator]:
         """Query validators.
 
         :param status: validator status, defaults to None
+        :param ctx: Optional QueryContext
         :return: List of validators
         """
         filtered_status = status or ValidatorStatus.BONDED
@@ -353,7 +384,7 @@ class LedgerClient:
         if filtered_status != ValidatorStatus.UNSPECIFIED:
             req.status = filtered_status.value
 
-        resp = self.staking.Validators(req)
+        resp = self.staking.Validators(req, ctx=ctx)
 
         validators: List[Validator] = []
         for validator in resp.validators:
@@ -367,10 +398,13 @@ class LedgerClient:
             )
         return validators
 
-    def query_staking_summary(self, address: Address) -> StakingSummary:
+    def query_staking_summary(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> StakingSummary:
         """Query staking summary.
 
         :param address: address
+        :param ctx: Optional QueryContext
         :return: staking summary
         """
         current_positions: List[StakingPosition] = []
@@ -378,14 +412,14 @@ class LedgerClient:
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
 
         for resp in get_paginated(
-            req, self.staking.DelegatorDelegations, per_page_limit=1
+            req, self.staking.DelegatorDelegations, per_page_limit=1, ctx=ctx
         ):
             for item in resp.delegation_responses:
                 req = QueryDelegationRewardsRequest(
                     delegator_address=str(address),
                     validator_address=str(item.delegation.validator_address),
                 )
-                rewards_resp = self.distribution.DelegationRewards(req)
+                rewards_resp = self.distribution.DelegationRewards(req, ctx=ctx)
 
                 stake_reward_dec = Decimal(0)
                 stake_reward = 0
@@ -407,7 +441,9 @@ class LedgerClient:
         unbonding_summary: Dict[str, int] = {}
         req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
 
-        for resp in get_paginated(req, self.staking.DelegatorUnbondingDelegations):
+        for resp in get_paginated(
+            req, self.staking.DelegatorUnbondingDelegations, ctx=ctx
+        ):
             for item in resp.unbonding_responses:
                 validator = str(item.validator_address)
                 total_unbonding = unbonding_summary.get(validator, 0)
@@ -611,12 +647,14 @@ class LedgerClient:
         tx_hash: str,
         timeout: Optional[timedelta] = None,
         poll_period: Optional[timedelta] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> TxResponse:
         """Wait for query transaction.
 
         :param tx_hash: transaction hash
         :param timeout: timeout, defaults to None
         :param poll_period: poll_period, defaults to None
+        :param ctx: Optional QueryContext
 
         :raises QueryTimeoutError: timeout
 
@@ -636,7 +674,7 @@ class LedgerClient:
         start = datetime.now()
         while True:
             try:
-                return self.query_tx(tx_hash)
+                return self.query_tx(tx_hash, ctx=ctx)
             except NotFoundError:
                 pass
 
@@ -646,17 +684,20 @@ class LedgerClient:
 
             time.sleep(poll_period.total_seconds())
 
-    def query_tx(self, tx_hash: str) -> TxResponse:
+    def query_tx(
+        self, tx_hash: str, ctx: Optional[ResponseQueryContext] = None
+    ) -> TxResponse:
         """query transaction.
 
         :param tx_hash: transaction hash
+        :param ctx: Optional QueryContext
         :raises NotFoundError: Tx details not found
         :raises grpc.RpcError: RPC connection issue
         :return: query response
         """
         req = GetTxRequest(hash=tx_hash)
         try:
-            resp = self.txs.GetTx(req)
+            resp = self.txs.GetTx(req, ctx=ctx)
         except grpc.RpcError as e:
             details = e.details()
             if "not found" in details:
@@ -744,35 +785,39 @@ class LedgerClient:
 
         return SubmittedTx(self, tx_digest)
 
-    def query_latest_block(self) -> Block:
+    def query_latest_block(self, ctx: Optional[ResponseQueryContext] = None) -> Block:
         """Query the latest block.
 
+        :param ctx: Optional QueryContext
         :return: latest block
         """
         req = GetLatestBlockRequest()
-        resp = self.tendermint.GetLatestBlock(req)
+        resp = self.tendermint.GetLatestBlock(req, ctx=ctx)
         return Block.from_proto(resp.block)
 
-    def query_block(self, height: int) -> Block:
+    def query_block(
+        self, height: int, ctx: Optional[ResponseQueryContext] = None
+    ) -> Block:
         """Query the block.
 
         :param height: block height
+        :param ctx: Optional QueryContext
         :return: block
         """
         req = GetBlockByHeightRequest(height=height)
-        resp = self.tendermint.GetBlockByHeight(req)
+        resp = self.tendermint.GetBlockByHeight(req, ctx=ctx)
         return Block.from_proto(resp.block)
 
-    def query_height(self) -> int:
+    def query_height(self, ctx: Optional[ResponseQueryContext] = None) -> int:
         """Query the latest block height.
 
         :return: latest block height
         """
-        return self.query_latest_block().height
+        return self.query_latest_block(ctx=ctx).height
 
-    def query_chain_id(self) -> str:
+    def query_chain_id(self, ctx: Optional[ResponseQueryContext] = None) -> str:
         """Query the chain id.
-
+        :param ctx: Optional QueryContext
         :return: chain id
         """
-        return self.query_latest_block().chain_id
+        return self.query_latest_block(ctx=ctx).chain_id
