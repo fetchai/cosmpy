@@ -23,6 +23,7 @@ from typing import List, Optional
 
 from google.protobuf.descriptor import Descriptor
 
+from cosmpy.aerial.query_context import ResponseQueryContext
 from cosmpy.common.rest_client import RestClient
 
 
@@ -47,6 +48,7 @@ class MockRestClient(RestClient):
         url_base_path: str,
         request: Optional[Descriptor] = None,
         used_params: Optional[List[str]] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> bytes:
         """
         Handle GET request.
@@ -54,6 +56,7 @@ class MockRestClient(RestClient):
         :param url_base_path: url base path
         :param request:  optional request descriptor instance
         :param used_params: optional list of params name used in path
+        :param ctx: optional query context
 
         :return: bytes
         """

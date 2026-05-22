@@ -22,7 +22,7 @@ import base64
 import json
 from contextlib import contextmanager
 from contextvars import ContextVar, Token
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode
 
 import requests
@@ -102,7 +102,7 @@ class RestClient:
 
         ctx = ctx or self._query_ctx.get()
         request_height = self._request_height(ctx)
-        request_kwargs = {"url": url}
+        request_kwargs: Dict[str, Any] = {"url": url}
         if request_height is not None:
             request_kwargs["headers"] = {
                 COSMOS_BLOCK_HEIGHT_HEADER: str(request_height)

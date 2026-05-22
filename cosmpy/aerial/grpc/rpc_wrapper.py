@@ -19,7 +19,7 @@
 
 """gRPC RPC method wrappers for request-scoped query context."""
 
-from typing import Any, Callable, Optional
+from typing import Any, Optional, Protocol, Tuple
 
 from cosmpy.aerial.query_context import ResponseQueryContext
 from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER
@@ -38,10 +38,22 @@ def _metadata_height(metadata: Any) -> Optional[int]:
     return None
 
 
+class RpcCallable(Protocol):
+    """Callable gRPC method with grpc-stub with_call support."""
+
+    def __call__(self, request: Any, *, metadata: Any = None, **kwargs: Any) -> Any:
+        """Call RPC method."""
+
+    def with_call(
+        self, request: Any, *, metadata: Any = None, **kwargs: Any
+    ) -> Tuple[Any, Any]:
+        """Call RPC method and return response with call metadata."""
+
+
 class RpcMethodWrapper:
     """Wrap one gRPC RPC method to support query context."""
 
-    def __init__(self, rpc: Callable):
+    def __init__(self, rpc: RpcCallable):
         """
         Init RPC method wrapper.
 
