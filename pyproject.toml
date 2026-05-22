@@ -47,7 +47,6 @@ virtualenv = ">=20.26.6"
 sortedcontainers = "==2.4.0"
 bcrypt = "==5.0.0"
 pynacl = "==1.6.0"
-setuptools = "<82"
 packaging = ">=23.0"
 
 [tool.poetry.group.dev]
@@ -77,7 +76,7 @@ virtualenv = ">=20.26.6"
 marshmallow = "<4.0.0"
 sortedcontainers-stubs = "2.4.3"
 click = "*"
-
+setuptools = "<82"
 
 [tool.poetry.group.docs]
 optional = true
