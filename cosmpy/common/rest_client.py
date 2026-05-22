@@ -31,6 +31,7 @@ from google.protobuf.message import Message
 
 from cosmpy.aerial.query_context import ResponseQueryContext
 
+
 COSMOS_BLOCK_HEIGHT_HEADER = "x-cosmos-block-height"
 
 
