@@ -224,6 +224,7 @@ class LedgerClient:
         """Query account.
 
         :param address: address
+        :param ctx: Optional QueryContext
         :raises RuntimeError: Unexpected account type returned from query
         :return: account details
         """
@@ -251,6 +252,7 @@ class LedgerClient:
 
         :param subspace: subspace
         :param key: key
+        :param ctx: Optional QueryContext
         :return: Query params
         """
         req = QueryParamsRequest(subspace=subspace, key=key)
@@ -260,6 +262,8 @@ class LedgerClient:
     def query_node_info(self, ctx: Optional[ResponseQueryContext] = None) -> NodeInfo:
         """
         Query basic Tendermint / node information (moniker, chain-id, version, etc.).
+
+        :param ctx: Optional QueryContext
 
         :return: NodeInfo.
         """
@@ -281,6 +285,7 @@ class LedgerClient:
     def query_consensus_params(self, ctx: Optional[ResponseQueryContext] = None) -> Any:
         """Query consensus params.
 
+        :param ctx: Optional QueryContext
         :return: Query consensus params
         """
         req = QueryParamsRequest()
@@ -295,6 +300,7 @@ class LedgerClient:
     ) -> int:
         """Query bank balance.
 
+        :param ctx: Optional QueryContext
         :param address: address
         :param denom: denom, defaults to None
         :return: bank balance
@@ -316,6 +322,7 @@ class LedgerClient:
     ) -> List[Coin]:
         """Query bank all balances.
 
+        :param ctx: Optional QueryContext
         :param address: address
         :return: bank all balances
         """
@@ -368,6 +375,7 @@ class LedgerClient:
         """Query validators.
 
         :param status: validator status, defaults to None
+        :param ctx: Optional QueryContext
         :return: List of validators
         """
         filtered_status = status or ValidatorStatus.BONDED
@@ -396,6 +404,7 @@ class LedgerClient:
         """Query staking summary.
 
         :param address: address
+        :param ctx: Optional QueryContext
         :return: staking summary
         """
         current_positions: List[StakingPosition] = []
@@ -645,6 +654,7 @@ class LedgerClient:
         :param tx_hash: transaction hash
         :param timeout: timeout, defaults to None
         :param poll_period: poll_period, defaults to None
+        :param ctx: Optional QueryContext
 
         :raises QueryTimeoutError: timeout
 
@@ -680,6 +690,7 @@ class LedgerClient:
         """query transaction.
 
         :param tx_hash: transaction hash
+        :param ctx: Optional QueryContext
         :raises NotFoundError: Tx details not found
         :raises grpc.RpcError: RPC connection issue
         :return: query response
@@ -777,6 +788,7 @@ class LedgerClient:
     def query_latest_block(self, ctx: Optional[ResponseQueryContext] = None) -> Block:
         """Query the latest block.
 
+        :param ctx: Optional QueryContext
         :return: latest block
         """
         req = GetLatestBlockRequest()
@@ -789,6 +801,7 @@ class LedgerClient:
         """Query the block.
 
         :param height: block height
+        :param ctx: Optional QueryContext
         :return: block
         """
         req = GetBlockByHeightRequest(height=height)
@@ -804,7 +817,7 @@ class LedgerClient:
 
     def query_chain_id(self, ctx: Optional[ResponseQueryContext] = None) -> str:
         """Query the chain id.
-
+        :param ctx: Optional QueryContext
         :return: chain id
         """
         return self.query_latest_block(ctx=ctx).chain_id
