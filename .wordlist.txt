@@ -338,3 +338,4 @@ QueryParamsResponse
 ConsensusRestClient
 CosmosSDK
 NodeInfo
+setuptools
