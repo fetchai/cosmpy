@@ -110,6 +110,81 @@ class SimulationGasStrategy(GasStrategy):
         return self._max_gas or -1
 
 
+class AsyncGasStrategy(ABC):
+    """Transaction gas strategy for the async ledger client."""
+
+    @abstractmethod
+    async def estimate_gas(self, tx: Transaction) -> int:
+        """Estimate the transaction gas.
+
+        :param tx: Transaction
+        :return: None
+        """
+
+    @abstractmethod
+    async def block_gas_limit(self) -> int:
+        """Get the block gas limit.
+
+        :return: None
+        """
+
+    async def _clip_gas(self, value: int) -> int:
+        block_limit = await self.block_gas_limit()
+        if block_limit < 0:
+            return value
+
+        return min(value, block_limit)
+
+
+class AsyncSimulationGasStrategy(AsyncGasStrategy):
+    """Simulation transaction gas strategy for the async ledger client.
+
+    :param AsyncGasStrategy: async gas strategy
+    """
+
+    DEFAULT_MULTIPLIER = 1.65
+
+    def __init__(self, client: "AsyncLedgerClient", multiplier: Optional[float] = None):  # type: ignore # noqa: F821
+        """Init the Simulation transaction gas strategy.
+
+        :param client: Async ledger client
+        :param multiplier: multiplier, defaults to None
+        """
+        self._client = client
+        self._max_gas: Optional[int] = None
+        self._multiplier = multiplier or self.DEFAULT_MULTIPLIER
+
+    async def estimate_gas(self, tx: Transaction) -> int:
+        """Get estimated transaction gas.
+
+        :param tx: transaction
+        :return: Estimated transaction gas
+        """
+        gas_estimate = await self._client.simulate_tx(tx)
+        return await self._clip_gas(int(gas_estimate * self._multiplier))
+
+    async def block_gas_limit(self) -> int:
+        """Get the block gas limit.
+
+        :raises Exception: Failed to query max_gas
+        :return: block gas limit
+        """
+        if self._max_gas is None:
+            try:
+                params = await self._client.query_consensus_params()
+                self._max_gas = int(params.params.block.max_gas)
+            except Exception as e:  # pylint: disable=broad-except
+                try:
+                    block_params = await self._client.query_params(
+                        "baseapp", "BlockParams"
+                    )
+                    self._max_gas = int(block_params["max_gas"])
+                except Exception as f:  # pylint: disable=broad-except
+                    raise f from e
+
+        return self._max_gas or -1
+
+
 class OfflineMessageTableStrategy(GasStrategy):
     """Offline message table strategy.
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2018-2021 Fetch.AI Limited
+#   Copyright 2018-2022 Fetch.AI Limited
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,17 +17,34 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Client functionality."""
+"""Asyncio-native client functionality (gRPC endpoints only).
+
+``AsyncLedgerClient`` mirrors ``LedgerClient`` method for method, but performs
+all network I/O on grpc's native asyncio channel (``grpc.aio``) — no worker
+threads involved. It reuses the same generated protobuf stubs as the sync
+client; the stubs return awaitables when constructed over an aio channel.
+
+Note: instantiate the client from within a running event loop (i.e. inside the
+coroutine passed to ``asyncio.run``) — the underlying grpc.aio channel binds to
+the running loop when it is created.
+
+Usage:
+
+.. code-block:: python
+
+    async with AsyncLedgerClient(NetworkConfig.fetchai_mainnet()) as client:
+        balance = await client.query_bank_balance(address)
+"""
+import asyncio
 import json
-import time
 from datetime import datetime, timedelta
-from typing import Any, List, Optional, Tuple
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 import grpc
+from grpc import aio
 
 from cosmpy.aerial.client.bank import create_bank_send_msg
-from cosmpy.aerial.client.base import (  # noqa: F401 # pylint: disable=unused-import
-    COSMOS_SDK_DEC_COIN_PRECISION,
+from cosmpy.aerial.client.base import (
     DEFAULT_QUERY_INTERVAL_SECS,
     DEFAULT_QUERY_TIMEOUT_SECS,
     LedgerClientBase,
@@ -41,33 +58,23 @@ from cosmpy.aerial.client.staking import (
     create_redelegate_msg,
     create_undelegate_msg,
 )
-from cosmpy.aerial.client.utils import (
-    TxFee,
-    get_paginated,
-    prepare_and_broadcast_basic_transaction,
-)
+from cosmpy.aerial.client.utils import DEFAULT_PER_PAGE_LIMIT
 from cosmpy.aerial.coins import Coin
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
-from cosmpy.aerial.gas import GasStrategy, SimulationGasStrategy
-from cosmpy.aerial.tx import Transaction
-from cosmpy.aerial.tx_helpers import SubmittedTx, TxResponse
+from cosmpy.aerial.gas import AsyncGasStrategy, AsyncSimulationGasStrategy, GasStrategy
+from cosmpy.aerial.tx import SigningCfg, Transaction, TxFee
+from cosmpy.aerial.tx_helpers import AsyncSubmittedTx, TxResponse
 from cosmpy.aerial.types import Account, Block, NodeInfo
 from cosmpy.aerial.urls import Protocol, parse_url
 from cosmpy.aerial.wallet import Wallet
-from cosmpy.auth.rest_client import AuthRestClient
-from cosmpy.bank.rest_client import BankRestClient
-from cosmpy.common.rest_client import RestClient
-from cosmpy.consensus.rest_client import ConsensusRestClient
-from cosmpy.cosmwasm.rest_client import CosmWasmRestClient
 from cosmpy.crypto.address import Address
-from cosmpy.distribution.rest_client import DistributionRestClient
-from cosmpy.params.rest_client import ParamsRestClient
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountRequest
 from cosmpy.protos.cosmos.bank.v1beta1.query_pb2 import (
     QueryAllBalancesRequest,
     QueryBalanceRequest,
 )
+from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
 from cosmpy.protos.cosmos.base.tendermint.v1beta1.query_pb2 import (
     GetBlockByHeightRequest,
     GetLatestBlockRequest,
@@ -88,15 +95,10 @@ from cosmpy.protos.cosmos.tx.v1beta1.service_pb2 import (
     GetTxRequest,
     SimulateRequest,
 )
-from cosmpy.staking.rest_client import StakingRestClient
-from cosmpy.tendermint.rest_client import (
-    CosmosBaseTendermintRestClient as TendermintRestClient,
-)
-from cosmpy.tx.rest_client import TxRestClient
 
 
-class LedgerClient(LedgerClientBase):
-    """Ledger client."""
+class AsyncLedgerClient(LedgerClientBase):
+    """Asyncio-native ledger client (gRPC endpoints only)."""
 
     def __init__(
         self,
@@ -104,40 +106,58 @@ class LedgerClient(LedgerClientBase):
         query_interval_secs: int = DEFAULT_QUERY_INTERVAL_SECS,
         query_timeout_secs: int = DEFAULT_QUERY_TIMEOUT_SECS,
     ):
-        """Init ledger client.
+        """Init async ledger client.
 
         :param cfg: Network configurations
         :param query_interval_secs: int. optional interval int seconds
         :param query_timeout_secs: int. optional interval int seconds
+        :raises RuntimeError: Network config url is not a gRPC endpoint
         """
         super().__init__(cfg, query_interval_secs, query_timeout_secs)
-        self._gas_strategy: GasStrategy = SimulationGasStrategy(self)
+        self._gas_strategy: Union[
+            GasStrategy, AsyncGasStrategy
+        ] = AsyncSimulationGasStrategy(self)
 
         parsed_url = parse_url(cfg.url)
 
-        if parsed_url.protocol == Protocol.GRPC:
-            if parsed_url.secure:
-                credentials = self._create_ssl_credentials()
-                grpc_client = grpc.secure_channel(parsed_url.host_and_port, credentials)
-            else:
-                grpc_client = grpc.insecure_channel(parsed_url.host_and_port)
+        if parsed_url.protocol != Protocol.GRPC:
+            raise RuntimeError(
+                "AsyncLedgerClient supports gRPC endpoints only; "
+                f"got {cfg.url!r}. Use LedgerClient for REST endpoints."
+            )
 
-            self._init_grpc_stubs(grpc_client)
+        if parsed_url.secure:
+            credentials = self._create_ssl_credentials()
+            self._grpc_channel = aio.secure_channel(
+                parsed_url.host_and_port, credentials
+            )
         else:
-            rest_client = RestClient(parsed_url.rest_url)
+            self._grpc_channel = aio.insecure_channel(parsed_url.host_and_port)
 
-            self.wasm = CosmWasmRestClient(rest_client)  # type: ignore
-            self.auth = AuthRestClient(rest_client)  # type: ignore
-            self.txs = TxRestClient(rest_client)  # type: ignore
-            self.bank = BankRestClient(rest_client)  # type: ignore
-            self.staking = StakingRestClient(rest_client)  # type: ignore
-            self.distribution = DistributionRestClient(rest_client)  # type: ignore
-            self.params = ParamsRestClient(rest_client)  # type: ignore
-            self.consensus = ConsensusRestClient(rest_client)  # type: ignore
-            self.tendermint = TendermintRestClient(rest_client)  # type: ignore
+        self._init_grpc_stubs(self._grpc_channel)
+
+    async def close(self):
+        """Close the underlying gRPC channel."""
+        await self._grpc_channel.close()
+
+    async def __aenter__(self) -> "AsyncLedgerClient":
+        """Enter the async context.
+
+        :return: this client
+        """
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        """Exit the async context, closing the gRPC channel.
+
+        :param exc_type: exception type
+        :param exc_value: exception value
+        :param traceback: exception traceback
+        """
+        await self.close()
 
     @property
-    def gas_strategy(self) -> GasStrategy:
+    def gas_strategy(self) -> Union[GasStrategy, AsyncGasStrategy]:
         """Get gas strategy.
 
         :return: gas strategy
@@ -145,27 +165,29 @@ class LedgerClient(LedgerClientBase):
         return self._gas_strategy
 
     @gas_strategy.setter
-    def gas_strategy(self, strategy: GasStrategy):
+    def gas_strategy(self, strategy: Union[GasStrategy, AsyncGasStrategy]):
         """Set gas strategy.
 
         :param strategy: strategy
-        :raises RuntimeError: Invalid strategy must implement GasStrategy interface
+        :raises RuntimeError: Invalid strategy must implement GasStrategy or AsyncGasStrategy interface
         """
-        if not isinstance(strategy, GasStrategy):
-            raise RuntimeError("Invalid strategy must implement GasStrategy interface")
+        if not isinstance(strategy, (GasStrategy, AsyncGasStrategy)):
+            raise RuntimeError(
+                "Invalid strategy must implement GasStrategy or AsyncGasStrategy interface"
+            )
         self._gas_strategy = strategy
 
-    def query_account(self, address: Address) -> Account:
+    async def query_account(self, address: Address) -> Account:
         """Query account.
 
         :param address: address
         :return: account details
         """
         request = QueryAccountRequest(address=str(address))
-        response = self.auth.Account(request)
+        response = await self.auth.Account(request)
         return self._parse_account(response, address)
 
-    def query_params(self, subspace: str, key: str) -> Any:
+    async def query_params(self, subspace: str, key: str) -> Any:
         """Query Prams.
 
         :param subspace: subspace
@@ -173,29 +195,31 @@ class LedgerClient(LedgerClientBase):
         :return: Query params
         """
         req = QueryParamsRequest(subspace=subspace, key=key)
-        resp = self.params.Params(req)
+        resp = await self.params.Params(req)
         return json.loads(resp.param.value)
 
-    def query_node_info(self) -> NodeInfo:
+    async def query_node_info(self) -> NodeInfo:
         """
         Query basic Tendermint / node information (moniker, chain-id, version, etc.).
 
         :return: NodeInfo.
         """
         request = GetNodeInfoRequest()
-        response = self.tendermint.GetNodeInfo(request)
+        response = await self.tendermint.GetNodeInfo(request)
         return self._parse_node_info(response)
 
-    def query_consensus_params(self) -> Any:
+    async def query_consensus_params(self) -> Any:
         """Query consensus params.
 
         :return: Query consensus params
         """
         req = QueryParamsRequest()
-        resp = self.consensus.Params(req)
+        resp = await self.consensus.Params(req)
         return resp
 
-    def query_bank_balance(self, address: Address, denom: Optional[str] = None) -> int:
+    async def query_bank_balance(
+        self, address: Address, denom: Optional[str] = None
+    ) -> int:
         """Query bank balance.
 
         :param address: address
@@ -209,20 +233,20 @@ class LedgerClient(LedgerClientBase):
             denom=denom,
         )
 
-        resp = self.bank.Balance(req)
+        resp = await self.bank.Balance(req)
         return self._parse_bank_balance(resp, denom)
 
-    def query_bank_all_balances(self, address: Address) -> List[Coin]:
+    async def query_bank_all_balances(self, address: Address) -> List[Coin]:
         """Query bank all balances.
 
         :param address: address
         :return: bank all balances
         """
         req = QueryAllBalancesRequest(address=str(address))
-        resp = self.bank.AllBalances(req)
+        resp = await self.bank.AllBalances(req)
         return self._parse_bank_all_balances(resp)
 
-    def send_tokens(
+    async def send_tokens(
         self,
         destination: Address,
         amount: int,
@@ -231,7 +255,7 @@ class LedgerClient(LedgerClientBase):
         memo: Optional[str] = None,
         fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
-    ) -> SubmittedTx:
+    ) -> AsyncSubmittedTx:
         """Send tokens.
 
         :param destination: destination address
@@ -249,7 +273,7 @@ class LedgerClient(LedgerClientBase):
             create_bank_send_msg(sender.address(), destination, amount, denom)
         )
 
-        return prepare_and_broadcast_basic_transaction(
+        return await prepare_and_broadcast_basic_transaction(
             self,
             tx,
             sender,
@@ -258,7 +282,7 @@ class LedgerClient(LedgerClientBase):
             timeout_height=timeout_height,
         )
 
-    def query_validators(
+    async def query_validators(
         self, status: Optional[ValidatorStatus] = None
     ) -> List[Validator]:
         """Query validators.
@@ -272,10 +296,10 @@ class LedgerClient(LedgerClientBase):
         if filtered_status != ValidatorStatus.UNSPECIFIED:
             req.status = filtered_status.value
 
-        resp = self.staking.Validators(req)
+        resp = await self.staking.Validators(req)
         return self._parse_validators(resp)
 
-    def query_staking_summary(self, address: Address) -> StakingSummary:
+    async def query_staking_summary(self, address: Address) -> StakingSummary:
         """Query staking summary.
 
         :param address: address
@@ -285,7 +309,7 @@ class LedgerClient(LedgerClientBase):
 
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
 
-        for resp in get_paginated(
+        for resp in await get_paginated(
             req, self.staking.DelegatorDelegations, per_page_limit=1
         ):
             for item in resp.delegation_responses:
@@ -293,21 +317,23 @@ class LedgerClient(LedgerClientBase):
                     delegator_address=str(address),
                     validator_address=str(item.delegation.validator_address),
                 )
-                rewards_resp = self.distribution.DelegationRewards(req)
+                rewards_resp = await self.distribution.DelegationRewards(req)
 
                 current_positions.append(
                     self._parse_staking_position(item, rewards_resp)
                 )
 
         req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
-        unbonding_pages = get_paginated(req, self.staking.DelegatorUnbondingDelegations)
+        unbonding_pages = await get_paginated(
+            req, self.staking.DelegatorUnbondingDelegations
+        )
 
         return StakingSummary(
             current_positions=current_positions,
             unbonding_positions=self._build_unbonding_positions(unbonding_pages),
         )
 
-    def delegate_tokens(
+    async def delegate_tokens(
         self,
         validator: Address,
         amount: int,
@@ -315,7 +341,7 @@ class LedgerClient(LedgerClientBase):
         memo: Optional[str] = None,
         fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
-    ) -> SubmittedTx:
+    ) -> AsyncSubmittedTx:
         """Delegate tokens.
 
         :param validator: validator address
@@ -336,7 +362,7 @@ class LedgerClient(LedgerClientBase):
             )
         )
 
-        return prepare_and_broadcast_basic_transaction(
+        return await prepare_and_broadcast_basic_transaction(
             self,
             tx,
             sender,
@@ -345,7 +371,7 @@ class LedgerClient(LedgerClientBase):
             timeout_height=timeout_height,
         )
 
-    def redelegate_tokens(
+    async def redelegate_tokens(
         self,
         current_validator: Address,
         next_validator: Address,
@@ -354,7 +380,7 @@ class LedgerClient(LedgerClientBase):
         memo: Optional[str] = None,
         fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
-    ) -> SubmittedTx:
+    ) -> AsyncSubmittedTx:
         """Redelegate tokens.
 
         :param current_validator: current validator address
@@ -377,7 +403,7 @@ class LedgerClient(LedgerClientBase):
             )
         )
 
-        return prepare_and_broadcast_basic_transaction(
+        return await prepare_and_broadcast_basic_transaction(
             self,
             tx,
             sender,
@@ -386,7 +412,7 @@ class LedgerClient(LedgerClientBase):
             timeout_height=timeout_height,
         )
 
-    def undelegate_tokens(
+    async def undelegate_tokens(
         self,
         validator: Address,
         amount: int,
@@ -394,7 +420,7 @@ class LedgerClient(LedgerClientBase):
         memo: Optional[str] = None,
         fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
-    ) -> SubmittedTx:
+    ) -> AsyncSubmittedTx:
         """Undelegate tokens.
 
         :param validator: validator
@@ -415,7 +441,7 @@ class LedgerClient(LedgerClientBase):
             )
         )
 
-        return prepare_and_broadcast_basic_transaction(
+        return await prepare_and_broadcast_basic_transaction(
             self,
             tx,
             sender,
@@ -424,14 +450,14 @@ class LedgerClient(LedgerClientBase):
             timeout_height=timeout_height,
         )
 
-    def claim_rewards(
+    async def claim_rewards(
         self,
         validator: Address,
         sender: Wallet,
         memo: Optional[str] = None,
         fee: Optional[TxFee] = None,
         timeout_height: Optional[int] = None,
-    ) -> SubmittedTx:
+    ) -> AsyncSubmittedTx:
         """claim rewards.
 
         :param validator: validator
@@ -444,7 +470,7 @@ class LedgerClient(LedgerClientBase):
         tx = Transaction()
         tx.add_message(create_withdraw_delegator_reward(sender.address(), validator))
 
-        return prepare_and_broadcast_basic_transaction(
+        return await prepare_and_broadcast_basic_transaction(
             self,
             tx,
             sender,
@@ -453,26 +479,30 @@ class LedgerClient(LedgerClientBase):
             timeout_height=timeout_height,
         )
 
-    def estimate_gas_for_tx(self, tx: Transaction) -> int:
+    async def estimate_gas_for_tx(self, tx: Transaction) -> int:
         """Estimate gas for transaction.
+
+        Supports both async and (I/O-free) sync gas strategies.
 
         :param tx: transaction
         :return: Estimated gas for transaction
         """
+        if isinstance(self._gas_strategy, AsyncGasStrategy):
+            return await self._gas_strategy.estimate_gas(tx)
         return self._gas_strategy.estimate_gas(tx)
 
     # NOTE(pb): We should come up with a mechanism how this method (or a new one) can return also `Coin`, resp. `Coins`.
-    def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
+    async def estimate_gas_and_fee_for_tx(self, tx: Transaction) -> Tuple[int, str]:
         """Estimate gas and fee for transaction.
 
         :param tx: transaction
         :return: estimate gas, fee for transaction
         """
-        gas_estimate = self.estimate_gas_for_tx(tx)
+        gas_estimate = await self.estimate_gas_for_tx(tx)
         fee = self.estimate_fee_from_gas(gas_estimate)
         return gas_estimate, fee
 
-    def wait_for_query_tx(
+    async def wait_for_query_tx(
         self,
         tx_hash: str,
         timeout: Optional[timedelta] = None,
@@ -493,7 +523,7 @@ class LedgerClient(LedgerClientBase):
         start = datetime.now()
         while True:
             try:
-                return self.query_tx(tx_hash)
+                return await self.query_tx(tx_hash)
             except NotFoundError:
                 pass
 
@@ -501,9 +531,9 @@ class LedgerClient(LedgerClientBase):
             if delta >= timeout:
                 raise QueryTimeoutError()
 
-            time.sleep(poll_period.total_seconds())
+            await asyncio.sleep(poll_period.total_seconds())
 
-    def query_tx(self, tx_hash: str) -> TxResponse:
+    async def query_tx(self, tx_hash: str) -> TxResponse:
         """query transaction.
 
         :param tx_hash: transaction hash
@@ -513,7 +543,7 @@ class LedgerClient(LedgerClientBase):
         """
         req = GetTxRequest(hash=tx_hash)
         try:
-            resp = self.txs.GetTx(req)
+            resp = await self.txs.GetTx(req)
         except grpc.RpcError as e:
             if self._is_tx_not_found_error(e):
                 raise NotFoundError() from e
@@ -525,7 +555,7 @@ class LedgerClient(LedgerClientBase):
 
         return self._parse_tx_response(resp.tx_response)
 
-    def simulate_tx(self, tx: Transaction) -> int:
+    async def simulate_tx(self, tx: Transaction) -> int:
         """simulate transaction.
 
         :param tx: transaction
@@ -534,11 +564,11 @@ class LedgerClient(LedgerClientBase):
         self._check_tx_final_for_simulation(tx)
 
         req = SimulateRequest(tx=tx.tx)
-        resp = self.txs.Simulate(req)
+        resp = await self.txs.Simulate(req)
 
         return int(resp.gas_info.gas_used)
 
-    def broadcast_tx(self, tx: Transaction) -> SubmittedTx:
+    async def broadcast_tx(self, tx: Transaction) -> AsyncSubmittedTx:
         """Broadcast transaction.
 
         :param tx: transaction
@@ -550,40 +580,199 @@ class LedgerClient(LedgerClientBase):
         )
 
         # broadcast the transaction
-        resp = self.txs.BroadcastTx(broadcast_req)
+        resp = await self.txs.BroadcastTx(broadcast_req)
         tx_digest = self._check_broadcast_response(resp)
 
-        return SubmittedTx(self, tx_digest)
+        return AsyncSubmittedTx(self, tx_digest)
 
-    def query_latest_block(self) -> Block:
+    async def query_latest_block(self) -> Block:
         """Query the latest block.
 
         :return: latest block
         """
         req = GetLatestBlockRequest()
-        resp = self.tendermint.GetLatestBlock(req)
+        resp = await self.tendermint.GetLatestBlock(req)
         return Block.from_proto(resp.block)
 
-    def query_block(self, height: int) -> Block:
+    async def query_block(self, height: int) -> Block:
         """Query the block.
 
         :param height: block height
         :return: block
         """
         req = GetBlockByHeightRequest(height=height)
-        resp = self.tendermint.GetBlockByHeight(req)
+        resp = await self.tendermint.GetBlockByHeight(req)
         return Block.from_proto(resp.block)
 
-    def query_height(self) -> int:
+    async def query_height(self) -> int:
         """Query the latest block height.
 
         :return: latest block height
         """
-        return self.query_latest_block().height
+        return (await self.query_latest_block()).height
 
-    def query_chain_id(self) -> str:
+    async def query_chain_id(self) -> str:
         """Query the chain id.
 
         :return: chain id
         """
-        return self.query_latest_block().chain_id
+        return (await self.query_latest_block()).chain_id
+
+
+async def simulate_tx(
+    client: AsyncLedgerClient,
+    tx: Transaction,
+    sender: Wallet,
+    account: Optional[Account] = None,
+    memo: Optional[str] = None,
+) -> Tuple[int, str, Account]:
+    """Estimate transaction fees based on either a provided amount, gas limit, or simulation.
+
+    :param client: Async ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param memo: Transaction memo, defaults to None
+
+    :return: Estimated gas_limit and fee amount tuple
+    """
+    # query the account information for the sender
+    if account is None:
+        account = await client.query_account(sender.address())
+
+    # we need to build up a representative transaction so that we can accurately simulate it
+    tx.seal(
+        SigningCfg.direct(sender.public_key(), account.sequence),
+        fee=TxFee([], 0),
+        memo=memo,
+    )
+    tx.sign(sender.signer(), client.network_config.chain_id, account.number)
+    tx.complete()
+
+    # simulate the gas and fee for the transaction
+    gas_limit, fee = await client.estimate_gas_and_fee_for_tx(tx)
+
+    return gas_limit, fee, account
+
+
+async def prepare_basic_transaction(
+    client: AsyncLedgerClient,
+    tx: Transaction,
+    sender: Wallet,
+    account: Optional[Account] = None,
+    fee: Optional[TxFee] = None,
+    memo: Optional[str] = None,
+    timeout_height: Optional[int] = None,
+) -> Transaction:
+    """Prepare basic transaction.
+
+    :param client: Async ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param fee: The tx fee (see below the behaviour):
+                - If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+                  estimate the `fee.gas_limit` value.
+                - If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+                  values (the `gas_price` value will be taken from client config).
+    :param memo: Transaction memo, defaults to None
+    :param timeout_height: timeout height, defaults to None
+
+    :return: transaction
+    """
+    if fee is None:
+        fee = TxFee()
+
+    # query the account information for the sender
+    if account is None:
+        account = await client.query_account(sender.address())
+
+    if fee.gas_limit is None:
+        # Simulate transaction to get gas and amount
+        fee.gas_limit, estimated_amount, _ = await simulate_tx(
+            client, tx, sender, account, memo
+        )
+        # Use estimated amount if not provided
+        fee.amount = fee.amount or estimated_amount  # type: ignore
+
+    if fee.amount is None:
+        fee.amount = client.estimate_fee_from_gas(fee.gas_limit)  # type: ignore
+
+    # Build the final transaction
+    tx.seal(
+        SigningCfg.direct(sender.public_key(), account.sequence),
+        fee=fee,
+        memo=memo,
+        timeout_height=timeout_height,
+    )
+
+    tx.sign(sender.signer(), client.network_config.chain_id, account.number)
+    tx.complete()
+
+    return tx
+
+
+async def prepare_and_broadcast_basic_transaction(
+    client: AsyncLedgerClient,
+    tx: Transaction,
+    sender: Wallet,
+    account: Optional[Account] = None,
+    fee: Optional[TxFee] = None,
+    memo: Optional[str] = None,
+    timeout_height: Optional[int] = None,
+) -> AsyncSubmittedTx:
+    """Prepare and broadcast basic transaction.
+
+    :param client: Async ledger client
+    :param tx: The transaction
+    :param sender: The transaction sender
+    :param account: The account
+    :param fee: The tx fee (see below the behaviour):
+                - If the `fee` *or* `fee.gas_limit` is `None`, then the `simulate_tx(...)` will be executed to
+                  estimate the `fee.gas_limit` value.
+                - If the `fee.amount` is `None` then it will be calculated from the `fee.gas_limit` and `gas_price`
+                  values (the `gas_price` value will be taken from client config).
+    :param memo: Transaction memo, defaults to None
+    :param timeout_height: timeout height, defaults to None
+
+    :return: broadcast transaction
+    """
+    tx = await prepare_basic_transaction(
+        client, tx, sender, account, fee, memo, timeout_height
+    )
+    return await client.broadcast_tx(tx)
+
+
+async def get_paginated(
+    initial_request: Any,
+    request_method: Callable,
+    pages_limit: int = 0,
+    per_page_limit: Optional[int] = DEFAULT_PER_PAGE_LIMIT,
+) -> List[Any]:
+    """
+    Get pages for specific request.
+
+    :param initial_request: request supports pagination
+    :param request_method: async function to perform request
+    :param pages_limit: max number of pages to return. default - 0 unlimited
+    :param per_page_limit: Optional int: amount of records per one page. default is None, determined by server
+
+    :return: List of responses
+    """
+    pages: List[Any] = []
+    pagination = PageRequest(limit=per_page_limit)
+
+    while pagination and (len(pages) < pages_limit or pages_limit == 0):
+        request = initial_request.__class__()
+        request.CopyFrom(initial_request)
+        request.pagination.CopyFrom(pagination)
+
+        resp = await request_method(request)
+
+        pages.append(resp)
+
+        pagination = None
+
+        if resp.pagination.next_key:
+            pagination = PageRequest(limit=per_page_limit, key=resp.pagination.next_key)
+    return pages
