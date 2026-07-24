@@ -26,13 +26,13 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-
-try:
-    import tomllib
-except ModuleNotFoundError:  # Python < 3.11
-    import tomli as tomllib
-
 from packaging.version import Version
+
+
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 
 ROOT = Path(__file__).parent.parent
