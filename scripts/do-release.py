@@ -26,7 +26,12 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-import tomli
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import tomli as tomllib
+
 from packaging.version import Version
 
 
@@ -69,7 +74,7 @@ class ReleaseTool:
     def get_current_version(self) -> Version:
         """Get current code version."""
         text = (ROOT / "pyproject.toml").read_text()
-        version = tomli.loads(text)["tool"]["poetry"]["version"]
+        version = tomllib.loads(text)["tool"]["poetry"]["version"]
         return Version(version)
 
     def do_we_need_to_release(self) -> bool:

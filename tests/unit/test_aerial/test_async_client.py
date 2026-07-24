@@ -122,9 +122,12 @@ def test_async_query_account():
     packed_account.Pack(account)
 
     class MockAuthStub:  # pylint: disable=too-few-public-methods
+        """Mock async auth stub."""
+
         async def Account(
             self, request
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
+            """Return a fixed account query response."""
             return QueryAccountResponse(account=packed_account)
 
     async def check(client):
@@ -141,7 +144,10 @@ def test_async_query_bank_balance():
     """Test querying a bank balance over a mocked async bank stub."""
 
     class MockBankStub:  # pylint: disable=too-few-public-methods
+        """Mock async bank stub."""
+
         async def Balance(self, request):  # noqa: N802 # pylint: disable=invalid-name
+            """Return a fixed balance for the requested denom."""
             return QueryBalanceResponse(
                 balance=PbCoin(denom=request.denom, amount="1234")
             )
@@ -157,9 +163,12 @@ def test_async_query_tx_not_found_and_wait_timeout():
     """Test tx not found translation and wait_for_query_tx timeout."""
 
     class MockTxStub:  # pylint: disable=too-few-public-methods
+        """Mock async tx stub whose GetTx always fails with 'tx not found'."""
+
         async def GetTx(
             self, request
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
+            """Raise a 'tx not found' error."""
             raise RuntimeError("tx not found")
 
     async def check_not_found(client):
@@ -182,14 +191,18 @@ def test_async_broadcast_and_wait():
     tx_hash = "ABCDEF0123456789"
 
     class MockTxStub:  # pylint: disable=too-few-public-methods
+        """Mock async tx stub for broadcast and completion polling."""
+
         async def BroadcastTx(
             self, request
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
+            """Return a successful broadcast response."""
             return BroadcastTxResponse(tx_response=PbTxResponse(txhash=tx_hash, code=0))
 
         async def GetTx(
             self, request
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
+            """Return a completed tx response."""
             return GetTxResponse(
                 tx_response=PbTxResponse(txhash=tx_hash, code=0, height=42)
             )
@@ -212,15 +225,21 @@ def test_async_gas_estimation_with_simulation_strategy():
     """Test the async simulation gas strategy end to end over mocked stubs."""
 
     class MockTxStub:  # pylint: disable=too-few-public-methods
+        """Mock async tx stub for gas simulation."""
+
         async def Simulate(
             self, request
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
+            """Return a fixed gas-used simulation response."""
             return SimulateResponse(gas_info=GasInfo(gas_used=100_000))
 
     class MockConsensusStub:  # pylint: disable=too-few-public-methods
+        """Mock async consensus stub."""
+
         async def Params(
             self, request
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
+            """Return consensus params with a fixed block max_gas."""
             return SimpleNamespace(
                 params=SimpleNamespace(block=SimpleNamespace(max_gas=3_000_000))
             )
