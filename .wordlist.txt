@@ -339,3 +339,7 @@ ConsensusRestClient
 CosmosSDK
 NodeInfo
 setuptools
+AsyncLedgerClient
+AsyncSubmittedTx
+Async
+AsyncGasStrategy
