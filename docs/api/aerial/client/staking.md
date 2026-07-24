@@ -70,6 +70,18 @@ class Validator()
 
 Validator.
 
+<a id="cosmpy.aerial.client.staking.Validator.address"></a>
+
+#### address
+
+the operators address
+
+<a id="cosmpy.aerial.client.staking.Validator.tokens"></a>
+
+#### tokens
+
+The total amount of tokens for the validator
+
 <a id="cosmpy.aerial.client.staking.StakingSummary"></a>
 
 ## StakingSummary Objects
