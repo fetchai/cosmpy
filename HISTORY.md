@@ -1,5 +1,9 @@
 # Release History
 
+## 0.13.0rc1
+
+- feat: add asyncio-native AsyncLedgerClient
+
 ## 0.12.2
 
 - refactor: dependencies - unlocked click, setuptools
