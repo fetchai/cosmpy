@@ -113,6 +113,115 @@ Get the block gas limit.
 
 block gas limit
 
+<a id="cosmpy.aerial.gas.AsyncGasStrategy"></a>
+
+## AsyncGasStrategy Objects
+
+```python
+class AsyncGasStrategy(ABC)
+```
+
+Transaction gas strategy for the async ledger client.
+
+<a id="cosmpy.aerial.gas.AsyncGasStrategy.estimate_gas"></a>
+
+#### estimate`_`gas
+
+```python
+@abstractmethod
+async def estimate_gas(tx: Transaction) -> int
+```
+
+Estimate the transaction gas.
+
+**Arguments**:
+
+- `tx`: Transaction
+
+**Returns**:
+
+None
+
+<a id="cosmpy.aerial.gas.AsyncGasStrategy.block_gas_limit"></a>
+
+#### block`_`gas`_`limit
+
+```python
+@abstractmethod
+async def block_gas_limit() -> int
+```
+
+Get the block gas limit.
+
+**Returns**:
+
+None
+
+<a id="cosmpy.aerial.gas.AsyncSimulationGasStrategy"></a>
+
+## AsyncSimulationGasStrategy Objects
+
+```python
+class AsyncSimulationGasStrategy(AsyncGasStrategy)
+```
+
+Simulation transaction gas strategy for the async ledger client.
+
+**Arguments**:
+
+- `AsyncGasStrategy`: async gas strategy
+
+<a id="cosmpy.aerial.gas.AsyncSimulationGasStrategy.__init__"></a>
+
+#### `__`init`__`
+
+```python
+def __init__(client: "AsyncLedgerClient", multiplier: Optional[float] = None)
+```
+
+Init the Simulation transaction gas strategy.
+
+**Arguments**:
+
+- `client`: Async ledger client
+- `multiplier`: multiplier, defaults to None
+
+<a id="cosmpy.aerial.gas.AsyncSimulationGasStrategy.estimate_gas"></a>
+
+#### estimate`_`gas
+
+```python
+async def estimate_gas(tx: Transaction) -> int
+```
+
+Get estimated transaction gas.
+
+**Arguments**:
+
+- `tx`: transaction
+
+**Returns**:
+
+Estimated transaction gas
+
+<a id="cosmpy.aerial.gas.AsyncSimulationGasStrategy.block_gas_limit"></a>
+
+#### block`_`gas`_`limit
+
+```python
+async def block_gas_limit() -> int
+```
+
+Get the block gas limit.
+
+**Raises**:
+
+- `Exception`: Failed to query max_gas
+
+**Returns**:
+
+block gas limit
+
 <a id="cosmpy.aerial.gas.OfflineMessageTableStrategy"></a>
 
 ## OfflineMessageTableStrategy Objects

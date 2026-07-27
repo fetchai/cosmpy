@@ -169,6 +169,38 @@ Wait to complete the transaction.
 
 Submitted Transaction
 
+<a id="cosmpy.aerial.tx_helpers.AsyncSubmittedTx"></a>
+
+## AsyncSubmittedTx Objects
+
+```python
+class AsyncSubmittedTx(SubmittedTx)
+```
+
+Submitted transaction bound to an AsyncLedgerClient.
+
+<a id="cosmpy.aerial.tx_helpers.AsyncSubmittedTx.wait_to_complete"></a>
+
+#### wait`_`to`_`complete
+
+```python
+async def wait_to_complete(
+    timeout: Optional[Union[int, float, timedelta]] = None,
+    poll_period: Optional[Union[int, float, timedelta]] = None
+) -> "AsyncSubmittedTx"
+```
+
+Wait to complete the transaction.
+
+**Arguments**:
+
+- `timeout`: timeout, defaults to None
+- `poll_period`: poll_period, defaults to None
+
+**Returns**:
+
+Submitted Transaction
+
 <a id="cosmpy.aerial.tx_helpers.safe_decode"></a>
 
 #### safe`_`decode
