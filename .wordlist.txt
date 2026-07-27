@@ -342,4 +342,16 @@ setuptools
 AsyncLedgerClient
 AsyncSubmittedTx
 Async
+async
 AsyncGasStrategy
+AsyncSimulationGasStrategy
+aio
+Asyncio
+asyncio
+awaitables
+gRPC
+grpc's
+coroutine
+aenter
+traceback
+LedgerClientBase
