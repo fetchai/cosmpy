@@ -20,19 +20,15 @@
 """cosmwasm contract functionality."""
 
 import json
-import os
-from collections import UserString
-from datetime import datetime
-from typing import Any, Dict, Optional
-
-from jsonschema import validate
+from typing import Any, Optional
 
 from cosmpy.aerial.client import (
     LedgerClient,
     TxFee,
     prepare_and_broadcast_basic_transaction,
 )
-from cosmpy.aerial.contract.cosmwasm import (
+from cosmpy.aerial.contract.base import LedgerContractBase
+from cosmpy.aerial.contract.cosmwasm import (  # noqa: F401
     create_cosmwasm_clear_admin_msg,
     create_cosmwasm_execute_msg,
     create_cosmwasm_instantiate_msg,
@@ -40,45 +36,14 @@ from cosmpy.aerial.contract.cosmwasm import (
     create_cosmwasm_store_code_msg,
     create_cosmwasm_update_admin_msg,
 )
-from cosmpy.aerial.tx import Transaction
 from cosmpy.aerial.tx_helpers import SubmittedTx
 from cosmpy.aerial.wallet import Wallet
-from cosmpy.common.utils import json_encode
 from cosmpy.crypto.address import Address
-from cosmpy.crypto.hashfuncs import sha256
 from cosmpy.protos.cosmos.base.query.v1beta1.pagination_pb2 import PageRequest
-from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import (
-    QueryCodesRequest,
-    QuerySmartContractStateRequest,
-)
+from cosmpy.protos.cosmwasm.wasm.v1.query_pb2 import QueryCodesRequest
 
 
-def _compute_digest(path: str) -> bytes:
-    with open(path, "rb") as input_file:
-        return sha256(input_file.read())
-
-
-def _generate_label(digest: bytes) -> str:
-    now = datetime.utcnow()
-    return f"{digest.hex()[:14]}-{now.strftime('%Y%m%d%H%M%S')}"
-
-
-def _load_contract_schema(schema_path: str) -> Optional[Dict[Any, Any]]:
-    if not os.path.isdir(schema_path):
-        return None
-
-    schema = {}
-    for filename in os.listdir(schema_path):
-        if filename.endswith(".json"):
-            msg_name = os.path.splitext(os.path.basename(filename))[0]
-            full_path = os.path.join(schema_path, filename)
-            with open(full_path, "r", encoding="utf-8") as msg_schema_file:
-                msg_schema = json.load(msg_schema_file)
-            schema[msg_name] = msg_schema
-    return schema
-
-
-class LedgerContract(UserString):
+class LedgerContract(LedgerContractBase):
     """Ledger contract."""
 
     def __init__(
@@ -100,56 +65,13 @@ class LedgerContract(UserString):
         :param code_id: optional int. code id of the contract stored
         """
         # pylint: disable=super-init-not-called
-        self._path = path
-        self._client = client
-        self._address = address
-
-        # load contract schema if path is provided
-        self._load_schema(schema_path)
-
-        # select the digest either by computing it from the provided contract or by the value specified by
-        # the user
-        self._digest: Optional[bytes] = digest
-        if path is not None:
-            self._digest = _compute_digest(str(self._path))
+        self._init_contract(path, client, address, digest, schema_path, code_id)
 
         # attempt to look up the code id from the network by digest
         if not code_id and self._digest is not None:
             self._code_id = self._find_contract_id_by_digest(self._digest)
         else:
             self._code_id = code_id
-
-    @property
-    def path(self) -> Optional[str]:
-        """Get contract path.
-
-        :return: contract path
-        """
-        return self._path
-
-    @property
-    def digest(self) -> Optional[bytes]:
-        """Get the contract digest.
-
-        :return: contract digest
-        """
-        return self._digest
-
-    @property
-    def code_id(self) -> Optional[int]:
-        """Get the code id.
-
-        :return: code id
-        """
-        return self._code_id
-
-    @property
-    def address(self) -> Optional[Address]:
-        """Get the contract address.
-
-        :return: contract address
-        """
-        return self._address
 
     def store(
         self,
@@ -167,12 +89,7 @@ class LedgerContract(UserString):
         :raises RuntimeError: Runtime error
         :return: code id
         """
-        if self._path is None:
-            raise RuntimeError("Unable to upload code, no contract provided")
-
-        # build up the store transaction
-        tx = Transaction()
-        tx.add_message(create_cosmwasm_store_code_msg(self._path, sender.address()))
+        tx = self._store_tx(sender)
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
             self._client,
@@ -213,32 +130,7 @@ class LedgerContract(UserString):
 
         :return: contract address
         """
-        assert self._code_id, RuntimeError("Code id was not set.")
-
-        if self._instantiate_schema is not None:
-            validate(args, self._instantiate_schema)
-
-        if label is None:
-            if self._digest:
-                label = _generate_label(bytes(self._digest))
-            elif self._code_id:
-                label = _generate_label(bytes(f"{self._code_id}", encoding="utf-8"))
-            else:
-                raise RuntimeError(
-                    "Failed to get label. No code_id or digest provided."
-                )
-
-        # build up the store transaction
-        instatiate_msg = create_cosmwasm_instantiate_msg(
-            self._code_id,
-            args,
-            label,
-            sender.address(),
-            admin_address=admin_address,
-            funds=funds,
-        )
-        tx = Transaction()
-        tx.add_message(instatiate_msg)
+        tx = self._instantiate_tx(args, sender, label, admin_address, funds)
 
         submitted_tx = prepare_and_broadcast_basic_transaction(
             self._client,
@@ -270,13 +162,12 @@ class LedgerContract(UserString):
         :param new_path: path to new contract
         :param fee: transaction fee, defaults to None
         :param timeout_height: timeout height, defaults to None
+        :raises RuntimeError: contract address is not set
 
         :return: transaction details broadcast
         """
-        assert self._address, RuntimeError("Address was not set.")
-
-        if self._migrate_schema is not None:
-            validate(args, self._migrate_schema)
+        if self._address is None:
+            raise RuntimeError("Address was not set.")
 
         self._path = new_path
         new_code_id = self.store(sender, fee)
@@ -307,20 +198,7 @@ class LedgerContract(UserString):
 
         :return: transaction details broadcast
         """
-        assert self._address, RuntimeError("Address was not set.")
-
-        if self._migrate_schema is not None:
-            validate(args, self._migrate_schema)
-
-        # build up the migrate transaction
-        migrate_msg = create_cosmwasm_migrate_msg(
-            new_code_id,
-            args,
-            self._address,
-            sender.address(),
-        )
-        tx = Transaction()
-        tx.add_message(migrate_msg)
+        tx = self._migrate_tx(args, sender, new_code_id)
 
         return prepare_and_broadcast_basic_transaction(
             self._client,
@@ -346,21 +224,7 @@ class LedgerContract(UserString):
 
         :return: transaction details broadcast
         """
-        assert self._address, RuntimeError("Address was not set.")
-
-        # build up the update/clear admin transaction
-        if new_admin is None:
-            msg = create_cosmwasm_clear_admin_msg(
-                sender.address(),
-                self._address,
-            )
-        else:
-            msg = create_cosmwasm_update_admin_msg(
-                sender.address(), self._address, new_admin
-            )
-
-        tx = Transaction()
-        tx.add_message(msg)
+        tx = self._update_admin_tx(sender, new_admin)
 
         return prepare_and_broadcast_basic_transaction(
             self._client,
@@ -429,25 +293,9 @@ class LedgerContract(UserString):
         :param fee: transaction fee, defaults to None
         :param funds: funds, defaults to None
         :param timeout_height: timeout height, defaults to None
-        :raises RuntimeError: Contract appears not to be deployed currently
         :return: transaction details broadcast
         """
-        if self._address is None:
-            raise RuntimeError("Contract appears not to be deployed currently")
-
-        if self._execute_schema is not None:
-            validate(args, self._execute_schema)
-
-        # build up the execute transaction
-        tx = Transaction()
-        tx.add_message(
-            create_cosmwasm_execute_msg(
-                sender.address(),
-                self._address,
-                args,
-                funds=funds,
-            )
-        )
+        tx = self._execute_tx(args, sender, funds)
 
         return prepare_and_broadcast_basic_transaction(
             self._client,
@@ -461,18 +309,9 @@ class LedgerContract(UserString):
         """Query on contract.
 
         :param args: args
-        :raises RuntimeError: Contract appears not to be deployed currently
         :return: query result
         """
-        if self._address is None:
-            raise RuntimeError("Contract appears not to be deployed currently")
-
-        if self._query_schema is not None:
-            validate(args, self._query_schema)
-
-        req = QuerySmartContractStateRequest(
-            address=str(self._address), query_data=json_encode(args).encode("UTF8")
-        )
+        req = self._query_request(args)
         resp = self._client.wasm.SmartContractState(req)
         return json.loads(resp.data)
 
@@ -500,42 +339,3 @@ class LedgerContract(UserString):
             pagination = PageRequest(key=resp.pagination.next_key)
 
         return code_id
-
-    def _load_schema(self, schema_path: Optional[str]):
-        self._schema: Optional[Dict[str, Any]] = None
-        self._instantiate_schema: Optional[Dict[str, Any]] = None
-        self._query_schema: Optional[Dict[str, Any]] = None
-        self._execute_schema: Optional[Dict[str, Any]] = None
-        self._migrate_schema: Optional[Dict[str, Any]] = None
-
-        if schema_path is None:
-            return
-
-        self._schema = _load_contract_schema(schema_path)
-        if self._schema is None:
-            return
-
-        for msg_type, schema in self._schema.items():
-            if "instantiate" in msg_type:
-                self._instantiate_schema = schema
-            elif "query" in msg_type:
-                self._query_schema = schema
-            elif "execute" in msg_type:
-                self._execute_schema = schema
-            elif "migrate" in msg_type:
-                self._migrate_schema = schema
-
-    @property
-    def data(self):
-        """Get the contract address.
-
-        :return: contract address
-        """
-        return self.address
-
-    def __json__(self):
-        """Get the contract details in json.
-
-        :return: contract details in json
-        """
-        return str(self)
