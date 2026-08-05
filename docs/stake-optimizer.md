@@ -40,12 +40,12 @@ validators_stake = [int(validator.tokens) for validator in resp.validators if va
 total_stake = sum(validators_stake)
 
 # For every bonded validator, we print commission and percentage of total stake
-print("MONIKER      COMISSION   % of TOTAL STAKE")
+print("MONIKER      COMMISSION   % of TOTAL STAKE")
 for validator in resp.validators:
     if validator.status == 3:
         moniker = validator.description.moniker
-        comission = int(validator.commission.commission_rates.rate)/1e18*100
-        print(moniker[:10]," ", comission,"%     ", round(int(validator.tokens)/total_stake*100,3),"%")
+        commission = int(validator.commission.commission_rates.rate)/1e18*100
+        print(moniker[:10]," ", commission,"%     ", round(int(validator.tokens)/total_stake*100,3),"%")
 ```
 
 After running the code above, you will observe each validator commission rate and its percentage delegated of the total stake. The most important parameter to observe in each validator is the commission it will take from the rewards. We will always select a validator with the lower commission as long as it has a reasonable stake compared with the total stake. In this case, at the moment the code was run, all validators had the same commission, therefore, we simply selected the validator with the highest stake, which was validator0. Feel free to select the most convenient validator when you run the code above. We will save the variables `commission` and the fraction of our `initial_stake` to the total stake to use them later on.
@@ -60,7 +60,7 @@ selected_validator = "validator0"
 validator = [v for v in validators if v.moniker == selected_validator][0]
 query_validator = [v for v in resp.validators if v.description.moniker == selected_validator][0]
 
-# Set the comission %
+# Set the commission %
 commission = int(query_validator.commission.commission_rates.rate)/1e18
 
 # Set percentage delegated of total stake
