@@ -45,6 +45,7 @@ class ParsedUrl:
     secure: bool
     hostname: str
     port: int
+    path: str
 
     @property
     def host_and_port(self) -> str:
@@ -71,6 +72,8 @@ class ParsedUrl:
         url = f"{prefix}://{self.hostname}"
         if self.port != default_port:
             url += f":{self.port}"
+        if self.path:
+            url += self.path
         return url
 
 
@@ -103,5 +106,6 @@ def parse_url(url: str) -> ParsedUrl:
 
     hostname = str(result.hostname)
     port = default_port if result.port is None else int(result.port)
+    path = result.path if result.path else ""
 
-    return ParsedUrl(protocol=protocol, secure=secure, hostname=hostname, port=port)
+    return ParsedUrl(protocol=protocol, secure=secure, hostname=hostname, port=port, path=path)
