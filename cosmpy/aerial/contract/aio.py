@@ -60,8 +60,7 @@ class AsyncLedgerContract(LedgerContractBase):
         :param schema_path: path to contract schemas, defaults to None
         :param code_id: stored contract code id, defaults to None
         """
-        # LedgerContract cannot be initialized through super(): its constructor
-        # performs synchronous network I/O.
+        super().__init__()
         self._init_contract(path, client, address, digest, schema_path, code_id)
         self._code_id_checked = code_id is not None or self._digest is None
 

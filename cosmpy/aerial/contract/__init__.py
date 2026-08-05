@@ -64,7 +64,7 @@ class LedgerContract(LedgerContractBase):
         :param schema_path: path to contract schema, defaults to None
         :param code_id: optional int. code id of the contract stored
         """
-        # pylint: disable=super-init-not-called
+        super().__init__()
         self._init_contract(path, client, address, digest, schema_path, code_id)
 
         # attempt to look up the code id from the network by digest

@@ -72,6 +72,21 @@ def load_contract_schema(schema_path: str) -> Optional[Dict[Any, Any]]:
 class LedgerContractBase(UserString):
     """Common functionality independent of the client's I/O model."""
 
+    def __init__(self):
+        # pylint: disable=super-init-not-called
+        # UserString.__init__ assigns self.data, which is a read-only property
+        # here (it returns self.address), so it cannot be called.
+        self._path: Optional[str] = None
+        self._client: Any = None
+        self._address: Optional[Address] = None
+        self._digest: Optional[bytes] = None
+        self._code_id: Optional[int] = None
+        self._schema: Optional[Dict[Any, Any]] = None
+        self._instantiate_schema: Optional[Dict[str, Any]] = None
+        self._query_schema: Optional[Dict[str, Any]] = None
+        self._execute_schema: Optional[Dict[str, Any]] = None
+        self._migrate_schema: Optional[Dict[str, Any]] = None
+
     def _init_contract(
         self,
         path: Optional[str],
