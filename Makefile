@@ -137,7 +137,7 @@ bandit:
 # Check the security of the code for known vulnerabilities
 .PHONY: safety
 safety:
-	safety check -i 41002
+	cd $(or $(SAFETY_WORKDIR),/tmp) && safety check -i 41002
 
 ########################################
 ### Linters
