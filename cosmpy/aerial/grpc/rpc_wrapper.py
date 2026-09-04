@@ -95,3 +95,49 @@ class RpcMethodWrapper:
             response_height = _metadata_height(call.initial_metadata())
         ctx.response_height = response_height
         return response
+
+
+class AsyncRpcMethodWrapper:
+    """Wrap one async gRPC RPC method to support query context."""
+
+    def __init__(self, rpc: Any):
+        """
+        Init async RPC method wrapper.
+
+        :param rpc: async gRPC RPC method (returns an awaitable call)
+        """
+        self._rpc = rpc
+
+    async def __call__(
+        self,
+        request: Any,
+        *,
+        ctx: Optional[ResponseQueryContext] = None,
+        metadata=None,
+        **kwargs,
+    ):
+        """
+        Call wrapped async RPC method.
+
+        :param request: RPC request
+        :param ctx: optional query context
+        :param metadata: optional gRPC metadata
+        :param kwargs: additional gRPC call arguments
+        :return: RPC response
+        """
+        request_height = _request_height(ctx)
+        metadata = list(metadata or [])
+
+        if request_height is not None:
+            metadata.append((COSMOS_BLOCK_HEIGHT_HEADER, str(request_height)))
+
+        call = self._rpc(request, metadata=metadata or None, **kwargs)
+        response = await call
+
+        if ctx is not None:
+            response_height = _metadata_height(await call.trailing_metadata())
+            if response_height is None:
+                response_height = _metadata_height(await call.initial_metadata())
+            ctx.response_height = response_height
+
+        return response

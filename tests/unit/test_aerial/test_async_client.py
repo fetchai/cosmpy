@@ -37,7 +37,12 @@ from cosmpy.aerial.client.aio import AsyncLedgerClient
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import AsyncSimulationGasStrategy, OfflineMessageTableStrategy
+from cosmpy.aerial.grpc.rpc_wrapper import AsyncRpcMethodWrapper
+from cosmpy.aerial.grpc.stub_wrapper import AsyncStubWrapper
+from cosmpy.aerial.query_client import AsyncNoopQueryClientWrapper
+from cosmpy.aerial.query_context import RequestQueryContext, ResponseQueryContext
 from cosmpy.aerial.tx_helpers import AsyncSubmittedTx
+from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.auth.v1beta1.auth_pb2 import BaseAccount
 from cosmpy.protos.cosmos.auth.v1beta1.query_pb2 import QueryAccountResponse
@@ -115,6 +120,102 @@ def test_async_ledger_client_rejects_rest_endpoints():
         AsyncLedgerClient(cfg)
 
 
+def test_async_rpc_method_wrapper_merges_metadata_and_reads_response_height():
+    """Test async gRPC RPC wrapper handles request and response query height."""
+
+    class Call:
+        """Fake async gRPC call."""
+
+        def __init__(self):
+            self._response = "response"
+
+        def __await__(self):
+            async def _return():
+                return self._response
+
+            return _return().__await__()
+
+        async def trailing_metadata(self):
+            return ((COSMOS_BLOCK_HEIGHT_HEADER, "456"),)
+
+        async def initial_metadata(self):
+            return ()
+
+    class Rpc:
+        """Fake async gRPC RPC method."""
+
+        def __call__(self, request, metadata=None, **kwargs):
+            self.request = request
+            self.metadata = metadata
+            self.kwargs = kwargs
+            return Call()
+
+    rpc = Rpc()
+    ctx = RequestQueryContext(request_height=123)
+
+    response = asyncio.run(
+        AsyncRpcMethodWrapper(rpc)(
+            "request",
+            ctx=ctx,
+            metadata=(("existing", "value"),),
+            timeout=1,
+        )
+    )
+
+    assert response == "response"
+    assert rpc.request == "request"
+    assert rpc.metadata == [
+        ("existing", "value"),
+        (COSMOS_BLOCK_HEIGHT_HEADER, "123"),
+    ]
+    assert rpc.kwargs == {"timeout": 1}
+    assert ctx.response_height == 456
+
+
+def test_async_rpc_method_wrapper_reads_latest_response_height():
+    """Test async gRPC RPC wrapper can read response height without request height."""
+
+    class Call:
+        """Fake async gRPC call."""
+
+        def __await__(self):
+            async def _return():
+                return "response"
+
+            return _return().__await__()
+
+        async def trailing_metadata(self):
+            return ()
+
+        async def initial_metadata(self):
+            return ((COSMOS_BLOCK_HEIGHT_HEADER, "789"),)
+
+    class Rpc:
+        """Fake async gRPC RPC method."""
+
+        @staticmethod
+        def __call__(request, metadata=None, **kwargs):
+            return Call()
+
+    ctx = ResponseQueryContext()
+    response = asyncio.run(AsyncRpcMethodWrapper(Rpc())("request", ctx=ctx))
+
+    assert response == "response"
+    assert ctx.response_height == 789
+
+
+def test_async_ledger_client_wraps_query_stubs():
+    """Test async ledger client wraps query stubs for query context support."""
+
+    async def check(client):
+        assert isinstance(client.bank, AsyncStubWrapper)
+        assert isinstance(client.auth, AsyncStubWrapper)
+        assert isinstance(client.tendermint, AsyncStubWrapper)
+        assert isinstance(client.txs, AsyncNoopQueryClientWrapper)
+
+    run_with_client(check)
+
+
 def test_async_query_account():
     """Test querying an account over a mocked async auth stub."""
     account = BaseAccount(address=str(TEST_ADDRESS), account_number=5, sequence=7)
@@ -125,7 +226,7 @@ def test_async_query_account():
         """Mock async auth stub."""
 
         async def Account(
-            self, request
+            self, request, ctx=None
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
             """Return a fixed account query response."""
             return QueryAccountResponse(account=packed_account)
@@ -140,23 +241,37 @@ def test_async_query_account():
     assert result.sequence == 7
 
 
-def test_async_query_bank_balance():
-    """Test querying a bank balance over a mocked async bank stub."""
+def test_async_query_bank_balance_with_query_context():
+    """Test querying a bank balance forwards query context to the stub."""
 
     class MockBankStub:  # pylint: disable=too-few-public-methods
         """Mock async bank stub."""
 
-        async def Balance(self, request):  # noqa: N802 # pylint: disable=invalid-name
-            """Return a fixed balance for the requested denom."""
+        def __init__(self):
+            self.ctx = None
+
+        async def Balance(
+            self, request, ctx=None
+        ):  # noqa: N802 # pylint: disable=invalid-name
+            """Return a fixed balance and capture the query context."""
+            self.ctx = ctx
+            if ctx is not None:
+                ctx.response_height = 42
             return QueryBalanceResponse(
                 balance=PbCoin(denom=request.denom, amount="1234")
             )
 
     async def check(client):
-        client.bank = MockBankStub()
-        return await client.query_bank_balance(TEST_ADDRESS)
+        stub = MockBankStub()
+        client.bank = stub
+        ctx = ResponseQueryContext()
+        balance = await client.query_bank_balance(TEST_ADDRESS, ctx=ctx)
+        return balance, ctx.response_height, stub.ctx
 
-    assert run_with_client(check) == 1234
+    balance, response_height, forwarded_ctx = run_with_client(check)
+    assert balance == 1234
+    assert response_height == 42
+    assert forwarded_ctx is not None
 
 
 def test_async_query_tx_not_found_and_wait_timeout():
@@ -166,7 +281,7 @@ def test_async_query_tx_not_found_and_wait_timeout():
         """Mock async tx stub whose GetTx always fails with 'tx not found'."""
 
         async def GetTx(
-            self, request
+            self, request, ctx=None
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
             """Raise a 'tx not found' error."""
             raise RuntimeError("tx not found")
@@ -200,7 +315,7 @@ def test_async_broadcast_and_wait():
             return BroadcastTxResponse(tx_response=PbTxResponse(txhash=tx_hash, code=0))
 
         async def GetTx(
-            self, request
+            self, request, ctx=None
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
             """Return a completed tx response."""
             return GetTxResponse(
@@ -237,7 +352,7 @@ def test_async_gas_estimation_with_simulation_strategy():
         """Mock async consensus stub."""
 
         async def Params(
-            self, request
+            self, request, ctx=None
         ):  # noqa: N802 # pylint: disable=invalid-name,unused-argument
             """Return consensus params with a fixed block max_gas."""
             return SimpleNamespace(

@@ -22,7 +22,7 @@
 from contextlib import nullcontext
 from typing import Any, Optional
 
-from cosmpy.aerial.grpc.stub_wrapper import StubWrapper
+from cosmpy.aerial.grpc.stub_wrapper import AsyncStubWrapper, StubWrapper
 from cosmpy.aerial.query_context import ResponseQueryContext
 from cosmpy.common.rest_client import RestClient
 
@@ -39,6 +39,13 @@ def wrap_query_client(client: Any) -> Any:
     if _find_rest_client(client) is not None:
         return RestQueryClientWrapper(client)
     return NoopQueryClientWrapper(client)
+
+
+def wrap_async_query_client(client: Any) -> Any:
+    """Wrap async gRPC stubs with request-scoped query context support."""
+    if is_query_grpc_stub(client):
+        return AsyncStubWrapper(client)
+    return AsyncNoopQueryClientWrapper(client)
 
 
 def _find_rest_client(client: Any) -> Optional[RestClient]:
@@ -85,6 +92,31 @@ class NoopQueryClientWrapper:
     def __init__(self, client: Any):
         """
         Init no-op query client wrapper.
+
+        :param client: client instance
+        """
+        self._client = client
+
+    def __getattr__(self, name: str) -> Any:
+        """Forward non-callable attributes and ignore ctx for client methods."""
+        attr = getattr(self._client, name)
+        if not callable(attr):
+            return attr
+
+        def call_ignoring_ctx(
+            *args, ctx: Optional[ResponseQueryContext] = None, **kwargs
+        ):
+            return attr(*args, **kwargs)
+
+        return call_ignoring_ctx
+
+
+class AsyncNoopQueryClientWrapper:
+    """Wrap async clients so a ctx keyword does not break non-query calls."""
+
+    def __init__(self, client: Any):
+        """
+        Init async no-op query client wrapper.
 
         :param client: client instance
         """

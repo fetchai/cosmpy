@@ -21,7 +21,7 @@
 
 from typing import Any
 
-from cosmpy.aerial.grpc.rpc_wrapper import RpcMethodWrapper
+from cosmpy.aerial.grpc.rpc_wrapper import AsyncRpcMethodWrapper, RpcMethodWrapper
 
 
 class StubWrapper:
@@ -39,3 +39,20 @@ class StubWrapper:
         """Forward non-callable attributes and wrap RPC methods."""
         attr = getattr(self._stub, name)
         return RpcMethodWrapper(attr) if callable(attr) else attr
+
+
+class AsyncStubWrapper:
+    """Wrap a generated async gRPC query stub to support query context."""
+
+    def __init__(self, stub: Any):
+        """
+        Init async gRPC stub wrapper.
+
+        :param stub: generated gRPC stub bound to a grpc.aio channel
+        """
+        self._stub = stub
+
+    def __getattr__(self, name: str) -> Any:
+        """Forward non-callable attributes and wrap RPC methods."""
+        attr = getattr(self._stub, name)
+        return AsyncRpcMethodWrapper(attr) if callable(attr) else attr
