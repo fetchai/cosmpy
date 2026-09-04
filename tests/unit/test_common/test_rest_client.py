@@ -24,7 +24,8 @@ from unittest.mock import Mock, patch
 
 from requests import Response, Session
 
-from cosmpy.common.rest_client import RestClient
+from cosmpy.aerial.query_context import RequestQueryContext, ResponseQueryContext
+from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER, RestClient
 
 
 class QueryRestClientTestCase(TestCase):
@@ -96,6 +97,59 @@ class QueryRestClientTestCase(TestCase):
 
         messageToDict_mock.assert_called_once_with(request)
         self.assertTrue("Error when sending a GET request" in str(context.exception))
+
+    @staticmethod
+    @patch("requests.session", spec=Session)
+    def test_get_with_query_context(session_mock):
+        """
+        Test get method sends and reads height with query context.
+
+        :param session_mock: mock
+        """
+        rest_address = "some url"
+        client = RestClient(rest_address)
+
+        request_url_path = "/my/weird/url/path"
+        resp = Mock(spec=Response)
+        resp.status_code = 200
+        resp.content = "dfdffdss".encode(encoding="utf8")
+        resp.headers = {COSMOS_BLOCK_HEIGHT_HEADER: "456"}
+
+        session_mock.return_value.get.return_value = resp
+        ctx = RequestQueryContext(request_height=123)
+        client.get(request_url_path, ctx=ctx)
+
+        session_mock.return_value.get.assert_called_once_with(
+            url=f"{rest_address}{request_url_path}",
+            headers={COSMOS_BLOCK_HEIGHT_HEADER: "123"},
+        )
+        assert ctx.response_height == 456
+
+    @staticmethod
+    @patch("requests.session", spec=Session)
+    def test_get_with_response_query_context(session_mock):
+        """
+        Test get method reads height with response-only query context.
+
+        :param session_mock: mock
+        """
+        rest_address = "some url"
+        client = RestClient(rest_address)
+
+        request_url_path = "/my/weird/url/path"
+        resp = Mock(spec=Response)
+        resp.status_code = 200
+        resp.content = "dfdffdss".encode(encoding="utf8")
+        resp.headers = {COSMOS_BLOCK_HEIGHT_HEADER: "456"}
+
+        session_mock.return_value.get.return_value = resp
+        ctx = ResponseQueryContext()
+        client.get(request_url_path, ctx=ctx)
+
+        session_mock.return_value.get.assert_called_once_with(
+            url=f"{rest_address}{request_url_path}"
+        )
+        assert ctx.response_height == 456
 
     @staticmethod
     @patch("requests.session", spec=Session)

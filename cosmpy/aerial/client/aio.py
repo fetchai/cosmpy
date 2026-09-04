@@ -63,6 +63,8 @@ from cosmpy.aerial.coins import Coin
 from cosmpy.aerial.config import NetworkConfig
 from cosmpy.aerial.exceptions import NotFoundError, QueryTimeoutError
 from cosmpy.aerial.gas import AsyncGasStrategy, AsyncSimulationGasStrategy, GasStrategy
+from cosmpy.aerial.query_client import wrap_async_query_client
+from cosmpy.aerial.query_context import ResponseQueryContext
 from cosmpy.aerial.tx import SigningCfg, Transaction, TxFee
 from cosmpy.aerial.tx_helpers import AsyncSubmittedTx, TxResponse
 from cosmpy.aerial.types import Account, Block, NodeInfo
@@ -135,6 +137,19 @@ class AsyncLedgerClient(LedgerClientBase):
             self._grpc_channel = aio.insecure_channel(parsed_url.host_and_port)
 
         self._init_grpc_stubs(self._grpc_channel)
+        self._wrap_query_clients()
+
+    def _wrap_query_clients(self):
+        """Wrap module clients so query methods accept request-scoped context."""
+        self.wasm = wrap_async_query_client(self.wasm)
+        self.auth = wrap_async_query_client(self.auth)
+        self.txs = wrap_async_query_client(self.txs)
+        self.bank = wrap_async_query_client(self.bank)
+        self.staking = wrap_async_query_client(self.staking)
+        self.distribution = wrap_async_query_client(self.distribution)
+        self.params = wrap_async_query_client(self.params)
+        self.consensus = wrap_async_query_client(self.consensus)
+        self.tendermint = wrap_async_query_client(self.tendermint)
 
     async def close(self):
         """Close the underlying gRPC channel."""
@@ -177,53 +192,73 @@ class AsyncLedgerClient(LedgerClientBase):
             )
         self._gas_strategy = strategy
 
-    async def query_account(self, address: Address) -> Account:
+    async def query_account(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> Account:
         """Query account.
 
         :param address: address
+        :param ctx: Optional QueryContext
         :return: account details
         """
         request = QueryAccountRequest(address=str(address))
-        response = await self.auth.Account(request)
+        response = await self.auth.Account(request, ctx=ctx)
         return self._parse_account(response, address)
 
-    async def query_params(self, subspace: str, key: str) -> Any:
+    async def query_params(
+        self,
+        subspace: str,
+        key: str,
+        ctx: Optional[ResponseQueryContext] = None,
+    ) -> Any:
         """Query Prams.
 
         :param subspace: subspace
         :param key: key
+        :param ctx: Optional QueryContext
         :return: Query params
         """
         req = QueryParamsRequest(subspace=subspace, key=key)
-        resp = await self.params.Params(req)
+        resp = await self.params.Params(req, ctx=ctx)
         return json.loads(resp.param.value)
 
-    async def query_node_info(self) -> NodeInfo:
+    async def query_node_info(
+        self, ctx: Optional[ResponseQueryContext] = None
+    ) -> NodeInfo:
         """
         Query basic Tendermint / node information (moniker, chain-id, version, etc.).
+
+        :param ctx: Optional QueryContext
 
         :return: NodeInfo.
         """
         request = GetNodeInfoRequest()
-        response = await self.tendermint.GetNodeInfo(request)
+        response = await self.tendermint.GetNodeInfo(request, ctx=ctx)
         return self._parse_node_info(response)
 
-    async def query_consensus_params(self) -> Any:
+    async def query_consensus_params(
+        self, ctx: Optional[ResponseQueryContext] = None
+    ) -> Any:
         """Query consensus params.
 
+        :param ctx: Optional QueryContext
         :return: Query consensus params
         """
         req = QueryParamsRequest()
-        resp = await self.consensus.Params(req)
+        resp = await self.consensus.Params(req, ctx=ctx)
         return resp
 
     async def query_bank_balance(
-        self, address: Address, denom: Optional[str] = None
+        self,
+        address: Address,
+        denom: Optional[str] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> int:
         """Query bank balance.
 
         :param address: address
         :param denom: denom, defaults to None
+        :param ctx: Optional QueryContext
         :return: bank balance
         """
         denom = denom or self.network_config.fee_denomination
@@ -233,17 +268,20 @@ class AsyncLedgerClient(LedgerClientBase):
             denom=denom,
         )
 
-        resp = await self.bank.Balance(req)
+        resp = await self.bank.Balance(req, ctx=ctx)
         return self._parse_bank_balance(resp, denom)
 
-    async def query_bank_all_balances(self, address: Address) -> List[Coin]:
+    async def query_bank_all_balances(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> List[Coin]:
         """Query bank all balances.
 
         :param address: address
+        :param ctx: Optional QueryContext
         :return: bank all balances
         """
         req = QueryAllBalancesRequest(address=str(address))
-        resp = await self.bank.AllBalances(req)
+        resp = await self.bank.AllBalances(req, ctx=ctx)
         return self._parse_bank_all_balances(resp)
 
     async def send_tokens(
@@ -283,11 +321,14 @@ class AsyncLedgerClient(LedgerClientBase):
         )
 
     async def query_validators(
-        self, status: Optional[ValidatorStatus] = None
+        self,
+        status: Optional[ValidatorStatus] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> List[Validator]:
         """Query validators.
 
         :param status: validator status, defaults to None
+        :param ctx: Optional QueryContext
         :return: List of validators
         """
         filtered_status = status or ValidatorStatus.BONDED
@@ -296,13 +337,16 @@ class AsyncLedgerClient(LedgerClientBase):
         if filtered_status != ValidatorStatus.UNSPECIFIED:
             req.status = filtered_status.value
 
-        resp = await self.staking.Validators(req)
+        resp = await self.staking.Validators(req, ctx=ctx)
         return self._parse_validators(resp)
 
-    async def query_staking_summary(self, address: Address) -> StakingSummary:
+    async def query_staking_summary(
+        self, address: Address, ctx: Optional[ResponseQueryContext] = None
+    ) -> StakingSummary:
         """Query staking summary.
 
         :param address: address
+        :param ctx: Optional QueryContext
         :return: staking summary
         """
         current_positions = []
@@ -310,14 +354,14 @@ class AsyncLedgerClient(LedgerClientBase):
         req = QueryDelegatorDelegationsRequest(delegator_addr=str(address))
 
         for resp in await get_paginated(
-            req, self.staking.DelegatorDelegations, per_page_limit=1
+            req, self.staking.DelegatorDelegations, per_page_limit=1, ctx=ctx
         ):
             for item in resp.delegation_responses:
                 req = QueryDelegationRewardsRequest(
                     delegator_address=str(address),
                     validator_address=str(item.delegation.validator_address),
                 )
-                rewards_resp = await self.distribution.DelegationRewards(req)
+                rewards_resp = await self.distribution.DelegationRewards(req, ctx=ctx)
 
                 current_positions.append(
                     self._parse_staking_position(item, rewards_resp)
@@ -325,7 +369,7 @@ class AsyncLedgerClient(LedgerClientBase):
 
         req = QueryDelegatorUnbondingDelegationsRequest(delegator_addr=str(address))
         unbonding_pages = await get_paginated(
-            req, self.staking.DelegatorUnbondingDelegations
+            req, self.staking.DelegatorUnbondingDelegations, ctx=ctx
         )
 
         return StakingSummary(
@@ -507,12 +551,14 @@ class AsyncLedgerClient(LedgerClientBase):
         tx_hash: str,
         timeout: Optional[timedelta] = None,
         poll_period: Optional[timedelta] = None,
+        ctx: Optional[ResponseQueryContext] = None,
     ) -> TxResponse:
         """Wait for query transaction.
 
         :param tx_hash: transaction hash
         :param timeout: timeout, defaults to None
         :param poll_period: poll_period, defaults to None
+        :param ctx: Optional QueryContext
 
         :raises QueryTimeoutError: timeout
 
@@ -523,7 +569,7 @@ class AsyncLedgerClient(LedgerClientBase):
         start = datetime.now()
         while True:
             try:
-                return await self.query_tx(tx_hash)
+                return await self.query_tx(tx_hash, ctx=ctx)
             except NotFoundError:
                 pass
 
@@ -533,17 +579,20 @@ class AsyncLedgerClient(LedgerClientBase):
 
             await asyncio.sleep(poll_period.total_seconds())
 
-    async def query_tx(self, tx_hash: str) -> TxResponse:
+    async def query_tx(
+        self, tx_hash: str, ctx: Optional[ResponseQueryContext] = None
+    ) -> TxResponse:
         """query transaction.
 
         :param tx_hash: transaction hash
+        :param ctx: Optional QueryContext
         :raises NotFoundError: Tx details not found
         :raises grpc.RpcError: RPC connection issue
         :return: query response
         """
         req = GetTxRequest(hash=tx_hash)
         try:
-            resp = await self.txs.GetTx(req)
+            resp = await self.txs.GetTx(req, ctx=ctx)
         except grpc.RpcError as e:
             if self._is_tx_not_found_error(e):
                 raise NotFoundError() from e
@@ -585,38 +634,46 @@ class AsyncLedgerClient(LedgerClientBase):
 
         return AsyncSubmittedTx(self, tx_digest)
 
-    async def query_latest_block(self) -> Block:
+    async def query_latest_block(
+        self, ctx: Optional[ResponseQueryContext] = None
+    ) -> Block:
         """Query the latest block.
 
+        :param ctx: Optional QueryContext
         :return: latest block
         """
         req = GetLatestBlockRequest()
-        resp = await self.tendermint.GetLatestBlock(req)
+        resp = await self.tendermint.GetLatestBlock(req, ctx=ctx)
         return Block.from_proto(resp.block)
 
-    async def query_block(self, height: int) -> Block:
+    async def query_block(
+        self, height: int, ctx: Optional[ResponseQueryContext] = None
+    ) -> Block:
         """Query the block.
 
         :param height: block height
+        :param ctx: Optional QueryContext
         :return: block
         """
         req = GetBlockByHeightRequest(height=height)
-        resp = await self.tendermint.GetBlockByHeight(req)
+        resp = await self.tendermint.GetBlockByHeight(req, ctx=ctx)
         return Block.from_proto(resp.block)
 
-    async def query_height(self) -> int:
+    async def query_height(self, ctx: Optional[ResponseQueryContext] = None) -> int:
         """Query the latest block height.
 
+        :param ctx: Optional QueryContext
         :return: latest block height
         """
-        return (await self.query_latest_block()).height
+        return (await self.query_latest_block(ctx=ctx)).height
 
-    async def query_chain_id(self) -> str:
+    async def query_chain_id(self, ctx: Optional[ResponseQueryContext] = None) -> str:
         """Query the chain id.
 
+        :param ctx: Optional QueryContext
         :return: chain id
         """
-        return (await self.query_latest_block()).chain_id
+        return (await self.query_latest_block(ctx=ctx)).chain_id
 
 
 async def simulate_tx(
@@ -748,6 +805,7 @@ async def get_paginated(
     request_method: Callable,
     pages_limit: int = 0,
     per_page_limit: Optional[int] = DEFAULT_PER_PAGE_LIMIT,
+    ctx: Optional[Any] = None,
 ) -> List[Any]:
     """
     Get pages for specific request.
@@ -756,6 +814,7 @@ async def get_paginated(
     :param request_method: async function to perform request
     :param pages_limit: max number of pages to return. default - 0 unlimited
     :param per_page_limit: Optional int: amount of records per one page. default is None, determined by server
+    :param ctx: optional query context
 
     :return: List of responses
     """
@@ -767,7 +826,11 @@ async def get_paginated(
         request.CopyFrom(initial_request)
         request.pagination.CopyFrom(pagination)
 
-        resp = await request_method(request)
+        resp = (
+            await request_method(request, ctx=ctx)
+            if ctx is not None
+            else await request_method(request)
+        )
 
         pages.append(resp)
 

@@ -22,6 +22,7 @@
 
 
 import datetime
+from types import SimpleNamespace
 
 from google.protobuf.timestamp_pb2 import Timestamp
 
@@ -32,6 +33,10 @@ from cosmpy.aerial.client import (
     LedgerClient,
 )
 from cosmpy.aerial.config import NetworkConfig
+from cosmpy.aerial.grpc.rpc_wrapper import RpcMethodWrapper
+from cosmpy.aerial.query_client import is_query_grpc_stub
+from cosmpy.aerial.query_context import RequestQueryContext, ResponseQueryContext
+from cosmpy.common.rest_client import COSMOS_BLOCK_HEIGHT_HEADER
 from cosmpy.protos.cosmos.base.abci.v1beta1.abci_pb2 import TxResponse as PbTxResponse
 from cosmpy.protos.tendermint.types.block_pb2 import Block as PbBlock
 from cosmpy.protos.tendermint.types.types_pb2 import Data, Header
@@ -59,6 +64,102 @@ def test_ledger_client_timeouts():
     )
     assert client._query_interval_secs == interval  # pylint: disable=protected-access
     assert client._query_timeout_secs == timeout  # pylint: disable=protected-access
+
+
+def test_ledger_client_query_context_is_optional():
+    """Test ledger client query context is per call and optional."""
+    cfg = NetworkConfig(
+        chain_id="test-chain",
+        fee_minimum_gas_price=1,
+        fee_denomination="atest",
+        staking_denomination="atest",
+        url="rest+http://localhost:1317",
+    )
+
+    client = LedgerClient(cfg)
+    original_bank = client.bank
+
+    assert client.network_config == cfg
+    assert (
+        client._query_interval_secs == DEFAULT_QUERY_INTERVAL_SECS
+    )  # pylint: disable=protected-access
+    assert (
+        client._query_timeout_secs == DEFAULT_QUERY_TIMEOUT_SECS
+    )  # pylint: disable=protected-access
+    assert client.bank is original_bank
+
+
+def test_rpc_method_wrapper_merges_metadata_and_reads_response_height():
+    """Test gRPC RPC wrapper handles request and response query height."""
+
+    class Rpc:
+        """Fake gRPC RPC method."""
+
+        def with_call(self, request, metadata=None, **kwargs):
+            self.request = request
+            self.metadata = metadata
+            self.kwargs = kwargs
+            call = SimpleNamespace(
+                trailing_metadata=lambda: ((COSMOS_BLOCK_HEIGHT_HEADER, "456"),),
+                initial_metadata=lambda: (),
+            )
+            return "response", call
+
+    rpc = Rpc()
+    ctx = RequestQueryContext(request_height=123)
+
+    response = RpcMethodWrapper(rpc)(
+        "request",
+        ctx=ctx,
+        metadata=(("existing", "value"),),
+        timeout=1,
+    )
+
+    assert response == "response"
+    assert rpc.request == "request"
+    assert rpc.metadata == [
+        ("existing", "value"),
+        (COSMOS_BLOCK_HEIGHT_HEADER, "123"),
+    ]
+    assert rpc.kwargs == {"timeout": 1}
+    assert ctx.response_height == 456
+
+
+def test_rpc_method_wrapper_reads_latest_response_height():
+    """Test gRPC RPC wrapper can read response height without request height."""
+
+    class Rpc:
+        """Fake gRPC RPC method."""
+
+        @staticmethod
+        def with_call(request, metadata=None, **kwargs):
+            call = SimpleNamespace(
+                trailing_metadata=lambda: (),
+                initial_metadata=lambda: ((COSMOS_BLOCK_HEIGHT_HEADER, "789"),),
+            )
+            return "response", call
+
+    ctx = ResponseQueryContext()
+    response = RpcMethodWrapper(Rpc())("request", ctx=ctx)
+
+    assert response == "response"
+    assert ctx.response_height == 789
+
+
+def test_grpc_query_stub_detection():
+    """Test only generated query gRPC stubs are detected as query stubs."""
+
+    class QueryStub:
+        """Fake generated query stub."""
+
+    class TxServiceStub:
+        """Fake generated tx service stub."""
+
+    QueryStub.__module__ = "cosmpy.protos.cosmos.bank.v1beta1.query_pb2_grpc"
+    TxServiceStub.__module__ = "cosmpy.protos.cosmos.tx.v1beta1.service_pb2_grpc"
+
+    assert is_query_grpc_stub(QueryStub())
+    assert not is_query_grpc_stub(TxServiceStub())
 
 
 def test_parsing_tx_response():

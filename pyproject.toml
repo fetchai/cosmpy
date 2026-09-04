@@ -106,6 +106,7 @@ exclude = "whitelist.py"
 [[tool.mypy.overrides]]
 module = [
     "cosmpy.protos.*",
+    "cosmpy.gogoproto.*",
 ]
 ignore_errors = true
 follow_imports = "skip"
@@ -121,6 +122,7 @@ module = [
     "docker.*",
     "pytest.*",
     "click.*",
+    "tomli.*",
     "certifi.*",
     "mbedtls.*",
     "jsonschema.*",
