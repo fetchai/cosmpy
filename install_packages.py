@@ -30,7 +30,8 @@ from tomlkit import loads as loads_toml
 
 def _load_groups():
     data = loads_toml(Path("pyproject.toml").read_text())
-    return list(data["tool"]["poetry"]["group"].keys())
+    # Exclude docs so docs-only pins cannot leak into other tox jobs.
+    return [g for g in data["tool"]["poetry"]["group"] if g != "docs"]
 
 
 def _load_dependencies() -> List[str]:

@@ -137,7 +137,7 @@ bandit:
 # Check the security of the code for known vulnerabilities
 .PHONY: safety
 safety:
-	safety check -i 41002
+	NLTK_DISABLE_IMPORT_SECURITY=1 safety check -i 41002
 
 ########################################
 ### Linters
@@ -158,11 +158,9 @@ pylint:
 ########################################
 
 # Check dependency licenses
-.PHONY: liccheck
-liccheck:
-	poetry export > tmp-requirements.txt
-	liccheck -s strategy.ini -r tmp-requirements.txt -l PARANOID
-	rm -frv tmp-requirements.txt
+.PHONY: licensecheck
+licensecheck:
+	licensecheck
 
 # Check that the relevant files have appropriate Copyright header
 .PHONY: copyright-check

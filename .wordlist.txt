@@ -166,7 +166,7 @@ CLI
 CosmPy's
 CosmPy
 isort
-liccheck
+licensecheck
 MakeFile
 mypy
 proto

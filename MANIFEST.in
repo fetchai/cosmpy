@@ -6,7 +6,6 @@ exclude *.lock
 exclude *.md
 exclude *.txt
 exclude *.yml
-exclude strategy.ini
 exclude tox.ini
 exclude *.cff
 exclude .firebaserc
