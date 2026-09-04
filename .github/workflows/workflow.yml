@@ -20,7 +20,7 @@ jobs:
           - safety
           - mypy
           - pylint
-          - liccheck
+          - licensecheck
           - copyright-check
           - check-manifest
           - check_api_docs

@@ -122,7 +122,7 @@ If you've made any changes to the dependencies (e.g. added/removed dependencies,
   This re-locks the dependencies. Ensure that the `poetry.lock` file is pushed into the repository (by default it is).
 
 - ``` shell
-   make liccheck
+   make licensecheck
   ```
 
   Checks that the licence for the library is correct, taking into account the licences for all dependencies, their dependencies and so forth.

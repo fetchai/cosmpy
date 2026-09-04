@@ -158,11 +158,9 @@ pylint:
 ########################################
 
 # Check dependency licenses
-.PHONY: liccheck
-liccheck:
-	poetry export > tmp-requirements.txt
-	liccheck -s strategy.ini -r tmp-requirements.txt -l PARANOID
-	rm -frv tmp-requirements.txt
+.PHONY: licensecheck
+licensecheck:
+	licensecheck
 
 # Check that the relevant files have appropriate Copyright header
 .PHONY: copyright-check
