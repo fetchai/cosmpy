@@ -9,7 +9,7 @@ Client functionality.
 ## LedgerClient Objects
 
 ```python
-class LedgerClient()
+class LedgerClient(LedgerClientBase)
 ```
 
 Ledger client.
@@ -31,21 +31,6 @@ Init ledger client.
 - `cfg`: Network configurations
 - `query_interval_secs`: int. optional interval int seconds
 - `query_timeout_secs`: int. optional interval int seconds
-
-<a id="cosmpy.aerial.client.__init__.LedgerClient.network_config"></a>
-
-#### network`_`config
-
-```python
-@property
-def network_config() -> NetworkConfig
-```
-
-Get the network config.
-
-**Returns**:
-
-network config
 
 <a id="cosmpy.aerial.client.__init__.LedgerClient.gas_strategy"></a>
 
@@ -94,10 +79,6 @@ Query account.
 **Arguments**:
 
 - `address`: address
-
-**Raises**:
-
-- `RuntimeError`: Unexpected account type returned from query
 
 **Returns**:
 
@@ -384,24 +365,6 @@ Estimate gas for transaction.
 
 Estimated gas for transaction
 
-<a id="cosmpy.aerial.client.__init__.LedgerClient.estimate_fee_from_gas"></a>
-
-#### estimate`_`fee`_`from`_`gas
-
-```python
-def estimate_fee_from_gas(gas_limit: int) -> str
-```
-
-Estimate fee from gas.
-
-**Arguments**:
-
-- `gas_limit`: gas limit
-
-**Returns**:
-
-Estimated fee for transaction
-
 <a id="cosmpy.aerial.client.__init__.LedgerClient.estimate_gas_and_fee_for_tx"></a>
 
 #### estimate`_`gas`_`and`_`fee`_`for`_`tx
@@ -482,10 +445,6 @@ simulate transaction.
 **Arguments**:
 
 - `tx`: transaction
-
-**Raises**:
-
-- `RuntimeError`: Unable to simulate non final transaction
 
 **Returns**:
 

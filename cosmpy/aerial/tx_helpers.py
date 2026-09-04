@@ -181,6 +181,30 @@ class SubmittedTx:
         return self
 
 
+class AsyncSubmittedTx(SubmittedTx):
+    """Submitted transaction bound to an AsyncLedgerClient."""
+
+    async def wait_to_complete(  # type: ignore[override] # pylint: disable=invalid-overridden-method
+        self,
+        timeout: Optional[Union[int, float, timedelta]] = None,
+        poll_period: Optional[Union[int, float, timedelta]] = None,
+    ) -> "AsyncSubmittedTx":
+        """Wait to complete the transaction.
+
+        :param timeout: timeout, defaults to None
+        :param poll_period: poll_period, defaults to None
+
+        :return: Submitted Transaction
+        """
+        self._response = await self._client.wait_for_query_tx(
+            self.tx_hash, timeout=timeout, poll_period=poll_period
+        )
+        assert self._response is not None
+        self._response.ensure_successful()
+
+        return self
+
+
 def safe_decode(v):
     """
     Decode a value from bytes to UTF-8 string if necessary.

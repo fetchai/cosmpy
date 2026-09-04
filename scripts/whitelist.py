@@ -88,3 +88,6 @@ _.ensure_funds  # unused method (./clients/ledger.py:656)
 _.staking_denomination
 _.fetch_mainnet
 _.is_successful
+exc_type  # unused variable (./aerial/client/aio.py: AsyncLedgerClient.__aexit__)
+exc_value  # unused variable (./aerial/client/aio.py: AsyncLedgerClient.__aexit__)
+traceback  # unused variable (./aerial/client/aio.py: AsyncLedgerClient.__aexit__)

@@ -26,8 +26,13 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-import tomli
 from packaging.version import Version
+
+
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 
 ROOT = Path(__file__).parent.parent
@@ -69,7 +74,7 @@ class ReleaseTool:
     def get_current_version(self) -> Version:
         """Get current code version."""
         text = (ROOT / "pyproject.toml").read_text()
-        version = tomli.loads(text)["tool"]["poetry"]["version"]
+        version = tomllib.loads(text)["tool"]["poetry"]["version"]
         return Version(version)
 
     def do_we_need_to_release(self) -> bool:
