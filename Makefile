@@ -137,7 +137,7 @@ bandit:
 # Check the security of the code for known vulnerabilities
 .PHONY: safety
 safety:
-	safety check -i 41002
+	NLTK_DISABLE_IMPORT_SECURITY=1 safety check -i 41002
 
 ########################################
 ### Linters
