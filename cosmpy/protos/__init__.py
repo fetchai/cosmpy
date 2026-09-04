@@ -24,4 +24,7 @@ import sys
 from os.path import dirname
 
 
-sys.path.append(dirname(__file__))
+# Insert at front so generated imports like `tendermint.types` resolve to
+# cosmpy/protos/tendermint, not the cosmpy.tendermint REST client package
+# when the package directory is early on sys.path (e.g. cwd == cosmpy/).
+sys.path.insert(0, dirname(__file__))
